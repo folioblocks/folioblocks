@@ -1,0 +1,69 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "portfolio-blocks/carousel-gallery-block",
+	"version": "0.1.0",
+	"title": "Carousel Gallery",
+	"category": "portfolio-blocks",
+	"allowedBlocks": [ "portfolio-blocks/pb-image-block" ],
+	"icon": "smiley",
+	"description": "Example block scaffolded with Create Block tool.",
+	"example": {},
+	"supports": {
+        "align": [ "wide", "full" ],
+		"color": {
+			"background": true,
+			"gradients": true,
+			"text": false
+		},
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
+		"anchor": true,
+		"ariaLabel": true,
+		"html": false
+    },
+	"attributes": {
+        "resolution": { "type": "string", "default": "large" },
+        "borderWidth": { "type": "number", "default": 0 }, 
+		"borderRadius": { "type": "number", "default": 0 },
+  		"borderColor": { "type": "string", "default": "#ffffff" },
+        "dropShadow": { "type": "boolean", "default": false },
+        "lightbox": { "type": "boolean", "default": false },
+        "lightboxCaption": { "type": "boolean", "default": false },
+        "onHoverTitle": { "type": "boolean", "default": false },
+        "randomizeOrder": { "type": "boolean", "default": false },
+        "disableRightClick": { "type": "boolean", "default": false },
+        "enableFilter": { "type": "boolean", "default": false },
+        "enableDownload": { "type": "boolean", "default": false},
+        "downloadOnHover": { "type": "boolean", "default": false },
+        "images": {
+            "type": "array",
+            "default": [],
+            "items": {
+                "type": "object",
+                "properties": {
+                    "id": { "type": "number" },
+                    "src": { "type": "string"},
+                    "alt": { "type": "string"},
+                    "title": { "type": "string" },
+                    "caption": { "type": "string"},
+                    "sizes": { "type": "object" },
+                    "width": { "type": "number" },   
+                    "height": { "type": "number" },
+                    "filterCategory": { "type": "string" }
+                }
+            }
+        }
+    },
+	"providesContext": {
+		"portfolioBlocks/resolution": "resolution"
+	},
+	"textdomain": "portfolio-blocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"viewScript": "file:./view.js"
+}

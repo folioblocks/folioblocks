@@ -1,0 +1,54 @@
+/**
+ * Registers a new block provided a unique name and an object defining its behavior.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
+ */
+import { registerBlockType } from '@wordpress/blocks';
+
+/**
+ * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
+ * All files containing `style` keyword are bundled together. The code used
+ * gets applied both to the front of your site and to the editor.
+ *
+ * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
+ */
+import './style.scss';
+
+/**
+ * Internal dependencies
+ */
+import Edit from './edit';
+import Save from './save';
+import metadata from './block.json';
+
+/**
+ * Every block starts by registering a new block type definition.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
+ */
+registerBlockType(
+	metadata,
+	{
+		icon: {
+			src:
+				<svg id="Layer_2" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1247.24 1247.24">
+					<g id="Layer_1-2">
+						<g>
+							<path d="M563,83.62H105.05c-11.84,0-21.43,9.95-21.43,22.23v455.58c0,12.28,9.59,22.23,21.43,22.23h457.95c11.84,0,21.43-9.95,21.43-22.23V105.85c0-12.28-9.59-22.23-21.43-22.23ZM538.49,536.01H129.55V131.27h408.94v404.74h0Z" />
+							<path d="M563,663.58H105.05c-11.83,0-21.43,9.95-21.43,22.23v455.58c0,12.28,9.59,22.23,21.43,22.23h457.95c11.84,0,21.43-9.95,21.43-22.23v-455.58c0-12.28-9.59-22.23-21.43-22.23h0ZM538.49,1115.97H129.55v-404.74h408.94v404.74Z" />
+							<path d="M1142.19,83.62h-457.95c-11.84,0-21.43,9.95-21.43,22.23v455.58c0,12.28,9.59,22.23,21.43,22.23h457.95c11.83,0,21.43-9.95,21.43-22.23V105.85c0-12.28-9.6-22.23-21.43-22.23ZM1117.69,536.01h-408.94V131.27h408.94v404.74h0Z" />
+							<path d="M1142.19,663.58h-457.95c-11.84,0-21.43,9.95-21.43,22.23v455.58c0,12.28,9.59,22.23,21.43,22.23h457.95c11.83,0,21.43-9.95,21.43-22.23v-455.58c0-12.28-9.6-22.23-21.43-22.23h0ZM1117.69,1115.97h-408.94v-404.74h408.94v404.74Z" />
+							<g>
+								<path d="M394.91,320.93l-106.53-63.99c-4.64-2.78-10.21-2.85-14.9-.19-4.71,2.67-7.52,7.49-7.52,12.9v127.97c0,5.41,2.82,10.24,7.52,12.9,2.3,1.3,4.79,1.95,7.29,1.95s5.24-.71,7.62-2.14l106.52-63.98c4.49-2.71,7.19-7.46,7.19-12.7s-2.69-10-7.19-12.71h0Z" />
+								<path d="M852.67,410.52c2.3,1.3,4.79,1.95,7.29,1.95s5.24-.71,7.62-2.14l106.52-63.98c4.49-2.71,7.18-7.46,7.18-12.7s-2.69-10-7.18-12.71l-106.53-63.99c-4.64-2.78-10.21-2.85-14.9-.19-4.71,2.67-7.52,7.49-7.52,12.9v127.97c0,5.41,2.82,10.24,7.52,12.9h0Z" />
+								<path d="M394.91,900.89l-106.52-63.98c-4.65-2.79-10.21-2.86-14.91-.19-4.71,2.66-7.52,7.49-7.52,12.9v127.97c0,5.41,2.81,10.23,7.52,12.9,2.3,1.3,4.79,1.95,7.3,1.95s5.23-.71,7.61-2.13l106.52-63.99c4.49-2.71,7.19-7.46,7.19-12.71s-2.69-10-7.19-12.7v-.02Z" />
+								<path d="M974.1,900.89l-106.52-63.98c-4.65-2.79-10.21-2.86-14.91-.19-4.71,2.66-7.52,7.49-7.52,12.9v127.97c0,5.41,2.81,10.23,7.52,12.9,2.3,1.3,4.79,1.95,7.3,1.95s5.23-.71,7.61-2.13l106.52-63.99c4.49-2.71,7.18-7.46,7.18-12.71s-2.69-10-7.18-12.7v-.02Z" />
+							</g>
+						</g>
+					</g>
+				</svg>
+		},
+		edit: Edit,
+		save: Save
+	}
+);

@@ -1,0 +1,98 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "portfolio-blocks/modular-gallery-block",
+	"version": "0.4.3",
+	"title": "Modular Gallery Block",
+	"category": "portfolio-blocks",
+	"icon": "images-alt2",
+	"description": "Use our custom Image Row block to create a modular image gallery",
+	"example": {},
+	"textdomain": "portfolio-blocks",
+	"allowedBlocks": [
+		"portfolio-blocks/pb-image-row"
+	],
+	"supports": {
+		"align": [
+			"wide",
+			"full"
+		],
+		"color": {
+			"background": true,
+			"gradients": true,
+			"text": false
+		},
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
+		"anchor": true,
+		"ariaLabel": true,
+		"html": false
+	},
+	"attributes": {
+		"resolution": { "type": "string", "default": "large" },
+		  "collapseOnMobile": { "type": "boolean", "default": false },
+		"dropShadow": {
+			"type": "boolean",
+			"default": false
+		},
+		"borderWidth": {
+			"type": "number",
+			"default": 0
+		},
+		"borderRadius": {
+			"type": "number",
+			"default": 0
+		},
+		"borderColor": {
+			"type": "string",
+			"default": "#ffffff"
+		},
+		"noGap": {
+			"type": "boolean",
+			"default": false
+		},
+		"disableRightClick": { "type": "boolean", "default": false },
+
+		"lightbox": {
+			"type": "boolean",
+			"default": false
+		},
+		"lightboxCaption": {
+			"type": "boolean",
+			"default": false
+		},
+		"onHoverTitle": {
+			"type": "boolean",
+			"default": false
+		},
+		"enableDownload": {
+			"type": "boolean",
+			"default": false
+		},
+		"downloadOnHover": {
+			"type": "boolean",
+			"default": false
+		}
+	},
+	"providesContext": {
+		"portfolioBlocks/resolution": "resolution",
+		"portfolioBlocks/borderColor": "borderColor",
+		"portfolioBlocks/borderWidth": "borderWidth",
+		"portfolioBlocks/borderRadius": "borderRadius",
+		"portfolioBlocks/dropShadow": "dropShadow",
+		"portfolioBlocks/noGap": "noGap",
+		"portfolioBlocks/lightbox": "lightbox",
+		"portfolioBlocks/lightboxCaption": "lightboxCaption",
+		"portfolioBlocks/onHoverTitle": "onHoverTitle",
+		"portfolioBlocks/layoutVersion": "layoutVersion",
+		"portfolioBlocks/enableDownload": "enableDownload",
+		"portfolioBlocks/downloadOnHover": "downloadOnHover"
+	},
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"viewScript": "file:./view.js"
+}

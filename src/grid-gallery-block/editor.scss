@@ -1,0 +1,11 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+ .be-video-gallery .block-list-appender {
+	grid-column: 1 / -1!important; // span all columns
+	justify-self: right;
+	margin-top: 16px;
+}

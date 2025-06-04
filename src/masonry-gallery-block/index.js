@@ -1,0 +1,51 @@
+/**
+ * Registers a new block provided a unique name and an object defining its behavior.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
+ */
+import { registerBlockType } from '@wordpress/blocks';
+
+/**
+ * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
+ * All files containing `style` keyword are bundled together. The code used
+ * gets applied both to the front of your site and to the editor.
+ *
+ * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
+ */
+import './style.scss';
+
+/**
+ * Internal dependencies
+ */
+import Edit from './edit';
+import Save from './save';
+import metadata from './block.json';
+
+/**
+ * Every block starts by registering a new block type definition.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
+ */
+registerBlockType(
+	metadata,
+	{
+		icon: {
+			src:
+				<svg id="Layer_2" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1247.24 1247.24">
+					<g id="Layer_1-2">
+						<g>
+							<path d="M385.13,518.89H106.11c-12.42,0-22.49,10.07-22.49,22.49v599.74c0,12.42,10.07,22.49,22.49,22.49h279.01c12.42,0,22.49-10.07,22.49-22.49v-599.73c0-12.42-10.07-22.49-22.49-22.49h.01ZM359.45,1115.45h-227.66v-548.39h227.66v548.39h0Z" />
+							<path d="M763.12,83.62h-279.01c-12.42,0-22.49,10.07-22.49,22.49v550.95c0,12.42,10.07,22.49,22.49,22.49h279.01c12.42,0,22.49-10.07,22.49-22.49V106.11c0-12.42-10.07-22.49-22.49-22.49ZM737.45,631.38h-227.66V131.79h227.66v499.59Z" />
+							<path d="M763.12,733.1h-279.01c-12.42,0-22.49,10.07-22.49,22.49v385.53c0,12.42,10.07,22.49,22.49,22.49h279.01c12.42,0,22.49-10.07,22.49-22.49v-385.53c0-12.42-10.07-22.49-22.49-22.49ZM737.45,1115.45h-227.66v-334.18h227.66v334.18Z" />
+							<path d="M1141.13,893.67h-279.01c-12.42,0-22.49,10.07-22.49,22.49v224.97c0,12.42,10.07,22.49,22.49,22.49h279.01c12.42,0,22.49-10.07,22.49-22.49v-224.97c0-12.42-10.07-22.49-22.49-22.49h0ZM1115.45,1115.45h-227.66v-173.62h227.66v173.62Z" />
+							<path d="M1141.13,518.91h-279.01c-12.42,0-22.49,10.07-22.49,22.49v276.29c0,12.42,10.07,22.49,22.49,22.49h279.01c12.42,0,22.49-10.07,22.49-22.49v-276.29c0-12.42-10.07-22.49-22.49-22.49ZM1115.45,792.02h-227.66v-224.94h227.66v224.94Z" />
+							<path d="M1141.13,83.62h-279.01c-12.42,0-22.49,10.07-22.49,22.49v336.76c0,12.42,10.07,22.49,22.49,22.49h279.01c12.42,0,22.49-10.07,22.49-22.49V106.11c0-12.42-10.07-22.49-22.49-22.49ZM1115.45,417.2h-227.66V131.79h227.66v285.41h0Z" />
+							<path d="M385.13,83.62H106.11c-12.42,0-22.49,10.07-22.49,22.49v336.76c0,12.42,10.07,22.49,22.49,22.49h279.01c12.42,0,22.49-10.07,22.49-22.49V106.11c0-12.42-10.07-22.49-22.49-22.49h.01ZM359.45,417.2h-227.66V131.79h227.66v285.41h0Z" />
+						</g>
+					</g>
+				</svg>
+		},
+		edit: Edit,
+		save: Save
+	}
+);

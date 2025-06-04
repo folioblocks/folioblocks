@@ -1,0 +1,98 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "portfolio-blocks/video-gallery-block",
+	"version": "0.4.5",
+	"title": "Video Gallery",
+	"category": "portfolio-blocks",
+	"icon": "format-video",
+	"description": "A filterable grid of videos with thumbnails and lightbox playback.",
+	"keywords": ["video", "gallery", "filter", "grid"],
+	"textdomain": "portfolio-blocks",
+	"allowedBlocks": [ "portfoio-blocks/pb-video-block" ],
+	"supports": {
+		"align": [ "wide", "full" ],
+		"color": {
+			"background": true,
+			"gradients": true,
+			"text": false
+		},
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
+		"anchor": true,
+		"ariaLabel": true,
+		"html": false, 
+		"className": true
+	},
+  	"attributes": {
+    	"columns": { "type": "number", "default": 3},
+    	"tabletColumns": { "type": "number", "default": 2 },
+    	"mobileColumns": { "type": "number", "default": 1},
+		"gap": { "type": "number", "default": 10 },
+		"borderWidth": { "type": "number", "default": 0 }, 
+		"borderRadius": { "type": "number", "default": 0 },
+  		"borderColor": { "type": "string", "default": "#ffffff" },
+        "dropShadow": { "type": "boolean", "default": false },
+		"aspectRatio": { "type": "string", "default": "16:9" },
+  		"playButtonVisibility": { "type": "string", "default": "always"},
+		"titleVisibility": { "type": "string", "default": "always" },
+    	"filterCategories": { "type": "array", "items": { "type": "string"}, "default": [] },
+    	"enableFilter": { "type": "boolean", "default": false },
+		"filterAlign": { "type": "string", "default": "center"},
+    	"lightbox": { "type": "boolean", "default": true }, 
+		"thumbnailSize": { "type": "string", "default": "large" },
+		"filterTextColor": {
+			"type": "string",
+			"default": "#000000"
+		  },
+		  "filterBgColor": {
+			"type": "string",
+			"default": "transparent"
+		  },
+		  "activeFilterTextColor": {
+			"type": "string",
+			"default": "#ffffff"
+		  },
+		  "activeFilterBgColor": {
+			"type": "string",
+			"default": "#000000"
+		  },
+		"videos": {
+    		"type": "array",
+    		"default": [],
+    		"items": {
+     			"type": "object",
+      			"properties": {
+        			"thumbnail": { "type": "string" },
+        			"videoUrl": { "type": "string" },
+        			"title": { "type": "string" },
+        			"aspectRatio": { "type": "string" },
+        			"playButtonVisibility": { "type": "string" },
+        			"titleVisibility": { "type": "string" },
+        			"filterCategory": { "type": "string" }
+      			}
+    		}
+  		}
+	},
+  	"usesContext": ["postId"],
+  	"providesContext": {
+		"portfolioBlocks/aspectRatio": "aspectRatio",
+		"portfolioBlocks/playButtonVisibility": "playButtonVisibility",
+		"portfolioBlocks/titleVisibility": "titleVisibility",
+		"portfolioBlocks/filterCategories": "filterCategories",
+		"portfolioBlocks/activeFilter": "activeFilter",
+		"portfolioBlocks/lightbox": "lightbox", 
+		"portfolioBlocks/thumbnailSize": "thumbnailSize",
+		"portfolioBlocks/borderColor": "borderColor",
+		"portfolioBlocks/borderWidth": "borderWidth",
+		"portfolioBlocks/borderRadius": "borderRadius",
+		"portfolioBlocks/dropShadow": "dropShadow"
+  	},
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"viewScript": "file:./view.js"
+}

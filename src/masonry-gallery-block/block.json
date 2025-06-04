@@ -1,0 +1,190 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "portfolio-blocks/masonry-gallery-block",
+	"version": "0.5.2",
+	"title": "Masonry Gallery",
+	"category": "portfolio-blocks",
+	"icon": "images-alt2",
+	"description": "Create a customizable masonry image gallery.",
+	"textdomain": "portfolio-blocks",
+	"allowedBlocks": [
+		"portfolio-blocks/pb-image-block"
+	],
+	"supports": {
+		"align": [
+			"wide",
+			"full"
+		],
+		"color": {
+			"background": true,
+			"gradients": true,
+			"text": false
+		},
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
+		"anchor": true,
+		"ariaLabel": true,
+		"html": false
+	},
+	"attributes": {
+		"columns": {
+			"type": "number",
+			"default": 6
+		},
+		"tabletColumns": {
+			"type": "number",
+			"default": 4
+		},
+		"mobileColumns": {
+			"type": "number",
+			"default": 2
+		},
+		"noGap": {
+			"type": "boolean",
+			"default": false
+		},
+		"dropShadow": {
+			"type": "boolean",
+			"default": false
+		},
+		"resolution": {
+			"type": "string",
+			"default": "large"
+		},
+		"borderWidth": {
+			"type": "number",
+			"default": 0
+		},
+		"borderRadius": {
+			"type": "number",
+			"default": 0
+		},
+		"borderColor": {
+			"type": "string",
+			"default": "#ffffff"
+		},
+		"lightbox": {
+			"type": "boolean",
+			"default": false
+		},
+		"lightboxCaption": {
+			"type": "boolean",
+			"default": false
+		},
+		"onHoverTitle": {
+			"type": "boolean",
+			"default": false
+		},
+		"randomizeOrder": {
+			"type": "boolean",
+			"default": false
+		},
+		"disableRightClick": { "type": "boolean", "default": false },
+
+		"enableFilter": {
+			"type": "boolean",
+			"default": false
+		},
+		"filterCategories": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			},
+			"default": []
+		},
+		"filtersInput": {
+			"type": "string",
+			"default": ""
+		},
+		"filterAlign": {
+			"type": "string",
+			"default": "center"
+		},
+		"filterTextColor": {
+			"type": "string",
+			"default": "#000000"
+		},
+		"filterBgColor": {
+			"type": "string",
+			"default": "transparent"
+		},
+		"activeFilterTextColor": {
+			"type": "string",
+			"default": "#ffffff"
+		},
+		"activeFilterBgColor": {
+			"type": "string",
+			"default": "#000000"
+		},
+		"activeFilter": {
+			"type": "string",
+			"default": "All"
+		},
+		"enableDownload": {
+			"type": "boolean",
+			"default": false
+		},
+		"downloadOnHover": {
+			"type": "boolean",
+			"default": false
+		},
+		"images": {
+			"type": "array",
+			"default": [],
+			"items": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "number"
+					},
+					"src": {
+						"type": "string"
+					},
+					"alt": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"caption": {
+						"type": "string"
+					},
+					"width": {
+						"type": "number"
+					},
+					"height": {
+						"type": "number"
+					},
+					"sizes": {
+						"type": "object"
+					},
+					"filterCategory": {
+						"type": "string"
+					}
+				}
+			}
+		}
+	},
+	"providesContext": {
+		"portfolioBlocks/resolution": "resolution",
+		"portfolioBlocks/borderColor": "borderColor",
+		"portfolioBlocks/borderWidth": "borderWidth",
+		"portfolioBlocks/borderRadius": "borderRadius",
+		"portfolioBlocks/dropShadow": "dropShadow",
+		"portfolioBlocks/lightbox": "lightbox",
+		"portfolioBlocks/lightboxCaption": "lightboxCaption",
+		"portfolioBlocks/onHoverTitle": "onHoverTitle",
+		"portfolioBlocks/filterCategories": "filterCategories",
+		"portfolioBlocks/activeFilter": "activeFilter",
+		"portfolioBlocks/enableDownload": "enableDownload",
+		"portfolioBlocks/downloadOnHover": "downloadOnHover"
+	},
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"viewScript": "file:./view.js"
+}

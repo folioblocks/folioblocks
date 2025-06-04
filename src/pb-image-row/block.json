@@ -1,0 +1,35 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "portfolio-blocks/pb-image-row",
+	"version": "0.2.4",
+	"title": "Image Row",
+	"category": "portfolio-blocks",
+	"icon": "columns",
+	"description": "The Image Row block is used in the Modular Gallery block to create a modular image gallery.",
+	"example": {},
+	"textdomain": "portfolio-blocks",
+	"parent": [ "portfolio-blocks/modular-gallery-block" ],
+	"allowedBlocks": [ 
+		"portfolio-blocks/pb-image-block",
+		"portfolio-blocks/pb-image-stack"
+	],
+	"supports": {
+		"inserter": false,
+		"anchor": false,
+		"ariaLabel": true,
+		"html": false
+    },
+	"providesContext": {
+        "portfolioBlocks/stackImageheight": "stackImageheight"
+	},
+	"usesContext": [ 
+		"portfolioBlocks/noGap",
+		"portfolioBlocks/layoutVersion"
+	],
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"viewScript": "file:./view.js"
+}

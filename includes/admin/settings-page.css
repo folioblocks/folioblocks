@@ -1,0 +1,55 @@
+
+.settings-container {
+    overflow: auto;
+}
+
+.settings-left {
+	max-width: 800px;
+    float: left;
+	margin-right: 20px;
+}
+
+.settings-right {
+	max-width: 300px;
+    background: #f9f9f9;
+	border: 1px solid #ccd0d4;
+    border-radius: 8px;
+	padding: 20px;
+	height: 100%;
+    float: left;
+}
+.settings-right ul li {
+	margin-bottom: 16px;
+}
+
+.settings-features {
+	display: flex;
+	gap: 24px;
+    margin: 0 auto;
+	margin-bottom: 32px;
+    width: 80%
+}
+
+.feature-column {
+	flex: 1;
+}
+.feature-column ul {list-style-type: disc; padding-left: 20px;}
+.feature-column ul li {
+    margin-bottom: 8px;
+}
+
+.license-key-container {
+	max-width: 80%;
+    background: #f9f9f9;
+	border: 1px solid #ccd0d4;
+    border-radius: 8px;
+	padding: 10px 20px;
+	margin: 0 auto;
+	margin-bottom: 40px;
+    display: block;
+}
+
+.license-key-container input {
+	max-width: 100%;
+	margin-bottom: 12px;
+}

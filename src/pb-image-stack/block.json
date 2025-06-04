@@ -1,0 +1,25 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "portfolio-blocks/pb-image-stack",
+	"version": "0.2.0",
+	"title": "Image Stack",
+	"category": "portfolio-blocks",
+	"icon": "columns",
+	"description": "The Image Stack block is used inside of an Image Row block inside the Modular Gallery block to create a modular image gallery.",
+	"example": {},
+	"textdomain": "portfolio-blocks",
+	"parent": [ "portfolio-blocks/pb-image-row" ],
+	"allowedBlocks": [ "portfolio-blocks/pb-image-block" ],
+	"supports": {
+		"inserter": false,
+		"anchor": false,
+		"ariaLabel": true,
+		"html": false
+    },
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"viewScript": "file:./view.js"
+}

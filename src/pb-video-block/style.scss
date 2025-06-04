@@ -1,0 +1,165 @@
+.pb-video-block {
+	position: relative;
+	width: 100%;
+	aspect-ratio: 16 / 9; // Fallback for modern browsers
+	overflow: hidden;
+	container-type: inline-size;
+	margin-bottom: 0!important;
+	box-sizing: border-box;
+
+	&.drop-shadow {
+		box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+		transition: box-shadow 0.3s ease-in-out;
+	}
+
+	&.aspect-21-9 { aspect-ratio: 21 / 9; }
+	&.aspect-16-9 { aspect-ratio: 16 / 9; }
+	&.aspect-9-16 { aspect-ratio: 9 / 16; }
+	&.aspect-4-3 {  aspect-ratio: 4 / 3; }
+	&.aspect-3-2 {  aspect-ratio: 3 / 2; }
+	&.aspect-1-1 {  aspect-ratio: 1 / 1; }
+
+	&-img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+		box-sizing: border-box;
+	}
+	
+	.video-overlay {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	pointer-events: none;
+	overflow: hidden;
+
+		.overlay-content {
+		transform: translateY(100%);
+		opacity: 0;
+		transition: transform 0.35s ease, opacity 0.35s ease;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		height: 100%;
+		}
+	}
+	
+		.video-title-overlay,
+		.video-play-button {
+			color: white;
+			text-shadow: 0 0 4px rgba(0, 0, 0, 0.7);
+			transition: opacity 0.3s ease;
+			pointer-events: none;	
+		}
+	
+		.video-title-overlay {
+			font-size: clamp(0.9rem, 5cqi, 1.8rem); // 5cqi = 5% of container inline size
+			font-weight: 600;
+			margin-bottom: 10px;
+			max-width: 90%;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+	
+		.video-play-button {
+			font-size: clamp(0.9rem, 5cqi, 1.8rem); // 5cqi = 5% of container inline size
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+	
+		// Visibility logic
+		.video-title-overlay.onHover,
+		.video-play-button.onHover {
+			opacity: 0;
+		}
+	
+		&:hover .video-title-overlay.onHover,
+		&:hover .video-play-button.onHover {
+			opacity: 1;
+		}
+	
+		.video-title-overlay.always,
+		.video-play-button.always {
+			opacity: 1;
+		}
+	
+		.video-title-overlay.hidden,
+		.video-play-button.hidden {
+			display: none;
+		}
+
+}
+
+.has-overlay-always .video-overlay .overlay-content,
+.has-overlay-hover:hover .video-overlay .overlay-content {
+	transform: translateY(0%);
+	opacity: 1;
+}
+
+.has-overlay-always .video-overlay {
+	background: rgba(0, 0, 0, 0.35);
+}
+
+.has-overlay-hover:hover .video-overlay {
+	background: rgba(0, 0, 0, 0.35);
+}
+
+// Lightbox Styles
+
+.pb-video-lightbox {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.9);
+	z-index: 9999;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+}
+
+.pb-video-lightbox-inner {
+	position: relative;
+	width: 100%;
+	max-width: 960px;
+	aspect-ratio: 16 / 9;
+	background: #000;
+}
+
+.pb-video-lightbox-video {
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+
+.pb-video-lightbox-video iframe,
+.pb-video-lightbox-video video {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	border: none;
+	object-fit: cover;
+}
+
+.pb-video-lightbox-close {
+	position: absolute;
+	top: -40px;
+	right: 0;
+	background: none;
+	border: none;
+	font-size: 32px;
+	color: white;
+	cursor: pointer;
+	line-height: 1;
+}
+
+@media (max-width: 640px) {
+	.pb-video-lightbox-inner {
+		aspect-ratio: auto;
+		height: 100%;
+	}
+}
