@@ -2,11 +2,16 @@
     "$schema": "https://schemas.wp.org/trunk/block.json",
     "apiVersion": 3,
     "name": "portfolio-blocks/justified-gallery-block",
-    "version": "0.5.0",
+    "version": "0.5.2",
     "title": "Justified Gallery",
     "category": "portfolio-blocks",
     "icon": "images-alt2",
     "description": "Create a customizable justified image gallery.",
+     "example": {
+        "attributes": {
+        "preview": true
+    }
+    },
     "textdomain": "portfolio-blocks",
     "allowedBlocks": [
         "portfolio-blocks/pb-image-block"
@@ -28,6 +33,7 @@
         "html": false
     },
     "attributes": {
+        "preview": { "type": "boolean", "default": false },       
         "rowHeight": { "type": "number", "default": 250 },
         "rowWidth": { "type": "number", "default": 0},
         "gap": { "type": "number", "default": 10 },

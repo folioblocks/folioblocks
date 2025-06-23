@@ -1,0 +1,259 @@
+.wp-block-portfolio-blocks-before-after-block {overflow: hidden;}
+
+.pb-before-after-container {
+	position: relative;
+	width: 100%;
+	overflow: hidden;
+
+	img {
+		display: block;
+		width: 100%;
+		height: auto;
+		object-fit: cover;
+	}
+
+	.pb-after-image {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		z-index: 1;
+		pointer-events: none;
+	}
+
+	.pb-before-image {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		z-index: 2;
+		pointer-events: none;
+	}
+
+	.pb-before-mask {
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 100%;
+		overflow: hidden;
+		z-index: 3;
+		pointer-events: none;
+	}
+
+	.pb-handle {
+		position: absolute;
+		top: 0;
+		height: 100%;
+		width: 2px;
+		background-color: #fff;
+		box-shadow: 0 0 0 2px #000;
+		z-index: 5;
+		transform: translateX(-50%);
+		pointer-events: none;
+	}
+
+	.pb-slider {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		opacity: 0;
+		cursor: ew-resize;
+		z-index: 10;
+		pointer-events: all;
+		appearance: none;
+		background: none;
+	}
+
+	.pb-slider.is-vertical {
+		writing-mode: vertical-rl;
+		width: 100%;
+		height: 100%;
+		cursor: ns-resize;
+
+		&::-webkit-slider-thumb {
+			writing-mode: horizontal-tb; // prevent WebKit override
+		}
+
+		&::-moz-range-thumb {
+			writing-mode: horizontal-tb;
+		}
+
+		&::-ms-thumb {
+			writing-mode: horizontal-tb;
+		}
+	}
+
+	.pb-slider-handle {
+		position: absolute;
+		top: 0;
+		width: 2px;
+		height: 100%;
+		background-color: white;
+		transform: translateX(-50%);
+		z-index: 9;
+		pointer-events: none;
+
+		&::before {
+			content: "";
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			width: 36px;
+			height: 36px;
+			border-radius: 50%;
+			background-color: var(--pb-slider-color, rgba(255, 255, 255, 0.7));
+			backdrop-filter: blur(4px);
+			color: black;
+			font-size: 16px;
+			font-family: sans-serif;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+		}
+	}
+
+	&.is-vertical {
+
+		.pb-before-image,
+		.pb-after-image {
+			width: 100%;
+			height: 100%;
+		}
+
+		.pb-slider {
+			cursor: ns-resize;
+		}
+
+		.pb-slider-handle {
+			width: 100%;
+			height: 2px;
+			top: 50%;
+			left: 0;
+			transform: translateY(-50%);
+
+			&::before {
+				content: "";
+				white-space: nowrap;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				width: 36px;
+				height: 36px;
+				border-radius: 50%;
+				background-color: var(--pb-slider-color, rgba(255, 255, 255, 0.7));
+				backdrop-filter: blur(4px);
+				color: black;
+				font-size: 16px;
+				font-family: sans-serif;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+			}
+		}
+	}
+
+	.pb-before-wrapper,
+	.pb-after-wrapper {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+	}
+
+	.pb-before-wrapper {
+		z-index: 2;
+		overflow: hidden;
+	}
+
+	.pb-after-wrapper {
+		z-index: 1;
+	}
+}
+// Before/After label styles
+.pb-before-after-container {
+	.pb-label {
+		position: absolute;
+		margin: 0; 
+		padding: 0.25em 0.75em;
+		font-size: 0.875rem;
+		font-weight: 600;
+		border-radius: 4px;
+		pointer-events: none;
+		white-space: nowrap;
+		z-index: 6;
+	}
+
+	// Horizontal placements
+	&:not(.is-vertical) {
+		.pb-before-label.label-top {
+			top: 10px;
+			left: 10px;
+		}
+		.pb-before-label.label-center {
+			top: 50%;
+			left: 10px;
+			transform: translateY(-50%);
+		}
+		.pb-before-label.label-bottom {
+			bottom: 10px;
+			left: 10px;
+		}
+
+		.pb-after-label.label-top {
+			top: 10px;
+			right: 10px;
+		}
+		.pb-after-label.label-center {
+			top: 50%;
+			right: 10px;
+			transform: translateY(-50%);
+		}
+		.pb-after-label.label-bottom {
+			bottom: 10px;
+			right: 10px;
+		}
+	}
+
+	// Vertical placements
+	&.is-vertical {
+		.pb-before-label.label-left {
+			top: 10px;
+			left: 10px;
+		}
+		.pb-before-label.label-center {
+			top: 10px;
+			left: 50%;
+			transform: translateX(-50%);
+		}
+		.pb-before-label.label-right {
+			top: 10px;
+			right: 10px;
+		}
+
+		.pb-after-label.label-left {
+			bottom: 10px;
+			left: 10px;
+		}
+		.pb-after-label.label-center {
+			bottom: 10px;
+			left: 50%;
+			transform: translateX(-50%);
+		}
+		.pb-after-label.label-right {
+			bottom: 10px;
+			right: 10px;
+		}
+	}
+}

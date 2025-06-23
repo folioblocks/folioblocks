@@ -2,13 +2,17 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
 	"name": "portfolio-blocks/carousel-gallery-block",
-	"version": "0.1.0",
+	"version": "0.4.6",
 	"title": "Carousel Gallery",
 	"category": "portfolio-blocks",
 	"allowedBlocks": [ "portfolio-blocks/pb-image-block" ],
 	"icon": "smiley",
 	"description": "Example block scaffolded with Create Block tool.",
-	"example": {},
+	"example": {
+        "attributes": {
+        "preview": true
+    }
+    },
 	"supports": {
         "align": [ "wide", "full" ],
 		"color": {
@@ -25,7 +29,10 @@
 		"html": false
     },
 	"attributes": {
+        "preview": { "type": "boolean", "default": false },        
         "resolution": { "type": "string", "default": "large" },
+		"verticalOnMobile": { "type": "boolean", "default": false },
+		"carouselHeight": { "type": "number", "default": 300},
         "borderWidth": { "type": "number", "default": 0 }, 
 		"borderRadius": { "type": "number", "default": 0 },
   		"borderColor": { "type": "string", "default": "#ffffff" },
@@ -38,6 +45,12 @@
         "enableFilter": { "type": "boolean", "default": false },
         "enableDownload": { "type": "boolean", "default": false},
         "downloadOnHover": { "type": "boolean", "default": false },
+		"inCarousel": { "type": "boolean", "default": true },
+        "showControls": { "type": "boolean", "default": false },
+        "autoplay": { "type": "boolean", "default": false},
+        "controlsAlignment": { "type": "string", "default": "center" },
+        "controlsBackgroundColor": { "type": "string", "default": "rgba(0, 0, 0, 0.5)" },
+        "controlsIconColor": { "type": "string", "default": "#ffffff" },
         "images": {
             "type": "array",
             "default": [],
@@ -57,9 +70,22 @@
             }
         }
     },
-	"providesContext": {
-		"portfolioBlocks/resolution": "resolution"
-	},
+    "providesContext": {
+        "portfolioBlocks/resolution": "resolution",
+        "portfolioBlocks/borderColor": "borderColor",
+		"portfolioBlocks/borderWidth": "borderWidth",
+		"portfolioBlocks/borderRadius": "borderRadius",
+        "portfolioBlocks/dropShadow": "dropShadow",
+        "portfolioBlocks/lightbox": "lightbox", 
+        "portfolioBlocks/lightboxCaption": "lightboxCaption",
+        "portfolioBlocks/onHoverTitle": "onHoverTitle",
+        "portfolioBlocks/filterCategories": "filterCategories",
+        "portfolioBlocks/activeFilter": "activeFilter",
+        "portfolioBlocks/enableDownload": "enableDownload",
+        "portfolioBlocks/downloadOnHover": "downloadOnHover",
+		"portfolioBlocks/carouselHeight": "carouselHeight",
+		"portfolioBlocks/inCarousel": "inCarousel"
+    },
 	"textdomain": "portfolio-blocks",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",

@@ -1,4 +1,4 @@
-const GridGalleryIcon = () => (
+const IconGridGallery = () => (
 	<svg
 		viewBox="0 0 1247.24 1247.24"
 		width="24"
@@ -21,4 +21,4 @@ const GridGalleryIcon = () => (
 	</svg>
 );
 
-export default GridGalleryIcon;
+export default IconGridGallery;

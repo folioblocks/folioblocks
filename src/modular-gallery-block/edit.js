@@ -6,12 +6,23 @@ import { BlockControls, useBlockProps, useInnerBlocksProps, InspectorControls } 
 import { ToolbarGroup, ToolbarButton, PanelBody, ToggleControl, SelectControl, RangeControl, ColorPalette, BaseControl } from '@wordpress/components';
 import { plus } from '@wordpress/icons';
 import { applyThumbnails } from '../pb-helpers/applyThumbnails';
+import IconModularGallery from '../pb-helpers/IconModularGallery';
+
 
 const ALLOWED_BLOCKS = ['portfolio-blocks/pb-image-row'];
 
 export default function Edit(props) {
 	const { clientId, attributes, setAttributes } = props;
-	const { resolution, dropShadow, noGap, lightbox, lightboxCaption, onHoverTitle, enableDownload, downloadOnHover, } = attributes;
+	const { resolution, dropShadow, noGap, lightbox, lightboxCaption, onHoverTitle, enableDownload, downloadOnHover, preview } = attributes;
+
+	// Block Preview Image
+	if (preview) {
+		return (
+			<div className="pb-block-preview">
+				<IconModularGallery />
+			</div>
+		);
+	}
 
 	const { insertBlock } = useDispatch('core/block-editor');
 
@@ -69,6 +80,53 @@ export default function Edit(props) {
 		}
 	);
 
+	// Determine if the Modular Gallery block or any of its children is selected
+	const isBlockOrChildSelected = useSelect(
+		(select) => {
+			const blockEditorStore = 'core/block-editor';
+			const selectedId = select(blockEditorStore).getSelectedBlockClientId();
+			if (!selectedId) return false;
+
+			const selectedBlock = select(blockEditorStore).getBlock(selectedId);
+			if (!selectedBlock) return false;
+
+			// Direct selection
+			if (selectedBlock.clientId === clientId) return true;
+
+			// Check if selected block is a pb-image-block nested within a pb-image-row or pb-image-stack
+			if (
+				selectedBlock.name === 'portfolio-blocks/pb-image-block'
+			) {
+				const parents = select(blockEditorStore).getBlockParents(selectedId);
+				return parents.includes(clientId);
+			}
+
+			return false;
+		},
+		[clientId]
+	);
+
+	// When the block or a child is selected, applyThumbnails
+	useEffect(() => {
+		if (isBlockOrChildSelected) {
+			setTimeout(() => {
+				applyThumbnails(clientId);
+			}, 200);
+		}
+	}, [isBlockOrChildSelected]);
+
+	// Fallback: if block has images but no thumbnails rendered, applyThumbnails
+	useEffect(() => {
+		const hasImages = innerBlocks.length > 0;
+		const listViewHasThumbnails = document.querySelector('[data-pb-thumbnail-applied="true"]');
+
+		if (hasImages && !listViewHasThumbnails) {
+			setTimeout(() => {
+				applyThumbnails(clientId);
+			}, 300);
+		}
+	}, [innerBlocks]);
+
 	return (
 		<>
 			<BlockControls>
@@ -104,7 +162,6 @@ export default function Edit(props) {
 								options={resolutionOptions}
 								onChange={(value) => {
 									setAttributes({ resolution: value });
-									applyThumbnails(clientId);
 								}}
 								__nextHasNoMarginBottom
 								__next40pxDefaultSize
@@ -158,13 +215,6 @@ export default function Edit(props) {
 				</PanelBody>
 				<PanelBody title={__('Gallery Image Settings', 'portfolio-blocks')} initialOpen={true}>
 					<ToggleControl
-						label={__('Add Drop Shadow', 'portfolio-blocks')}
-						checked={dropShadow}
-						onChange={(value) => setAttributes({ dropShadow: value })}
-						__nextHasNoMarginBottom
-						help={__('Applies a subtle drop shadow to images.')}
-					/>
-					<ToggleControl
 						label={__('Enable Lightbox', 'portfolio-blocks')}
 						checked={lightbox}
 						onChange={(value) => setAttributes({ lightbox: value })}
@@ -194,6 +244,13 @@ export default function Edit(props) {
 			</InspectorControls>
 			<InspectorControls group="styles">
 				<PanelBody title={__('Gallery Image Styles', 'portfolio-blocks')} initialOpen={true}>
+					<ToggleControl
+						label={__('Enable Drop Shadow', 'portfolio-blocks')}
+						checked={dropShadow}
+						onChange={(value) => setAttributes({ dropShadow: value })}
+						__nextHasNoMarginBottom
+						help={__('Applies a subtle drop shadow to images.')}
+					/>
 					<BaseControl label={__('Border Color', 'portfolio-blocks')} __nextHasNoMarginBottom>
 						<ColorPalette
 							value={attributes.borderColor}

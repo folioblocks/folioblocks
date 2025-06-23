@@ -8,7 +8,11 @@
     "allowedBlocks": [ "portfolio-blocks/pb-image-block" ],
     "icon": "images-alt2",
     "description": "Create a customizable grid image gallery.",
-    "example": {},
+    "example": {
+        "attributes": {
+        "preview": true
+    }
+    },
     "textdomain": "portfolio-blocks",
     "supports": {
         "align": [ "wide", "full" ],
@@ -26,6 +30,7 @@
 		"html": false
     },
     "attributes": {
+        "preview": { "type": "boolean", "default": false },
         "isGridGallery": { "type": "boolean", "default": true },
         "columns": { "type": "number", "default": 6 },
         "tabletColumns": { "type": "number", "default": 4 },

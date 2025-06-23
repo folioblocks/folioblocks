@@ -81,6 +81,28 @@ function portfolio_blocks_render_settings_page() {
 				<h2>Changelog</h2>
 				<ul>
 					<li>
+						<strong>0.6.9</strong><br/>  
+						- Add Before & After comparison block<br/>
+						- Fixed block previews for all blocks
+					</li>
+					<li>
+						<strong>0.6.8</strong><br/>
+						- Fixed stability on thumbnail injection into List View
+					</li>
+					<li>
+						<strong>0.6.7</strong><br/>
+						- Render.php on Carousel Gallery Block complete<br/>
+						- Fixed bug container-type bug on PB Image Block
+					</li>
+					<li>
+						<strong>0.6.6</strong><br/>
+						- Building Carousel Gallery Block
+					</li>
+					<li>
+						<strong>0.6.5</strong><br/>
+						- Added custom icons to all blocks
+					</li>
+					<li>
 						<strong>0.6.4</strong><br/>
 						- Fixed download icon in lightbox on Grid, Justified, Masonry, and Modular galleries<br/>
 						- Fixed arrow placement in lightbox on Mobile<br/>

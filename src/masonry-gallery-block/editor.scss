@@ -1,7 +1,14 @@
-/**
-* Portfolio Blocks - Masonry Gallery Block
-* Styles applied inside the editor only.
- */
+.pb-block-preview {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	background: #3B82F6;
+	
+	svg { width: 100px; height: 100px; fill: #fff; }
+}
 
 .pb-masonry-gallery.block-editor-block-list__layout {
     padding-bottom: 35px !important;

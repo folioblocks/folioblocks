@@ -1,4 +1,4 @@
-const VideoGalleryIcon = () => (
+const IconVideoGallery = () => (
     <svg
         viewBox="0 0 1247.24 1247.24"
         width="24"
@@ -24,4 +24,4 @@ const VideoGalleryIcon = () => (
     </svg>
 );
 
-export default VideoGalleryIcon;
+export default IconVideoGallery;

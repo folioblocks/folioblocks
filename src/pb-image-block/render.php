@@ -98,7 +98,11 @@ $wrapper_attributes = get_block_wrapper_attributes( [
 		<?php endif; ?>
 
 		<?php if ( $title_hover && ! empty( $title ) ) : ?>
-			<figcaption class="pb-image-block-title" style="<?php echo esc_attr( $img_styles ); ?>"><?php echo wp_kses_post( $title ); ?></figcaption>
+			<div class="pb-image-block-title-container">
+				<figcaption class="pb-image-block-title" style="<?php echo esc_attr( $img_styles ); ?>">
+					<?php echo wp_kses_post( $title ); ?>
+				</figcaption>
+			</div>
 		<?php endif; ?>
 		
 		<?php if ( ! empty( $context['portfolioBlocks/enableDownload'] ) || ! empty( $attributes['enableDownload'] ) ) : ?>

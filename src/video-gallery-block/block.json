@@ -7,6 +7,11 @@
 	"category": "portfolio-blocks",
 	"icon": "format-video",
 	"description": "A filterable grid of videos with thumbnails and lightbox playback.",
+	"example": {
+        "attributes": {
+        "preview": true
+    }
+    },
 	"keywords": ["video", "gallery", "filter", "grid"],
 	"textdomain": "portfolio-blocks",
 	"allowedBlocks": [ "portfoio-blocks/pb-video-block" ],
@@ -27,6 +32,7 @@
 		"className": true
 	},
   	"attributes": {
+		"preview": { "type": "boolean", "default": false },   
     	"columns": { "type": "number", "default": 3},
     	"tabletColumns": { "type": "number", "default": 2 },
     	"mobileColumns": { "type": "number", "default": 1},

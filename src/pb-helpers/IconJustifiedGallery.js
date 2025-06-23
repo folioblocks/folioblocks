@@ -1,4 +1,4 @@
-const JustifiedGalleryIcon = () => (
+const IconJustifiedGallery = () => (
     <svg
         viewBox="0 0 1247.24 1247.24"
         width="24"
@@ -20,4 +20,4 @@ const JustifiedGalleryIcon = () => (
     </svg>
 );
 
-export default JustifiedGalleryIcon;
+export default IconJustifiedGallery;

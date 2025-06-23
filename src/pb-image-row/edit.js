@@ -6,7 +6,7 @@ import { createBlock } from '@wordpress/blocks';
 import { ToolbarGroup, ToolbarButton } from '@wordpress/components';
 import { plus } from '@wordpress/icons';
 import { decodeEntities } from '@wordpress/html-entities';
-import ModularGalleryIcon from '../pb-helpers/ModularGalleryIcon';
+import IconModularGallery from '../pb-helpers/IconModularGallery';
 
 const ALLOWED_BLOCKS = ['portfolio-blocks/pb-image-block', 'portfolio-blocks/pb-image-stack'];
 
