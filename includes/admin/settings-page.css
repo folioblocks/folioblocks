@@ -1,3 +1,15 @@
+/* Resize Portfolio Blocks icon in admin menu */
+#adminmenu .toplevel_page_portfolio-blocks-settings .wp-menu-image img {
+	width: 18px !important;
+	height: auto !important;
+	filter: invert(38%) sepia(99%) saturate(613%) hue-rotate(184deg) brightness(103%) contrast(94%);
+}
+
+/* Remove the filter when menu item is current or hovered */
+#adminmenu .toplevel_page_portfolio-blocks-settings.current .wp-menu-image img,
+#adminmenu .toplevel_page_portfolio-blocks-settings:hover .wp-menu-image img {
+	filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(355deg) brightness(106%) contrast(101%);
+}
 
 .settings-container {
     overflow: auto;
@@ -53,3 +65,4 @@
 	max-width: 100%;
 	margin-bottom: 12px;
 }
+

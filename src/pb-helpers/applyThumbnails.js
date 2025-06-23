@@ -7,7 +7,45 @@ const getAllBlocksRecursive = (clientId) => {
 	return all;
 };
 
-console.log('[applyThumbnails] Initialized');
+const observeListViewChanges = () => {
+	const listViewContainer = document.querySelector('.block-editor-list-view__content');
+	if (!listViewContainer) return;
+
+	const observer = new MutationObserver(() => {
+		applyThumbnails(clientId);
+	});
+
+	observer.observe(listViewContainer, {
+		childList: true,
+		subtree: true,
+	});
+};
+
+
+// Wait for List View to appear, then initialize observer
+const waitForListView = () => {
+	const editorLayout = document.querySelector('.edit-post-editor-layout');
+
+	if (!editorLayout) {
+		return;
+	}
+
+	const observer = new MutationObserver(() => {
+		const listView = document.querySelector('.block-editor-list-view__content');
+		if (listView) {
+			observer.disconnect();
+			observeListViewChanges(); // Begin watching for internal changes
+			applyThumbnails(); // Run initially
+		}
+	});
+
+	observer.observe(editorLayout, {
+		childList: true,
+		subtree: true,
+	});
+};
+
+waitForListView();
 
 export const applyThumbnails = (clientId = null, retries = 10) => {
 	const delay = 300;
@@ -17,46 +55,57 @@ export const applyThumbnails = (clientId = null, retries = 10) => {
 		? getAllBlocksRecursive(clientId)
 		: wp.data.select('core/block-editor').getBlocks();
 
-	console.log(`[applyThumbnails] Start — blocks found: ${blocks.length}, retries left: ${retries}`);
-
 	blocks.forEach((block) => {
-		console.log(`[applyThumbnails] Checking block: ${block.name}, clientId: ${block.clientId}`);
-
-		if (!block.attributes?.src) {
-			console.log(`[applyThumbnails] Skipped — no src for block ${block.clientId}`);
+		// Only apply to 'portfolio-blocks/pb-image-block' with a valid src
+		if (
+			block.name !== 'portfolio-blocks/pb-image-block' ||
+			!block.attributes?.src
+		) {
 			return;
 		}
 
 		const listItem = document.querySelector(`[data-block="${block.clientId}"]`);
 		if (!listItem) {
-			console.warn(`[applyThumbnails] List item not found for block ${block.clientId}`);
 			allApplied = false;
 			return;
 		}
 
-		let thumbnailContainer = listItem.querySelector('.block-editor-list-view-block-select-button__images');
+		let thumbnailContainer = listItem.querySelector('.block-editor-list-view-block-select-button__image');
 		if (!thumbnailContainer) {
 			const selectButton = listItem.querySelector('.block-editor-list-view-block-select-button');
 			if (selectButton) {
 				thumbnailContainer = document.createElement('span');
-				thumbnailContainer.className = 'block-editor-list-view-block-select-button__images';
+				thumbnailContainer.className = 'block-editor-list-view-block-select-button__image';
+				thumbnailContainer.dataset.pbThumbnail = 'true';
 				selectButton.appendChild(thumbnailContainer);
-				console.log(`[applyThumbnails] Created new thumbnail span for block ${block.clientId}`);
 			} else {
-				console.warn(`[applyThumbnails] Select button not found for block ${block.clientId}`);
 				allApplied = false;
 				return;
 			}
 		}
 
-		// Apply styling
-		thumbnailContainer.style.backgroundImage = `url(${block.attributes.src})`;
-		thumbnailContainer.style.backgroundSize = 'cover';
-		thumbnailContainer.style.backgroundPosition = 'center';
-		thumbnailContainer.style.display = 'inline-block';
-		thumbnailContainer.style.width = '24px';
-		thumbnailContainer.style.height = '18px';
+		// Skip if already applied with correct background image
+		if (
+			thumbnailContainer.dataset.pbThumbnailApplied === 'true' &&
+			thumbnailContainer.style.backgroundImage === `url("${block.attributes.src}")`
+		) {
+			return;
+		}
 
-		console.log(`[applyThumbnails] Applied thumbnail for block ${block.clientId}`);
+		requestAnimationFrame(() => {
+			thumbnailContainer.style.backgroundImage = `url("${block.attributes.src}")`;
+			thumbnailContainer.style.backgroundSize = 'cover';
+			thumbnailContainer.style.backgroundPosition = 'center';
+			thumbnailContainer.style.setProperty('width', '30px', 'important');
+			thumbnailContainer.style.height = '20px';
+			thumbnailContainer.style.zIndex = '1';
+			thumbnailContainer.dataset.pbThumbnailApplied = 'true';
+		});
 	});
+
+	if (!allApplied && retries > 0) {
+		setTimeout(() => {
+			applyThumbnails(clientId, retries - 1);
+		}, delay);
+	}
 };

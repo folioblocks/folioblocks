@@ -44,6 +44,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 		borderRadius: isInsideGallery ? `${context['portfolioBlocks/borderRadius'] || 0}px` : attributes.borderRadius ? `${attributes.borderRadius}px` : undefined,
 	};
 	const captionStyle = {
+		borderColor: isInsideGallery ? context['portfolioBlocks/borderColor'] || '#ffffff' : attributes.borderColor || '#ffffff',
 		borderWidth: isInsideGallery ? `${context['portfolioBlocks/borderWidth'] || 0}px` : attributes.borderWidth ? `${attributes.borderWidth}px` : undefined,
 		borderStyle: (isInsideGallery ? context['portfolioBlocks/borderWidth'] : attributes.borderWidth) ? 'solid' : undefined,
 		borderRadius: isInsideGallery ? `${context['portfolioBlocks/borderRadius'] || 0}px` : attributes.borderRadius ? `${attributes.borderRadius}px` : undefined,
@@ -67,6 +68,9 @@ export default function Edit({ attributes, setAttributes, context }) {
 	const wrapperRef = useRef();
 
 	const [isLightboxOpen, setLightboxOpen] = useState(false);
+
+	const carouselHeight = context['portfolioBlocks/carouselHeight'] || 400;
+	const displayHeight = carouselHeight;
 
 	useEffect(() => {
 		setAttributes({ imageSize });
@@ -237,6 +241,14 @@ export default function Edit({ attributes, setAttributes, context }) {
 							${enableDownload ? 'has-download' : ''}
 							`,
 					})}
+					style={
+						context['portfolioBlocks/inCarousel']
+							? {
+									height: `${displayHeight}px`,
+					
+							  }
+							: undefined
+					}
 				>
 					{!src ? (
 						<MediaPlaceholder
@@ -251,7 +263,6 @@ export default function Edit({ attributes, setAttributes, context }) {
 							<img
 								src={selectedSrc}
 								alt={alt}
-								title={title}
 								width={width}
 								height={height}
 								className="pb-image-block__img"

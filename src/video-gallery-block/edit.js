@@ -33,7 +33,7 @@ import { plus } from '@wordpress/icons';
  * Internal imports
  */
 import ResponsiveRangeControl from '../pb-helpers/ResponsiveRangeControl';
-import VideoGalleryIcon from '../pb-helpers/VideoGalleryIcon';
+import IconVideoGallery from '../pb-helpers/IconVideoGallery';
 /**
  * Internal styles
  */
@@ -65,7 +65,17 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		filterBgColor,
 		activeFilterTextColor,
 		activeFilterBgColor,
+		preview
 	} = attributes;
+
+	// Block Preview Image
+	if (preview) {
+		return (
+			<div className="pb-block-preview">
+				<IconVideoGallery />
+			</div>
+		);
+	}
 
 	/**
 	 * State & Effects

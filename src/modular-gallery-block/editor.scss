@@ -1,9 +1,11 @@
-/**
- * The following styles get applied inside the editor only.
- *
- * Replace them with your own styles or remove the file completely.
- */
-
-.wp-block-create-block-modular-gallery-block {
-	border: 1px dotted #f00;
+.pb-block-preview {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	background: #3B82F6;
+	
+	svg { width: 100px; height: 100px; fill: #fff; }
 }

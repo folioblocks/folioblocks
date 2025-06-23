@@ -1,9 +1,14 @@
 import { registerBlockType } from '@wordpress/blocks';
 import './style.scss';
-import edit from './edit';
-import save from './save';
+import Edit from './edit';
+import Save from './save';
+import metadata from './block.json';
 
-registerBlockType('portfolio-blocks/pb-image-block', {
-    edit,
-    save, // Ensure save function is included
-});
+registerBlockType(
+    metadata,
+    {
+        edit: Edit,
+        save: Save, // Ensure save function is included
+        
+    }
+);

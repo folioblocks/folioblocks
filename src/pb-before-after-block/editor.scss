@@ -1,0 +1,112 @@
+.pb-block-preview {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	background: #3B82F6;
+	
+	svg { width: 100px; height: 100px; fill: #fff; }
+}
+
+.pb-split-placeholder {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	align-items: left;
+	padding: 20px;
+	background: #ffffff;
+	border: 1px solid #000;
+	border-radius: 2px;
+	min-height: 180px;
+
+	.pb-placeholder-header {
+		display: flex;
+		align-items: left;
+		justify-content: left;
+		gap: 3px;
+
+		svg {
+			width: 24px;
+			height: 24px;
+			color: #757575;
+		}
+
+		h2 {
+			font-size: 13px;
+			font-weight: 600;
+			margin: 0;
+			line-height: 24px;
+		}
+	}
+
+	.pb-placeholder-instructions {
+		color: #303030;
+		font-size: 13px;
+		font-weight: 400;
+		margin: 0;
+	}
+
+	.pb-placeholder-fields {
+		display: flex;
+		gap: 20px;
+		justify-content: center;
+		width: 100%;
+
+		> div {
+			flex: 1;
+			text-align: center;
+			border: 1px solid #eee;
+			padding: 20px;
+
+			p {
+				font-size: 13px;
+				font-weight: 600;
+				margin-bottom: 12px;
+			}
+
+			.components-button {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				width: auto;
+				min-width: 160px;
+				text-align: center;
+			}
+		}
+	}
+}
+.pb-thumbnail-row {
+	display: flex;
+	gap: 12px;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 16px;
+}
+
+.pb-thumbnail {
+	width: 50%;
+	flex: 1;
+	text-align: center;
+
+	p {
+		margin-bottom: 4px;
+		font-weight: 600;
+		font-size: 12px;
+	}
+
+	img {
+		max-width: 100%;
+		height: auto;
+		max-height: 80px;
+		object-fit: cover;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+	}
+}
+.pb-swap-button {
+	display: flex; 
+	align-items: center;
+	justify-content: center;
+}

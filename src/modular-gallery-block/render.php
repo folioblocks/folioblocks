@@ -21,6 +21,9 @@ if ( ! empty( $attributes['enableDownload'] ) ) {
     $wrapper_args['data-enable-download'] = 'true';
 }
 ?>
-<div <?php echo get_block_wrapper_attributes( $wrapper_args ); ?>>
+<?php
+$wrapper_attributes = get_block_wrapper_attributes( $wrapper_args );
+echo '<div ' . wp_kses( $wrapper_attributes, [ 'div' => [] ] ) . '>';
+?>
 	<?php echo wp_kses_post( $content ); ?>
 </div>

@@ -28,7 +28,7 @@ import { useEffect, useRef } from '@wordpress/element';
 import ResponsiveRangeControl from '../pb-helpers/ResponsiveRangeControl';
 import { plus } from '@wordpress/icons';
 import { decodeEntities } from '@wordpress/html-entities';
-import MasonryGalleryIcon from '../pb-helpers/MasonryGalleryIcon';
+import IconMasonryGallery from '../pb-helpers/IconMasonryGallery';
 import { applyThumbnails } from '../pb-helpers/applyThumbnails';
 
 import './editor.scss';
@@ -45,7 +45,17 @@ export default function Edit({ clientId, attributes, setAttributes }) {
         mobileColumns,
         enableDownload,
         downloadOnHover,
+        preview
     } = attributes;
+
+    // Block Preview Image
+    if (preview) {
+        return (
+            <div className="pb-block-preview">
+                <IconMasonryGallery />
+            </div>
+        );
+    }
 
     const handleFilterInputChange = (val) => {
         setAttributes({ filtersInput: val });
@@ -144,12 +154,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 
         // Replace inner blocks with the newly created blocks
         replaceInnerBlocks(clientId, [...currentBlocks, ...newBlocks]);
-
-        // Refresh the block to ensure thumbnails are applied
-        setTimeout(() => {
-            updateBlockAttributes(clientId, { _forceRefresh: Date.now() });
-            applyThumbnails(clientId);
-        }, 300);
+        updateBlockAttributes(clientId, { _forceRefresh: Date.now() });
     };
 
     useEffect(() => {
@@ -245,6 +250,53 @@ export default function Edit({ clientId, attributes, setAttributes }) {
     }, [innerBlocks, attributes.noGap, attributes.columns, attributes.tabletColumns, attributes.mobileColumns]);
 
 
+    // Determine if this block or one of its children is selected
+    const isBlockOrChildSelected = useSelect(
+        (select) => {
+            const selectedId = select(blockEditorStore).getSelectedBlockClientId();
+            if (!selectedId) return false;
+
+            const selectedBlock = select(blockEditorStore).getBlock(selectedId);
+            if (!selectedBlock) return false;
+
+            // Check if this block is selected
+            if (selectedBlock.clientId === clientId) return true;
+
+            // Check if selected block is a pb-image-block inside this gallery
+            if (
+                selectedBlock.name === 'portfolio-blocks/pb-image-block' &&
+                select(blockEditorStore).getBlockRootClientId(selectedId) === clientId
+            ) {
+                return true;
+            }
+
+            return false;
+        },
+        [clientId]
+    );
+    // Apply thumbnails when this block or a child is selected
+    useEffect(() => {
+        if (isBlockOrChildSelected) {
+            setTimeout(() => {
+                applyThumbnails(clientId);
+            }, 200);
+        }
+    }, [isBlockOrChildSelected]);
+
+    // Fallback: Apply thumbnails if images are present but thumbnails haven't rendered yet
+    useEffect(() => {
+        const hasImages = innerBlocks.length > 0;
+        const listViewHasThumbnails = document.querySelector('[data-pb-thumbnail-applied="true"]');
+
+        if (hasImages && !listViewHasThumbnails) {
+            setTimeout(() => {
+                applyThumbnails(clientId);
+            }, 300);
+        }
+    }, [innerBlocks]);
+
+
+
     const selectedBlock = useSelect(
         (select) => {
             const { getSelectedBlock } = select(blockEditorStore);
@@ -334,11 +386,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
                                 });
                             });
 
-                            // Ensure images re-render properly
-                            setTimeout(() => {
-                                updateBlockAttributes(clientId, { _forceRefresh: Date.now() });
-                                applyThumbnails(clientId);
-                            }, 300);
+                            updateBlockAttributes(clientId, { _forceRefresh: Date.now() });
                         }}
                         __nextHasNoMarginBottom
                         __next40pxDefaultSize
@@ -351,7 +399,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
                         mobileColumns={mobileColumns}
                         onChange={(newValues) => setAttributes(newValues)}
                     />
-                     <ToggleControl
+                    <ToggleControl
                         label={__('Remove Image Gap', 'portfolio-blocks')}
                         checked={attributes.noGap || false}
                         onChange={(noGap) => setAttributes({ noGap })}
@@ -396,13 +444,6 @@ export default function Edit({ clientId, attributes, setAttributes }) {
                 </PanelBody>
                 <PanelBody title={__('Gallery Image Settings', 'portfolio-blocks')} initialOpen={true}>
                     <ToggleControl
-                        label={__('Add Drop Shadow', 'portfolio-blocks')}
-                        checked={attributes.dropShadow || false}
-                        onChange={(newDropShadow) => setAttributes({ dropShadow: newDropShadow })}
-                        __nextHasNoMarginBottom
-                        help={__('Applies a subtle drop shadow to images.', 'portfolio-blocks')}
-                    />
-                    <ToggleControl
                         label={__('Enable Lightbox', 'portfolio-blocks')}
                         checked={attributes.lightbox || false}
                         onChange={(newLightbox) => setAttributes({ lightbox: newLightbox })}
@@ -425,8 +466,8 @@ export default function Edit({ clientId, attributes, setAttributes }) {
                         __nextHasNoMarginBottom={true}
                         help={__('Enable image Title appearing on hover.')}
                     />
-				</PanelBody>
-				<PanelBody title={__('Gallery Filter Settings', 'portfolio-blocks')} initialOpen={true}>
+                </PanelBody>
+                <PanelBody title={__('Gallery Filter Settings', 'portfolio-blocks')} initialOpen={true}>
                     <ToggleControl
                         label={__('Enable Image Filtering', 'portfolio-blocks')}
                         checked={enableFilter}
@@ -472,11 +513,18 @@ export default function Edit({ clientId, attributes, setAttributes }) {
                     )}
                 </PanelBody>
                 <PanelBody title={__('Woo Settings', 'portfolio-blocks')} initialOpen={false}>
-                    
+
                 </PanelBody>
             </InspectorControls >
             <InspectorControls group="styles">
                 <PanelBody title={__('Gallery Image Styles', 'portfolio-blocks')} initialOpen={true}>
+                    <ToggleControl
+                        label={__('Enable Drop Shadow', 'portfolio-blocks')}
+                        checked={attributes.dropShadow || false}
+                        onChange={(newDropShadow) => setAttributes({ dropShadow: newDropShadow })}
+                        __nextHasNoMarginBottom
+                        help={__('Applies a subtle drop shadow to images.', 'portfolio-blocks')}
+                    />
                     <BaseControl label={__('Border Color', 'portfolio-blocks')} __nextHasNoMarginBottom>
                         <ColorPalette
                             value={attributes.borderColor}
@@ -558,7 +606,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
             <div {...blockProps} className={`${blockProps.className} ${attributes.dropShadow ? 'drop-shadow' : ''}`}>
                 {innerBlocks.length === 0 ? (
                     <MediaPlaceholder
-                        icon={<MasonryGalleryIcon />}
+                        icon={<IconMasonryGallery />}
                         labels={{ title: __('Add Images', 'portfolio-blocks') }}
                         onSelect={onSelectImages}
                         allowedTypes={['image']}

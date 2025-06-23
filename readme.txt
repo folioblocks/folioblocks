@@ -1,9 +1,11 @@
 === Portfolio Blocks ===
 Contributors:      PB Team
-Tags:              block, portfolio, portfolios, gallery, galleries, image, images, image galleries, photo, photo galleries, video, 
-                   video galleries, grid gallery, justified gallery, masonry gallery, modular gallery, video gallery
+Plugin link: https://portfolio-blocks.com/
+Tags: gallery, portfolio, image, photo, video
 Tested up to:      6.8
-Stable tag:        0.6.3
+Requires at least: 6.3
+Requires PHP: 7.4
+Stable tag:        0.6.8
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -43,6 +45,20 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 2. This is the second screen shot
 
 == Changelog ==
+
+0.6.9  
+- Add Before & After comparison block 
+- Fixed block previews for all blocks
+
+0.6.8
+- Fixed stability on thumbnail injection into List View
+
+0.6.7
+- Render.php on Carousel Gallery Block complete
+- Fixed bug container-type bug on PB Image Block
+
+0.6.6
+- Building Carousel Gallery Block
 
 0.6.5
 - Added custom icons to all blocks

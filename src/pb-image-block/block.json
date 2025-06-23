@@ -13,6 +13,7 @@
 	"parent": [
 		"portfolio-blocks/pb-image-row",
 		"portfolio-blocks/pb-image-stack",
+		"portfolio-blocks/carousel-gallery-block",
 		"portfolio-blocks/grid-gallery-block",
 		"portfolio-blocks/masonry-gallery-block",
 		"portfolio-blocks/justified-gallery-block"
@@ -123,7 +124,9 @@
 		"portfolioBlocks/borderRadius",
 		"portfolioBlocks/borderColor", 
 		"portfolioBlocks/enableDownload",
-        "portfolioBlocks/downloadOnHover"
+        "portfolioBlocks/downloadOnHover",
+		"portfolioBlocks/carouselHeight",
+		"portfolioBlocks/inCarousel"
 	],
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",

@@ -1,8 +1,58 @@
 <?php
-/**
- * @see https://github.com/WordPress/gutenberg/blob/trunk/docs/reference-guides/block-api/block-metadata.md#render
- */
+$wrapper_attributes = array(
+	'data-vertical-on-mobile' => empty( $attributes['verticalOnMobile'] ) ? 'false' : 'true',
+	'data-show-controls'      => empty( $attributes['showControls'] ) ? 'false' : 'true',
+	'data-autoplay'           => empty( $attributes['autoplay'] ) ? 'false' : 'true',
+	'data-autoplay-speed'     => isset( $attributes['autoplaySpeed'] ) ? esc_attr( $attributes['autoplaySpeed'] ) : '3',
+	'data-controls-align'     => isset( $attributes['controlsAlignment'] ) ? esc_attr( $attributes['controlsAlignment'] ) : 'center',
+	'data-controls-bg-color'  => isset( $attributes['controlsBackgroundColor'] ) ? esc_attr( $attributes['controlsBackgroundColor'] ) : 'rgba(0,0,0,0.5)',
+	'data-controls-icon-color'=> isset( $attributes['controlsIconColor'] ) ? esc_attr( $attributes['controlsIconColor'] ) : '#ffffff',
+);
+
+if ( ! empty( $attributes['enableDownload'] ) ) {
+	$wrapper_attributes['data-enable-download'] = 'true';
+}
+
+if ( ! empty( $attributes['disableRightClick'] ) ) {
+	$wrapper_attributes['data-disable-right-click'] = 'true';
+}
 ?>
-<p <?php echo get_block_wrapper_attributes(); ?>>
-	<?php esc_html_e( 'Carousel Gallery Block – hello from a dynamic block!', 'carousel-gallery-block' ); ?>
-</p>
+
+<?php
+$wrapper_attr_string = get_block_wrapper_attributes( $wrapper_attributes );
+echo '<div ' . wp_kses( $wrapper_attr_string, [ 'div' => [] ] ) . '>';
+?>
+	<div class="pb-carousel-gallery">
+		<?php echo wp_kses_post( $content ); ?>
+	</div>
+	<?php if ( ! empty( $attributes['showControls'] ) ) : ?>
+			<div
+				class="pb-carousel-controls align-<?php echo esc_attr( $attributes['controlsAlignment'] ?? 'center' ); ?>"
+				style="
+					--pb-controls-bg: <?php echo esc_attr( $attributes['controlsBackgroundColor'] ?? 'rgba(0,0,0,0.5)' ); ?>;
+					--pb-controls-icon: <?php echo esc_attr( $attributes['controlsIconColor'] ?? '#ffffff' ); ?>;
+				"
+			>
+				<button class="pb-carousel-chevron prev" aria-label="Previous slide">
+					<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true">
+						<path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+					</svg>
+				</button>
+				<?php if ( ! empty( $attributes['autoplay'] ) ) : ?>
+					<button class="pb-carousel-play-button" aria-label="Play/Pause carousel">
+						<svg class="play-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+							<path d="M8 5v14l11-7z"/>
+						</svg>
+						<svg class="pause-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true" style="display:none;">
+							<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+						</svg>
+					</button>
+				<?php endif; ?>
+				<button class="pb-carousel-chevron next" aria-label="Next slide">
+					<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true">
+						<path d="M8.59 16.59 10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
+					</svg>
+				</button>
+			</div>
+	<?php endif; ?>
+</div>

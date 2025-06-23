@@ -1,4 +1,4 @@
-const MasonryGalleryIcon = () => (
+const IconMasonryGallery = () => (
     <svg
         viewBox="0 0 1247.24 1247.24"
         width="24"
@@ -21,4 +21,4 @@ const MasonryGalleryIcon = () => (
     </svg>
 );
 
-export default MasonryGalleryIcon;
+export default IconMasonryGallery;

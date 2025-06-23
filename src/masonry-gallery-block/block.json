@@ -2,11 +2,16 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
 	"name": "portfolio-blocks/masonry-gallery-block",
-	"version": "0.5.2",
+	"version": "0.5.3",
 	"title": "Masonry Gallery",
 	"category": "portfolio-blocks",
 	"icon": "images-alt2",
 	"description": "Create a customizable masonry image gallery.",
+	"example": {
+        "attributes": {
+        "preview": true
+    }
+    },
 	"textdomain": "portfolio-blocks",
 	"allowedBlocks": [
 		"portfolio-blocks/pb-image-block"
@@ -30,6 +35,7 @@
 		"html": false
 	},
 	"attributes": {
+		"preview": { "type": "boolean", "default": false },   
 		"columns": {
 			"type": "number",
 			"default": 6

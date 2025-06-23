@@ -1,3 +1,11 @@
+.pb-image-block-wrapper {
+	position: relative;
+	line-height: 0;
+	padding: 0;
+	margin: 0;
+}
+
+
 .pb-image-block {
     width: 100%; 
     height: auto;
@@ -5,7 +13,6 @@
     padding: 0; 
     line-height: 0; 
     position: relative;
-    overflow: hidden;
     box-sizing: border-box;
 
 
@@ -22,18 +29,17 @@
 }
 
 // DropShadow Styles 
-.pb-image-block.dropshadow {
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+.pb-image-block.dropshadow img {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
     transition: box-shadow 0.3s ease-in-out;
 }
 
 // Caption on Hover Styles 
-.pb-image-block .pb-image-block-title {display:none}
-
 .pb-image-block.title-hover {
-	position: relative;
-    display: inline-block;
-    container-type: inline-size;
+	
+    .pb-image-block-title-container {
+        container-type: inline-size;
+    }
 
 	.pb-image-block-title {
         position: absolute;
@@ -52,8 +58,8 @@
         line-height: 1.5; 
         padding: 1rem;
         opacity: 0;
-        transform: translateY(100%);
-        transition: opacity 0.3s ease, transform 0.3s ease;
+        transform: scale(0.95);
+        transition: opacity 0.3s ease, transform 0.2s ease;
         box-sizing: border-box; 
         pointer-events: none;
         overflow: hidden;

@@ -1,4 +1,4 @@
-const ModularGalleryIcon = () => (
+const IconModularGallery = () => (
     <svg
         viewBox="0 0 1247.24 1247.24"
         width="24"
@@ -19,4 +19,4 @@ const ModularGalleryIcon = () => (
     </svg>
 );
 
-export default ModularGalleryIcon;
+export default IconModularGallery;
