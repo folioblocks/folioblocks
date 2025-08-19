@@ -91,7 +91,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 				titleMap[item.id] = decodeEntities(item.title?.rendered || '');
 			});
 		} catch (error) {
-			console.error("Failed to fetch image titles:", error);
+			// Swallow error, maybe show a user notification in future
 		}
 
 		// Create new blocks
@@ -149,7 +149,6 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 		else if (innerRef && typeof innerRef === 'object') innerRef.current = node;
 	}, [innerRef]);
 
-
 	// Calculate and set carousel height based on aspect ratio and container width
 	const [containerWidth, setContainerWidth] = useState(0);
 	useEffect(() => {
@@ -176,6 +175,26 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 			return () => clearTimeout(timeout);
 		}
 	}, [containerWidth, attributes.verticalOnMobile]);
+
+	// Recalculate when block alignment changes (normal → wide → full)
+	useEffect(() => {
+		// Run even when align is undefined (normal width)
+		const runRecalc = () => {
+			const newHeight = calculateCarouselHeight();
+			const currentAlign = attributes.align || 'normal';
+
+			if (!isNaN(newHeight) && newHeight !== attributes.carouselHeight) {
+				setAttributes({ carouselHeight: newHeight });
+			}
+		};
+
+		// Delay until after DOM updates so wrapper width is correct
+		const raf = requestAnimationFrame(() => {
+			setTimeout(runRecalc, 0);
+		});
+
+		return () => cancelAnimationFrame(raf);
+	}, [attributes.align]);
 
 	// Determine if this block or one of its children is selected
 	const isBlockOrChildSelected = useSelect(
@@ -298,17 +317,13 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 	// Scroll to active slide on change
 	useEffect(() => {
 		const scrollContainer = containerRef.current;
-		console.log("▶️ Scroll triggered. currentSlide:", currentSlide);
-		console.log("📦 Scroll container (from ref):", scrollContainer);
 
 		if (!scrollContainer) return;
 
 		const blockOrder = wp.data.select('core/block-editor').getBlockOrder(clientId);
 		const blockClientId = blockOrder[currentSlide];
-		console.log("🔢 blockClientId for currentSlide:", blockClientId);
 
 		const blockNode = scrollContainer.querySelector(`[data-block="${blockClientId}"]`);
-		console.log("🧱 blockNode:", blockNode);
 
 		if (!blockNode) return;
 
@@ -659,7 +674,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 							}}
 						>
 							<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true">
-								<path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+								<path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
 							</svg>
 						</button>
 						{attributes.autoplay && (
@@ -674,11 +689,11 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 							>
 								{isPlaying ? (
 									<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
-										<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+										<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
 									</svg>
 								) : (
 									<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
-										<path d="M8 5v14l11-7z"/>
+										<path d="M8 5v14l11-7z" />
 									</svg>
 								)}
 							</button>
@@ -692,7 +707,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 							}}
 						>
 							<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true">
-								<path d="M8.59 16.59 10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
+								<path d="M8.59 16.59 10 18l6-6-6-6-1.41 1.41L13.17 12z" />
 							</svg>
 						</button>
 					</div>

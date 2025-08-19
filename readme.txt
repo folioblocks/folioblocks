@@ -5,7 +5,7 @@ Tags: gallery, portfolio, image, photo, video
 Tested up to:      6.8
 Requires at least: 6.3
 Requires PHP: 7.4
-Stable tag:        0.6.8
+Stable tag:        0.7.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -46,9 +46,15 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 
 == Changelog ==
 
+0.7.0
+- Moved Modular Gallery logic from Image Row into parent block for improved resizing performance
+- Improved first placeholder screen on Modular Gallery
+- Improvec first placeholder screen on Video Gallery
+
 0.6.9  
 - Add Before & After comparison block 
 - Fixed block previews for all blocks
+- Fixed bug on Carousel gallery that prevented block from re-sizing correctly before page was saved
 
 0.6.8
 - Fixed stability on thumbnail injection into List View

@@ -81,9 +81,6 @@ export default function Edit({ clientId, attributes, setAttributes }) {
         context: {
             'portfolioBlocks/activeFilter': activeFilter,
             'portfolioBlocks/filterCategories': filterCategories,
-            'portfolioBlocks/borderWidth': attributes.borderWidth || 0,
-            'portfolioBlocks/borderRadius': attributes.borderRadius || 0,
-            'portfolioBlocks/borderColor': attributes.borderColor || '#fff',
         },
         style: {
             '--pb--filter-text-color': attributes.filterTextColor || '#000',
@@ -518,13 +515,6 @@ export default function Edit({ clientId, attributes, setAttributes }) {
             </InspectorControls >
             <InspectorControls group="styles">
                 <PanelBody title={__('Gallery Image Styles', 'portfolio-blocks')} initialOpen={true}>
-                    <ToggleControl
-                        label={__('Enable Drop Shadow', 'portfolio-blocks')}
-                        checked={attributes.dropShadow || false}
-                        onChange={(newDropShadow) => setAttributes({ dropShadow: newDropShadow })}
-                        __nextHasNoMarginBottom
-                        help={__('Applies a subtle drop shadow to images.', 'portfolio-blocks')}
-                    />
                     <BaseControl label={__('Border Color', 'portfolio-blocks')} __nextHasNoMarginBottom>
                         <ColorPalette
                             value={attributes.borderColor}
@@ -567,7 +557,13 @@ export default function Edit({ clientId, attributes, setAttributes }) {
                         __next40pxDefaultSize
                         __nextHasNoMarginBottom
                         help={__('Set border radius in pixels.')}
-
+                    />
+                    <ToggleControl
+                        label={__('Enable Drop Shadow', 'portfolio-blocks')}
+                        checked={attributes.dropShadow || false}
+                        onChange={(newDropShadow) => setAttributes({ dropShadow: newDropShadow })}
+                        __nextHasNoMarginBottom
+                        help={__('Applies a subtle drop shadow to images.', 'portfolio-blocks')}
                     />
                 </PanelBody>
                 {enableFilter && (

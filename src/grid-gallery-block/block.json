@@ -7,7 +7,7 @@
     "category": "portfolio-blocks",
     "allowedBlocks": [ "portfolio-blocks/pb-image-block" ],
     "icon": "images-alt2",
-    "description": "Create a customizable grid image gallery.",
+    "description": "Shows images in a clean, responsive grid while maintaining original proportions.",
     "example": {
         "attributes": {
         "preview": true
