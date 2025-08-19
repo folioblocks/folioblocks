@@ -248,9 +248,6 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		context: {
 			'portfolioBlocks/activeFilter': activeFilter,
 			'portfolioBlocks/filterCategories': filterCategories,
-			'portfolioBlocks/borderColor': attributes.borderColor || '#ffffff',
-			'portfolioBlocks/borderRadius': `${attributes.borderRadius || 0}px`,
-			'portfolioBlocks/borderWidth': `${attributes.borderWidth || 0}px`,
 		},
 		style: {
 			'--pb--filter-text-color': attributes.filterTextColor || '#000',
@@ -535,13 +532,6 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			</InspectorControls>
 			<InspectorControls group="styles">
 				<PanelBody title={__('Gallery Image Styles', 'portfolio-blocks')} initialOpen={true}>
-					<ToggleControl
-						label={__('Enable Drop Shadow', 'portfolio-blocks')}
-						checked={attributes.dropShadow || false}
-						onChange={(newDropShadow) => setAttributes({ dropShadow: newDropShadow })}
-						__nextHasNoMarginBottom
-						help={__('Applies a subtle drop shadow to images.')}
-					/>
 					<BaseControl label={__('Border Color', 'portfolio-blocks')} __nextHasNoMarginBottom>
 						<ColorPalette
 							value={attributes.borderColor}
@@ -579,7 +569,13 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						__next40pxDefaultSize
 						__nextHasNoMarginBottom
 						help={__('Set border radius in pixels.')}
-
+					/>
+					<ToggleControl
+						label={__('Enable Drop Shadow', 'portfolio-blocks')}
+						checked={attributes.dropShadow || false}
+						onChange={(newDropShadow) => setAttributes({ dropShadow: newDropShadow })}
+						__nextHasNoMarginBottom
+						help={__('Applies a subtle drop shadow to images.')}
 					/>
 				</PanelBody>
 				{enableFilter && (

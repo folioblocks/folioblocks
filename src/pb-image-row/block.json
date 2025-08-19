@@ -6,7 +6,7 @@
 	"title": "Image Row",
 	"category": "portfolio-blocks",
 	"icon": "columns",
-	"description": "The Image Row block is used in the Modular Gallery block to create a modular image gallery.",
+	"description": "Groups images into a single row, scaling them to fill the full width without cropping.",
 	"example": {},
 	"textdomain": "portfolio-blocks",
 	"parent": [ "portfolio-blocks/modular-gallery-block" ],

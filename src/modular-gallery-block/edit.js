@@ -1,8 +1,7 @@
 import { __ } from '@wordpress/i18n';
-import { useSelect, useDispatch } from '@wordpress/data';
-import { select } from '@wordpress/data';
-import { useState, useEffect } from '@wordpress/element';
-import { BlockControls, useBlockProps, useInnerBlocksProps, InspectorControls } from '@wordpress/block-editor';
+import { select, useSelect, useDispatch } from '@wordpress/data';
+import { useState, useEffect, useRef } from '@wordpress/element';
+import { BlockControls, useBlockProps, useInnerBlocksProps, InspectorControls, MediaPlaceholder } from '@wordpress/block-editor';
 import { ToolbarGroup, ToolbarButton, PanelBody, ToggleControl, SelectControl, RangeControl, ColorPalette, BaseControl } from '@wordpress/components';
 import { plus } from '@wordpress/icons';
 import { applyThumbnails } from '../pb-helpers/applyThumbnails';
@@ -30,40 +29,188 @@ export default function Edit(props) {
 		return select('core/block-editor').getBlock(clientId)?.innerBlocks || [];
 	}, [clientId]);
 
+	const handleImageSelect = async (media) => {
+		try {
+			// Fetch the full media object to ensure we get raw fields
+			const response = await wp.apiFetch({
+				path: `/wp/v2/media/${media.id}`,
+			});
+
+			const title = response.title?.rendered || '';
+			// Prefer raw caption like Masonry, fallback to media.caption
+			const caption = response.caption?.raw || media.caption || '';
+			const alt = response.alt_text || media.alt || '';
+
+			const rowBlock = wp.blocks.createBlock('portfolio-blocks/pb-image-row', {}, [
+				wp.blocks.createBlock('portfolio-blocks/pb-image-block', {
+					id: media.id,
+					src: media.url,
+					alt,
+					title,
+					caption,
+					sizes: media.sizes || {},
+					width: media.width || 0,
+					height: media.height || 0,
+				}),
+			]);
+
+			wp.data.dispatch('core/block-editor').replaceInnerBlocks(clientId, [rowBlock], false);
+
+		} catch (error) {
+			console.error('Failed to fetch image metadata:', error);
+		}
+	};
+
 	const handleAddRow = () => {
 		const { createBlock } = wp.blocks;
 		const newRow = createBlock('portfolio-blocks/pb-image-row');
 		insertBlock(newRow, innerBlocks.length, clientId);
 	};
 	const [layoutVersion, setLayoutVersion] = useState(0);
+	const containerRef = useRef(null);
+	const [rowLayouts, setRowLayouts] = useState({});
 
 	useEffect(() => {
 		const observer = new ResizeObserver(() => {
 			requestAnimationFrame(() => {
 				requestAnimationFrame(() => {
-					setLayoutVersion(Date.now());
+					recalculateLayout();
 				});
 			});
 		});
-		const container = document.querySelector(`[data-block="${clientId}"]`);
+		const container = containerRef.current;
 		if (container) observer.observe(container);
 		return () => observer.disconnect();
-	}, []);
+	}, [innerBlocks, noGap]);
 
 	const blockProps = useBlockProps({
+		ref: containerRef,
 		context: {
-			'portfolioBlocks/lightbox': lightbox,
-			'portfolioBlocks/lightboxCaption': lightboxCaption,
-			'portfolioBlocks/dropShadow': dropShadow,
-			'portfolioBlocks/resolution': resolution,
-			'portfolioBlocks/onHoverTitle': onHoverTitle,
 			'portfolioBlocks/noGap': noGap,
-			'portfolioBlocks/borderColor': attributes.borderColor || '#ffffff',
-			'portfolioBlocks/borderRadius': `${attributes.borderRadius || 0}px`,
-			'portfolioBlocks/borderWidth': `${attributes.borderWidth || 0}px`,
-			'portfolioBlocks/layoutVersion': layoutVersion
+			'portfolioBlocks/layoutVersion': layoutVersion,
+			'portfolioBlocks/rowLayouts': rowLayouts,
 		},
 	});
+	const recalculateLayout = () => {
+		if (!containerRef.current) return;
+		const rowWrappers = containerRef.current.querySelectorAll('.pb-image-row');
+		const layouts = {};
+		rowWrappers.forEach((row, rowIndex) => {
+			const wrappers = Array.from(row.children).filter(
+				(child) =>
+					child.classList.contains('pb-image-block-wrapper') ||
+					child.classList.contains('wp-block-portfolio-blocks-pb-image-stack')
+			);
+			if (!wrappers.length) return;
+
+			const containerWidth = row.clientWidth;
+			const gap = noGap ? 0 : 10;
+			const totalGaps = gap * (wrappers.length - 1);
+
+			const aspectRatios = [];
+			let totalNaturalWidth = 0;
+			const stackMeta = [];
+
+			wrappers.forEach((wrapper) => {
+				let ratio;
+				let isStack = false;
+
+				if (wrapper.classList.contains('pb-image-block-wrapper')) {
+					const img = wrapper.querySelector('img');
+					if (img && img.naturalWidth && img.naturalHeight) {
+						ratio = img.naturalWidth / img.naturalHeight;
+					}
+				} else if (wrapper.classList.contains('wp-block-portfolio-blocks-pb-image-stack')) {
+					isStack = true;
+					const images = wrapper.querySelectorAll('img');
+					let totalStackHeight = 0;
+					images.forEach((img) => {
+						if (img.naturalWidth && img.naturalHeight) {
+							totalStackHeight += img.naturalHeight / img.naturalWidth;
+						}
+					});
+					if (totalStackHeight > 0) {
+						ratio = 1 / totalStackHeight;
+					}
+				}
+
+				if (ratio) {
+					aspectRatios.push(ratio);
+					totalNaturalWidth += ratio;
+					stackMeta.push({ isStack, wrapper });
+				}
+			});
+
+			if (aspectRatios.length !== wrappers.length || totalNaturalWidth === 0) return;
+
+			const targetHeight = Math.round((containerWidth - totalGaps) / totalNaturalWidth);
+
+			let usedWidth = 0;
+			const widths = aspectRatios.map((ratio) => Math.floor(ratio * targetHeight));
+			widths.forEach((width) => {
+				usedWidth += width;
+			});
+			const remainingWidth = containerWidth - usedWidth - totalGaps;
+
+			const widthAdjustments = new Array(wrappers.length).fill(0);
+			for (let i = 0; i < remainingWidth; i++) {
+				widthAdjustments[i % wrappers.length]++;
+			}
+
+			layouts[rowIndex] = widths.map((w, i) => ({
+				width: w + widthAdjustments[i],
+				height: targetHeight,
+				marginRight: i === wrappers.length - 1 ? '0' : `${gap}px`,
+				isStack: stackMeta[i].isStack,
+			}));
+
+			wrappers.forEach((wrapper, index) => {
+				const layout = layouts[rowIndex][index];
+				if (!layout) return;
+
+				if (!layout.isStack) {
+					const figure = wrapper.querySelector('.pb-image-block');
+					if (figure) {
+						figure.style.width = `${layout.width}px`;
+						figure.style.height = `${layout.height}px`;
+						figure.style.marginRight = layout.marginRight;
+					}
+				} else {
+					// Stack logic (already present above)
+					const stackWrapper = wrapper;
+					stackWrapper.style.width = `${layout.width}px`;
+					stackWrapper.style.height = `${layout.height}px`;
+					stackWrapper.style.marginRight = layout.marginRight;
+
+					const images = stackWrapper.querySelectorAll('img');
+					let totalRatio = 0;
+					const ratios = [];
+					images.forEach((img) => {
+						if (img.naturalWidth && img.naturalHeight) {
+							const r = img.naturalHeight / img.naturalWidth;
+							ratios.push(r);
+							totalRatio += r;
+						}
+					});
+
+					const totalStackGaps = noGap ? 0 : (images.length - 1) * 10;
+					const usableHeight = layout.height - totalStackGaps;
+
+					images.forEach((img, idx) => {
+						const share = ratios[idx] / totalRatio;
+						const imgHeight = Math.round(share * usableHeight);
+						const figure = img.closest('.pb-image-block');
+						if (figure) {
+							figure.style.height = `${imgHeight}px`;
+							figure.style.marginBottom = (noGap || idx === images.length - 1) ? '0px' : '10px';
+						}
+					});
+				}
+			});
+		});
+		setRowLayouts(layouts);
+		setLayoutVersion(Date.now());
+	};
 	const innerBlocksProps = useInnerBlocksProps(
 		{
 			className: [
@@ -126,6 +273,21 @@ export default function Edit(props) {
 			}, 300);
 		}
 	}, [innerBlocks]);
+
+	if (innerBlocks.length === 0) {
+		return (
+			<div {...blockProps}>
+				<MediaPlaceholder
+					icon={<IconModularGallery />}
+					labels={{ title: 'Add First Image' }}
+					accept="image/*"
+					allowedTypes={['image']}
+					multiple={false}
+					onSelect={handleImageSelect}
+				/>
+			</div>
+		);
+	}
 
 	return (
 		<>
@@ -244,13 +406,6 @@ export default function Edit(props) {
 			</InspectorControls>
 			<InspectorControls group="styles">
 				<PanelBody title={__('Gallery Image Styles', 'portfolio-blocks')} initialOpen={true}>
-					<ToggleControl
-						label={__('Enable Drop Shadow', 'portfolio-blocks')}
-						checked={dropShadow}
-						onChange={(value) => setAttributes({ dropShadow: value })}
-						__nextHasNoMarginBottom
-						help={__('Applies a subtle drop shadow to images.')}
-					/>
 					<BaseControl label={__('Border Color', 'portfolio-blocks')} __nextHasNoMarginBottom>
 						<ColorPalette
 							value={attributes.borderColor}
@@ -288,7 +443,13 @@ export default function Edit(props) {
 						__next40pxDefaultSize
 						__nextHasNoMarginBottom
 						help={__('Set border radius in pixels.')}
-
+					/>
+					<ToggleControl
+						label={__('Enable Drop Shadow', 'portfolio-blocks')}
+						checked={dropShadow}
+						onChange={(value) => setAttributes({ dropShadow: value })}
+						__nextHasNoMarginBottom
+						help={__('Applies a subtle drop shadow to images.')}
 					/>
 				</PanelBody>
 

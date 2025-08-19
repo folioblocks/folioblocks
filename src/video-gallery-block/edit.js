@@ -10,6 +10,7 @@ import {
 	BlockControls,
 	PanelColorSettings,
 	store as blockEditorStore,
+	MediaPlaceholder,
 } from '@wordpress/block-editor';
 import {
 	PanelBody,
@@ -23,6 +24,7 @@ import {
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 	Panel,
+	Modal,
 } from '@wordpress/components';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { useState, useEffect } from '@wordpress/element';
@@ -83,6 +85,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 
 	// Local state for filter input field
 	const [filtersInput, setFiltersInput] = useState(filterCategories.join(', '));
+	const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 
 	// Selected block in the editor
 	const selectedBlock = useSelect(
@@ -128,23 +131,21 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		}
 	}, [activeFilter, clientId]);
 
-	// Ensure at least one video block exists inside on initial mount
-	const { insertBlock } = useDispatch('core/block-editor');
-	useEffect(() => {
-		const timeout = setTimeout(() => {
-			const block = wp.data.select('core/block-editor').getBlock(clientId);
+	// Handler to add first video via MediaPlaceholder
+	const { replaceInnerBlocks, insertBlock } = useDispatch('core/block-editor');
+	const handleVideoSelect = (media) => {
+		if (!media || !media.url) return;
+		const defaultTitle = media.title && media.title.trim() !== ''
+			? media.title
+			: __('Video', 'portfolio-blocks');
 
-			if (block && block.innerBlocks.length === 0) {
-				insertBlock(
-					wp.blocks.createBlock('portfolio-blocks/pb-video-block'),
-					undefined,
-					clientId
-				);
-			}
-		}, 0); // Delay to ensure block is ready
-
-		return () => clearTimeout(timeout);
-	}, [clientId, insertBlock]);
+		const newBlock = wp.blocks.createBlock('portfolio-blocks/pb-video-block', {
+			videoUrl: media.url,
+			title: defaultTitle,
+			alt: defaultTitle,
+		});
+		replaceInnerBlocks(clientId, [newBlock], false);
+	};
 
 	/**
 	 * Context
@@ -226,16 +227,37 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 
 	// Handler to add a new video block inside the gallery
 	const addVideoBlock = () => {
-		insertBlock(
-			wp.blocks.createBlock('portfolio-blocks/pb-video-block'),
-			undefined,
-			clientId
-		);
+		setIsVideoModalOpen(true);
 	};
 
 	/**
 	 * Render
 	 */
+	// If no videos yet, show MediaPlaceholder
+	const innerBlocks = useSelect(
+		(select) => select('core/block-editor').getBlock(clientId)?.innerBlocks || [],
+		[clientId]
+	);
+
+	if (innerBlocks.length === 0) {
+		return (
+			<div {...blockProps}>
+				<MediaPlaceholder
+					icon={<IconVideoGallery />}
+					labels={{ title: __('Add First Video', 'portfolio-blocks') }}
+					allowedTypes={['video']}
+					onSelect={handleVideoSelect}
+					onSelectURL={(url) => {
+						const videoBlock = wp.blocks.createBlock('portfolio-blocks/pb-video-block', { videoUrl: url });
+						insertBlock(videoBlock, undefined, clientId);
+					}}
+					accept="video/*"
+					multiple={false}
+				/>
+			</div>
+		);
+	}
+
 	return (
 		<>
 			<BlockControls>
@@ -247,6 +269,44 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					{__('Add Videos', 'portfolio-blocks')}
 				</ToolbarButton>
 			</BlockControls>
+			{isVideoModalOpen && (
+				<Modal
+					title={__('Select or Insert Video', 'portfolio-blocks')}
+					onRequestClose={() => setIsVideoModalOpen(false)}
+				>
+					<MediaPlaceholder
+						labels={{
+							title: __('Select or Insert Video', 'portfolio-blocks'),
+							instructions: __('Upload, select from media library, or insert from URL.', 'portfolio-blocks'),
+						}}
+						allowedTypes={['video']}
+						accept="video/*"
+						multiple={false}
+						onSelect={(media) => {
+							const defaultTitle = media.title && media.title.trim() !== ''
+								? media.title
+								: __('Video', 'portfolio-blocks');
+							const newBlock = wp.blocks.createBlock('portfolio-blocks/pb-video-block', {
+								videoUrl: media.url,
+								title: defaultTitle,
+								alt: defaultTitle,
+							});
+							wp.data.dispatch('core/block-editor').insertBlock(newBlock, undefined, clientId);
+							setIsVideoModalOpen(false);
+						}}
+						onSelectURL={(url) => {
+							const defaultTitle = __('Video', 'portfolio-blocks');
+							const newBlock = wp.blocks.createBlock('portfolio-blocks/pb-video-block', {
+								videoUrl: url,
+								title: defaultTitle,
+								alt: defaultTitle,
+							});
+							wp.data.dispatch('core/block-editor').insertBlock(newBlock, undefined, clientId);
+							setIsVideoModalOpen(false);
+						}}
+					/>
+				</Modal>
+			)}
 
 			<InspectorControls>
 				{/* Gallery Settings Panel */}
@@ -275,13 +335,6 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						onChange={(val) => setAttributes({ lightbox: !val })}
 						__nextHasNoMarginBottom
 						help={__('Prevent videos from opening in a Lightbox while editing.')}
-					/>
-					<ToggleControl
-						label={__('Enable Drop Shadow', 'portfolio-blocks')}
-						checked={!!dropShadow}
-						onChange={(value) => setAttributes({ dropShadow: value })}
-						help={__('Enable drop show on Video Blocks.')}
-						__nextHasNoMarginBottom
 					/>
 				</PanelBody>
 
@@ -417,6 +470,13 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						__next40pxDefaultSize
 						__nextHasNoMarginBottom
 						help={__('Set border radius in pixels.')}
+					/>
+					<ToggleControl
+						label={__('Enable Drop Shadow', 'portfolio-blocks')}
+						checked={!!dropShadow}
+						onChange={(value) => setAttributes({ dropShadow: value })}
+						help={__('Enable drop show on Video Blocks.')}
+						__nextHasNoMarginBottom
 					/>
 				</PanelBody>
 

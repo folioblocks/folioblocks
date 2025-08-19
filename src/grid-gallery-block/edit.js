@@ -1,7 +1,3 @@
-
-/**
- * External (WordPress) imports
- */
 import { __ } from '@wordpress/i18n';
 import {
 	useBlockProps,
@@ -31,17 +27,9 @@ import { useEffect, useRef, useCallback } from '@wordpress/element';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { plus } from '@wordpress/icons';
 import { decodeEntities } from '@wordpress/html-entities';
-
-/**
- * Internal imports
- */
 import ResponsiveRangeControl from '../pb-helpers/ResponsiveRangeControl';
 import IconGridGallery from '../pb-helpers/IconGridGallery';
 import { applyThumbnails } from '../pb-helpers/applyThumbnails';
-
-/**
- * Internal styles
- */
 import './editor.scss';
 
 const ALLOWED_BLOCKS = ['portfolio-blocks/pb-image-block'];
@@ -330,9 +318,6 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		context: {
 			'portfolioBlocks/activeFilter': activeFilter,
 			'portfolioBlocks/filterCategories': filterCategories,
-			'portfolioBlocks/borderColor': attributes.borderColor || '#ffffff',
-			'portfolioBlocks/borderRadius': `${attributes.borderRadius || 0}px`,
-			'portfolioBlocks/borderWidth': `${attributes.borderWidth || 0}px`,
 		},
 		style: {
 			'--pb--filter-text-color': attributes.filterTextColor || '#000',
@@ -341,7 +326,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			'--pb--filter-active-bg': attributes.activeFilterBgColor || '#000',
 		},
 	});
-	const className = `${blockProps.className} ${attributes.dropShadow ? 'drop-shadow' : ''}`;
+	const className = `${blockProps.className}`;
 
 	// ---------------------------------------------
 	// Derived / Effective Values
@@ -605,23 +590,15 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 								onBlur={handleFilterInputBlur}
 								help={__('Separate categories with commas')}
 								__nextHasNoMarginBottom
+								__next40pxDefaultSize
 							/>
 						</>
 					)}
-				</PanelBody>
-				<PanelBody title={__('Woo Integration', 'portfolio-blocks')} initialOpen={false}>
 				</PanelBody>
 			</InspectorControls>
 			<InspectorControls group="styles">
 				{/* Thumbnail Settings Panel */}
 				<PanelBody title={__('Gallery Image Styles', 'portfolio-blocks')} initialOpen={true}>
-					<ToggleControl
-						label={__('Enable Drop Shadow', 'portfolio-blocks')}
-						checked={attributes.dropShadow || false}
-						onChange={(newDropShadow) => setAttributes({ dropShadow: newDropShadow })}
-						__nextHasNoMarginBottom
-						help={__('Applies a subtle drop shadow to images.')}
-					/>
 					<BaseControl label={__('Border Color', 'portfolio-blocks')} __nextHasNoMarginBottom>
 						<ColorPalette
 							value={attributes.borderColor}
@@ -659,6 +636,13 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						__next40pxDefaultSize
 						__nextHasNoMarginBottom
 						help={__('Set border radius in pixels.')}
+					/>
+					<ToggleControl
+						label={__('Enable Drop Shadow', 'portfolio-blocks')}
+						checked={attributes.dropShadow || false}
+						onChange={(newDropShadow) => setAttributes({ dropShadow: newDropShadow })}
+						__nextHasNoMarginBottom
+						help={__('Applies a subtle drop shadow to images.')}
 					/>
 				</PanelBody>
 				{enableFilter && (

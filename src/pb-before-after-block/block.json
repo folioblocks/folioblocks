@@ -6,7 +6,7 @@
 	"title": "Before & After Block",
 	"category": "portfolio-blocks",
 	"icon": "images-alt2",
-	"description": "Before and after image comparison slider with customizable options.",
+	"description": "Provides a slider to compare two images side-by-side or top-to-bottom.",
 	"example": {
         "attributes": {
         "preview": true

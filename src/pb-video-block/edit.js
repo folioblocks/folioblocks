@@ -380,7 +380,12 @@ export default function Edit({ attributes, setAttributes, context }) {
 					<TextControl
 						label={__('Video Title', 'portfolio-blocks')}
 						value={title}
-						onChange={(val) => setAttributes({ title: val })}
+						onChange={(val) => {
+							setAttributes({
+								title: val,
+								alt: val // keep alt synced with title edits
+							});
+						}}
 						help={__('Set video Title used in the overlay and for alt text.')}
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
@@ -486,7 +491,6 @@ export default function Edit({ attributes, setAttributes, context }) {
 								<MediaUpload
 									onSelect={(media) => {
 										setThumbnail(media);
-										setIsVideoModalOpen(true);
 									}}
 									allowedTypes={["image"]}
 									render={({ open }) => (

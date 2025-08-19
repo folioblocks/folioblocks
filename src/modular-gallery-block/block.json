@@ -2,11 +2,11 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
 	"name": "portfolio-blocks/modular-gallery-block",
-	"version": "0.4.5",
+	"version": "0.4.6",
 	"title": "Modular Gallery Block",
 	"category": "portfolio-blocks",
 	"icon": "images-alt2",
-	"description": "Use our custom Image Row block to create a modular image gallery",
+	"description": "Organizes images into custom rows for precise control over layout and spacing.",
 	"example": {
         "attributes": {
         "preview": true

@@ -6,7 +6,7 @@
 	"title": "Image Stack",
 	"category": "portfolio-blocks",
 	"icon": "columns",
-	"description": "The Image Stack block is used inside of an Image Row block inside the Modular Gallery block to create a modular image gallery.",
+	"description": "Stacks images vertically with consistent spacing and full-width alignment.",
 	"example": {},
 	"textdomain": "portfolio-blocks",
 	"parent": [ "portfolio-blocks/pb-image-row" ],

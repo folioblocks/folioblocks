@@ -6,7 +6,7 @@
     "title": "Justified Gallery",
     "category": "portfolio-blocks",
     "icon": "images-alt2",
-    "description": "Create a customizable justified image gallery.",
+    "description": "Creates a justified gallery layout where rows are dynamically sized for balance.",
      "example": {
         "attributes": {
         "preview": true

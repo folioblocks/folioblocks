@@ -2,11 +2,11 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
 	"name": "portfolio-blocks/video-gallery-block",
-	"version": "0.4.5",
+	"version": "0.4.6",
 	"title": "Video Gallery",
 	"category": "portfolio-blocks",
 	"icon": "format-video",
-	"description": "A filterable grid of videos with thumbnails and lightbox playback.",
+	"description": "Displays videos in a responsive grid with thumbnails, titles, and lightbox playback.",
 	"example": {
         "attributes": {
         "preview": true
@@ -42,8 +42,8 @@
   		"borderColor": { "type": "string", "default": "#ffffff" },
         "dropShadow": { "type": "boolean", "default": false },
 		"aspectRatio": { "type": "string", "default": "16:9" },
-  		"playButtonVisibility": { "type": "string", "default": "always"},
-		"titleVisibility": { "type": "string", "default": "always" },
+  		"playButtonVisibility": { "type": "string", "default": "onHover"},
+		"titleVisibility": { "type": "string", "default": "onHover" },
     	"filterCategories": { "type": "array", "items": { "type": "string"}, "default": [] },
     	"enableFilter": { "type": "boolean", "default": false },
 		"filterAlign": { "type": "string", "default": "center"},
