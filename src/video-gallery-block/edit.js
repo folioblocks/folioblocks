@@ -14,6 +14,7 @@ import {
 } from '@wordpress/block-editor';
 import {
 	PanelBody,
+	Notice,
 	RangeControl,
 	SelectControl,
 	ToggleControl,
@@ -23,11 +24,11 @@ import {
 	ColorPalette,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
-	Panel,
 	Modal,
 } from '@wordpress/components';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { useState, useEffect } from '@wordpress/element';
+import { applyFilters } from '@wordpress/hooks';
 import { plus } from '@wordpress/icons';
 
 
@@ -70,6 +71,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		preview
 	} = attributes;
 
+	const checkoutUrl = window.portfolioBlocksData?.checkoutUrl || 'https://portfolio-blocks.com/portfolio-blocks-pricing/';
+	
 	// Block Preview Image
 	if (preview) {
 		return (
@@ -392,14 +395,21 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					/>
 				</PanelBody>
 				<PanelBody title={__('Gallery Filter Settings', 'portfolio-blocks')} initialOpen={true}>
-					<ToggleControl
-						label={__('Enable Video Filtering', 'portfolio-blocks')}
-						checked={enableFilter}
-						onChange={(val) => setAttributes({ enableFilter: val })}
-						__nextHasNoMarginBottom
-						help={__('Enable Video filtering with categories.')}
-					/>
-
+					{applyFilters(
+						'portfolioBlocks.videoGallery.enableFilterToggle',
+						(
+							<div style={{ marginBottom: '8px' }}>
+								<Notice status="info" isDismissible={false}>
+									<strong>{__('Enable Video Filtering', 'portfolio-blocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'portfolio-blocks')}
+									</a>
+								</Notice>
+							</div>
+						),
+						{ attributes, setAttributes }
+					)}
 					{enableFilter && (
 						<>
 							<ToggleGroupControl
@@ -433,51 +443,66 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 
 			<InspectorControls group="styles">
 				<PanelBody title={__('Video Thumbnail Styles', 'portfolio-blocks')} initialOpen={true}>
-					<BaseControl label={__('Border Color', 'portfolio-blocks')} __nextHasNoMarginBottom>
-						<ColorPalette
-							value={borderColor}
-							onChange={(value) => setAttributes({ borderColor: value })}
-							clearable={false}
-							help={__('Set border color.')}
-						/>
-					</BaseControl>
-					<RangeControl
-						label={__('Border Width', 'portfolio-blocks')}
-						value={borderWidth}
-						onChange={(value) => {
-							setAttributes({ borderWidth: value });
-							setTimeout(() => {
-								updateBlockAttributes(clientId, { _forceRefresh: Date.now() });
-							}, 50);
-						}}
-						min={0}
-						max={20}
-						__next40pxDefaultSize
-						__nextHasNoMarginBottom
-						help={__('Set border width in pixels.')}
-					/>
-					<RangeControl
-						label={__('Border Radius', 'portfolio-blocks')}
-						value={borderRadius}
-						onChange={(value) => {
-							setAttributes({ borderRadius: value });
-							setTimeout(() => {
-								updateBlockAttributes(clientId, { _forceRefresh: Date.now() });
-							}, 50);
-						}}
-						min={0}
-						max={100}
-						__next40pxDefaultSize
-						__nextHasNoMarginBottom
-						help={__('Set border radius in pixels.')}
-					/>
-					<ToggleControl
-						label={__('Enable Drop Shadow', 'portfolio-blocks')}
-						checked={!!dropShadow}
-						onChange={(value) => setAttributes({ dropShadow: value })}
-						help={__('Enable drop show on Video Blocks.')}
-						__nextHasNoMarginBottom
-					/>
+					{applyFilters(
+						'portfolioBlocks.videoGallery.borderColorControl',
+						(
+							<div style={{ marginBottom: '8px' }}>
+								<Notice status="info" isDismissible={false}>
+									<strong>{__('Enable Image Border Color', 'portfolio-blocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'portfolio-blocks')}
+									</a>
+								</Notice>
+							</div>
+						),
+						{ attributes, setAttributes }
+					)}
+					{applyFilters(
+						'portfolioBlocks.videoGallery.borderWidthControl',
+						(
+							<div style={{ marginBottom: '8px' }}>
+								<Notice status="info" isDismissible={false}>
+									<strong>{__('Enable Image Border Width', 'portfolio-blocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'portfolio-blocks')}
+									</a>
+								</Notice>
+							</div>
+						),
+						{ attributes, setAttributes }
+					)}
+					{applyFilters(
+						'portfolioBlocks.videoGallery.borderRadiusControl',
+						(
+							<div style={{ marginBottom: '8px' }}>
+								<Notice status="info" isDismissible={false}>
+									<strong>{__('Enable Image Border Radius', 'portfolio-blocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'portfolio-blocks')}
+									</a>
+								</Notice>
+							</div>
+						),
+						{ attributes, setAttributes }
+					)}
+					{applyFilters(
+						'portfolioBlocks.videoGallery.dropShadowToggle',
+						(
+							<div style={{ marginBottom: '8px' }}>
+								<Notice status="info" isDismissible={false}>
+									<strong>{__('Enable Image Drop Shadow', 'portfolio-blocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'portfolio-blocks')}
+									</a>
+								</Notice>
+							</div>
+						),
+						{ attributes, setAttributes }
+					)}
 				</PanelBody>
 
 				{enableFilter && (

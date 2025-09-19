@@ -23,22 +23,25 @@ function portfolio_blocks_render_settings_page() {
 
 		<div class="settings-container">
         	<div class="settings-left">
-
                 <p>
                     Thank you for downloading Portfolio Blocks. Portfolio Blocks is a WordPress plugin 
 					purpose-built for the block editor and full site editor, giving you the tools to create 
-					beautiful photo and video galleries with ease.
+					beautiful photo and video galleries with ease directly in your posts or pages.
                 </p>
+				<p>
+					Portfolio Blocks is a paid premiuim plugin, the free version available in the WordPress plugin repository
+					is only meant to give you a taste of what the full version can do.
+				</p>
 				<div class="settings-features">
-					<div class="feature-column">
+					
 						<h2>Free - Features:</h2>
-						<ul>
+						<ul class="features">
 							<li>Galleries limited to 15 images</li>
-							<li>Block Settings Disabled</li>
-					</div>
-					<div class="feature-column">
+							<li>Responsive Design Controls</li>
+							<li>All Other Block Settings <Strong>Disabled</strong></li>
+						</ul>
 						<h2>Pro - Features:</h2>
-						<ul>
+						<ul class="features">
 							<li>Unlimited galleries</li>
 							<li>Filterable Image & Video galleries</li>
 							<li>Add border width, radius & color to images</li>
@@ -49,114 +52,124 @@ function portfolio_blocks_render_settings_page() {
 							<li>Option to allow Image downloads</li>
                             <li>Randomize Image order</li>
 							<li>Right-click prevention</li>
-							<li>Woo Integration</li>
+							<li>Lazy Load galleries</li>
 						</ul>
-					</div>
 				</div>
+				<p>
+					If you haven't already purchased a license for Portfolio Blocks use the Upgrade link in the left hand menu to purchase it 
+					directly on your website. Or can use the button bellow to go to our pricing page and purchase a license there.
+				</p>
+				<p class="buy-button-wrapper">
+                    <a class="button button-primary buy-button" href="https://portfolio-blocks.com/portfolio-blocks-pricing/" target="_blank" rel="noopener noreferrer">
+                        <?php esc_html_e( 'Buy Now', 'portfolio-blocks' ); ?>
+                    </a>
+				</p>
+				<hr/>
+					<h2><?php esc_html_e( 'Portfolio Blocks Walk-Through Videos', 'portfolio-blocks' ); ?></h2>
+					<p>
+						We have made YouTube videos to help you get the most out of Portfolio Blocks and walk 
+						you through all of the features of the Premium version. Check them out below:
+					</p>
+				<hr/>
+				<?php
+    				// --- Latest News from portfolio-blocks.com ---
+    				// Load WordPress feed functions (SimplePie wrapper)
+    				if ( ! function_exists( 'fetch_feed' ) ) {
+        				require_once ABSPATH . WPINC . '/feed.php';
+    				}
 
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae 
-                    pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean 
-                    sed diam urna tempor. 
-                </p>
-		        <p>
-                    Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer 
-                    nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra 
-                    inceptos himenaeos.
-                </p>
+    				// Cache the feed for 6 hours to avoid slow admin loads
+    				$pb_feed_cache_lifetime = function( $seconds ) { return 6 * HOUR_IN_SECONDS; };
+    				add_filter( 'wp_feed_cache_transient_lifetime', $pb_feed_cache_lifetime );
 
-				<div class="license-key-container">
-					<h2>License Key</h2>
-                    <p>Enter you license kdy to activate the pro features.</p>
-					<div class="input-row">
-						<input type="text" name="portfolio_blocks_license_key" value="" class="regular-text" placeholder="Enter your license key" />
-						<button class="button button-primary" type="button">Verify License</button>
-						<button class="button" type="button">Deactivate License</button>
-					</div>
-				</div>
+    				$pb_rss = fetch_feed( 'https://portfolio-blocks.com/feed/' );
 
+    				// Remove our temporary cache lifetime filter
+    				remove_filter( 'wp_feed_cache_transient_lifetime', $pb_feed_cache_lifetime );
+
+    				$pb_has_items = false;
+    				$pb_rss_items = array();
+
+    				if ( ! is_wp_error( $pb_rss ) ) {
+        				$pb_maxitems   = $pb_rss->get_item_quantity( 5 );
+        				$pb_rss_items  = $pb_rss->get_items( 0, $pb_maxitems );
+        				$pb_has_items  = ( $pb_maxitems > 0 );
+    				}
+				?>
+
+				<h2><?php esc_html_e( 'Latest News From Portfolio Blocks', 'portfolio-blocks' ); ?></h2>
+				<ul class="pb-latest-news">
+    				<?php if ( $pb_has_items ) : ?>
+        				<?php foreach ( $pb_rss_items as $item ) :
+            				// Prepare safe values
+            				$pb_title = wp_kses( $item->get_title(), array() );
+            				$pb_link  = esc_url( $item->get_permalink() );
+            				$pb_date  = date_i18n( get_option( 'date_format' ), (int) $item->get_date( 'U' ) );
+
+            				// Build a short excerpt from the item description/content
+            				$pb_desc_raw = $item->get_description();
+            				if ( empty( $pb_desc_raw ) && method_exists( $item, 'get_content' ) ) {
+                				$pb_desc_raw = $item->get_content();
+            				}
+            				$pb_desc = wp_strip_all_tags( $pb_desc_raw );
+            				if ( mb_strlen( $pb_desc ) > 140 ) {
+                				$pb_desc = mb_substr( $pb_desc, 0, 140 ) . '…';
+            				}
+            				$pb_desc = esc_html( $pb_desc );
+        				?>
+            		<li class="pb-news-item">
+                		<a href="<?php echo $pb_link; ?>" target="_blank" rel="noopener noreferrer">
+                    		<?php echo $pb_title; ?>
+                		</a>
+                		<div class="pb-news-meta"><?php echo esc_html( $pb_date ); ?></div>
+                			<?php if ( ! empty( $pb_desc ) ) : ?>
+                    			<div class="pb-news-excerpt"><?php echo $pb_desc; ?></div>
+                			<?php endif; ?>
+            		</li>
+        			<?php endforeach; ?>
+    				<?php else : ?>
+        			<li class="pb-news-item--empty">
+            			<?php esc_html_e( 'No news items found right now. Please check back later.', 'portfolio-blocks' ); ?>
+        			</li>
+    				<?php endif; ?>
+				</ul>
+				<p class="pb-news-view-all">
+    				<a href="https://portfolio-blocks.com/news/" target="_blank" rel="noopener noreferrer">
+       					 <?php esc_html_e( 'View all news', 'portfolio-blocks' ); ?> &rarr;
+    				</a>
+				</p>
 			</div>
 
 			<div class="settings-right">
 				<h2>Changelog</h2>
-				<ul>
-					<li>
-						<strong>0.6.9</strong><br/>  
-						- Add Before & After comparison block<br/>
-						- Fixed block previews for all blocks
-					</li>
-					<li>
-						<strong>0.6.8</strong><br/>
-						- Fixed stability on thumbnail injection into List View
-					</li>
-					<li>
-						<strong>0.6.7</strong><br/>
-						- Render.php on Carousel Gallery Block complete<br/>
-						- Fixed bug container-type bug on PB Image Block
-					</li>
-					<li>
-						<strong>0.6.6</strong><br/>
-						- Building Carousel Gallery Block
-					</li>
-					<li>
-						<strong>0.6.5</strong><br/>
-						- Added custom icons to all blocks
-					</li>
-					<li>
-						<strong>0.6.4</strong><br/>
-						- Fixed download icon in lightbox on Grid, Justified, Masonry, and Modular galleries<br/>
-						- Fixed arrow placement in lightbox on Mobile<br/>
-						- Tweaked styles for download icon
-					</li>
-					<li>
-						<strong>0.6.3</strong><br/>
-						- Organized gallery settings
-					</li>
-					<li>
-						<strong>0.6.2</strong><br/>
-						- Added Right-Click Prevention to Grid, Justified, Masonry, and Modular galleries
-					</li>
-					<li>
-						<strong>0.6.1</strong><br/> 
-						- Fixed a bug in Masonry where adding border messed up the layout in the block editor<br/>
-						- Fixed margin-bottom bug in Justified gallery on Mobile
-					</li>
-					<li>
-						<strong>0.6.0</strong><br/> 
-						- Added support for Image downloads in Grid, Justified, Masonry, and Modular galleries<br/>
-						- Switched the on Image hover to show Title instead of caption
-					</li>
-					<li>
-						<strong>0.5.5</strong><br/> 
-						- Added support for borders and border-radius to PB Image Block<br/>
-						- Added support for borders and border-radius to Grid, Justifed, Masonry, and Modular galleries<br/>
-						- Moved layout logic for Grid Gallery out of PB Image Block and into Grid Gallery
-					</li>
-					<li>
-						<strong>0.5.4</strong><br/> 
-						- Tested in WordPress 6.8<br/>
-						- Moved Filter Bar color settings into Styles panel on all blocks<br/>
-						- Started scaffolding the Modular Gallery and ImageRow block
-					</li>
-					<li>
-						<strong>0.5.3</strong><br/> 
-						- Created custom component for managing columns' responsive vallues.<br/>
-						- Fixed bug in Masonry that prevented collumn value from being used in front-end.
-					</li>
-					<li>
-						<strong>0.5.2</strong><br/> 
-						- Fixed compliance issues on all render files.
-					</li>
-					<li>
-						<strong>0.5.1</strong><br/> 
-						- Initial release of the settings page.
-						- Improved license management UI.
-					</li>
-					<li>
-						<strong>0.5.0</strong><br/> 
-						- Grid, Masonry, Justified, and Video gallery blocks feature complete.
-					</li>
-				</ul>
+				<?php
+				$readme_path = plugin_dir_path( __DIR__ ) . '../readme.txt';
+
+				if ( file_exists( $readme_path ) ) {
+				    $readme = file_get_contents( $readme_path );
+				    preg_match( '/==\s*Changelog\s*==(.+)/s', $readme, $matches );
+				    if ( isset( $matches[1] ) ) {
+				        $changelog = trim( $matches[1] );
+				        $entries = preg_split( '/^\s*(?=\d+\.\d+)/m', $changelog, -1, PREG_SPLIT_NO_EMPTY );
+				        echo '<ul class="pb-changelog">';
+				        foreach ( $entries as $entry ) {
+				            $lines = array_filter( array_map( 'trim', explode( "\n", $entry ) ) );
+				            $version = array_shift( $lines );
+				            echo '<li>';
+				            echo '<strong>' . esc_html( $version ) . '</strong><br/>';
+				            foreach ( $lines as $line ) {
+				                echo esc_html( $line ) . '<br/>';
+				            }
+				            echo '</li>';
+				        }
+				        echo '</ul>';
+				    } else {
+				        echo '<p>No changelog found in readme.txt.</p>';
+				    }
+				} else {
+				    echo '<p>readme.txt file not found at ' . esc_html( $readme_path ) . '</p>';
+				}
+				?>
 			</div>
 		</div>
 	</div>

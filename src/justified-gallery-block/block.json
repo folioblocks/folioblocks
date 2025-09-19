@@ -48,6 +48,7 @@
         "onHoverTitle": { "type": "boolean", "default": false },
         "randomizeOrder": { "type": "boolean", "default": false},
         "disableRightClick": { "type": "boolean", "default": false },
+        "lazyLoad": { "type": "boolean", "default": false },
         "enableFilter": { "type": "boolean", "default": false },
         "filterCategories": { "type": "array", "items": { "type": "string"}, "default": [] },
         "filtersInput": { "type": "string", "default": "" },

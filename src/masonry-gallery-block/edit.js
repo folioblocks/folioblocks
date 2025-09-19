@@ -11,6 +11,7 @@ import {
 } from '@wordpress/block-editor';
 import {
     PanelBody,
+    Notice,
     ToggleControl,
     Button,
     SelectControl,
@@ -27,6 +28,7 @@ import { useDispatch, useSelect } from '@wordpress/data';
 import { useEffect, useRef } from '@wordpress/element';
 import ResponsiveRangeControl from '../pb-helpers/ResponsiveRangeControl';
 import { plus } from '@wordpress/icons';
+import { applyFilters } from '@wordpress/hooks';
 import { decodeEntities } from '@wordpress/html-entities';
 import IconMasonryGallery from '../pb-helpers/IconMasonryGallery';
 import { applyThumbnails } from '../pb-helpers/applyThumbnails';
@@ -47,6 +49,8 @@ export default function Edit({ clientId, attributes, setAttributes }) {
         downloadOnHover,
         preview
     } = attributes;
+
+    const checkoutUrl = window.portfolioBlocksData?.checkoutUrl || 'https://portfolio-blocks.com/portfolio-blocks-pricing/';
 
     // Block Preview Image
     if (preview) {
@@ -403,75 +407,115 @@ export default function Edit({ clientId, attributes, setAttributes }) {
                         help={__('Remove gap between images.')}
                         __nextHasNoMarginBottom
                     />
-                    <ToggleControl
-                        label={__('Randomize Image Order', 'portfolio-blocks')}
-                        checked={attributes.randomizeOrder !== undefined ? attributes.randomizeOrder : false}
-                        onChange={(newRandomize) => setAttributes({ randomizeOrder: !!newRandomize })}
-                        __nextHasNoMarginBottom={true}
-                        help={__('Randomize the order of images.')}
-                    />
-                    <ToggleControl
-                        label={__('Enable Image Downloads', 'portfolio-blocks')}
-                        checked={enableDownload}
-                        onChange={(value) => setAttributes({ enableDownload: value })}
-                        __nextHasNoMarginBottom
-                        help={__('Enable visitors to download images from the gallery.', 'portfolio-blocks')}
-                    />
-                    {enableDownload && (
-                        <SelectControl
-                            label={__('Display Image Download Icon', 'portfolio-blocks')}
-                            value={downloadOnHover ? 'hover' : 'always'}
-                            options={[
-                                { label: __('Always', 'portfolio-blocks'), value: 'always' },
-                                { label: __('On Hover', 'portfolio-blocks'), value: 'hover' },
-                            ]}
-                            onChange={(value) => setAttributes({ downloadOnHover: value === 'hover' })}
-                            __nextHasNoMarginBottom
-                            __next40pxDefaultSize
-                            help={__('Set display preference for Image Download icon.')}
-                        />
+                    {applyFilters(
+                        'portfolioBlocks.masonryGallery.randomizeToggle',
+                        (
+                            <div style={{ marginBottom: '8px' }}>
+                                <Notice status="info" isDismissible={false}>
+                                    <strong>{__('Randomize Image Order', 'portfolio-blocks')}</strong><br />
+                                    {__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'portfolio-blocks')}
+									</a>
+                                </Notice>
+                            </div>
+                        ),
+                        { attributes, setAttributes }
                     )}
-                    <ToggleControl
-                        label="Disable Right-Click on Page"
-                        help="Prevents visitors from right-clicking."
-                        __nextHasNoMarginBottom={true}
-                        checked={attributes.disableRightClick}
-                        onChange={(value) => setAttributes({ disableRightClick: value })}
-                    />
+                    {applyFilters(
+                        'portfolioBlocks.masonryGallery.downloadControls',
+                        (
+                            <div style={{ marginBottom: '8px' }}>
+                                <Notice status="info" isDismissible={false}>
+                                    <strong>{__('Enable Image Downloads', 'portfolio-blocks')}</strong><br />
+                                    {__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'portfolio-blocks')}
+									</a>
+                                </Notice>
+                            </div>
+                        ),
+                        { attributes, setAttributes }
+                    )}
+                    {applyFilters(
+                        'portfolioBlocks.masonryGallery.disableRightClickToggle',
+                        (
+                            <div style={{ marginBottom: '8px' }}>
+                                <Notice status="info" isDismissible={false}>
+                                    <strong>{__('Disable Right-Click', 'portfolio-blocks')}</strong><br />
+                                    {__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'portfolio-blocks')}
+									</a>
+                                </Notice>
+                            </div>
+                        ),
+                        { attributes, setAttributes }
+                    )}
+                    {applyFilters(
+                        'portfolioBlocks.masonryGallery.lazyLoadToggle',
+                        (
+                            <div style={{ marginBottom: '8px' }}>
+                                <Notice status="info" isDismissible={false}>
+                                    <strong>{__('Enable Lazy Load of Images', 'portfolio-blocks')}</strong><br />
+                                    {__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'portfolio-blocks')}
+									</a>
+                                </Notice>
+                            </div>
+                        ),
+                        { attributes, setAttributes }
+                    )}
                 </PanelBody>
                 <PanelBody title={__('Gallery Image Settings', 'portfolio-blocks')} initialOpen={true}>
-                    <ToggleControl
-                        label={__('Enable Lightbox', 'portfolio-blocks')}
-                        checked={attributes.lightbox || false}
-                        onChange={(newLightbox) => setAttributes({ lightbox: newLightbox })}
-                        __nextHasNoMarginBottom={true}
-                        help={__('Enable image Lightbox on click.')}
-                    />
-                    {attributes.lightbox && (
-                        <ToggleControl
-                            label={__('Show Caption in Lightbox', 'portfolio-blocks')}
-                            checked={attributes.lightboxCaption || false}
-                            onChange={(newLightboxCaption) => setAttributes({ lightboxCaption: newLightboxCaption })}
-                            __nextHasNoMarginBottom={true}
-                            help={__('Display image captions inside the lightbox.')}
-                        />
+                    {applyFilters(
+                        'portfolioBlocks.masonryGallery.lightboxControls',
+                        (
+                            <div style={{ marginBottom: '8px' }}>
+                                <Notice status="info" isDismissible={false}>
+                                    <strong>{__('Enalble Lightbox', 'portfolio-blocks')}</strong><br />
+                                    {__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'portfolio-blocks')}
+									</a>
+                                </Notice>
+                            </div>
+                        ),
+                        { attributes, setAttributes }
                     )}
-                    <ToggleControl
-                        label={__('Show Title on Hover', 'portfolio-blocks')}
-                        checked={attributes.onHoverTitle || false}
-                        onChange={(newonHoverTitle) => setAttributes({ onHoverTitle: newonHoverTitle })}
-                        __nextHasNoMarginBottom={true}
-                        help={__('Enable image Title appearing on hover.')}
-                    />
+                    {applyFilters(
+                        'portfolioBlocks.masonryGallery.onHoverTitleToggle',
+                        (
+                            <div style={{ marginBottom: '8px' }}>
+                                <Notice status="info" isDismissible={false}>
+                                    <strong>{__('Show Title on Hover', 'portfolio-blocks')}</strong><br />
+                                    {__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'portfolio-blocks')}
+									</a>
+                                </Notice>
+                            </div>
+                        ),
+                        { attributes, setAttributes }
+                    )}
                 </PanelBody>
                 <PanelBody title={__('Gallery Filter Settings', 'portfolio-blocks')} initialOpen={true}>
-                    <ToggleControl
-                        label={__('Enable Image Filtering', 'portfolio-blocks')}
-                        checked={enableFilter}
-                        onChange={(val) => setAttributes({ enableFilter: val })}
-                        __nextHasNoMarginBottom
-                        help={__('Enable Image filtering with categories.')}
-                    />
+                    {applyFilters(
+                        'portfolioBlocks.masonryGallery.enableFilterToggle',
+                        (
+                            <div style={{ marginBottom: '8px' }}>
+                                <Notice status="info" isDismissible={false}>
+                                    <strong>{__('Enable Image Filtering', 'portfolio-blocks')}</strong><br />
+                                    {__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'portfolio-blocks')}
+									</a>
+                                </Notice>
+                            </div>
+                        ),
+                        { attributes, setAttributes }
+                    )}
                     {enableFilter && (
                         <>
                             <ToggleGroupControl
@@ -509,62 +553,69 @@ export default function Edit({ clientId, attributes, setAttributes }) {
                         </>
                     )}
                 </PanelBody>
-                <PanelBody title={__('Woo Settings', 'portfolio-blocks')} initialOpen={false}>
-
-                </PanelBody>
             </InspectorControls >
             <InspectorControls group="styles">
                 <PanelBody title={__('Gallery Image Styles', 'portfolio-blocks')} initialOpen={true}>
-                    <BaseControl label={__('Border Color', 'portfolio-blocks')} __nextHasNoMarginBottom>
-                        <ColorPalette
-                            value={attributes.borderColor}
-                            onChange={(value) => setAttributes({ borderColor: value })}
-                            clearable={false}
-                            help={__('Set border color.')}
-                        />
-                    </BaseControl>
-                    <RangeControl
-                        label={__('Border Width', 'portfolio-blocks')}
-                        value={attributes.borderWidth}
-                        onChange={(value) => {
-                            setAttributes({ borderWidth: value });
-
-                            // Force a masonry layout recalculation
-                            setTimeout(() => {
-                                const gallery = galleryRef.current;
-                                if (gallery) {
-                                    applyCustomMasonryLayout(); // Directly recalculate the layout
-                                }
-                            }, 50);
-                        }}
-                        min={0}
-                        max={20}
-                        __next40pxDefaultSize
-                        __nextHasNoMarginBottom
-                        help={__('Set border width in pixels.')}
-                    />
-                    <RangeControl
-                        label={__('Border Radius', 'portfolio-blocks')}
-                        value={attributes.borderRadius}
-                        onChange={(value) => {
-                            setAttributes({ borderRadius: value });
-                            setTimeout(() => {
-                                updateBlockAttributes(clientId, { _forceRefresh: Date.now() });
-                            }, 50);
-                        }}
-                        min={0}
-                        max={100}
-                        __next40pxDefaultSize
-                        __nextHasNoMarginBottom
-                        help={__('Set border radius in pixels.')}
-                    />
-                    <ToggleControl
-                        label={__('Enable Drop Shadow', 'portfolio-blocks')}
-                        checked={attributes.dropShadow || false}
-                        onChange={(newDropShadow) => setAttributes({ dropShadow: newDropShadow })}
-                        __nextHasNoMarginBottom
-                        help={__('Applies a subtle drop shadow to images.', 'portfolio-blocks')}
-                    />
+                    {applyFilters(
+                        'portfolioBlocks.masonryGallery.borderColorControl',
+                        (
+                            <div style={{ marginBottom: '8px' }}>
+                                <Notice status="info" isDismissible={false}>
+                                    <strong>{__('Enable Image Border Color', 'portfolio-blocks')}</strong><br />
+                                    {__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'portfolio-blocks')}
+									</a>
+                                </Notice>
+                            </div>
+                        ),
+                        { attributes, setAttributes }
+                    )}
+                    {applyFilters(
+                        'portfolioBlocks.masonryGallery.borderWidthControl',
+                        (
+                            <div style={{ marginBottom: '8px' }}>
+                                <Notice status="info" isDismissible={false}>
+                                    <strong>{__('Enable Image Border Width', 'portfolio-blocks')}</strong><br />
+                                    {__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'portfolio-blocks')}
+									</a>
+                                </Notice>
+                            </div>
+                        ),
+                        { attributes, setAttributes }
+                    )}
+                    {applyFilters(
+                        'portfolioBlocks.masonryGallery.borderRadiusControl',
+                        (
+                            <div style={{ marginBottom: '8px' }}>
+                                <Notice status="info" isDismissible={false}>
+                                    <strong>{__('Enable Image Border Radius', 'portfolio-blocks')}</strong><br />
+                                    {__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'portfolio-blocks')}
+									</a>
+                                </Notice>
+                            </div>
+                        ),
+                        { attributes, setAttributes }
+                    )}
+                    {applyFilters(
+                        'portfolioBlocks.masonryGallery.dropShadowToggle',
+                        (
+                            <div style={{ marginBottom: '8px' }}>
+                                <Notice status="info" isDismissible={false}>
+                                    <strong>{__('Enable Image Drop Shadow', 'portfolio-blocks')}</strong><br />
+                                    {__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'portfolio-blocks')}
+									</a>
+                                </Notice>
+                            </div>
+                        ),
+                        { attributes, setAttributes }
+                    )}
                 </PanelBody>
                 {enableFilter && (
                     <PanelColorSettings

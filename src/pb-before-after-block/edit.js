@@ -1,7 +1,8 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps, MediaUpload, BlockControls, InspectorControls, PanelColorSettings } from '@wordpress/block-editor';
-import { Button, Icon, PanelBody, ToolbarGroup, ToolbarButton, SelectControl, RangeControl, ToggleControl } from '@wordpress/components';
+import { Button, Icon, PanelBody, Notice, ToolbarGroup, ToolbarButton, SelectControl, RangeControl, ToggleControl } from '@wordpress/components';
 import { useState, useRef, useEffect } from '@wordpress/element';
+import { applyFilters } from '@wordpress/hooks';
 import IconBeforeAfter from '../pb-helpers/IconBeforeAfter';
 import './editor.scss';
 
@@ -72,6 +73,8 @@ export default function Edit({ attributes, setAttributes }) {
 	const [sliderValue, setSliderValue] = useState(50);
 	const containerRef = useRef(null);
 	const afterImageRef = useRef(null);
+
+	const checkoutUrl = window.portfolioBlocksData?.checkoutUrl || 'https://portfolio-blocks.com/portfolio-blocks-pricing/';
 
 	// Block Preview Image
 	if (preview) {
@@ -264,13 +267,22 @@ export default function Edit({ attributes, setAttributes }) {
 								__nextHasNoMarginBottom
 								help={__('Set starting position for slider drag handle.', 'portfolio-blocks')}
 							/>
-							<ToggleControl
-								label={__('Show Before & After Labels', 'portfolio-blocks')}
-								checked={showLabels}
-								onChange={(value) => setAttributes({ showLabels: value })}
-								help={__('Display Before & After labels.', 'portfolio-blocks')}
-								__nextHasNoMarginBottom
-							/>
+
+							{applyFilters(
+								'portfolioBlocks.beforeAfter.showLabelsToggle',
+								(
+									<div style={{ marginBottom: '8px' }}>
+										<Notice status="info" isDismissible={false}>
+											<strong>{__('Show Before & After Labels', 'portfolio-blocks')}</strong><br />
+											{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+											<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+												{__('Upgrade to Pro', 'portfolio-blocks')}
+											</a>
+										</Notice>
+									</div>
+								),
+								{ attributes, setAttributes }
+							)}
 							{showLabels && (
 								<SelectControl
 									label={__('Label Position', 'portfolio-blocks')}
@@ -297,27 +309,23 @@ export default function Edit({ attributes, setAttributes }) {
 						</PanelBody>
 					</InspectorControls>
 					<InspectorControls group="styles">
-						<PanelColorSettings
-							title={__('Before & After Block Styles', 'portfolio-blocks')}
-							initialOpen={true}
-							colorSettings={[
-								{
-									label: __('Slider Handle & Line Color', 'portfolio-blocks'),
-									value: sliderColor,
-									onChange: (value) => setAttributes({ sliderColor: value }),
-								},
-								{
-									label: __('Label Text Color', 'portfolio-blocks'),
-									value: labelTextColor,
-									onChange: (value) => setAttributes({ labelTextColor: value }),
-								},
-								{
-									label: __('Label Background Color', 'portfolio-blocks'),
-									value: labelBackgroundColor,
-									onChange: (value) => setAttributes({ labelBackgroundColor: value }),
-								},
-							]}
-						/>
+						{applyFilters(
+							'portfolioBlocks.beforeAfter.colorSettingsPanel',
+							(
+								<PanelBody title={__('Before & After Block Styles', 'portfolio-blocks')} initialOpen={true}>
+									<div style={{ marginBottom: '8px' }}>
+										<Notice status="info" isDismissible={false}>
+											<strong>{__('Enable Before & After Style Controls', 'portfolio-blocks')}</strong><br />
+											{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+											<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+												{__('Upgrade to Pro', 'portfolio-blocks')}
+											</a>
+										</Notice>
+									</div>
+								</PanelBody>
+							),
+							{ attributes, setAttributes }
+						)}
 					</InspectorControls>
 				</>
 			)}
