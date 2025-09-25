@@ -62,6 +62,10 @@ Answer to foo bar dilemma.
 
 == Changelog ==
 
+0.8.1 
+- More fixes for issues found by WordPress Plugin Check (PCP). 
+- Fixed bug loading premium scripts 
+
 0.8.0 
 - Fixes for issues found by WordPress Plugin Check (PCP). 
 - Added assets (icons, banners, & screenshots) required by WordPress plugin repository. 
