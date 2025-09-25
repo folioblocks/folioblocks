@@ -11,6 +11,15 @@ import IconModularGallery from '../pb-helpers/IconModularGallery';
 
 const ALLOWED_BLOCKS = ['portfolio-blocks/pb-image-row'];
 
+// Debounce utility to throttle function calls
+const debounce = (fn, delay) => {
+	let timer;
+	return (...args) => {
+		clearTimeout(timer);
+		timer = setTimeout(() => fn(...args), delay);
+	};
+};
+
 export default function Edit(props) {
 	const { clientId, attributes, setAttributes } = props;
 	const { resolution, dropShadow, noGap, lightbox, lightboxCaption, onHoverTitle, enableDownload, downloadOnHover, preview } = attributes;
@@ -72,32 +81,14 @@ export default function Edit(props) {
 	const [layoutVersion, setLayoutVersion] = useState(0);
 	const containerRef = useRef(null);
 	const [rowLayouts, setRowLayouts] = useState({});
+	const prevLayouts = useRef({});
 
-	useEffect(() => {
-		const observer = new ResizeObserver(() => {
-			requestAnimationFrame(() => {
-				requestAnimationFrame(() => {
-					recalculateLayout();
-				});
-			});
-		});
-		const container = containerRef.current;
-		if (container) observer.observe(container);
-		return () => observer.disconnect();
-	}, [innerBlocks, noGap]);
-
-	const blockProps = useBlockProps({
-		ref: containerRef,
-		context: {
-			'portfolioBlocks/noGap': noGap,
-			'portfolioBlocks/layoutVersion': layoutVersion,
-			'portfolioBlocks/rowLayouts': rowLayouts,
-		},
-	});
 	const recalculateLayout = () => {
 		if (!containerRef.current) return;
 		const rowWrappers = containerRef.current.querySelectorAll('.pb-image-row');
 		const layouts = {};
+		let allRowsReady = true;
+
 		rowWrappers.forEach((row, rowIndex) => {
 			const wrappers = Array.from(row.children).filter(
 				(child) =>
@@ -106,6 +97,15 @@ export default function Edit(props) {
 			);
 			if (!wrappers.length) return;
 
+			// Guard: Only proceed if all images in the row are fully loaded
+			const images = row.querySelectorAll('img');
+			const anyNotLoaded = Array.from(images).some((img) => !img.complete);
+			if (anyNotLoaded) {
+				allRowsReady = false;
+				return;
+			}
+
+			// Proceed with layout calculation for the row (unchanged)
 			const containerWidth = row.clientWidth;
 			const gap = noGap ? 0 : 10;
 			const totalGaps = gap * (wrappers.length - 1);
@@ -211,9 +211,39 @@ export default function Edit(props) {
 				}
 			});
 		});
-		setRowLayouts(layouts);
-		setLayoutVersion(Date.now());
+
+		// If any row's images are not loaded, skip layout recalculation
+		if (!allRowsReady) return;
+
+		const layoutsEqual = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+		if (!layoutsEqual(prevLayouts.current, layouts)) {
+			setRowLayouts(layouts);
+			setLayoutVersion(Date.now());
+			prevLayouts.current = layouts;
+		}
 	};
+
+	const recalculateLayoutDebounced = debounce(recalculateLayout, 150);
+
+	useEffect(() => {
+		const observer = new ResizeObserver(() => {
+			requestAnimationFrame(() => {
+				recalculateLayoutDebounced();
+			});
+		});
+		const container = containerRef.current;
+		if (container) observer.observe(container);
+		return () => observer.disconnect();
+	}, [innerBlocks, noGap]);
+
+	const blockProps = useBlockProps({
+		ref: containerRef,
+		context: {
+			'portfolioBlocks/noGap': noGap,
+			'portfolioBlocks/layoutVersion': layoutVersion,
+			'portfolioBlocks/rowLayouts': rowLayouts,
+		},
+	});
 	const innerBlocksProps = useInnerBlocksProps(
 		{
 			className: [

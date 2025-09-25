@@ -11,52 +11,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	galleries.forEach((gallery) => gallery.classList.add('is-loading'));
 
-	function waitForImage(img) {
-		return new Promise((resolve) => {
-			const timeout = setTimeout(() => {
-				console.warn('Timeout reached for image', img);
-				resolve();
-			}, 3000); // fallback after 3s
+	const observer = new IntersectionObserver((entries) => {
+		entries.forEach((entry) => {
+			if (!entry.isIntersecting) return;
 
-			if (img.complete && img.naturalWidth) {
-				clearTimeout(timeout);
-				resolve();
-			} else {
-				img.addEventListener('load', () => {
-					clearTimeout(timeout);
-					resolve();
-				}, { once: true });
+			const img = entry.target;
+			const wrapper = img.closest('.pb-image-block-wrapper');
+			const figure = wrapper?.querySelector('.pb-image-block');
 
-				img.addEventListener('error', () => {
-					clearTimeout(timeout);
-					resolve();
-				}, { once: true });
-			}
-		});
-	}
+			if (!wrapper || !figure || !img.complete || !img.naturalWidth) return;
 
-	const imageLoadPromises = Array.from(galleries).flatMap((gallery) => {
-		const galleryImages = Array.from(gallery.querySelectorAll('img'));
-		return galleryImages.map(waitForImage);
-	});
-	console.log('Found images to wait for:', imageLoadPromises.length);
-
-	Promise.all(imageLoadPromises).then(() => {
-		console.log('All images loaded, running layout logic');
-		const wrappers = document.querySelectorAll(".pb-image-block-wrapper");
-
-		wrappers.forEach((wrapper) => {
-			const figure = wrapper.querySelector(".pb-image-block");
-			const img = wrapper.querySelector("img");
-
-			if (!figure || !img) return;
-
-			const observer = new ResizeObserver((entries) => {
+			const resizeObserver = new ResizeObserver((entries) => {
 				for (const entry of entries) {
 					const wrapperWidth = entry.contentRect.width;
 					const wrapperHeight = entry.contentRect.height;
-
-					if (!img.complete || !img.naturalWidth || !img.naturalHeight) return;
 
 					const borderWidth = parseFloat(getComputedStyle(img).borderWidth) || 0;
 					const aspectRatio = img.naturalWidth / img.naturalHeight;
@@ -86,39 +54,50 @@ document.addEventListener("DOMContentLoaded", function () {
 				}
 			});
 
-			observer.observe(wrapper);
+			resizeObserver.observe(wrapper);
+			img.classList.add('is-visible');
+			observer.unobserve(img);
 		});
+	}, {
+		rootMargin: '100px',
+		threshold: 0.1,
+	});
 
-		galleries.forEach((galleryBlock) => {
-			const filterButtons = galleryBlock.querySelectorAll('.pb-image-gallery-filters .filter-button');
-			const imageBlockWrappers = galleryBlock.querySelectorAll('.pb-image-block-wrapper');
+	galleries.forEach((gallery) => {
+		gallery.classList.remove('is-loading');
+		const imgs = gallery.querySelectorAll('img');
+		imgs.forEach((img) => {
+			if (img.complete) {
+				observer.observe(img); // may trigger immediately
+			} else {
+				img.onload = () => observer.observe(img);
+				img.onerror = () => observer.observe(img);
+			}
+		});
+	});
 
-			filterButtons.forEach((button) => {
-				button.addEventListener('click', () => {
-					const selected = button.getAttribute('data-filter');
+	galleries.forEach((galleryBlock) => {
+		const filterButtons = galleryBlock.querySelectorAll('.pb-image-gallery-filters .filter-button');
+		const imageBlockWrappers = galleryBlock.querySelectorAll('.pb-image-block-wrapper');
 
-					// Toggle active state
-					filterButtons.forEach((btn) => btn.classList.remove('is-active'));
-					button.classList.add('is-active');
+		filterButtons.forEach((button) => {
+			button.addEventListener('click', () => {
+				const selected = button.getAttribute('data-filter');
 
-					// Show/hide full wrapper blocks based on filter
-					imageBlockWrappers.forEach((wrapper) => {
-						const blockCategory = wrapper.getAttribute('data-filter') || '';
+				// Toggle active state
+				filterButtons.forEach((btn) => btn.classList.remove('is-active'));
+				button.classList.add('is-active');
 
-						if (selected === 'All' || blockCategory === selected) {
-							wrapper.classList.remove('is-hidden');
-						} else {
-							wrapper.classList.add('is-hidden');
-						}
-					});
+				// Show/hide full wrapper blocks based on filter
+				imageBlockWrappers.forEach((wrapper) => {
+					const blockCategory = wrapper.getAttribute('data-filter') || '';
+
+					if (selected === 'All' || blockCategory === selected) {
+						wrapper.classList.remove('is-hidden');
+					} else {
+						wrapper.classList.add('is-hidden');
+					}
 				});
-			});
-		});
-
-		requestAnimationFrame(() => {
-			galleries.forEach((gallery) => {
-				console.log('Removing .is-loading from', gallery);
-				gallery.classList.remove('is-loading');
 			});
 		});
 	});

@@ -2,7 +2,7 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
 	"name": "portfolio-blocks/pb-image-block",
-	"version": "0.5.6",
+	"version": "0.6.0",
 	"title": "Image",
 	"category": "portfolio-blocks",
 	"icon": "format-image",
@@ -110,7 +110,8 @@
 		"enableDownload": {
         	"type": "boolean"    	},
     	"downloadOnHover": {
-        	"type": "boolean"    	}
+        	"type": "boolean"    	}, 
+		"lazyLoad": { "type": "boolean", "default": false }
 	},
 	"usesContext": [
 		"portfolioBlocks/resolution",
@@ -125,6 +126,7 @@
 		"portfolioBlocks/borderColor", 
 		"portfolioBlocks/enableDownload",
         "portfolioBlocks/downloadOnHover",
+		"portfolioBlocks/lazyLoad",
 		"portfolioBlocks/carouselHeight",
 		"portfolioBlocks/inCarousel"
 	],

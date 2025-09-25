@@ -8,6 +8,8 @@ if ( empty( $attributes['src'] ) ) {
 	return;
 }
 
+
+
 $src     = esc_url( $attributes['src'] );
 $full_src = !empty( $attributes['sizes']['full']['url'] ) ? esc_url( $attributes['sizes']['full']['url'] ) : $src;
 
@@ -19,6 +21,7 @@ $id      = isset( $attributes['id'] ) ? (int) $attributes['id'] : 0;
 
 $context = $block->context ?? [];
 
+$lazy_load = $block->context['portfolioBlocks/lazyLoad'] ?? false;
 $lightbox         = $context['portfolioBlocks/lightbox'] ?? ! empty( $attributes['enableLightbox'] );
 $caption_lightbox = $context['portfolioBlocks/lightboxCaption'] ?? ! empty( $attributes['showCaptionInLightbox'] );
 $title_hover = $context['portfolioBlocks/onHoverTitle'] ?? ( isset( $attributes['showTitleOnHover'] ) ? (bool) $attributes['showTitleOnHover'] : false );
@@ -83,7 +86,7 @@ $wrapper_attributes = get_block_wrapper_attributes( [
 			$img_attributes = [
 				'src'	 => $src,
 				'class'    => 'pb-image-block-img wp-image-' . esc_attr( $id ),
-				'loading'  => 'eager',
+				'loading' => $lazy_load ? 'lazy' : 'eager',
 				'decoding' => 'async',
 				'style'    => $img_styles,
 			];

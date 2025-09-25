@@ -57,6 +57,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 	const effectiveDownloadEnabled = isInsideGallery ? contextEnableDownload : enableDownload;
 	const effectiveDownloadOnHover = isInsideGallery ? contextDownloadOnHover : downloadOnHover;
 	const filterCategories = context['portfolioBlocks/filterCategories'] || [];
+	const lazyLoad = context?.['portfolioBlocks/lazyLoad'];
 
 	const activeFilter = context?.['portfolioBlocks/activeFilter'] || 'All';
 	const filterCategory = attributes.filterCategory || '';

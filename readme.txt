@@ -4,8 +4,8 @@ Plugin link: https://portfolio-blocks.com/
 Tags: gallery, portfolio, image, photo, video
 Tested up to:      6.8
 Requires at least: 6.3
-Requires PHP: 7.5
-Stable tag:        0.7.8
+Requires PHP: 7.4
+Stable tag:        0.8.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,13 +52,23 @@ Answer to foo bar dilemma.
 
 == Screenshots ==
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screen shot
+1. Before & After Comparison block populated with images
+2. Carousel Gallery block populated with images
+3. Grid Gallery block populated with images
+4. Justified Gallery block populated with images
+5. Masonry Gallery block populated with images
+6. Modular Gallery block populated with images
+7. Video Gallery block populated with images
 
 == Changelog ==
+
+0.8.0 
+- Fixes for issues found by WordPress Plugin Check (PCP). 
+- Added assets (icons, banners, & screenshots) required by WordPress plugin repository. 
+
+0.7.9
+- Built in Lazy Load logic on Carousel, Grid, Justified, Masonry, and Modular galleries. 
+- Modified Modular Gallery layout logic to improve performane on servers. 
 
 0.7.8
 - All locked features on free version now link to Upgrade page 

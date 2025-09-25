@@ -135,24 +135,25 @@ if (gallery?.classList.contains('collapse-on-mobile') && window.innerWidth < 768
 			const figures = child.querySelectorAll('.pb-image-block');
 			let totalOriginalHeight = 0;
 			imgs.forEach((img) => {
-				totalOriginalHeight += img.naturalHeight || img.height;
+				const h = img.naturalHeight;
+				if (h) totalOriginalHeight += h;
 			});
 
 			figures.forEach((figure, index) => {
 				const img = figure.querySelector('img');
-				const imgOriginalHeight = img?.naturalHeight || img?.height || 0;
-				const effectiveStackHeight = targetHeight - (gap * (figures.length - 1));
-				const figureHeight = (effectiveStackHeight * imgOriginalHeight) / totalOriginalHeight;
+				const imgOriginalHeight = img?.naturalHeight || 0;
+				const effectiveStackHeight = totalOriginalHeight > 0
+					? (targetHeight - (gap * (figures.length - 1)))
+					: targetHeight;
+
+				const figureHeight = totalOriginalHeight > 0
+					? (effectiveStackHeight * imgOriginalHeight) / totalOriginalHeight
+					: effectiveStackHeight / figures.length;
 
 				figure.style.width = '100%';
 				figure.style.height = `${figureHeight}px`;
 				figure.style.marginRight = `0`;
-
-				if (index < figures.length - 1) {
-					figure.style.marginBottom = `${gap}px`;
-				} else {
-					figure.style.marginBottom = `0`;
-				}
+				figure.style.marginBottom = index < figures.length - 1 ? `${gap}px` : `0`;
 			});
 		}
 	});
@@ -175,7 +176,23 @@ if (gallery?.classList.contains('collapse-on-mobile') && window.innerWidth < 768
 document.addEventListener('DOMContentLoaded', () => {
 	const rows = document.querySelectorAll('.pb-image-row');
 	rows.forEach((row) => {
-		waitForImages(row, () => recalculateLayout(row));
+		waitForImages(row, () => {
+			// Wait again specifically for all images in stacks inside the row
+			const stacks = row.querySelectorAll('.pb-image-stack');
+			if (stacks.length === 0) {
+				recalculateLayout(row);
+			} else {
+				let stacksLoaded = 0;
+				stacks.forEach((stack) => {
+					waitForImages(stack, () => {
+						stacksLoaded++;
+						if (stacksLoaded === stacks.length) {
+							recalculateLayout(row);
+						}
+					});
+				});
+			}
+		});
 		window.addEventListener('resize', () => recalculateLayout(row));
 	});
 });

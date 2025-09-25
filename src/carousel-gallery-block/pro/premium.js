@@ -17,7 +17,6 @@ addFilter(
         });
     }
 );
-
 addFilter(
     'portfolioBlocks.carouselGallery.downloadControls',
     'portfolio-blocks/carousel-gallery-premium-downloads',
@@ -139,7 +138,6 @@ addFilter(
         });
     }
 );
-
 addFilter(
     'portfolioBlocks.carouselGallery.enableFilterToggle',
     'portfolio-blocks/carousel-gallery-premium-filter-toggle',
@@ -155,7 +153,6 @@ addFilter(
         });
     }
 );
-
 addFilter(
     'portfolioBlocks.carouselGallery.borderColorControl',
     'portfolio-blocks/carousel-gallery-premium-border-color',
@@ -176,7 +173,6 @@ addFilter(
         );
     }
 );
-
 addFilter(
     'portfolioBlocks.carouselGallery.borderWidthControl',
     'portfolio-blocks/carousel-gallery-premium-border-width',
@@ -200,7 +196,6 @@ addFilter(
         });
     }
 );
-
 addFilter(
     'portfolioBlocks.carouselGallery.borderRadiusControl',
     'portfolio-blocks/carousel-gallery-premium-border-radius',
@@ -224,7 +219,6 @@ addFilter(
         });
     }
 );
-
 addFilter(
     'portfolioBlocks.carouselGallery.dropShadowToggle',
     'portfolio-blocks/carousel-gallery-premium-drop-shadow',

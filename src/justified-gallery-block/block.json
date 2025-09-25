@@ -2,7 +2,7 @@
     "$schema": "https://schemas.wp.org/trunk/block.json",
     "apiVersion": 3,
     "name": "portfolio-blocks/justified-gallery-block",
-    "version": "0.5.2",
+    "version": "0.6.0",
     "title": "Justified Gallery",
     "category": "portfolio-blocks",
     "icon": "images-alt2",
@@ -106,7 +106,8 @@
         "portfolioBlocks/filterCategories": "filterCategories",
         "portfolioBlocks/activeFilter": "activeFilter",
         "portfolioBlocks/enableDownload": "enableDownload",
-        "portfolioBlocks/downloadOnHover": "downloadOnHover"
+        "portfolioBlocks/downloadOnHover": "downloadOnHover",
+        "portfolioBlocks/lazyLoad": "lazyLoad"
     },
     "editorScript": "file:./index.js",
     "editorStyle": "file:./index.css",

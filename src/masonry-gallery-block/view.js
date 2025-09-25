@@ -96,19 +96,31 @@ const getColumnsForWidth = (width) => {
   };
 
   const images = gallery.querySelectorAll('img');
-  let loadedImages = 0;
 
-  const imageLoaded = () => {
-    loadedImages += 1;
-    if (loadedImages === images.length) {
+  const observer = new IntersectionObserver((entries) => {
+    let shouldRecalculate = false;
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        shouldRecalculate = true;
+        observer.unobserve(entry.target);
+      }
+    });
+    if (shouldRecalculate) {
       applyCustomMasonryLayout();
       gallery.classList.remove('is-loading');
     }
-  };
+  }, {
+    rootMargin: '200px',
+    threshold: 0.1,
+  });
 
   images.forEach((img) => {
-    if (img.complete && img.naturalHeight !== 0) imageLoaded();
-    else img.onload = img.onerror = imageLoaded;
+    if (img.complete && img.naturalHeight !== 0) {
+      applyCustomMasonryLayout();
+      gallery.classList.remove('is-loading');
+    } else {
+      observer.observe(img);
+    }
   });
 
   const fallbackTimeout = setTimeout(applyCustomMasonryLayout, 1000);

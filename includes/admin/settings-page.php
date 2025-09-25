@@ -103,7 +103,7 @@ function portfolio_blocks_render_settings_page() {
         				<?php foreach ( $pb_rss_items as $item ) :
             				// Prepare safe values
             				$pb_title = wp_kses( $item->get_title(), array() );
-            				$pb_link  = esc_url( $item->get_permalink() );
+            				$pb_link  = $item->get_permalink();
             				$pb_date  = date_i18n( get_option( 'date_format' ), (int) $item->get_date( 'U' ) );
 
             				// Build a short excerpt from the item description/content
@@ -112,18 +112,14 @@ function portfolio_blocks_render_settings_page() {
                 				$pb_desc_raw = $item->get_content();
             				}
             				$pb_desc = wp_strip_all_tags( $pb_desc_raw );
-            				if ( mb_strlen( $pb_desc ) > 140 ) {
-                				$pb_desc = mb_substr( $pb_desc, 0, 140 ) . '…';
-            				}
-            				$pb_desc = esc_html( $pb_desc );
         				?>
             		<li class="pb-news-item">
-                		<a href="<?php echo $pb_link; ?>" target="_blank" rel="noopener noreferrer">
-                    		<?php echo $pb_title; ?>
+                		<a href="<?php echo esc_url( $pb_link ); ?>" target="_blank" rel="noopener noreferrer">
+                    		<?php echo esc_html( $pb_title ); ?>
                 		</a>
                 		<div class="pb-news-meta"><?php echo esc_html( $pb_date ); ?></div>
                 			<?php if ( ! empty( $pb_desc ) ) : ?>
-                    			<div class="pb-news-excerpt"><?php echo $pb_desc; ?></div>
+                    			<div class="pb-news-excerpt"><?php echo esc_html( $pb_desc ); ?></div>
                 			<?php endif; ?>
             		</li>
         			<?php endforeach; ?>

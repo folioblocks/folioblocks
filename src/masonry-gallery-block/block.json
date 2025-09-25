@@ -2,7 +2,7 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
 	"name": "portfolio-blocks/masonry-gallery-block",
-	"version": "0.5.3",
+	"version": "0.6.0",
 	"title": "Masonry Gallery",
 	"category": "portfolio-blocks",
 	"icon": "images-alt2",
@@ -77,7 +77,8 @@
 		"portfolioBlocks/filterCategories": "filterCategories",
 		"portfolioBlocks/activeFilter": "activeFilter",
 		"portfolioBlocks/enableDownload": "enableDownload",
-		"portfolioBlocks/downloadOnHover": "downloadOnHover"
+		"portfolioBlocks/downloadOnHover": "downloadOnHover", 
+		"portfolioBlocks/lazyLoad": "lazyLoad"
 	},
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
