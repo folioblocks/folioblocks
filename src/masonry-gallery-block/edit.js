@@ -24,11 +24,11 @@ import {
     __experimentalToggleGroupControl as ToggleGroupControl,
     __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from '@wordpress/components';
-import { useDispatch, useSelect } from '@wordpress/data';
+import { subscribe, dispatch, select, useDispatch, useSelect } from '@wordpress/data';
 import { useEffect, useRef } from '@wordpress/element';
 import ResponsiveRangeControl from '../pb-helpers/ResponsiveRangeControl';
 import { plus } from '@wordpress/icons';
-import { applyFilters } from '@wordpress/hooks';
+import { addFilter, applyFilters } from '@wordpress/hooks';
 import { decodeEntities } from '@wordpress/html-entities';
 import IconMasonryGallery from '../pb-helpers/IconMasonryGallery';
 import { applyThumbnails } from '../pb-helpers/applyThumbnails';
@@ -106,23 +106,75 @@ export default function Edit({ clientId, attributes, setAttributes }) {
         { ref: galleryRef, className: `${blockProps.className} pb-masonry-gallery` },
         {
             allowedBlocks: ALLOWED_BLOCKS,
-            renderAppender: () => (
-                <MediaUpload
-                    onSelect={onSelectImages}
-                    allowedTypes={['image']}
-                    multiple
-                    render={({ open }) => (
-                        <Button variant="primary" onClick={open} className="pb-add-images-button">
-                            + Add Images
-                        </Button>
-                    )}
-                />
-            ),
+            renderAppender: false,
         }
     );
 
+    // Filter to limit number of images in free version (only if not Pro)
+    if (!window.portfolioBlocksData?.isPro) {
+        addFilter(
+            'portfolioBlocks.masonryGallery.limitImages',
+            'portfolio-blocks/masonry-gallery-limit',
+            (media, existingCount) => {
+                const MAX_IMAGES_FREE = 15;
+                const allowed = Math.max(0, MAX_IMAGES_FREE - existingCount);
+
+                if (allowed <= 0) {
+                    const message = __('Free version allows up to 15 images. Upgrade to Pro for unlimited.', 'portfolio-blocks');
+                    wp.data.dispatch('core/notices').createNotice(
+                        'warning',
+                        message,
+                        { isDismissible: true, id: 'pb-masonry-limit-warning' }
+                    );
+                    return [];
+                }
+
+                if (media.length > allowed) {
+                    const message = sprintf(
+                        __('Free version allows up to %d images. Only the first %d were added.', 'portfolio-blocks'),
+                        MAX_IMAGES_FREE,
+                        allowed
+                    );
+                    wp.data.dispatch('core/notices').createNotice(
+                        'warning',
+                        message,
+                        { isDismissible: true, id: 'pb-masonry-limit-truncate' }
+                    );
+                }
+
+                return media.slice(0, allowed);
+            }
+        );
+        // Prevent people duplicating blocks to bypass limits in free version
+        subscribe(() => {
+            const blocks = select('core/block-editor').getBlocksByClientId(clientId)[0]?.innerBlocks || [];
+            if (blocks.length > 15) {
+                const extras = blocks.slice(15);
+                extras.forEach((block) => {
+                    dispatch('core/block-editor').removeBlock(block.clientId);
+                });
+
+                if (!document.getElementById('pb-gallery-limit-warning')) {
+                    dispatch('core/notices').createNotice(
+                        'warning',
+                        __('Free version allows up to 15 images. Upgrade to Pro for unlimited.', 'portfolio-blocks'),
+                        { id: 'pb-gallery-limit-warning', isDismissible: true }
+                    );
+                }
+            }
+        });
+    }
+
+    // Select Images Handler
     const onSelectImages = async (media) => {
         if (!media || media.length === 0) return;
+
+        // Allow filtering of selected images (for free vs premium limits)
+        media = applyFilters(
+            'portfolioBlocks.masonryGallery.limitImages',
+            media,
+            innerBlocks.length
+        );
 
         const currentBlocks = wp.data.select('core/block-editor').getBlocks(clientId);
         const existingImageIds = currentBlocks.map((block) => block.attributes.id);
@@ -341,6 +393,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
                     <ToolbarButton
                         icon={plus}
                         label={__('Add Images', 'portfolio-blocks')}
+                        disabled={!window.portfolioBlocksData?.isPro && innerBlocks.length >= 15}
                         onClick={() => {
                             // Trigger the MediaUpload dialog
                             wp.media({
@@ -414,9 +467,9 @@ export default function Edit({ clientId, attributes, setAttributes }) {
                                 <Notice status="info" isDismissible={false}>
                                     <strong>{__('Randomize Image Order', 'portfolio-blocks')}</strong><br />
                                     {__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'portfolio-blocks')}
-									</a>
+                                    <a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+                                        {__('Upgrade to Pro', 'portfolio-blocks')}
+                                    </a>
                                 </Notice>
                             </div>
                         ),
@@ -429,9 +482,9 @@ export default function Edit({ clientId, attributes, setAttributes }) {
                                 <Notice status="info" isDismissible={false}>
                                     <strong>{__('Enable Image Downloads', 'portfolio-blocks')}</strong><br />
                                     {__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'portfolio-blocks')}
-									</a>
+                                    <a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+                                        {__('Upgrade to Pro', 'portfolio-blocks')}
+                                    </a>
                                 </Notice>
                             </div>
                         ),
@@ -444,9 +497,9 @@ export default function Edit({ clientId, attributes, setAttributes }) {
                                 <Notice status="info" isDismissible={false}>
                                     <strong>{__('Disable Right-Click', 'portfolio-blocks')}</strong><br />
                                     {__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'portfolio-blocks')}
-									</a>
+                                    <a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+                                        {__('Upgrade to Pro', 'portfolio-blocks')}
+                                    </a>
                                 </Notice>
                             </div>
                         ),
@@ -459,9 +512,9 @@ export default function Edit({ clientId, attributes, setAttributes }) {
                                 <Notice status="info" isDismissible={false}>
                                     <strong>{__('Enable Lazy Load of Images', 'portfolio-blocks')}</strong><br />
                                     {__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'portfolio-blocks')}
-									</a>
+                                    <a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+                                        {__('Upgrade to Pro', 'portfolio-blocks')}
+                                    </a>
                                 </Notice>
                             </div>
                         ),
@@ -476,9 +529,9 @@ export default function Edit({ clientId, attributes, setAttributes }) {
                                 <Notice status="info" isDismissible={false}>
                                     <strong>{__('Enalble Lightbox', 'portfolio-blocks')}</strong><br />
                                     {__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'portfolio-blocks')}
-									</a>
+                                    <a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+                                        {__('Upgrade to Pro', 'portfolio-blocks')}
+                                    </a>
                                 </Notice>
                             </div>
                         ),
@@ -491,9 +544,9 @@ export default function Edit({ clientId, attributes, setAttributes }) {
                                 <Notice status="info" isDismissible={false}>
                                     <strong>{__('Show Title on Hover', 'portfolio-blocks')}</strong><br />
                                     {__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'portfolio-blocks')}
-									</a>
+                                    <a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+                                        {__('Upgrade to Pro', 'portfolio-blocks')}
+                                    </a>
                                 </Notice>
                             </div>
                         ),
@@ -508,9 +561,9 @@ export default function Edit({ clientId, attributes, setAttributes }) {
                                 <Notice status="info" isDismissible={false}>
                                     <strong>{__('Enable Image Filtering', 'portfolio-blocks')}</strong><br />
                                     {__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'portfolio-blocks')}
-									</a>
+                                    <a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+                                        {__('Upgrade to Pro', 'portfolio-blocks')}
+                                    </a>
                                 </Notice>
                             </div>
                         ),
@@ -563,9 +616,9 @@ export default function Edit({ clientId, attributes, setAttributes }) {
                                 <Notice status="info" isDismissible={false}>
                                     <strong>{__('Enable Image Border Color', 'portfolio-blocks')}</strong><br />
                                     {__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'portfolio-blocks')}
-									</a>
+                                    <a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+                                        {__('Upgrade to Pro', 'portfolio-blocks')}
+                                    </a>
                                 </Notice>
                             </div>
                         ),
@@ -578,9 +631,9 @@ export default function Edit({ clientId, attributes, setAttributes }) {
                                 <Notice status="info" isDismissible={false}>
                                     <strong>{__('Enable Image Border Width', 'portfolio-blocks')}</strong><br />
                                     {__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'portfolio-blocks')}
-									</a>
+                                    <a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+                                        {__('Upgrade to Pro', 'portfolio-blocks')}
+                                    </a>
                                 </Notice>
                             </div>
                         ),
@@ -593,9 +646,9 @@ export default function Edit({ clientId, attributes, setAttributes }) {
                                 <Notice status="info" isDismissible={false}>
                                     <strong>{__('Enable Image Border Radius', 'portfolio-blocks')}</strong><br />
                                     {__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'portfolio-blocks')}
-									</a>
+                                    <a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+                                        {__('Upgrade to Pro', 'portfolio-blocks')}
+                                    </a>
                                 </Notice>
                             </div>
                         ),
@@ -608,9 +661,9 @@ export default function Edit({ clientId, attributes, setAttributes }) {
                                 <Notice status="info" isDismissible={false}>
                                     <strong>{__('Enable Image Drop Shadow', 'portfolio-blocks')}</strong><br />
                                     {__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'portfolio-blocks')}
-									</a>
+                                    <a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+                                        {__('Upgrade to Pro', 'portfolio-blocks')}
+                                    </a>
                                 </Notice>
                             </div>
                         ),
@@ -654,7 +707,12 @@ export default function Edit({ clientId, attributes, setAttributes }) {
                 {innerBlocks.length === 0 ? (
                     <MediaPlaceholder
                         icon={<IconMasonryGallery />}
-                        labels={{ title: __('Add Images', 'portfolio-blocks') }}
+                        labels={{
+                            title: __('Masonry Gallery', 'portfolio-blocks'),
+                            instructions: !window.portfolioBlocksData?.isPro
+                                ? __('Upload or select up to 15 images to create a Masonry Gallery. Upgrade to Pro for unlimited images.', 'portfolio-blocks')
+                                : __('Upload or select images to create a Masonry Gallery.', 'portfolio-blocks'),
+                        }}
                         onSelect={onSelectImages}
                         allowedTypes={['image']}
                         multiple

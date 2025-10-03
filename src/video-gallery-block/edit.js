@@ -26,9 +26,9 @@ import {
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 	Modal,
 } from '@wordpress/components';
-import { useDispatch, useSelect } from '@wordpress/data';
+import { subscribe, select, dispatch, useDispatch, useSelect } from '@wordpress/data';
 import { useState, useEffect } from '@wordpress/element';
-import { applyFilters } from '@wordpress/hooks';
+import { addFilter, applyFilters } from '@wordpress/hooks';
 import { plus } from '@wordpress/icons';
 
 
@@ -134,10 +134,49 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		}
 	}, [activeFilter, clientId]);
 
+	// Prevent people duplicating blocks to bypass limits
+	if (!window.portfolioBlocksData?.isPro) {
+    subscribe(() => {
+        const blocks = select('core/block-editor').getBlocksByClientId(clientId)[0]?.innerBlocks || [];
+        if (blocks.length > 15) {
+            // Remove extras immediately
+            const extras = blocks.slice(15);
+            extras.forEach((block) => {
+                dispatch('core/block-editor').removeBlock(block.clientId);
+            });
+
+            // Show warning notice
+            if (!document.getElementById('pb-video-limit-warning')) {
+                dispatch('core/notices').createNotice(
+                    'warning',
+                    __('Free version allows up to 15 videos. Upgrade to Pro for unlimited.', 'portfolio-blocks'),
+                    { id: 'pb-video-limit-warning', isDismissible: true }
+                );
+            }
+        }
+    });
+}
+
 	// Handler to add first video via MediaPlaceholder
 	const { replaceInnerBlocks, insertBlock } = useDispatch('core/block-editor');
 	const handleVideoSelect = (media) => {
 		if (!media || !media.url) return;
+		const isPro = !!window.portfolioBlocksData?.isPro;
+		const currentBlocks = wp.data.select('core/block-editor').getBlock(clientId)?.innerBlocks || [];
+		if (!isPro && currentBlocks.length >= 15) {
+			// Show warning notice
+			if (!document.getElementById('pb-video-limit-warning')) {
+				wp.data.dispatch('core/notices').createNotice(
+					'warning',
+					__('Video limit reached. Upgrade to Pro for unlimited videos.', 'portfolio-blocks'),
+					{
+						id: 'pb-video-limit-warning',
+						isDismissible: true,
+					}
+				);
+			}
+			return;
+		}
 		const defaultTitle = media.title && media.title.trim() !== ''
 			? media.title
 			: __('Video', 'portfolio-blocks');
@@ -243,14 +282,49 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 	);
 
 	if (innerBlocks.length === 0) {
+		const isPro = !!window.portfolioBlocksData?.isPro;
 		return (
 			<div {...blockProps}>
 				<MediaPlaceholder
 					icon={<IconVideoGallery />}
-					labels={{ title: __('Add First Video', 'portfolio-blocks') }}
+					labels={{
+						title: __('Video Gallery', 'portfolio-blocks'),
+						instructions: isPro
+							? __('Add first video. Upload, select from media library, or insert from URL.', 'portfolio-blocks')
+							: __('Add first video. Upload or select up to 15 videos. Upgrade to Pro for unlimited.', 'portfolio-blocks')
+					}}
 					allowedTypes={['video']}
-					onSelect={handleVideoSelect}
+					onSelect={(media) => {
+						// Limit check for free version
+						if (!isPro && innerBlocks.length >= 15) {
+							if (!document.getElementById('pb-video-limit-warning')) {
+								wp.data.dispatch('core/notices').createNotice(
+									'warning',
+									__('Video limit reached. Upgrade to Pro for unlimited videos.', 'portfolio-blocks'),
+									{
+										id: 'pb-video-limit-warning',
+										isDismissible: true,
+									}
+								);
+							}
+							return;
+						}
+						handleVideoSelect(media);
+					}}
 					onSelectURL={(url) => {
+						if (!isPro && innerBlocks.length >= 15) {
+							if (!document.getElementById('pb-video-limit-warning')) {
+								wp.data.dispatch('core/notices').createNotice(
+									'warning',
+									__('Video limit reached. Upgrade to Pro for unlimited videos.', 'portfolio-blocks'),
+									{
+										id: 'pb-video-limit-warning',
+										isDismissible: true,
+									}
+								);
+							}
+							return;
+						}
 						const videoBlock = wp.blocks.createBlock('portfolio-blocks/pb-video-block', { videoUrl: url });
 						insertBlock(videoBlock, undefined, clientId);
 					}}
@@ -268,19 +342,22 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					icon={plus}
 					label={__('Add Videos', 'portfolio-blocks')}
 					onClick={addVideoBlock}
+					disabled={!window.portfolioBlocksData?.isPro && innerBlocks.length >= 15}
 				>
 					{__('Add Videos', 'portfolio-blocks')}
 				</ToolbarButton>
 			</BlockControls>
 			{isVideoModalOpen && (
-				<Modal
+								<Modal
 					title={__('Select or Insert Video', 'portfolio-blocks')}
 					onRequestClose={() => setIsVideoModalOpen(false)}
 				>
 					<MediaPlaceholder
 						labels={{
 							title: __('Select or Insert Video', 'portfolio-blocks'),
-							instructions: __('Upload, select from media library, or insert from URL.', 'portfolio-blocks'),
+							instructions: window.portfolioBlocksData?.isPro
+								? __('Upload, select from media library, or insert from URL.', 'portfolio-blocks')
+								: __('Upload or select up to 15 videos. Upgrade to Pro for unlimited.', 'portfolio-blocks'),
 						}}
 						allowedTypes={['video']}
 						accept="video/*"

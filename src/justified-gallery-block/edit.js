@@ -22,11 +22,11 @@ import {
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from '@wordpress/components';
-import { useSelect, useDispatch } from '@wordpress/data';
+import { subscribe, dispatch, select, useSelect, useDispatch } from '@wordpress/data';
 import { plus } from '@wordpress/icons';
 import { useCallback, useEffect, useRef } from '@wordpress/element';
 import { decodeEntities } from '@wordpress/html-entities';
-import { applyFilters } from '@wordpress/hooks';
+import { addFilter, applyFilters } from '@wordpress/hooks';
 import './editor.scss';
 
 import IconJustifiedGallery from '../pb-helpers/IconJustifiedGallery';
@@ -91,8 +91,71 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		[innerRef]
 	);
 
+	// Filter to limit number of images in free version (only if not Pro)
+	if (!window.portfolioBlocksData?.isPro) {
+		addFilter(
+			'portfolioBlocks.justifiedGallery.limitImages',
+			'portfolio-blocks/justified-gallery-limit',
+			(media, existingCount) => {
+				const MAX_IMAGES_FREE = 15;
+				const allowed = Math.max(0, MAX_IMAGES_FREE - existingCount);
+
+				if (allowed <= 0) {
+					const message = __('Free version allows up to 15 images. Upgrade to Pro for unlimited.', 'portfolio-blocks');
+					wp.data.dispatch('core/notices').createNotice(
+						'warning',
+						message,
+						{ isDismissible: true, id: 'pb-justified-limit-warning' }
+					);
+					return [];
+				}
+
+				if (media.length > allowed) {
+					const message = sprintf(
+						__('Free version allows up to %d images. Only the first %d were added.', 'portfolio-blocks'),
+						MAX_IMAGES_FREE,
+						allowed
+					);
+					wp.data.dispatch('core/notices').createNotice(
+						'warning',
+						message,
+						{ isDismissible: true, id: 'pb-justified-limit-truncate' }
+					);
+				}
+
+				return media.slice(0, allowed);
+			}
+		);
+		// Prevent people duplicating blocks to bypass limits in free version
+        subscribe(() => {
+            const blocks = select('core/block-editor').getBlocksByClientId(clientId)[0]?.innerBlocks || [];
+            if (blocks.length > 15) {
+                const extras = blocks.slice(15);
+                extras.forEach((block) => {
+                    dispatch('core/block-editor').removeBlock(block.clientId);
+                });
+
+                if (!document.getElementById('pb-gallery-limit-warning')) {
+                    dispatch('core/notices').createNotice(
+                        'warning',
+                        __('Free version allows up to 15 images. Upgrade to Pro for unlimited.', 'portfolio-blocks'),
+                        { id: 'pb-gallery-limit-warning', isDismissible: true }
+                    );
+                }
+            }
+        });
+	}
+
+	// Select Images Handler
 	const onSelectImages = async (media) => {
 		if (!media || media.length === 0) return;
+
+		// Allow filtering of selected images (for free vs premium limits)
+		media = applyFilters(
+			'portfolioBlocks.justifiedGallery.limitImages',
+			media,
+			innerBlocks.length
+		);
 
 		// Preserve randomization logic
 		const images = attributes.randomizeOrder ? [...media].sort(() => 0.5 - Math.random()) : media;
@@ -358,6 +421,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					<ToolbarButton
 						icon={plus}
 						label={__('Add Images', 'portfolio-blocks')}
+						disabled={!window.portfolioBlocksData?.isPro && innerBlocks.length >= 15}
 						onClick={() => {
 							wp.media({
 								title: __('Select Images', 'portfolio-blocks'),
@@ -675,7 +739,12 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 				{innerBlocks.length === 0 ? (
 					<MediaPlaceholder
 						icon={<IconJustifiedGallery />}
-						labels={{ title: __('Add Images', 'portfolio-blocks') }}
+						labels={{
+							title: __('Justified Gallery', 'portfolio-blocks'),
+							instructions: !window.portfolioBlocksData?.isPro
+								? __('Upload or select up to 15 images to create a Justified Gallery. Upgrade to Pro for unlimited images.', 'portfolio-blocks')
+								: __('Upload or select images to create a Justified Gallery.', 'portfolio-blocks'),
+						}}
 						onSelect={onSelectImages}
 						allowedTypes={['image']}
 						multiple

@@ -24,12 +24,13 @@ import {
 import { alignLeft, alignCenter, alignRight } from '@wordpress/icons';
 import { plus } from '@wordpress/icons';
 import { decodeEntities } from '@wordpress/html-entities';
-import { useSelect, useDispatch } from '@wordpress/data';
+import { subscribe, dispatch, select, useSelect, useDispatch } from '@wordpress/data';
 import { useEffect, useCallback, useRef, useState } from '@wordpress/element';
-import { applyFilters } from '@wordpress/hooks';
+import { addFilter, applyFilters } from '@wordpress/hooks';
 import { applyThumbnails } from '../pb-helpers/applyThumbnails';
 import IconCarouselGallery from '../pb-helpers/IconCarouselGallery';
 import './editor.scss';
+
 
 export default function Edit({ clientId, attributes, setAttributes }) {
 	const ALLOWED_BLOCKS = ['portfolio-blocks/pb-image-block'];
@@ -77,8 +78,71 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 		return Math.round(width * 0.85 * ratio);
 	};
 
+
+	// Filter to limit number of images in free version (only if not Pro)
+	if (!window.portfolioBlocksData?.isPro) {
+		addFilter(
+			'portfolioBlocks.carouselGallery.limitImages',
+			'portfolio-blocks/carousel-gallery-limit',
+			(media, existingCount) => {
+				const MAX_IMAGES_FREE = 15;
+				const allowed = Math.max(0, MAX_IMAGES_FREE - existingCount);
+
+				if (allowed <= 0) {
+					const message = __('Free version allows up to 15 images. Upgrade to Pro for unlimited.', 'portfolio-blocks');
+					wp.data.dispatch('core/notices').createNotice(
+						'warning',
+						message,
+						{ isDismissible: true, id: 'pb-carousel-limit-warning' }
+					);
+					return [];
+				}
+
+				if (media.length > allowed) {
+					const message = sprintf(
+						__('Free version allows up to %d images. Only the first %d were added.', 'portfolio-blocks'),
+						MAX_IMAGES_FREE,
+						allowed
+					);
+					wp.data.dispatch('core/notices').createNotice(
+						'warning',
+						message,
+						{ isDismissible: true, id: 'pb-carousel-limit-truncate' }
+					);
+				}
+
+				return media.slice(0, allowed);
+			}
+		);
+		// Prevent people duplicating blocks to bypass limits in free version
+		subscribe(() => {
+			const blocks = select('core/block-editor').getBlocksByClientId(clientId)[0]?.innerBlocks || [];
+			if (blocks.length > 15) {
+				const extras = blocks.slice(15);
+				extras.forEach((block) => {
+					dispatch('core/block-editor').removeBlock(block.clientId);
+				});
+
+				if (!document.getElementById('pb-gallery-limit-warning')) {
+					dispatch('core/notices').createNotice(
+						'warning',
+						__('Free version allows up to 15 images. Upgrade to Pro for unlimited.', 'portfolio-blocks'),
+						{ id: 'pb-gallery-limit-warning', isDismissible: true }
+					);
+				}
+			}
+		});
+	}
+
 	const onSelectImages = async (media) => {
 		if (!media || media.length === 0) return;
+
+		// Allow filtering of selected images (for free vs premium limits)
+		media = applyFilters(
+			'portfolioBlocks.carouselGallery.limitImages',
+			media,
+			innerBlocks.length
+		);
 
 		const currentBlocks = wp.data.select('core/block-editor').getBlocks(clientId);
 		const existingImageIds = currentBlocks.map((block) => block.attributes.id);
@@ -178,7 +242,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 			}, 100);
 			return () => clearTimeout(timeout);
 		}
-	}, [containerWidth, attributes.verticalOnMobile]);
+	}, [containerWidth]);
 
 	// Recalculate when block alignment changes (normal → wide → full)
 	useEffect(() => {
@@ -233,51 +297,17 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 		}
 	}, [isBlockOrChildSelected]);
 
-
-	// --- Scroll selected pb-image-block into center view in List View
-	const selectedBlockClientId = useSelect(
-		(select) => select(blockEditorStore).getSelectedBlockClientId(),
-		[]
-	);
+	// --- Apply thumbnails as a fallback if not already present
 	useEffect(() => {
-		if (!selectedBlockClientId) return;
+		const hasImages = innerBlocks.length > 0;
+		const listViewHasThumbnails = document.querySelector('[data-pb-thumbnail-applied="true"]');
 
-		const selectedBlock = wp.data.select('core/block-editor').getBlock(selectedBlockClientId);
-		if (!selectedBlock || selectedBlock.name !== 'portfolio-blocks/pb-image-block') return;
-
-		const parent = selectedBlock?.parent;
-		if (!parent || !parent.includes(clientId)) return;
-
-		const domEl = document.querySelector(`[data-block="${selectedBlockClientId}"]`);
-		const container = containerRef.current;
-
-		if (container && domEl) {
-			const containerRect = container.getBoundingClientRect();
-			const elementRect = domEl.getBoundingClientRect();
-			const scrollLeft = container.scrollLeft;
-			const offset = elementRect.left - containerRect.left - (containerRect.width - elementRect.width) / 2;
-
-			// Get the scrollable ancestor (block editor canvas)
-			const scrollContainer = document.querySelector('.edit-post-visual-editor');
-
-			// Save original scroll position
-			const originalTop = scrollContainer ? scrollContainer.scrollTop : window.scrollY;
-
-			container.scrollTo({
-				left: scrollLeft + offset,
-				behavior: 'smooth',
-			});
-
-			// Restore scroll after animation
+		if (hasImages && !listViewHasThumbnails) {
 			setTimeout(() => {
-				if (scrollContainer) {
-					scrollContainer.scrollTop = originalTop;
-				} else {
-					window.scrollTo({ top: originalTop });
-				}
-			}, 200);
+				applyThumbnails(clientId);
+			}, 300);
 		}
-	}, [selectedBlockClientId]);
+	}, [innerBlocks]);
 
 	// --- Sync images to attributes.images (existing)
 	useEffect(() => {
@@ -294,17 +324,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 		setAttributes({ images: updatedImages });
 	}, [innerBlocks]);
 
-	// --- Apply thumbnails as a fallback if not already present
-	useEffect(() => {
-		const hasImages = innerBlocks.length > 0;
-		const listViewHasThumbnails = document.querySelector('[data-pb-thumbnail-applied="true"]');
 
-		if (hasImages && !listViewHasThumbnails) {
-			setTimeout(() => {
-				applyThumbnails(clientId);
-			}, 300);
-		}
-	}, [innerBlocks]);
 
 	// Carousel navigation state and handlers
 	const [currentSlide, setCurrentSlide] = useState(0);
@@ -318,29 +338,64 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 		setCurrentSlide((prev) => Math.min(innerBlocks.length - 1, prev + 1));
 	};
 
-	// Scroll to active slide on change
+	// Scroll to active slide on change (center image in container)
 	useEffect(() => {
 		const scrollContainer = containerRef.current;
-
 		if (!scrollContainer) return;
 
 		const blockOrder = wp.data.select('core/block-editor').getBlockOrder(clientId);
 		const blockClientId = blockOrder[currentSlide];
-
 		const blockNode = scrollContainer.querySelector(`[data-block="${blockClientId}"]`);
-
 		if (!blockNode) return;
 
 		const containerRect = scrollContainer.getBoundingClientRect();
 		const elementRect = blockNode.getBoundingClientRect();
 		const scrollLeft = scrollContainer.scrollLeft;
-		const offset = elementRect.left - containerRect.left;
+		// Center the image in the container
+		const offset =
+			elementRect.left -
+			containerRect.left -
+			(containerRect.width - elementRect.width) / 2;
 
 		scrollContainer.scrollTo({
 			left: scrollLeft + offset,
 			behavior: 'smooth',
 		});
 	}, [currentSlide, clientId]);
+
+	// Scroll selected block (from List View) into center if it's part of this carousel
+	const selectedBlockClientId = useSelect(
+		(select) => select(blockEditorStore).getSelectedBlockClientId(),
+		[]
+	);
+
+	useEffect(() => {
+		if (!selectedBlockClientId) return;
+
+		const scrollContainer = containerRef.current;
+		if (!scrollContainer) return;
+
+		// Only proceed if selected block is a child of this carousel
+		const rootId = wp.data.select('core/block-editor').getBlockRootClientId(selectedBlockClientId);
+		if (rootId !== clientId) return;
+
+		const blockNode = scrollContainer.querySelector(`[data-block="${selectedBlockClientId}"]`);
+		if (!blockNode) return;
+
+		const containerRect = scrollContainer.getBoundingClientRect();
+		const elementRect = blockNode.getBoundingClientRect();
+		const scrollLeft = scrollContainer.scrollLeft;
+
+		const offset =
+			elementRect.left -
+			containerRect.left -
+			(containerRect.width - elementRect.width) / 2;
+
+		scrollContainer.scrollTo({
+			left: scrollLeft + offset,
+			behavior: 'smooth',
+		});
+	}, [selectedBlockClientId, clientId]);
 
 	// Autoplay effect: advance slide automatically if isPlaying and autoplay are true
 	useEffect(() => {
@@ -416,6 +471,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 					<ToolbarButton
 						icon={plus}
 						label={__('Add Images', 'portfolio-blocks')}
+						disabled={!window.portfolioBlocksData?.isPro && innerBlocks.length >= 15}
 						onClick={() => {
 							wp.media({
 								title: __('Select Images', 'portfolio-blocks'),
@@ -700,7 +756,9 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 						icon={<IconCarouselGallery />}
 						labels={{
 							title: __('Carousel Gallery', 'portfolio-blocks'),
-							instructions: __('Upload or select images to create a carousel.', 'portfolio-blocks'),
+							instructions: !window.portfolioBlocksData?.isPro
+								? __('Upload or select up to 15 images to create a carousel. Upgrade to Pro for unlimited images.', 'portfolio-blocks')
+								: __('Upload or select images to create a carousel.', 'portfolio-blocks'),
 						}}
 						onSelect={onSelectImages}
 						accept="image/*"

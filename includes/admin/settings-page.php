@@ -19,21 +19,34 @@ function portfolio_blocks_admin_styles( $hook ) {
 function portfolio_blocks_render_settings_page() {
 	?>
 	<div class="wrap">
-		<h1><?php esc_html_e( 'Portfolio Blocks Settings', 'portfolio-blocks' ); ?></h1>
+		<h1><?php esc_html_e( 'Portfolio Blocks', 'portfolio-blocks' ); ?></h1>
 
 		<div class="settings-container">
         	<div class="settings-left">
-                <p>
-                    Thank you for downloading Portfolio Blocks. Portfolio Blocks is a WordPress plugin 
-					purpose-built for the block editor and full site editor, giving you the tools to create 
-					beautiful photo and video galleries with ease directly in your posts or pages.
-                </p>
-				<p>
-					Portfolio Blocks is a paid premiuim plugin, the free version available in the WordPress plugin repository
-					is only meant to give you a taste of what the full version can do.
-				</p>
-				<div class="settings-features">
-					
+				<?php if ( pb_fs()->can_use_premium_code() ) : ?>
+					<p>
+                	    Thank you for purchasing Portfolio Blocks Pro. Portfolio Blocks is a WordPress plugin 
+						purpose-built for the block editor and full site editor, giving you the tools to create 
+						beautiful photo and video galleries with ease directly in your posts or pages.
+                	</p>
+					<p>
+						All of the blocks and galleries work entirely from the block editor. There are no external 
+						settings pages for any of the blocks, you work entirely from the block editor. If you find 
+						that you need any help using the plugin, we have prepared walktrough video tutorials on our 
+						for all YouTube channel the blocks:
+					</p>
+				<?php else : ?>
+                	<p>
+                	    Thank you for downloading Portfolio Blocks. Portfolio Blocks is a WordPress plugin 
+						purpose-built for the block editor and full site editor, giving you the tools to create 
+						beautiful photo and video galleries with ease directly in your posts or pages.
+                	</p>
+					<p>
+						Portfolio Blocks is a paid premiuim plugin, this free version available in the WordPress plugin repository
+						is only meant to give you a taste of what the full version can do.
+					</p>
+					<div class="settings-features">
+
 						<h2>Free - Features:</h2>
 						<ul class="features">
 							<li>Galleries limited to 15 images</li>
@@ -54,22 +67,67 @@ function portfolio_blocks_render_settings_page() {
 							<li>Right-click prevention</li>
 							<li>Lazy Load galleries</li>
 						</ul>
-				</div>
-				<p>
-					If you haven't already purchased a license for Portfolio Blocks use the Upgrade link in the left hand menu to purchase it 
-					directly on your website. Or can use the button bellow to go to our pricing page and purchase a license there.
-				</p>
-				<p class="buy-button-wrapper">
-                    <a class="button button-primary buy-button" href="https://portfolio-blocks.com/portfolio-blocks-pricing/" target="_blank" rel="noopener noreferrer">
-                        <?php esc_html_e( 'Buy Now', 'portfolio-blocks' ); ?>
-                    </a>
-				</p>
-				<hr/>
-					<h2><?php esc_html_e( 'Portfolio Blocks Walk-Through Videos', 'portfolio-blocks' ); ?></h2>
+					</div>
 					<p>
-						We have made YouTube videos to help you get the most out of Portfolio Blocks and walk 
-						you through all of the features of the Premium version. Check them out below:
+						Purchase a license for Portfolio Blocks today and enjoy the best gallery plugin for modern WordPress and the block editor.
 					</p>
+					<p class="buy-button-wrapper">
+    					<a class="button button-primary buy-button" href="<?php echo esc_url( admin_url( 'admin.php?page=portfolio-blocks-settings-pricing' ) ); ?>">
+        					<?php esc_html_e( 'Upgrade Now', 'portfolio-blocks' ); ?>
+    					</a>
+					</p>
+					<p>
+						Still undecided? Check out the video tutorials of all the blocks so you can see all the premium features in action:
+					</p>
+				
+				<?php endif; ?>
+				<p>
+					NOTE TO BETA TESTERS: VIDEOS COMING SOON!
+				</p>
+				<div class="video-grid">
+					<div class="video-block before-after">
+						<a href="#">
+							<span class="play-icon">▶</span>
+							<span class="video-label">Before &amp; After Block</span>
+						</a>
+					</div>
+					<div class="video-block carousel-gallery">
+						<a href="#">
+							<span class="play-icon">▶</span>
+							<span class="video-label">Carousel Gallery Block</span>
+						</a>
+					</div>
+					<div class="video-block grid-gallery">
+						<a href="#">
+							<span class="play-icon">▶</span>
+							<span class="video-label">Grid Gallery Block</span>
+						</a>
+					</div>
+					<div class="video-block justified-gallery">
+						<a href="#">
+							<span class="play-icon">▶</span>
+							<span class="video-label">Justified Gallery Block</span>
+						</a>
+					</div>
+					<div class="video-block masonry-gallery">
+						<a href="#">
+							<span class="play-icon">▶</span>
+							<span class="video-label">Masonry Gallery Block</span>
+						</a>
+					</div>
+					<div class="video-block modular-gallery">
+						<a href="#">
+							<span class="play-icon">▶</span>
+							<span class="video-label">Modular Gallery Block</span>
+						</a>
+					</div>
+					<div class="video-block video-gallery">
+						<a href="#">
+							<span class="play-icon">▶</span>
+							<span class="video-label">Video Gallery Block</span>
+						</a>
+					</div>
+				</div>
 				<hr/>
 				<?php
     				// --- Latest News from portfolio-blocks.com ---
@@ -97,7 +155,7 @@ function portfolio_blocks_render_settings_page() {
     				}
 				?>
 
-				<h2><?php esc_html_e( 'Latest News From Portfolio Blocks', 'portfolio-blocks' ); ?></h2>
+				<h2><?php esc_html_e( 'Latest News From Portfolio Blocks Website:', 'portfolio-blocks' ); ?></h2>
 				<ul class="pb-latest-news">
     				<?php if ( $pb_has_items ) : ?>
         				<?php foreach ( $pb_rss_items as $item ) :
@@ -137,7 +195,7 @@ function portfolio_blocks_render_settings_page() {
 			</div>
 
 			<div class="settings-right">
-				<h2>Changelog</h2>
+				<h2>Changelog:</h2>
 				<?php
 				$readme_path = plugin_dir_path( __DIR__ ) . '../readme.txt';
 
@@ -148,7 +206,7 @@ function portfolio_blocks_render_settings_page() {
 				        $changelog = trim( $matches[1] );
 				        $entries = preg_split( '/^\s*(?=\d+\.\d+)/m', $changelog, -1, PREG_SPLIT_NO_EMPTY );
 				        echo '<ul class="pb-changelog">';
-				        foreach ( $entries as $entry ) {
+				        foreach ( array_slice( $entries, 0, 15 ) as $entry ) {
 				            $lines = array_filter( array_map( 'trim', explode( "\n", $entry ) ) );
 				            $version = array_shift( $lines );
 				            echo '<li>';

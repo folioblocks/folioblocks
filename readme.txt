@@ -5,7 +5,7 @@ Tags: gallery, portfolio, image, photo, video
 Tested up to:      6.8
 Requires at least: 6.3
 Requires PHP: 7.4
-Stable tag:        0.8.0
+Stable tag:        0.8.2
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -42,13 +42,32 @@ To install with the zip file downloaded from this page:
 
 == Frequently Asked Questions ==
 
-= A question that someone might have =
+= What is Portfolio Blocks? =
+Portfolio Blocks is a collection of modern, responsive gallery and media blocks built specifically for the WordPress Block Editor (Gutenberg). You can create image and video galleries with advanced layouts like Grid, Masonry, Justified, Carousel, and more — all directly in the editor.
 
-An answer to that question.
+= Does Portfolio Blocks work with any WordPress theme? =
+Yes. Portfolio Blocks is designed to work with all modern WordPress themes. For best results, we recommend using a block theme that supports Full Site Editing.
 
-= What about foo bar? =
+= What’s the difference between the free and Pro versions? =
+The free version includes all the core blocks and functionality, but galleries are limited to 15 images or videos. The Pro version removes this limit and unlocks additional premium features such as Randomize Order, Image Downloads, Lightbox captions, Right-Click Disable, and more.
 
-Answer to foo bar dilemma.
+= Can I use Portfolio Blocks with page builders like Elementor or Divi? =
+Portfolio Blocks is built specifically for the WordPress Block Editor (Gutenberg). It will not work inside Elementor, Divi, or other third-party page builders.
+
+= Will Portfolio Blocks slow down my website? =
+No. Portfolio Blocks is optimized for performance and loads only the scripts and styles needed for each block. The Pro version also includes Lazy Load support to further improve loading speed.
+
+= Can I upgrade from the free version to Pro? =
+Yes. You can install the free version from the WordPress plugin directory, and upgrade to Pro at any time. Your galleries will continue to work — you’ll simply unlock unlimited images and additional features.
+
+= Do you offer support? =
+Yes. Free users can post support requests on the WordPress.org plugin forum. Pro users receive priority email support directly from the developer.
+
+= Can I use Portfolio Blocks on client websites? =
+Absolutely. Portfolio Blocks is built with agencies and freelancers in mind. The Pro version offers licensing for single sites, 5 sites, or unlimited client projects depending on your plan.
+
+= Will my galleries stop working if I deactivate the plugin? =
+No, the galleries will remain in place on your site. However, the advanced layouts and features are powered by Portfolio Blocks, so deactivating the plugin will remove those.
 
 == Screenshots ==
 
@@ -62,9 +81,18 @@ Answer to foo bar dilemma.
 
 == Changelog ==
 
+0.8.2
+- Added FAQ section to readme.txt file. 
+- Updated Carousel Gallery icon. 
+- Placed 15 image limit on Carousel, Grid, Justified, and Masonry Galleries on Free version. 
+- Placed 15 video limit on Video Gallery block on Free version. 
+- Updated plugin admin page to show alternate text to premium users. 
+- Fixed issue in Carousel gallery that prevented certain images selected in list view from centering in the editor. 
+- Fixed issue when changing Image Orientation to Vertical on Carousel Gallery. 
+
 0.8.1 
 - More fixes for issues found by WordPress Plugin Check (PCP). 
-- Fixed bug loading premium scripts 
+- Fixed bug loading premium scripts.
 
 0.8.0 
 - Fixes for issues found by WordPress Plugin Check (PCP). 
@@ -75,73 +103,73 @@ Answer to foo bar dilemma.
 - Modified Modular Gallery layout logic to improve performane on servers. 
 
 0.7.8
-- All locked features on free version now link to Upgrade page 
+- All locked features on free version now link to Upgrade page.
 - Changelog in Portfolio Block settings page is now automatically pulled from readme.txt
 
 0.7.7
-- Added hooks and toggles for Lazy Load feature to Carousel, Grid, Justified, Masony, and Modular Galleries
-- Freemius integration bug fixes
+- Added hooks and toggles for Lazy Load feature to Carousel, Grid, Justified, Masony, and Modular Galleries.
+- Freemius integration bug fixes.
 
 0.7.6
-- Freemius integration bug fixes
+- Freemius integration bug fixes.
 
 0.7.5
-- Freemius integration bug fixes
+- Freemius integration bug fixes.
 
 0.7.4
-- Integrated Freemius premium feature blocks on Video Gallery Block
+- Integrated Freemius premium feature blocks on Video Gallery Block.
 
 0.7.3
-- Integrated Freemius premium feature blocks on Carousel Gallery & Before & After blocks
+- Integrated Freemius premium feature blocks on Carousel Gallery & Before & After blocks.
 
 0.7.2
-- Integrated Freemius premium feature blocks on Masonry Gallery & Modular Gallery blocks
+- Integrated Freemius premium feature blocks on Masonry Gallery & Modular Gallery blocks.
 
 0.7.1
-- Integrated Freemius SDK into plugin
-- Integrated Freemius premium feature blocks on Grid Gallery & Justifed Gallery blocks
+- Integrated Freemius SDK into plugin.
+- Integrated Freemius premium feature blocks on Grid Gallery & Justifed Gallery blocks.
 
 0.7.0
-- Moved Modular Gallery logic from Image Row into parent block for improved resizing performance
-- Improved first placeholder screen on Modular Gallery
-- Improvec first placeholder screen on Video Gallery
+- Moved Modular Gallery logic from Image Row into parent block for improved resizing performance.
+- Improved first placeholder screen on Modular Gallery.
+- Improvec first placeholder screen on Video Gallery.
 
 0.6.9  
-- Add Before & After comparison block 
-- Fixed block previews for all blocks
-- Fixed bug on Carousel gallery that prevented block from re-sizing correctly before page was saved
+- Add Before & After comparison block.
+- Fixed block previews for all blocks.
+- Fixed bug on Carousel gallery that prevented block from re-sizing correctly before page was saved.
 
 0.6.8
-- Fixed stability on thumbnail injection into List View
+- Fixed stability on thumbnail injection into List View.
 
 0.6.7
-- Render.php on Carousel Gallery Block complete
-- Fixed bug container-type bug on PB Image Block
+- Render.php on Carousel Gallery Block complete.
+- Fixed bug container-type bug on PB Image Block.
 
 0.6.6
-- Building Carousel Gallery Block
+- Began building Carousel Gallery Block.
 
 0.6.5
-- Added custom icons to all blocks
+- Added custom icons to all blocks. 
 
 0.6.4
-- Fixed download icon in lightbox on Grid, Justified, Masonry, and Modular galleries
-- Fixed arrow placement in lightbox on Mobile
-- Tweaked styles for download icon
+- Fixed download icon in lightbox on Grid, Justified, Masonry, and Modular galleries.
+- Fixed arrow placement in lightbox on Mobile.
+- Tweaked styles for download icon.
 
 0.6.3
-- Organized gallery settings
+- Organized gallery settings.
 
 0.6.2
-- Added Right-Click Prevention to Grid, Justified, Masonry, and Modular galleries
+- Added Right-Click Prevention to Grid, Justified, Masonry, and Modular galleries.
 
 0.6.1
-- Fixed a bug in Masonry where adding border messed up the layout in the block editor
-- Fixed margin-bottom bug in Justified gallery on Mobile
+- Fixed a bug in Masonry where adding border messed up the layout in the block editor.
+- Fixed margin-bottom bug in Justified gallery on Mobile.
 
 0.6.0
-- Added support for Image downloads in Grid, Justified, Masonry, and Modular galleries
-- Switched the on Image hover to show Title instead of caption
+- Added support for Image downloads in Grid, Justified, Masonry, and Modular galleries.
+- Switched the on Image hover to show Title instead of caption.
 
 0.5.5
 - Added support for borders and border-radius to PB Image Block

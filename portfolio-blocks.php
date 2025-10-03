@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Portfolio Blocks
  * Description:       A collection of blocks for making photo and video galleries
- * Version:           0.8.1
+ * Version:           0.8.2
  * Requires at least: 6.3
  * Requires PHP:      7.4
  * Author:            PB Team
@@ -81,6 +81,8 @@ if ( function_exists( 'pb_fs' ) ) {
             $data = [
                 'checkoutUrl' => pb_fs()->pricing_url(),
                 'siteUrl'     => site_url(),
+                'isPro'       => ( function_exists( 'pb_fs' ) && pb_fs()->can_use_premium_code() ),
+
             ];
 
             wp_register_script(
