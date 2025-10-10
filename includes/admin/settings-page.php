@@ -35,6 +35,8 @@ function portfolio_blocks_render_settings_page() {
 						that you need any help using the plugin, we have prepared walktrough video tutorials on our 
 						for all YouTube channel the blocks:
 					</p>
+					<hr/>
+					<h2>Video Tutorials:</h2>
 				<?php else : ?>
                 	<p>
                 	    Thank you for downloading Portfolio Blocks. Portfolio Blocks is a WordPress plugin 
@@ -76,6 +78,8 @@ function portfolio_blocks_render_settings_page() {
         					<?php esc_html_e( 'Upgrade Now', 'portfolio-blocks' ); ?>
     					</a>
 					</p>
+					<hr/>
+					<h2>Video Tutorials:</h2>
 					<p>
 						Still undecided? Check out the video tutorials of all the blocks so you can see all the premium features in action:
 					</p>

@@ -14,6 +14,7 @@ import {
 import {
 	PanelBody,
 	TextControl,
+	TextareaControl,
 	Button,
 	SelectControl,
 	ToolbarButton,
@@ -101,6 +102,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 		thumbnail,
 		thumbnailId,
 		title,
+		description,
 		aspectRatio,
 		playButtonVisibility,
 		titleVisibility,
@@ -134,6 +136,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 	const parentPlayButton = context?.['portfolioBlocks/playButtonVisibility'];
 	const parentTitleVisibility = context?.['portfolioBlocks/titleVisibility'];
 	const lightboxEnabled = context?.['portfolioBlocks/lightbox'] ?? true;
+	const lightboxLayout = context?.['portfolioBlocks/lightboxLayout'];
 	const inheritedBorderColor = context?.['portfolioBlocks/borderColor'];
 	const inheritedBorderWidth = context?.['portfolioBlocks/borderWidth'];
 	const inheritedBorderRadius = context?.['portfolioBlocks/borderRadius'];
@@ -386,9 +389,15 @@ export default function Edit({ attributes, setAttributes, context }) {
 								alt: val // keep alt synced with title edits
 							});
 						}}
-						help={__('Set video Title used in the overlay and for alt text.')}
+						help={__('Set Video Title used in the Hover Overlay, Lightbox, and for Alt-text.')}
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
+					/>
+					<TextareaControl
+						label={__('Description', 'portfolio-blocks')}
+						value={description}
+						onChange={(value) => setAttributes({ description: value })}
+						help={__('Shown in the lightbox when enabled in Gallery Lightbox Settings.', 'portfolio-blocks')}
 					/>
 
 					{filterCategories.length > 0 && (
@@ -547,16 +556,40 @@ export default function Edit({ attributes, setAttributes, context }) {
 				)}
 
 				{isLightboxOpen && (
-					<div className="pb-video-lightbox">
-						<div className="lightbox-inner">
-							<button className="lightbox-close" onClick={() => setLightboxOpen(false)}>×</button>
-							<div className="lightbox-video">
-								{getVideoEmbedMarkup(
-									videoUrl,
-									// Hide controls if in Video Gallery
-									isInVideoGallery ? { controls: false } : undefined
-								)}
-							</div>
+					<div
+						className={`pb-video-lightbox ${lightboxLayout === 'split' ? 'split-layout' : ''}`}
+						onClick={(e) => {
+							if (e.target.classList.contains('pb-video-lightbox')) {
+								setLightboxOpen(false);
+							}
+						}}
+					>
+						<div className="pb-video-lightbox-inner">
+							<button
+								className="pb-video-lightbox-close"
+								onClick={() => setLightboxOpen(false)}
+								aria-label={__('Close lightbox', 'portfolio-blocks')}
+							>
+								×
+							</button>
+
+							{lightboxLayout === 'video-only' && (
+								<div className="pb-video-lightbox-video">
+									{getVideoEmbedMarkup(videoUrl, isInVideoGallery ? { controls: false } : undefined)}
+								</div>
+							)}
+
+							{lightboxLayout === 'split' && (
+								<>
+									<div className="pb-video-lightbox-video" style={{ flex: '0 0 70%' }}>
+										{getVideoEmbedMarkup(videoUrl, isInVideoGallery ? { controls: false } : undefined)}
+									</div>
+									<div className="pb-video-lightbox-info" style={{ flex: '0 0 30%' }}>
+										{title && <h2 className="lightbox-title">{title}</h2>}
+										{description && <p className="lightbox-description">{description}</p>}
+									</div>
+								</>
+							)}
 						</div>
 					</div>
 				)}

@@ -6,6 +6,7 @@ export default function save({ attributes }) {
 		tabletColumns,
 		mobileColumns,
 		gap,
+		lightboxLayout,
 	} = attributes;
 
 	return (
@@ -13,6 +14,7 @@ export default function save({ attributes }) {
 			<div
 				className={`pb-video-gallery cols-d-${columns} cols-t-${tabletColumns} cols-m-${mobileColumns}`}
 				style={{ '--gap': `${gap}px` }}
+				data-lightbox-layout={lightboxLayout}
 			>
 				<InnerBlocks.Content />
 			</div>

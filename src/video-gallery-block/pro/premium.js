@@ -11,11 +11,11 @@ addFilter(
         const { attributes, setAttributes } = props;
 
         return createElement(ToggleControl, {
-            label: __('Enable Image Filtering', 'portfolio-blocks'),
+            label: __('Enable Video Filtering', 'portfolio-blocks'),
             checked: !!attributes.enableFilter,
             onChange: (val) => setAttributes({ enableFilter: val }),
             __nextHasNoMarginBottom: true,
-            help: __('Enable image filtering with categories.', 'portfolio-blocks')
+            help: __('Enable video filtering with categories.', 'portfolio-blocks')
         });
     }
 );

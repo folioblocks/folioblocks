@@ -197,6 +197,14 @@
 	justify-content: center;
     }
 }
+.pb-image-lightbox button:focus {
+	outline: none; /* remove all focus outlines */
+}
+
+.pb-image-lightbox button:focus-visible {
+	outline: 2px solid #fff; /* or whatever subtle color fits */
+	outline-offset: 2px;
+}
 
 .pb-lightbox-download {
 	position: absolute;

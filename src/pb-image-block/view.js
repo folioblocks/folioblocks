@@ -1,5 +1,22 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    // Track input method for focus visibility control
+    let userUsedKeyboard = false;
+
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Tab' || e.key === 'Enter' || e.key === ' ') {
+            userUsedKeyboard = true;
+        }
+    });
+
+    window.addEventListener('mousedown', () => {
+        userUsedKeyboard = false;
+    });
+
+    window.addEventListener('touchstart', () => {
+        userUsedKeyboard = false;
+    });
+
     // Add randomizer to galleries
     const galleries = document.querySelectorAll(".pb-randomized");
 
@@ -37,11 +54,46 @@ document.addEventListener('DOMContentLoaded', () => {
         const wrapper = document.createElement('div');
         wrapper.className = 'pb-image-lightbox';
 
+        const previouslyFocused = document.activeElement;
+
         const inner = document.createElement('div');
         inner.className = 'lightbox-inner';
 
         wrapper.appendChild(inner);
         document.body.appendChild(wrapper);
+
+        const focusStart = document.createElement('span');
+        focusStart.tabIndex = 0;
+        focusStart.className = 'pb-focus-sentinel-start';
+
+        const focusEnd = document.createElement('span');
+        focusEnd.tabIndex = 0;
+        focusEnd.className = 'pb-focus-sentinel-end';
+
+        document.body.insertBefore(focusStart, wrapper);
+        document.body.insertBefore(focusEnd, wrapper.nextSibling);
+
+        focusStart.addEventListener('focus', () => {
+            const focusable = wrapper.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+            if (focusable.length) focusable[focusable.length - 1].focus();
+        });
+        focusEnd.addEventListener('focus', () => {
+            const focusable = wrapper.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+            if (focusable.length) focusable[0].focus();
+        });
+
+        // Close lightbox when clicking outside the image and controls (on the backdrop)
+        wrapper.addEventListener('click', (e) => {
+            if (e.target === wrapper) {
+                wrapper.remove();
+                focusStart.remove();
+                focusEnd.remove();
+                document.removeEventListener('keydown', keyHandler);
+                if (previouslyFocused && typeof previouslyFocused.focus === 'function') {
+                    previouslyFocused.focus();
+                }
+            }
+        });
 
         function renderLightbox(index) {
             const imageData = allImages[index];
@@ -55,9 +107,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const close = document.createElement('button');
             close.className = 'lightbox-close';
             close.innerHTML = '&times;';
+            close.setAttribute('aria-label', 'Close lightbox');
             close.addEventListener('click', () => {
                 wrapper.remove();
+                focusStart.remove();
+                focusEnd.remove();
                 document.removeEventListener('keydown', keyHandler);
+                if (previouslyFocused && typeof previouslyFocused.focus === 'function') {
+                    previouslyFocused.focus();
+                }
             });
 
             const imageWrapper = document.createElement('div');
@@ -79,6 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const prev = document.createElement('button');
             prev.className = 'lightbox-prev';
             prev.innerHTML = '&#10094;';
+            prev.setAttribute('aria-label', 'Previous image');
             prev.addEventListener('click', () => {
                 currentIndex = (currentIndex - 1 + allImages.length) % allImages.length;
                 renderLightbox(currentIndex);
@@ -87,6 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const next = document.createElement('button');
             next.className = 'lightbox-next';
             next.innerHTML = '&#10095;';
+            next.setAttribute('aria-label', 'Next image');
             next.addEventListener('click', () => {
                 currentIndex = (currentIndex + 1) % allImages.length;
                 renderLightbox(currentIndex);
@@ -97,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (parentBlock && parentBlock.getAttribute('data-enable-download') === 'true') {
                 const downloadButton = document.createElement('button');
                 downloadButton.className = 'pb-lightbox-download';
-                downloadButton.setAttribute('aria-label', 'Download Image');
+                downloadButton.setAttribute('aria-label', 'Download image');
 
                 // Extract the original file name
                 const fileUrl = src;
@@ -124,6 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const prev = document.createElement('button');
                 prev.className = 'lightbox-prev';
                 prev.innerHTML = '&#10094;';
+                prev.setAttribute('aria-label', 'Previous image');
                 prev.addEventListener('click', () => {
                     currentIndex = (currentIndex - 1 + allImages.length) % allImages.length;
                     renderLightbox(currentIndex);
@@ -132,6 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const next = document.createElement('button');
                 next.className = 'lightbox-next';
                 next.innerHTML = '&#10095;';
+                next.setAttribute('aria-label', 'Next image');
                 next.addEventListener('click', () => {
                     currentIndex = (currentIndex + 1) % allImages.length;
                     renderLightbox(currentIndex);
@@ -141,12 +203,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 wrapper.appendChild(prev);
                 wrapper.appendChild(next);
             }
+            const closeBtn = wrapper.querySelector('.lightbox-close');
+            if (closeBtn && userUsedKeyboard) {
+                closeBtn.focus();
+            }
         }
 
         function keyHandler(e) {
             if (e.key === 'Escape') {
                 wrapper.remove();
+                focusStart.remove();
+                focusEnd.remove();
                 document.removeEventListener('keydown', keyHandler);
+                if (previouslyFocused && typeof previouslyFocused.focus === 'function') {
+                    previouslyFocused.focus();
+                }
             } else if (e.key === 'ArrowRight') {
                 currentIndex = (currentIndex + 1) % allImages.length;
                 renderLightbox(currentIndex);
@@ -158,6 +229,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.addEventListener('keydown', keyHandler);
         renderLightbox(currentIndex);
+
+        // Handle Tab and Shift+Tab navigation inside the lightbox (explicit control)
+        wrapper.addEventListener('keydown', (e) => {
+            if (e.key !== 'Tab') return;
+
+            const focusable = Array.from(
+                wrapper.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
+            ).filter(el => !el.disabled && el.offsetParent !== null);
+
+            if (!focusable.length) return;
+
+            const currentIndex = focusable.indexOf(document.activeElement);
+            let nextIndex = e.shiftKey ? currentIndex - 1 : currentIndex + 1;
+
+            // Loop focus when reaching start or end
+            if (nextIndex >= focusable.length) nextIndex = 0;
+            if (nextIndex < 0) nextIndex = focusable.length - 1;
+
+            e.preventDefault();
+            focusable[nextIndex].focus();
+        });
     });
 
     // Image Download Button

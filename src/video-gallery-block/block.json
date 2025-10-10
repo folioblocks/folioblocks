@@ -48,6 +48,7 @@
     	"enableFilter": { "type": "boolean", "default": false },
 		"filterAlign": { "type": "string", "default": "center"},
     	"lightbox": { "type": "boolean", "default": true }, 
+		"lightboxLayout": { "type": "string", "default": "video-only" }, 
 		"thumbnailSize": { "type": "string", "default": "large" },
 		"filterTextColor": {
 			"type": "string",
@@ -90,6 +91,7 @@
 		"portfolioBlocks/filterCategories": "filterCategories",
 		"portfolioBlocks/activeFilter": "activeFilter",
 		"portfolioBlocks/lightbox": "lightbox", 
+		"portfolioBlocks/lightboxLayout": "lightboxLayout",
 		"portfolioBlocks/thumbnailSize": "thumbnailSize",
 		"portfolioBlocks/borderColor": "borderColor",
 		"portfolioBlocks/borderWidth": "borderWidth",

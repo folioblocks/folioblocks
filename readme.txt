@@ -5,7 +5,7 @@ Tags: gallery, portfolio, image, photo, video
 Tested up to:      6.8
 Requires at least: 6.3
 Requires PHP: 7.4
-Stable tag:        0.8.2
+Stable tag:        0.8.3
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -80,6 +80,12 @@ No, the galleries will remain in place on your site. However, the advanced layou
 7. Video Gallery block populated with images
 
 == Changelog ==
+
+0.8.3
+- Updated Video Gallery block with option to show Title & Description in Lightbox. 
+- Fixed Carousel gallery front-end bug where Navigation Controls became out of sync with current sldie. 
+- Removed Lightbox on Image Galleries in the Block Editor. Lightbox on Image Galleries is now front-end only. 
+- Improved the accessibility of the Video and Image lightboxes on Front-End, now works with Tab navigation. 
 
 0.8.2
 - Added FAQ section to readme.txt file. 

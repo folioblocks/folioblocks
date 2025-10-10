@@ -5,11 +5,12 @@ export default function save({ attributes }) {
 		thumbnail,
 		title,
 		alt,
-		caption,
+		description,
 		aspectRatio = '16:9',
 		filterCategory = '',
 		playButtonVisibility = 'always',
 		titleVisibility = 'always',
+		lightboxLayout = 'video-only',
 		borderWidth,
 		borderColor,
 		borderRadius,
@@ -41,10 +42,12 @@ export default function save({ attributes }) {
 			data-filter={filterCategory}
 			data-title-visibility={titleVisibility}
 			data-play-button={playButtonVisibility}
+			data-video-description={description}
 			title={title}
+
 		>
 			<img src={thumbnail} alt={alt || title || ''} />
-			{caption && <div className="video-overlay">{title}</div>}
+			<div className="video-overlay">{title}</div>
 		</div>
 	);
 }

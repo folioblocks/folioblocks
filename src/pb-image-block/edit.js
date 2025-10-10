@@ -68,8 +68,6 @@ export default function Edit({ attributes, setAttributes, context }) {
 
 	const wrapperRef = useRef();
 
-	const [isLightboxOpen, setLightboxOpen] = useState(false);
-
 	const carouselHeight = context['portfolioBlocks/carouselHeight'] || 400;
 	const displayHeight = carouselHeight;
 
@@ -268,11 +266,6 @@ export default function Edit({ attributes, setAttributes, context }) {
 								height={height}
 								className="pb-image-block__img"
 								style={imageStyle}
-								onClick={() => {
-									if (effectiveLightbox) {
-										setLightboxOpen(true);
-									}
-								}}
 							/>
 							{title && effectiveHoverTitle && (
 								<figcaption className="pb-image-block-title" style={captionStyle}>{title}</figcaption>
@@ -305,45 +298,6 @@ export default function Edit({ attributes, setAttributes, context }) {
 						</>
 					)}
 				</figure>
-				{isLightboxOpen && (
-					<div className="pb-image-lightbox">
-						<div className="lightbox-inner">
-							<button
-								className="lightbox-close"
-								onClick={() => setLightboxOpen(false)}
-							>
-								&times;
-							</button>
-							{effectiveDownloadEnabled && (
-								<button
-									className="pb-lightbox-download"
-									onClick={(e) => {
-										e.stopPropagation();
-										
-										// Extract the original file name
-										const fileUrl = sizes?.full?.url || src;
-										const fileName = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
-
-										// Create a download link
-										const link = document.createElement('a');
-										link.href = fileUrl;
-										link.download = fileName || 'download';
-										link.click();
-									}}
-									aria-label={__('Download Image', 'portfolio-blocks')}
-								>
-									{download}
-								</button>
-							)}
-							<div className="lightbox-image">
-								<img src={sizes?.full?.url || src} alt={alt} />
-								{effectiveLightboxCaption && caption && (
-									<p className="lightbox-caption">{caption}</p>
-								)}
-							</div>
-						</div>
-					</div>
-				)}
 			</div>
 		</>
 	);

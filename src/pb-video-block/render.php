@@ -42,7 +42,9 @@ if ( $play_visibility === 'always' || $title_visibility === 'always' ) {
 <div class="pb-video-block aspect-<?php echo esc_attr( str_replace( ':', '-', $aspect ) ); ?><?php echo esc_attr( $overlay_class ); ?><?php echo $drop_shadow ? ' drop-shadow' : ''; ?>"
 	data-filter="<?php echo esc_attr( $filter_category ); ?>"
 	data-video-url="<?php echo esc_url( $video_url ); ?>"
-	style="<?php echo esc_attr( $style ); ?>">	
+	data-video-title="<?php echo esc_attr( $title ); ?>"
+	data-video-description="<?php echo esc_attr( $attributes['description'] ); ?>"
+	style="<?php echo esc_attr( $style ); ?>">
 	<?php echo wp_get_attachment_image( $attributes['thumbnailId'] ?? 0, 'full', false, [ 'alt' => $title, 'class' => 'pb-video-block-img' ] ); ?>
 	<div class="video-overlay">
 		<div class="overlay-content">

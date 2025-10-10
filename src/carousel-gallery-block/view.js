@@ -1,12 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // Disable right-click on entire page if any gallery block has it enabled
-	const disableRightClick = document.querySelector('[data-disable-right-click="true"]');
-	if (disableRightClick) {
-		document.addEventListener('contextmenu', (e) => {
-			e.preventDefault();
-		});
-	}
+    const disableRightClick = document.querySelector('[data-disable-right-click="true"]');
+    if (disableRightClick) {
+        document.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+        });
+    }
 
     const blocks = document.querySelectorAll('.wp-block-portfolio-blocks-carousel-gallery-block');
     blocks.forEach((block) => {
@@ -129,13 +129,37 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         chevrons.forEach((button) => {
-	        button.addEventListener('click', () => {
-		        if (button.classList.contains('prev') && currentSlide > 0) {
-			        scrollToSlide(currentSlide - 1);
-		        } else if (button.classList.contains('next') && currentSlide < slides.length - 1) {
-			        scrollToSlide(currentSlide + 1);
-		        }
-	        });
+            button.addEventListener('click', () => {
+                if (button.classList.contains('prev') && currentSlide > 0) {
+                    scrollToSlide(currentSlide - 1);
+                } else if (button.classList.contains('next') && currentSlide < slides.length - 1) {
+                    scrollToSlide(currentSlide + 1);
+                }
+            });
+        });
+
+        // --- Keep currentSlide in sync with manual swiping ---
+        let scrollSyncTimeout;
+        gallery.addEventListener('scroll', () => {
+            clearTimeout(scrollSyncTimeout);
+            scrollSyncTimeout = setTimeout(() => {
+                if (!slides || slides.length === 0) return;
+
+                const scrollCenter = gallery.scrollLeft + gallery.clientWidth / 2;
+                let nearestIndex = 0;
+                let nearestDistance = Infinity;
+
+                slides.forEach((slide, index) => {
+                    const slideCenter = slide.offsetLeft + slide.clientWidth / 2;
+                    const distance = Math.abs(scrollCenter - slideCenter);
+                    if (distance < nearestDistance) {
+                        nearestDistance = distance;
+                        nearestIndex = index;
+                    }
+                });
+
+                currentSlide = nearestIndex;
+            }, 100); // debounce scroll detection
         });
 
         const playButton = block.querySelector('.pb-carousel-play-button');
@@ -147,42 +171,47 @@ document.addEventListener('DOMContentLoaded', () => {
         let intervalId = null;
 
         function updateIcons(isPlaying) {
-	        if (isPlaying) {
-		        playIcon.style.display = 'none';
-		        pauseIcon.style.display = 'inline';
-	        } else {
-		        playIcon.style.display = 'inline';
-		        pauseIcon.style.display = 'none';
-	        }
+            if (isPlaying) {
+                playIcon.style.display = 'none';
+                pauseIcon.style.display = 'inline';
+            } else {
+                playIcon.style.display = 'inline';
+                pauseIcon.style.display = 'none';
+            }
         }
 
         function startAutoplay() {
-	        if (intervalId) return;
-	        updateIcons(true);
-	        intervalId = setInterval(() => {
-		        if (currentSlide < slides.length - 1) {
-			        scrollToSlide(currentSlide + 1);
-		        } else {
-			        clearInterval(intervalId);
-			        updateIcons(false);
-		        }
-	        }, autoplaySpeed * 1000);
+            if (intervalId) return;
+            updateIcons(true);
+            intervalId = setInterval(() => {
+                if (currentSlide < slides.length - 1) {
+                    scrollToSlide(currentSlide + 1);
+                    // Ensure scroll sync runs immediately after autoplay movement
+                    setTimeout(() => {
+                        const event = new Event('scroll');
+                        gallery.dispatchEvent(event);
+                    }, 150);
+                } else {
+                    clearInterval(intervalId);
+                    updateIcons(false);
+                }
+            }, autoplaySpeed * 1000);
         }
 
         function stopAutoplay() {
-	        if (intervalId) {
-		        clearInterval(intervalId);
-		        intervalId = null;
-		        updateIcons(false);
-	        }
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
+                updateIcons(false);
+            }
         }
 
         playButton?.addEventListener('click', () => {
-	        if (intervalId) {
-		        stopAutoplay();
-	        } else {
-		        startAutoplay();
-	        }
+            if (intervalId) {
+                stopAutoplay();
+            } else {
+                startAutoplay();
+            }
         });
 
         const observer = new IntersectionObserver((entries) => {

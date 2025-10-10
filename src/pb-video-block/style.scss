@@ -114,47 +114,86 @@
 .pb-video-lightbox {
 	position: fixed;
 	inset: 0;
-	background: rgba(0, 0, 0, 0.9);
-	z-index: 9999;
+	background: rgba(0, 0, 0, 0.85);
+	backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	padding: 20px;
+	z-index: 9999;
+
+	.pb-video-lightbox-inner {
+		position: relative;
+		width: 90%;
+		background: transparent;
+	}
+
+	.pb-video-lightbox-video {
+		position: relative;
+		padding-top: 56.25%; // 16:9 default ratio
+		iframe,
+		video {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			border: none;
+		}
+	}
+
+	.pb-video-lightbox-close {
+		position: absolute;
+		top: -40px;
+		right: -10px;
+		background: transparent;
+		border: none;
+		color: white;
+		font-size: 32px;
+		cursor: pointer;
+	}
 }
 
-.pb-video-lightbox-inner {
-	position: relative;
-	width: 100%;
-	max-width: 960px;
-	aspect-ratio: 16 / 9;
-	background: #000;
+.pb-video-lightbox:not(.split-layout) .pb-video-lightbox-inner {
+	max-width: 80%;
+	max-height: 80vh;
 }
 
-.pb-video-lightbox-video {
-	width: 100%;
-	height: 100%;
-	position: relative;
+.pb-video-lightbox:not(.split-layout) .pb-video-lightbox-close {
+	top: -30px;
 }
 
-.pb-video-lightbox-video iframe,
-.pb-video-lightbox-video video {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	border: none;
-	object-fit: cover;
+.pb-video-lightbox.split-layout .pb-video-lightbox-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
 }
 
-.pb-video-lightbox-close {
-	position: absolute;
-	top: -40px;
-	right: 0;
-	background: none;
-	border: none;
-	font-size: 32px;
-	color: white;
-	cursor: pointer;
-	line-height: 1;
+.pb-video-lightbox.split-layout .pb-video-lightbox-info {
+  color: #fff;
+  overflow-y: auto;
+  max-height: 80vh;
+
+
+	h2.pb-video-lightbox-title {
+		font-size: clamp(1rem, 2vw + 0.5rem, 2rem);
+		font-weight: 600;
+		margin-bottom: 1rem;
+		line-height: 1.2;
+	}
+
+	p.pb-video-lightbox-description {
+		font-size: clamp(0.875rem, 1.2vw + 0.4rem, 1.125rem);
+		line-height: 1.6;
+		margin: 0;
+	}
+}
+
+@media (max-width: 768px) {
+  .pb-video-lightbox.split-layout .pb-video-lightbox-inner {
+    flex-direction: column;
+  }
 }
 
 @media (max-width: 640px) {

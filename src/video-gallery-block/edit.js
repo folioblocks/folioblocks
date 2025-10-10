@@ -53,6 +53,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		enableFilter,
 		filterAlign = 'left',
 		lightbox,
+		lightboxLayout, 
 		gap,
 		aspectRatio,
 		thumbnailSize,
@@ -72,7 +73,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 	} = attributes;
 
 	const checkoutUrl = window.portfolioBlocksData?.checkoutUrl || 'https://portfolio-blocks.com/portfolio-blocks-pricing/';
-	
+
 	// Block Preview Image
 	if (preview) {
 		return (
@@ -136,26 +137,26 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 
 	// Prevent people duplicating blocks to bypass limits
 	if (!window.portfolioBlocksData?.isPro) {
-    subscribe(() => {
-        const blocks = select('core/block-editor').getBlocksByClientId(clientId)[0]?.innerBlocks || [];
-        if (blocks.length > 15) {
-            // Remove extras immediately
-            const extras = blocks.slice(15);
-            extras.forEach((block) => {
-                dispatch('core/block-editor').removeBlock(block.clientId);
-            });
+		subscribe(() => {
+			const blocks = select('core/block-editor').getBlocksByClientId(clientId)[0]?.innerBlocks || [];
+			if (blocks.length > 15) {
+				// Remove extras immediately
+				const extras = blocks.slice(15);
+				extras.forEach((block) => {
+					dispatch('core/block-editor').removeBlock(block.clientId);
+				});
 
-            // Show warning notice
-            if (!document.getElementById('pb-video-limit-warning')) {
-                dispatch('core/notices').createNotice(
-                    'warning',
-                    __('Free version allows up to 15 videos. Upgrade to Pro for unlimited.', 'portfolio-blocks'),
-                    { id: 'pb-video-limit-warning', isDismissible: true }
-                );
-            }
-        }
-    });
-}
+				// Show warning notice
+				if (!document.getElementById('pb-video-limit-warning')) {
+					dispatch('core/notices').createNotice(
+						'warning',
+						__('Free version allows up to 15 videos. Upgrade to Pro for unlimited.', 'portfolio-blocks'),
+						{ id: 'pb-video-limit-warning', isDismissible: true }
+					);
+				}
+			}
+		});
+	}
 
 	// Handler to add first video via MediaPlaceholder
 	const { replaceInnerBlocks, insertBlock } = useDispatch('core/block-editor');
@@ -348,7 +349,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 				</ToolbarButton>
 			</BlockControls>
 			{isVideoModalOpen && (
-								<Modal
+				<Modal
 					title={__('Select or Insert Video', 'portfolio-blocks')}
 					onRequestClose={() => setIsVideoModalOpen(false)}
 				>
@@ -409,13 +410,6 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						__next40pxDefaultSize
 						help={__('Set gap size between Thumbnails.')}
 					/>
-					<ToggleControl
-						label={__('Disable Lightbox in Editor', 'portfolio-blocks')}
-						checked={!lightbox}
-						onChange={(val) => setAttributes({ lightbox: !val })}
-						__nextHasNoMarginBottom
-						help={__('Prevent videos from opening in a Lightbox while editing.')}
-					/>
 				</PanelBody>
 
 				<PanelBody title={__('Gallery Thumbnail Settings', 'portfolio-blocks')} initialOpen={true}>
@@ -469,6 +463,24 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						help={__('Settings for the Video Title overlay.')}
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
+					/>
+				</PanelBody>
+				<PanelBody title={__('Gallery Lightbox Settings', 'portfolio-blocks')} initialOpen={true}>
+					<ToggleControl
+						label={__('Disable Lightbox in Editor', 'portfolio-blocks')}
+						checked={!lightbox}
+						onChange={(val) => setAttributes({ lightbox: !val })}
+						__nextHasNoMarginBottom
+						help={__('Prevent videos from opening in a Lightbox while editing.')}
+					/>
+					<SelectControl
+						label={__('Lightbox Layout', 'portfolio-blocks')}
+						value={lightboxLayout}
+						options={[
+							{ label: __('Video Only', 'portfolio-blocks'), value: 'video-only' },
+							{ label: __('Video + Info Split', 'portfolio-blocks'), value: 'split' },
+						]}
+						onChange={(value) => setAttributes({ lightboxLayout: value })}
 					/>
 				</PanelBody>
 				<PanelBody title={__('Gallery Filter Settings', 'portfolio-blocks')} initialOpen={true}>
