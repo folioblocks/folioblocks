@@ -85,7 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                     gallery.setAttribute('tabindex', '0');
                                     gallery.style.outline = 'none';
                                     gallery.style.boxShadow = 'none';
-                                    gallery.focus();
                                     gallery.addEventListener('keydown', (event) => {
                                         if (event.key === 'ArrowRight' && currentSlide < slides.length - 1) {
                                             scrollToSlide(currentSlide + 1);

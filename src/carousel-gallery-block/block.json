@@ -49,6 +49,7 @@
 		"inCarousel": { "type": "boolean", "default": true },
         "showControls": { "type": "boolean", "default": false },
         "autoplay": { "type": "boolean", "default": false},
+        "loopSlides": { "type": "boolean", "default": false},
         "controlsAlignment": { "type": "string", "default": "center" },
         "controlsBackgroundColor": { "type": "string", "default": "rgba(0, 0, 0, 0.5)" },
         "controlsIconColor": { "type": "string", "default": "#ffffff" },

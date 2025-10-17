@@ -42,6 +42,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 		enableDownload,
 		downloadOnHover,
 		preview,
+		loopSlides
 	} = attributes;
 
 	// Block Preview Image
@@ -579,6 +580,33 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 					)}
 				</PanelBody>
 				<PanelBody title={__('Gallery Control Settings', 'portfolio-blocks')} initialOpen={true}>
+					{applyFilters('portfolioBlocks.carouselGallery.enableAutoplayToggle',
+						(
+							<div style={{ marginBottom: '8px' }}>
+								<Notice status="info" isDismissible={false}>
+									<strong>{__('Enable Autoplay', 'portfolio-blocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'portfolio-blocks')}
+									</a>
+								</Notice>
+							</div>
+						),
+						{ attributes, setAttributes, }
+					)}
+					{attributes.autoplay && (
+						<RangeControl
+							label={__('Autoplay Speed (seconds)', 'portfolio-blocks')}
+							value={attributes.autoplaySpeed || 3}
+							onChange={(value) => setAttributes({ autoplaySpeed: value })}
+							min={1}
+							max={5}
+							step={0.25}
+							__next40pxDefaultSize
+							__nextHasNoMarginBottom
+							help={__('Time between automatic slide transitions.', 'portfolio-blocks')}
+						/>
+					)}
 					{applyFilters('portfolioBlocks.carouselGallery.showControlsToggle',
 						(
 							<div style={{ marginBottom: '8px' }}>
@@ -608,27 +636,6 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 								<ToggleGroupControlOption value="center" icon={alignCenter} label={__('Center', 'portfolio-blocks')} />
 								<ToggleGroupControlOption value="right" icon={alignRight} label={__('Right', 'portfolio-blocks')} />
 							</ToggleGroupControl>
-
-							<ToggleControl
-								label={__('Enable Autoplay', 'portfolio-blocks')}
-								checked={attributes.autoplay || false}
-								onChange={(value) => setAttributes({ autoplay: value })}
-								__nextHasNoMarginBottom
-								help={__('Automatically advance to the next image in the carousel.', 'portfolio-blocks')}
-							/>
-							{attributes.autoplay && (
-								<RangeControl
-									label={__('Autoplay Speed (seconds)', 'portfolio-blocks')}
-									value={attributes.autoplaySpeed || 3}
-									onChange={(value) => setAttributes({ autoplaySpeed: value })}
-									min={1}
-									max={5}
-									step={0.25}
-									__next40pxDefaultSize
-									__nextHasNoMarginBottom
-									help={__('Time between automatic slide transitions.', 'portfolio-blocks')}
-								/>
-							)}
 						</>
 					)}
 				</PanelBody>

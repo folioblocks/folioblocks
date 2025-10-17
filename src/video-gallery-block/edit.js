@@ -53,7 +53,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		enableFilter,
 		filterAlign = 'left',
 		lightbox,
-		lightboxLayout, 
+		lightboxLayout,
+		lazyLoad,
 		gap,
 		aspectRatio,
 		thumbnailSize,
@@ -200,6 +201,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			'portfolioBlocks/titleVisibility': titleVisibility,
 			'portfolioBlocks/activeFilter': activeFilter,
 			'portfolioBlocks/lightbox': lightbox,
+			'portfolioBlocks/lightboxLayout': lightboxLayout,
+			'portfolioBlocks/lazyLoad': lazyLoad,
 		},
 		style: {
 			'--pb--filter-text-color': filterTextColor || '#000',
@@ -224,6 +227,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 				'portfolioBlocks/titleVisibility': titleVisibility,
 				'portfolioBlocks/activeFilter': activeFilter,
 				'portfolioBlocks/lightbox': lightbox,
+				'portfolioBlocks/lightboxLayout': lightboxLayout,
+				'portfolioBlocks/lazyLoad': lazyLoad,
 			},
 		}
 	);
@@ -410,6 +415,36 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						__next40pxDefaultSize
 						help={__('Set gap size between Thumbnails.')}
 					/>
+					{applyFilters(
+						'portfolioBlocks.videoGallery.disableRightClickToggle',
+						(
+							<div style={{ marginBottom: '8px' }}>
+								<Notice status="info" isDismissible={false}>
+									<strong>{__('Disable Right-Click', 'portfolio-blocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'portfolio-blocks')}
+									</a>
+								</Notice>
+							</div>
+						),
+						{ attributes, setAttributes }
+					)}
+					{applyFilters(
+						'portfolioBlocks.videoGallery.lazyLoadToggle',
+						(
+							<div style={{ marginBottom: '8px' }}>
+								<Notice status="info" isDismissible={false}>
+									<strong>{__('Enable Lazy Load of Images', 'portfolio-blocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'portfolio-blocks')}
+									</a>
+								</Notice>
+							</div>
+						),
+						{ attributes, setAttributes }
+					)}
 				</PanelBody>
 
 				<PanelBody title={__('Gallery Thumbnail Settings', 'portfolio-blocks')} initialOpen={true}>
@@ -473,15 +508,21 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						__nextHasNoMarginBottom
 						help={__('Prevent videos from opening in a Lightbox while editing.')}
 					/>
-					<SelectControl
-						label={__('Lightbox Layout', 'portfolio-blocks')}
-						value={lightboxLayout}
-						options={[
-							{ label: __('Video Only', 'portfolio-blocks'), value: 'video-only' },
-							{ label: __('Video + Info Split', 'portfolio-blocks'), value: 'split' },
-						]}
-						onChange={(value) => setAttributes({ lightboxLayout: value })}
-					/>
+					{applyFilters(
+						'portfolioBlocks.videoGallery.lightboxLayout',
+						(
+							<div style={{ marginBottom: '8px' }}>
+								<Notice status="info" isDismissible={false}>
+									<strong>{__('Lightbox Layout', 'portfolio-blocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'portfolio-blocks')}
+									</a>
+								</Notice>
+							</div>
+						),
+						{ attributes, setAttributes }
+					)}
 				</PanelBody>
 				<PanelBody title={__('Gallery Filter Settings', 'portfolio-blocks')} initialOpen={true}>
 					{applyFilters(

@@ -257,16 +257,21 @@ export default function Edit({ attributes, setAttributes }) {
 								__nextHasNoMarginBottom
 								__next40pxDefaultSize
 							/>
-							<RangeControl
-								label={__('Drag Handle Starting Position (%)', 'portfolio-blocks')}
-								value={attributes.startingPosition}
-								onChange={(value) => setAttributes({ startingPosition: value })}
-								min={0}
-								max={100}
-								__next40pxDefaultSize
-								__nextHasNoMarginBottom
-								help={__('Set starting position for slider drag handle.', 'portfolio-blocks')}
-							/>
+							{applyFilters(
+								'portfolioBlocks.beforeAfter.dragHandlePosition',
+								(
+									<div style={{ marginBottom: '8px' }}>
+										<Notice status="info" isDismissible={false}>
+											<strong>{__('Drag Handle Starting Postion', 'portfolio-blocks')}</strong><br />
+											{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+											<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+												{__('Upgrade to Pro', 'portfolio-blocks')}
+											</a>
+										</Notice>
+									</div>
+								),
+								{ attributes, setAttributes }
+							)}
 
 							{applyFilters(
 								'portfolioBlocks.beforeAfter.showLabelsToggle',
@@ -305,6 +310,36 @@ export default function Edit({ attributes, setAttributes }) {
 									__nextHasNoMarginBottom
 									__next40pxDefaultSize
 								/>
+							)}
+							{applyFilters(
+								'portfolioBlocks.beforeAfter.disableRightClickToggle',
+								(
+									<div style={{ marginBottom: '8px' }}>
+										<Notice status="info" isDismissible={false}>
+											<strong>{__('Disable Right-Click', 'portfolio-blocks')}</strong><br />
+											{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+											<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+												{__('Upgrade to Pro', 'portfolio-blocks')}
+											</a>
+										</Notice>
+									</div>
+								),
+								{ attributes, setAttributes }
+							)}
+							{applyFilters(
+								'portfolioBlocks.beforeAfter.lazyLoadToggle',
+								(
+									<div style={{ marginBottom: '8px' }}>
+										<Notice status="info" isDismissible={false}>
+											<strong>{__('Enable Lazy Load of Images', 'portfolio-blocks')}</strong><br />
+											{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+											<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+												{__('Upgrade to Pro', 'portfolio-blocks')}
+											</a>
+										</Notice>
+									</div>
+								),
+								{ attributes, setAttributes }
 							)}
 						</PanelBody>
 					</InspectorControls>

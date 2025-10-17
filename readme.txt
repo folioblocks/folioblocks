@@ -81,6 +81,11 @@ No, the galleries will remain in place on your site. However, the advanced layou
 
 == Changelog ==
 
+0.8.4
+- Fixes Focus State bug on Carousel Gallery block.
+- Addded Lazy Load & Disable Right Click to Video Gallery Block.
+- Addded Lazy Load & Disable Right Click to Before & After Block.
+
 0.8.3
 - Updated Video Gallery block with option to show Title & Description in Lightbox. 
 - Fixed Carousel gallery front-end bug where Navigation Controls became out of sync with current sldie. 

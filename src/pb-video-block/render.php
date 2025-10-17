@@ -13,6 +13,7 @@ $border_width = absint( $attributes['borderWidth'] ?? 0 );
 $border_radius = absint( $attributes['borderRadius'] ?? 0 );
 
 $drop_shadow = ! empty( $attributes['dropShadow'] );
+$lazy_load = ! empty( $attributes['lazyLoad'] );
 
 // Build style string for border and radius
 $style = '';
@@ -43,9 +44,11 @@ if ( $play_visibility === 'always' || $title_visibility === 'always' ) {
 	data-filter="<?php echo esc_attr( $filter_category ); ?>"
 	data-video-url="<?php echo esc_url( $video_url ); ?>"
 	data-video-title="<?php echo esc_attr( $title ); ?>"
-	data-video-description="<?php echo esc_attr( $attributes['description'] ); ?>"
+	<?php if ( isset( $attributes['lightboxLayout'] ) && $attributes['lightboxLayout'] === 'split' ) : ?>
+		data-video-description="<?php echo esc_attr( $attributes['description'] ); ?>"
+	<?php endif; ?>
 	style="<?php echo esc_attr( $style ); ?>">
-	<?php echo wp_get_attachment_image( $attributes['thumbnailId'] ?? 0, 'full', false, [ 'alt' => $title, 'class' => 'pb-video-block-img' ] ); ?>
+	<?php echo wp_get_attachment_image( $attributes['thumbnailId'] ?? 0, 'full', false, [ 'alt' => $title, 'class' => 'pb-video-block-img', 'loading' => $lazy_load ? 'lazy' : 'eager'] ); ?>
 	<div class="video-overlay">
 		<div class="overlay-content">
 			<?php if ( $title && $title_visibility !== 'hidden' ) : ?>

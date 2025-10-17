@@ -57,7 +57,9 @@
 		"labelPosition": { "type": "string", "default": "center" },
 		"labelTextColor": { "type": "string", "default": "#ffffff" },
 		"labelBackgroundColor": { "type": "string", "default": "rgba(0, 0, 0, 0.6)" }, 
-		"sliderColor": { "type": "string", "default": "#ffffff" }
+		"sliderColor": { "type": "string", "default": "#ffffff" }, 
+		"disableRightClick": { "type": "boolean", "default": false },
+        "lazyLoad": { "type": "boolean", "default": false }
 	},
 	"textdomain": "portfolio-blocks",
 	"editorScript": "file:./index.js",

@@ -34,18 +34,18 @@ addFilter(
                 help: __('Enable visitors to download images from the gallery.', 'portfolio-blocks')
             }),
             enableDownload &&
-                createElement(SelectControl, {
-                    key: 'download-icon-display',
-                    label: __('Display Image Download Icon', 'portfolio-blocks'),
-                    value: downloadOnHover ? 'hover' : 'always',
-                    options: [
-                        { label: __('Always', 'portfolio-blocks'), value: 'always' },
-                        { label: __('On Hover', 'portfolio-blocks'), value: 'hover' }
-                    ],
-                    onChange: (value) => setAttributes({ downloadOnHover: value === 'hover' }),
-                    __nextHasNoMarginBottom: true,
-                    help: __('Set display preference for Image Download icon.')
-                })
+            createElement(SelectControl, {
+                key: 'download-icon-display',
+                label: __('Display Image Download Icon', 'portfolio-blocks'),
+                value: downloadOnHover ? 'hover' : 'always',
+                options: [
+                    { label: __('Always', 'portfolio-blocks'), value: 'always' },
+                    { label: __('On Hover', 'portfolio-blocks'), value: 'hover' }
+                ],
+                onChange: (value) => setAttributes({ downloadOnHover: value === 'hover' }),
+                __nextHasNoMarginBottom: true,
+                help: __('Set display preference for Image Download icon.')
+            })
         ]);
     }
 );
@@ -80,21 +80,57 @@ addFilter(
     }
 );
 addFilter(
-	'portfolioBlocks.carouselGallery.showControlsToggle',
-	'portfolio-blocks/carousel-gallery-premium-controls',
-	(defaultContent, props) => {
-		const { attributes, setAttributes } = props;
+    'portfolioBlocks.carouselGallery.enableAutoplayToggle',
+    'portfolio-blocks/carousel-gallery-premium-controls',
+    (defaultContent, props) => {
+        const { attributes, setAttributes } = props;
 
-		return (
-			<ToggleControl
-				label={__('Enable Carousel Controls', 'portfolio-blocks')}
-				checked={attributes.showControls}
-				onChange={(value) => setAttributes({ showControls: value })}
-				__nextHasNoMarginBottom
-				help={__('Toggle visibility of navigation arrows.', 'portfolio-blocks')}
-			/>
-		);
-	}
+        return (
+            <ToggleControl
+                label={__('Enable Autoplay', 'portfolio-blocks')}
+                checked={attributes.autoplay || false}
+                onChange={(value) => setAttributes({ autoplay: value })}
+                __nextHasNoMarginBottom
+                help={__('Automatically advance to the next image in the carousel.', 'portfolio-blocks')}
+            />
+        );
+    }
+);
+addFilter(
+    'portfolioBlocks.carouselGallery.loopSlides',
+    'portfolio-blocks/carousel-gallery-premium-controls',
+    (defaultContent, props) => {
+        const { attributes, setAttributes } = props;
+
+        return (
+            <ToggleControl
+                label={__('Loop Carousel Slides', 'portfolio-blocks')}
+                checked={attributes.loopSlides || false}
+                onChange={(value) => setAttributes({ loopSlides: value })}
+                __nextHasNoMarginBottom
+                help={__('Enable the carousel to loop infinitely.', 'portfolio-blocks')}
+            />
+        );
+    }
+);
+
+
+addFilter(
+    'portfolioBlocks.carouselGallery.showControlsToggle',
+    'portfolio-blocks/carousel-gallery-premium-controls',
+    (defaultContent, props) => {
+        const { attributes, setAttributes } = props;
+
+        return (
+            <ToggleControl
+                label={__('Enable Carousel Controls', 'portfolio-blocks')}
+                checked={attributes.showControls}
+                onChange={(value) => setAttributes({ showControls: value })}
+                __nextHasNoMarginBottom
+                help={__('Toggle visibility of navigation arrows.', 'portfolio-blocks')}
+            />
+        );
+    }
 );
 addFilter(
     'portfolioBlocks.carouselGallery.lightboxControls',
@@ -112,14 +148,14 @@ addFilter(
                 help: __('Enable image Lightbox on click.', 'portfolio-blocks')
             }),
             attributes.lightbox &&
-                createElement(ToggleControl, {
-                    key: 'show-lightbox-caption',
-                    label: __('Show Caption in Lightbox', 'portfolio-blocks'),
-                    checked: !!attributes.lightboxCaption,
-                    onChange: (newLightboxCaption) => setAttributes({ lightboxCaption: newLightboxCaption }),
-                    __nextHasNoMarginBottom: true,
-                    help: __('Display image Captions inside the lightbox.', 'portfolio-blocks')
-                })
+            createElement(ToggleControl, {
+                key: 'show-lightbox-caption',
+                label: __('Show Caption in Lightbox', 'portfolio-blocks'),
+                checked: !!attributes.lightboxCaption,
+                onChange: (newLightboxCaption) => setAttributes({ lightboxCaption: newLightboxCaption }),
+                __nextHasNoMarginBottom: true,
+                help: __('Display image Captions inside the lightbox.', 'portfolio-blocks')
+            })
         ]);
     }
 );

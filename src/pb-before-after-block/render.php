@@ -8,6 +8,8 @@ $label_position = $attributes['labelPosition'] ?? 'center';
 $label_text_color = $attributes['labelTextColor'] ?? '#ffffff';
 $label_bg_color = $attributes['labelBackgroundColor'] ?? 'rgba(0, 0, 0, 0.6)';
 $slider_color = $attributes['sliderColor'] ?? '#ffffff';
+$disable_right_click = !empty($attributes['disableRightClick']);
+$lazy_load = !empty($attributes['lazyLoad']);
 
 if (empty($before_image['src']) || empty($after_image['src'])) {
 	return '';
@@ -18,9 +20,19 @@ $block_wrapper_attributes = get_block_wrapper_attributes();
 ?>
 
 <?php echo '<div ' . wp_kses( $block_wrapper_attributes, [ 'div' => [] ] ) . '>'; ?>
-	<div class="pb-before-after-container <?php echo $orientation === 'vertical' ? 'is-vertical' : ''; ?>">
+	<div class="pb-before-after-container <?php echo $orientation === 'vertical' ? 'is-vertical' : ''; ?>" data-disable-right-click="<?php echo $disable_right_click ? 'true' : 'false'; ?>">
 		<div class="pb-after-wrapper">
-			<?php echo wp_get_attachment_image( $after_image['id'], 'full', false, [ 'class' => 'pb-after-image' ] ); ?>
+			<?php 
+				echo wp_get_attachment_image( 
+  					$after_image['id'], 
+  					'full', 
+  					false, 
+  					[ 
+    					'class' => 'pb-after-image', 
+    					'loading' => $lazy_load ? 'lazy' : 'eager', 
+  					] 
+				); 
+			?>
 			<?php if ($show_labels): ?>
 				<div class="pb-label pb-after-label label-<?php echo esc_attr($label_position); ?>" style="color: <?php echo esc_attr($label_text_color); ?>; background-color: <?php echo esc_attr($label_bg_color); ?>;">
 					<?php esc_html_e('After', 'portfolio-blocks'); ?>
@@ -28,7 +40,17 @@ $block_wrapper_attributes = get_block_wrapper_attributes();
 			<?php endif; ?>
 		</div>
 		<div class="pb-before-wrapper">
-			<?php echo wp_get_attachment_image( $before_image['id'], 'full', false, [ 'class' => 'pb-before-image' ] ); ?>
+			<?php 
+				echo wp_get_attachment_image( 
+  					$before_image['id'], 
+  					'full', 
+  					false, 
+  					[ 
+    					'class' => 'pb-before-image', 
+    					'loading' => $lazy_load ? 'lazy' : 'eager', 
+  					] 
+				); 
+			?>
 			<?php if ($show_labels): ?>
 				<div class="pb-label pb-before-label label-<?php echo esc_attr($label_position); ?>" style="color: <?php echo esc_attr($label_text_color); ?>; background-color: <?php echo esc_attr($label_bg_color); ?>;">
 					<?php esc_html_e('Before', 'portfolio-blocks'); ?>

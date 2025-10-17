@@ -137,6 +137,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 	const parentTitleVisibility = context?.['portfolioBlocks/titleVisibility'];
 	const lightboxEnabled = context?.['portfolioBlocks/lightbox'] ?? true;
 	const lightboxLayout = context?.['portfolioBlocks/lightboxLayout'];
+	const lazyLoad = context?.['portfolioBlocks/lazyLoad'];
 	const inheritedBorderColor = context?.['portfolioBlocks/borderColor'];
 	const inheritedBorderWidth = context?.['portfolioBlocks/borderWidth'];
 	const inheritedBorderRadius = context?.['portfolioBlocks/borderRadius'];
@@ -172,6 +173,12 @@ export default function Edit({ attributes, setAttributes, context }) {
 		if (inheritedDropShadow !== undefined) {
 			setAttributes({ dropShadow: inheritedDropShadow });
 		}
+		if (lazyLoad !== undefined && attributes.lazyLoad !== lazyLoad) {
+			setAttributes({ lazyLoad });
+		}
+		if (lightboxLayout && attributes.lightboxLayout !== lightboxLayout) {
+			setAttributes({ lightboxLayout });
+		}
 	}, [
 		parentAspectRatio,
 		parentPlayButton,
@@ -179,7 +186,9 @@ export default function Edit({ attributes, setAttributes, context }) {
 		inheritedBorderColor,
 		inheritedBorderWidth,
 		inheritedBorderRadius,
-		inheritedDropShadow
+		inheritedDropShadow,
+		lazyLoad,
+		lightboxLayout
 	]);
 
 	// ---------------------------
@@ -398,6 +407,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 						value={description}
 						onChange={(value) => setAttributes({ description: value })}
 						help={__('Shown in the lightbox when enabled in Gallery Lightbox Settings.', 'portfolio-blocks')}
+						__nextHasNoMarginBottom
 					/>
 
 					{filterCategories.length > 0 && (
@@ -541,6 +551,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 							src={resolvedThumbnailUrl}
 							alt={title || ''}
 							className="pb-video-block-img"
+							loading={lazyLoad ? 'lazy' : 'eager'}
 						/>
 						<div className="video-overlay">
 							<div className="overlay-content">

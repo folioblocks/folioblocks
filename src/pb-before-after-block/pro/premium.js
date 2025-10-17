@@ -1,8 +1,29 @@
 import { __ } from '@wordpress/i18n';
-import { ToggleControl } from '@wordpress/components';
+import { RangeControl, ToggleControl } from '@wordpress/components';
 import { PanelColorSettings } from '@wordpress/block-editor';
+import { createElement } from '@wordpress/element';
 import { addFilter } from '@wordpress/hooks';
 
+addFilter(
+	'portfolioBlocks.beforeAfter.dragHandlePosition',
+	'portfolio-blocks/before-after-drag-handle-position',
+	(defaultContent, props) => {
+		const { setAttributes, attributes } = props;
+
+		return (
+			<RangeControl
+				label={__('Drag Handle Starting Position (%)', 'portfolio-blocks')}
+				value={attributes.startingPosition}
+				onChange={(value) => setAttributes({ startingPosition: value })}
+				min={0}
+				max={100}
+				__next40pxDefaultSize
+				__nextHasNoMarginBottom
+				help={__('Set starting position for slider drag handle.', 'portfolio-blocks')}
+			/>
+		);
+	}
+);
 addFilter(
 	'portfolioBlocks.beforeAfter.showLabelsToggle',
 	'portfolio-blocks/before-after-premium-labels',
@@ -21,7 +42,36 @@ addFilter(
 		);
 	}
 );
+addFilter(
+	'portfolioBlocks.beforeAfter.disableRightClickToggle',
+	'portfolio-blocks/before-after-premium-disable-right-click',
+	(defaultContent, props) => {
+		const { attributes, setAttributes } = props;
 
+		return createElement(ToggleControl, {
+			label: __('Disable Right-Click on Page', 'portfolio-blocks'),
+			help: __('Prevents visitors from right-clicking.', 'portfolio-blocks'),
+			__nextHasNoMarginBottom: true,
+			checked: !!attributes.disableRightClick,
+			onChange: (value) => setAttributes({ disableRightClick: value })
+		});
+	}
+);
+addFilter(
+	'portfolioBlocks.beforeAfter.lazyLoadToggle',
+	'portfolio-blocks/before-after-premium-lazy-load',
+	(defaultContent, props) => {
+		const { attributes, setAttributes } = props;
+
+		return createElement(ToggleControl, {
+			label: __('Enable Lazy Load of Images', 'portfolio-blocks'),
+			help: __('Enables lazy loading of gallery images.', 'portfolio-blocks'),
+			__nextHasNoMarginBottom: true,
+			checked: !!attributes.lazyLoad,
+			onChange: (value) => setAttributes({ lazyLoad: value })
+		});
+	}
+);
 addFilter(
 	'portfolioBlocks.beforeAfter.colorSettingsPanel',
 	'portfolio-blocks/before-after-premium-colors',

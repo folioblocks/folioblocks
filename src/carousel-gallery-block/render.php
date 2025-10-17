@@ -16,13 +16,15 @@ if ( ! empty( $attributes['enableDownload'] ) ) {
 if ( ! empty( $attributes['disableRightClick'] ) ) {
 	$wrapper_attributes['data-disable-right-click'] = 'true';
 }
+
+$loop = isset( $attributes['loopSlides'] ) ? $attributes['loopSlides'] : false;
 ?>
 
 <?php
 $wrapper_attr_string = get_block_wrapper_attributes( $wrapper_attributes );
 echo '<div ' . wp_kses( $wrapper_attr_string, [ 'div' => [] ] ) . '>';
 ?>
-	<div class="pb-carousel-gallery">
+	<div class="pb-carousel-gallery" data-loop="<?php echo $loop ? 'true' : 'false'; ?>">
 		<?php echo wp_kses_post( $content ); ?>
 	</div>
 	<?php if ( ! empty( $attributes['showControls'] ) ) : ?>

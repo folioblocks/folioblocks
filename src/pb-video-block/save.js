@@ -10,7 +10,6 @@ export default function save({ attributes }) {
 		filterCategory = '',
 		playButtonVisibility = 'always',
 		titleVisibility = 'always',
-		lightboxLayout = 'video-only',
 		borderWidth,
 		borderColor,
 		borderRadius,

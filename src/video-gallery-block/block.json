@@ -37,6 +37,8 @@
     	"tabletColumns": { "type": "number", "default": 2 },
     	"mobileColumns": { "type": "number", "default": 1},
 		"gap": { "type": "number", "default": 10 },
+		"disableRightClick": { "type": "boolean", "default": false },
+        "lazyLoad": { "type": "boolean", "default": false },
 		"borderWidth": { "type": "number", "default": 0 }, 
 		"borderRadius": { "type": "number", "default": 0 },
   		"borderColor": { "type": "string", "default": "#ffffff" },
@@ -85,6 +87,7 @@
 	},
   	"usesContext": ["postId"],
   	"providesContext": {
+		"portfolioBlocks/lazyLoad": "lazyLoad",
 		"portfolioBlocks/aspectRatio": "aspectRatio",
 		"portfolioBlocks/playButtonVisibility": "playButtonVisibility",
 		"portfolioBlocks/titleVisibility": "titleVisibility",
