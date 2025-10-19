@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-	
+
 	// Disable right-click on entire page if any gallery block has it enabled
 	const disableRightClick = document.querySelector('[data-disable-right-click="true"]');
 	if (disableRightClick) {
@@ -127,4 +127,16 @@ document.addEventListener('DOMContentLoaded', () => {
 	setTimeout(() => {
 		requestAnimationFrame(calculateLayout);
 	}, 100);
+
+	// Sequential fade-in for justified gallery images
+	const gridBlocks = document.querySelectorAll('.pb-image-block-wrapper');
+	gridBlocks.forEach((block, index) => {
+		block.style.opacity = 0;
+		block.style.transform = 'translateY(20px)';
+		block.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+		setTimeout(() => {
+			block.style.opacity = 1;
+			block.style.transform = 'translateY(0)';
+		}, index * 150);
+	});
 });

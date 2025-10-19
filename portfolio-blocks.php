@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Portfolio Blocks
  * Description:       A collection of blocks for making photo and video galleries
- * Version:           0.8.3
+ * Version:           0.8.6
  * Requires at least: 6.3
  * Requires PHP:      7.4
  * Author:            PB Team
@@ -195,4 +195,33 @@ if ( function_exists( 'pb_fs' ) ) {
     }
     add_filter( 'wp_kses_allowed_html', 'pb_allow_svg_tags', 10, 2 );
 
+}
+
+// Enqueue premium block scripts if premium is active.
+add_action( 'enqueue_block_editor_assets', 'portfolio_blocks_enqueue_premium_scripts' );
+function portfolio_blocks_enqueue_premium_scripts() {
+    if ( !function_exists( 'pb_fs' ) || !pb_fs()->can_use_premium_code() ) {
+        return;
+    }
+    $blocks_dir = plugin_dir_path( __FILE__ ) . 'build/';
+    $blocks_url = plugins_url( 'build/', __FILE__ );
+    foreach ( glob( $blocks_dir . '*', GLOB_ONLYDIR ) as $block_path ) {
+        $block_name = basename( $block_path );
+        $premium_js_path = $block_path . '/premium.js';
+        if ( file_exists( $premium_js_path ) ) {
+            wp_enqueue_script(
+                "portfolio-blocks-{$block_name}-premium",
+                $blocks_url . "{$block_name}/premium.js",
+                [
+                    'wp-blocks',
+                    'wp-element',
+                    'wp-hooks',
+                    'wp-components',
+                    'wp-editor'
+                ],
+                filemtime( $premium_js_path ),
+                true
+            );
+        }
+    }
 }

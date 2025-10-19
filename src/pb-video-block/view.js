@@ -5,17 +5,17 @@ document.addEventListener('DOMContentLoaded', () => {
 	let userUsedKeyboard = false;
 
 	window.addEventListener('keydown', (e) => {
-	    if (e.key === 'Tab' || e.key === 'Enter' || e.key === ' ') {
-	        userUsedKeyboard = true;
-	    }
+		if (e.key === 'Tab' || e.key === 'Enter' || e.key === ' ') {
+			userUsedKeyboard = true;
+		}
 	});
 
 	window.addEventListener('mousedown', () => {
-	    userUsedKeyboard = false;
+		userUsedKeyboard = false;
 	});
 
 	window.addEventListener('touchstart', () => {
-	    userUsedKeyboard = false;
+		userUsedKeyboard = false;
 	});
 
 	const blocks = document.querySelectorAll('.pb-video-block');
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				<div class="pb-video-lightbox-inner">
 					<button class="pb-video-lightbox-close" aria-label="Close">×</button>
 					${layout === 'split'
-						? `
+				? `
 						<div class="pb-video-lightbox-video" style="flex:0 0 70%">
 							${getVideoEmbedMarkup(videoUrl)}
 						</div>
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
 							${description ? `<p class="pb-video-lightbox-description">${description}</p>` : ''}
 						</div>
 						`
-						: `
+				: `
 						<div class="pb-video-lightbox-video">
 							${getVideoEmbedMarkup(videoUrl)}
 						</div>
@@ -91,28 +91,28 @@ document.addEventListener('DOMContentLoaded', () => {
 		document.addEventListener('keydown', handleFullscreen);
 
 		function handleFullscreen(e) {
-		    if (e.key.toLowerCase() === 'f') {
-		        const iframe = overlay.querySelector('.pb-video-lightbox-video iframe');
-		        const video = overlay.querySelector('.pb-video-lightbox-video video');
-		        if (iframe) {
-		            const container = iframe.parentElement;
-		            if (container.requestFullscreen) {
-		                container.requestFullscreen();
-		            } else if (container.webkitRequestFullscreen) {
-		                container.webkitRequestFullscreen();
-		            } else if (container.msRequestFullscreen) {
-		                container.msRequestFullscreen();
-		            }
-		        } else if (video) {
-		            if (video.requestFullscreen) {
-		                video.requestFullscreen();
-		            } else if (video.webkitRequestFullscreen) {
-		                video.webkitRequestFullscreen();
-		            } else if (video.msRequestFullscreen) {
-		                video.msRequestFullscreen();
-		            }
-		        }
-		    }
+			if (e.key.toLowerCase() === 'f') {
+				const iframe = overlay.querySelector('.pb-video-lightbox-video iframe');
+				const video = overlay.querySelector('.pb-video-lightbox-video video');
+				if (iframe) {
+					const container = iframe.parentElement;
+					if (container.requestFullscreen) {
+						container.requestFullscreen();
+					} else if (container.webkitRequestFullscreen) {
+						container.webkitRequestFullscreen();
+					} else if (container.msRequestFullscreen) {
+						container.msRequestFullscreen();
+					}
+				} else if (video) {
+					if (video.requestFullscreen) {
+						video.requestFullscreen();
+					} else if (video.webkitRequestFullscreen) {
+						video.webkitRequestFullscreen();
+					} else if (video.msRequestFullscreen) {
+						video.msRequestFullscreen();
+					}
+				}
+			}
 		}
 
 		function handleEscape(e) {
@@ -138,4 +138,16 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 		return `<video src="${videoUrl}" controls autoplay></video>`;
 	}
+
+	// Sequential fade-in for video blocks
+	const allBlocks = document.querySelectorAll('.pb-video-block');
+	allBlocks.forEach((block, index) => {
+		block.style.opacity = 0;
+		block.style.transform = 'translateY(20px)';
+		block.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+		setTimeout(() => {
+			block.style.opacity = 1;
+			block.style.transform = 'translateY(0)';
+		}, index * 150); // 150ms delay between each block
+	});
 });

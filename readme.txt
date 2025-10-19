@@ -5,7 +5,7 @@ Tags: gallery, portfolio, image, photo, video
 Tested up to:      6.8
 Requires at least: 6.3
 Requires PHP: 7.4
-Stable tag:        0.8.3
+Stable tag:        0.8.6
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -80,6 +80,13 @@ No, the galleries will remain in place on your site. However, the advanced layou
 7. Video Gallery block populated with images
 
 == Changelog ==
+
+0.8.6
+- Improved entrance animation on Grid, Justified, Masonry, Modular, and Video Galleries. 
+- Fixes an issue where Video blocks would not render if the Thumbnail was missing. 
+
+0.8.5
+- Fixes bug script loading bug. 
 
 0.8.4
 - Fixes Focus State bug on Carousel Gallery block.

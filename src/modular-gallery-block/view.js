@@ -195,4 +195,16 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 		window.addEventListener('resize', () => recalculateLayout(row));
 	});
+	
+	// Sequential fade-in for Modular gallery images
+	const gridBlocks = document.querySelectorAll('.pb-image-block-wrapper');
+	gridBlocks.forEach((block, index) => {
+		block.style.opacity = 0;
+		block.style.transform = 'translateY(20px)';
+		block.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+		setTimeout(() => {
+			block.style.opacity = 1;
+			block.style.transform = 'translateY(0)';
+		}, index * 150);
+	});
 });

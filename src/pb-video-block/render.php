@@ -27,8 +27,27 @@ if ( $border_radius > 0 ) {
 	$style .= "border-radius: {$border_radius}px;";
 }
 
-if ( ! $thumbnail || ! $video_url ) {
-	return ''; // Bail if missing data
+// Only bail if no video URL exists
+if ( ! $video_url ) {
+	return '';
+}
+
+// Render placeholder if thumbnail is missing
+if ( ! $thumbnail ) {
+	$thumbnail_html = '<div class="pb-video-placeholder" aria-hidden="true">
+		<h3 class="pb-video-missing">Thumbnail Missing</h3>
+	</div>';
+} else {
+	$thumbnail_html = wp_get_attachment_image(
+		$attributes['thumbnailId'] ?? 0,
+		'full',
+		false,
+		[
+			'alt'   => $title,
+			'class' => 'pb-video-block-img',
+			'loading' => $lazy_load ? 'lazy' : 'eager'
+		]
+	);
 }
 ?>
 <div <?php echo wp_kses_post( get_block_wrapper_attributes() ); ?>>
@@ -48,7 +67,7 @@ if ( $play_visibility === 'always' || $title_visibility === 'always' ) {
 		data-video-description="<?php echo esc_attr( $attributes['description'] ); ?>"
 	<?php endif; ?>
 	style="<?php echo esc_attr( $style ); ?>">
-	<?php echo wp_get_attachment_image( $attributes['thumbnailId'] ?? 0, 'full', false, [ 'alt' => $title, 'class' => 'pb-video-block-img', 'loading' => $lazy_load ? 'lazy' : 'eager'] ); ?>
+	<?php echo $thumbnail_html; ?>
 	<div class="video-overlay">
 		<div class="overlay-content">
 			<?php if ( $title && $title_visibility !== 'hidden' ) : ?>

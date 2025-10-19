@@ -1,12 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   // Disable right-click on entire page if any gallery block has it enabled
-	const disableRightClick = document.querySelector('[data-disable-right-click="true"]');
-	if (disableRightClick) {
-		document.addEventListener('contextmenu', (e) => {
-			e.preventDefault();
-		});
-	}
+  const disableRightClick = document.querySelector('[data-disable-right-click="true"]');
+  if (disableRightClick) {
+    document.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+    });
+  }
 
   const gallery = document.querySelector('.wp-block-portfolio-blocks-masonry-gallery-block');
 
@@ -42,18 +42,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-const getColumnsForWidth = (width) => {
-  const innerGallery = gallery.querySelector('.pb-masonry-gallery');
-  if (!innerGallery) return 4; // default fallback
+  const getColumnsForWidth = (width) => {
+    const innerGallery = gallery.querySelector('.pb-masonry-gallery');
+    if (!innerGallery) return 4; // default fallback
 
-  const desktopCols = parseInt(innerGallery.className.match(/cols-d-(\d+)/)?.[1] || 6, 10);
-  const tabletCols  = parseInt(innerGallery.className.match(/cols-t-(\d+)/)?.[1] || 4, 10);
-  const mobileCols  = parseInt(innerGallery.className.match(/cols-m-(\d+)/)?.[1] || 2, 10);
+    const desktopCols = parseInt(innerGallery.className.match(/cols-d-(\d+)/)?.[1] || 6, 10);
+    const tabletCols = parseInt(innerGallery.className.match(/cols-t-(\d+)/)?.[1] || 4, 10);
+    const mobileCols = parseInt(innerGallery.className.match(/cols-m-(\d+)/)?.[1] || 2, 10);
 
-  if (width <= 600) return mobileCols;
-  if (width <= 1024) return tabletCols;
-  return desktopCols;
-};
+    if (width <= 600) return mobileCols;
+    if (width <= 1024) return tabletCols;
+    return desktopCols;
+  };
 
   const applyCustomMasonryLayout = () => {
     if (!gallery) return;
@@ -137,5 +137,17 @@ const getColumnsForWidth = (width) => {
     clearTimeout(fallbackTimeout);
     window.removeEventListener('resize', applyCustomMasonryLayout);
     resizeObserver.disconnect();
-});
+  });
+
+  // Sequential fade-in for masonry gallery images
+	const gridBlocks = document.querySelectorAll('.pb-image-block-wrapper');
+	gridBlocks.forEach((block, index) => {
+		block.style.opacity = 0;
+		block.style.transform = 'translateY(20px)';
+		block.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+		setTimeout(() => {
+			block.style.opacity = 1;
+			block.style.transform = 'translateY(0)';
+		}, index * 150);
+	});
 });
