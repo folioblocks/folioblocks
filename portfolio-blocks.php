@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Portfolio Blocks
  * Description:       A collection of blocks for making photo and video galleries
- * Version:           0.8.6
+ * Version:           0.8.7
  * Requires at least: 6.3
  * Requires PHP:      7.4
  * Author:            PB Team

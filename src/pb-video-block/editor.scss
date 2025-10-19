@@ -1,5 +1,9 @@
 // Placeholder Styles
-
+.pb-video-block {
+	opacity: 1 !important;
+	transform: none !important;
+	transition: none !important;
+}
 .pb-video-block .video-thumbnail-placeholder {
 	display: flex;
 	flex-direction: column;

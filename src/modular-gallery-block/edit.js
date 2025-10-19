@@ -8,6 +8,7 @@ import { applyFilters } from '@wordpress/hooks';
 import { applyThumbnails } from '../pb-helpers/applyThumbnails';
 import IconModularGallery from '../pb-helpers/IconModularGallery';
 
+import './editor.scss';
 
 const ALLOWED_BLOCKS = ['portfolio-blocks/pb-image-row'];
 

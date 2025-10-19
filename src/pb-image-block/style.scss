@@ -45,8 +45,11 @@
         position: absolute;
         top: 0;
         left: 0;
-        width: 100%;
-        height: 100%;
+        inset: -0.5px;                 /* extend slightly to kill the sliver */
+        width: calc(100% + 1px);
+        height: calc(100% + 1px);
+        backface-visibility: hidden;   /* reduce edge antialiasing artifacts */
+        transform: translateZ(0);
         background: rgba(0, 0, 0, 0.65);
         backdrop-filter: blur(6px);
         color: white;
@@ -67,6 +70,7 @@
         border: var(--pb-border-width, 0px) solid var(--pb-border-color, #ffffff);
         border-radius: var(--pb-border-radius, 0px);
 	}
+    
 
 	&:hover .pb-image-block-title {
 		opacity: 1;
