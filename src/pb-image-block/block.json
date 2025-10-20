@@ -2,7 +2,7 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
 	"name": "portfolio-blocks/pb-image-block",
-	"version": "0.6.0",
+	"version": "1.0.0",
 	"title": "Image",
 	"category": "portfolio-blocks",
 	"icon": "format-image",
@@ -22,96 +22,39 @@
 		"inserter": false,
 		"html": false,
 		"anchor": false,
-		"align": [
-			"wide",
-			"full"
-		],
-		"color": {
-			"text": false,
-			"background": false
-		},
-		"filter": {
-			"duotone": true
-		}
+		"align": [ "wide", "full" ],
+		"color": { "text": false,
+		"background": false},
+		"filter": { "duotone": true }
 	},
 	"attributes": {
-		"id": {
-			"type": "number",
-			"default": 0
-		},
-		"src": {
-			"type": "string",
-			"default": ""
-		},
-		"imageSize": {
-			"type": "string",
-			"default": "large"
-		},
-		"sizes": {
-			"type": "object",
-			"default": {}
-		},
-		"width": {
-			"type": "number",
-			"default": 0
-		},
-		"height": {
-			"type": "number",
-			"default": 0
-		},
-		"borderColor": {
-			"type": "string",
-			"default": ""
-		},
-		"borderWidth": {
-			"type": "number",
-			"default": 0
-		},
-		"borderRadius": {
-			"type": "number",
-			"default": 0
-		},
-		"alt": {
-			"type": "string",
-			"default": ""
-		},
-		"caption": {
-			"type": "string",
-			"default": ""
-		},
-		"title": {
-			"type": "string",
-			"default": ""
-		},
-		"class": {
-			"type": "string",
-			"default": ""
-		},
-		"enableLightbox": {
-			"type": "boolean",
-			"default": false
-		},
-		"showCaptionInLightbox": {
-			"type": "boolean",
-			"default": false
-		},
-		"showTitleOnHover": {
-			"type": "boolean",
-			"default": false
-		},
-		"dropshadow": {
-			"type": "boolean",
-			"default": false
-		},
-		"filterCategory": {
-			"type": "string",
-			"default": ""
-		}, 
-		"enableDownload": {
-        	"type": "boolean"    	},
-    	"downloadOnHover": {
-        	"type": "boolean"    	}, 
-		"lazyLoad": { "type": "boolean", "default": false }
+		"id": { "type": "number", "default": 0 },
+		"src": { "type": "string", "default": "" },
+		"imageSize": { "type": "string", "default": "large" },
+		"sizes": { "type": "object", "default": {} },
+		"width": { "type": "number", "default": 0 },
+		"height": { "type": "number", "default": 0 },
+		"borderColor": { "type": "string", "default": ""},
+		"borderWidth": { "type": "number", "default": 0 },
+		"borderRadius": { "type": "number", "default": 0 },
+		"alt": { "type": "string", "default": ""},
+		"caption": { "type": "string", "default": ""},
+		"title": { "type": "string", "default": "" },
+		"class": { "type": "string", "default": "" },
+		"enableLightbox": { "type": "boolean", "default": false },
+		"showCaptionInLightbox": { "type": "boolean", "default": false },
+		"showTitleOnHover": { "type": "boolean", "default": false },
+		"dropshadow": { "type": "boolean", "default": false },
+		"filterCategory": { "type": "string", "default": ""}, 
+		"enableDownload": { "type": "boolean" },
+    	"downloadOnHover": { "type": "boolean" }, 
+		"lazyLoad": { "type": "boolean", "default": false }, 
+		"wooProductId": { "type": "number", "default": 0 },
+		"wooProductName": { "type": "string", "default": ""},
+		"wooProductPrice": { "type": "string", "default": "" },
+		"wooProductImage": { "type": "string", "default": "" },
+		"wooProductDescription": { "type": "string", "default": "" },
+		"wooProductURL": { "type": "string", "default": ""}
 	},
 	"usesContext": [
 		"portfolioBlocks/resolution",
@@ -126,6 +69,10 @@
 		"portfolioBlocks/borderColor", 
 		"portfolioBlocks/enableDownload",
         "portfolioBlocks/downloadOnHover",
+		"portfolioBlocks/enableWooCommerce",
+    	"portfolioBlocks/wooCartIconDisplay",
+    	"portfolioBlocks/wooLightboxInfoType",
+		"portfolioBlocks/wooProductPriceOnHover",
 		"portfolioBlocks/lazyLoad",
 		"portfolioBlocks/carouselHeight",
 		"portfolioBlocks/inCarousel"

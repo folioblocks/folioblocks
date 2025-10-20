@@ -128,56 +128,12 @@ document.addEventListener('DOMContentLoaded', () => {
             imageWrapper.appendChild(img);
 
             if (caption) {
-                const captionEl = document.createElement('p');
+                const captionEl = document.createElement('div');
                 captionEl.className = 'lightbox-caption';
-                captionEl.textContent = caption;
+                captionEl.innerHTML = caption;
                 imageWrapper.appendChild(captionEl);
             }
 
-            const prev = document.createElement('button');
-            prev.className = 'lightbox-prev';
-            prev.innerHTML = '&#10094;';
-            prev.setAttribute('aria-label', 'Previous image');
-            prev.addEventListener('click', () => {
-                currentIndex = (currentIndex - 1 + allImages.length) % allImages.length;
-                renderLightbox(currentIndex);
-            });
-
-            const next = document.createElement('button');
-            next.className = 'lightbox-next';
-            next.innerHTML = '&#10095;';
-            next.setAttribute('aria-label', 'Next image');
-            next.addEventListener('click', () => {
-                currentIndex = (currentIndex + 1) % allImages.length;
-                renderLightbox(currentIndex);
-            });
-
-            // Add download button if enabled
-            const parentBlock = imageData.closest('[class*="wp-block-portfolio-blocks-"][class*="-gallery-block"]');
-            if (parentBlock && parentBlock.getAttribute('data-enable-download') === 'true') {
-                const downloadButton = document.createElement('button');
-                downloadButton.className = 'pb-lightbox-download';
-                downloadButton.setAttribute('aria-label', 'Download image');
-
-                // Extract the original file name
-                const fileUrl = src;
-                const fileName = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
-                downloadButton.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const link = document.createElement('a');
-                    link.href = fileUrl;
-                    link.download = fileName || 'download';
-                    link.click();
-                });
-
-                // Add the download icon
-                downloadButton.innerHTML = `
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path d="M18 11.3l-1-1.1-4 4V3h-1.5v11.3L7 10.2l-1 1.1 6.2 5.8 5.8-5.8zm.5 3.7v3.5h-13V15H4v5h16v-5h-1.5z"></path></svg>
-                `;
-
-                // Append the button
-                inner.appendChild(downloadButton);
-            }
             inner.appendChild(close);
             inner.appendChild(imageWrapper);
             if (allImages.length > 1) {
@@ -254,7 +210,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Image Download Button
     const downloadButtons = document.querySelectorAll('.pb-image-block-download');
-
     downloadButtons.forEach(button => {
         button.addEventListener('click', (event) => {
             event.stopPropagation();
@@ -269,4 +224,5 @@ document.addEventListener('DOMContentLoaded', () => {
             link.click();
         });
     });
+
 });

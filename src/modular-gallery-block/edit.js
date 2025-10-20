@@ -26,7 +26,7 @@ export default function Edit(props) {
 	const { resolution, dropShadow, noGap, lightbox, lightboxCaption, onHoverTitle, enableDownload, downloadOnHover, preview } = attributes;
 
 	const checkoutUrl = window.portfolioBlocksData?.checkoutUrl || 'https://portfolio-blocks.com/portfolio-blocks-pricing/';
-	
+
 	// Block Preview Image
 	if (preview) {
 		return (
@@ -385,6 +385,21 @@ export default function Edit(props) {
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
 									<strong>{__('Enable Image Downloads', 'portfolio-blocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'portfolio-blocks')}
+									</a>
+								</Notice>
+							</div>
+						),
+						{ attributes, setAttributes }
+					)}
+					{applyFilters(
+						'portfolioBlocks.modularGallery.wooCommerceControls',
+						(
+							<div style={{ marginBottom: '8px' }}>
+								<Notice status="info" isDismissible={false}>
+									<strong>{__('Enable Woo Commerce', 'portfolio-blocks')}</strong><br />
 									{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
 										{__('Upgrade to Pro', 'portfolio-blocks')}

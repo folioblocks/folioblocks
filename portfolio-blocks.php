@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Portfolio Blocks
  * Description:       A collection of blocks for making photo and video galleries
- * Version:           0.8.7
+ * Version:           0.9.0
  * Requires at least: 6.3
  * Requires PHP:      7.4
  * Author:            PB Team
@@ -194,6 +194,14 @@ if ( function_exists( 'pb_fs' ) ) {
         return $tags;
     }
     add_filter( 'wp_kses_allowed_html', 'pb_allow_svg_tags', 10, 2 );
+
+    // Removes the add-to-cart query arg from the URL after adding a product to the cart.
+    add_action( 'template_redirect', function() {
+	    if ( isset( $_GET['add-to-cart'] ) ) {
+		    wp_safe_redirect( remove_query_arg( 'add-to-cart' ) );
+		    exit;
+	    }
+    });
 
 }
 

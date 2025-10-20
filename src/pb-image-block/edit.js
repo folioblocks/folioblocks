@@ -18,20 +18,22 @@ import {
 	RangeControl,
 	BaseControl,
 } from '@wordpress/components';
-import { useRef, useState, useEffect } from '@wordpress/element';
+import { useRef, useEffect } from '@wordpress/element';
 import { media, download } from '@wordpress/icons';
+import ProductSearchControl from '../pb-helpers/ProductSearchControl';
+import { wooCartIcon } from '../pb-helpers/wooCartIcon.js';
 import './editor.scss';
 
 export default function Edit({ attributes, setAttributes, context }) {
 	const {
 		id, src, sizes, alt, title, caption, width, height,
 		enableLightbox, showCaptionInLightbox,
-		showTitleOnHover, dropshadow, enableDownload, downloadOnHover
+		showTitleOnHover, dropshadow, enableDownload, downloadOnHover,
 	} = attributes;
 
 	const {
 		'portfolioBlocks/enableDownload': contextEnableDownload = enableDownload,
-		'portfolioBlocks/downloadOnHover': contextDownloadOnHover = downloadOnHover
+		'portfolioBlocks/downloadOnHover': contextDownloadOnHover = downloadOnHover,
 	} = context || {};
 
 	const isInsideGallery = Object.keys(context || {}).some((key) => key.startsWith('portfolioBlocks/'));
@@ -56,9 +58,12 @@ export default function Edit({ attributes, setAttributes, context }) {
 	const effectiveHoverTitle = isInsideGallery ? context['portfolioBlocks/onHoverTitle'] : attributes.showTitleOnHover;
 	const effectiveDownloadEnabled = isInsideGallery ? contextEnableDownload : enableDownload;
 	const effectiveDownloadOnHover = isInsideGallery ? contextDownloadOnHover : downloadOnHover;
-	const filterCategories = context['portfolioBlocks/filterCategories'] || [];
+
 	const lazyLoad = context?.['portfolioBlocks/lazyLoad'];
 
+	const enableWooCommerce = context['portfolioBlocks/enableWooCommerce'] || false;
+
+	const filterCategories = context['portfolioBlocks/filterCategories'] || [];
 	const activeFilter = context?.['portfolioBlocks/activeFilter'] || 'All';
 	const filterCategory = attributes.filterCategory || '';
 	const isHidden =
@@ -173,7 +178,45 @@ export default function Edit({ attributes, setAttributes, context }) {
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
+					{enableWooCommerce && (
+						<>
+							<hr style={{ border: '0.5px solid #e0e0e0', margin: '12px 0' }} />
+							<ProductSearchControl
+								value={
+									attributes.wooProductId
+										? {
+											id: attributes.wooProductId,
+											name: attributes.wooProductName,
+											price_html: attributes.wooProductPrice, // note: using stored HTML
+											permalink: attributes.wooProductURL,
+											image: attributes.wooProductImage || '',
+										}
+										: null
+								}
+								onSelect={(product) => {
+									if (!product || !product.id) {
+										setAttributes({
+											wooProductId: 0,
+											wooProductName: '',
+											wooProductPrice: '',
+											wooProductURL: '',
+											wooProductDescription: '',
+											wooProductImage: '',
+										});
+										return;
+									}
 
+									setAttributes({
+										wooProductId: product.id,
+										wooProductName: product.name,
+										wooProductPrice: product.price_html || product.price || '',
+										wooProductURL: product.permalink || '',
+										wooProductImage: product.image || product.images?.[0]?.src || '',
+									});
+								}}
+							/>
+						</>
+					)}
 					{filterCategories.length > 0 && (
 						<>
 							<hr style={{ border: '0.5px solid #e0e0e0', margin: '12px 0' }} />
@@ -243,9 +286,9 @@ export default function Edit({ attributes, setAttributes, context }) {
 					style={
 						context['portfolioBlocks/inCarousel']
 							? {
-									height: `${displayHeight}px`,
-					
-							  }
+								height: `${displayHeight}px`,
+
+							}
 							: undefined
 					}
 				>
@@ -267,8 +310,31 @@ export default function Edit({ attributes, setAttributes, context }) {
 								className="pb-image-block__img"
 								style={imageStyle}
 							/>
-							{title && effectiveHoverTitle && (
-								<figcaption className="pb-image-block-title" style={captionStyle}>{title}</figcaption>
+							{effectiveHoverTitle && (
+								(Number(attributes.wooProductId) > 0 ||
+									(title && title.trim() !== '')) && (
+									<figcaption className="pb-image-block-title" style={captionStyle}>
+										{enableWooCommerce && context['portfolioBlocks/wooProductPriceOnHover'] ? (
+											Number(attributes.wooProductId) > 0 ? (
+												<>
+													{attributes.wooProductName && (
+														<div className="pb-product-name">{attributes.wooProductName}</div>
+													)}
+													{attributes.wooProductPrice && (
+														<div
+															className="pb-product-price"
+															dangerouslySetInnerHTML={{ __html: attributes.wooProductPrice }}
+														/>
+													)}
+												</>
+											) : (
+												title && <>{title}</>
+											)
+										) : (
+											title && <>{title}</>
+										)}
+									</figcaption>
+								)
 							)}
 							{effectiveDownloadEnabled && src && (
 								<button
@@ -293,6 +359,17 @@ export default function Edit({ attributes, setAttributes, context }) {
 									aria-label={__('Download Image', 'portfolio-blocks')}
 								>
 									{download}
+								</button>
+							)}
+							{enableWooCommerce && Number(attributes.wooProductId) > 0 && (
+								<button
+									className={`pb-add-to-cart-icon ${context['portfolioBlocks/wooCartIconDisplay'] === 'hover' ? 'hover-only' : ''}`}
+									aria-label={__('Add to Cart', 'portfolio-blocks')}
+									onClick={(e) => {
+										e.stopPropagation();
+									}}
+								>
+									{wooCartIcon}
 								</button>
 							)}
 						</>

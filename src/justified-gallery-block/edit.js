@@ -127,23 +127,23 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			}
 		);
 		// Prevent people duplicating blocks to bypass limits in free version
-        subscribe(() => {
-            const blocks = select('core/block-editor').getBlocksByClientId(clientId)[0]?.innerBlocks || [];
-            if (blocks.length > 15) {
-                const extras = blocks.slice(15);
-                extras.forEach((block) => {
-                    dispatch('core/block-editor').removeBlock(block.clientId);
-                });
+		subscribe(() => {
+			const blocks = select('core/block-editor').getBlocksByClientId(clientId)[0]?.innerBlocks || [];
+			if (blocks.length > 15) {
+				const extras = blocks.slice(15);
+				extras.forEach((block) => {
+					dispatch('core/block-editor').removeBlock(block.clientId);
+				});
 
-                if (!document.getElementById('pb-gallery-limit-warning')) {
-                    dispatch('core/notices').createNotice(
-                        'warning',
-                        __('Free version allows up to 15 images. Upgrade to Pro for unlimited.', 'portfolio-blocks'),
-                        { id: 'pb-gallery-limit-warning', isDismissible: true }
-                    );
-                }
-            }
-        });
+				if (!document.getElementById('pb-gallery-limit-warning')) {
+					dispatch('core/notices').createNotice(
+						'warning',
+						__('Free version allows up to 15 images. Upgrade to Pro for unlimited.', 'portfolio-blocks'),
+						{ id: 'pb-gallery-limit-warning', isDismissible: true }
+					);
+				}
+			}
+		});
 	}
 
 	// Select Images Handler
@@ -512,6 +512,21 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
 									<strong>{__('Enable Image Downloads', 'portfolio-blocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'portfolio-blocks')}
+									</a>
+								</Notice>
+							</div>
+						),
+						{ attributes, setAttributes }
+					)}
+					{applyFilters(
+						'portfolioBlocks.justifiedGallery.wooCommerceControls',
+						(
+							<div style={{ marginBottom: '8px' }}>
+								<Notice status="info" isDismissible={false}>
+									<strong>{__('Enable Woo Commerce', 'portfolio-blocks')}</strong><br />
 									{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
 										{__('Upgrade to Pro', 'portfolio-blocks')}

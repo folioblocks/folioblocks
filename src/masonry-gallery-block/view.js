@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const gap = gallery.closest('.no-gap') ? 0 : 10;
     const columns = getColumnsForWidth(innerGallery.offsetWidth);
     const columnHeights = Array(columns).fill(0);
-    const columnWidth = (innerGallery.offsetWidth - gap * (columns - 1)) / columns;
+    const columnWidth = Math.round((innerGallery.offsetWidth - gap * (columns - 1)) / columns);
 
 
     // Reset layout styles
@@ -84,8 +84,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       item.style.position = 'absolute';
       item.style.width = `${columnWidth}px`;
-      item.style.top = `${columnHeights[minCol]}px`;
-      item.style.left = `${(columnWidth + gap) * minCol}px`;
+      item.style.top = `${Math.round(columnHeights[minCol])}px`;
+      item.style.left = `${Math.round((columnWidth + gap) * minCol)}px`;
 
       const style = window.getComputedStyle(item);
       const marginBottom = parseFloat(style.marginBottom) || 0;

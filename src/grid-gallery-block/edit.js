@@ -138,6 +138,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		enableDownload,
 		downloadOnHover,
 		preview,
+		enableWooCommerce, 
+		wooCartIconDisplay,
 	} = attributes;
 
 	// ---------------------------------------------
@@ -323,6 +325,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		context: {
 			'portfolioBlocks/activeFilter': activeFilter,
 			'portfolioBlocks/filterCategories': filterCategories,
+			'portfolioBlocks/enableWooCommerce': enableWooCommerce,
+			'portfolioBlocks/wooCartIconDisplay': wooCartIconDisplay,
 		},
 		style: {
 			'--pb--filter-text-color': attributes.filterTextColor || '#000',
@@ -482,7 +486,6 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			applyGridLayoutWhenImagesLoaded(galleryRef);
 		}, 300);
 	};
-
 	// ---------------------------------------------
 	// Render
 	// ---------------------------------------------
@@ -574,6 +577,21 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
 									<strong>{__('Enable Image Downloads', 'portfolio-blocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'portfolio-blocks')}
+									</a>
+								</Notice>
+							</div>
+						),
+						{ attributes, setAttributes }
+					)}
+					{applyFilters(
+						'portfolioBlocks.gridGallery.wooCommerceControls',
+						(
+							<div style={{ marginBottom: '8px' }}>
+								<Notice status="info" isDismissible={false}>
+									<strong>{__('Enable Woo Commerce', 'portfolio-blocks')}</strong><br />
 									{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
 										{__('Upgrade to Pro', 'portfolio-blocks')}

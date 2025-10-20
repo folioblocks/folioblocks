@@ -5,7 +5,7 @@ Tags: gallery, portfolio, image, photo, video
 Tested up to:      6.8
 Requires at least: 6.3
 Requires PHP: 7.4
-Stable tag:        0.8.6
+Stable tag:        0.9.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -80,6 +80,24 @@ No, the galleries will remain in place on your site. However, the advanced layou
 7. Video Gallery block populated with images
 
 == Changelog ==
+
+0.9.0
+- Add WooCommerce integration into Carousel Gallery Block. 
+- Added WooCommerce integration into Justified Gallery Block
+- Added WooCommerce integration into Masonry Gallery Block
+- Added WooCommerce integration into Modular Gallery Block. 
+
+0.8.9
+- Added WooCommerce integration into Grid Gallery Block. 
+- Added WoCommerce integration into PB Image Block. 
+
+0.8.8
+- Rebuilt premium filters to all use the same method. 
+
+
+0.8.7
+- Fixes a bug introduced in 0.8.6 
+- Fixes a bug where the Image Overlay did not completely cover the image
 
 0.8.6
 - Improved entrance animation on Grid, Justified, Masonry, Modular, and Video Galleries. 

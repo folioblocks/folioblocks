@@ -54,6 +54,7 @@
         backdrop-filter: blur(6px);
         color: white;
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
         font-size: clamp(0.9rem, 5cqi, 1rem);
@@ -69,7 +70,21 @@
         text-overflow: ellipsis;
         border: var(--pb-border-width, 0px) solid var(--pb-border-color, #ffffff);
         border-radius: var(--pb-border-radius, 0px);
+
+        .pb-product-name,
+	    .pb-product-price {
+		    display: block; 
+		    text-align: center; /* optional, to match gallery alignment */
+		    line-height: 1.3;
+            width: 100%; 
+	    }
+
+	    .pb-product-price {
+		    margin-top: 2px;
+		    font-weight: 600; /* makes it pop a bit */
+	    }
 	}
+
     
 
 	&:hover .pb-image-block-title {
@@ -81,7 +96,7 @@
 //Download Button Styles
 .pb-image-block {
 
-    .pb-image-block-download {
+    .pb-image-block-download, .pb-add-to-cart-icon {
         width: 24px;
         height: 24px;
         position: absolute;
@@ -93,16 +108,20 @@
         padding: 2px!important;
         cursor: pointer;
         z-index: 10;
-        box-sizing: border-box;
         padding-inline-start: 0px!important;
         padding-inline-end: 0px!important;
         padding-block-start: 0px!important;
         padding-block-end: 0px!important;
+        align-content: center;
 
         svg {
+            color: #555 !important;
 	        fill: #555;
-	        display: block;
-            object-fit: contain; 
+            width: 24px !important;
+	        height: 24px !important;
+	        display: inline-block !important;
+	        vertical-align: middle;
+	        flex-shrink: 0; 
         }
 
         &:hover {
@@ -114,7 +133,7 @@
         }
     }
 
-    &:hover .pb-image-block-download.hover-only {
+    &:hover .pb-image-block-download.hover-only, &:hover .pb-add-to-cart-icon.hover-only {
         opacity: 1;
     }
 }
@@ -185,6 +204,8 @@
         box-sizing: border-box;
         display: inline-block;
     }
+    .lightbox-caption .pb-lightbox-product-info .pb-product-name {margin-bottom: 5px!important;}
+    .lightbox-caption .pb-lightbox-product-info .pb-product-price {margin: 0!important; }
 
 	.lightbox-close {
 	position: absolute;
@@ -211,7 +232,7 @@
 	outline-offset: 2px;
 }
 
-.pb-lightbox-download {
+.pb-lightbox-download, .pb-lightbox-add-to-cart-icon {
 	position: absolute;
 	top: -34px;
     left: 0px;

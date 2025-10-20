@@ -101,6 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			});
 		});
 	});
+	
 	// Sequential fade-in for grid gallery images
 	const gridBlocks = document.querySelectorAll('.pb-image-block-wrapper');
 	gridBlocks.forEach((block, index) => {

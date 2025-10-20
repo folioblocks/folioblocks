@@ -1,7 +1,6 @@
 import { __ } from '@wordpress/i18n';
 import { RangeControl, ToggleControl } from '@wordpress/components';
 import { PanelColorSettings } from '@wordpress/block-editor';
-import { createElement } from '@wordpress/element';
 import { addFilter } from '@wordpress/hooks';
 
 addFilter(
@@ -48,13 +47,15 @@ addFilter(
 	(defaultContent, props) => {
 		const { attributes, setAttributes } = props;
 
-		return createElement(ToggleControl, {
-			label: __('Disable Right-Click on Page', 'portfolio-blocks'),
-			help: __('Prevents visitors from right-clicking.', 'portfolio-blocks'),
-			__nextHasNoMarginBottom: true,
-			checked: !!attributes.disableRightClick,
-			onChange: (value) => setAttributes({ disableRightClick: value })
-		});
+		return (
+			<ToggleControl
+				label={__('Disable Right-Click on Page', 'portfolio-blocks')}
+				help={__('Prevents visitors from right-clicking.', 'portfolio-blocks')}
+				__nextHasNoMarginBottom
+				checked={!!attributes.disableRightClick}
+				onChange={(value) => setAttributes({ disableRightClick: value })}
+			/>
+		);
 	}
 );
 addFilter(
@@ -63,13 +64,15 @@ addFilter(
 	(defaultContent, props) => {
 		const { attributes, setAttributes } = props;
 
-		return createElement(ToggleControl, {
-			label: __('Enable Lazy Load of Images', 'portfolio-blocks'),
-			help: __('Enables lazy loading of gallery images.', 'portfolio-blocks'),
-			__nextHasNoMarginBottom: true,
-			checked: !!attributes.lazyLoad,
-			onChange: (value) => setAttributes({ lazyLoad: value })
-		});
+		return (
+			<ToggleControl
+				label={__('Enable Lazy Load of Images', 'portfolio-blocks')}
+				help={__('Enables lazy loading of gallery images.', 'portfolio-blocks')}
+				__nextHasNoMarginBottom
+				checked={!!attributes.lazyLoad}
+				onChange={(value) => setAttributes({ lazyLoad: value })}
+			/>
+		);
 	}
 );
 addFilter(

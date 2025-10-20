@@ -547,7 +547,21 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 						),
 						{ attributes, setAttributes }
 					)}
-
+					{applyFilters(
+						'portfolioBlocks.carouselGallery.wooCommerceControls',
+						(
+							<div style={{ marginBottom: '8px' }}>
+								<Notice status="info" isDismissible={false}>
+									<strong>{__('Enable Woo Commerce', 'portfolio-blocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'portfolio-blocks')}
+									</a>
+								</Notice>
+							</div>
+						),
+						{ attributes, setAttributes }
+					)}
 					{applyFilters(
 						'portfolioBlocks.carouselGallery.disableRightClickToggle',
 						(

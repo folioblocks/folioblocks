@@ -2,7 +2,7 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
 	"name": "portfolio-blocks/before-after-block",
-	"version": "0.4.5",
+	"version": "1.0.0",
 	"title": "Before & After Block",
 	"category": "portfolio-blocks",
 	"icon": "images-alt2",
