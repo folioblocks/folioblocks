@@ -207,18 +207,14 @@ $wrapper_attributes = get_block_wrapper_attributes( [
 		}
 		?>
 		<?php if ( $enable_woo && ! empty( $attributes['wooProductId'] ) ) : ?>
-			<a 
-				href="<?php echo esc_url( '?add-to-cart=' . intval( $attributes['wooProductId'] ) ); ?>"
+			<button
+				type="button"
 				class="pb-add-to-cart-icon <?php echo $woo_cart_display === 'hover' ? 'hover-only' : ''; ?>"
+				data-add-to-cart="<?php echo esc_attr( intval( $attributes['wooProductId'] ) ); ?>"
 				aria-label="<?php esc_attr_e( 'Add to Cart', 'portfolio-blocks' ); ?>"
 			>
-				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="24" height="24">
-					<circle cx="12.6667" cy="24.6667" r="2" fill="currentColor"></circle>
-					<circle cx="23.3333" cy="24.6667" r="2" fill="currentColor"></circle>
-					<path d="M9.28491 10.0356C9.47481 9.80216 9.75971 9.66667 10.0606 9.66667H25.3333C25.6232 9.66667 25.8989 9.79247 26.0888 10.0115C26.2787 10.2305 26.3643 10.5211 26.3233 10.8081L24.99 20.1414C24.9196 20.6341 24.4977 21 24 21H12C11.5261 21 11.1173 20.6674 11.0209 20.2034L9.08153 10.8701C9.02031 10.5755 9.09501 10.269 9.28491 10.0356ZM11.2898 11.6667L12.8136 19H23.1327L24.1803 11.6667H11.2898Z" fill="currentColor"></path>
-					<path d="M5.66669 6.66667C5.66669 6.11438 6.1144 5.66667 6.66669 5.66667H9.33335C9.81664 5.66667 10.2308 6.01229 10.3172 6.48778L11.0445 10.4878C11.1433 11.0312 10.7829 11.5517 10.2395 11.6505C9.69614 11.7493 9.17555 11.3889 9.07676 10.8456L8.49878 7.66667H6.66669C6.1144 7.66667 5.66669 7.21895 5.66669 6.66667Z" fill="currentColor"></path>
-				</svg>
-			</a>
+				<img src="<?php echo esc_url( plugins_url( 'includes/icons/add-to-cart.png', dirname( __FILE__, 2 ) ) ); ?>" alt="<?php esc_attr_e( 'Add to Cart', 'portfolio-blocks' ); ?>" width="24" height="24" />
+			</button>
 		<?php endif; ?>
 		<?php if ( ! empty( $context['portfolioBlocks/enableDownload'] ) || ! empty( $attributes['enableDownload'] ) ) : ?>
     		<button 
@@ -227,7 +223,7 @@ $wrapper_attributes = get_block_wrapper_attributes( [
     			style="top: calc(8px + <?php echo esc_attr( $border_width ); ?>px); right: calc(8px + <?php echo esc_attr( $border_width ); ?>px);"
     			data-full-src="<?php echo esc_url( $full_src ); ?>"
 			>
-    			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 11.3l-1-1.1-4 4V3h-1.5v11.3L7 10.2l-1 1.1 6.2 5.8 5.8-5.8zm.5 3.7v3.5h-13V15H4v5h16v-5h-1.5z"></path></svg>
+				<img src="<?php echo esc_url( plugins_url( 'includes/icons/download.png', dirname( __FILE__, 2 ) ) ); ?>" alt="<?php esc_attr_e( 'Download Image', 'portfolio-blocks' ); ?>" width="24" height="24" />
 			</button>
 		<?php endif; ?>
 	</figure>

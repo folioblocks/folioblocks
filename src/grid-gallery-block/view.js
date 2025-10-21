@@ -65,7 +65,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	galleries.forEach((gallery) => {
 		gallery.classList.remove('is-loading');
-		const imgs = gallery.querySelectorAll('img');
+		// Ignore PNG icons like "add to cart" or "download"
+		const imgs = gallery.querySelectorAll('img:not([src*="add-to-cart"]):not([src*="download"])');
+
 		imgs.forEach((img) => {
 			if (img.complete) {
 				observer.observe(img); // may trigger immediately
@@ -101,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			});
 		});
 	});
-	
+
 	// Sequential fade-in for grid gallery images
 	const gridBlocks = document.querySelectorAll('.pb-image-block-wrapper');
 	gridBlocks.forEach((block, index) => {

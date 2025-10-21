@@ -2,7 +2,7 @@
 "$schema": "https://schemas.wp.org/trunk/block.json",
 "apiVersion": 3,
 "name": "portfolio-blocks/pb-video-block",
-"version": "0.5.1",
+"version": "1.0.0",
 "title": "Video Block",
 "category": "portfolio-blocks",
 "icon": "video-alt3",
@@ -33,9 +33,18 @@
 	"borderColor": { "type": "string", "default": "#ffffff" }, 
 	"dropShadow": { "type": "boolean", "default": false }, 
 	"lazyLoad": { "type": "boolean", "default": false }, 
-	"lightboxLayout": { "type": "string", "default": "video-only" }
+	"lightboxLayout": { "type": "string", "default": "video-only" }, 
+	"wooProductId": { "type": "number", "default": 0 },
+	"wooProductName": { "type": "string", "default": ""},
+	"wooProductPrice": { "type": "string", "default": "" },
+	"wooProductImage": { "type": "string", "default": "" },
+	"wooProductDescription": { "type": "string", "default": "" },
+	"wooProductURL": { "type": "string", "default": ""}
 },
 "usesContext": [
+	"portfolioBlocks/enableWooCommerce",
+    "portfolioBlocks/wooCartIconDisplay",
+    "portfolioBlocks/wooLightboxInfoType",
 	"portfolioBlocks/lazyLoad",
 	"portfolioBlocks/aspectRatio",
 	"portfolioBlocks/playButtonVisibility",

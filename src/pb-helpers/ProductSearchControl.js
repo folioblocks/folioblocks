@@ -32,7 +32,9 @@ export default function ProductSearchControl({ value, onSelect }) {
                     price_html: p.price_html,
                     permalink: p.permalink,
                     image: p.images?.[0]?.src || '',
+                    description: p.short_description || p.description || '',
                 }));
+                console.log('WooCommerce product data:', products);
                 setSearchResults(results);
             })
             .catch(() => setSearchResults([]))

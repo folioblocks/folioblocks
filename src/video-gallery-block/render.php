@@ -13,6 +13,8 @@ $filter_categories = $attributes['filterCategories'] ?? [];
 $active_styles   = '';
 $inactive_styles = '';
 
+
+
 if ( $enable_filter ) {
 	if ( ! empty( $attributes['activeFilterTextColor'] ) ) {
 		$active_styles .= '--pb--filter-active-text:' . esc_attr( $attributes['activeFilterTextColor'] ) . ';';

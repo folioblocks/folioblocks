@@ -3,6 +3,54 @@ import { ToggleControl, BaseControl, ColorPalette, RangeControl, SelectControl }
 import { addFilter } from '@wordpress/hooks';
 
 addFilter(
+	'portfolioBlocks.videoGallery.wooCommerceControls',
+	'portfolio-blocks/video-gallery-premium-woocommerce',
+	(defaultContent, props) => {
+		const { attributes, setAttributes } = props;
+		const { enableWooCommerce, wooCartIconDisplay, enableDownload } = attributes;
+
+		return (
+			<>
+				<ToggleControl
+					label={__('Enable WooCommerce Integration', 'portfolio-blocks')}
+					checked={!!enableWooCommerce}
+					onChange={(value) => {
+						setAttributes({ enableWooCommerce: value });
+
+						// Reset WooCommerce-specific settings when disabled
+						if (!value) {
+							setAttributes({
+								wooLightboxInfoType: 'caption',
+								wooProductPriceOnHover: false,
+								wooCartIconDisplay: 'hover'
+							});
+						}
+					}}
+					__nextHasNoMarginBottom
+					help={__('Link gallery images to WooCommerce products.', 'portfolio-blocks')}
+					disabled={enableDownload}
+				/>
+
+				{enableWooCommerce && (
+					<SelectControl
+						label={__('Display Add to Cart Icon', 'portfolio-blocks')}
+						value={wooCartIconDisplay}
+						options={[
+							{ label: __('On Hover', 'portfolio-blocks'), value: 'hover' },
+							{ label: __('Always', 'portfolio-blocks'), value: 'always' }
+						]}
+						onChange={(value) => setAttributes({ wooCartIconDisplay: value })}
+						__nextHasNoMarginBottom
+                        __next40pxDefaultSize
+						help={__('Choose when to display the Add to Cart icon.', 'portfolio-blocks')}
+					/>
+				)}
+			</>
+		);
+	}
+);
+
+addFilter(
     'portfolioBlocks.videoGallery.disableRightClickToggle',
     'portfolio-blocks/video-gallery-premium-disable-right-click',
     (defaultContent, props) => {
@@ -42,15 +90,27 @@ addFilter(
     'portfolio-blocks/video-gallery-premium-lightbox-layout',
     (defaultContent, props) => {
         const { setAttributes, attributes } = props;
+        const { enableWooCommerce } = attributes;
+
+        // Base layout options
+        const options = [
+            { label: __('Video Only', 'portfolio-blocks'), value: 'video-only' },
+            { label: __('Video + Info', 'portfolio-blocks'), value: 'split' },
+        ];
+
+        // Add WooCommerce-specific layout option when enabled
+        if (enableWooCommerce) {
+            options.push({
+                label: __('Video + Product Info', 'portfolio-blocks'),
+                value: 'video-product',
+            });
+        }
 
         return (
             <SelectControl
                 label={__('Lightbox Layout', 'portfolio-blocks')}
                 value={attributes.lightboxLayout}
-                options={[
-                    { label: __('Video Only', 'portfolio-blocks'), value: 'video-only' },
-                    { label: __('Video + Info Split', 'portfolio-blocks'), value: 'split' },
-                ]}
+                options={options}
                 onChange={(value) => setAttributes({ lightboxLayout: value })}
                 __nextHasNoMarginBottom
                 __next40pxDefaultSize

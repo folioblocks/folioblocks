@@ -27,10 +27,8 @@ import {
 } from '@wordpress/components';
 import { useState, useEffect } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
-
-// ---------------------------
-// Internal styles
-// ---------------------------
+import ProductSearchControl from '../pb-helpers/ProductSearchControl';
+import { wooCartIcon } from '../pb-helpers/wooCartIcon.js';
 import './editor.scss';
 
 
@@ -138,6 +136,9 @@ export default function Edit({ attributes, setAttributes, context }) {
 	const lightboxEnabled = context?.['portfolioBlocks/lightbox'] ?? true;
 	const lightboxLayout = context?.['portfolioBlocks/lightboxLayout'];
 	const lazyLoad = context?.['portfolioBlocks/lazyLoad'];
+	const enableWooCommerce = context['portfolioBlocks/enableWooCommerce'] || false;
+	const wooCartIconDisplay = context?.['portfolioBlocks/wooCartIconDisplay'];
+	const wooLightboxInfoType = context?.['portfolioBlocks/wooLightboxInfoType'];
 	const inheritedBorderColor = context?.['portfolioBlocks/borderColor'];
 	const inheritedBorderWidth = context?.['portfolioBlocks/borderWidth'];
 	const inheritedBorderRadius = context?.['portfolioBlocks/borderRadius'];
@@ -424,6 +425,46 @@ export default function Edit({ attributes, setAttributes, context }) {
 							__next40pxDefaultSize
 						/>
 					)}
+					{enableWooCommerce && (
+						<>
+							<hr style={{ border: '0.5px solid #e0e0e0', margin: '12px 0' }} />
+							<ProductSearchControl
+								value={
+									attributes.wooProductId
+										? {
+											id: attributes.wooProductId,
+											name: attributes.wooProductName,
+											price_html: attributes.wooProductPrice, // note: using stored HTML
+											permalink: attributes.wooProductURL,
+											image: attributes.wooProductImage || '',
+										}
+										: null
+								}
+								onSelect={(product) => {
+									if (!product || !product.id) {
+										setAttributes({
+											wooProductId: 0,
+											wooProductName: '',
+											wooProductPrice: '',
+											wooProductURL: '',
+											wooProductDescription: '',
+											wooProductImage: '',
+										});
+										return;
+									}
+
+									setAttributes({
+										wooProductId: product.id,
+										wooProductName: product.name,
+										wooProductPrice: product.price_html || product.price || '',
+										wooProductURL: product.permalink || '',
+										wooProductImage: product.image || product.images?.[0]?.src || '',
+										wooProductDescription: product.description || '',
+									});
+								}}
+							/>
+						</>
+					)}
 					{typeof inheritedPlayButtonVisibility === 'undefined' && (
 						<SelectControl
 							label={__('Play Button Visibility', 'portfolio-blocks')}
@@ -553,6 +594,15 @@ export default function Edit({ attributes, setAttributes, context }) {
 							className="pb-video-block-img"
 							loading={lazyLoad ? 'lazy' : 'eager'}
 						/>
+						{enableWooCommerce && attributes.wooProductId > 0 && (
+							<a
+								href={`?add-to-cart=${attributes.wooProductId}`}
+								className={`pb-video-add-to-cart ${wooCartIconDisplay === 'hover' ? 'hover-only' : 'always'}`}
+								data-product_id={attributes.wooProductId}
+							>
+								{wooCartIcon}
+							</a>
+						)}
 						<div className="video-overlay">
 							<div className="overlay-content">
 								{title && effectiveTitleVisibility !== 'hidden' && (
@@ -568,7 +618,8 @@ export default function Edit({ attributes, setAttributes, context }) {
 
 				{isLightboxOpen && (
 					<div
-						className={`pb-video-lightbox ${lightboxLayout === 'split' ? 'split-layout' : ''}`}
+						className={`pb-video-lightbox ${lightboxLayout === 'split' ? 'split-layout' : ''} ${lightboxLayout === 'video-product' ? 'video-product-layout' : ''
+							}`}
 						onClick={(e) => {
 							if (e.target.classList.contains('pb-video-lightbox')) {
 								setLightboxOpen(false);
@@ -601,6 +652,54 @@ export default function Edit({ attributes, setAttributes, context }) {
 									</div>
 								</>
 							)}
+
+							{lightboxLayout === 'video-product' && enableWooCommerce ? (
+								attributes.wooProductId > 0 ? (
+									<>
+										<div className="pb-video-lightbox-video" style={{ flex: '0 0 70%' }}>
+											{getVideoEmbedMarkup(videoUrl, isInVideoGallery ? { controls: false } : undefined)}
+										</div>
+										<div className="pb-video-lightbox-info" style={{ flex: '0 0 30%' }}>
+											{attributes.wooProductName && (
+												<h2 className="pb-video-lightbox-product-title">{attributes.wooProductName}</h2>
+											)}
+											{attributes.wooProductPrice && (
+												<div
+													className="pb-video-lightbox-product-price"
+													dangerouslySetInnerHTML={{ __html: attributes.wooProductPrice }}
+												/>
+											)}
+											{attributes.wooProductDescription && (
+												<div
+													className="pb-video-lightbox-product-description"
+													dangerouslySetInnerHTML={{ __html: attributes.wooProductDescription }}
+												/>
+											)}
+											{attributes.wooProductURL && (
+												<a
+													href={attributes.wooProductURL}
+													className="pb-view-product-button"
+													target="_blank"
+													rel="noopener noreferrer"
+												>
+													{__('View Product', 'portfolio-blocks')}
+												</a>
+											)}
+										</div>
+									</>
+								) : (
+									// fallback to split layout if product not linked
+									<>
+										<div className="pb-video-lightbox-video" style={{ flex: '0 0 70%' }}>
+											{getVideoEmbedMarkup(videoUrl, isInVideoGallery ? { controls: false } : undefined)}
+										</div>
+										<div className="pb-video-lightbox-info" style={{ flex: '0 0 30%' }}>
+											{title && <h2 className="lightbox-title">{title}</h2>}
+											{description && <p className="lightbox-description">{description}</p>}
+										</div>
+									</>
+								)
+							) : null}
 						</div>
 					</div>
 				)}

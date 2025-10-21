@@ -15,6 +15,8 @@ $border_radius = absint( $attributes['borderRadius'] ?? 0 );
 $drop_shadow = ! empty( $attributes['dropShadow'] );
 $lazy_load = ! empty( $attributes['lazyLoad'] );
 
+$context = $block->context ?? [];
+
 // Build style string for border and radius
 $style = '';
 if ( $border_width > 0 ) {
@@ -63,7 +65,19 @@ if ( $play_visibility === 'always' || $title_visibility === 'always' ) {
 	data-filter="<?php echo esc_attr( $filter_category ); ?>"
 	data-video-url="<?php echo esc_url( $video_url ); ?>"
 	data-video-title="<?php echo esc_attr( $title ); ?>"
-	<?php if ( isset( $attributes['lightboxLayout'] ) && $attributes['lightboxLayout'] === 'split' ) : ?>
+	<?php if ( ! empty( $attributes['wooProductName'] ) ) : ?>
+		data-product-name="<?php echo esc_attr( $attributes['wooProductName'] ); ?>"
+	<?php endif; ?>
+	<?php if ( ! empty( $attributes['wooProductPrice'] ) ) : ?>
+		data-product-price="<?php echo esc_attr( $attributes['wooProductPrice'] ); ?>"
+	<?php endif; ?>
+	<?php if ( ! empty( $attributes['wooProductDescription'] ) ) : ?>
+		data-product-description="<?php echo esc_attr( wp_strip_all_tags( $attributes['wooProductDescription'] ) ); ?>"
+	<?php endif; ?>
+	<?php if ( ! empty( $attributes['wooProductURL'] ) ) : ?>
+		data-product-url="<?php echo esc_url( $attributes['wooProductURL'] ); ?>"
+	<?php endif; ?>
+	<?php if ( ! empty( $attributes['description'] ) ) : ?>
 		data-video-description="<?php echo esc_attr( $attributes['description'] ); ?>"
 	<?php endif; ?>
 	style="<?php echo esc_attr( $style ); ?>">
@@ -78,5 +92,25 @@ if ( $play_visibility === 'always' || $title_visibility === 'always' ) {
 			<?php endif; ?>
 		</div>
 	</div>
+	
+    <?php
+    // WooCommerce Add to Cart button integration.
+    if ( ! empty( $attributes['wooProductId'] ) ) :
+        $woo_cart_icon_display = $context['portfolioBlocks/wooCartIconDisplay'] ?? 'always';
+        $product_id = absint( $attributes['wooProductId'] );
+        ?>
+        <a
+            href="<?php echo esc_url( '?add-to-cart=' . $product_id ); ?>"
+            class="pb-video-add-to-cart <?php echo $woo_cart_icon_display === 'hover' ? 'hover-only' : 'always'; ?>"
+            data-product_id="<?php echo esc_attr( $product_id ); ?>"
+        >
+            <img
+                src="<?php echo esc_url( plugins_url( 'includes/icons/add-to-cart.png', dirname( __FILE__, 2 ) ) ); ?>"
+                alt="<?php esc_attr_e( 'Add to Cart', 'portfolio-blocks' ); ?>"
+                width="24"
+                height="24"
+            />
+        </a>
+    <?php endif; ?>
 </div>
 </div>

@@ -70,7 +70,9 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		filterBgColor,
 		activeFilterTextColor,
 		activeFilterBgColor,
-		preview
+		preview,
+		enableWooCommerce, 
+		wooCartIconDisplay,
 	} = attributes;
 
 	const checkoutUrl = window.portfolioBlocksData?.checkoutUrl || 'https://portfolio-blocks.com/portfolio-blocks-pricing/';
@@ -203,6 +205,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			'portfolioBlocks/lightbox': lightbox,
 			'portfolioBlocks/lightboxLayout': lightboxLayout,
 			'portfolioBlocks/lazyLoad': lazyLoad,
+			'portfolioBlocks/enableWooCommerce': enableWooCommerce,
+			'portfolioBlocks/wooCartIconDisplay': wooCartIconDisplay,
 		},
 		style: {
 			'--pb--filter-text-color': filterTextColor || '#000',
@@ -415,6 +419,21 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						__next40pxDefaultSize
 						help={__('Set gap size between Thumbnails.')}
 					/>
+					{applyFilters(
+						'portfolioBlocks.videoGallery.wooCommerceControls',
+						(
+							<div style={{ marginBottom: '8px' }}>
+								<Notice status="info" isDismissible={false}>
+									<strong>{__('Enable Woo Commerce', 'portfolio-blocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'portfolio-blocks')}
+									</a>
+								</Notice>
+							</div>
+						),
+						{ attributes, setAttributes }
+					)}
 					{applyFilters(
 						'portfolioBlocks.videoGallery.disableRightClickToggle',
 						(

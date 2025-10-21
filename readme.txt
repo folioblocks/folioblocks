@@ -1,11 +1,11 @@
 === Portfolio Blocks ===
-Contributors:      PB Team
+Contributors:      Portfolio Blocks
 Plugin link: https://portfolio-blocks.com/
 Tags: gallery, portfolio, image, photo, video
 Tested up to:      6.8
 Requires at least: 6.3
 Requires PHP: 7.4
-Stable tag:        0.9.0
+Stable tag:        0.9.2
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -80,6 +80,14 @@ No, the galleries will remain in place on your site. However, the advanced layou
 7. Video Gallery block populated with images
 
 == Changelog ==
+
+0.9.2
+- Add WooCommerce integration in PB Video Block. 
+- Add WooCommerce integration into Video Gallery Block. 
+
+0.9.1
+- Replaced front end icons with PNG files to ensure sizing.
+- Fixed bug in Grid Gallery preventing layout calculation when icons were present. 
 
 0.9.0
 - Add WooCommerce integration into Carousel Gallery Block. 
