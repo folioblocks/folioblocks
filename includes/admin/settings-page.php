@@ -17,9 +17,18 @@ function portfolio_blocks_admin_styles( $hook ) {
 }
 
 function portfolio_blocks_render_settings_page() {
+    $plugin_data = get_file_data(
+        WP_PLUGIN_DIR . '/portfolio-blocks/portfolio-blocks.php',
+        array( 'Version' => 'Version' ),
+        'plugin'
+    );
+    $plugin_version = $plugin_data['Version'];
 	?>
 	<div class="wrap">
+		<div class="pb-settings-header">	
 		<h1><?php esc_html_e( 'Portfolio Blocks', 'portfolio-blocks' ); ?></h1>
+		<span class="plugin-version">v<?php echo esc_html( $plugin_version ); ?></span>
+		<div>
 
 		<div class="settings-container">
         	<div class="settings-left">

@@ -21,6 +21,16 @@ $id      = isset( $attributes['id'] ) ? (int) $attributes['id'] : 0;
 
 $context = $block->context ?? [];
 
+// Runtime check — ensure WooCommerce output only if plugin is active
+if ( ! function_exists( 'is_plugin_active' ) ) {
+    include_once ABSPATH . 'wp-admin/includes/plugin.php';
+}
+$woo_active = is_plugin_active( 'woocommerce/woocommerce.php' );
+$enable_woo = ( $context['portfolioBlocks/enableWooCommerce'] ?? false ) && $woo_active;
+$woo_cart_display = $context['portfolioBlocks/wooCartIconDisplay'] ?? 'always';
+$woo_hover_info = $context['portfolioBlocks/wooProductPriceOnHover'] ?? false;
+$woo_lightbox_info = $context['portfolioBlocks/wooLightboxInfoType'] ?? 'caption';
+
 $lazy_load = $block->context['portfolioBlocks/lazyLoad'] ?? false;
 $lightbox         = $context['portfolioBlocks/lightbox'] ?? ! empty( $attributes['enableLightbox'] );
 $caption_lightbox = $context['portfolioBlocks/lightboxCaption'] ?? ! empty( $attributes['showCaptionInLightbox'] );
@@ -32,10 +42,7 @@ $border_width  = isset( $context['portfolioBlocks/borderWidth'] ) ? $context['po
 $border_radius = isset( $context['portfolioBlocks/borderRadius'] ) ? $context['portfolioBlocks/borderRadius'] : ( $attributes['borderRadius'] ?? 0 );
 $border_color  = isset( $context['portfolioBlocks/borderColor'] ) ? $context['portfolioBlocks/borderColor'] : ( $attributes['borderColor'] ?? '#ffffff' );
 
-$enable_woo = $context['portfolioBlocks/enableWooCommerce'] ?? false;
-$woo_cart_display = $context['portfolioBlocks/wooCartIconDisplay'] ?? 'always';
-$woo_hover_info = $context['portfolioBlocks/wooProductPriceOnHover'] ?? false;
-$woo_lightbox_info = $context['portfolioBlocks/wooLightboxInfoType'] ?? 'caption';
+
 
 $img_styles = '';
 if ( $border_width > 0 ) {
@@ -212,11 +219,12 @@ $wrapper_attributes = get_block_wrapper_attributes( [
 				class="pb-add-to-cart-icon <?php echo $woo_cart_display === 'hover' ? 'hover-only' : ''; ?>"
 				data-add-to-cart="<?php echo esc_attr( intval( $attributes['wooProductId'] ) ); ?>"
 				aria-label="<?php esc_attr_e( 'Add to Cart', 'portfolio-blocks' ); ?>"
+				style="top: calc(8px + <?php echo esc_attr( $border_width ); ?>px); right: calc(8px + <?php echo esc_attr( $border_width ); ?>px);"
 			>
 				<img src="<?php echo esc_url( plugins_url( 'includes/icons/add-to-cart.png', dirname( __FILE__, 2 ) ) ); ?>" alt="<?php esc_attr_e( 'Add to Cart', 'portfolio-blocks' ); ?>" width="24" height="24" />
 			</button>
 		<?php endif; ?>
-		<?php if ( ! empty( $context['portfolioBlocks/enableDownload'] ) || ! empty( $attributes['enableDownload'] ) ) : ?>
+		<?php if ( ( ! $enable_woo ) && ( ! empty( $context['portfolioBlocks/enableDownload'] ) || ! empty( $attributes['enableDownload'] ) ) ) : ?>
     		<button 
     			class="pb-image-block-download <?php echo !empty($context['portfolioBlocks/downloadOnHover']) ? 'hover-only' : ''; ?>" 
     			aria-label="<?php esc_attr_e( 'Download Image', 'portfolio-blocks' ); ?>"

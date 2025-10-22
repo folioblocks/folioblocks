@@ -36,6 +36,17 @@ export default function Edit(props) {
 		);
 	}
 
+	// Runtime override: if WooCommerce is not active, force Woo features off without mutating saved attributes
+	const hasWooCommerce = window.portfolioBlocksData?.hasWooCommerce ?? false;
+	const effectiveEnableWoo = hasWooCommerce ? (attributes.enableWooCommerce || false) : false;
+	useEffect(() => {
+		const wooActive = window.portfolioBlocksData?.hasWooCommerce ?? false;
+		if (wooActive !== attributes.hasWooCommerce) {
+			setAttributes({ hasWooCommerce: wooActive });
+		}
+	}, [window.portfolioBlocksData?.hasWooCommerce]);
+
+
 	const { insertBlock } = useDispatch('core/block-editor');
 
 	const innerBlocks = useSelect((select) => {
@@ -243,6 +254,8 @@ export default function Edit(props) {
 			'portfolioBlocks/noGap': noGap,
 			'portfolioBlocks/layoutVersion': layoutVersion,
 			'portfolioBlocks/rowLayouts': rowLayouts,
+			'portfolioBlocks/enableWooCommerce': effectiveEnableWoo,
+            'portfolioBlocks/hasWooCommerce': hasWooCommerce,
 		},
 	});
 	const innerBlocksProps = useInnerBlocksProps(
@@ -392,9 +405,9 @@ export default function Edit(props) {
 								</Notice>
 							</div>
 						),
-						{ attributes, setAttributes }
+						{ attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
 					)}
-					{applyFilters(
+					{ window.portfolioBlocksData?.hasWooCommerce && applyFilters(
 						'portfolioBlocks.modularGallery.wooCommerceControls',
 						(
 							<div style={{ marginBottom: '8px' }}>
@@ -407,7 +420,7 @@ export default function Edit(props) {
 								</Notice>
 							</div>
 						),
-						{ attributes, setAttributes }
+						{ attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
 					)}
 					{applyFilters(
 						'portfolioBlocks.modularGallery.disableRightClickToggle',

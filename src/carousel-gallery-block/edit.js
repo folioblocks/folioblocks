@@ -12,11 +12,8 @@ import {
 	PanelBody,
 	Notice,
 	SelectControl,
-	ToggleControl,
 	ToolbarGroup,
 	ToolbarButton,
-	ColorPalette,
-	BaseControl,
 	RangeControl,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
@@ -53,6 +50,16 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 			</div>
 		);
 	}
+
+	// Runtime override: if WooCommerce is not active, force Woo features off without mutating saved attributes
+	const hasWooCommerce = window.portfolioBlocksData?.hasWooCommerce ?? false;
+	const effectiveEnableWoo = hasWooCommerce ? (attributes.enableWooCommerce || false) : false;
+	useEffect(() => {
+		const wooActive = window.portfolioBlocksData?.hasWooCommerce ?? false;
+		if (wooActive !== attributes.hasWooCommerce) {
+			setAttributes({ hasWooCommerce: wooActive });
+		}
+	}, [window.portfolioBlocksData?.hasWooCommerce]);
 
 
 	const blockProps = useBlockProps({
@@ -198,7 +205,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 	};
 
 	const { ref: innerRef, ...restInnerBlocksProps } = useInnerBlocksProps(
-		{
+		{	
 			className: 'pb-carousel-gallery',
 			style: { '--pb-carousel-height': `${carouselHeight || 400}px` },
 		},
@@ -545,9 +552,9 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 								</Notice>
 							</div>
 						),
-						{ attributes, setAttributes }
+						{ attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
 					)}
-					{applyFilters(
+					{window.portfolioBlocksData?.hasWooCommerce && applyFilters(
 						'portfolioBlocks.carouselGallery.wooCommerceControls',
 						(
 							<div style={{ marginBottom: '8px' }}>
@@ -560,7 +567,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 								</Notice>
 							</div>
 						),
-						{ attributes, setAttributes }
+						{ attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
 					)}
 					{applyFilters(
 						'portfolioBlocks.carouselGallery.disableRightClickToggle',

@@ -65,8 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	galleries.forEach((gallery) => {
 		gallery.classList.remove('is-loading');
-		// Ignore PNG icons like "add to cart" or "download"
-		const imgs = gallery.querySelectorAll('img:not([src*="add-to-cart"]):not([src*="download"])');
+		const imgs = gallery.querySelectorAll('img.pb-image-block-img');
 
 		imgs.forEach((img) => {
 			if (img.complete) {

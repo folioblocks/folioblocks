@@ -61,7 +61,9 @@ export default function Edit({ attributes, setAttributes, context }) {
 
 	const lazyLoad = context?.['portfolioBlocks/lazyLoad'];
 
+	const hasWooCommerce = context['portfolioBlocks/hasWooCommerce'] || false;
 	const enableWooCommerce = context['portfolioBlocks/enableWooCommerce'] || false;
+	const effectiveWooActive = hasWooCommerce && enableWooCommerce;
 
 	const filterCategories = context['portfolioBlocks/filterCategories'] || [];
 	const activeFilter = context?.['portfolioBlocks/activeFilter'] || 'All';
@@ -178,7 +180,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
-					{enableWooCommerce && (
+					{effectiveWooActive && (
 						<>
 							<hr style={{ border: '0.5px solid #e0e0e0', margin: '12px 0' }} />
 							<ProductSearchControl
@@ -307,14 +309,14 @@ export default function Edit({ attributes, setAttributes, context }) {
 								alt={alt}
 								width={width}
 								height={height}
-								className="pb-image-block__img"
+								className="pb-image-block-img"
 								style={imageStyle}
 							/>
 							{effectiveHoverTitle && (
 								(Number(attributes.wooProductId) > 0 ||
 									(title && title.trim() !== '')) && (
 									<figcaption className="pb-image-block-title" style={captionStyle}>
-										{enableWooCommerce && context['portfolioBlocks/wooProductPriceOnHover'] ? (
+										{effectiveWooActive && context['portfolioBlocks/wooProductPriceOnHover'] ? (
 											Number(attributes.wooProductId) > 0 ? (
 												<>
 													{attributes.wooProductName && (
@@ -361,10 +363,14 @@ export default function Edit({ attributes, setAttributes, context }) {
 									{download}
 								</button>
 							)}
-							{enableWooCommerce && Number(attributes.wooProductId) > 0 && (
+							{effectiveWooActive && Number(attributes.wooProductId) > 0 && (
 								<button
 									className={`pb-add-to-cart-icon ${context['portfolioBlocks/wooCartIconDisplay'] === 'hover' ? 'hover-only' : ''}`}
 									aria-label={__('Add to Cart', 'portfolio-blocks')}
+									style={{
+										top: `${8 + (isInsideGallery ? (context['portfolioBlocks/borderWidth'] || 0) : (attributes.borderWidth || 0))}px`,
+										right: `${8 + (isInsideGallery ? (context['portfolioBlocks/borderWidth'] || 0) : (attributes.borderWidth || 0))}px`
+									}}
 									onClick={(e) => {
 										e.stopPropagation();
 									}}

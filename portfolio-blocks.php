@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Portfolio Blocks
  * Description:       A collection of blocks for making photo and video galleries
- * Version:           0.9.2
+ * Version:           0.9.3
  * Requires at least: 6.3
  * Requires PHP:      7.4
  * Author:            Portfolio Blocks
@@ -76,29 +76,37 @@ if ( function_exists( 'pb_fs' ) ) {
         }
         pb_fs()->add_filter( 'plugin_icon', 'pb_fs_custom_icon' );
     
-        // Make url available to JS for Upgrade links
-        add_action( 'enqueue_block_editor_assets', function () {
-            $data = [
-                'checkoutUrl' => pb_fs()->pricing_url(),
-                'siteUrl'     => site_url(),
-                'isPro'       => ( function_exists( 'pb_fs' ) && pb_fs()->can_use_premium_code() ),
+        // Make url available to JS for Upgrade links and WooCommerce status
+add_action( 'enqueue_block_editor_assets', function () {
+    if ( ! function_exists( 'is_plugin_active' ) ) {
+        include_once ABSPATH . 'wp-admin/includes/plugin.php';
+    }
 
-            ];
+    $woo_active = is_plugin_active( 'woocommerce/woocommerce.php' );
 
-            wp_register_script(
-                'portfolio-blocks-shared-data',
-                false,               // no external src; this handle is for inline data only
-                array(),             // no deps
-                filemtime( __FILE__ ), // version for cache-busting (plugin file mtime)
-                true                 // load in footer
-            );
-            wp_add_inline_script(
-                'portfolio-blocks-shared-data',
-                'window.portfolioBlocksData = ' . wp_json_encode( $data ) . ';',
-                'before'
-            );
-            wp_enqueue_script( 'portfolio-blocks-shared-data' );
-        } );
+    $data = [
+        'checkoutUrl'    => pb_fs()->pricing_url(),
+        'siteUrl'        => site_url(),
+        'isPro'          => ( function_exists( 'pb_fs' ) && pb_fs()->can_use_premium_code() ),
+        'hasWooCommerce' => $woo_active,
+    ];
+
+    wp_register_script(
+        'portfolio-blocks-shared-data',
+        false,                // no external src; just a container for inline data
+        array(),              // no dependencies
+        filemtime( __FILE__ ), // version for cache-busting
+        true
+    );
+
+    wp_add_inline_script(
+        'portfolio-blocks-shared-data',
+        'window.portfolioBlocksData = ' . wp_json_encode( $data ) . ';',
+        'before'
+    );
+
+    wp_enqueue_script( 'portfolio-blocks-shared-data' );
+} );
 
     }
 }
@@ -174,26 +182,6 @@ if ( function_exists( 'pb_fs' ) ) {
     	array_unshift( $links, $settings_link );
     	return $links;
     }
-
-    // Allow SVG tags in post content.
-    function pb_allow_svg_tags( $tags, $context ) {
-        if ( $context === 'post' ) {
-            $tags['svg'] = [
-                'xmlns' => true,
-                'width' => true,
-                'height' => true,
-                'viewBox' => true,
-                'fill' => true,
-                'aria-hidden' => true,
-            ];
-            $tags['path'] = [
-                'd' => true,
-                'fill' => true,
-            ];
-        }
-        return $tags;
-    }
-    add_filter( 'wp_kses_allowed_html', 'pb_allow_svg_tags', 10, 2 );
 
     // Removes the add-to-cart query arg from the URL after adding a product to the cart.
     add_action( 'template_redirect', function() {

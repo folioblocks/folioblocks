@@ -4,7 +4,6 @@ import {
 	useInnerBlocksProps,
 	InspectorControls,
 	MediaPlaceholder,
-	MediaUpload,
 	BlockControls,
 	PanelColorSettings,
 	store as blockEditorStore,
@@ -12,15 +11,10 @@ import {
 import {
 	PanelBody,
 	Notice,
-	ToggleControl,
-	RangeControl,
-	Button,
 	SelectControl,
 	ToolbarGroup,
 	ToolbarButton,
 	TextControl,
-	ColorPalette,
-	BaseControl,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from '@wordpress/components';
@@ -138,7 +132,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		enableDownload,
 		downloadOnHover,
 		preview,
-		enableWooCommerce, 
+		enableWooCommerce,
 		wooCartIconDisplay,
 	} = attributes;
 
@@ -159,6 +153,16 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 	const { replaceInnerBlocks, updateBlockAttributes } = useDispatch('core/block-editor');
 
 	const checkoutUrl = window.portfolioBlocksData?.checkoutUrl || 'https://portfolio-blocks.com/portfolio-blocks-pricing/';
+
+	// Runtime override: if WooCommerce is not active, force Woo features off without mutating saved attributes
+	const hasWooCommerce = window.portfolioBlocksData?.hasWooCommerce ?? false;
+	const effectiveEnableWoo = hasWooCommerce ? (attributes.enableWooCommerce || false) : false;
+	useEffect(() => {
+		const wooActive = window.portfolioBlocksData?.hasWooCommerce ?? false;
+		if (wooActive !== attributes.hasWooCommerce) {
+			setAttributes({ hasWooCommerce: wooActive });
+		}
+	}, [window.portfolioBlocksData?.hasWooCommerce]);
 
 
 	// Get the currently selected block
@@ -325,8 +329,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		context: {
 			'portfolioBlocks/activeFilter': activeFilter,
 			'portfolioBlocks/filterCategories': filterCategories,
-			'portfolioBlocks/enableWooCommerce': enableWooCommerce,
-			'portfolioBlocks/wooCartIconDisplay': wooCartIconDisplay,
+            'portfolioBlocks/enableWooCommerce': effectiveEnableWoo,
+            'portfolioBlocks/hasWooCommerce': hasWooCommerce,
 		},
 		style: {
 			'--pb--filter-text-color': attributes.filterTextColor || '#000',
@@ -584,9 +588,9 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 								</Notice>
 							</div>
 						),
-						{ attributes, setAttributes }
+						{ attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
 					)}
-					{applyFilters(
+					{window.portfolioBlocksData?.hasWooCommerce && applyFilters(
 						'portfolioBlocks.gridGallery.wooCommerceControls',
 						(
 							<div style={{ marginBottom: '8px' }}>
@@ -599,7 +603,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 								</Notice>
 							</div>
 						),
-						{ attributes, setAttributes }
+						{ attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
 					)}
 					{applyFilters(
 						'portfolioBlocks.gridGallery.disableRightClickToggle',

@@ -5,7 +5,7 @@ Tags: gallery, portfolio, image, photo, video
 Tested up to:      6.8
 Requires at least: 6.3
 Requires PHP: 7.4
-Stable tag:        0.9.2
+Stable tag:        0.9.3
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -80,6 +80,12 @@ No, the galleries will remain in place on your site. However, the advanced layou
 7. Video Gallery block populated with images
 
 == Changelog ==
+
+0.9.3
+- Blocks now only display Enable WooCommerce when WooCommerce is installed and active. 
+- Fixed bug on Carousel where Download & Add To Cart icons were not sized correctly. 
+- Fixed bug on Modular Gallery where Add To Cart icons affected Image Stack sizing.
+- Fixed bug in PB Image Block where Add To Cart icon was not respecting added image borders. 
 
 0.9.2
 - Add WooCommerce integration in PB Video Block. 

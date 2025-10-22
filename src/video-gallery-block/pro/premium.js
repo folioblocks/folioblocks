@@ -2,53 +2,55 @@ import { __ } from '@wordpress/i18n';
 import { ToggleControl, BaseControl, ColorPalette, RangeControl, SelectControl } from '@wordpress/components';
 import { addFilter } from '@wordpress/hooks';
 
-addFilter(
-	'portfolioBlocks.videoGallery.wooCommerceControls',
-	'portfolio-blocks/video-gallery-premium-woocommerce',
-	(defaultContent, props) => {
-		const { attributes, setAttributes } = props;
-		const { enableWooCommerce, wooCartIconDisplay, enableDownload } = attributes;
+if (window.portfolioBlocksData?.hasWooCommerce) {
+    addFilter(
+        'portfolioBlocks.videoGallery.wooCommerceControls',
+        'portfolio-blocks/video-gallery-premium-woocommerce',
+        (defaultContent, props) => {
+            const { attributes, setAttributes } = props;
+            const { enableWooCommerce, wooCartIconDisplay, enableDownload } = attributes;
 
-		return (
-			<>
-				<ToggleControl
-					label={__('Enable WooCommerce Integration', 'portfolio-blocks')}
-					checked={!!enableWooCommerce}
-					onChange={(value) => {
-						setAttributes({ enableWooCommerce: value });
+            return (
+                <>
+                    <ToggleControl
+                        label={__('Enable WooCommerce Integration', 'portfolio-blocks')}
+                        checked={!!enableWooCommerce}
+                        onChange={(value) => {
+                            setAttributes({ enableWooCommerce: value });
 
-						// Reset WooCommerce-specific settings when disabled
-						if (!value) {
-							setAttributes({
-								wooLightboxInfoType: 'caption',
-								wooProductPriceOnHover: false,
-								wooCartIconDisplay: 'hover'
-							});
-						}
-					}}
-					__nextHasNoMarginBottom
-					help={__('Link gallery images to WooCommerce products.', 'portfolio-blocks')}
-					disabled={enableDownload}
-				/>
+                            // Reset WooCommerce-specific settings when disabled
+                            if (!value) {
+                                setAttributes({
+                                    wooLightboxInfoType: 'caption',
+                                    wooProductPriceOnHover: false,
+                                    wooCartIconDisplay: 'hover'
+                                });
+                            }
+                        }}
+                        __nextHasNoMarginBottom
+                        help={__('Link gallery images to WooCommerce products.', 'portfolio-blocks')}
+                        disabled={enableDownload}
+                    />
 
-				{enableWooCommerce && (
-					<SelectControl
-						label={__('Display Add to Cart Icon', 'portfolio-blocks')}
-						value={wooCartIconDisplay}
-						options={[
-							{ label: __('On Hover', 'portfolio-blocks'), value: 'hover' },
-							{ label: __('Always', 'portfolio-blocks'), value: 'always' }
-						]}
-						onChange={(value) => setAttributes({ wooCartIconDisplay: value })}
-						__nextHasNoMarginBottom
-                        __next40pxDefaultSize
-						help={__('Choose when to display the Add to Cart icon.', 'portfolio-blocks')}
-					/>
-				)}
-			</>
-		);
-	}
-);
+                    {enableWooCommerce && (
+                        <SelectControl
+                            label={__('Display Add to Cart Icon', 'portfolio-blocks')}
+                            value={wooCartIconDisplay}
+                            options={[
+                                { label: __('On Hover', 'portfolio-blocks'), value: 'hover' },
+                                { label: __('Always', 'portfolio-blocks'), value: 'always' }
+                            ]}
+                            onChange={(value) => setAttributes({ wooCartIconDisplay: value })}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
+                            help={__('Choose when to display the Add to Cart icon.', 'portfolio-blocks')}
+                        />
+                    )}
+                </>
+            );
+        }
+    );
+}
 
 addFilter(
     'portfolioBlocks.videoGallery.disableRightClickToggle',

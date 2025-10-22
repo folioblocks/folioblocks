@@ -419,7 +419,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						__next40pxDefaultSize
 						help={__('Set gap size between Thumbnails.')}
 					/>
-					{applyFilters(
+					{ window.portfolioBlocksData?.hasWooCommerce && applyFilters(
 						'portfolioBlocks.videoGallery.wooCommerceControls',
 						(
 							<div style={{ marginBottom: '8px' }}>

@@ -18,27 +18,32 @@ addFilter(
         );
     }
 );
+
 addFilter(
     'portfolioBlocks.carouselGallery.downloadControls',
     'portfolio-blocks/carousel-gallery-premium-downloads',
     (defaultContent, props) => {
-        const { attributes, setAttributes } = props;
-        const { enableDownload, downloadOnHover, enableWooCommerce } = attributes;
+        const { attributes, setAttributes, effectiveEnableWoo } = props;
+
+        if (effectiveEnableWoo && attributes.enableDownload) {
+            setAttributes({ enableDownload: false });
+        }
+
+        const { enableDownload, downloadOnHover } = attributes;
 
         return (
             <>
                 <ToggleControl
-                    key="enable-download"
                     label={__('Enable Image Downloads', 'portfolio-blocks')}
                     checked={!!enableDownload}
                     onChange={(value) => setAttributes({ enableDownload: value })}
                     __nextHasNoMarginBottom
                     help={__('Enable visitors to download images from the gallery.', 'portfolio-blocks')}
-                    disabled={enableWooCommerce}
+                    disabled={effectiveEnableWoo}
                 />
+
                 {enableDownload && (
                     <SelectControl
-                        key="download-icon-display"
                         label={__('Display Image Download Icon', 'portfolio-blocks')}
                         value={downloadOnHover ? 'hover' : 'always'}
                         options={[
@@ -47,59 +52,63 @@ addFilter(
                         ]}
                         onChange={(value) => setAttributes({ downloadOnHover: value === 'hover' })}
                         __nextHasNoMarginBottom
-                        help={__('Set display preference for Image Download icon.')}
+                        help={__('Set display preference for Image Download icon.', 'portfolio-blocks')}
                     />
                 )}
             </>
         );
     }
 );
-addFilter(
-	'portfolioBlocks.carouselGallery.wooCommerceControls',
-	'portfolio-blocks/carousel-gallery-premium-woocommerce',
-	(defaultContent, props) => {
-		const { attributes, setAttributes } = props;
-		const { enableWooCommerce, wooCartIconDisplay, enableDownload } = attributes;
 
-		return (
-			<>
-				<ToggleControl
-					label={__('Enable WooCommerce Integration', 'portfolio-blocks')}
-					checked={!!enableWooCommerce}
-					onChange={(value) => {
-						setAttributes({ enableWooCommerce: value });
+if (window.portfolioBlocksData?.hasWooCommerce) {
+    addFilter(
+        'portfolioBlocks.carouselGallery.wooCommerceControls',
+        'portfolio-blocks/carousel-gallery-premium-woocommerce',
+        (defaultContent, props) => {
+            const { attributes, setAttributes } = props;
+            const { enableWooCommerce, wooCartIconDisplay, enableDownload } = attributes;
 
-						// Reset WooCommerce-specific settings when disabled
-						if (!value) {
-							setAttributes({
-								wooLightboxInfoType: 'caption',
-								wooProductPriceOnHover: false,
-								wooCartIconDisplay: 'hover'
-							});
-						}
-					}}
-					__nextHasNoMarginBottom
-					help={__('Link gallery images to WooCommerce products.', 'portfolio-blocks')}
-					disabled={enableDownload}
-				/>
+            return (
+                <>
+                    <ToggleControl
+                        label={__('Enable WooCommerce Integration', 'portfolio-blocks')}
+                        checked={!!enableWooCommerce}
+                        onChange={(value) => {
+                            setAttributes({ enableWooCommerce: value });
 
-				{enableWooCommerce && (
-					<SelectControl
-						label={__('Display Add to Cart Icon', 'portfolio-blocks')}
-						value={wooCartIconDisplay}
-						options={[
-							{ label: __('On Hover', 'portfolio-blocks'), value: 'hover' },
-							{ label: __('Always', 'portfolio-blocks'), value: 'always' }
-						]}
-						onChange={(value) => setAttributes({ wooCartIconDisplay: value })}
-						__nextHasNoMarginBottom
-						help={__('Choose when to display the Add to Cart icon.', 'portfolio-blocks')}
-					/>
-				)}
-			</>
-		);
-	}
-);
+                            // Reset WooCommerce-specific settings when disabled
+                            if (!value) {
+                                setAttributes({
+                                    wooLightboxInfoType: 'caption',
+                                    wooProductPriceOnHover: false,
+                                    wooCartIconDisplay: 'hover'
+                                });
+                            }
+                        }}
+                        __nextHasNoMarginBottom
+                        help={__('Link gallery images to WooCommerce products.', 'portfolio-blocks')}
+                        disabled={enableDownload}
+                    />
+
+                    {enableWooCommerce && (
+                        <SelectControl
+                            label={__('Display Add to Cart Icon', 'portfolio-blocks')}
+                            value={wooCartIconDisplay}
+                            options={[
+                                { label: __('On Hover', 'portfolio-blocks'), value: 'hover' },
+                                { label: __('Always', 'portfolio-blocks'), value: 'always' }
+                            ]}
+                            onChange={(value) => setAttributes({ wooCartIconDisplay: value })}
+                            __nextHasNoMarginBottom
+                            help={__('Choose when to display the Add to Cart icon.', 'portfolio-blocks')}
+                        />
+                    )}
+                </>
+            );
+        }
+    );
+}
+
 addFilter(
     'portfolioBlocks.carouselGallery.disableRightClickToggle',
     'portfolio-blocks/carousel-gallery-premium-disable-right-click',

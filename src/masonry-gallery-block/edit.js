@@ -50,6 +50,16 @@ export default function Edit({ clientId, attributes, setAttributes }) {
         preview
     } = attributes;
 
+    // Runtime override: if WooCommerce is not active, force Woo features off without mutating saved attributes
+    const hasWooCommerce = window.portfolioBlocksData?.hasWooCommerce ?? false;
+    const effectiveEnableWoo = hasWooCommerce ? (attributes.enableWooCommerce || false) : false;
+    useEffect(() => {
+        const wooActive = window.portfolioBlocksData?.hasWooCommerce ?? false;
+        if (wooActive !== attributes.hasWooCommerce) {
+            setAttributes({ hasWooCommerce: wooActive });
+        }
+    }, [window.portfolioBlocksData?.hasWooCommerce]);
+
     const checkoutUrl = window.portfolioBlocksData?.checkoutUrl || 'https://portfolio-blocks.com/portfolio-blocks-pricing/';
 
     // Block Preview Image
@@ -69,7 +79,6 @@ export default function Edit({ clientId, attributes, setAttributes }) {
         const cleanFilters = rawFilters.filter(Boolean);
         setAttributes({ filterCategories: cleanFilters });
     };
-
     const filterCategories = filtersInput
         .split(',')
         .map((s) => s.trim())
@@ -85,6 +94,8 @@ export default function Edit({ clientId, attributes, setAttributes }) {
         context: {
             'portfolioBlocks/activeFilter': activeFilter,
             'portfolioBlocks/filterCategories': filterCategories,
+            'portfolioBlocks/enableWooCommerce': effectiveEnableWoo,
+            'portfolioBlocks/hasWooCommerce': hasWooCommerce,
         },
         style: {
             '--pb--filter-text-color': attributes.filterTextColor || '#000',
@@ -488,9 +499,9 @@ export default function Edit({ clientId, attributes, setAttributes }) {
                                 </Notice>
                             </div>
                         ),
-                        { attributes, setAttributes }
+                        { attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
                     )}
-                    {applyFilters(
+                    {window.portfolioBlocksData?.hasWooCommerce && applyFilters(
                         'portfolioBlocks.masonryGallery.wooCommerceControls',
                         (
                             <div style={{ marginBottom: '8px' }}>
@@ -503,7 +514,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
                                 </Notice>
                             </div>
                         ),
-                        { attributes, setAttributes }
+                        { attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
                     )}
                     {applyFilters(
                         'portfolioBlocks.masonryGallery.disableRightClickToggle',

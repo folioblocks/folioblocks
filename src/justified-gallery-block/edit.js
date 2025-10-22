@@ -17,8 +17,6 @@ import {
 	ToolbarGroup,
 	ToolbarButton,
 	TextControl,
-	ColorPalette,
-	BaseControl,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from '@wordpress/components';
@@ -56,6 +54,17 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			</div>
 		);
 	}
+
+	// Runtime override: if WooCommerce is not active, force Woo features off without mutating saved attributes
+	const hasWooCommerce = window.portfolioBlocksData?.hasWooCommerce ?? false;
+	const effectiveEnableWoo = hasWooCommerce ? (attributes.enableWooCommerce || false) : false;
+	useEffect(() => {
+		const wooActive = window.portfolioBlocksData?.hasWooCommerce ?? false;
+		if (wooActive !== attributes.hasWooCommerce) {
+			setAttributes({ hasWooCommerce: wooActive });
+		}
+	}, [window.portfolioBlocksData?.hasWooCommerce]);
+
 
 	const checkoutUrl = window.portfolioBlocksData?.checkoutUrl || 'https://portfolio-blocks.com/portfolio-blocks-pricing/';
 	const { replaceInnerBlocks, updateBlockAttributes } = useDispatch('core/block-editor');
@@ -324,6 +333,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		context: {
 			'portfolioBlocks/activeFilter': activeFilter,
 			'portfolioBlocks/filterCategories': filterCategories,
+			'portfolioBlocks/enableWooCommerce': effectiveEnableWoo,
+            'portfolioBlocks/hasWooCommerce': hasWooCommerce,
 		},
 		style: {
 			'--pb--filter-text-color': attributes.filterTextColor || '#000',
@@ -519,9 +530,9 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 								</Notice>
 							</div>
 						),
-						{ attributes, setAttributes }
+						{ attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
 					)}
-					{applyFilters(
+					{window.portfolioBlocksData?.hasWooCommerce && applyFilters(
 						'portfolioBlocks.justifiedGallery.wooCommerceControls',
 						(
 							<div style={{ marginBottom: '8px' }}>
@@ -534,7 +545,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 								</Notice>
 							</div>
 						),
-						{ attributes, setAttributes }
+						{ attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
 					)}
 					{applyFilters(
 						'portfolioBlocks.justifiedGallery.disableRightClickToggle',

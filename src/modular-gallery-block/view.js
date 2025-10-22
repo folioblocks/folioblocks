@@ -10,7 +10,7 @@ if (disableRightClick) {
 
 // Helper function to wait for all images to load
 function waitForImages(container, callback) {
-	const images = container.querySelectorAll('img');
+	const images = container.querySelectorAll('img.pb-image-block-img');
 	let loadedCount = 0;
 
 	if (images.length === 0) {
@@ -67,7 +67,7 @@ if (gallery?.classList.contains('collapse-on-mobile') && window.innerWidth < 768
 	const children = Array.from(container.children);
 	const totalAspectRatio = children.reduce((sum, child) => {
 		if (child.classList.contains('pb-image-block-wrapper')) {
-			const img = child.querySelector('img');
+			const img = child.querySelector('img.pb-image-block-img');
 			if (img) {
 				const width = img.naturalWidth || img.width;
 				const height = img.naturalHeight || img.height;
@@ -76,7 +76,7 @@ if (gallery?.classList.contains('collapse-on-mobile') && window.innerWidth < 768
 				}
 			}
 		} else if (child.classList.contains('pb-image-stack')) {
-			const imgs = child.querySelectorAll('img');
+			const imgs = child.querySelectorAll('img.pb-image-block-img');
 			if (imgs.length > 0) {
 				let totalHeight = 0;
 				let maxWidth = 0;
@@ -106,7 +106,7 @@ if (gallery?.classList.contains('collapse-on-mobile') && window.innerWidth < 768
 
 	children.forEach((child) => {
 		if (child.classList.contains('pb-image-block-wrapper')) {
-			const img = child.querySelector('figure img');
+			const img = child.querySelector('figure img.pb-image-block-img');
 			if (img) {
 				const aspectRatio = img.naturalWidth / img.naturalHeight;
 				const width = targetHeight * aspectRatio;
@@ -119,7 +119,7 @@ if (gallery?.classList.contains('collapse-on-mobile') && window.innerWidth < 768
 				}
 			}
 		} else if (child.classList.contains('pb-image-stack')) {
-			const imgs = child.querySelectorAll('img');
+			const imgs = child.querySelectorAll('img.pb-image-block-img');
 			const stackAspectRatios = Array.from(imgs).map((img) => {
 				const width = img.naturalWidth || img.width;
 				const height = img.naturalHeight || img.height;
@@ -140,7 +140,7 @@ if (gallery?.classList.contains('collapse-on-mobile') && window.innerWidth < 768
 			});
 
 			figures.forEach((figure, index) => {
-				const img = figure.querySelector('img');
+				const img = figure.querySelector('img.pb-image-block-img');
 				const imgOriginalHeight = img?.naturalHeight || 0;
 				const effectiveStackHeight = totalOriginalHeight > 0
 					? (targetHeight - (gap * (figures.length - 1)))
