@@ -342,8 +342,14 @@ export default function Edit({ attributes, setAttributes, context }) {
 								<button
 									className={`pb-image-block-download ${effectiveDownloadOnHover ? 'hover-only' : ''}`}
 									style={{
-										top: `${8 + (isInsideGallery ? (context['portfolioBlocks/borderWidth'] || 0) : (attributes.borderWidth || 0))}px`,
-										right: `${8 + (isInsideGallery ? (context['portfolioBlocks/borderWidth'] || 0) : (attributes.borderWidth || 0))}px`
+										top: `${10 + Math.max(
+											isInsideGallery ? (context['portfolioBlocks/borderWidth'] || 0) : (attributes.borderWidth || 0),
+											(isInsideGallery ? (context['portfolioBlocks/borderRadius'] || 0) : (attributes.borderRadius || 0)) * 0.15
+										)}px`,
+										right: `${10 + Math.max(
+											isInsideGallery ? (context['portfolioBlocks/borderWidth'] || 0) : (attributes.borderWidth || 0),
+											(isInsideGallery ? (context['portfolioBlocks/borderRadius'] || 0) : (attributes.borderRadius || 0)) * 0.30
+										)}px`
 									}}
 									onClick={(e) => {
 										e.stopPropagation();
@@ -368,8 +374,14 @@ export default function Edit({ attributes, setAttributes, context }) {
 									className={`pb-add-to-cart-icon ${context['portfolioBlocks/wooCartIconDisplay'] === 'hover' ? 'hover-only' : ''}`}
 									aria-label={__('Add to Cart', 'portfolio-blocks')}
 									style={{
-										top: `${8 + (isInsideGallery ? (context['portfolioBlocks/borderWidth'] || 0) : (attributes.borderWidth || 0))}px`,
-										right: `${8 + (isInsideGallery ? (context['portfolioBlocks/borderWidth'] || 0) : (attributes.borderWidth || 0))}px`
+										top: `${10 + Math.max(
+											isInsideGallery ? (context['portfolioBlocks/borderWidth'] || 0) : (attributes.borderWidth || 0),
+											(isInsideGallery ? (context['portfolioBlocks/borderRadius'] || 0) : (attributes.borderRadius || 0)) * 0.30
+										)}px`,
+										right: `${10 + Math.max(
+											isInsideGallery ? (context['portfolioBlocks/borderWidth'] || 0) : (attributes.borderWidth || 0),
+											(isInsideGallery ? (context['portfolioBlocks/borderRadius'] || 0) : (attributes.borderRadius || 0)) * 0.30
+										)}px`
 									}}
 									onClick={(e) => {
 										e.stopPropagation();

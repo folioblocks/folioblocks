@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
 
 $thumbnail = esc_url( $attributes['thumbnail'] ?? '' );
 $title = esc_html( $attributes['title'] ?? '' );
@@ -16,6 +19,8 @@ $drop_shadow = ! empty( $attributes['dropShadow'] );
 $lazy_load = ! empty( $attributes['lazyLoad'] );
 
 $context = $block->context ?? [];
+
+$has_woocommerce = class_exists( 'WooCommerce' );
 
 // Build style string for border and radius
 $style = '';
@@ -95,7 +100,7 @@ if ( $play_visibility === 'always' || $title_visibility === 'always' ) {
 	
     <?php
     // WooCommerce Add to Cart button integration.
-    if ( ! empty( $attributes['wooProductId'] ) ) :
+    if ( $has_woocommerce && ! empty( $attributes['wooProductId'] ) ) :
         $woo_cart_icon_display = $context['portfolioBlocks/wooCartIconDisplay'] ?? 'always';
         $product_id = absint( $attributes['wooProductId'] );
         ?>
@@ -103,6 +108,7 @@ if ( $play_visibility === 'always' || $title_visibility === 'always' ) {
             href="<?php echo esc_url( '?add-to-cart=' . $product_id ); ?>"
             class="pb-video-add-to-cart <?php echo $woo_cart_icon_display === 'hover' ? 'hover-only' : 'always'; ?>"
             data-product_id="<?php echo esc_attr( $product_id ); ?>"
+    		style="top: calc(10px + max(<?php echo esc_attr( $border_width ); ?>px, <?php echo esc_attr( $border_radius ); ?>px * 0.15)); right: calc(10px + max(<?php echo esc_attr( $border_width ); ?>px, <?php echo esc_attr( $border_radius ); ?>px * 0.30));"
         >
             <img
                 src="<?php echo esc_url( plugins_url( 'includes/icons/add-to-cart.png', dirname( __FILE__, 2 ) ) ); ?>"

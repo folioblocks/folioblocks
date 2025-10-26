@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 import { select, useSelect, useDispatch } from '@wordpress/data';
 import { useState, useEffect, useRef } from '@wordpress/element';
 import { BlockControls, useBlockProps, useInnerBlocksProps, InspectorControls, MediaPlaceholder } from '@wordpress/block-editor';
-import { Notice, ToolbarGroup, ToolbarButton, PanelBody, ToggleControl, SelectControl, RangeControl, ColorPalette, BaseControl } from '@wordpress/components';
+import { Notice, ToolbarGroup, ToolbarButton, PanelBody, ToggleControl, SelectControl } from '@wordpress/components';
 import { plus } from '@wordpress/icons';
 import { applyFilters } from '@wordpress/hooks';
 import { applyThumbnails } from '../pb-helpers/applyThumbnails';

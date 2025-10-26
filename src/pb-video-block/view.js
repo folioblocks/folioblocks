@@ -20,6 +20,8 @@ window.addEventListener('touchstart', () => {
 	userUsedKeyboard = false;
 });
 
+const hasWooCommerce = !!document.querySelector('.woocommerce');
+
 // ------------------------------
 // 2. Block Click Handling
 // ------------------------------
@@ -92,6 +94,7 @@ function openLightbox(videoUrl, layout = 'video-only', title = '', description =
 				</div>
 				<div class="pb-video-lightbox-info" style="flex:0 0 30%">
 					${
+						hasWooCommerce &&
 						layout === 'video-product' &&
 						(block.getAttribute('data-product-name') ||
 							block.getAttribute('data-product-price') ||

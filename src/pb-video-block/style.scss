@@ -161,6 +161,7 @@
 
 	&:hover {
         background: #f0f0f0;
+		color: #555!important;
     }
 
     &.hover-only {
@@ -177,8 +178,9 @@
 .pb-video-lightbox {
 	position: fixed;
 	inset: 0;
-	background: rgba(0, 0, 0, 0.98);
+	background: rgba(0, 0, 0, 0.90);
 	backdrop-filter: blur(6px);
+	-webkit-backdrop-filter: blur(6px);
 	display: flex;
 	align-items: center;
 	justify-content: center;

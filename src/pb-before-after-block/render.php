@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
 
 $before_image = $attributes['beforeImage'] ?? null;
 $after_image = $attributes['afterImage'] ?? null;

@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 $wrapper_attributes = array(
 	'data-vertical-on-mobile' => empty( $attributes['verticalOnMobile'] ) ? 'false' : 'true',
 	'data-show-controls'      => empty( $attributes['showControls'] ) ? 'false' : 'true',

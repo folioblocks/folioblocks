@@ -39,6 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Add lightbox functionality to image blocks
     document.body.addEventListener('click', (event) => {
+        const isAddToCart = event.target.closest('.pb-add-to-cart-icon');
+        const isDownload = event.target.closest('.pb-image-block-download');
+        if (isAddToCart || isDownload) return;
+
         const trigger = event.target.closest('.pb-image-block-lightbox');
         if (!trigger) return;
 
@@ -61,6 +65,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         wrapper.appendChild(inner);
         document.body.appendChild(wrapper);
+
+        document.body.classList.add('pb-lightbox-open');
 
         const focusStart = document.createElement('span');
         focusStart.tabIndex = 0;
@@ -86,6 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
         wrapper.addEventListener('click', (e) => {
             if (e.target === wrapper) {
                 wrapper.remove();
+                document.body.classList.remove('pb-lightbox-open');
                 focusStart.remove();
                 focusEnd.remove();
                 document.removeEventListener('keydown', keyHandler);
@@ -110,6 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
             close.setAttribute('aria-label', 'Close lightbox');
             close.addEventListener('click', () => {
                 wrapper.remove();
+                document.body.classList.remove('pb-lightbox-open');
                 focusStart.remove();
                 focusEnd.remove();
                 document.removeEventListener('keydown', keyHandler);
@@ -168,6 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
         function keyHandler(e) {
             if (e.key === 'Escape') {
                 wrapper.remove();
+                document.body.classList.remove('pb-lightbox-open');
                 focusStart.remove();
                 focusEnd.remove();
                 document.removeEventListener('keydown', keyHandler);
@@ -208,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Image Download Button
+    // Image Download Button Logic
     const downloadButtons = document.querySelectorAll('.pb-image-block-download');
     downloadButtons.forEach(button => {
         button.addEventListener('click', (event) => {
@@ -224,5 +233,25 @@ document.addEventListener('DOMContentLoaded', () => {
             link.click();
         });
     });
+
+    // Add to Cart Button Logic
+    document.addEventListener('click', (e) => {
+	const cartBtn = e.target.closest('.pb-add-to-cart-icon');
+	if (!cartBtn) return;
+
+	e.preventDefault();
+
+	const productId = cartBtn.dataset.addToCart;
+	if (!productId) return;
+
+	// Send request to WooCommerce add-to-cart endpoint
+	fetch(`?add-to-cart=${productId}`, { method: 'GET' })
+		.then(() => {
+			// Reload page without query string
+			const url = new URL(window.location.href);
+			url.searchParams.delete('add-to-cart');
+			window.location.href = url.pathname + url.hash;
+		});
+});
 
 });

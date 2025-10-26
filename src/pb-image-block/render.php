@@ -1,7 +1,7 @@
 <?php
-/**
- * Render template for pb-image-block with optional lightbox.
- */
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
 
 if ( empty( $attributes['src'] ) ) {
 	echo '<div class="pb-image-block"><p>No image selected.</p></div>';
@@ -116,21 +116,6 @@ $wrapper_attributes = get_block_wrapper_attributes( [
 					'decoding' => 'async',
 					'style'    => $img_styles,
 				];
-				// Determine appropriate title attribute for image
-				$img_title_attr = '';
-				if ( $enable_woo ) {
-					$linked_product = ! empty( $attributes['wooProductId'] );
-					if ( $linked_product && ! empty( $attributes['wooProductName'] ) ) {
-						$img_title_attr = $attributes['wooProductName'];
-					} elseif ( ! $linked_product && ! empty( $title ) ) {
-						$img_title_attr = $title;
-					}
-				} elseif ( ! empty( $title ) ) {
-					$img_title_attr = $title;
-				}
-				if ( ! empty( $img_title_attr ) ) {
-					$img_attributes['title'] = esc_attr( $img_title_attr );
-				}
 				if ( ! empty( $alt ) ) {
 					$img_attributes['alt'] = $alt;
 				}
@@ -146,21 +131,6 @@ $wrapper_attributes = get_block_wrapper_attributes( [
 				'decoding' => 'async',
 				'style'    => $img_styles,
 			];
-			// Determine appropriate title attribute for image
-			$img_title_attr = '';
-			if ( $enable_woo ) {
-				$linked_product = ! empty( $attributes['wooProductId'] );
-				if ( $linked_product && ! empty( $attributes['wooProductName'] ) ) {
-					$img_title_attr = $attributes['wooProductName'];
-				} elseif ( ! $linked_product && ! empty( $title ) ) {
-					$img_title_attr = $title;
-				}
-			} elseif ( ! empty( $title ) ) {
-				$img_title_attr = $title;
-			}
-			if ( ! empty( $img_title_attr ) ) {
-				$img_attributes['title'] = esc_attr( $img_title_attr );
-			}
 			if ( ! empty( $alt ) ) {
 				$img_attributes['alt'] = $alt;
 			}
@@ -219,7 +189,7 @@ $wrapper_attributes = get_block_wrapper_attributes( [
 				class="pb-add-to-cart-icon <?php echo $woo_cart_display === 'hover' ? 'hover-only' : ''; ?>"
 				data-add-to-cart="<?php echo esc_attr( intval( $attributes['wooProductId'] ) ); ?>"
 				aria-label="<?php esc_attr_e( 'Add to Cart', 'portfolio-blocks' ); ?>"
-				style="top: calc(8px + <?php echo esc_attr( $border_width ); ?>px); right: calc(8px + <?php echo esc_attr( $border_width ); ?>px);"
+    			style="top: calc(10px + max(<?php echo esc_attr( $border_width ); ?>px, <?php echo esc_attr( $border_radius ); ?>px * 0.15)); right: calc(10px + max(<?php echo esc_attr( $border_width ); ?>px, <?php echo esc_attr( $border_radius ); ?>px * 0.30));"
 			>
 				<img src="<?php echo esc_url( plugins_url( 'includes/icons/add-to-cart.png', dirname( __FILE__, 2 ) ) ); ?>" alt="<?php esc_attr_e( 'Add to Cart', 'portfolio-blocks' ); ?>" width="24" height="24" />
 			</button>
@@ -228,7 +198,7 @@ $wrapper_attributes = get_block_wrapper_attributes( [
     		<button 
     			class="pb-image-block-download <?php echo !empty($context['portfolioBlocks/downloadOnHover']) ? 'hover-only' : ''; ?>" 
     			aria-label="<?php esc_attr_e( 'Download Image', 'portfolio-blocks' ); ?>"
-    			style="top: calc(8px + <?php echo esc_attr( $border_width ); ?>px); right: calc(8px + <?php echo esc_attr( $border_width ); ?>px);"
+    			style="top: calc(10px + max(<?php echo esc_attr( $border_width ); ?>px, <?php echo esc_attr( $border_radius ); ?>px * 0.15)); right: calc(10px + max(<?php echo esc_attr( $border_width ); ?>px, <?php echo esc_attr( $border_radius ); ?>px * 0.30));"
     			data-full-src="<?php echo esc_url( $full_src ); ?>"
 			>
 				<img src="<?php echo esc_url( plugins_url( 'includes/icons/download.png', dirname( __FILE__, 2 ) ) ); ?>" alt="<?php esc_attr_e( 'Download Image', 'portfolio-blocks' ); ?>" width="24" height="24" />

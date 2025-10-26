@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name:       Portfolio Blocks
+ * Plugin Name:       Portfolio Blocks - Build amazing photo & video galleries
  * Description:       A collection of blocks for making photo and video galleries
- * Version:           0.9.3
+ * Version:           0.9.4
  * Requires at least: 6.3
  * Requires PHP:      7.4
  * Author:            Portfolio Blocks

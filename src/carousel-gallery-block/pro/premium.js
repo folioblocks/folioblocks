@@ -52,6 +52,7 @@ addFilter(
                         ]}
                         onChange={(value) => setAttributes({ downloadOnHover: value === 'hover' })}
                         __nextHasNoMarginBottom
+                        __next40pxDefaultSize
                         help={__('Set display preference for Image Download icon.', 'portfolio-blocks')}
                     />
                 )}
@@ -352,9 +353,11 @@ addFilter(
                 value={attributes.borderWidth}
                 onChange={(value) => {
                     setAttributes({ borderWidth: value });
-                    setTimeout(() => {
-                        updateBlockAttributes(clientId, { _forceRefresh: Date.now() });
-                    }, 50);
+                    if (typeof updateBlockAttributes === 'function') {
+                        setTimeout(() => {
+                            updateBlockAttributes(clientId, { _forceRefresh: Date.now() });
+                        }, 50);
+                    }
                 }}
                 min={0}
                 max={20}
@@ -377,9 +380,11 @@ addFilter(
                 value={attributes.borderRadius}
                 onChange={(value) => {
                     setAttributes({ borderRadius: value });
-                    setTimeout(() => {
-                        updateBlockAttributes(clientId, { _forceRefresh: Date.now() });
-                    }, 50);
+                    if (typeof updateBlockAttributes === 'function') {
+                        setTimeout(() => {
+                            updateBlockAttributes(clientId, { _forceRefresh: Date.now() });
+                        }, 50);
+                    }
                 }}
                 min={0}
                 max={100}

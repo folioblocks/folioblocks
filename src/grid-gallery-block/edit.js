@@ -39,6 +39,8 @@ const applyGridLayout = (galleryRef) => {
 
 	wrappers.forEach((wrapper) => {
 		const figure = wrapper.querySelector('figure');
+		// Skip hidden wrappers
+		if (wrapper.classList.contains('is-hidden')) return;
 		const img = wrapper.querySelector('img');
 
 		if (!figure || !img || !img.naturalWidth || !img.naturalHeight) return;
@@ -241,6 +243,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedBlock, attributes.activeFilter]);
 
+
 	// Keep attributes.images up to date with innerBlocks
 	useEffect(() => {
 		const updatedImages = innerBlocks.map((block) => ({
@@ -329,8 +332,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		context: {
 			'portfolioBlocks/activeFilter': activeFilter,
 			'portfolioBlocks/filterCategories': filterCategories,
-            'portfolioBlocks/enableWooCommerce': effectiveEnableWoo,
-            'portfolioBlocks/hasWooCommerce': hasWooCommerce,
+			'portfolioBlocks/enableWooCommerce': effectiveEnableWoo,
+			'portfolioBlocks/hasWooCommerce': hasWooCommerce,
 		},
 		style: {
 			'--pb--filter-text-color': attributes.filterTextColor || '#000',

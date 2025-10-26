@@ -1,15 +1,15 @@
-=== Portfolio Blocks ===
-Contributors:      Portfolio Blocks
+=== Portfolio Blocks - Build amazing photo & video galleries ===
+Contributors: portfolioblocks 
 Plugin link: https://portfolio-blocks.com/
 Tags: gallery, portfolio, image, photo, video
 Tested up to:      6.8
 Requires at least: 6.3
 Requires PHP: 7.4
-Stable tag:        0.9.3
+Stable tag:        0.9.4
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
-Create amazing image galleries inside the block editor
+Create amazing image & video galleries inside the block editor
 
 == Description ==
 
@@ -80,6 +80,14 @@ No, the galleries will remain in place on your site. However, the advanced layou
 7. Video Gallery block populated with images
 
 == Changelog ==
+
+0.9.4
+- Improved icon adjustment when border and border radius are active. 
+- Fixed TypeError on all blocks. 
+- Removed title tag from img on PB Image Block. 
+- Fixed bug in Carousel Gallery where Safari would drop image blur on hovered images.
+- Fixed bug in Grid Gallery where filtered some images would not re-appear. 
+- Fixed issues related to WordPress.org compliance. 
 
 0.9.3
 - Blocks now only display Enable WooCommerce when WooCommerce is installed and active. 

@@ -100,8 +100,8 @@ addFilter(
             { label: __('Video + Info', 'portfolio-blocks'), value: 'split' },
         ];
 
-        // Add WooCommerce-specific layout option when enabled
-        if (enableWooCommerce) {
+        // Add WooCommerce-specific layout option only when WooCommerce is installed and enabled
+        if (window.portfolioBlocksData?.hasWooCommerce && enableWooCommerce) {
             options.push({
                 label: __('Video + Product Info', 'portfolio-blocks'),
                 value: 'video-product',
@@ -174,9 +174,11 @@ addFilter(
                 value={attributes.borderWidth}
                 onChange={(value) => {
                     setAttributes({ borderWidth: value });
-                    setTimeout(() => {
-                        updateBlockAttributes(clientId, { _forceRefresh: Date.now() });
-                    }, 50);
+                    if (typeof updateBlockAttributes === 'function') {
+                        setTimeout(() => {
+                            updateBlockAttributes(clientId, { _forceRefresh: Date.now() });
+                        }, 50);
+                    }
                 }}
                 min={0}
                 max={20}
@@ -200,9 +202,11 @@ addFilter(
                 value={attributes.borderRadius}
                 onChange={(value) => {
                     setAttributes({ borderRadius: value });
-                    setTimeout(() => {
-                        updateBlockAttributes(clientId, { _forceRefresh: Date.now() });
-                    }, 50);
+                    if (typeof updateBlockAttributes === 'function') {
+                        setTimeout(() => {
+                            updateBlockAttributes(clientId, { _forceRefresh: Date.now() });
+                        }, 50);
+                    }
                 }}
                 min={0}
                 max={100}

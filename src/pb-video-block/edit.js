@@ -137,6 +137,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 	const lightboxLayout = context?.['portfolioBlocks/lightboxLayout'];
 	const lazyLoad = context?.['portfolioBlocks/lazyLoad'];
 	const enableWooCommerce = context['portfolioBlocks/enableWooCommerce'] || false;
+	const hasWooCommerce = window.portfolioBlocksData?.hasWooCommerce || false;
 	const wooCartIconDisplay = context?.['portfolioBlocks/wooCartIconDisplay'];
 	const wooLightboxInfoType = context?.['portfolioBlocks/wooLightboxInfoType'];
 	const inheritedBorderColor = context?.['portfolioBlocks/borderColor'];
@@ -180,6 +181,17 @@ export default function Edit({ attributes, setAttributes, context }) {
 		if (lightboxLayout && attributes.lightboxLayout !== lightboxLayout) {
 			setAttributes({ lightboxLayout });
 		}
+		// Optionally clear WooCommerce product data if Woo is not available
+		if (!hasWooCommerce) {
+			setAttributes({
+				wooProductId: 0,
+				wooProductName: '',
+				wooProductPrice: '',
+				wooProductURL: '',
+				wooProductDescription: '',
+				wooProductImage: '',
+			});
+		}
 	}, [
 		parentAspectRatio,
 		parentPlayButton,
@@ -189,7 +201,8 @@ export default function Edit({ attributes, setAttributes, context }) {
 		inheritedBorderRadius,
 		inheritedDropShadow,
 		lazyLoad,
-		lightboxLayout
+		lightboxLayout,
+		hasWooCommerce
 	]);
 
 	// ---------------------------
@@ -425,7 +438,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 							__next40pxDefaultSize
 						/>
 					)}
-					{enableWooCommerce && (
+					{hasWooCommerce && enableWooCommerce && (
 						<>
 							<hr style={{ border: '0.5px solid #e0e0e0', margin: '12px 0' }} />
 							<ProductSearchControl
@@ -594,11 +607,21 @@ export default function Edit({ attributes, setAttributes, context }) {
 							className="pb-video-block-img"
 							loading={lazyLoad ? 'lazy' : 'eager'}
 						/>
-						{enableWooCommerce && attributes.wooProductId > 0 && (
+						{hasWooCommerce && enableWooCommerce && attributes.wooProductId > 0 && (
 							<a
 								href={`?add-to-cart=${attributes.wooProductId}`}
 								className={`pb-video-add-to-cart ${wooCartIconDisplay === 'hover' ? 'hover-only' : 'always'}`}
 								data-product_id={attributes.wooProductId}
+								style={{
+									top: `${10 + Math.max(
+										isInVideoGallery ? (context['portfolioBlocks/borderWidth'] || 0) : (attributes.borderWidth || 0),
+										(isInVideoGallery ? (context['portfolioBlocks/borderRadius'] || 0) : (attributes.borderRadius || 0)) * 0.10
+									)}px`,
+									right: `${10 + Math.max(
+										isInVideoGallery ? (context['portfolioBlocks/borderWidth'] || 0) : (attributes.borderWidth || 0),
+										(isInVideoGallery ? (context['portfolioBlocks/borderRadius'] || 0) : (attributes.borderRadius || 0)) * 0.30
+									)}px`
+								}}
 							>
 								{wooCartIcon}
 							</a>

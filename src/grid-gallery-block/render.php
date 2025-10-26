@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 $attributes = wp_parse_args($attributes, [
     'randomizeOrder' => false,
 ]);

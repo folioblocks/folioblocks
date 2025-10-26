@@ -107,6 +107,7 @@ if (window.portfolioBlocksData?.hasWooCommerce) {
                             ]}
                             onChange={(value) => setAttributes({ wooCartIconDisplay: value })}
                             __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                             help={__('Choose when to display the Add to Cart icon.', 'portfolio-blocks')}
                         />
                     )}
@@ -312,9 +313,11 @@ addFilter(
                 value={attributes.borderWidth}
                 onChange={(value) => {
                     setAttributes({ borderWidth: value });
-                    setTimeout(() => {
-                        updateBlockAttributes(clientId, { _forceRefresh: Date.now() });
-                    }, 50);
+                    if (typeof updateBlockAttributes === 'function') {
+                        setTimeout(() => {
+                            updateBlockAttributes(clientId, { _forceRefresh: Date.now() });
+                        }, 50);
+                    }
                 }}
                 min={0}
                 max={20}
@@ -338,9 +341,11 @@ addFilter(
                 value={attributes.borderRadius}
                 onChange={(value) => {
                     setAttributes({ borderRadius: value });
-                    setTimeout(() => {
-                        updateBlockAttributes(clientId, { _forceRefresh: Date.now() });
-                    }, 50);
+                    if (typeof updateBlockAttributes === 'function') {
+                        setTimeout(() => {
+                            updateBlockAttributes(clientId, { _forceRefresh: Date.now() });
+                        }, 50);
+                    }
                 }}
                 min={0}
                 max={100}

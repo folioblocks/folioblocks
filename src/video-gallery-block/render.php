@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
 
 $columns_desktop = intval( $attributes['columns'] ?? 3 );
 $columns_tablet  = intval( $attributes['tabletColumns'] ?? 2 );

@@ -1,10 +1,4 @@
 <?php
-/**
- * Server-side rendering for the pb-image-row block.
- *
- * @package Portfolio_Blocks
- */
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
