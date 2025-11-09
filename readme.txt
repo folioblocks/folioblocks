@@ -1,11 +1,11 @@
-=== Portfolio Blocks - Build amazing photo & video galleries ===
-Contributors: portfolioblocks 
+=== Portfolio Blocks ===
+Contributors: portfolioblocks , campanellafoto
 Plugin link: https://portfolio-blocks.com/
 Tags: gallery, portfolio, image, photo, video
 Tested up to:      6.8
 Requires at least: 6.3
 Requires PHP: 7.4
-Stable tag:        0.9.4
+Stable tag:        0.9.6
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -80,6 +80,22 @@ No, the galleries will remain in place on your site. However, the advanced layou
 7. Video Gallery block populated with images
 
 == Changelog ==
+
+0.9.6
+- Before & After Block updated to remove premium code from free version
+- Carousel Gallery Block updated to remove premium code from free version
+- Grid Gallery Block updated to remove premium code from free version
+- Justified Gallery Block updated to remove premium code from free version
+- Masonry Gallery Block updated to remove premium code from free version
+- Modular Gallery Block updated to remove premium code from free version
+- PB Image Block updated to remove premium code from free version
+- PB Video Block updated to remove premium code from free version
+- Video Gallery Block updated to remove premium code from free version
+- PB Video Block rebuilt Lightbox to match PB Image Block
+
+0.9.5
+- Changed plugin slug for WordPress.org compliance
+- Added deprecsted.js to all blocks to help transition beta tester into new slug
 
 0.9.4
 - Improved icon adjustment when border and border radius are active. 

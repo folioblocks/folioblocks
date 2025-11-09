@@ -1,3 +1,8 @@
+/**
+ * PB Video Block
+ * Editor SCSS
+ **/
+
 // Placeholder Styles
 .pb-video-block {
 	opacity: 1 !important;
@@ -12,6 +17,7 @@
 	width: 100%;
 	height: 100%;
 	padding: 12px;
+	background: #eee;
 	box-shadow: inset 0 0 0 1px #1e1e1e;
 	border-radius: 2px;
 	text-align: center;
@@ -55,4 +61,4 @@
 // Hide blocks in editor
 .pb-video-block.is-hidden {
 	display: none;
-}
+} 

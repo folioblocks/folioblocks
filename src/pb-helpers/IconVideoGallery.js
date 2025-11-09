@@ -1,3 +1,7 @@
+/**
+ * Video Gallery Block
+ * SVCG Icon
+ **/
 const IconVideoGallery = () => (
     <svg
         viewBox="0 0 1247.24 1247.24"

@@ -1,14 +1,13 @@
-import { __ } from '@wordpress/i18n';
-
 /**
- * External (WordPress) imports
- */
+ * Video Gallery Block
+ * Edit JS
+ **/
+import { __ } from '@wordpress/i18n';
 import {
 	InspectorControls,
 	useBlockProps,
 	useInnerBlocksProps,
 	BlockControls,
-	PanelColorSettings,
 	store as blockEditorStore,
 	MediaPlaceholder,
 } from '@wordpress/block-editor';
@@ -19,27 +18,14 @@ import {
 	SelectControl,
 	ToggleControl,
 	ToolbarButton,
-	TextControl,
-	BaseControl,
-	ColorPalette,
-	__experimentalToggleGroupControl as ToggleGroupControl,
-	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 	Modal,
 } from '@wordpress/components';
 import { subscribe, select, dispatch, useDispatch, useSelect } from '@wordpress/data';
 import { useState, useEffect } from '@wordpress/element';
-import { addFilter, applyFilters } from '@wordpress/hooks';
+import { applyFilters } from '@wordpress/hooks';
 import { plus } from '@wordpress/icons';
-
-
-/**
- * Internal imports
- */
 import ResponsiveRangeControl from '../pb-helpers/ResponsiveRangeControl';
 import IconVideoGallery from '../pb-helpers/IconVideoGallery';
-/**
- * Internal styles
- */
 import './editor.scss';
 
 export default function Edit({ attributes, setAttributes, clientId }) {
@@ -50,8 +36,6 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		columns,
 		tabletColumns,
 		mobileColumns,
-		enableFilter,
-		filterAlign = 'left',
 		lightbox,
 		lightboxLayout,
 		lazyLoad,
@@ -61,11 +45,6 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		playButtonVisibility,
 		titleVisibility,
 		activeFilter = 'All',
-		filterCategories = [],
-		dropShadow,
-		borderColor,
-		borderWidth,
-		borderRadius,
 		filterTextColor,
 		filterBgColor,
 		activeFilterTextColor,
@@ -91,7 +70,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 	 */
 
 	// Local state for filter input field
-	const [filtersInput, setFiltersInput] = useState(filterCategories.join(', '));
+	
 	const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 
 	// Selected block in the editor
@@ -102,17 +81,14 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		},
 		[]
 	);
+	applyFilters('portfolioBlocks.videoGallery.filterLogic', null, { clientId, attributes, setAttributes, selectedBlock });
 
-	// Sync filtersInput state when filterCategories attribute changes
-	useEffect(() => {
-		setFiltersInput(filterCategories.join(', '));
-	}, [filterCategories]);
 
 	// Reset activeFilter to 'All' if selected block's category doesn't match
 	useEffect(() => {
 		if (
 			selectedBlock &&
-			selectedBlock.name === 'portfolio-blocks/pb-video-block'
+			selectedBlock.name === 'pb-gallery/pb-video-block'
 		) {
 			const selectedCategory = selectedBlock.attributes?.filterCategory || '';
 
@@ -153,7 +129,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 				if (!document.getElementById('pb-video-limit-warning')) {
 					dispatch('core/notices').createNotice(
 						'warning',
-						__('Free version allows up to 15 videos. Upgrade to Pro for unlimited.', 'portfolio-blocks'),
+						__('Free version allows up to 15 videos. Upgrade to Pro for unlimited.', 'pb-gallery'),
 						{ id: 'pb-video-limit-warning', isDismissible: true }
 					);
 				}
@@ -172,7 +148,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			if (!document.getElementById('pb-video-limit-warning')) {
 				wp.data.dispatch('core/notices').createNotice(
 					'warning',
-					__('Video limit reached. Upgrade to Pro for unlimited videos.', 'portfolio-blocks'),
+					__('Video limit reached. Upgrade to Pro for unlimited videos.', 'pb-gallery'),
 					{
 						id: 'pb-video-limit-warning',
 						isDismissible: true,
@@ -183,9 +159,9 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		}
 		const defaultTitle = media.title && media.title.trim() !== ''
 			? media.title
-			: __('Video', 'portfolio-blocks');
+			: __('Video', 'pb-gallery');
 
-		const newBlock = wp.blocks.createBlock('portfolio-blocks/pb-video-block', {
+		const newBlock = wp.blocks.createBlock('pb-gallery/pb-video-block', {
 			videoUrl: media.url,
 			title: defaultTitle,
 			alt: defaultTitle,
@@ -222,7 +198,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			style: { '--gap': `${gap}px` },
 		},
 		{
-			allowedBlocks: ['portfolio-blocks/pb-video-block'],
+			allowedBlocks: ['pb-gallery/pb-video-block'],
 			orientation: 'horizontal',
 			templateLock: false,
 			context: {
@@ -261,21 +237,9 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			return indexA - indexB;
 		});
 
-	/**
-	 * Controls & Handlers
-	 */
+	
 
-	// Handler for filter input change
-	const handleFilterInputChange = (val) => {
-		setFiltersInput(val);
-	};
 
-	// Handler for filter input blur event to update filterCategories attribute
-	const handleFilterInputBlur = () => {
-		const rawFilters = filtersInput.split(',').map((f) => f.trim());
-		const cleanFilters = rawFilters.filter(Boolean);
-		setAttributes({ filterCategories: cleanFilters });
-	};
 
 	// Handler to add a new video block inside the gallery
 	const addVideoBlock = () => {
@@ -298,10 +262,10 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 				<MediaPlaceholder
 					icon={<IconVideoGallery />}
 					labels={{
-						title: __('Video Gallery', 'portfolio-blocks'),
+						title: __('Video Gallery', 'pb-gallery'),
 						instructions: isPro
-							? __('Add first video. Upload, select from media library, or insert from URL.', 'portfolio-blocks')
-							: __('Add first video. Upload or select up to 15 videos. Upgrade to Pro for unlimited.', 'portfolio-blocks')
+							? __('Add first video. Upload, select from media library, or insert from URL.', 'pb-gallery')
+							: __('Add first video. Upload or select up to 15 videos. Upgrade to Pro for unlimited.', 'pb-gallery')
 					}}
 					allowedTypes={['video']}
 					onSelect={(media) => {
@@ -310,7 +274,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 							if (!document.getElementById('pb-video-limit-warning')) {
 								wp.data.dispatch('core/notices').createNotice(
 									'warning',
-									__('Video limit reached. Upgrade to Pro for unlimited videos.', 'portfolio-blocks'),
+									__('Video limit reached. Upgrade to Pro for unlimited videos.', 'pb-gallery'),
 									{
 										id: 'pb-video-limit-warning',
 										isDismissible: true,
@@ -322,21 +286,34 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						handleVideoSelect(media);
 					}}
 					onSelectURL={(url) => {
-						if (!isPro && innerBlocks.length >= 15) {
-							if (!document.getElementById('pb-video-limit-warning')) {
-								wp.data.dispatch('core/notices').createNotice(
-									'warning',
-									__('Video limit reached. Upgrade to Pro for unlimited videos.', 'portfolio-blocks'),
-									{
-										id: 'pb-video-limit-warning',
-										isDismissible: true,
-									}
-								);
-							}
-							return;
-						}
-						const videoBlock = wp.blocks.createBlock('portfolio-blocks/pb-video-block', { videoUrl: url });
-						insertBlock(videoBlock, undefined, clientId);
+					    if (!url) return;
+
+					    const isPro = !!window.portfolioBlocksData?.isPro;
+					    const currentBlocks = wp.data.select('core/block-editor').getBlock(clientId)?.innerBlocks || [];
+
+					    if (!isPro && currentBlocks.length >= 15) {
+					        if (!document.getElementById('pb-video-limit-warning')) {
+					            wp.data.dispatch('core/notices').createNotice(
+					                'warning',
+					                __('Video limit reached. Upgrade to Pro for unlimited videos.', 'pb-gallery'),
+					                {
+					                    id: 'pb-video-limit-warning',
+					                    isDismissible: true,
+					                }
+					            );
+					        }
+					        return;
+					    }
+
+					    const defaultTitle = __('Video', 'pb-gallery');
+					    const newBlock = wp.blocks.createBlock('pb-gallery/pb-video-block', {
+					        videoUrl: url,
+					        title: defaultTitle,
+					        alt: defaultTitle,
+					    });
+
+					    // Use replaceInnerBlocks instead of insertBlock to handle empty galleries
+					    wp.data.dispatch('core/block-editor').replaceInnerBlocks(clientId, [newBlock], false);
 					}}
 					accept="video/*"
 					multiple={false}
@@ -350,24 +327,24 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			<BlockControls>
 				<ToolbarButton
 					icon={plus}
-					label={__('Add Videos', 'portfolio-blocks')}
+					label={__('Add Videos', 'pb-gallery')}
 					onClick={addVideoBlock}
 					disabled={!window.portfolioBlocksData?.isPro && innerBlocks.length >= 15}
 				>
-					{__('Add Videos', 'portfolio-blocks')}
+					{__('Add Videos', 'pb-gallery')}
 				</ToolbarButton>
 			</BlockControls>
 			{isVideoModalOpen && (
 				<Modal
-					title={__('Select or Insert Video', 'portfolio-blocks')}
+					title={__('Select or Insert Video', 'pb-gallery')}
 					onRequestClose={() => setIsVideoModalOpen(false)}
 				>
 					<MediaPlaceholder
 						labels={{
-							title: __('Select or Insert Video', 'portfolio-blocks'),
+							title: __('Select or Insert Video', 'pb-gallery'),
 							instructions: window.portfolioBlocksData?.isPro
-								? __('Upload, select from media library, or insert from URL.', 'portfolio-blocks')
-								: __('Upload or select up to 15 videos. Upgrade to Pro for unlimited.', 'portfolio-blocks'),
+								? __('Upload, select from media library, or insert from URL.', 'pb-gallery')
+								: __('Upload or select up to 15 videos. Upgrade to Pro for unlimited.', 'pb-gallery'),
 						}}
 						allowedTypes={['video']}
 						accept="video/*"
@@ -375,8 +352,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						onSelect={(media) => {
 							const defaultTitle = media.title && media.title.trim() !== ''
 								? media.title
-								: __('Video', 'portfolio-blocks');
-							const newBlock = wp.blocks.createBlock('portfolio-blocks/pb-video-block', {
+								: __('Video', 'pb-gallery');
+							const newBlock = wp.blocks.createBlock('pb-gallery/pb-video-block', {
 								videoUrl: media.url,
 								title: defaultTitle,
 								alt: defaultTitle,
@@ -385,8 +362,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 							setIsVideoModalOpen(false);
 						}}
 						onSelectURL={(url) => {
-							const defaultTitle = __('Video', 'portfolio-blocks');
-							const newBlock = wp.blocks.createBlock('portfolio-blocks/pb-video-block', {
+							const defaultTitle = __('Video', 'pb-gallery');
+							const newBlock = wp.blocks.createBlock('pb-gallery/pb-video-block', {
 								videoUrl: url,
 								title: defaultTitle,
 								alt: defaultTitle,
@@ -400,16 +377,16 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 
 			<InspectorControls>
 				{/* Gallery Settings Panel */}
-				<PanelBody title={__('General Gallery Settings', 'portfolio-blocks')} initialOpen={true}>
+				<PanelBody title={__('General Gallery Settings', 'pb-gallery')} initialOpen={true}>
 					<ResponsiveRangeControl
-						label={__('Columns', 'portfolio-blocks')}
+						label={__('Columns', 'pb-gallery')}
 						columns={columns}
 						tabletColumns={tabletColumns}
 						mobileColumns={mobileColumns}
 						onChange={(newValues) => setAttributes(newValues)}
 					/>
 					<RangeControl
-						label={__('Gap Between Items (px)', 'portfolio-blocks')}
+						label={__('Gap Between Items (px)', 'pb-gallery')}
 						value={gap}
 						onChange={(val) => setAttributes({ gap: val })}
 						min={0}
@@ -424,10 +401,10 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Woo Commerce', 'portfolio-blocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<strong>{__('Enable Woo Commerce', 'pb-gallery')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'portfolio-blocks')}
+										{__('Upgrade to Pro', 'pb-gallery')}
 									</a>
 								</Notice>
 							</div>
@@ -439,10 +416,10 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Disable Right-Click', 'portfolio-blocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<strong>{__('Disable Right-Click', 'pb-gallery')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'portfolio-blocks')}
+										{__('Upgrade to Pro', 'pb-gallery')}
 									</a>
 								</Notice>
 							</div>
@@ -454,10 +431,10 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Lazy Load of Images', 'portfolio-blocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<strong>{__('Enable Lazy Load of Images', 'pb-gallery')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'portfolio-blocks')}
+										{__('Upgrade to Pro', 'pb-gallery')}
 									</a>
 								</Notice>
 							</div>
@@ -466,9 +443,9 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					)}
 				</PanelBody>
 
-				<PanelBody title={__('Gallery Thumbnail Settings', 'portfolio-blocks')} initialOpen={true}>
+				<PanelBody title={__('Gallery Thumbnail Settings', 'pb-gallery')} initialOpen={true}>
 					<SelectControl
-						label={__('Thumbnail Aspect Ratio', 'portfolio-blocks')}
+						label={__('Thumbnail Aspect Ratio', 'pb-gallery')}
 						value={aspectRatio}
 						onChange={(val) => setAttributes({ aspectRatio: val })}
 						options={[
@@ -484,7 +461,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						__next40pxDefaultSize
 					/>
 					<SelectControl
-						label={__('Thumbnail Resolution', 'portfolio-blocks')}
+						label={__('Thumbnail Resolution', 'pb-gallery')}
 						value={thumbnailSize}
 						onChange={(val) => setAttributes({ thumbnailSize: val })}
 						options={imageSizeOptions}
@@ -493,35 +470,35 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						__next40pxDefaultSize
 					/>
 					<SelectControl
-						label={__('Play Button Visibility', 'portfolio-blocks')}
+						label={__('Play Button Visibility', 'pb-gallery')}
 						value={playButtonVisibility}
 						onChange={(val) => setAttributes({ playButtonVisibility: val })}
 						options={[
-							{ label: __('Always Show', 'portfolio-blocks'), value: 'always' },
-							{ label: __('On Hover', 'portfolio-blocks'), value: 'onHover' },
-							{ label: __('Hidden', 'portfolio-blocks'), value: 'hidden' },
+							{ label: __('Always Show', 'pb-gallery'), value: 'always' },
+							{ label: __('On Hover', 'pb-gallery'), value: 'onHover' },
+							{ label: __('Hidden', 'pb-gallery'), value: 'hidden' },
 						]}
 						help={__('Settings for the Play button overlay.')}
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
 					<SelectControl
-						label={__('Title Visibility', 'portfolio-blocks')}
+						label={__('Title Visibility', 'pb-gallery')}
 						value={titleVisibility}
 						onChange={(val) => setAttributes({ titleVisibility: val })}
 						options={[
-							{ label: __('Always Show', 'portfolio-blocks'), value: 'always' },
-							{ label: __('On Hover', 'portfolio-blocks'), value: 'onHover' },
-							{ label: __('Hidden', 'portfolio-blocks'), value: 'hidden' },
+							{ label: __('Always Show', 'pb-gallery'), value: 'always' },
+							{ label: __('On Hover', 'pb-gallery'), value: 'onHover' },
+							{ label: __('Hidden', 'pb-gallery'), value: 'hidden' },
 						]}
 						help={__('Settings for the Video Title overlay.')}
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
 				</PanelBody>
-				<PanelBody title={__('Gallery Lightbox Settings', 'portfolio-blocks')} initialOpen={true}>
+				<PanelBody title={__('Gallery Lightbox Settings', 'pb-gallery')} initialOpen={true}>
 					<ToggleControl
-						label={__('Disable Lightbox in Editor', 'portfolio-blocks')}
+						label={__('Disable Lightbox in Editor', 'pb-gallery')}
 						checked={!lightbox}
 						onChange={(val) => setAttributes({ lightbox: !val })}
 						__nextHasNoMarginBottom
@@ -532,10 +509,10 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Lightbox Layout', 'portfolio-blocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<strong>{__('Lightbox Layout', 'pb-gallery')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'portfolio-blocks')}
+										{__('Upgrade to Pro', 'pb-gallery')}
 									</a>
 								</Notice>
 							</div>
@@ -543,64 +520,37 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						{ attributes, setAttributes }
 					)}
 				</PanelBody>
-				<PanelBody title={__('Gallery Filter Settings', 'portfolio-blocks')} initialOpen={true}>
+				<PanelBody title={__('Gallery Filter Settings', 'pb-gallery')} initialOpen={true}>
 					{applyFilters(
 						'portfolioBlocks.videoGallery.enableFilterToggle',
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Video Filtering', 'portfolio-blocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<strong>{__('Enable Video Filtering', 'pb-gallery')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'portfolio-blocks')}
+										{__('Upgrade to Pro', 'pb-gallery')}
 									</a>
 								</Notice>
 							</div>
 						),
 						{ attributes, setAttributes }
-					)}
-					{enableFilter && (
-						<>
-							<ToggleGroupControl
-								__next40pxDefaultSize
-								__nextHasNoMarginBottom
-								value={filterAlign}
-								isBlock
-								label={__('Filter Bar Alignment', 'portfolio-blocks')}
-								help={__('Set alignment of the filter bar.', 'portfolio-blocks')}
-								onChange={(value) => setAttributes({ filterAlign: value })}
-							>
-								<ToggleGroupControlOption label="Left" value="left" />
-								<ToggleGroupControlOption label="Center" value="center" />
-								<ToggleGroupControlOption label="Right" value="right" />
-							</ToggleGroupControl>
-
-							<TextControl
-								label={__('Filter Categories', 'portfolio-blocks')}
-								value={filtersInput}
-								onChange={handleFilterInputChange}
-								onBlur={handleFilterInputBlur}
-								help={__('Separate categories with commas')}
-								__nextHasNoMarginBottom
-								__next40pxDefaultSize
-							/>
-						</>
 					)}
 				</PanelBody>
 
 			</InspectorControls>
 
 			<InspectorControls group="styles">
-				<PanelBody title={__('Video Thumbnail Styles', 'portfolio-blocks')} initialOpen={true}>
+				<PanelBody title={__('Video Thumbnail Styles', 'pb-gallery')} initialOpen={true}>
 					{applyFilters(
 						'portfolioBlocks.videoGallery.borderColorControl',
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Image Border Color', 'portfolio-blocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<strong>{__('Enable Image Border Color', 'pb-gallery')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'portfolio-blocks')}
+										{__('Upgrade to Pro', 'pb-gallery')}
 									</a>
 								</Notice>
 							</div>
@@ -612,10 +562,10 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Image Border Width', 'portfolio-blocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<strong>{__('Enable Image Border Width', 'pb-gallery')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'portfolio-blocks')}
+										{__('Upgrade to Pro', 'pb-gallery')}
 									</a>
 								</Notice>
 							</div>
@@ -627,10 +577,10 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Image Border Radius', 'portfolio-blocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<strong>{__('Enable Image Border Radius', 'pb-gallery')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'portfolio-blocks')}
+										{__('Upgrade to Pro', 'pb-gallery')}
 									</a>
 								</Notice>
 							</div>
@@ -642,10 +592,10 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Image Drop Shadow', 'portfolio-blocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+									<strong>{__('Enable Image Drop Shadow', 'pb-gallery')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'portfolio-blocks')}
+										{__('Upgrade to Pro', 'pb-gallery')}
 									</a>
 								</Notice>
 							</div>
@@ -654,53 +604,29 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					)}
 				</PanelBody>
 
-				{enableFilter && (
-					<PanelColorSettings
-						title={__('Filter Bar Styles', 'portfolio-blocks')}
-						colorSettings={[
-							{
-								label: __('Active - Text Color', 'portfolio-blocks'),
-								value: activeFilterTextColor,
-								onChange: (value) => setAttributes({ activeFilterTextColor: value }),
-							},
-							{
-								label: __('Active - Background Color', 'portfolio-blocks'),
-								value: activeFilterBgColor,
-								onChange: (value) => setAttributes({ activeFilterBgColor: value }),
-							},
-							{
-								label: __('Inactive - Text Color', 'portfolio-blocks'),
-								value: filterTextColor,
-								onChange: (value) => setAttributes({ filterTextColor: value }),
-							},
-							{
-								label: __('Inactive - Background Color', 'portfolio-blocks'),
-								value: filterBgColor,
-								onChange: (value) => setAttributes({ filterBgColor: value }),
-							},
-						]}
-					/>
+				{applyFilters(
+					'portfolioBlocks.videoGallery.filterStylesControls',
+					(
+						<div style={{ marginBottom: '8px' }}>
+							<Notice status="info" isDismissible={false}>
+								<strong>{__('Filter Styles Controls', 'pb-gallery')}</strong><br />
+								{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
+								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+									{__('Upgrade to Pro', 'pb-gallery')}
+								</a>
+							</Notice>
+						</div>
+					),
+					{ attributes, setAttributes }
 				)}
 			</InspectorControls>
 
 			<div {...blockProps}>
-				{/* Filter Bar */}
-				{enableFilter && (
-					<div className={`pb-video-gallery-filters align-${filterAlign}`}>
-						{['All', ...filterCategories].map((term) => (
-							<button
-								key={term}
-								className={`filter-button${activeFilter === term ? ' is-active' : ''}`}
-								onClick={() => setAttributes({ activeFilter: term })}
-								type="button"
-							>
-								{term}
-							</button>
-						))}
-					</div>
+				{applyFilters(
+					'portfolioBlocks.videoGallery.renderFilterBar',
+					null,
+					{ attributes, setAttributes }
 				)}
-
-				{/* Inner Video Blocks */}
 				<div {...innerBlocksProps} />
 			</div>
 		</>

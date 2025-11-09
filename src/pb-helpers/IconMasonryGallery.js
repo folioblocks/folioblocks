@@ -1,3 +1,7 @@
+/**
+ * Masonry Gallery Block
+ * SVCG Icon
+ **/
 const IconMasonryGallery = () => (
     <svg
         viewBox="0 0 1247.24 1247.24"

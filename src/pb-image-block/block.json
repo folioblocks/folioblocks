@@ -1,22 +1,22 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "portfolio-blocks/pb-image-block",
-	"version": "1.0.1",
+	"name": "pb-gallery/pb-image-block",
+	"version": "1.0.3",
 	"title": "Image",
-	"category": "portfolio-blocks",
+	"category": "pb-gallery",
 	"icon": "format-image",
 	"description": "Custom image block used by the Portfolio Blocks gallery blocks.",
 	"example": {},
 	"keywords": [ "img", "photo", "picture" ],
-	"textdomain": "portfolio-blocks",
+	"textdomain": "pb-gallery",
 	"parent": [
-		"portfolio-blocks/pb-image-row",
-		"portfolio-blocks/pb-image-stack",
-		"portfolio-blocks/carousel-gallery-block",
-		"portfolio-blocks/grid-gallery-block",
-		"portfolio-blocks/masonry-gallery-block",
-		"portfolio-blocks/justified-gallery-block"
+		"pb-gallery/pb-image-row",
+		"pb-gallery/pb-image-stack",
+		"pb-gallery/carousel-gallery-block",
+		"pb-gallery/grid-gallery-block",
+		"pb-gallery/masonry-gallery-block",
+		"pb-gallery/justified-gallery-block"
 	],
 	"supports": {
 		"inserter": false,

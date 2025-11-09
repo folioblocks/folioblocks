@@ -1,10 +1,10 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "portfolio-blocks/modular-gallery-block",
-	"version": "1.0.1",
+	"name": "pb-gallery/modular-gallery-block",
+	"version": "1.0.3",
 	"title": "Modular Gallery Block",
-	"category": "portfolio-blocks",
+	"category": "pb-gallery",
 	"icon": "images-alt2",
 	"description": "Organizes images into custom rows for precise control over layout and spacing.",
 	"example": {
@@ -12,9 +12,9 @@
         "preview": true
     }
     },
-	"textdomain": "portfolio-blocks",
+	"textdomain": "pb-gallery",
 	"allowedBlocks": [
-		"portfolio-blocks/pb-image-row"
+		"pb-gallery/pb-image-row"
 	],
 	"supports": {
 		"align": [

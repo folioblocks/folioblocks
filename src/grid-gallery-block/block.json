@@ -1,11 +1,11 @@
 {
     "$schema": "https://schemas.wp.org/trunk/block.json",
     "apiVersion": 3,
-    "name": "portfolio-blocks/grid-gallery-block",
-    "version": "1.0.2",
+    "name": "pb-gallery/grid-gallery-block",
+    "version": "1.0.4",
     "title": "Grid Gallery",
-    "category": "portfolio-blocks",
-    "allowedBlocks": [ "portfolio-blocks/pb-image-block" ],
+    "category": "pb-gallery",
+    "allowedBlocks": [ "pb-gallery/pb-image-block" ],
     "icon": "images-alt2",
     "description": "Shows images in a clean, responsive grid while maintaining original proportions.",
     "example": {
@@ -13,7 +13,6 @@
         "preview": true
     }
     },
-    "textdomain": "portfolio-blocks",
     "supports": {
         "align": [ "wide", "full" ],
 		"color": {
@@ -102,6 +101,7 @@
         "portfolioBlocks/wooProductPriceOnHover": "wooProductPriceOnHover",
         "portfolioBlocks/lazyLoad": "lazyLoad"
     },
+    "textdomain": "pb-gallery",
     "editorScript": "file:./index.js",
     "editorStyle": "file:./index.css",
     "style": "file:./style-index.css",

@@ -1,18 +1,18 @@
 <?php
 /**
- * Plugin Name:       Portfolio Blocks - Build amazing photo & video galleries
+ * Plugin Name:       Portfolio Blocks
  * Description:       A collection of blocks for making photo and video galleries
- * Version:           0.9.4
+ * Version:           0.9.6
  * Requires at least: 6.3
  * Requires PHP:      7.4
  * Author:            Portfolio Blocks
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       portfolio-blocks
+ * Text Domain:       pb-gallery
  *
  * @package PortfolioBlocks
  * 
- * @fs_premium_only /build/carousel-gallery-block/premium.asset.php, /build/carousel-gallery-block/premium.js, /build/grid-gallery-block/premium.asset.php, /build/grid-gallery-block/premium.js, /build/justified-gallery-block/premium.asset.php, /build/justified-gallery-block/premium.js, /build/masonry-gallery-block/premium.asset.php, /build/masonry-gallery-block/premium.js, /build/modular-gallery-block/premium.asset.php, /build/modular-gallery-block/premium.js, /build/pb-before-after-block/premium.asset.php, /build/pb-before-after-block/premium.js, /build/video-gallery-block/premium.asset.php, /build/video-gallery-block/premium.js
+ * @fs_premium_only /build/carousel-gallery-block/premium-view.asset.php, /build/carousel-gallery-block/premium-view.js, /build/carousel-gallery-block/premium.asset.php, /build/carousel-gallery-block/premium.js, /build/grid-gallery-block/premium-view.asset.php, /build/grid-gallery-block/premium-view.js, /build/grid-gallery-block/premium.asset.php, /build/grid-gallery-block/premium.js, /build/justified-gallery-block/premium-view.asset.php, /build/justified-gallery-block/premium-view.js, /build/justified-gallery-block/premium.asset.php, /build/justified-gallery-block/premium.js, /build/masonry-gallery-block/premium-view.asset.php, /build/masonry-gallery-block/premium-view.js, /build/masonry-gallery-block/premium.asset.php, /build/masonry-gallery-block/premium.js, /build/modular-gallery-block/premium-view.asset.php, /build/modular-gallery-block/premium-view.js, /build/modular-gallery-block/premium.asset.php, /build/modular-gallery-block/premium.js, /build/pb-before-after-block/premium-view.asset.php, /build/pb-before-after-block/premium-view.js, /build/pb-before-after-block/premium.asset.php, /build/pb-before-after-block/premium.js, /build/pb-image-block/premium-view.asset.php, /build/pb-image-block/premium-view.js, /build/pb-image-block/premium.asset.php, /build/pb-image-block/premium.js, /build/pb-video-block/premium-view.asset.php, /build/pb-video-block/premium-view.js, /build/pb-video-block/premium.asset.php, /build/pb-video-block/premium.js, /build/video-gallery-block/premium-view.asset.php, /build/video-gallery-block/premium-view.js, /build/video-gallery-block/premium.asset.php, /build/video-gallery-block/premium.js
  */
 
 
@@ -40,8 +40,8 @@ if ( function_exists( 'pb_fs' ) ) {
                 require_once dirname( __FILE__ ) . '/vendor/freemius/start.php';
                 $pb_fs = fs_dynamic_init( array(
                     'id'                  => '19558',
-                    'slug'                => 'portfolio-blocks',
-                    'premium_slug'        => 'portfolio-blocks-pro',
+                    'slug'                => 'pb-gallery',
+                    'premium_slug'        => 'pb-gallery-pro',
                     'type'                => 'plugin',
                     'public_key'          => 'pk_9719a603d337d33af1a1193508cdf',
                     'is_premium'          => true,
@@ -49,12 +49,13 @@ if ( function_exists( 'pb_fs' ) ) {
                     // If your plugin is a serviceware, set this option to false.
                     'has_premium_version' => true,
                     'has_addons'          => false,
-                   'has_paid_plans'      => true,
+                    'has_paid_plans'      => true,
+                    'is_org_compliant' => true,
                     // Automatically removed in the free version. If you're not using the
                     // auto-generated free version, delete this line before uploading to wp.org.
-                     'wp_org_gatekeeper'   => 'OA7#BoRiBNqdf52FvzEf!!074aRLPs8fspif$7K1#4u4Csys1fQlCecVcUTOs2mcpeVHi#C2j9d09fOTvbC0HloPT7fFee5WdS3G',
+                    'wp_org_gatekeeper'   => 'OA7#BoRiBNqdf52FvzEf!!074aRLPs8fspif$7K1#4u4Csys1fQlCecVcUTOs2mcpeVHi#C2j9d09fOTvbC0HloPT7fFee5WdS3G',
                     'menu'                => array(
-                    'slug'           => 'portfolio-blocks-settings',
+                    'slug'           => 'pb-gallery-settings',
                 
                 ),
             ) );
@@ -77,36 +78,36 @@ if ( function_exists( 'pb_fs' ) ) {
         pb_fs()->add_filter( 'plugin_icon', 'pb_fs_custom_icon' );
     
         // Make url available to JS for Upgrade links and WooCommerce status
-add_action( 'enqueue_block_editor_assets', function () {
-    if ( ! function_exists( 'is_plugin_active' ) ) {
-        include_once ABSPATH . 'wp-admin/includes/plugin.php';
-    }
+        add_action( 'enqueue_block_editor_assets', function () {
+        if ( ! function_exists( 'is_plugin_active' ) ) {
+            include_once ABSPATH . 'wp-admin/includes/plugin.php';
+        }
 
-    $woo_active = is_plugin_active( 'woocommerce/woocommerce.php' );
+        $woo_active = is_plugin_active( 'woocommerce/woocommerce.php' );
 
-    $data = [
-        'checkoutUrl'    => pb_fs()->pricing_url(),
-        'siteUrl'        => site_url(),
-        'isPro'          => ( function_exists( 'pb_fs' ) && pb_fs()->can_use_premium_code() ),
-        'hasWooCommerce' => $woo_active,
-    ];
+        $data = [
+            'checkoutUrl'    => pb_fs()->pricing_url(),
+            'siteUrl'        => site_url(),
+            'isPro'          => ( function_exists( 'pb_fs' ) && pb_fs()->can_use_premium_code() ),
+            'hasWooCommerce' => $woo_active,
+        ];
 
-    wp_register_script(
-        'portfolio-blocks-shared-data',
-        false,                // no external src; just a container for inline data
-        array(),              // no dependencies
-        filemtime( __FILE__ ), // version for cache-busting
-        true
-    );
+        wp_register_script(
+            'pb-gallery-shared-data',
+            false,                // no external src; just a container for inline data
+            array(),              // no dependencies
+            filemtime( __FILE__ ), // version for cache-busting
+            true
+        );
 
-    wp_add_inline_script(
-        'portfolio-blocks-shared-data',
-        'window.portfolioBlocksData = ' . wp_json_encode( $data ) . ';',
-        'before'
-    );
+        wp_add_inline_script(
+            'pb-gallery-shared-data',
+            'window.portfolioBlocksData = ' . wp_json_encode( $data ) . ';',
+            'before'
+        );
 
-    wp_enqueue_script( 'portfolio-blocks-shared-data' );
-} );
+        wp_enqueue_script( 'pb-gallery-shared-data' );
+    } );
 
     }
 }
@@ -114,8 +115,8 @@ add_action( 'enqueue_block_editor_assets', function () {
     // Add custom category for blocks.
     function portfolio_blocks_add_category( $categories ) {
         $new_category = array(
-            'slug'  => 'portfolio-blocks',
-            'title' => __( 'Portfolio Blocks', 'portfolio-blocks' ),
+            'slug'  => 'pb-gallery',
+            'title' => __( 'Portfolio Blocks', 'pb-gallery' ),
             'icon'  => 'portfolio',
         );
 
@@ -158,7 +159,7 @@ add_action( 'enqueue_block_editor_assets', function () {
     		'Portfolio Blocks',        // Page title
     		'Portfolio Blocks',        // Menu title
     		'manage_options',          // Capability
-    		'portfolio-blocks-settings', // Slug
+    		'pb-gallery-settings', // Slug
     		'portfolio_blocks_render_settings_page', // Callback
     		$icon_url, // Icon
     		10 // Position 11 for media 80 for bottom
@@ -168,21 +169,23 @@ add_action( 'enqueue_block_editor_assets', function () {
     add_action( 'admin_enqueue_scripts', 'portfolio_blocks_enqueue_admin_styles' );
     function portfolio_blocks_enqueue_admin_styles() {
     	wp_enqueue_style(
-    		'portfolio-blocks-settings-css',
+    		'pb-gallery-settings-css',
     		plugin_dir_url( __FILE__ ) . 'includes/admin/settings-page.css',
     		array(),
     		'1.0'
     	);
     }
-
     add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'portfolio_blocks_plugin_action_links' );
-
     function portfolio_blocks_plugin_action_links( $links ) {
-    	$settings_link = '<a href="' . esc_url( admin_url( 'admin.php?page=portfolio-blocks-settings' ) ) . '">' . __( 'Settings', 'portfolio-blocks' ) . '</a>';
+    	$settings_link = '<a href="' . esc_url( admin_url( 'admin.php?page=pb-gallery-settings' ) ) . '">' . __( 'Settings', 'pb-gallery' ) . '</a>';
     	array_unshift( $links, $settings_link );
     	return $links;
     }
 
+}
+
+
+if ( pb_fs()->can_use_premium_code__premium_only() ) {
     // Removes the add-to-cart query arg from the URL after adding a product to the cart.
     add_action( 'template_redirect', function() {
 	    if ( isset( $_GET['add-to-cart'] ) ) {
@@ -191,33 +194,44 @@ add_action( 'enqueue_block_editor_assets', function () {
 	    }
     });
 
-}
+    // Enqueue premium block scripts if premium is active.
+    add_action( 'enqueue_block_editor_assets', 'portfolio_blocks_enqueue_premium_scripts' );
+    add_action( 'wp_enqueue_scripts', 'portfolio_blocks_enqueue_premium_scripts' );
 
-// Enqueue premium block scripts if premium is active.
-add_action( 'enqueue_block_editor_assets', 'portfolio_blocks_enqueue_premium_scripts' );
-function portfolio_blocks_enqueue_premium_scripts() {
-    if ( !function_exists( 'pb_fs' ) || !pb_fs()->can_use_premium_code() ) {
-        return;
-    }
-    $blocks_dir = plugin_dir_path( __FILE__ ) . 'build/';
-    $blocks_url = plugins_url( 'build/', __FILE__ );
-    foreach ( glob( $blocks_dir . '*', GLOB_ONLYDIR ) as $block_path ) {
-        $block_name = basename( $block_path );
-        $premium_js_path = $block_path . '/premium.js';
-        if ( file_exists( $premium_js_path ) ) {
-            wp_enqueue_script(
-                "portfolio-blocks-{$block_name}-premium",
-                $blocks_url . "{$block_name}/premium.js",
-                [
-                    'wp-blocks',
-                    'wp-element',
-                    'wp-hooks',
-                    'wp-components',
-                    'wp-editor'
-                ],
-                filemtime( $premium_js_path ),
-                true
-            );
+    function portfolio_blocks_enqueue_premium_scripts() {
+        if ( !pb_fs()->can_use_premium_code() ) {
+            return;
+        }
+
+        $blocks_dir = plugin_dir_path( __FILE__ ) . 'build/';
+        $blocks_url = plugins_url( 'build/', __FILE__ );
+
+        foreach ( glob( $blocks_dir . '*', GLOB_ONLYDIR ) as $block_path ) {
+            $block_name = basename( $block_path );
+
+            // Editor premium script
+            $premium_js_path = $block_path . '/premium.js';
+            if ( file_exists( $premium_js_path ) ) {
+                wp_enqueue_script(
+                    "pb-gallery-{$block_name}-premium",
+                    $blocks_url . "{$block_name}/premium.js",
+                    [ 'wp-blocks', 'wp-element', 'wp-hooks', 'wp-components', 'wp-editor' ],
+                    filemtime( $premium_js_path ),
+                    true
+                );
+            }
+
+            // Frontend premium script
+            $premium_view_js_path = $block_path . '/premium-view.js';
+            if ( file_exists( $premium_view_js_path ) ) {
+                wp_enqueue_script(
+                    "pb-gallery-{$block_name}-premium-view",
+                    $blocks_url . "{$block_name}/premium-view.js",
+                    [],
+                    filemtime( $premium_view_js_path ),
+                    true
+                );
+            }
         }
     }
 }

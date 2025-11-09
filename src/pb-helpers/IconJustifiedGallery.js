@@ -1,3 +1,7 @@
+/**
+ * Justified Gallery Block
+ * SVCG Icon
+ **/
 const IconJustifiedGallery = () => (
     <svg
         viewBox="0 0 1247.24 1247.24"

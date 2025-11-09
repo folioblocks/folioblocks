@@ -1,11 +1,11 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "portfolio-blocks/carousel-gallery-block",
-	"version": "1.0.1",
+	"name": "pb-gallery/carousel-gallery-block",
+	"version": "1.0.3",
 	"title": "Carousel Gallery",
-	"category": "portfolio-blocks",
-	"allowedBlocks": [ "portfolio-blocks/pb-image-block" ],
+	"category": "pb-gallery",
+	"allowedBlocks": [ "pb-gallery/pb-image-block" ],
 	"icon": "smiley",
 	"description": "Displays images in a horizontal, swipeable carousel with optional autoplay.",
 	"example": {
@@ -99,7 +99,7 @@
 		"portfolioBlocks/inCarousel": "inCarousel",
         "portfolioBlocks/lazyLoad": "lazyLoad"
     },
-	"textdomain": "portfolio-blocks",
+	"textdomain": "pb-gallery",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",

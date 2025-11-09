@@ -1,3 +1,7 @@
+/**
+ * Grid Gallery Block
+ * Save JS
+ **/
 import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
 
 export default function save({ attributes }) {

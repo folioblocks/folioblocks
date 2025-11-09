@@ -1,3 +1,7 @@
+/**
+ * PB Image Stack Block
+ * Edit JS
+ **/
 import { __ } from '@wordpress/i18n';
 import { useEffect, useRef } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
@@ -7,7 +11,7 @@ import { ToolbarGroup, ToolbarButton } from '@wordpress/components';
 import { plus } from '@wordpress/icons';
 import { decodeEntities } from '@wordpress/html-entities';
 
-const ALLOWED_BLOCKS = ['portfolio-blocks/pb-image-block'];
+const ALLOWED_BLOCKS = ['pb-gallery/pb-image-block'];
 
 export default function Edit({ clientId, context }) {
 	const MAX_IMAGES = 4;
@@ -32,10 +36,10 @@ export default function Edit({ clientId, context }) {
 		if (innerBlocks.length >= MAX_IMAGES) return;
 
 		const mediaFrame = wp.media({
-			title: __('Select Image', 'portfolio-blocks'),
+			title: __('Select Image', 'pb-gallery'),
 			multiple: false,
 			library: { type: 'image' },
-			button: { text: __('Add Image', 'portfolio-blocks') },
+			button: { text: __('Add Image', 'pb-gallery') },
 		});
 
 		mediaFrame.on('select', async () => {
@@ -49,7 +53,7 @@ export default function Edit({ clientId, context }) {
 
 				const title = decodeEntities(response.title?.rendered || '');
 
-				const newBlock = createBlock('portfolio-blocks/pb-image-block', {
+				const newBlock = createBlock('pb-gallery/pb-image-block', {
 					id: image.id,
 					src: image.url,
 					alt: image.alt || '',
@@ -74,15 +78,15 @@ export default function Edit({ clientId, context }) {
 		const timer = setTimeout(() => {
 			if (innerBlocks.length === 0 && !hasOpenedMediaFrame.current) {
 				const mediaFrame = wp.media({
-					title: __('Select Image', 'portfolio-blocks'),
+					title: __('Select Image', 'pb-gallery'),
 					multiple: false,
 					library: { type: 'image' },
-					button: { text: __('Add Image', 'portfolio-blocks') },
+					button: { text: __('Add Image', 'pb-gallery') },
 				});
 
 				mediaFrame.on('select', () => {
 					const image = mediaFrame.state().get('selection').first().toJSON();
-					const newBlock = createBlock('portfolio-blocks/pb-image-block', {
+					const newBlock = createBlock('pb-gallery/pb-image-block', {
 						id: image.id,
 						src: image.url,
 						alt: image.alt,
@@ -120,11 +124,11 @@ export default function Edit({ clientId, context }) {
 				<ToolbarGroup>
 					<ToolbarButton
 						icon={plus}
-						label={__('Add Image', 'portfolio-blocks')}
+						label={__('Add Image', 'pb-gallery')}
 						onClick={addImageBlock}
 						disabled={innerBlocks.length >= MAX_IMAGES}
 					>
-						{__('Add Image', 'portfolio-blocks')}
+						{__('Add Image', 'pb-gallery')}
 					</ToolbarButton>
 				</ToolbarGroup>
 			</BlockControls>

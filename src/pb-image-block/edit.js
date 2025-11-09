@@ -1,3 +1,7 @@
+/**
+ * PB Image Block
+ * Edit JS
+ **/
 import { __ } from '@wordpress/i18n';
 import {
 	useBlockProps,
@@ -5,30 +9,25 @@ import {
 	MediaPlaceholder,
 	BlockControls,
 	MediaUpload,
-	ColorPalette,
 } from '@wordpress/block-editor';
 import {
 	PanelBody,
 	TextareaControl,
 	TextControl,
-	SelectControl,
 	ToolbarGroup,
 	ToolbarButton,
 	Button,
-	RangeControl,
-	BaseControl,
 } from '@wordpress/components';
 import { useRef, useEffect } from '@wordpress/element';
-import { media, download } from '@wordpress/icons';
-import ProductSearchControl from '../pb-helpers/ProductSearchControl';
-import { wooCartIcon } from '../pb-helpers/wooCartIcon.js';
+import { media } from '@wordpress/icons';
+import { applyFilters } from '@wordpress/hooks';
 import './editor.scss';
 
 export default function Edit({ attributes, setAttributes, context }) {
 	const {
 		id, src, sizes, alt, title, caption, width, height,
 		enableLightbox, showCaptionInLightbox,
-		showTitleOnHover, dropshadow, enableDownload, downloadOnHover,
+		dropshadow, enableDownload, downloadOnHover,
 	} = attributes;
 
 	const {
@@ -53,13 +52,9 @@ export default function Edit({ attributes, setAttributes, context }) {
 	};
 
 	const effectiveDropShadow = isInsideGallery ? context['portfolioBlocks/dropShadow'] : dropshadow;
-	const effectiveLightbox = isInsideGallery ? context['portfolioBlocks/lightbox'] : enableLightbox;
-	const effectiveLightboxCaption = isInsideGallery ? context['portfolioBlocks/lightboxCaption'] : showCaptionInLightbox;
 	const effectiveHoverTitle = isInsideGallery ? context['portfolioBlocks/onHoverTitle'] : attributes.showTitleOnHover;
 	const effectiveDownloadEnabled = isInsideGallery ? contextEnableDownload : enableDownload;
 	const effectiveDownloadOnHover = isInsideGallery ? contextDownloadOnHover : downloadOnHover;
-
-	const lazyLoad = context?.['portfolioBlocks/lazyLoad'];
 
 	const hasWooCommerce = context['portfolioBlocks/hasWooCommerce'] || false;
 	const enableWooCommerce = context['portfolioBlocks/enableWooCommerce'] || false;
@@ -122,10 +117,10 @@ export default function Edit({ attributes, setAttributes, context }) {
 							render={({ open }) => (
 								<ToolbarButton
 									icon={media}
-									label={__('Replace Image', 'portfolio-blocks')}
+									label={__('Replace Image', 'pb-gallery')}
 									onClick={open}
 								>
-									{__('Change Image', 'portfolio-blocks')}
+									{__('Change Image', 'pb-gallery')}
 								</ToolbarButton>
 							)}
 						/>
@@ -133,7 +128,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 				)}
 			</BlockControls>
 			<InspectorControls>
-				<PanelBody title={__('Image Settings', 'portfolio-blocks')} initialOpen={true}>
+				<PanelBody title={__('Image Settings', 'pb-gallery')} initialOpen={true}>
 					{id && src && (
 						<div style={{ marginBottom: '16px' }}>
 							<div className="pb-img-thumbnail-preview">
@@ -146,7 +141,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 								render={({ open }) => (
 									<div style={{ display: 'flex', justifyContent: 'center', marginTop: '8px' }}>
 										<Button onClick={open} variant="secondary">
-											{__('Change Image', 'portfolio-blocks')}
+											{__('Change Image', 'pb-gallery')}
 										</Button>
 									</div>
 								)}
@@ -157,7 +152,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 					<hr style={{ border: '0.5px solid #e0e0e0', margin: '12px 0' }} />
 
 					<TextareaControl
-						label={__('Image Caption', 'portfolio-blocks')}
+						label={__('Image Caption', 'pb-gallery')}
 						value={caption}
 						onChange={(value) => setAttributes({ caption: value })}
 						help={__('Add image caption.')}
@@ -165,7 +160,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 						__next40pxDefaultSize
 					/>
 					<TextControl
-						label={__('Image Title', 'portfolio-blocks')}
+						label={__('Image Title', 'pb-gallery')}
 						value={title}
 						onChange={(value) => setAttributes({ title: value })}
 						help={__('Describe the role of this image on the page.')}
@@ -173,104 +168,29 @@ export default function Edit({ attributes, setAttributes, context }) {
 						__next40pxDefaultSize
 					/>
 					<TextControl
-						label={__('Alternative Text', 'portfolio-blocks')}
+						label={__('Alternative Text', 'pb-gallery')}
 						value={alt}
 						onChange={(value) => setAttributes({ alt: value })}
 						help={__('Describe the purpose of the image. Leave empty if decorative.')}
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
-					{effectiveWooActive && (
-						<>
-							<hr style={{ border: '0.5px solid #e0e0e0', margin: '12px 0' }} />
-							<ProductSearchControl
-								value={
-									attributes.wooProductId
-										? {
-											id: attributes.wooProductId,
-											name: attributes.wooProductName,
-											price_html: attributes.wooProductPrice, // note: using stored HTML
-											permalink: attributes.wooProductURL,
-											image: attributes.wooProductImage || '',
-										}
-										: null
-								}
-								onSelect={(product) => {
-									if (!product || !product.id) {
-										setAttributes({
-											wooProductId: 0,
-											wooProductName: '',
-											wooProductPrice: '',
-											wooProductURL: '',
-											wooProductDescription: '',
-											wooProductImage: '',
-										});
-										return;
-									}
-
-									setAttributes({
-										wooProductId: product.id,
-										wooProductName: product.name,
-										wooProductPrice: product.price_html || product.price || '',
-										wooProductURL: product.permalink || '',
-										wooProductImage: product.image || product.images?.[0]?.src || '',
-									});
-								}}
-							/>
-						</>
+					{applyFilters(
+						'portfolioBlocks.imageBlock.wooProductLinkControl',
+						null,
+						{ attributes, setAttributes, effectiveWooActive }
 					)}
-					{filterCategories.length > 0 && (
-						<>
-							<hr style={{ border: '0.5px solid #e0e0e0', margin: '12px 0' }} />
-							<SelectControl
-								label={__('Filter Category', 'portfolio-blocks')}
-								value={filterCategory}
-								onChange={(val) => setAttributes({ filterCategory: val })}
-								options={[
-									{ label: __('None', 'portfolio-blocks'), value: '' },
-									...filterCategories.map((cat) => ({ label: cat, value: cat }))
-								]}
-								help={__('Set image filter category.')}
-								__nextHasNoMarginBottom
-								__next40pxDefaultSize
-							/>
-						</>
+					{applyFilters(
+						'portfolioBlocks.imageBlock.filterCategoryControl',
+						null,
+						{ attributes, setAttributes, filterCategories }
 					)}
 				</PanelBody>
 			</InspectorControls>
-			{!isInsideGallery && (
-				<InspectorControls group="styles">
-					<PanelBody title={__('Image Styles', 'pb-image-block')} initialOpen={true}>
-						<BaseControl label={__('Border Color', 'portfolio-blocks')} __nextHasNoMarginBottom>
-							<ColorPalette
-								value={attributes.borderColor}
-								onChange={(value) => setAttributes({ borderColor: value })}
-								help={__('Set border color.')}
-							/>
-						</BaseControl>
-						<RangeControl
-							label={__('Border Width', 'portfolio-blocks')}
-							value={attributes.borderWidth}
-							onChange={(value) => setAttributes({ borderRadius: value })}
-							min={0}
-							max={20}
-							__next40pxDefaultSize
-							__nextHasNoMarginBottom
-							help={__('Set border width in pixels.')}
-						/>
-						<RangeControl
-							label={__('Border Radius', 'portfolio-blocks')}
-							value={attributes.borderRadius}
-							onChange={(value) => setAttributes({ borderRadius: value })}
-							min={0}
-							max={100}
-							__next40pxDefaultSize
-							__nextHasNoMarginBottom
-							help={__('Set border radius in pixels.')}
-
-						/>
-					</PanelBody>
-				</InspectorControls>
+			{applyFilters(
+				'portfolioBlocks.imageBlock.styleControls',
+				null,
+				{ attributes, setAttributes, isInsideGallery }
 			)}
 			<div
 				ref={wrapperRef}
@@ -297,7 +217,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 					{!src ? (
 						<MediaPlaceholder
 							icon="format-image"
-							labels={{ title: __('Select Image', 'portfolio-blocks') }}
+							labels={{ title: __('Select Image', 'pb-gallery') }}
 							onSelect={onSelectImage}
 							allowedTypes={['image']}
 							multiple={false}
@@ -316,79 +236,26 @@ export default function Edit({ attributes, setAttributes, context }) {
 								(Number(attributes.wooProductId) > 0 ||
 									(title && title.trim() !== '')) && (
 									<figcaption className="pb-image-block-title" style={captionStyle}>
-										{effectiveWooActive && context['portfolioBlocks/wooProductPriceOnHover'] ? (
-											Number(attributes.wooProductId) > 0 ? (
-												<>
-													{attributes.wooProductName && (
-														<div className="pb-product-name">{attributes.wooProductName}</div>
-													)}
-													{attributes.wooProductPrice && (
-														<div
-															className="pb-product-price"
-															dangerouslySetInnerHTML={{ __html: attributes.wooProductPrice }}
-														/>
-													)}
-												</>
-											) : (
-												title && <>{title}</>
-											)
-										) : (
-											title && <>{title}</>
-										)}
+										{(() => {
+											const hoverContent = applyFilters(
+												'portfolioBlocks.imageBlock.hoverOverlayContent',
+												null,
+												{ attributes, setAttributes, effectiveWooActive, context, title }
+											);
+											return hoverContent || title;
+										})()}
 									</figcaption>
 								)
 							)}
-							{effectiveDownloadEnabled && src && (
-								<button
-									className={`pb-image-block-download ${effectiveDownloadOnHover ? 'hover-only' : ''}`}
-									style={{
-										top: `${10 + Math.max(
-											isInsideGallery ? (context['portfolioBlocks/borderWidth'] || 0) : (attributes.borderWidth || 0),
-											(isInsideGallery ? (context['portfolioBlocks/borderRadius'] || 0) : (attributes.borderRadius || 0)) * 0.15
-										)}px`,
-										right: `${10 + Math.max(
-											isInsideGallery ? (context['portfolioBlocks/borderWidth'] || 0) : (attributes.borderWidth || 0),
-											(isInsideGallery ? (context['portfolioBlocks/borderRadius'] || 0) : (attributes.borderRadius || 0)) * 0.30
-										)}px`
-									}}
-									onClick={(e) => {
-										e.stopPropagation();
-
-										// Extract the original file name
-										const fileUrl = sizes?.full?.url || src;
-										const fileName = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
-
-										// Create a download link
-										const link = document.createElement('a');
-										link.href = fileUrl;
-										link.download = fileName || 'download';
-										link.click();
-									}}
-									aria-label={__('Download Image', 'portfolio-blocks')}
-								>
-									{download}
-								</button>
+							{applyFilters(
+								'portfolioBlocks.imageBlock.downloadButton',
+								null,
+								{ attributes, setAttributes, effectiveDownloadEnabled, effectiveDownloadOnHover, sizes, src, context, isInsideGallery }
 							)}
-							{effectiveWooActive && Number(attributes.wooProductId) > 0 && (
-								<button
-									className={`pb-add-to-cart-icon ${context['portfolioBlocks/wooCartIconDisplay'] === 'hover' ? 'hover-only' : ''}`}
-									aria-label={__('Add to Cart', 'portfolio-blocks')}
-									style={{
-										top: `${10 + Math.max(
-											isInsideGallery ? (context['portfolioBlocks/borderWidth'] || 0) : (attributes.borderWidth || 0),
-											(isInsideGallery ? (context['portfolioBlocks/borderRadius'] || 0) : (attributes.borderRadius || 0)) * 0.30
-										)}px`,
-										right: `${10 + Math.max(
-											isInsideGallery ? (context['portfolioBlocks/borderWidth'] || 0) : (attributes.borderWidth || 0),
-											(isInsideGallery ? (context['portfolioBlocks/borderRadius'] || 0) : (attributes.borderRadius || 0)) * 0.30
-										)}px`
-									}}
-									onClick={(e) => {
-										e.stopPropagation();
-									}}
-								>
-									{wooCartIcon}
-								</button>
+							{applyFilters(
+								'portfolioBlocks.imageBlock.addToCartButton',
+								null,
+								{ attributes, setAttributes, effectiveWooActive, context, isInsideGallery }
 							)}
 						</>
 					)}

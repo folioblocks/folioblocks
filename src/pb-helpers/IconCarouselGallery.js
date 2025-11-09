@@ -1,3 +1,7 @@
+/**
+ * Carousel Gallery Block
+ * SVCG Icon
+ **/
 const IconCarouselGallery = () => (
     <svg
         viewBox="0 0 1247.24 1247.24"

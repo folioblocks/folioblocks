@@ -1,15 +1,15 @@
 {
 "$schema": "https://schemas.wp.org/trunk/block.json",
 "apiVersion": 3,
-"name": "portfolio-blocks/pb-video-block",
-"version": "1.0.0",
+"name": "pb-gallery/pb-video-block",
+"version": "1.0.1",
 "title": "Video Block",
-"category": "portfolio-blocks",
+"category": "pb-gallery",
 "icon": "video-alt3",
 "example": {}, 
-"textdomain": "portfolio-blocks",
+"textdomain": "pb-gallery",
 "parent": [
-		"portfolio-blocks/video-gallery-block"
+		"pb-gallery/video-gallery-block"
 	],
 "supports": {
 	"inserter": false,

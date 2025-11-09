@@ -1,4 +1,9 @@
 <?php
+/**
+ * PB Image Row Block
+ * Render PHP
+ **/
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }

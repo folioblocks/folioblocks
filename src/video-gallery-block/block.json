@@ -1,10 +1,10 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "portfolio-blocks/video-gallery-block",
-	"version": "1.0.1",
+	"name": "pb-gallery/video-gallery-block",
+	"version": "1.0.3",
 	"title": "Video Gallery",
-	"category": "portfolio-blocks",
+	"category": "pb-gallery",
 	"icon": "format-video",
 	"description": "Displays videos in a responsive grid with thumbnails, titles, and lightbox playback.",
 	"example": {
@@ -13,8 +13,8 @@
     }
     },
 	"keywords": ["video", "gallery", "filter", "grid"],
-	"textdomain": "portfolio-blocks",
-	"allowedBlocks": [ "portfoio-blocks/pb-video-block" ],
+	"textdomain": "pb-gallery",
+	"allowedBlocks": [ "pb-gallery/pb-video-block" ],
 	"supports": {
 		"align": [ "wide", "full" ],
 		"color": {
@@ -51,26 +51,15 @@
 		"titleVisibility": { "type": "string", "default": "onHover" },
     	"filterCategories": { "type": "array", "items": { "type": "string"}, "default": [] },
     	"enableFilter": { "type": "boolean", "default": false },
+		"filtersInput": { "type": "string", "default": "" },
 		"filterAlign": { "type": "string", "default": "center"},
-    	"lightbox": { "type": "boolean", "default": true }, 
+    	"lightbox": { "type": "boolean", "default": false }, 
 		"lightboxLayout": { "type": "string", "default": "video-only" }, 
 		"thumbnailSize": { "type": "string", "default": "large" },
-		"filterTextColor": {
-			"type": "string",
-			"default": "#000000"
-		  },
-		  "filterBgColor": {
-			"type": "string",
-			"default": "transparent"
-		  },
-		  "activeFilterTextColor": {
-			"type": "string",
-			"default": "#ffffff"
-		  },
-		  "activeFilterBgColor": {
-			"type": "string",
-			"default": "#000000"
-		  },
+		"filterTextColor": { "type": "string", "default": "#000000" },
+		"filterBgColor": { "type": "string", "default": "transparent" },
+		"activeFilterTextColor": { "type": "string", "default": "#ffffff" },
+		"activeFilterBgColor": { "type": "string", "default": "#000000" },
 		"videos": {
     		"type": "array",
     		"default": [],

@@ -1,7 +1,7 @@
 /**
  * Responsive Range Control
- * Used for Desktop / Tablet / Mobile column control.
- */
+ * Helper file for Galleries responsive component
+ **/
 
 import { useState } from '@wordpress/element';
 import PropTypes from 'prop-types';

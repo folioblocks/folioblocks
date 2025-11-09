@@ -1,3 +1,7 @@
+/**
+ * Portfolio Blocks Logo
+ * SVCG Icon
+ **/
 const IconPortfolioBlocks = () => (
     <svg
         viewBox="0 0 1247.24 1247.24"

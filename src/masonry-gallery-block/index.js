@@ -1,8 +1,15 @@
+/**
+ * Masonry Gallery Block
+ * Index JS
+ **/
+
+
 import { registerBlockType } from '@wordpress/blocks';
 import './style.scss';
 
 import Edit from './edit';
 import Save from './save';
+import deprecated from './deprecated';
 import metadata from './block.json';
 
 registerBlockType(
@@ -25,6 +32,7 @@ registerBlockType(
 				</svg>
 		},
 		edit: Edit,
-		save: Save
+		save: Save,
+		deprecated
 	}
 );

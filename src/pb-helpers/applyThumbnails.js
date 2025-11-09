@@ -1,3 +1,7 @@
+/**
+ * Apply Thumbnails 
+ * Helper file for galleries
+ **/
 const getAllBlocksRecursive = (clientId) => {
 	const blocks = wp.data.select('core/block-editor').getBlocks(clientId);
 	let all = [...blocks];
@@ -56,9 +60,9 @@ export const applyThumbnails = (clientId = null, retries = 10) => {
 		: wp.data.select('core/block-editor').getBlocks();
 
 	blocks.forEach((block) => {
-		// Only apply to 'portfolio-blocks/pb-image-block' with a valid src
+		// Only apply to 'pb-gallery/pb-image-block' with a valid src
 		if (
-			block.name !== 'portfolio-blocks/pb-image-block' ||
+			block.name !== 'pb-gallery/pb-image-block' ||
 			!block.attributes?.src
 		) {
 			return;

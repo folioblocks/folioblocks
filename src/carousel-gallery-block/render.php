@@ -1,37 +1,51 @@
 <?php
+/**
+ * Carousel Gallery Block
+ * Render PHP
+ **/
+
 if ( ! defined( 'ABSPATH' ) ) {
-    exit;
+	exit;
 }
 
+// Base attributes (free features)
 $wrapper_attributes = array(
 	'data-vertical-on-mobile' => empty( $attributes['verticalOnMobile'] ) ? 'false' : 'true',
-	'data-show-controls'      => empty( $attributes['showControls'] ) ? 'false' : 'true',
-	'data-autoplay'           => empty( $attributes['autoplay'] ) ? 'false' : 'true',
-	'data-autoplay-speed'     => isset( $attributes['autoplaySpeed'] ) ? esc_attr( $attributes['autoplaySpeed'] ) : '3',
-	'data-controls-align'     => isset( $attributes['controlsAlignment'] ) ? esc_attr( $attributes['controlsAlignment'] ) : 'center',
-	'data-controls-bg-color'  => isset( $attributes['controlsBackgroundColor'] ) ? esc_attr( $attributes['controlsBackgroundColor'] ) : 'rgba(0,0,0,0.5)',
-	'data-controls-icon-color'=> isset( $attributes['controlsIconColor'] ) ? esc_attr( $attributes['controlsIconColor'] ) : '#ffffff',
 );
 
-if ( ! empty( $attributes['enableDownload'] ) ) {
-	$wrapper_attributes['data-enable-download'] = 'true';
-}
+if ( pb_fs()->can_use_premium_code__premium_only() ) {
+	// Premium-only attributes
 
-if ( ! empty( $attributes['disableRightClick'] ) ) {
-	$wrapper_attributes['data-disable-right-click'] = 'true';
+	// Autoplay
+	if ( ! empty( $attributes['autoplay'] ) ) {
+		$wrapper_attributes['data-autoplay']       = 'true';
+		$wrapper_attributes['data-autoplay-speed'] = isset( $attributes['autoplaySpeed'] )
+			? esc_attr( $attributes['autoplaySpeed'] )
+			: '3';
+	}
+
+	// Downloads
+	if ( ! empty( $attributes['enableDownload'] ) ) {
+		$wrapper_attributes['data-enable-download'] = 'true';
+	}
+
+	// Disable right-click
+	if ( ! empty( $attributes['disableRightClick'] ) ) {
+		$wrapper_attributes['data-disable-right-click'] = 'true';
+	}
 }
 
 $loop = isset( $attributes['loopSlides'] ) ? $attributes['loopSlides'] : false;
-?>
 
-<?php
 $wrapper_attr_string = get_block_wrapper_attributes( $wrapper_attributes );
-echo '<div ' . wp_kses( $wrapper_attr_string, [ 'div' => [] ] ) . '>';
 ?>
+<div <?php echo wp_kses( $wrapper_attr_string, [ 'div' => [] ] ); ?>>
 	<div class="pb-carousel-gallery" data-loop="<?php echo $loop ? 'true' : 'false'; ?>">
 		<?php echo wp_kses_post( $content ); ?>
 	</div>
-	<?php if ( ! empty( $attributes['showControls'] ) ) : ?>
+
+	<?php if ( pb_fs()->can_use_premium_code__premium_only() ) : ?>
+		<?php if ( ! empty( $attributes['showControls'] ) ) : ?>
 			<div
 				class="pb-carousel-controls align-<?php echo esc_attr( $attributes['controlsAlignment'] ?? 'center' ); ?>"
 				style="
@@ -44,6 +58,7 @@ echo '<div ' . wp_kses( $wrapper_attr_string, [ 'div' => [] ] ) . '>';
 						<path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
 					</svg>
 				</button>
+
 				<?php if ( ! empty( $attributes['autoplay'] ) ) : ?>
 					<button class="pb-carousel-play-button" aria-label="Play/Pause carousel">
 						<svg class="play-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
@@ -54,11 +69,13 @@ echo '<div ' . wp_kses( $wrapper_attr_string, [ 'div' => [] ] ) . '>';
 						</svg>
 					</button>
 				<?php endif; ?>
+
 				<button class="pb-carousel-chevron next" aria-label="Next slide">
 					<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true">
 						<path d="M8.59 16.59 10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
 					</svg>
 				</button>
 			</div>
+		<?php endif; ?>
 	<?php endif; ?>
 </div>

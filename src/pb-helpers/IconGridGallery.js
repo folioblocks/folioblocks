@@ -1,3 +1,7 @@
+/**
+ * Grid Gallery Block
+ * SVCG Icon
+ **/
 const IconGridGallery = () => (
 	<svg
 		viewBox="0 0 1247.24 1247.24"

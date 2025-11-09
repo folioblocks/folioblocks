@@ -1,3 +1,7 @@
+/**
+ * PB Image Block
+ * Index JS
+ **/
 import { registerBlockType } from '@wordpress/blocks';
 import './style.scss';
 import Edit from './edit';

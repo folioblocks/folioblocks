@@ -1,3 +1,7 @@
+/**
+ * Before & After Block
+ * SVCG Icon
+ **/
 const IconBeforeAfter = () => (
     <svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 2" viewBox="0 0 1080 1080">
         <g data-name="Layer 1" id="Layer_1-2">

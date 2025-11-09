@@ -1,3 +1,7 @@
+/**
+ * PB Image Row Block
+ * Edit JS
+ **/
 import { __ } from '@wordpress/i18n';
 import { useEffect } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
@@ -6,9 +10,8 @@ import { createBlock } from '@wordpress/blocks';
 import { ToolbarGroup, ToolbarButton } from '@wordpress/components';
 import { plus } from '@wordpress/icons';
 import { decodeEntities } from '@wordpress/html-entities';
-import IconModularGallery from '../pb-helpers/IconModularGallery';
 
-const ALLOWED_BLOCKS = ['portfolio-blocks/pb-image-block', 'portfolio-blocks/pb-image-stack'];
+const ALLOWED_BLOCKS = ['pb-gallery/pb-image-block', 'pb-gallery/pb-image-stack'];
 
 export default function Edit({ clientId, context }) {
 	const MAX_IMAGES = 8;
@@ -33,10 +36,10 @@ export default function Edit({ clientId, context }) {
 		if (innerBlocks.length >= MAX_IMAGES) return;
 
 		const mediaFrame = wp.media({
-			title: __('Select Image', 'portfolio-blocks'),
+			title: __('Select Image', 'pb-gallery'),
 			multiple: false,
 			library: { type: 'image' },
-			button: { text: __('Add Image', 'portfolio-blocks') },
+			button: { text: __('Add Image', 'pb-gallery') },
 		});
 
 		mediaFrame.on('select', async () => {
@@ -50,7 +53,7 @@ export default function Edit({ clientId, context }) {
 
 				const title = decodeEntities(response.title?.rendered || '');
 
-				const newBlock = createBlock('portfolio-blocks/pb-image-block', {
+				const newBlock = createBlock('pb-gallery/pb-image-block', {
 					id: image.id,
 					src: image.url,
 					alt: image.alt || '',
@@ -73,7 +76,7 @@ export default function Edit({ clientId, context }) {
 
 	useEffect(() => {
 		if (innerBlocks.length === 0) {
-			const defaultBlock = createBlock('portfolio-blocks/pb-image-block');
+			const defaultBlock = createBlock('pb-gallery/pb-image-block');
 			replaceInnerBlocks(clientId, [defaultBlock], false);
 		}
 	}, [innerBlocks, clientId, replaceInnerBlocks]);
@@ -91,7 +94,7 @@ export default function Edit({ clientId, context }) {
 		if (!layouts) return;
 		const wrappers = document.querySelectorAll(
 			`[data-block="${clientId}"] .pb-image-block-wrapper, 
-			 [data-block="${clientId}"] .wp-block-portfolio-blocks-pb-image-stack`
+			 [data-block="${clientId}"] .wp-block-pb-gallery-pb-image-stack`
 		);
 		wrappers.forEach((wrapper, index) => {
 			const layout = layouts[index];
@@ -108,22 +111,22 @@ export default function Edit({ clientId, context }) {
 				<ToolbarGroup>
 					<ToolbarButton
 						icon={plus}
-						label={__('Add Image', 'portfolio-blocks')}
+						label={__('Add Image', 'pb-gallery')}
 						onClick={addImageBlock}
 						disabled={innerBlocks.length >= MAX_IMAGES}
 					>
-						{__('Add Image', 'portfolio-blocks')}
+						{__('Add Image', 'pb-gallery')}
 					</ToolbarButton>
 					<ToolbarButton
 						icon={plus}
-						label={__('Add Image Stack', 'portfolio-blocks')}
+						label={__('Add Image Stack', 'pb-gallery')}
 						onClick={() => {
-							const newStackBlock = createBlock('portfolio-blocks/pb-image-stack');
+							const newStackBlock = createBlock('pb-gallery/pb-image-stack');
 							replaceInnerBlocks(clientId, [...innerBlocks, newStackBlock], false);
 						}}
 						disabled={innerBlocks.length >= MAX_IMAGES}
 					>
-						{__('Add Image Stack', 'portfolio-blocks')}
+						{__('Add Image Stack', 'pb-gallery')}
 					</ToolbarButton>
 				</ToolbarGroup>
 			</BlockControls>

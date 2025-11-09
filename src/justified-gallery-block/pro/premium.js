@@ -1,15 +1,86 @@
+/**
+ * Justified Gallery Block
+ * Premium JS
+ **/
 import { __ } from '@wordpress/i18n';
-import { ToggleControl, SelectControl, BaseControl, ColorPalette, RangeControl } from '@wordpress/components';
+import { PanelColorSettings } from '@wordpress/block-editor';
+import {
+    ToggleControl,
+    SelectControl,
+    BaseControl,
+    ColorPalette,
+    RangeControl,
+    TextControl,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
+} from '@wordpress/components';
 import { addFilter } from '@wordpress/hooks';
+import { useEffect } from '@wordpress/element';
+import { applyThumbnails } from '../../pb-helpers/applyThumbnails';
 
 addFilter(
+    'portfolioBlocks.justifiedGallery.editorEnhancements',
+    'pb-gallery/justified-gallery-premium-thumbnails',
+    (_, { clientId, innerBlocks, isBlockOrChildSelected }) => {
+        // Apply thumbnails when this block or a child is selected
+        useEffect(() => {
+            if (isBlockOrChildSelected) {
+                setTimeout(() => {
+                    applyThumbnails(clientId);
+                }, 200);
+            }
+        }, [isBlockOrChildSelected]);
+
+        // Fallback: Apply thumbnails if images are present but thumbnails haven't rendered yet
+        useEffect(() => {
+            const hasImages = innerBlocks.length > 0;
+            const listViewHasThumbnails = document.querySelector('[data-pb-thumbnail-applied="true"]');
+
+            if (hasImages && !listViewHasThumbnails) {
+                setTimeout(() => {
+                    applyThumbnails(clientId);
+                }, 300);
+            }
+        }, [innerBlocks]);
+        return null;
+    }
+);
+addFilter(
+    'portfolioBlocks.justifiedGallery.editorEnhancements',
+    'pb-gallery/justified-gallery-randomize',
+    (_, { attributes, innerBlocks, clientId, replaceInnerBlocks }) => {
+
+        // Shuffle images if randomizeOrder is enabled
+        useEffect(() => {
+            if (!attributes || !attributes.randomizeOrder || innerBlocks.length === 0) return;
+
+            // Use a small delay to avoid nested updates inside React render phase
+            const timer = setTimeout(() => {
+                const shuffled = [...innerBlocks];
+                for (let i = shuffled.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+                }
+
+                if (typeof replaceInnerBlocks === 'function') {
+                    replaceInnerBlocks(clientId, shuffled);
+                }
+            }, 100);
+
+            return () => clearTimeout(timer);
+        }, [attributes?.randomizeOrder]);
+
+        return null;
+    }
+);
+addFilter(
     'portfolioBlocks.justifiedGallery.randomizeToggle',
-    'portfolio-blocks/justified-gallery-premium-toggle',
+    'pb-gallery/justified-gallery-premium-toggle',
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
         return (
             <ToggleControl
-                label={__('Randomize Image Order', 'portfolio-blocks')}
+                label={__('Randomize Image Order', 'pb-gallery')}
                 checked={!!attributes.randomizeOrder}
                 onChange={(value) => {
                     setAttributes({ randomizeOrder: value });
@@ -20,7 +91,7 @@ addFilter(
                     }
                 }}
                 __nextHasNoMarginBottom={true}
-                help={__('Randomize order of images.', 'portfolio-blocks')}
+                help={__('Randomize order of images.', 'pb-gallery')}
             />
         );
     }
@@ -28,7 +99,7 @@ addFilter(
 
 addFilter(
     'portfolioBlocks.justifiedGallery.downloadControls',
-    'portfolio-blocks/justified-gallery-premium-downloads',
+    'pb-gallery/justified-gallery-premium-downloads',
     (defaultContent, props) => {
         const { attributes, setAttributes, effectiveEnableWoo } = props;
 
@@ -41,25 +112,25 @@ addFilter(
         return (
             <>
                 <ToggleControl
-                    label={__('Enable Image Downloads', 'portfolio-blocks')}
+                    label={__('Enable Image Downloads', 'pb-gallery')}
                     checked={!!enableDownload}
                     onChange={(value) => setAttributes({ enableDownload: value })}
                     __nextHasNoMarginBottom
-                    help={__('Enable visitors to download images from the gallery.', 'portfolio-blocks')}
+                    help={__('Enable visitors to download images from the gallery.', 'pb-gallery')}
                     disabled={effectiveEnableWoo}
                 />
 
                 {enableDownload && (
                     <SelectControl
-                        label={__('Display Image Download Icon', 'portfolio-blocks')}
+                        label={__('Display Image Download Icon', 'pb-gallery')}
                         value={downloadOnHover ? 'hover' : 'always'}
                         options={[
-                            { label: __('Always', 'portfolio-blocks'), value: 'always' },
-                            { label: __('On Hover', 'portfolio-blocks'), value: 'hover' }
+                            { label: __('Always', 'pb-gallery'), value: 'always' },
+                            { label: __('On Hover', 'pb-gallery'), value: 'hover' }
                         ]}
                         onChange={(value) => setAttributes({ downloadOnHover: value === 'hover' })}
                         __nextHasNoMarginBottom
-                        help={__('Set display preference for Image Download icon.', 'portfolio-blocks')}
+                        help={__('Set display preference for Image Download icon.', 'pb-gallery')}
                     />
                 )}
             </>
@@ -70,7 +141,7 @@ addFilter(
 if (window.portfolioBlocksData?.hasWooCommerce) {
     addFilter(
         'portfolioBlocks.justifiedGallery.wooCommerceControls',
-        'portfolio-blocks/justified-gallery-premium-woocommerce',
+        'pb-gallery/justified-gallery-premium-woocommerce',
         (defaultContent, props) => {
             const { attributes, setAttributes } = props;
             const { enableWooCommerce, wooCartIconDisplay, enableDownload } = attributes;
@@ -78,7 +149,7 @@ if (window.portfolioBlocksData?.hasWooCommerce) {
             return (
                 <>
                     <ToggleControl
-                        label={__('Enable WooCommerce Integration', 'portfolio-blocks')}
+                        label={__('Enable WooCommerce Integration', 'pb-gallery')}
                         checked={!!enableWooCommerce}
                         onChange={(value) => {
                             setAttributes({ enableWooCommerce: value });
@@ -93,22 +164,22 @@ if (window.portfolioBlocksData?.hasWooCommerce) {
                             }
                         }}
                         __nextHasNoMarginBottom
-                        help={__('Link gallery images to WooCommerce products.', 'portfolio-blocks')}
+                        help={__('Link gallery images to WooCommerce products.', 'pb-gallery')}
                         disabled={enableDownload}
                     />
 
                     {enableWooCommerce && (
                         <SelectControl
-                            label={__('Display Add to Cart Icon', 'portfolio-blocks')}
+                            label={__('Display Add to Cart Icon', 'pb-gallery')}
                             value={wooCartIconDisplay}
                             options={[
-                                { label: __('On Hover', 'portfolio-blocks'), value: 'hover' },
-                                { label: __('Always', 'portfolio-blocks'), value: 'always' }
+                                { label: __('On Hover', 'pb-gallery'), value: 'hover' },
+                                { label: __('Always', 'pb-gallery'), value: 'always' }
                             ]}
                             onChange={(value) => setAttributes({ wooCartIconDisplay: value })}
                             __nextHasNoMarginBottom
                             __next40pxDefaultSize
-                            help={__('Choose when to display the Add to Cart icon.', 'portfolio-blocks')}
+                            help={__('Choose when to display the Add to Cart icon.', 'pb-gallery')}
                         />
                     )}
                 </>
@@ -119,14 +190,14 @@ if (window.portfolioBlocksData?.hasWooCommerce) {
 
 addFilter(
     'portfolioBlocks.justifiedGallery.disableRightClickToggle',
-    'portfolio-blocks/justified-gallery-premium-disable-right-click',
+    'pb-gallery/justified-gallery-premium-disable-right-click',
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
 
         return (
             <ToggleControl
-                label={__('Disable Right-Click on Page', 'portfolio-blocks')}
-                help={__('Prevents visitors from right-clicking.', 'portfolio-blocks')}
+                label={__('Disable Right-Click on Page', 'pb-gallery')}
+                help={__('Prevents visitors from right-clicking.', 'pb-gallery')}
                 __nextHasNoMarginBottom={true}
                 checked={!!attributes.disableRightClick}
                 onChange={(value) => setAttributes({ disableRightClick: value })}
@@ -136,14 +207,14 @@ addFilter(
 );
 addFilter(
     'portfolioBlocks.justifiedGallery.lazyLoadToggle',
-    'portfolio-blocks/justified-gallery-premium-lazy-load',
+    'pb-gallery/justified-gallery-premium-lazy-load',
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
 
         return (
             <ToggleControl
-                label={__('Enable Lazy Load of Images', 'portfolio-blocks')}
-                help={__('Enables lazy loading of gallery images.', 'portfolio-blocks')}
+                label={__('Enable Lazy Load of Images', 'pb-gallery')}
+                help={__('Enables lazy loading of gallery images.', 'pb-gallery')}
                 __nextHasNoMarginBottom={true}
                 checked={!!attributes.lazyLoad}
                 onChange={(value) => setAttributes({ lazyLoad: value })}
@@ -153,7 +224,7 @@ addFilter(
 );
 addFilter(
     'portfolioBlocks.justifiedGallery.lightboxControls',
-    'portfolio-blocks/justified-gallery-premium-lightbox',
+    'pb-gallery/justified-gallery-premium-lightbox',
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
         const { lightbox, lightboxCaption, enableWooCommerce, wooLightboxInfoType } = attributes;
@@ -161,11 +232,11 @@ addFilter(
         return (
             <>
                 <ToggleControl
-                    label={__('Enable Lightbox', 'portfolio-blocks')}
+                    label={__('Enable Lightbox', 'pb-gallery')}
                     checked={!!lightbox}
                     onChange={(newLightbox) => setAttributes({ lightbox: newLightbox })}
                     __nextHasNoMarginBottom
-                    help={__('Enable image Lightbox on click.', 'portfolio-blocks')}
+                    help={__('Enable image Lightbox on click.', 'pb-gallery')}
                 />
 
                 {lightbox && (
@@ -173,13 +244,13 @@ addFilter(
                         <ToggleControl
                             label={
                                 enableWooCommerce
-                                    ? __('Show Image Caption or Product Info in Lightbox', 'portfolio-blocks')
-                                    : __('Show Image Caption in Lightbox', 'portfolio-blocks')
+                                    ? __('Show Image Caption or Product Info in Lightbox', 'pb-gallery')
+                                    : __('Show Image Caption in Lightbox', 'pb-gallery')
                             }
                             help={
                                 enableWooCommerce
-                                    ? __('Display image caption or product info inside the Lightbox.', 'portfolio-blocks')
-                                    : __('Display Image Caption inside the lightbox.', 'portfolio-blocks')
+                                    ? __('Display image caption or product info inside the Lightbox.', 'pb-gallery')
+                                    : __('Display Image Caption inside the lightbox.', 'pb-gallery')
                             }
                             checked={!!lightboxCaption}
                             onChange={(newLightboxCaption) =>
@@ -190,16 +261,16 @@ addFilter(
 
                         {enableWooCommerce && lightboxCaption && (
                             <SelectControl
-                                label={__('Lightbox Info', 'portfolio-blocks')}
+                                label={__('Lightbox Info', 'pb-gallery')}
                                 value={wooLightboxInfoType}
                                 options={[
-                                    { label: __('Show Image Caption', 'portfolio-blocks'), value: 'caption' },
-                                    { label: __('Show Product Description', 'portfolio-blocks'), value: 'product' }
+                                    { label: __('Show Image Caption', 'pb-gallery'), value: 'caption' },
+                                    { label: __('Show Product Description', 'pb-gallery'), value: 'product' }
                                 ]}
                                 onChange={(value) => setAttributes({ wooLightboxInfoType: value })}
                                 __nextHasNoMarginBottom
                                 __next40pxDefaultSize
-                                help={__('Choose what appears below images in the lightbox.', 'portfolio-blocks')}
+                                help={__('Choose what appears below images in the lightbox.', 'pb-gallery')}
                             />
                         )}
                     </>
@@ -211,7 +282,7 @@ addFilter(
 
 addFilter(
     'portfolioBlocks.justifiedGallery.onHoverTitleToggle',
-    'portfolio-blocks/justified-gallery-premium-title-toggle',
+    'pb-gallery/justified-gallery-premium-title-toggle',
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
         const { onHoverTitle, enableWooCommerce, wooProductPriceOnHover } = attributes;
@@ -221,13 +292,13 @@ addFilter(
                 <ToggleControl
                     label={
                         enableWooCommerce
-                            ? __('Show Overlay on Hover', 'portfolio-blocks')
-                            : __('Show Image Title in Hover Overlay', 'portfolio-blocks')
+                            ? __('Show Overlay on Hover', 'pb-gallery')
+                            : __('Show Image Title in Hover Overlay', 'pb-gallery')
                     }
                     help={
                         enableWooCommerce
-                            ? __('Display image title or product info when hovering over images.', 'portfolio-blocks')
-                            : __('Display image title when hovering over image.', 'portfolio-blocks')
+                            ? __('Display image title or product info when hovering over images.', 'pb-gallery')
+                            : __('Display image title when hovering over image.', 'pb-gallery')
                     }
                     __nextHasNoMarginBottom
                     checked={!!attributes.onHoverTitle}
@@ -236,11 +307,11 @@ addFilter(
 
                 {enableWooCommerce && onHoverTitle && (
                     <SelectControl
-                        label={__('Overlay Content', 'portfolio-blocks')}
+                        label={__('Overlay Content', 'pb-gallery')}
                         value={wooProductPriceOnHover ? 'product' : 'title'}
                         options={[
-                            { label: __('Show Image Title', 'portfolio-blocks'), value: 'title' },
-                            { label: __('Show Product Name & Price', 'portfolio-blocks'), value: 'product' }
+                            { label: __('Show Image Title', 'pb-gallery'), value: 'title' },
+                            { label: __('Show Product Name & Price', 'pb-gallery'), value: 'product' }
                         ]}
                         onChange={(val) => {
                             // Ensure hover info is enabled, then switch mode
@@ -251,8 +322,126 @@ addFilter(
                         }}
                         __nextHasNoMarginBottom
                         __next40pxDefaultSize
-                        help={__('Choose what appears when hovering over images.', 'portfolio-blocks')}
+                        help={__('Choose what appears when hovering over images.', 'pb-gallery')}
                     />
+                )}
+            </>
+        );
+    }
+);
+addFilter(
+    'portfolioBlocks.justifiedGallery.filterLogic',
+    'pb-gallery/justified-gallery-filter-logic',
+    (_, { attributes, setAttributes, selectedBlock }) => {
+        const {
+            enableFilter = false,
+            filterAlign = 'center',
+            filtersInput = '',
+            activeFilter = 'All',
+        } = attributes;
+
+        // Derive categories from filtersInput
+        const filterCategories = filtersInput
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean);
+
+        // Sync derived categories
+        useEffect(() => {
+            setAttributes({ filterCategories });
+        }, [filtersInput]);
+
+        // Reset activeFilter if selected block becomes hidden
+        useEffect(() => {
+            if (
+                selectedBlock &&
+                selectedBlock.name === 'pb-gallery/pb-image-block'
+            ) {
+                const selectedCategory = selectedBlock.attributes?.filterCategory || '';
+                const isFilteredOut =
+                    activeFilter !== 'All' &&
+                    selectedCategory.toLowerCase() !== activeFilter.toLowerCase();
+
+                if (isFilteredOut) {
+                    setAttributes({ activeFilter: 'All' });
+                }
+            }
+        }, [selectedBlock, activeFilter]);
+
+        // Keep these base filter attributes consistent
+        useEffect(() => {
+            if (attributes.enableFilter !== enableFilter)
+                setAttributes({ enableFilter });
+            if (attributes.filterAlign !== filterAlign)
+                setAttributes({ filterAlign });
+        }, [enableFilter, filterAlign]);
+
+        return null;
+    }
+);
+addFilter(
+    'portfolioBlocks.justifiedGallery.enableFilterToggle',
+    'pb-gallery/justified-gallery-premium-filter-toggle',
+    (defaultContent, props) => {
+        const { attributes, setAttributes } = props;
+        const { enableFilter, filterAlign, filtersInput } = attributes;
+
+        const handleFilterInputChange = (value) => {
+            setAttributes({ filtersInput: value });
+        };
+
+        const handleFilterInputBlur = () => {
+            const parsed = filtersInput
+                .split(',')
+                .map((item) => item.trim())
+                .filter((item) => item.length > 0);
+            setAttributes({ filterCategories: parsed });
+        };
+
+        return (
+            <>
+                <ToggleControl
+                    label={__('Enable Image Filtering', 'pb-gallery')}
+                    checked={!!attributes.enableFilter}
+                    onChange={(val) => setAttributes({ enableFilter: val })}
+                    __nextHasNoMarginBottom={true}
+                    help={__('Enable image filtering with categories.', 'pb-gallery')}
+                />
+                {enableFilter && (
+                    <>
+                        <ToggleGroupControl
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                            value={filterAlign}
+                            isBlock
+                            label={__('Filter Bar Alignment', 'pb-gallery')}
+                            help={__('Set alignment of the filter bar.', 'pb-gallery')}
+                            onChange={(value) => setAttributes({ filterAlign: value })}
+                        >
+                            <ToggleGroupControlOption
+                                label="Left"
+                                value="left"
+                            />
+                            <ToggleGroupControlOption
+                                label="Center"
+                                value="center"
+                            />
+                            <ToggleGroupControlOption
+                                label="Right"
+                                value="right"
+                            />
+                        </ToggleGroupControl>
+
+                        <TextControl
+                            label={__('Filter Categories', 'pb-gallery')}
+                            value={filtersInput}
+                            onChange={handleFilterInputChange}
+                            onBlur={handleFilterInputBlur}
+                            help={__('Separate categories with commas')}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
+                        />
+                    </>
                 )}
             </>
         );
@@ -260,35 +449,17 @@ addFilter(
 );
 
 addFilter(
-    'portfolioBlocks.justifiedGallery.enableFilterToggle',
-    'portfolio-blocks/justified-gallery-premium-filter-toggle',
-    (defaultContent, props) => {
-        const { attributes, setAttributes } = props;
-
-        return (
-            <ToggleControl
-                label={__('Enable Image Filtering', 'portfolio-blocks')}
-                checked={!!attributes.enableFilter}
-                onChange={(val) => setAttributes({ enableFilter: val })}
-                __nextHasNoMarginBottom={true}
-                help={__('Enable image filtering with categories.', 'portfolio-blocks')}
-            />
-        );
-    }
-);
-
-addFilter(
     'portfolioBlocks.justifiedGallery.borderColorControl',
-    'portfolio-blocks/justified-gallery-premium-border-color',
+    'pb-gallery/justified-gallery-premium-border-color',
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
         return (
-            <BaseControl label={__('Border Color', 'portfolio-blocks')} __nextHasNoMarginBottom={true}>
+            <BaseControl label={__('Border Color', 'pb-gallery')} __nextHasNoMarginBottom={true}>
                 <ColorPalette
                     value={attributes.borderColor}
                     onChange={(value) => setAttributes({ borderColor: value })}
                     clearable={false}
-                    help={__('Set border color.', 'portfolio-blocks')}
+                    help={__('Set border color.', 'pb-gallery')}
                 />
             </BaseControl>
         );
@@ -297,13 +468,13 @@ addFilter(
 
 addFilter(
     'portfolioBlocks.justifiedGallery.borderWidthControl',
-    'portfolio-blocks/justified-gallery-premium-border-width',
+    'pb-gallery/justified-gallery-premium-border-width',
     (defaultContent, props) => {
         const { attributes, setAttributes, clientId, updateBlockAttributes } = props;
 
         return (
             <RangeControl
-                label={__('Border Width', 'portfolio-blocks')}
+                label={__('Border Width', 'pb-gallery')}
                 value={attributes.borderWidth}
                 onChange={(value) => {
                     setAttributes({ borderWidth: value });
@@ -317,7 +488,7 @@ addFilter(
                 max={20}
                 __next40pxDefaultSize={true}
                 __nextHasNoMarginBottom={true}
-                help={__('Set border width in pixels.', 'portfolio-blocks')}
+                help={__('Set border width in pixels.', 'pb-gallery')}
             />
         );
     }
@@ -325,13 +496,13 @@ addFilter(
 
 addFilter(
     'portfolioBlocks.justifiedGallery.borderRadiusControl',
-    'portfolio-blocks/justified-gallery-premium-border-radius',
+    'pb-gallery/justified-gallery-premium-border-radius',
     (defaultContent, props) => {
         const { attributes, setAttributes, clientId, updateBlockAttributes } = props;
 
         return (
             <RangeControl
-                label={__('Border Radius', 'portfolio-blocks')}
+                label={__('Border Radius', 'pb-gallery')}
                 value={attributes.borderRadius}
                 onChange={(value) => {
                     setAttributes({ borderRadius: value });
@@ -345,7 +516,7 @@ addFilter(
                 max={100}
                 __next40pxDefaultSize={true}
                 __nextHasNoMarginBottom={true}
-                help={__('Set border radius in pixels.', 'portfolio-blocks')}
+                help={__('Set border radius in pixels.', 'pb-gallery')}
             />
         );
     }
@@ -353,18 +524,92 @@ addFilter(
 
 addFilter(
     'portfolioBlocks.justifiedGallery.dropShadowToggle',
-    'portfolio-blocks/justified-gallery-premium-drop-shadow',
+    'pb-gallery/justified-gallery-premium-drop-shadow',
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
 
         return (
             <ToggleControl
-                label={__('Enable Drop Shadow', 'portfolio-blocks')}
+                label={__('Enable Drop Shadow', 'pb-gallery')}
                 checked={!!attributes.dropShadow}
                 onChange={(newDropShadow) => setAttributes({ dropShadow: newDropShadow })}
                 __nextHasNoMarginBottom={true}
-                help={__('Applies a subtle drop shadow to images.', 'portfolio-blocks')}
+                help={__('Applies a subtle drop shadow to images.', 'pb-gallery')}
             />
+        );
+    }
+);
+
+addFilter(
+    'portfolioBlocks.justifiedGallery.filterStyleSettings',
+    'pb-gallery/justified-gallery-premium-filter-styles',
+    (defaultContent, { attributes, setAttributes }) => {
+        if (!attributes.enableFilter) {
+            return null;
+        }
+
+        return (
+            <PanelColorSettings
+                title="Filter Bar Styles"
+                colorSettings={[
+                    {
+                        label: 'Active - Text Color',
+                        value: attributes.activeFilterTextColor,
+                        onChange: (value) =>
+                            setAttributes({ activeFilterTextColor: value }),
+                    },
+                    {
+                        label: 'Active - Background Color',
+                        value: attributes.activeFilterBgColor,
+                        onChange: (value) =>
+                            setAttributes({ activeFilterBgColor: value }),
+                    },
+                    {
+                        label: 'Inactive - Text Color',
+                        value: attributes.filterTextColor,
+                        onChange: (value) =>
+                            setAttributes({ filterTextColor: value }),
+                    },
+                    {
+                        label: 'Inactive - Background Color',
+                        value: attributes.filterBgColor,
+                        onChange: (value) =>
+                            setAttributes({ filterBgColor: value }),
+                    },
+                ]}
+            />
+        );
+    }
+);
+
+addFilter(
+    'portfolioBlocks.justifiedGallery.renderFilterBar',
+    'pb-gallery/justified-gallery-premium-filter-bar',
+    (defaultContent, { attributes, setAttributes }) => {
+        const {
+            enableFilter = false,
+            activeFilter = 'All',
+            filterCategories = [],
+            filterAlign = 'center',
+        } = attributes;
+
+        if (!enableFilter || !Array.isArray(filterCategories)) {
+            return defaultContent;
+        }
+
+        return (
+            <div className={`pb-image-gallery-filters align-${filterAlign}`}>
+                {['All', ...filterCategories].map((term) => (
+                    <button
+                        key={term}
+                        className={`filter-button${activeFilter === term ? ' is-active' : ''}`}
+                        onClick={() => setAttributes({ activeFilter: term })}
+                        type="button"
+                    >
+                        {term}
+                    </button>
+                ))}
+            </div>
         );
     }
 );

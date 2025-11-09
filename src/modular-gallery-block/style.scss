@@ -1,8 +1,14 @@
-.pb-modular-gallery > .wp-block-portfolio-blocks-pb-image-row {
+/**
+ * Modular Gallery Block
+ * Front-End SCSS
+ **/
+
+
+.pb-modular-gallery > .wp-block-pb-gallery-pb-image-row {
 	margin-bottom: 10px;
 }
 
-.pb-modular-gallery.no-row-gap > .wp-block-portfolio-blocks-pb-image-row {
+.pb-modular-gallery.no-row-gap > .wp-block-pb-gallery-pb-image-row {
 	margin-bottom: 0!important;
 }
 .no-row-gap .pb-image-row {
@@ -46,7 +52,7 @@
 		}
 
 		.pb-image-block-wrapper,
-		.wp-block-portfolio-blocks-pb-image-stack {
+		.wp-block-pb-gallery-pb-image-stack {
 			width: 100% !important;
 			height: auto !important;
 			margin: 0 0 10px 0;

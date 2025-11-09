@@ -1,5 +1,9 @@
+/**
+ * WooCommerce Search Component
+ * Helper file for searching Woo products
+ **/
 import { __ } from '@wordpress/i18n';
-import { BaseControl, TextControl, Spinner, Button } from '@wordpress/components';
+import { BaseControl, TextControl, Spinner } from '@wordpress/components';
 import { useState, useEffect } from '@wordpress/element';
 import { useDebounce } from '@wordpress/compose';
 import apiFetch from '@wordpress/api-fetch';
@@ -46,12 +50,12 @@ export default function ProductSearchControl({ value, onSelect }) {
     }, [searchTerm]);
 
     return (
-        <BaseControl label={__('Linked WooCommerce Product', 'portfolio-blocks')} __nextHasNoMarginBottom>
+        <BaseControl label={__('Linked WooCommerce Product', 'pb-gallery')} __nextHasNoMarginBottom>
             {(!value || !value.id) && (
                 <>
                     <TextControl
                         value={searchTerm}
-                        placeholder={__('Search products...', 'portfolio-blocks')}
+                        placeholder={__('Search products...', 'pb-gallery')}
                         onChange={(val) => setSearchTerm(val)}
                         __nextHasNoMarginBottom
                         __next40pxDefaultSize
@@ -110,7 +114,7 @@ export default function ProductSearchControl({ value, onSelect }) {
                                     setSearchTerm('');
                                     setSearchResults([]);
                                 }}
-                                aria-label={__('Remove Product', 'portfolio-blocks')}
+                                aria-label={__('Remove Product', 'pb-gallery')}
                             >
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -127,7 +131,7 @@ export default function ProductSearchControl({ value, onSelect }) {
                                     setSearchTerm('');
                                     setSearchResults([]);
                                 }}
-                                aria-label={__('Remove Product', 'portfolio-blocks')}
+                                aria-label={__('Remove Product', 'pb-gallery')}
                             >
                                 <span aria-hidden="true">&times;</span>
                             </button>

@@ -4,12 +4,12 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly.
 add_action( 'admin_enqueue_scripts', 'portfolio_blocks_admin_styles' );
 
 function portfolio_blocks_admin_styles( $hook ) {
-    if ( $hook !== 'toplevel_page_portfolio-blocks-settings' ) {
+    if ( $hook !== 'toplevel_page_pb-gallery-settings' ) {
         return;
     }
 
     wp_enqueue_style( 
-        'portfolio-blocks-admin', 
+        'pb-gallery-admin', 
         plugin_dir_url( __FILE__ ) . 'settings-page.css',
         array(), 
         filemtime( plugin_dir_path( __FILE__ ) . 'settings-page.css' )
@@ -17,17 +17,11 @@ function portfolio_blocks_admin_styles( $hook ) {
 }
 
 function portfolio_blocks_render_settings_page() {
-    $plugin_data = get_file_data(
-        WP_PLUGIN_DIR . '/portfolio-blocks/portfolio-blocks.php',
-        array( 'Version' => 'Version' ),
-        'plugin'
-    );
-    $plugin_version = $plugin_data['Version'];
-	?>
+
+?>
 	<div class="wrap">
 		<div class="pb-settings-header">	
-		<h1><?php esc_html_e( 'Portfolio Blocks', 'portfolio-blocks' ); ?></h1>
-		<span class="plugin-version">v<?php echo esc_html( $plugin_version ); ?></span>
+		<h1><?php esc_html_e( 'Portfolio Blocks', 'pb-gallery' ); ?></h1>
 		<div>
 
 		<div class="settings-container">
@@ -83,8 +77,8 @@ function portfolio_blocks_render_settings_page() {
 						Purchase a license for Portfolio Blocks today and enjoy the best gallery plugin for modern WordPress and the block editor.
 					</p>
 					<p class="buy-button-wrapper">
-    					<a class="button button-primary buy-button" href="<?php echo esc_url( admin_url( 'admin.php?page=portfolio-blocks-settings-pricing' ) ); ?>">
-        					<?php esc_html_e( 'Upgrade Now', 'portfolio-blocks' ); ?>
+    					<a class="button button-primary buy-button" href="<?php echo esc_url( admin_url( 'admin.php?page=pb-gallery-settings-pricing' ) ); ?>">
+        					<?php esc_html_e( 'Upgrade Now', 'pb-gallery' ); ?>
     					</a>
 					</p>
 					<hr/>
@@ -143,7 +137,7 @@ function portfolio_blocks_render_settings_page() {
 				</div>
 				<hr/>
 				<?php
-    				// --- Latest News from portfolio-blocks.com ---
+    				// --- Latest News from pb-gallery.com ---
     				// Load WordPress feed functions (SimplePie wrapper)
     				if ( ! function_exists( 'fetch_feed' ) ) {
         				require_once ABSPATH . WPINC . '/feed.php';
@@ -153,7 +147,7 @@ function portfolio_blocks_render_settings_page() {
     				$pb_feed_cache_lifetime = function( $seconds ) { return 6 * HOUR_IN_SECONDS; };
     				add_filter( 'wp_feed_cache_transient_lifetime', $pb_feed_cache_lifetime );
 
-    				$pb_rss = fetch_feed( 'https://portfolio-blocks.com/feed/' );
+    				$pb_rss = fetch_feed( 'https://pb-gallery.com/feed/' );
 
     				// Remove our temporary cache lifetime filter
     				remove_filter( 'wp_feed_cache_transient_lifetime', $pb_feed_cache_lifetime );
@@ -168,7 +162,7 @@ function portfolio_blocks_render_settings_page() {
     				}
 				?>
 
-				<h2><?php esc_html_e( 'Latest News From Portfolio Blocks Website:', 'portfolio-blocks' ); ?></h2>
+				<h2><?php esc_html_e( 'Latest News From Portfolio Blocks Website:', 'pb-gallery' ); ?></h2>
 				<ul class="pb-latest-news">
     				<?php if ( $pb_has_items ) : ?>
         				<?php foreach ( $pb_rss_items as $item ) :
@@ -196,13 +190,13 @@ function portfolio_blocks_render_settings_page() {
         			<?php endforeach; ?>
     				<?php else : ?>
         			<li class="pb-news-item--empty">
-            			<?php esc_html_e( 'No news items found right now. Please check back later.', 'portfolio-blocks' ); ?>
+            			<?php esc_html_e( 'No news items found right now. Please check back later.', 'pb-gallery' ); ?>
         			</li>
     				<?php endif; ?>
 				</ul>
 				<p class="pb-news-view-all">
-    				<a href="https://portfolio-blocks.com/news/" target="_blank" rel="noopener noreferrer">
-       					 <?php esc_html_e( 'View all news', 'portfolio-blocks' ); ?> &rarr;
+    				<a href="https://pb-gallery.com/news/" target="_blank" rel="noopener noreferrer">
+       					 <?php esc_html_e( 'View all news', 'pb-gallery' ); ?> &rarr;
     				</a>
 				</p>
 			</div>

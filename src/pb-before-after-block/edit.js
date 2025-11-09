@@ -1,6 +1,10 @@
+/**
+ * Before & After Block
+ * Edit JS
+ **/
 import { __ } from '@wordpress/i18n';
-import { useBlockProps, MediaUpload, BlockControls, InspectorControls, PanelColorSettings } from '@wordpress/block-editor';
-import { Button, Icon, PanelBody, Notice, ToolbarGroup, ToolbarButton, SelectControl, RangeControl, ToggleControl } from '@wordpress/components';
+import { useBlockProps, MediaUpload, BlockControls, InspectorControls } from '@wordpress/block-editor';
+import { Button, Icon, PanelBody, Notice, ToolbarGroup, ToolbarButton, SelectControl } from '@wordpress/components';
 import { useState, useRef, useEffect } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
 import IconBeforeAfter from '../pb-helpers/IconBeforeAfter';
@@ -11,14 +15,14 @@ function CustomPlaceholder({ beforeImage, afterImage, onSelectBefore, onSelectAf
 		<div className="pb-split-placeholder">
 			<div className="pb-placeholder-header">
 				<Icon icon={IconBeforeAfter} />
-				<h2>{__('Select two images for Before & After Block', 'portfolio-blocks')}</h2>
+				<h2>{__('Select two images for Before & After Block', 'pb-gallery')}</h2>
 			</div>
 			<p className="pb-placeholder-instructions">
-				{__('For best results, use images with the same dimensions (width and height).', 'portfolio-blocks')}
+				{__('For best results, use images with the same dimensions (width and height).', 'pb-gallery')}
 			</p>
 			<div className="pb-placeholder-fields">
 				<div>
-					<p>{__('Before Image', 'portfolio-blocks')}</p>
+					<p>{__('Before Image', 'pb-gallery')}</p>
 					<MediaUpload
 						onSelect={onSelectBefore}
 						allowedTypes={['image']}
@@ -36,7 +40,7 @@ function CustomPlaceholder({ beforeImage, afterImage, onSelectBefore, onSelectAf
 					/>
 				</div>
 				<div>
-					<p>{__('After Image', 'portfolio-blocks')}</p>
+					<p>{__('After Image', 'pb-gallery')}</p>
 					<MediaUpload
 						onSelect={onSelectAfter}
 						allowedTypes={['image']}
@@ -63,10 +67,6 @@ export default function Edit({ attributes, setAttributes }) {
 		beforeImage = {},
 		afterImage = {},
 		sliderOrientation = 'horizontal',
-		showLabels,
-		labelPosition,
-		labelTextColor,
-		labelBackgroundColor,
 		sliderColor,
 		preview
 	} = attributes;
@@ -167,11 +167,11 @@ export default function Edit({ attributes, setAttributes }) {
 					allowedTypes={['image']}
 					render={({ open }) => (
 						<ToolbarButton
-							label={__('Replace Before Image', 'portfolio-blocks')}
+							label={__('Replace Before Image', 'pb-gallery')}
 							icon="format-image"
 							onClick={open}
 						>
-							{__('Replace Before Image', 'portfolio-blocks')}
+							{__('Replace Before Image', 'pb-gallery')}
 						</ToolbarButton>
 					)}
 				/>
@@ -180,11 +180,11 @@ export default function Edit({ attributes, setAttributes }) {
 					allowedTypes={['image']}
 					render={({ open }) => (
 						<ToolbarButton
-							label={__('Replace After Image', 'portfolio-blocks')}
+							label={__('Replace After Image', 'pb-gallery')}
 							icon="format-image"
 							onClick={open}
 						>
-							{__('Replace After Image', 'portfolio-blocks')}
+							{__('Replace After Image', 'pb-gallery')}
 						</ToolbarButton>
 					)}
 				/>
@@ -201,16 +201,16 @@ export default function Edit({ attributes, setAttributes }) {
 			{beforeImage?.src && afterImage?.src && (
 				<>
 					<InspectorControls>
-						<PanelBody title={__('Image Order', 'portfolio-blocks')} initialOpen={true}>
+						<PanelBody title={__('Image Order', 'pb-gallery')} initialOpen={true}>
 							<div className="pb-thumbnail-row">
 								<div className="pb-thumbnail">
-									<p>{__('Before', 'portfolio-blocks')}</p>
+									<p>{__('Before', 'pb-gallery')}</p>
 									<div className="pb-thumbnail-wrapper">
 										<img src={beforeImage.src} alt={beforeImage.alt || ''} />
 									</div>
 								</div>
 								<div className="pb-thumbnail">
-									<p>{__('After', 'portfolio-blocks')}</p>
+									<p>{__('After', 'pb-gallery')}</p>
 									<div className="pb-thumbnail-wrapper">
 										<img src={afterImage.src} alt={afterImage.alt || ''} />
 									</div>
@@ -226,13 +226,13 @@ export default function Edit({ attributes, setAttributes }) {
 										})
 									}
 								>
-									{__('Swap Position', 'portfolio-blocks')}
+									{__('Swap Position', 'pb-gallery')}
 								</Button>
 							</div>
 						</PanelBody>
-						<PanelBody title={__('General Settings', 'portfolio-blocks')} initialOpen={true}>
+						<PanelBody title={__('General Settings', 'pb-gallery')} initialOpen={true}>
 							<SelectControl
-								label={__('Resolution', 'portfolio-blocks')}
+								label={__('Resolution', 'pb-gallery')}
 								value={attributes.resolution}
 								options={[
 									{ label: 'Thumbnail', value: 'thumbnail' },
@@ -246,14 +246,14 @@ export default function Edit({ attributes, setAttributes }) {
 								__next40pxDefaultSize
 							/>
 							<SelectControl
-								label={__('Slider Orientation', 'portfolio-blocks')}
+								label={__('Slider Orientation', 'pb-gallery')}
 								value={attributes.sliderOrientation}
 								options={[
-									{ label: __('Horizontal', 'portfolio-blocks'), value: 'horizontal' },
-									{ label: __('Vertical', 'portfolio-blocks'), value: 'vertical' },
+									{ label: __('Horizontal', 'pb-gallery'), value: 'horizontal' },
+									{ label: __('Vertical', 'pb-gallery'), value: 'vertical' },
 								]}
 								onChange={(newOrientation) => setAttributes({ sliderOrientation: newOrientation })}
-								help={__('Choose whether the slider moves left-to-right or top-to-bottom.', 'portfolio-blocks')}
+								help={__('Choose whether the slider moves left-to-right or top-to-bottom.', 'pb-gallery')}
 								__nextHasNoMarginBottom
 								__next40pxDefaultSize
 							/>
@@ -262,10 +262,10 @@ export default function Edit({ attributes, setAttributes }) {
 								(
 									<div style={{ marginBottom: '8px' }}>
 										<Notice status="info" isDismissible={false}>
-											<strong>{__('Drag Handle Starting Postion', 'portfolio-blocks')}</strong><br />
-											{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+											<strong>{__('Drag Handle Starting Postion', 'pb-gallery')}</strong><br />
+											{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
 											<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-												{__('Upgrade to Pro', 'portfolio-blocks')}
+												{__('Upgrade to Pro', 'pb-gallery')}
 											</a>
 										</Notice>
 									</div>
@@ -278,48 +278,25 @@ export default function Edit({ attributes, setAttributes }) {
 								(
 									<div style={{ marginBottom: '8px' }}>
 										<Notice status="info" isDismissible={false}>
-											<strong>{__('Show Before & After Labels', 'portfolio-blocks')}</strong><br />
-											{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+											<strong>{__('Show Before & After Labels', 'pb-gallery')}</strong><br />
+											{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
 											<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-												{__('Upgrade to Pro', 'portfolio-blocks')}
+												{__('Upgrade to Pro', 'pb-gallery')}
 											</a>
 										</Notice>
 									</div>
 								),
 								{ attributes, setAttributes }
 							)}
-							{showLabels && (
-								<SelectControl
-									label={__('Label Position', 'portfolio-blocks')}
-									value={labelPosition}
-									options={
-										sliderOrientation === 'vertical'
-											? [
-												{ label: __('Left', 'portfolio-blocks'), value: 'left' },
-												{ label: __('Center', 'portfolio-blocks'), value: 'center' },
-												{ label: __('Right', 'portfolio-blocks'), value: 'right' },
-											]
-											: [
-												{ label: __('Top', 'portfolio-blocks'), value: 'top' },
-												{ label: __('Center', 'portfolio-blocks'), value: 'center' },
-												{ label: __('Bottom', 'portfolio-blocks'), value: 'bottom' },
-											]
-									}
-									onChange={(value) => setAttributes({ labelPosition: value })}
-									help={__('Set Before & After label position.', 'portfolio-blocks')}
-									__nextHasNoMarginBottom
-									__next40pxDefaultSize
-								/>
-							)}
 							{applyFilters(
 								'portfolioBlocks.beforeAfter.disableRightClickToggle',
 								(
 									<div style={{ marginBottom: '8px' }}>
 										<Notice status="info" isDismissible={false}>
-											<strong>{__('Disable Right-Click', 'portfolio-blocks')}</strong><br />
-											{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+											<strong>{__('Disable Right-Click', 'pb-gallery')}</strong><br />
+											{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
 											<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-												{__('Upgrade to Pro', 'portfolio-blocks')}
+												{__('Upgrade to Pro', 'pb-gallery')}
 											</a>
 										</Notice>
 									</div>
@@ -331,10 +308,10 @@ export default function Edit({ attributes, setAttributes }) {
 								(
 									<div style={{ marginBottom: '8px' }}>
 										<Notice status="info" isDismissible={false}>
-											<strong>{__('Enable Lazy Load of Images', 'portfolio-blocks')}</strong><br />
-											{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+											<strong>{__('Enable Lazy Load of Images', 'pb-gallery')}</strong><br />
+											{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
 											<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-												{__('Upgrade to Pro', 'portfolio-blocks')}
+												{__('Upgrade to Pro', 'pb-gallery')}
 											</a>
 										</Notice>
 									</div>
@@ -347,13 +324,13 @@ export default function Edit({ attributes, setAttributes }) {
 						{applyFilters(
 							'portfolioBlocks.beforeAfter.colorSettingsPanel',
 							(
-								<PanelBody title={__('Before & After Block Styles', 'portfolio-blocks')} initialOpen={true}>
+								<PanelBody title={__('Before & After Block Styles', 'pb-gallery')} initialOpen={true}>
 									<div style={{ marginBottom: '8px' }}>
 										<Notice status="info" isDismissible={false}>
-											<strong>{__('Enable Before & After Style Controls', 'portfolio-blocks')}</strong><br />
-											{__('This is a premium feature. Unlock all features: ', 'portfolio-blocks')}
+											<strong>{__('Enable Before & After Style Controls', 'pb-gallery')}</strong><br />
+											{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
 											<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-												{__('Upgrade to Pro', 'portfolio-blocks')}
+												{__('Upgrade to Pro', 'pb-gallery')}
 											</a>
 										</Notice>
 									</div>
@@ -369,17 +346,7 @@ export default function Edit({ attributes, setAttributes }) {
 					<div className={`pb-before-after-container ${sliderOrientation === 'vertical' ? 'is-vertical' : ''}`} ref={containerRef}>
 						<div className="pb-after-wrapper">
 							<img ref={afterImageRef} className="pb-after-image" src={afterImage.src} alt={afterImage.alt} />
-							{showLabels && (
-								<div
-									className={`pb-label pb-after-label label-${labelPosition}`}
-									style={{
-										color: labelTextColor,
-										backgroundColor: labelBackgroundColor,
-									}}
-								>
-									{__('After', 'portfolio-blocks')}
-								</div>
-							)}
+							{applyFilters('portfolioBlocks.beforeAfter.renderAfterLabel', null, { attributes })}
 						</div>
 						<div
 							className="pb-before-wrapper"
@@ -394,17 +361,7 @@ export default function Edit({ attributes, setAttributes }) {
 								src={beforeImage.src}
 								alt={beforeImage.alt}
 							/>
-							{showLabels && (
-								<div
-									className={`pb-label pb-before-label label-${labelPosition}`}
-									style={{
-										color: labelTextColor,
-										backgroundColor: labelBackgroundColor,
-									}}
-								>
-									{__('Before', 'portfolio-blocks')}
-								</div>
-							)}
+							{applyFilters('portfolioBlocks.beforeAfter.renderBeforeLabel', null, { attributes })}
 						</div>
 						<input
 							type="range"

@@ -20,6 +20,12 @@ glob.sync('./src/*/pro/premium.js').forEach(file => {
 	entries[`${blockName}/premium`] = path.resolve(__dirname, file);
 });
 
+// Add premium-view.js from pro/ folder if it exists
+glob.sync('./src/*/pro/premium-view.js').forEach(file => {
+	const blockName = path.basename(path.dirname(path.dirname(file)));
+	entries[`${blockName}/premium-view`] = path.resolve(__dirname, file);
+});
+
 // Export merged config
 module.exports = {
 	...defaultConfig,

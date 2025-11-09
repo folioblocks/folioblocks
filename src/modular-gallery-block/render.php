@@ -1,4 +1,10 @@
 <?php
+/**
+ * Modular Gallery Block
+ * Render PHP
+ **/
+
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
@@ -7,12 +13,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 <?php
 $wrapper_args = [];
 
-if ( ! empty( $attributes['disableRightClick'] ) ) {
-    $wrapper_args['data-disable-right-click'] = 'true';
-}
+if ( pb_fs()->can_use_premium_code__premium_only() ) {
+    if ( ! empty( $attributes['disableRightClick'] ) ) {
+        $wrapper_args['data-disable-right-click'] = 'true';
+    }
 
-if ( ! empty( $attributes['enableDownload'] ) ) {
-    $wrapper_args['data-enable-download'] = 'true';
+    if ( ! empty( $attributes['enableDownload'] ) ) {
+        $wrapper_args['data-enable-download'] = 'true';
+    }
 }
 ?>
 <?php

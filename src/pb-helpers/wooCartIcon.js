@@ -1,5 +1,7 @@
-import { SVG, Path } from '@wordpress/primitives';
-
+/**
+ * WooCommerce Cart 
+ * SCG Icon 
+ **/
 export const wooCartIcon = (
 	<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 		<circle cx="12.6667" cy="24.6667" r="2" fill="currentColor"></circle>

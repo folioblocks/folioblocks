@@ -1,46 +1,11 @@
+// Masonry Gallery Block - View JS
 document.addEventListener('DOMContentLoaded', () => {
 
-  // Disable right-click on entire page if any gallery block has it enabled
-  const disableRightClick = document.querySelector('[data-disable-right-click="true"]');
-  if (disableRightClick) {
-    document.addEventListener('contextmenu', (e) => {
-      e.preventDefault();
-    });
-  }
-
-  const gallery = document.querySelector('.wp-block-portfolio-blocks-masonry-gallery-block');
+  const gallery = document.querySelector('.wp-block-pb-gallery-masonry-gallery-block');
 
   if (!gallery) return;
 
   gallery.classList.add('is-loading');
-
-  const filterBar = document.querySelector('.pb-image-gallery-filters');
-  const allItems = gallery.querySelectorAll('.pb-image-block-wrapper');
-
-  if (filterBar) {
-    filterBar.addEventListener('click', (e) => {
-      if (!e.target.matches('.filter-button')) return;
-
-      const selected = e.target.textContent.trim();
-
-      // Update active class
-      document.querySelectorAll('.filter-button').forEach((btn) => {
-        btn.classList.toggle('is-active', btn === e.target);
-      });
-
-      // Show/hide images
-      allItems.forEach((item) => {
-        const category = item.getAttribute('data-filter');
-        if (selected === 'All' || (category && category.toLowerCase() === selected.toLowerCase())) {
-          item.classList.remove('is-hidden');
-        } else {
-          item.classList.add('is-hidden');
-        }
-      });
-
-      applyCustomMasonryLayout();
-    });
-  }
 
   const getColumnsForWidth = (width) => {
     const innerGallery = gallery.querySelector('.pb-masonry-gallery');

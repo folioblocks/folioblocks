@@ -1,10 +1,10 @@
 {
     "$schema": "https://schemas.wp.org/trunk/block.json",
     "apiVersion": 3,
-    "name": "portfolio-blocks/justified-gallery-block",
-    "version": "1.0.1",
+    "name": "pb-gallery/justified-gallery-block",
+    "version": "1.0.2",
     "title": "Justified Gallery",
-    "category": "portfolio-blocks",
+    "category": "pb-gallery",
     "icon": "images-alt2",
     "description": "Creates a justified gallery layout where rows are dynamically sized for balance.",
      "example": {
@@ -12,9 +12,9 @@
         "preview": true
     }
     },
-    "textdomain": "portfolio-blocks",
+    "textdomain": "pb-gallery",
     "allowedBlocks": [
-        "portfolio-blocks/pb-image-block"
+        "pb-gallery/pb-image-block"
     ],
     "supports": {
         "align": [ "wide", "full" ],

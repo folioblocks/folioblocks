@@ -1,18 +1,18 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "portfolio-blocks/pb-image-row",
-	"version": "0.2.4",
+	"name": "pb-gallery/pb-image-row",
+	"version": "1.0.1",
 	"title": "Image Row",
-	"category": "portfolio-blocks",
+	"category": "pb-gallery",
 	"icon": "columns",
 	"description": "Groups images into a single row, scaling them to fill the full width without cropping.",
 	"example": {},
-	"textdomain": "portfolio-blocks",
-	"parent": [ "portfolio-blocks/modular-gallery-block" ],
+	"textdomain": "pb-gallery",
+	"parent": [ "pb-gallery/modular-gallery-block" ],
 	"allowedBlocks": [ 
-		"portfolio-blocks/pb-image-block",
-		"portfolio-blocks/pb-image-stack"
+		"pb-gallery/pb-image-block",
+		"pb-gallery/pb-image-stack"
 	],
 	"supports": {
 		"inserter": false,

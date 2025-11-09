@@ -1,4 +1,10 @@
 <?php
+/**
+ * Before & After Block
+ * Render PHP
+ **/
+
+
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
@@ -6,13 +12,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 $before_image = $attributes['beforeImage'] ?? null;
 $after_image = $attributes['afterImage'] ?? null;
 $orientation = $attributes['sliderOrientation'] ?? 'horizontal';
-$show_labels = !empty($attributes['showLabels']);
-$label_position = $attributes['labelPosition'] ?? 'center';
-$label_text_color = $attributes['labelTextColor'] ?? '#ffffff';
-$label_bg_color = $attributes['labelBackgroundColor'] ?? 'rgba(0, 0, 0, 0.6)';
-$slider_color = $attributes['sliderColor'] ?? '#ffffff';
-$disable_right_click = !empty($attributes['disableRightClick']);
-$lazy_load = !empty($attributes['lazyLoad']);
 
 if (empty($before_image['src']) || empty($after_image['src'])) {
 	return '';
@@ -23,7 +22,17 @@ $block_wrapper_attributes = get_block_wrapper_attributes();
 ?>
 
 <?php echo '<div ' . wp_kses( $block_wrapper_attributes, [ 'div' => [] ] ) . '>'; ?>
-	<div class="pb-before-after-container <?php echo $orientation === 'vertical' ? 'is-vertical' : ''; ?>" data-disable-right-click="<?php echo $disable_right_click ? 'true' : 'false'; ?>">
+	<div
+		class="pb-before-after-container <?php echo $orientation === 'vertical' ? 'is-vertical' : ''; ?>"
+		<?php if ( pb_fs()->can_use_premium_code__premium_only() ) : ?>
+			<?php if ( !empty($attributes['disableRightClick']) ) : ?>
+				data-disable-right-click="true"
+			<?php endif; ?>
+			<?php if ( !empty($attributes['lazyLoad']) ) : ?>
+				data-lazy-load="true"
+			<?php endif; ?>
+		<?php endif; ?>
+	>
 		<div class="pb-after-wrapper">
 			<?php 
 				echo wp_get_attachment_image( 
@@ -32,15 +41,22 @@ $block_wrapper_attributes = get_block_wrapper_attributes();
   					false, 
   					[ 
     					'class' => 'pb-after-image', 
-    					'loading' => $lazy_load ? 'lazy' : 'eager', 
+						'loading' => 'eager',
   					] 
 				); 
 			?>
-			<?php if ($show_labels): ?>
-				<div class="pb-label pb-after-label label-<?php echo esc_attr($label_position); ?>" style="color: <?php echo esc_attr($label_text_color); ?>; background-color: <?php echo esc_attr($label_bg_color); ?>;">
-					<?php esc_html_e('After', 'portfolio-blocks'); ?>
-				</div>
-			<?php endif; ?>
+			<?php if ( pb_fs()->can_use_premium_code__premium_only() ) : 
+				$show_labels = !empty($attributes['showLabels']);
+				$label_position = $attributes['labelPosition'] ?? 'center';
+				$label_text_color = $attributes['labelTextColor'] ?? '#ffffff';
+				$label_bg_color = $attributes['labelBackgroundColor'] ?? 'rgba(0, 0, 0, 0.6)';
+				if ( $show_labels ) : ?>
+					<div class="pb-label pb-after-label label-<?php echo esc_attr($label_position); ?>" style="color: <?php echo esc_attr($label_text_color); ?>; background-color: <?php echo esc_attr($label_bg_color); ?>;">
+						<?php esc_html_e('After', 'pb-gallery'); ?>
+					</div>
+			<?php 
+				endif; 
+			endif; ?>
 		</div>
 		<div class="pb-before-wrapper">
 			<?php 
@@ -50,19 +66,33 @@ $block_wrapper_attributes = get_block_wrapper_attributes();
   					false, 
   					[ 
     					'class' => 'pb-before-image', 
-    					'loading' => $lazy_load ? 'lazy' : 'eager', 
+						'loading' => 'eager',
   					] 
 				); 
 			?>
-			<?php if ($show_labels): ?>
-				<div class="pb-label pb-before-label label-<?php echo esc_attr($label_position); ?>" style="color: <?php echo esc_attr($label_text_color); ?>; background-color: <?php echo esc_attr($label_bg_color); ?>;">
-					<?php esc_html_e('Before', 'portfolio-blocks'); ?>
-				</div>
-			<?php endif; ?>
+			<?php if ( pb_fs()->can_use_premium_code__premium_only() ) : 
+				$show_labels = !empty($attributes['showLabels']);
+				$label_position = $attributes['labelPosition'] ?? 'center';
+				$label_text_color = $attributes['labelTextColor'] ?? '#ffffff';
+				$label_bg_color = $attributes['labelBackgroundColor'] ?? 'rgba(0, 0, 0, 0.6)';
+				if ( $show_labels ) : ?>
+					<div class="pb-label pb-before-label label-<?php echo esc_attr($label_position); ?>" style="color: <?php echo esc_attr($label_text_color); ?>; background-color: <?php echo esc_attr($label_bg_color); ?>;">
+						<?php esc_html_e('Before', 'pb-gallery'); ?>
+					</div>
+			<?php 
+				endif; 
+			endif; ?>
 		</div>
 		
-		<?php $slider_value = $orientation === 'vertical' ? 100 - 50 : 50; ?>
-		<input type="range" min="0" max="100" value="<?php echo isset($attributes['startingPosition']) ? intval($attributes['startingPosition']) : 50; ?>" class="pb-slider <?php echo $orientation === 'vertical' ? 'is-vertical' : ''; ?>" />		
-		<div class="pb-slider-handle" style="--pb-slider-color: <?php echo esc_attr($slider_color); ?>; background-color: <?php echo esc_attr($slider_color); ?>;"></div>
+		<?php if ( pb_fs()->can_use_premium_code__premium_only() ) : 
+			$slider_color = $attributes['sliderColor'] ?? '#ffffff';
+			$starting_position = isset($attributes['startingPosition']) ? intval($attributes['startingPosition']) : 50;
+		?>
+			<input type="range" min="0" max="100" value="<?php echo $starting_position; ?>" class="pb-slider <?php echo $orientation === 'vertical' ? 'is-vertical' : ''; ?>" />
+			<div class="pb-slider-handle" style="--pb-slider-color: <?php echo esc_attr($slider_color); ?>; background-color: <?php echo esc_attr($slider_color); ?>;"></div>
+		<?php else : ?>
+			<input type="range" min="0" max="100" value="50" class="pb-slider <?php echo $orientation === 'vertical' ? 'is-vertical' : ''; ?>" />
+			<div class="pb-slider-handle"></div>
+		<?php endif; ?>
 	</div>
 </div>
