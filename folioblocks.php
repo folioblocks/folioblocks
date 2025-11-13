@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       FolioBlocks
  * Description:       A collection of blocks for making photo and video galleries
- * Version:           0.9.7
+ * Version:           0.9.8
  * Requires at least: 6.3
  * Requires PHP:      7.4
  * Author:            FolioBlocks

@@ -94,71 +94,9 @@ export default function Edit({ clientId, attributes, setAttributes }) {
         }
     );
 
-    // Filter to limit number of images in free version (only if not Pro)
-    if (!window.folioBlocksData?.isPro) {
-        addFilter(
-            'folioBlocks.masonryGallery.limitImages',
-            'folioblocks/masonry-gallery-limit',
-            (media, existingCount) => {
-                const MAX_IMAGES_FREE = 15;
-                const allowed = Math.max(0, MAX_IMAGES_FREE - existingCount);
-
-                if (allowed <= 0) {
-                    const message = __('Free version allows up to 15 images. Upgrade to Pro for unlimited.', 'folioblocks');
-                    wp.data.dispatch('core/notices').createNotice(
-                        'warning',
-                        message,
-                        { isDismissible: true, id: 'pb-masonry-limit-warning' }
-                    );
-                    return [];
-                }
-
-                if (media.length > allowed) {
-                    const message = sprintf(
-                        __('Free version allows up to %d images. Only the first %d were added.', 'folioblocks'),
-                        MAX_IMAGES_FREE,
-                        allowed
-                    );
-                    wp.data.dispatch('core/notices').createNotice(
-                        'warning',
-                        message,
-                        { isDismissible: true, id: 'pb-masonry-limit-truncate' }
-                    );
-                }
-
-                return media.slice(0, allowed);
-            }
-        );
-        // Prevent people duplicating blocks to bypass limits in free version
-        subscribe(() => {
-            const blocks = select('core/block-editor').getBlocksByClientId(clientId)[0]?.innerBlocks || [];
-            if (blocks.length > 15) {
-                const extras = blocks.slice(15);
-                extras.forEach((block) => {
-                    dispatch('core/block-editor').removeBlock(block.clientId);
-                });
-
-                if (!document.getElementById('folioblocks-limit-warning')) {
-                    dispatch('core/notices').createNotice(
-                        'warning',
-                        __('Free version allows up to 15 images. Upgrade to Pro for unlimited.', 'folioblocks'),
-                        { id: 'folioblocks-limit-warning', isDismissible: true }
-                    );
-                }
-            }
-        });
-    }
-
     // Select Images Handler
     const onSelectImages = async (media) => {
         if (!media || media.length === 0) return;
-
-        // Allow filtering of selected images (for free vs premium limits)
-        media = applyFilters(
-            'folioBlocks.masonryGallery.limitImages',
-            media,
-            innerBlocks.length
-        );
 
         const currentBlocks = wp.data.select('core/block-editor').getBlocks(clientId);
         const existingImageIds = currentBlocks.map((block) => block.attributes.id);
@@ -296,7 +234,6 @@ export default function Edit({ clientId, attributes, setAttributes }) {
                     <ToolbarButton
                         icon={plus}
                         label={__('Add Images', 'folioblocks')}
-                        disabled={!window.folioBlocksData?.isPro && innerBlocks.length >= 15}
                         onClick={() => {
                             // Trigger the MediaUpload dialog
                             wp.media({

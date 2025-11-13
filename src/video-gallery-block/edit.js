@@ -114,53 +114,14 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		}
 	}, [activeFilter, clientId]);
 
-	// Prevent people duplicating blocks to bypass limits
-	if (!window.folioBlocksData?.isPro) {
-		subscribe(() => {
-			const blocks = select('core/block-editor').getBlocksByClientId(clientId)[0]?.innerBlocks || [];
-			if (blocks.length > 15) {
-				// Remove extras immediately
-				const extras = blocks.slice(15);
-				extras.forEach((block) => {
-					dispatch('core/block-editor').removeBlock(block.clientId);
-				});
-
-				// Show warning notice
-				if (!document.getElementById('pb-video-limit-warning')) {
-					dispatch('core/notices').createNotice(
-						'warning',
-						__('Free version allows up to 15 videos. Upgrade to Pro for unlimited.', 'folioblocks'),
-						{ id: 'pb-video-limit-warning', isDismissible: true }
-					);
-				}
-			}
-		});
-	}
 
 	// Handler to add first video via MediaPlaceholder
 	const { replaceInnerBlocks, insertBlock } = useDispatch('core/block-editor');
 	const handleVideoSelect = (media) => {
 		if (!media || !media.url) return;
-		const isPro = !!window.folioBlocksData?.isPro;
-		const currentBlocks = wp.data.select('core/block-editor').getBlock(clientId)?.innerBlocks || [];
-		if (!isPro && currentBlocks.length >= 15) {
-			// Show warning notice
-			if (!document.getElementById('pb-video-limit-warning')) {
-				wp.data.dispatch('core/notices').createNotice(
-					'warning',
-					__('Video limit reached. Upgrade to Pro for unlimited videos.', 'folioblocks'),
-					{
-						id: 'pb-video-limit-warning',
-						isDismissible: true,
-					}
-				);
-			}
-			return;
-		}
 		const defaultTitle = media.title && media.title.trim() !== ''
 			? media.title
 			: __('Video', 'folioblocks');
-
 		const newBlock = wp.blocks.createBlock('folioblocks/pb-video-block', {
 			videoUrl: media.url,
 			title: defaultTitle,
@@ -263,57 +224,24 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					icon={<IconVideoGallery />}
 					labels={{
 						title: __('Video Gallery', 'folioblocks'),
-						instructions: isPro
-							? __('Add first video. Upload, select from media library, or insert from URL.', 'folioblocks')
-							: __('Add first video. Upload or select up to 15 videos. Upgrade to Pro for unlimited.', 'folioblocks')
+						instructions: __('Add first video. Upload, select from media library, or insert from URL.', 'folioblocks'),
 					}}
 					allowedTypes={['video']}
 					onSelect={(media) => {
-						// Limit check for free version
-						if (!isPro && innerBlocks.length >= 15) {
-							if (!document.getElementById('pb-video-limit-warning')) {
-								wp.data.dispatch('core/notices').createNotice(
-									'warning',
-									__('Video limit reached. Upgrade to Pro for unlimited videos.', 'folioblocks'),
-									{
-										id: 'pb-video-limit-warning',
-										isDismissible: true,
-									}
-								);
-							}
-							return;
-						}
 						handleVideoSelect(media);
 					}}
 					onSelectURL={(url) => {
-					    if (!url) return;
+						if (!url) return;
 
-					    const isPro = !!window.folioBlocksData?.isPro;
-					    const currentBlocks = wp.data.select('core/block-editor').getBlock(clientId)?.innerBlocks || [];
+						const defaultTitle = __('Video', 'folioblocks');
+						const newBlock = wp.blocks.createBlock('folioblocks/pb-video-block', {
+							videoUrl: url,
+							title: defaultTitle,
+							alt: defaultTitle,
+						});
 
-					    if (!isPro && currentBlocks.length >= 15) {
-					        if (!document.getElementById('pb-video-limit-warning')) {
-					            wp.data.dispatch('core/notices').createNotice(
-					                'warning',
-					                __('Video limit reached. Upgrade to Pro for unlimited videos.', 'folioblocks'),
-					                {
-					                    id: 'pb-video-limit-warning',
-					                    isDismissible: true,
-					                }
-					            );
-					        }
-					        return;
-					    }
-
-					    const defaultTitle = __('Video', 'folioblocks');
-					    const newBlock = wp.blocks.createBlock('folioblocks/pb-video-block', {
-					        videoUrl: url,
-					        title: defaultTitle,
-					        alt: defaultTitle,
-					    });
-
-					    // Use replaceInnerBlocks instead of insertBlock to handle empty galleries
-					    wp.data.dispatch('core/block-editor').replaceInnerBlocks(clientId, [newBlock], false);
+						// Use replaceInnerBlocks instead of insertBlock to handle empty galleries
+						wp.data.dispatch('core/block-editor').replaceInnerBlocks(clientId, [newBlock], false);
 					}}
 					accept="video/*"
 					multiple={false}
@@ -329,7 +257,6 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					icon={plus}
 					label={__('Add Videos', 'folioblocks')}
 					onClick={addVideoBlock}
-					disabled={!window.folioBlocksData?.isPro && innerBlocks.length >= 15}
 				>
 					{__('Add Videos', 'folioblocks')}
 				</ToolbarButton>
@@ -342,9 +269,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					<MediaPlaceholder
 						labels={{
 							title: __('Select or Insert Video', 'folioblocks'),
-							instructions: window.folioBlocksData?.isPro
-								? __('Upload, select from media library, or insert from URL.', 'folioblocks')
-								: __('Upload or select up to 15 videos. Upgrade to Pro for unlimited.', 'folioblocks'),
+							instructions: __('Upload, select from media library, or insert from URL.', 'folioblocks'),
 						}}
 						allowedTypes={['video']}
 						accept="video/*"

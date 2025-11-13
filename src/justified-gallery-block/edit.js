@@ -94,71 +94,9 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		[innerRef]
 	);
 
-	// Filter to limit number of images in free version (only if not Pro)
-	if (!window.folioBlocksData?.isPro) {
-		addFilter(
-			'folioBlocks.justifiedGallery.limitImages',
-			'folioblocks/justified-gallery-limit',
-			(media, existingCount) => {
-				const MAX_IMAGES_FREE = 15;
-				const allowed = Math.max(0, MAX_IMAGES_FREE - existingCount);
-
-				if (allowed <= 0) {
-					const message = __('Free version allows up to 15 images. Upgrade to Pro for unlimited.', 'folioblocks');
-					wp.data.dispatch('core/notices').createNotice(
-						'warning',
-						message,
-						{ isDismissible: true, id: 'pb-justified-limit-warning' }
-					);
-					return [];
-				}
-
-				if (media.length > allowed) {
-					const message = sprintf(
-						__('Free version allows up to %d images. Only the first %d were added.', 'folioblocks'),
-						MAX_IMAGES_FREE,
-						allowed
-					);
-					wp.data.dispatch('core/notices').createNotice(
-						'warning',
-						message,
-						{ isDismissible: true, id: 'pb-justified-limit-truncate' }
-					);
-				}
-
-				return media.slice(0, allowed);
-			}
-		);
-		// Prevent people duplicating blocks to bypass limits in free version
-		subscribe(() => {
-			const blocks = select('core/block-editor').getBlocksByClientId(clientId)[0]?.innerBlocks || [];
-			if (blocks.length > 15) {
-				const extras = blocks.slice(15);
-				extras.forEach((block) => {
-					dispatch('core/block-editor').removeBlock(block.clientId);
-				});
-
-				if (!document.getElementById('folioblocks-limit-warning')) {
-					dispatch('core/notices').createNotice(
-						'warning',
-						__('Free version allows up to 15 images. Upgrade to Pro for unlimited.', 'folioblocks'),
-						{ id: 'folioblocks-limit-warning', isDismissible: true }
-					);
-				}
-			}
-		});
-	}
-
 	// Select Images Handler
 	const onSelectImages = async (media) => {
 		if (!media || media.length === 0) return;
-
-		// Allow filtering of selected images (for free vs premium limits)
-		media = applyFilters(
-			'folioBlocks.justifiedGallery.limitImages',
-			media,
-			innerBlocks.length
-		);
 
 		// Preserve randomization logic
 		const images = attributes.randomizeOrder ? [...media].sort(() => 0.5 - Math.random()) : media;
@@ -361,7 +299,6 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					<ToolbarButton
 						icon={plus}
 						label={__('Add Images', 'folioblocks')}
-						disabled={!window.folioBlocksData?.isPro && innerBlocks.length >= 15}
 						onClick={() => {
 							wp.media({
 								title: __('Select Images', 'folioblocks'),
