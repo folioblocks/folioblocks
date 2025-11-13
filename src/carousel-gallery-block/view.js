@@ -1,7 +1,7 @@
 // Carousel Gallery Block - View JS
 document.addEventListener('DOMContentLoaded', () => {
 
-    const blocks = document.querySelectorAll('.wp-block-pb-gallery-carousel-gallery-block');
+    const blocks = document.querySelectorAll('.wp-block-folioblocks-carousel-gallery-block');
     blocks.forEach((block) => {
         const gallery = block.querySelector('.pb-carousel-gallery');
         if (!gallery) return;

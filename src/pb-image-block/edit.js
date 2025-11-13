@@ -31,37 +31,37 @@ export default function Edit({ attributes, setAttributes, context }) {
 	} = attributes;
 
 	const {
-		'portfolioBlocks/enableDownload': contextEnableDownload = enableDownload,
-		'portfolioBlocks/downloadOnHover': contextDownloadOnHover = downloadOnHover,
+		'folioBlocks/enableDownload': contextEnableDownload = enableDownload,
+		'folioBlocks/downloadOnHover': contextDownloadOnHover = downloadOnHover,
 	} = context || {};
 
-	const isInsideGallery = Object.keys(context || {}).some((key) => key.startsWith('portfolioBlocks/'));
-	const imageSize = context['portfolioBlocks/resolution'] || 'large';
+	const isInsideGallery = Object.keys(context || {}).some((key) => key.startsWith('folioBlocks/'));
+	const imageSize = context['folioBlocks/resolution'] || 'large';
 
 	const imageStyle = {
-		borderColor: isInsideGallery ? context['portfolioBlocks/borderColor'] || '#ffffff' : attributes.borderColor || '#ffffff',
-		borderWidth: isInsideGallery ? `${context['portfolioBlocks/borderWidth'] || 0}px` : attributes.borderWidth ? `${attributes.borderWidth}px` : undefined,
-		borderStyle: (isInsideGallery ? context['portfolioBlocks/borderWidth'] : attributes.borderWidth) ? 'solid' : undefined,
-		borderRadius: isInsideGallery ? `${context['portfolioBlocks/borderRadius'] || 0}px` : attributes.borderRadius ? `${attributes.borderRadius}px` : undefined,
+		borderColor: isInsideGallery ? context['folioBlocks/borderColor'] || '#ffffff' : attributes.borderColor || '#ffffff',
+		borderWidth: isInsideGallery ? `${context['folioBlocks/borderWidth'] || 0}px` : attributes.borderWidth ? `${attributes.borderWidth}px` : undefined,
+		borderStyle: (isInsideGallery ? context['folioBlocks/borderWidth'] : attributes.borderWidth) ? 'solid' : undefined,
+		borderRadius: isInsideGallery ? `${context['folioBlocks/borderRadius'] || 0}px` : attributes.borderRadius ? `${attributes.borderRadius}px` : undefined,
 	};
 	const captionStyle = {
-		borderColor: isInsideGallery ? context['portfolioBlocks/borderColor'] || '#ffffff' : attributes.borderColor || '#ffffff',
-		borderWidth: isInsideGallery ? `${context['portfolioBlocks/borderWidth'] || 0}px` : attributes.borderWidth ? `${attributes.borderWidth}px` : undefined,
-		borderStyle: (isInsideGallery ? context['portfolioBlocks/borderWidth'] : attributes.borderWidth) ? 'solid' : undefined,
-		borderRadius: isInsideGallery ? `${context['portfolioBlocks/borderRadius'] || 0}px` : attributes.borderRadius ? `${attributes.borderRadius}px` : undefined,
+		borderColor: isInsideGallery ? context['folioBlocks/borderColor'] || '#ffffff' : attributes.borderColor || '#ffffff',
+		borderWidth: isInsideGallery ? `${context['folioBlocks/borderWidth'] || 0}px` : attributes.borderWidth ? `${attributes.borderWidth}px` : undefined,
+		borderStyle: (isInsideGallery ? context['folioBlocks/borderWidth'] : attributes.borderWidth) ? 'solid' : undefined,
+		borderRadius: isInsideGallery ? `${context['folioBlocks/borderRadius'] || 0}px` : attributes.borderRadius ? `${attributes.borderRadius}px` : undefined,
 	};
 
-	const effectiveDropShadow = isInsideGallery ? context['portfolioBlocks/dropShadow'] : dropshadow;
-	const effectiveHoverTitle = isInsideGallery ? context['portfolioBlocks/onHoverTitle'] : attributes.showTitleOnHover;
+	const effectiveDropShadow = isInsideGallery ? context['folioBlocks/dropShadow'] : dropshadow;
+	const effectiveHoverTitle = isInsideGallery ? context['folioBlocks/onHoverTitle'] : attributes.showTitleOnHover;
 	const effectiveDownloadEnabled = isInsideGallery ? contextEnableDownload : enableDownload;
 	const effectiveDownloadOnHover = isInsideGallery ? contextDownloadOnHover : downloadOnHover;
 
-	const hasWooCommerce = context['portfolioBlocks/hasWooCommerce'] || false;
-	const enableWooCommerce = context['portfolioBlocks/enableWooCommerce'] || false;
+	const hasWooCommerce = context['folioBlocks/hasWooCommerce'] || false;
+	const enableWooCommerce = context['folioBlocks/enableWooCommerce'] || false;
 	const effectiveWooActive = hasWooCommerce && enableWooCommerce;
 
-	const filterCategories = context['portfolioBlocks/filterCategories'] || [];
-	const activeFilter = context?.['portfolioBlocks/activeFilter'] || 'All';
+	const filterCategories = context['folioBlocks/filterCategories'] || [];
+	const activeFilter = context?.['folioBlocks/activeFilter'] || 'All';
 	const filterCategory = attributes.filterCategory || '';
 	const isHidden =
 		activeFilter !== 'All' &&
@@ -70,7 +70,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 
 	const wrapperRef = useRef();
 
-	const carouselHeight = context['portfolioBlocks/carouselHeight'] || 400;
+	const carouselHeight = context['folioBlocks/carouselHeight'] || 400;
 	const displayHeight = carouselHeight;
 
 	useEffect(() => {
@@ -117,10 +117,10 @@ export default function Edit({ attributes, setAttributes, context }) {
 							render={({ open }) => (
 								<ToolbarButton
 									icon={media}
-									label={__('Replace Image', 'pb-gallery')}
+									label={__('Replace Image', 'folioblocks')}
 									onClick={open}
 								>
-									{__('Change Image', 'pb-gallery')}
+									{__('Change Image', 'folioblocks')}
 								</ToolbarButton>
 							)}
 						/>
@@ -128,7 +128,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 				)}
 			</BlockControls>
 			<InspectorControls>
-				<PanelBody title={__('Image Settings', 'pb-gallery')} initialOpen={true}>
+				<PanelBody title={__('Image Settings', 'folioblocks')} initialOpen={true}>
 					{id && src && (
 						<div style={{ marginBottom: '16px' }}>
 							<div className="pb-img-thumbnail-preview">
@@ -141,7 +141,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 								render={({ open }) => (
 									<div style={{ display: 'flex', justifyContent: 'center', marginTop: '8px' }}>
 										<Button onClick={open} variant="secondary">
-											{__('Change Image', 'pb-gallery')}
+											{__('Change Image', 'folioblocks')}
 										</Button>
 									</div>
 								)}
@@ -152,7 +152,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 					<hr style={{ border: '0.5px solid #e0e0e0', margin: '12px 0' }} />
 
 					<TextareaControl
-						label={__('Image Caption', 'pb-gallery')}
+						label={__('Image Caption', 'folioblocks')}
 						value={caption}
 						onChange={(value) => setAttributes({ caption: value })}
 						help={__('Add image caption.')}
@@ -160,7 +160,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 						__next40pxDefaultSize
 					/>
 					<TextControl
-						label={__('Image Title', 'pb-gallery')}
+						label={__('Image Title', 'folioblocks')}
 						value={title}
 						onChange={(value) => setAttributes({ title: value })}
 						help={__('Describe the role of this image on the page.')}
@@ -168,7 +168,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 						__next40pxDefaultSize
 					/>
 					<TextControl
-						label={__('Alternative Text', 'pb-gallery')}
+						label={__('Alternative Text', 'folioblocks')}
 						value={alt}
 						onChange={(value) => setAttributes({ alt: value })}
 						help={__('Describe the purpose of the image. Leave empty if decorative.')}
@@ -176,19 +176,19 @@ export default function Edit({ attributes, setAttributes, context }) {
 						__next40pxDefaultSize
 					/>
 					{applyFilters(
-						'portfolioBlocks.imageBlock.wooProductLinkControl',
+						'folioBlocks.imageBlock.wooProductLinkControl',
 						null,
 						{ attributes, setAttributes, effectiveWooActive }
 					)}
 					{applyFilters(
-						'portfolioBlocks.imageBlock.filterCategoryControl',
+						'folioBlocks.imageBlock.filterCategoryControl',
 						null,
 						{ attributes, setAttributes, filterCategories }
 					)}
 				</PanelBody>
 			</InspectorControls>
 			{applyFilters(
-				'portfolioBlocks.imageBlock.styleControls',
+				'folioBlocks.imageBlock.styleControls',
 				null,
 				{ attributes, setAttributes, isInsideGallery }
 			)}
@@ -206,7 +206,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 							`,
 					})}
 					style={
-						context['portfolioBlocks/inCarousel']
+						context['folioBlocks/inCarousel']
 							? {
 								height: `${displayHeight}px`,
 
@@ -217,7 +217,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 					{!src ? (
 						<MediaPlaceholder
 							icon="format-image"
-							labels={{ title: __('Select Image', 'pb-gallery') }}
+							labels={{ title: __('Select Image', 'folioblocks') }}
 							onSelect={onSelectImage}
 							allowedTypes={['image']}
 							multiple={false}
@@ -238,7 +238,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 									<figcaption className="pb-image-block-title" style={captionStyle}>
 										{(() => {
 											const hoverContent = applyFilters(
-												'portfolioBlocks.imageBlock.hoverOverlayContent',
+												'folioBlocks.imageBlock.hoverOverlayContent',
 												null,
 												{ attributes, setAttributes, effectiveWooActive, context, title }
 											);
@@ -248,12 +248,12 @@ export default function Edit({ attributes, setAttributes, context }) {
 								)
 							)}
 							{applyFilters(
-								'portfolioBlocks.imageBlock.downloadButton',
+								'folioBlocks.imageBlock.downloadButton',
 								null,
 								{ attributes, setAttributes, effectiveDownloadEnabled, effectiveDownloadOnHover, sizes, src, context, isInsideGallery }
 							)}
 							{applyFilters(
-								'portfolioBlocks.imageBlock.addToCartButton',
+								'folioBlocks.imageBlock.addToCartButton',
 								null,
 								{ attributes, setAttributes, effectiveWooActive, context, isInsideGallery }
 							)}

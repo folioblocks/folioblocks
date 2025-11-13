@@ -3,7 +3,7 @@
  * View JS
  **/
 document.addEventListener("DOMContentLoaded", function () {
-	const galleries = document.querySelectorAll('.wp-block-pb-gallery-grid-gallery-block');
+	const galleries = document.querySelectorAll('.wp-block-folioblocks-grid-gallery-block');
 
 	galleries.forEach((gallery) => gallery.classList.add('is-loading'));
 

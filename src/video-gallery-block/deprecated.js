@@ -79,7 +79,7 @@ registerBlockType('portfolio-blocks/video-gallery-block', {
 
 		useEffect(() => {
 			const newBlock = createBlock(
-				'pb-gallery/video-gallery-block',
+				'folioblocks/video-gallery-block',
 				{ ...attributes },
 				innerBlocks
 			);

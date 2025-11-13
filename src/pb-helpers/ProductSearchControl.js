@@ -50,12 +50,12 @@ export default function ProductSearchControl({ value, onSelect }) {
     }, [searchTerm]);
 
     return (
-        <BaseControl label={__('Linked WooCommerce Product', 'pb-gallery')} __nextHasNoMarginBottom>
+        <BaseControl label={__('Linked WooCommerce Product', 'folioblocks')} __nextHasNoMarginBottom>
             {(!value || !value.id) && (
                 <>
                     <TextControl
                         value={searchTerm}
-                        placeholder={__('Search products...', 'pb-gallery')}
+                        placeholder={__('Search products...', 'folioblocks')}
                         onChange={(val) => setSearchTerm(val)}
                         __nextHasNoMarginBottom
                         __next40pxDefaultSize
@@ -114,7 +114,7 @@ export default function ProductSearchControl({ value, onSelect }) {
                                     setSearchTerm('');
                                     setSearchResults([]);
                                 }}
-                                aria-label={__('Remove Product', 'pb-gallery')}
+                                aria-label={__('Remove Product', 'folioblocks')}
                             >
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -131,7 +131,7 @@ export default function ProductSearchControl({ value, onSelect }) {
                                     setSearchTerm('');
                                     setSearchResults([]);
                                 }}
-                                aria-label={__('Remove Product', 'pb-gallery')}
+                                aria-label={__('Remove Product', 'folioblocks')}
                             >
                                 <span aria-hidden="true">&times;</span>
                             </button>

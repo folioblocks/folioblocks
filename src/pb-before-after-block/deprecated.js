@@ -49,7 +49,7 @@ registerBlockType('portfolio-blocks/before-after-block', {
 
 		useEffect(() => {
 			const newBlock = createBlock(
-				'pb-gallery/before-after-block',
+				'folioblocks/before-after-block',
 				{ ...attributes },
 				innerBlocks
 			);

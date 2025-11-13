@@ -9,10 +9,10 @@ import { wooCartIcon } from '../../pb-helpers/wooCartIcon.js';
 import ProductSearchControl from '../../pb-helpers/ProductSearchControl';
 
 addFilter(
-	'portfolioBlocks.pbVideoBlock.inspectorControls',
-	'pb-gallery/pb-video-filter-category',
+	'folioBlocks.pbVideoBlock.inspectorControls',
+	'folioblocks/pb-video-filter-category',
 	(output, { attributes, setAttributes, context }) => {
-		const filterCategories = context?.['portfolioBlocks/filterCategories'] || [];
+		const filterCategories = context?.['folioBlocks/filterCategories'] || [];
 
 		if (filterCategories.length === 0) {
 			return output;
@@ -22,17 +22,17 @@ addFilter(
 			<>
 				{output}
 				<SelectControl
-					label={__('Filter Category', 'pb-gallery')}
+					label={__('Filter Category', 'folioblocks')}
 					value={attributes.filterCategory}
 					onChange={(val) => setAttributes({ filterCategory: val })}
 					options={[
-						{ label: __('None', 'pb-gallery'), value: '' },
+						{ label: __('None', 'folioblocks'), value: '' },
 						...filterCategories.map((cat) => ({
 							label: cat,
 							value: cat,
 						})),
 					]}
-					help={__('Set video filter category.', 'pb-gallery')}
+					help={__('Set video filter category.', 'folioblocks')}
 					__nextHasNoMarginBottom
 					__next40pxDefaultSize
 				/>
@@ -41,8 +41,8 @@ addFilter(
 	}
 );
 addFilter(
-	'portfolioBlocks.pbVideoBlock.inspectorControls',
-	'pb-gallery/pb-video-woo-product-search',
+	'folioBlocks.pbVideoBlock.inspectorControls',
+	'folioblocks/pb-video-woo-product-search',
 	(output, { attributes, setAttributes, hasWooCommerce, enableWooCommerce }) => {
 		if (!hasWooCommerce || !enableWooCommerce) {
 			return output;
@@ -93,12 +93,12 @@ addFilter(
 	}
 );
 addFilter(
-	'portfolioBlocks.pbVideoBlock.renderAddToCart',
-	'pb-gallery/pb-video-add-to-cart',
+	'folioBlocks.pbVideoBlock.renderAddToCart',
+	'folioblocks/pb-video-add-to-cart',
 	(_, { attributes, context, isInVideoGallery }) => {
-		const hasWooCommerce = window.portfolioBlocksData?.hasWooCommerce || false;
-		const enableWooCommerce = context?.['portfolioBlocks/enableWooCommerce'] || false;
-		const wooCartIconDisplay = context?.['portfolioBlocks/wooCartIconDisplay'] || 'hover';
+		const hasWooCommerce = window.folioBlocksData?.hasWooCommerce || false;
+		const enableWooCommerce = context?.['folioBlocks/enableWooCommerce'] || false;
+		const wooCartIconDisplay = context?.['folioBlocks/wooCartIconDisplay'] || 'hover';
 
 		// Only render for premium users with WooCommerce active
 		if (
@@ -110,10 +110,10 @@ addFilter(
 		}
 
 		const borderWidth = isInVideoGallery
-			? context?.['portfolioBlocks/borderWidth'] || 0
+			? context?.['folioBlocks/borderWidth'] || 0
 			: attributes.borderWidth || 0;
 		const borderRadius = isInVideoGallery
-			? context?.['portfolioBlocks/borderRadius'] || 0
+			? context?.['folioBlocks/borderRadius'] || 0
 			: attributes.borderRadius || 0;
 
 		const top = 10 + Math.max(borderWidth, borderRadius * 0.1);
@@ -135,8 +135,8 @@ addFilter(
 	}
 );
 addFilter(
-	'portfolioBlocks.pbVideoBlock.renderLightbox',
-	'pb-gallery/pb-video-lightbox-product',
+	'folioBlocks.pbVideoBlock.renderLightbox',
+	'folioblocks/pb-video-lightbox-product',
 	(
 		originalContent,
 		{
@@ -195,7 +195,7 @@ addFilter(
 								target="_blank"
 								rel="noopener noreferrer"
 							>
-								{__('View Product', 'pb-gallery')}
+								{__('View Product', 'folioblocks')}
 							</a>
 						)}
 					</div>

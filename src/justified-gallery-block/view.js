@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	const container = document.querySelector('.pb-justified-gallery');
 	if (!container) return;
 
-	const wrapper = container.closest('.wp-block-pb-gallery-justified-gallery-block');
+	const wrapper = container.closest('.wp-block-folioblocks-justified-gallery-block');
 	if (wrapper) wrapper.classList.add('is-loading');
 
 	const rowHeight = parseInt(container.dataset.rowHeight) || 250;

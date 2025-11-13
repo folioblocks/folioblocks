@@ -54,7 +54,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		wooCartIconDisplay,
 	} = attributes;
 
-	const checkoutUrl = window.portfolioBlocksData?.checkoutUrl || 'https://portfolio-blocks.com/portfolio-blocks-pricing/';
+	const checkoutUrl = window.folioBlocksData?.checkoutUrl || 'https://portfolio-blocks.com/portfolio-blocks-pricing/';
 
 	// Block Preview Image
 	if (preview) {
@@ -81,14 +81,14 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		},
 		[]
 	);
-	applyFilters('portfolioBlocks.videoGallery.filterLogic', null, { clientId, attributes, setAttributes, selectedBlock });
+	applyFilters('folioBlocks.videoGallery.filterLogic', null, { clientId, attributes, setAttributes, selectedBlock });
 
 
 	// Reset activeFilter to 'All' if selected block's category doesn't match
 	useEffect(() => {
 		if (
 			selectedBlock &&
-			selectedBlock.name === 'pb-gallery/pb-video-block'
+			selectedBlock.name === 'folioblocks/pb-video-block'
 		) {
 			const selectedCategory = selectedBlock.attributes?.filterCategory || '';
 
@@ -115,7 +115,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 	}, [activeFilter, clientId]);
 
 	// Prevent people duplicating blocks to bypass limits
-	if (!window.portfolioBlocksData?.isPro) {
+	if (!window.folioBlocksData?.isPro) {
 		subscribe(() => {
 			const blocks = select('core/block-editor').getBlocksByClientId(clientId)[0]?.innerBlocks || [];
 			if (blocks.length > 15) {
@@ -129,7 +129,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 				if (!document.getElementById('pb-video-limit-warning')) {
 					dispatch('core/notices').createNotice(
 						'warning',
-						__('Free version allows up to 15 videos. Upgrade to Pro for unlimited.', 'pb-gallery'),
+						__('Free version allows up to 15 videos. Upgrade to Pro for unlimited.', 'folioblocks'),
 						{ id: 'pb-video-limit-warning', isDismissible: true }
 					);
 				}
@@ -141,14 +141,14 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 	const { replaceInnerBlocks, insertBlock } = useDispatch('core/block-editor');
 	const handleVideoSelect = (media) => {
 		if (!media || !media.url) return;
-		const isPro = !!window.portfolioBlocksData?.isPro;
+		const isPro = !!window.folioBlocksData?.isPro;
 		const currentBlocks = wp.data.select('core/block-editor').getBlock(clientId)?.innerBlocks || [];
 		if (!isPro && currentBlocks.length >= 15) {
 			// Show warning notice
 			if (!document.getElementById('pb-video-limit-warning')) {
 				wp.data.dispatch('core/notices').createNotice(
 					'warning',
-					__('Video limit reached. Upgrade to Pro for unlimited videos.', 'pb-gallery'),
+					__('Video limit reached. Upgrade to Pro for unlimited videos.', 'folioblocks'),
 					{
 						id: 'pb-video-limit-warning',
 						isDismissible: true,
@@ -159,9 +159,9 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		}
 		const defaultTitle = media.title && media.title.trim() !== ''
 			? media.title
-			: __('Video', 'pb-gallery');
+			: __('Video', 'folioblocks');
 
-		const newBlock = wp.blocks.createBlock('pb-gallery/pb-video-block', {
+		const newBlock = wp.blocks.createBlock('folioblocks/pb-video-block', {
 			videoUrl: media.url,
 			title: defaultTitle,
 			alt: defaultTitle,
@@ -174,15 +174,15 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 	 */
 	const blockProps = useBlockProps({
 		context: {
-			'portfolioBlocks/aspectRatio': aspectRatio,
-			'portfolioBlocks/playButtonVisibility': playButtonVisibility,
-			'portfolioBlocks/titleVisibility': titleVisibility,
-			'portfolioBlocks/activeFilter': activeFilter,
-			'portfolioBlocks/lightbox': lightbox,
-			'portfolioBlocks/lightboxLayout': lightboxLayout,
-			'portfolioBlocks/lazyLoad': lazyLoad,
-			'portfolioBlocks/enableWooCommerce': enableWooCommerce,
-			'portfolioBlocks/wooCartIconDisplay': wooCartIconDisplay,
+			'folioBlocks/aspectRatio': aspectRatio,
+			'folioBlocks/playButtonVisibility': playButtonVisibility,
+			'folioBlocks/titleVisibility': titleVisibility,
+			'folioBlocks/activeFilter': activeFilter,
+			'folioBlocks/lightbox': lightbox,
+			'folioBlocks/lightboxLayout': lightboxLayout,
+			'folioBlocks/lazyLoad': lazyLoad,
+			'folioBlocks/enableWooCommerce': enableWooCommerce,
+			'folioBlocks/wooCartIconDisplay': wooCartIconDisplay,
 		},
 		style: {
 			'--pb--filter-text-color': filterTextColor || '#000',
@@ -198,17 +198,17 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			style: { '--gap': `${gap}px` },
 		},
 		{
-			allowedBlocks: ['pb-gallery/pb-video-block'],
+			allowedBlocks: ['folioblocks/pb-video-block'],
 			orientation: 'horizontal',
 			templateLock: false,
 			context: {
-				'portfolioBlocks/aspectRatio': aspectRatio,
-				'portfolioBlocks/playButtonVisibility': playButtonVisibility,
-				'portfolioBlocks/titleVisibility': titleVisibility,
-				'portfolioBlocks/activeFilter': activeFilter,
-				'portfolioBlocks/lightbox': lightbox,
-				'portfolioBlocks/lightboxLayout': lightboxLayout,
-				'portfolioBlocks/lazyLoad': lazyLoad,
+				'folioBlocks/aspectRatio': aspectRatio,
+				'folioBlocks/playButtonVisibility': playButtonVisibility,
+				'folioBlocks/titleVisibility': titleVisibility,
+				'folioBlocks/activeFilter': activeFilter,
+				'folioBlocks/lightbox': lightbox,
+				'folioBlocks/lightboxLayout': lightboxLayout,
+				'folioBlocks/lazyLoad': lazyLoad,
 			},
 		}
 	);
@@ -256,16 +256,16 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 	);
 
 	if (innerBlocks.length === 0) {
-		const isPro = !!window.portfolioBlocksData?.isPro;
+		const isPro = !!window.folioBlocksData?.isPro;
 		return (
 			<div {...blockProps}>
 				<MediaPlaceholder
 					icon={<IconVideoGallery />}
 					labels={{
-						title: __('Video Gallery', 'pb-gallery'),
+						title: __('Video Gallery', 'folioblocks'),
 						instructions: isPro
-							? __('Add first video. Upload, select from media library, or insert from URL.', 'pb-gallery')
-							: __('Add first video. Upload or select up to 15 videos. Upgrade to Pro for unlimited.', 'pb-gallery')
+							? __('Add first video. Upload, select from media library, or insert from URL.', 'folioblocks')
+							: __('Add first video. Upload or select up to 15 videos. Upgrade to Pro for unlimited.', 'folioblocks')
 					}}
 					allowedTypes={['video']}
 					onSelect={(media) => {
@@ -274,7 +274,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 							if (!document.getElementById('pb-video-limit-warning')) {
 								wp.data.dispatch('core/notices').createNotice(
 									'warning',
-									__('Video limit reached. Upgrade to Pro for unlimited videos.', 'pb-gallery'),
+									__('Video limit reached. Upgrade to Pro for unlimited videos.', 'folioblocks'),
 									{
 										id: 'pb-video-limit-warning',
 										isDismissible: true,
@@ -288,14 +288,14 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					onSelectURL={(url) => {
 					    if (!url) return;
 
-					    const isPro = !!window.portfolioBlocksData?.isPro;
+					    const isPro = !!window.folioBlocksData?.isPro;
 					    const currentBlocks = wp.data.select('core/block-editor').getBlock(clientId)?.innerBlocks || [];
 
 					    if (!isPro && currentBlocks.length >= 15) {
 					        if (!document.getElementById('pb-video-limit-warning')) {
 					            wp.data.dispatch('core/notices').createNotice(
 					                'warning',
-					                __('Video limit reached. Upgrade to Pro for unlimited videos.', 'pb-gallery'),
+					                __('Video limit reached. Upgrade to Pro for unlimited videos.', 'folioblocks'),
 					                {
 					                    id: 'pb-video-limit-warning',
 					                    isDismissible: true,
@@ -305,8 +305,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					        return;
 					    }
 
-					    const defaultTitle = __('Video', 'pb-gallery');
-					    const newBlock = wp.blocks.createBlock('pb-gallery/pb-video-block', {
+					    const defaultTitle = __('Video', 'folioblocks');
+					    const newBlock = wp.blocks.createBlock('folioblocks/pb-video-block', {
 					        videoUrl: url,
 					        title: defaultTitle,
 					        alt: defaultTitle,
@@ -327,24 +327,24 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			<BlockControls>
 				<ToolbarButton
 					icon={plus}
-					label={__('Add Videos', 'pb-gallery')}
+					label={__('Add Videos', 'folioblocks')}
 					onClick={addVideoBlock}
-					disabled={!window.portfolioBlocksData?.isPro && innerBlocks.length >= 15}
+					disabled={!window.folioBlocksData?.isPro && innerBlocks.length >= 15}
 				>
-					{__('Add Videos', 'pb-gallery')}
+					{__('Add Videos', 'folioblocks')}
 				</ToolbarButton>
 			</BlockControls>
 			{isVideoModalOpen && (
 				<Modal
-					title={__('Select or Insert Video', 'pb-gallery')}
+					title={__('Select or Insert Video', 'folioblocks')}
 					onRequestClose={() => setIsVideoModalOpen(false)}
 				>
 					<MediaPlaceholder
 						labels={{
-							title: __('Select or Insert Video', 'pb-gallery'),
-							instructions: window.portfolioBlocksData?.isPro
-								? __('Upload, select from media library, or insert from URL.', 'pb-gallery')
-								: __('Upload or select up to 15 videos. Upgrade to Pro for unlimited.', 'pb-gallery'),
+							title: __('Select or Insert Video', 'folioblocks'),
+							instructions: window.folioBlocksData?.isPro
+								? __('Upload, select from media library, or insert from URL.', 'folioblocks')
+								: __('Upload or select up to 15 videos. Upgrade to Pro for unlimited.', 'folioblocks'),
 						}}
 						allowedTypes={['video']}
 						accept="video/*"
@@ -352,8 +352,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						onSelect={(media) => {
 							const defaultTitle = media.title && media.title.trim() !== ''
 								? media.title
-								: __('Video', 'pb-gallery');
-							const newBlock = wp.blocks.createBlock('pb-gallery/pb-video-block', {
+								: __('Video', 'folioblocks');
+							const newBlock = wp.blocks.createBlock('folioblocks/pb-video-block', {
 								videoUrl: media.url,
 								title: defaultTitle,
 								alt: defaultTitle,
@@ -362,8 +362,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 							setIsVideoModalOpen(false);
 						}}
 						onSelectURL={(url) => {
-							const defaultTitle = __('Video', 'pb-gallery');
-							const newBlock = wp.blocks.createBlock('pb-gallery/pb-video-block', {
+							const defaultTitle = __('Video', 'folioblocks');
+							const newBlock = wp.blocks.createBlock('folioblocks/pb-video-block', {
 								videoUrl: url,
 								title: defaultTitle,
 								alt: defaultTitle,
@@ -377,16 +377,16 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 
 			<InspectorControls>
 				{/* Gallery Settings Panel */}
-				<PanelBody title={__('General Gallery Settings', 'pb-gallery')} initialOpen={true}>
+				<PanelBody title={__('General Gallery Settings', 'folioblocks')} initialOpen={true}>
 					<ResponsiveRangeControl
-						label={__('Columns', 'pb-gallery')}
+						label={__('Columns', 'folioblocks')}
 						columns={columns}
 						tabletColumns={tabletColumns}
 						mobileColumns={mobileColumns}
 						onChange={(newValues) => setAttributes(newValues)}
 					/>
 					<RangeControl
-						label={__('Gap Between Items (px)', 'pb-gallery')}
+						label={__('Gap Between Items (px)', 'folioblocks')}
 						value={gap}
 						onChange={(val) => setAttributes({ gap: val })}
 						min={0}
@@ -396,15 +396,15 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						__next40pxDefaultSize
 						help={__('Set gap size between Thumbnails.')}
 					/>
-					{ window.portfolioBlocksData?.hasWooCommerce && applyFilters(
-						'portfolioBlocks.videoGallery.wooCommerceControls',
+					{ window.folioBlocksData?.hasWooCommerce && applyFilters(
+						'folioBlocks.videoGallery.wooCommerceControls',
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Woo Commerce', 'pb-gallery')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
+									<strong>{__('Enable Woo Commerce', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'pb-gallery')}
+										{__('Upgrade to Pro', 'folioblocks')}
 									</a>
 								</Notice>
 							</div>
@@ -412,14 +412,14 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						{ attributes, setAttributes }
 					)}
 					{applyFilters(
-						'portfolioBlocks.videoGallery.disableRightClickToggle',
+						'folioBlocks.videoGallery.disableRightClickToggle',
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Disable Right-Click', 'pb-gallery')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
+									<strong>{__('Disable Right-Click', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'pb-gallery')}
+										{__('Upgrade to Pro', 'folioblocks')}
 									</a>
 								</Notice>
 							</div>
@@ -427,14 +427,14 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						{ attributes, setAttributes }
 					)}
 					{applyFilters(
-						'portfolioBlocks.videoGallery.lazyLoadToggle',
+						'folioBlocks.videoGallery.lazyLoadToggle',
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Lazy Load of Images', 'pb-gallery')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
+									<strong>{__('Enable Lazy Load of Images', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'pb-gallery')}
+										{__('Upgrade to Pro', 'folioblocks')}
 									</a>
 								</Notice>
 							</div>
@@ -443,9 +443,9 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					)}
 				</PanelBody>
 
-				<PanelBody title={__('Gallery Thumbnail Settings', 'pb-gallery')} initialOpen={true}>
+				<PanelBody title={__('Gallery Thumbnail Settings', 'folioblocks')} initialOpen={true}>
 					<SelectControl
-						label={__('Thumbnail Aspect Ratio', 'pb-gallery')}
+						label={__('Thumbnail Aspect Ratio', 'folioblocks')}
 						value={aspectRatio}
 						onChange={(val) => setAttributes({ aspectRatio: val })}
 						options={[
@@ -461,7 +461,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						__next40pxDefaultSize
 					/>
 					<SelectControl
-						label={__('Thumbnail Resolution', 'pb-gallery')}
+						label={__('Thumbnail Resolution', 'folioblocks')}
 						value={thumbnailSize}
 						onChange={(val) => setAttributes({ thumbnailSize: val })}
 						options={imageSizeOptions}
@@ -470,49 +470,49 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						__next40pxDefaultSize
 					/>
 					<SelectControl
-						label={__('Play Button Visibility', 'pb-gallery')}
+						label={__('Play Button Visibility', 'folioblocks')}
 						value={playButtonVisibility}
 						onChange={(val) => setAttributes({ playButtonVisibility: val })}
 						options={[
-							{ label: __('Always Show', 'pb-gallery'), value: 'always' },
-							{ label: __('On Hover', 'pb-gallery'), value: 'onHover' },
-							{ label: __('Hidden', 'pb-gallery'), value: 'hidden' },
+							{ label: __('Always Show', 'folioblocks'), value: 'always' },
+							{ label: __('On Hover', 'folioblocks'), value: 'onHover' },
+							{ label: __('Hidden', 'folioblocks'), value: 'hidden' },
 						]}
 						help={__('Settings for the Play button overlay.')}
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
 					<SelectControl
-						label={__('Title Visibility', 'pb-gallery')}
+						label={__('Title Visibility', 'folioblocks')}
 						value={titleVisibility}
 						onChange={(val) => setAttributes({ titleVisibility: val })}
 						options={[
-							{ label: __('Always Show', 'pb-gallery'), value: 'always' },
-							{ label: __('On Hover', 'pb-gallery'), value: 'onHover' },
-							{ label: __('Hidden', 'pb-gallery'), value: 'hidden' },
+							{ label: __('Always Show', 'folioblocks'), value: 'always' },
+							{ label: __('On Hover', 'folioblocks'), value: 'onHover' },
+							{ label: __('Hidden', 'folioblocks'), value: 'hidden' },
 						]}
 						help={__('Settings for the Video Title overlay.')}
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
 				</PanelBody>
-				<PanelBody title={__('Gallery Lightbox Settings', 'pb-gallery')} initialOpen={true}>
+				<PanelBody title={__('Gallery Lightbox Settings', 'folioblocks')} initialOpen={true}>
 					<ToggleControl
-						label={__('Disable Lightbox in Editor', 'pb-gallery')}
+						label={__('Disable Lightbox in Editor', 'folioblocks')}
 						checked={!lightbox}
 						onChange={(val) => setAttributes({ lightbox: !val })}
 						__nextHasNoMarginBottom
 						help={__('Prevent videos from opening in a Lightbox while editing.')}
 					/>
 					{applyFilters(
-						'portfolioBlocks.videoGallery.lightboxLayout',
+						'folioBlocks.videoGallery.lightboxLayout',
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Lightbox Layout', 'pb-gallery')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
+									<strong>{__('Lightbox Layout', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'pb-gallery')}
+										{__('Upgrade to Pro', 'folioblocks')}
 									</a>
 								</Notice>
 							</div>
@@ -520,16 +520,16 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						{ attributes, setAttributes }
 					)}
 				</PanelBody>
-				<PanelBody title={__('Gallery Filter Settings', 'pb-gallery')} initialOpen={true}>
+				<PanelBody title={__('Gallery Filter Settings', 'folioblocks')} initialOpen={true}>
 					{applyFilters(
-						'portfolioBlocks.videoGallery.enableFilterToggle',
+						'folioBlocks.videoGallery.enableFilterToggle',
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Video Filtering', 'pb-gallery')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
+									<strong>{__('Enable Video Filtering', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'pb-gallery')}
+										{__('Upgrade to Pro', 'folioblocks')}
 									</a>
 								</Notice>
 							</div>
@@ -541,16 +541,16 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			</InspectorControls>
 
 			<InspectorControls group="styles">
-				<PanelBody title={__('Video Thumbnail Styles', 'pb-gallery')} initialOpen={true}>
+				<PanelBody title={__('Video Thumbnail Styles', 'folioblocks')} initialOpen={true}>
 					{applyFilters(
-						'portfolioBlocks.videoGallery.borderColorControl',
+						'folioBlocks.videoGallery.borderColorControl',
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Image Border Color', 'pb-gallery')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
+									<strong>{__('Enable Image Border Color', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'pb-gallery')}
+										{__('Upgrade to Pro', 'folioblocks')}
 									</a>
 								</Notice>
 							</div>
@@ -558,14 +558,14 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						{ attributes, setAttributes }
 					)}
 					{applyFilters(
-						'portfolioBlocks.videoGallery.borderWidthControl',
+						'folioBlocks.videoGallery.borderWidthControl',
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Image Border Width', 'pb-gallery')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
+									<strong>{__('Enable Image Border Width', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'pb-gallery')}
+										{__('Upgrade to Pro', 'folioblocks')}
 									</a>
 								</Notice>
 							</div>
@@ -573,14 +573,14 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						{ attributes, setAttributes }
 					)}
 					{applyFilters(
-						'portfolioBlocks.videoGallery.borderRadiusControl',
+						'folioBlocks.videoGallery.borderRadiusControl',
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Image Border Radius', 'pb-gallery')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
+									<strong>{__('Enable Image Border Radius', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'pb-gallery')}
+										{__('Upgrade to Pro', 'folioblocks')}
 									</a>
 								</Notice>
 							</div>
@@ -588,14 +588,14 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						{ attributes, setAttributes }
 					)}
 					{applyFilters(
-						'portfolioBlocks.videoGallery.dropShadowToggle',
+						'folioBlocks.videoGallery.dropShadowToggle',
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Image Drop Shadow', 'pb-gallery')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
+									<strong>{__('Enable Image Drop Shadow', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'pb-gallery')}
+										{__('Upgrade to Pro', 'folioblocks')}
 									</a>
 								</Notice>
 							</div>
@@ -605,14 +605,14 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 				</PanelBody>
 
 				{applyFilters(
-					'portfolioBlocks.videoGallery.filterStylesControls',
+					'folioBlocks.videoGallery.filterStylesControls',
 					(
 						<div style={{ marginBottom: '8px' }}>
 							<Notice status="info" isDismissible={false}>
-								<strong>{__('Filter Styles Controls', 'pb-gallery')}</strong><br />
-								{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
+								<strong>{__('Filter Styles Controls', 'folioblocks')}</strong><br />
+								{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
 								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-									{__('Upgrade to Pro', 'pb-gallery')}
+									{__('Upgrade to Pro', 'folioblocks')}
 								</a>
 							</Notice>
 						</div>
@@ -623,7 +623,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 
 			<div {...blockProps}>
 				{applyFilters(
-					'portfolioBlocks.videoGallery.renderFilterBar',
+					'folioBlocks.videoGallery.renderFilterBar',
 					null,
 					{ attributes, setAttributes }
 				)}

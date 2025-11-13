@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Wire filter bars per gallery instance
     document.querySelectorAll('.pb-masonry-gallery').forEach((gallery) => {
         // The filter bar is rendered by render.php as a sibling within the same wrapper
-        const wrapper = gallery.closest('.wp-block-pb-gallery-masonry-gallery-block, [data-active-filter]') || gallery.parentElement;
+        const wrapper = gallery.closest('.wp-block-folioblocks-masonry-gallery-block, [data-active-filter]') || gallery.parentElement;
         const filterBar = wrapper ? wrapper.querySelector('.pb-image-gallery-filters') : null;
         if (!filterBar) return;
 

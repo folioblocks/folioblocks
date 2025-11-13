@@ -13,7 +13,7 @@ import IconModularGallery from '../pb-helpers/IconModularGallery';
 
 import './editor.scss';
 
-const ALLOWED_BLOCKS = ['pb-gallery/pb-image-row'];
+const ALLOWED_BLOCKS = ['folioblocks/pb-image-row'];
 
 // Debounce utility to throttle function calls
 const debounce = (fn, delay) => {
@@ -28,7 +28,7 @@ export default function Edit(props) {
 	const { clientId, attributes, setAttributes } = props;
 	const { noGap, lightbox, lightboxCaption, preview } = attributes;
 
-	const checkoutUrl = window.portfolioBlocksData?.checkoutUrl || 'https://portfolio-blocks.com/portfolio-blocks-pricing/';
+	const checkoutUrl = window.folioBlocksData?.checkoutUrl || 'https://portfolio-blocks.com/portfolio-blocks-pricing/';
 
 	// Block Preview Image
 	if (preview) {
@@ -40,14 +40,14 @@ export default function Edit(props) {
 	}
 
 	// Runtime override: if WooCommerce is not active, force Woo features off without mutating saved attributes
-	const hasWooCommerce = window.portfolioBlocksData?.hasWooCommerce ?? false;
+	const hasWooCommerce = window.folioBlocksData?.hasWooCommerce ?? false;
 	const effectiveEnableWoo = hasWooCommerce ? (attributes.enableWooCommerce || false) : false;
 	useEffect(() => {
-		const wooActive = window.portfolioBlocksData?.hasWooCommerce ?? false;
+		const wooActive = window.folioBlocksData?.hasWooCommerce ?? false;
 		if (wooActive !== attributes.hasWooCommerce) {
 			setAttributes({ hasWooCommerce: wooActive });
 		}
-	}, [window.portfolioBlocksData?.hasWooCommerce]);
+	}, [window.folioBlocksData?.hasWooCommerce]);
 
 
 	const { insertBlock } = useDispatch('core/block-editor');
@@ -68,8 +68,8 @@ export default function Edit(props) {
 			const caption = response.caption?.raw || media.caption || '';
 			const alt = response.alt_text || media.alt || '';
 
-			const rowBlock = wp.blocks.createBlock('pb-gallery/pb-image-row', {}, [
-				wp.blocks.createBlock('pb-gallery/pb-image-block', {
+			const rowBlock = wp.blocks.createBlock('folioblocks/pb-image-row', {}, [
+				wp.blocks.createBlock('folioblocks/pb-image-block', {
 					id: media.id,
 					src: media.url,
 					alt,
@@ -90,7 +90,7 @@ export default function Edit(props) {
 
 	const handleAddRow = () => {
 		const { createBlock } = wp.blocks;
-		const newRow = createBlock('pb-gallery/pb-image-row');
+		const newRow = createBlock('folioblocks/pb-image-row');
 		insertBlock(newRow, innerBlocks.length, clientId);
 	};
 	const [layoutVersion, setLayoutVersion] = useState(0);
@@ -108,7 +108,7 @@ export default function Edit(props) {
 			const wrappers = Array.from(row.children).filter(
 				(child) =>
 					child.classList.contains('pb-image-block-wrapper') ||
-					child.classList.contains('wp-block-pb-gallery-pb-image-stack')
+					child.classList.contains('wp-block-folioblocks-pb-image-stack')
 			);
 			if (!wrappers.length) return;
 
@@ -138,7 +138,7 @@ export default function Edit(props) {
 					if (img && img.naturalWidth && img.naturalHeight) {
 						ratio = img.naturalWidth / img.naturalHeight;
 					}
-				} else if (wrapper.classList.contains('wp-block-pb-gallery-pb-image-stack')) {
+				} else if (wrapper.classList.contains('wp-block-folioblocks-pb-image-stack')) {
 					isStack = true;
 					const images = wrapper.querySelectorAll('img');
 					let totalStackHeight = 0;
@@ -254,11 +254,11 @@ export default function Edit(props) {
 	const blockProps = useBlockProps({
 		ref: containerRef,
 		context: {
-			'portfolioBlocks/noGap': noGap,
-			'portfolioBlocks/layoutVersion': layoutVersion,
-			'portfolioBlocks/rowLayouts': rowLayouts,
-			'portfolioBlocks/enableWooCommerce': effectiveEnableWoo,
-			'portfolioBlocks/hasWooCommerce': hasWooCommerce,
+			'folioBlocks/noGap': noGap,
+			'folioBlocks/layoutVersion': layoutVersion,
+			'folioBlocks/rowLayouts': rowLayouts,
+			'folioBlocks/enableWooCommerce': effectiveEnableWoo,
+			'folioBlocks/hasWooCommerce': hasWooCommerce,
 		},
 	});
 	const innerBlocksProps = useInnerBlocksProps(
@@ -272,7 +272,7 @@ export default function Edit(props) {
 		{
 			allowedBlocks: ALLOWED_BLOCKS,
 			orientation: 'vertical',
-			template: [['pb-gallery/pb-image-row']],
+			template: [['folioblocks/pb-image-row']],
 			templateLock: false,
 		}
 	);
@@ -292,7 +292,7 @@ export default function Edit(props) {
 
 			// Check if selected block is a pb-image-block nested within a pb-image-row or pb-image-stack
 			if (
-				selectedBlock.name === 'pb-gallery/pb-image-block'
+				selectedBlock.name === 'folioblocks/pb-image-block'
 			) {
 				const parents = select(blockEditorStore).getBlockParents(selectedId);
 				return parents.includes(clientId);
@@ -304,7 +304,7 @@ export default function Edit(props) {
 	);
 
 	// Always call editorEnhancements filter for consistent hook ordering
-	applyFilters('portfolioBlocks.modularGallery.editorEnhancements', null, { attributes, clientId, innerBlocks, isBlockOrChildSelected });
+	applyFilters('folioBlocks.modularGallery.editorEnhancements', null, { attributes, clientId, innerBlocks, isBlockOrChildSelected });
 
 	if (innerBlocks.length === 0) {
 		return (
@@ -330,12 +330,12 @@ export default function Edit(props) {
 						label="Add Image Row"
 						onClick={handleAddRow}
 					>
-						{__('Add Image Row', 'pb-gallery')}
+						{__('Add Image Row', 'folioblocks')}
 					</ToolbarButton>
 				</ToolbarGroup>
 			</BlockControls>
 			<InspectorControls>
-				<PanelBody title={__('General Gallery Settings', 'pb-gallery')} initialOpen={true}>
+				<PanelBody title={__('General Gallery Settings', 'folioblocks')} initialOpen={true}>
 					{(() => {
 						const allSizes = innerBlocks.flatMap(rowBlock => {
 							const rowInnerBlocks = select('core/block-editor').getBlocks(rowBlock.clientId);
@@ -344,14 +344,14 @@ export default function Edit(props) {
 							);
 						});
 						const resolutionOptions = [
-							{ label: __('Thumbnail', 'pb-gallery'), value: 'thumbnail' },
-							{ label: __('Medium', 'pb-gallery'), value: 'medium' },
-							{ label: __('Large', 'pb-gallery'), value: 'large' },
-							{ label: __('Full', 'pb-gallery'), value: 'full' }
+							{ label: __('Thumbnail', 'folioblocks'), value: 'thumbnail' },
+							{ label: __('Medium', 'folioblocks'), value: 'medium' },
+							{ label: __('Large', 'folioblocks'), value: 'large' },
+							{ label: __('Full', 'folioblocks'), value: 'full' }
 						].filter(option => allSizes.includes(option.value) || option.value === 'full');
 						return (
 							<SelectControl
-								label={__('Image Resolution', 'pb-gallery')}
+								label={__('Image Resolution', 'folioblocks')}
 								value={attributes.resolution}
 								options={resolutionOptions}
 								onChange={(value) => {
@@ -364,43 +364,43 @@ export default function Edit(props) {
 						);
 					})()}
 					<ToggleControl
-						label={__('Collapse layout on Mobile', 'pb-gallery')}
+						label={__('Collapse layout on Mobile', 'folioblocks')}
 						checked={attributes.collapseOnMobile}
 						onChange={(value) => setAttributes({ collapseOnMobile: value })}
 						__nextHasNoMarginBottom
-						help={__('Stack all images vertically on mobile devices.', 'pb-gallery')}
+						help={__('Stack all images vertically on mobile devices.', 'folioblocks')}
 					/>
 					<ToggleControl
-						label={__('Remove Image Gap', 'pb-gallery')}
+						label={__('Remove Image Gap', 'folioblocks')}
 						checked={attributes.noGap || false}
 						onChange={(noGap) => setAttributes({ noGap })}
 						help={__('Remove gap between images.')}
 						__nextHasNoMarginBottom
 					/>
 					{applyFilters(
-						'portfolioBlocks.modularGallery.downloadControls',
+						'folioBlocks.modularGallery.downloadControls',
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Image Downloads', 'pb-gallery')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
+									<strong>{__('Enable Image Downloads', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'pb-gallery')}
+										{__('Upgrade to Pro', 'folioblocks')}
 									</a>
 								</Notice>
 							</div>
 						),
 						{ attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
 					)}
-					{window.portfolioBlocksData?.hasWooCommerce && applyFilters(
-						'portfolioBlocks.modularGallery.wooCommerceControls',
+					{window.folioBlocksData?.hasWooCommerce && applyFilters(
+						'folioBlocks.modularGallery.wooCommerceControls',
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Woo Commerce', 'pb-gallery')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
+									<strong>{__('Enable Woo Commerce', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'pb-gallery')}
+										{__('Upgrade to Pro', 'folioblocks')}
 									</a>
 								</Notice>
 							</div>
@@ -408,14 +408,14 @@ export default function Edit(props) {
 						{ attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
 					)}
 					{applyFilters(
-						'portfolioBlocks.modularGallery.disableRightClickToggle',
+						'folioBlocks.modularGallery.disableRightClickToggle',
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Disable Right-Click', 'pb-gallery')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
+									<strong>{__('Disable Right-Click', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'pb-gallery')}
+										{__('Upgrade to Pro', 'folioblocks')}
 									</a>
 								</Notice>
 							</div>
@@ -423,14 +423,14 @@ export default function Edit(props) {
 						{ attributes, setAttributes }
 					)}
 					{applyFilters(
-						'portfolioBlocks.modularGallery.lazyLoadToggle',
+						'folioBlocks.modularGallery.lazyLoadToggle',
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Lazy Load of Images', 'pb-gallery')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
+									<strong>{__('Enable Lazy Load of Images', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'pb-gallery')}
+										{__('Upgrade to Pro', 'folioblocks')}
 									</a>
 								</Notice>
 							</div>
@@ -439,28 +439,28 @@ export default function Edit(props) {
 					)}
 
 				</PanelBody>
-				<PanelBody title={__('Gallery Image Settings', 'pb-gallery')} initialOpen={true}>
+				<PanelBody title={__('Gallery Image Settings', 'folioblocks')} initialOpen={true}>
 					{applyFilters(
-						'portfolioBlocks.modularGallery.lightboxControls',
+						'folioBlocks.modularGallery.lightboxControls',
 						(
 							<>
 								<ToggleControl
-									label={__('Enable Lightbox', 'pb-gallery')}
+									label={__('Enable Lightbox', 'folioblocks')}
 									checked={!!lightbox}
 									onChange={(newLightbox) => setAttributes({ lightbox: newLightbox })}
 									__nextHasNoMarginBottom
-									help={__('Open images in a lightbox when clicked.', 'pb-gallery')}
+									help={__('Open images in a lightbox when clicked.', 'folioblocks')}
 								/>
 
 								{lightbox && (
 									<ToggleControl
-										label={__('Show Image Caption in Lightbox', 'pb-gallery')}
+										label={__('Show Image Caption in Lightbox', 'folioblocks')}
 										checked={!!lightboxCaption}
 										onChange={(newLightboxCaption) =>
 											setAttributes({ lightboxCaption: newLightboxCaption })
 										}
 										__nextHasNoMarginBottom
-										help={__('Display image captions inside the lightbox.', 'pb-gallery')}
+										help={__('Display image captions inside the lightbox.', 'folioblocks')}
 									/>
 								)}
 							</>
@@ -468,12 +468,12 @@ export default function Edit(props) {
 						{ attributes, setAttributes }
 					)}
 					{applyFilters(
-						'portfolioBlocks.modularGallery.onHoverTitleToggle',
+						'folioBlocks.modularGallery.onHoverTitleToggle',
 						(
 							<>
 								<ToggleControl
-									label={__('Show Image Title on Hover', 'pb-gallery')}
-									help={__('Display the image title when hovering over images.', 'pb-gallery')}
+									label={__('Show Image Title on Hover', 'folioblocks')}
+									help={__('Display the image title when hovering over images.', 'folioblocks')}
 									__nextHasNoMarginBottom
 									checked={!!attributes.onHoverTitle}
 									onChange={(value) => setAttributes({ onHoverTitle: value })}
@@ -485,16 +485,16 @@ export default function Edit(props) {
 				</PanelBody>
 			</InspectorControls>
 			<InspectorControls group="styles">
-				<PanelBody title={__('Gallery Image Styles', 'pb-gallery')} initialOpen={true}>
+				<PanelBody title={__('Gallery Image Styles', 'folioblocks')} initialOpen={true}>
 					{applyFilters(
-						'portfolioBlocks.modularGallery.borderColorControl',
+						'folioBlocks.modularGallery.borderColorControl',
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Image Border Color', 'pb-gallery')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
+									<strong>{__('Enable Image Border Color', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'pb-gallery')}
+										{__('Upgrade to Pro', 'folioblocks')}
 									</a>
 								</Notice>
 							</div>
@@ -502,14 +502,14 @@ export default function Edit(props) {
 						{ attributes, setAttributes }
 					)}
 					{applyFilters(
-						'portfolioBlocks.modularGallery.borderWidthControl',
+						'folioBlocks.modularGallery.borderWidthControl',
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Image Border Width', 'pb-gallery')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
+									<strong>{__('Enable Image Border Width', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'pb-gallery')}
+										{__('Upgrade to Pro', 'folioblocks')}
 									</a>
 								</Notice>
 							</div>
@@ -517,14 +517,14 @@ export default function Edit(props) {
 						{ attributes, setAttributes }
 					)}
 					{applyFilters(
-						'portfolioBlocks.modularGallery.borderRadiusControl',
+						'folioBlocks.modularGallery.borderRadiusControl',
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Image Border Radius', 'pb-gallery')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
+									<strong>{__('Enable Image Border Radius', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'pb-gallery')}
+										{__('Upgrade to Pro', 'folioblocks')}
 									</a>
 								</Notice>
 							</div>
@@ -532,14 +532,14 @@ export default function Edit(props) {
 						{ attributes, setAttributes }
 					)}
 					{applyFilters(
-						'portfolioBlocks.modularGallery.dropShadowToggle',
+						'folioBlocks.modularGallery.dropShadowToggle',
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Image Drop Shadow', 'pb-gallery')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
+									<strong>{__('Enable Image Drop Shadow', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'pb-gallery')}
+										{__('Upgrade to Pro', 'folioblocks')}
 									</a>
 								</Notice>
 							</div>

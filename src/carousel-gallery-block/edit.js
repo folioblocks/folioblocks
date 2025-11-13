@@ -30,9 +30,9 @@ import './editor.scss';
 
 
 export default function Edit({ clientId, attributes, setAttributes }) {
-	const ALLOWED_BLOCKS = ['pb-gallery/pb-image-block'];
+	const ALLOWED_BLOCKS = ['folioblocks/pb-image-block'];
 
-	const checkoutUrl = window.portfolioBlocksData?.checkoutUrl || 'https://portfolio-blocks.com/portfolio-blocks-pricing/';
+	const checkoutUrl = window.folioBlocksData?.checkoutUrl || 'https://portfolio-blocks.com/portfolio-blocks-pricing/';
 
 	const {
 		carouselHeight,
@@ -51,14 +51,14 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 	}
 
 	// Runtime override: if WooCommerce is not active, force Woo features off without mutating saved attributes
-	const hasWooCommerce = window.portfolioBlocksData?.hasWooCommerce ?? false;
+	const hasWooCommerce = window.folioBlocksData?.hasWooCommerce ?? false;
 	const effectiveEnableWoo = hasWooCommerce ? (attributes.enableWooCommerce || false) : false;
 	useEffect(() => {
-		const wooActive = window.portfolioBlocksData?.hasWooCommerce ?? false;
+		const wooActive = window.folioBlocksData?.hasWooCommerce ?? false;
 		if (wooActive !== attributes.hasWooCommerce) {
 			setAttributes({ hasWooCommerce: wooActive });
 		}
-	}, [window.portfolioBlocksData?.hasWooCommerce]);
+	}, [window.folioBlocksData?.hasWooCommerce]);
 
 
 	const blockProps = useBlockProps({
@@ -87,16 +87,16 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 
 
 	// Filter to limit number of images in free version (only if not Pro)
-	if (!window.portfolioBlocksData?.isPro) {
+	if (!window.folioBlocksData?.isPro) {
 		addFilter(
-			'portfolioBlocks.carouselGallery.limitImages',
-			'pb-gallery/carousel-gallery-limit',
+			'folioBlocks.carouselGallery.limitImages',
+			'folioblocks/carousel-gallery-limit',
 			(media, existingCount) => {
 				const MAX_IMAGES_FREE = 15;
 				const allowed = Math.max(0, MAX_IMAGES_FREE - existingCount);
 
 				if (allowed <= 0) {
-					const message = __('Free version allows up to 15 images. Upgrade to Pro for unlimited.', 'pb-gallery');
+					const message = __('Free version allows up to 15 images. Upgrade to Pro for unlimited.', 'folioblocks');
 					wp.data.dispatch('core/notices').createNotice(
 						'warning',
 						message,
@@ -107,7 +107,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 
 				if (media.length > allowed) {
 					const message = sprintf(
-						__('Free version allows up to %d images. Only the first %d were added.', 'pb-gallery'),
+						__('Free version allows up to %d images. Only the first %d were added.', 'folioblocks'),
 						MAX_IMAGES_FREE,
 						allowed
 					);
@@ -130,11 +130,11 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 					dispatch('core/block-editor').removeBlock(block.clientId);
 				});
 
-				if (!document.getElementById('pb-gallery-limit-warning')) {
+				if (!document.getElementById('folioblocks-limit-warning')) {
 					dispatch('core/notices').createNotice(
 						'warning',
-						__('Free version allows up to 15 images. Upgrade to Pro for unlimited.', 'pb-gallery'),
-						{ id: 'pb-gallery-limit-warning', isDismissible: true }
+						__('Free version allows up to 15 images. Upgrade to Pro for unlimited.', 'folioblocks'),
+						{ id: 'folioblocks-limit-warning', isDismissible: true }
 					);
 				}
 			}
@@ -146,7 +146,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 
 		// Allow filtering of selected images (for free vs premium limits)
 		media = applyFilters(
-			'portfolioBlocks.carouselGallery.limitImages',
+			'folioBlocks.carouselGallery.limitImages',
 			media,
 			innerBlocks.length
 		);
@@ -177,7 +177,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 				const width = fullSize.width || image.width || 0;
 				const height = fullSize.height || image.height || 0;
 
-				return wp.blocks.createBlock('pb-gallery/pb-image-block', {
+				return wp.blocks.createBlock('folioblocks/pb-image-block', {
 					id: image.id,
 					src: image.url,
 					alt: image.alt || '',
@@ -285,7 +285,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 
 			// Check if selected block is a pb-image-block inside this gallery
 			if (
-				selectedBlock.name === 'pb-gallery/pb-image-block' &&
+				selectedBlock.name === 'folioblocks/pb-image-block' &&
 				select(blockEditorStore).getBlockRootClientId(selectedId) === clientId
 			) {
 				return true;
@@ -459,7 +459,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 		};
 	}, []);
 
-	applyFilters('portfolioBlocks.carouselGallery.editorEnhancements', null, { clientId, innerBlocks, isBlockOrChildSelected });
+	applyFilters('folioBlocks.carouselGallery.editorEnhancements', null, { clientId, innerBlocks, isBlockOrChildSelected });
 
 	return (
 		<>
@@ -467,14 +467,14 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 				<ToolbarGroup>
 					<ToolbarButton
 						icon={plus}
-						label={__('Add Images', 'pb-gallery')}
-						disabled={!window.portfolioBlocksData?.isPro && innerBlocks.length >= 15}
+						label={__('Add Images', 'folioblocks')}
+						disabled={!window.folioBlocksData?.isPro && innerBlocks.length >= 15}
 						onClick={() => {
 							wp.media({
-								title: __('Select Images', 'pb-gallery'),
+								title: __('Select Images', 'folioblocks'),
 								multiple: true,
 								library: { type: 'image' },
-								button: { text: __('Add to Gallery', 'pb-gallery') },
+								button: { text: __('Add to Gallery', 'folioblocks') },
 							})
 								.on('select', () => {
 									const selection = wp.media.frame.state().get('selection').toJSON();
@@ -483,20 +483,20 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 								.open();
 						}}
 					>
-						{__('Add Images', 'pb-gallery')}
+						{__('Add Images', 'folioblocks')}
 					</ToolbarButton>
 				</ToolbarGroup>
 			</BlockControls>
 			<InspectorControls>
-				<PanelBody title={__('General Gallery Settings', 'pb-gallery')} initialOpen={true}>
+				<PanelBody title={__('General Gallery Settings', 'folioblocks')} initialOpen={true}>
 					<SelectControl
-						label={__('Resolution', 'pb-gallery')}
+						label={__('Resolution', 'folioblocks')}
 						value={attributes.resolution || 'large'}
 						options={[
-							{ label: __('Thumbnail', 'pb-gallery'), value: 'thumbnail' },
-							{ label: __('Medium', 'pb-gallery'), value: 'medium' },
-							{ label: __('Large', 'pb-gallery'), value: 'large' },
-							{ label: __('Full', 'pb-gallery'), value: 'full' },
+							{ label: __('Thumbnail', 'folioblocks'), value: 'thumbnail' },
+							{ label: __('Medium', 'folioblocks'), value: 'medium' },
+							{ label: __('Large', 'folioblocks'), value: 'large' },
+							{ label: __('Full', 'folioblocks'), value: 'full' },
 						].filter(option => {
 							// Check all images for available sizes
 							const allSizes = innerBlocks.flatMap(block => Object.keys(block.attributes.sizes || {}));
@@ -517,41 +517,41 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 						help={__('Select the size of the source image.')}
 					/>
 					<SelectControl
-						label={__('Image Orientation (Mobile)', 'pb-gallery')}
+						label={__('Image Orientation (Mobile)', 'folioblocks')}
 						value={attributes.verticalOnMobile ? 'vertical' : 'horizontal'}
 						options={[
-							{ label: __('Horizontal Images', 'pb-gallery'), value: 'horizontal' },
-							{ label: __('Vertical Images', 'pb-gallery'), value: 'vertical' },
+							{ label: __('Horizontal Images', 'folioblocks'), value: 'horizontal' },
+							{ label: __('Vertical Images', 'folioblocks'), value: 'vertical' },
 						]}
 						onChange={(val) => setAttributes({ verticalOnMobile: val === 'vertical' })}
-						help={__('Affects layout on mobile only. Switch ONLY when all images are vertical in orientation.', 'pb-gallery')}
+						help={__('Affects layout on mobile only. Switch ONLY when all images are vertical in orientation.', 'folioblocks')}
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
 					{applyFilters(
-						'portfolioBlocks.carouselGallery.downloadControls',
+						'folioBlocks.carouselGallery.downloadControls',
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Image Downloads', 'pb-gallery')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
+									<strong>{__('Enable Image Downloads', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'pb-gallery')}
+										{__('Upgrade to Pro', 'folioblocks')}
 									</a>
 								</Notice>
 							</div>
 						),
 						{ attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
 					)}
-					{window.portfolioBlocksData?.hasWooCommerce && applyFilters(
-						'portfolioBlocks.carouselGallery.wooCommerceControls',
+					{window.folioBlocksData?.hasWooCommerce && applyFilters(
+						'folioBlocks.carouselGallery.wooCommerceControls',
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Woo Commerce', 'pb-gallery')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
+									<strong>{__('Enable Woo Commerce', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'pb-gallery')}
+										{__('Upgrade to Pro', 'folioblocks')}
 									</a>
 								</Notice>
 							</div>
@@ -559,14 +559,14 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 						{ attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
 					)}
 					{applyFilters(
-						'portfolioBlocks.carouselGallery.disableRightClickToggle',
+						'folioBlocks.carouselGallery.disableRightClickToggle',
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Disable Right-Click', 'pb-gallery')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
+									<strong>{__('Disable Right-Click', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'pb-gallery')}
+										{__('Upgrade to Pro', 'folioblocks')}
 									</a>
 								</Notice>
 							</div>
@@ -574,14 +574,14 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 						{ attributes, setAttributes }
 					)}
 					{applyFilters(
-						'portfolioBlocks.carouselGallery.lazyLoadToggle',
+						'folioBlocks.carouselGallery.lazyLoadToggle',
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Lazy Load of Images', 'pb-gallery')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
+									<strong>{__('Enable Lazy Load of Images', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'pb-gallery')}
+										{__('Upgrade to Pro', 'folioblocks')}
 									</a>
 								</Notice>
 							</div>
@@ -589,29 +589,29 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 						{ attributes, setAttributes }
 					)}
 				</PanelBody>
-				<PanelBody title={__('Gallery Control Settings', 'pb-gallery')} initialOpen={true}>
-					{applyFilters('portfolioBlocks.carouselGallery.enableAutoplayToggle',
+				<PanelBody title={__('Gallery Control Settings', 'folioblocks')} initialOpen={true}>
+					{applyFilters('folioBlocks.carouselGallery.enableAutoplayToggle',
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Autoplay', 'pb-gallery')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
+									<strong>{__('Enable Autoplay', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'pb-gallery')}
+										{__('Upgrade to Pro', 'folioblocks')}
 									</a>
 								</Notice>
 							</div>
 						),
 						{ attributes, setAttributes, }
 					)}
-					{applyFilters('portfolioBlocks.carouselGallery.showControlsToggle',
+					{applyFilters('folioBlocks.carouselGallery.showControlsToggle',
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Carousel Controls', 'pb-gallery')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
+									<strong>{__('Enable Carousel Controls', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'pb-gallery')}
+										{__('Upgrade to Pro', 'folioblocks')}
 									</a>
 								</Notice>
 							</div>
@@ -619,28 +619,28 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 						{ attributes, setAttributes, }
 					)}
 				</PanelBody>
-				<PanelBody title={__('Gallery Image Settings', 'pb-gallery')} initialOpen={true}>
+				<PanelBody title={__('Gallery Image Settings', 'folioblocks')} initialOpen={true}>
 					{applyFilters(
-						'portfolioBlocks.carouselGallery.lightboxControls',
+						'folioBlocks.carouselGallery.lightboxControls',
 						(
 							<>
 								<ToggleControl
-									label={__('Enable Lightbox', 'pb-gallery')}
+									label={__('Enable Lightbox', 'folioblocks')}
 									checked={!!lightbox}
 									onChange={(newLightbox) => setAttributes({ lightbox: newLightbox })}
 									__nextHasNoMarginBottom
-									help={__('Open images in a lightbox when clicked.', 'pb-gallery')}
+									help={__('Open images in a lightbox when clicked.', 'folioblocks')}
 								/>
 
 								{lightbox && (
 									<ToggleControl
-										label={__('Show Image Caption in Lightbox', 'pb-gallery')}
+										label={__('Show Image Caption in Lightbox', 'folioblocks')}
 										checked={!!lightboxCaption}
 										onChange={(newLightboxCaption) =>
 											setAttributes({ lightboxCaption: newLightboxCaption })
 										}
 										__nextHasNoMarginBottom
-										help={__('Display image captions inside the lightbox.', 'pb-gallery')}
+										help={__('Display image captions inside the lightbox.', 'folioblocks')}
 									/>
 								)}
 							</>
@@ -648,12 +648,12 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 						{ attributes, setAttributes }
 					)}
 					{applyFilters(
-						'portfolioBlocks.carouselGallery.onHoverTitleToggle',
+						'folioBlocks.carouselGallery.onHoverTitleToggle',
 						(
 							<>
 								<ToggleControl
-									label={__('Show Image Title on Hover', 'pb-gallery')}
-									help={__('Display the image title when hovering over images.', 'pb-gallery')}
+									label={__('Show Image Title on Hover', 'folioblocks')}
+									help={__('Display the image title when hovering over images.', 'folioblocks')}
 									__nextHasNoMarginBottom
 									checked={!!attributes.onHoverTitle}
 									onChange={(value) => setAttributes({ onHoverTitle: value })}
@@ -668,30 +668,30 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 
 			<InspectorControls group="styles">
 				{applyFilters(
-					'portfolioBlocks.carouselGallery.controlStyleSettings',
+					'folioBlocks.carouselGallery.controlStyleSettings',
 					(
 						<div style={{ marginBottom: '8px' }}>
 							<Notice status="info" isDismissible={false}>
-								<strong>{__('Carousel Control Styles', 'pb-gallery')}</strong><br />
-								{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
+								<strong>{__('Carousel Control Styles', 'folioblocks')}</strong><br />
+								{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
 								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-									{__('Upgrade to Pro', 'pb-gallery')}
+									{__('Upgrade to Pro', 'folioblocks')}
 								</a>
 							</Notice>
 						</div>
 					),
 					{ attributes, setAttributes }
 				)}
-				<PanelBody title={__('Gallery Image Styles', 'pb-gallery')} initialOpen={true}>
+				<PanelBody title={__('Gallery Image Styles', 'folioblocks')} initialOpen={true}>
 					{applyFilters(
-						'portfolioBlocks.carouselGallery.borderColorControl',
+						'folioBlocks.carouselGallery.borderColorControl',
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Image Border Color', 'pb-gallery')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
+									<strong>{__('Enable Image Border Color', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'pb-gallery')}
+										{__('Upgrade to Pro', 'folioblocks')}
 									</a>
 								</Notice>
 							</div>
@@ -699,14 +699,14 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 						{ attributes, setAttributes }
 					)}
 					{applyFilters(
-						'portfolioBlocks.carouselGallery.borderWidthControl',
+						'folioBlocks.carouselGallery.borderWidthControl',
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Image Border Width', 'pb-gallery')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
+									<strong>{__('Enable Image Border Width', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'pb-gallery')}
+										{__('Upgrade to Pro', 'folioblocks')}
 									</a>
 								</Notice>
 							</div>
@@ -714,14 +714,14 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 						{ attributes, setAttributes }
 					)}
 					{applyFilters(
-						'portfolioBlocks.carouselGallery.borderRadiusControl',
+						'folioBlocks.carouselGallery.borderRadiusControl',
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Image Border Radius', 'pb-gallery')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
+									<strong>{__('Enable Image Border Radius', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'pb-gallery')}
+										{__('Upgrade to Pro', 'folioblocks')}
 									</a>
 								</Notice>
 							</div>
@@ -729,14 +729,14 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 						{ attributes, setAttributes }
 					)}
 					{applyFilters(
-						'portfolioBlocks.carouselGallery.dropShadowToggle',
+						'folioBlocks.carouselGallery.dropShadowToggle',
 						(
 							<div style={{ marginBottom: '8px' }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Image Drop Shadow', 'pb-gallery')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'pb-gallery')}
+									<strong>{__('Enable Image Drop Shadow', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
 									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'pb-gallery')}
+										{__('Upgrade to Pro', 'folioblocks')}
 									</a>
 								</Notice>
 							</div>
@@ -751,10 +751,10 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 					<MediaPlaceholder
 						icon={<IconCarouselGallery />}
 						labels={{
-							title: __('Carousel Gallery', 'pb-gallery'),
-							instructions: !window.portfolioBlocksData?.isPro
-								? __('Upload or select up to 15 images to create a carousel. Upgrade to Pro for unlimited images.', 'pb-gallery')
-								: __('Upload or select images to create a carousel.', 'pb-gallery'),
+							title: __('Carousel Gallery', 'folioblocks'),
+							instructions: !window.folioBlocksData?.isPro
+								? __('Upload or select up to 15 images to create a carousel. Upgrade to Pro for unlimited images.', 'folioblocks')
+								: __('Upload or select images to create a carousel.', 'folioblocks'),
 						}}
 						onSelect={onSelectImages}
 						accept="image/*"
@@ -768,7 +768,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 					/>
 				)}
 				{applyFilters(
-					'portfolioBlocks.carouselGallery.controlButtons',
+					'folioBlocks.carouselGallery.controlButtons',
 					null,
 					{ attributes, setAttributes, goToPrevSlide, goToNextSlide, isPlaying, setIsPlaying, innerBlocks }
 				)}

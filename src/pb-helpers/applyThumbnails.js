@@ -60,9 +60,9 @@ export const applyThumbnails = (clientId = null, retries = 10) => {
 		: wp.data.select('core/block-editor').getBlocks();
 
 	blocks.forEach((block) => {
-		// Only apply to 'pb-gallery/pb-image-block' with a valid src
+		// Only apply to 'folioblocks/pb-image-block' with a valid src
 		if (
-			block.name !== 'pb-gallery/pb-image-block' ||
+			block.name !== 'folioblocks/pb-image-block' ||
 			!block.attributes?.src
 		) {
 			return;

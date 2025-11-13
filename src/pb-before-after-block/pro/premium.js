@@ -8,28 +8,28 @@ import { PanelColorSettings } from '@wordpress/block-editor';
 import { addFilter } from '@wordpress/hooks';
 
 addFilter(
-	'portfolioBlocks.beforeAfter.dragHandlePosition',
-	'pb-gallery/before-after-drag-handle-position',
+	'folioBlocks.beforeAfter.dragHandlePosition',
+	'folioblocks/before-after-drag-handle-position',
 	(defaultContent, props) => {
 		const { setAttributes, attributes } = props;
 
 		return (
 			<RangeControl
-				label={__('Drag Handle Starting Position (%)', 'pb-gallery')}
+				label={__('Drag Handle Starting Position (%)', 'folioblocks')}
 				value={attributes.startingPosition}
 				onChange={(value) => setAttributes({ startingPosition: value })}
 				min={0}
 				max={100}
 				__next40pxDefaultSize
 				__nextHasNoMarginBottom
-				help={__('Set starting position for slider drag handle.', 'pb-gallery')}
+				help={__('Set starting position for slider drag handle.', 'folioblocks')}
 			/>
 		);
 	}
 );
 addFilter(
-	'portfolioBlocks.beforeAfter.showLabelsToggle',
-	'pb-gallery/before-after-premium-labels',
+	'folioBlocks.beforeAfter.showLabelsToggle',
+	'folioblocks/before-after-premium-labels',
 	(defaultContent, props) => {
 		const { setAttributes, attributes } = props;
 		const { showLabels, labelPosition, sliderOrientation } = attributes;
@@ -37,32 +37,32 @@ addFilter(
 		return (
 			<>
 				<ToggleControl
-					label={__('Show Before & After Labels', 'pb-gallery')}
+					label={__('Show Before & After Labels', 'folioblocks')}
 					checked={showLabels}
 					onChange={(value) => setAttributes({ showLabels: value })}
-					help={__('Display Before & After labels.', 'pb-gallery')}
+					help={__('Display Before & After labels.', 'folioblocks')}
 					__nextHasNoMarginBottom
 				/>
 				{
 					showLabels && (
 						<SelectControl
-							label={__('Label Position', 'pb-gallery')}
+							label={__('Label Position', 'folioblocks')}
 							value={labelPosition}
 							options={
 								sliderOrientation === 'vertical'
 									? [
-										{ label: __('Left', 'pb-gallery'), value: 'left' },
-										{ label: __('Center', 'pb-gallery'), value: 'center' },
-										{ label: __('Right', 'pb-gallery'), value: 'right' },
+										{ label: __('Left', 'folioblocks'), value: 'left' },
+										{ label: __('Center', 'folioblocks'), value: 'center' },
+										{ label: __('Right', 'folioblocks'), value: 'right' },
 									]
 									: [
-										{ label: __('Top', 'pb-gallery'), value: 'top' },
-										{ label: __('Center', 'pb-gallery'), value: 'center' },
-										{ label: __('Bottom', 'pb-gallery'), value: 'bottom' },
+										{ label: __('Top', 'folioblocks'), value: 'top' },
+										{ label: __('Center', 'folioblocks'), value: 'center' },
+										{ label: __('Bottom', 'folioblocks'), value: 'bottom' },
 									]
 							}
 							onChange={(value) => setAttributes({ labelPosition: value })}
-							help={__('Set Before & After label position.', 'pb-gallery')}
+							help={__('Set Before & After label position.', 'folioblocks')}
 							__nextHasNoMarginBottom
 							__next40pxDefaultSize
 						/>
@@ -73,8 +73,8 @@ addFilter(
 	}
 );
 addFilter(
-  'portfolioBlocks.beforeAfter.renderBeforeLabel',
-  'pb-gallery/premium-render-before-label',
+  'folioBlocks.beforeAfter.renderBeforeLabel',
+  'folioblocks/premium-render-before-label',
   (content, { attributes }) => {
     const { showLabels, labelPosition, labelTextColor, labelBackgroundColor } = attributes;
     if (!showLabels) return content;
@@ -89,15 +89,15 @@ addFilter(
             backgroundColor: labelBackgroundColor,
           }}
         >
-          {__('Before', 'pb-gallery')}
+          {__('Before', 'folioblocks')}
         </div>
       </>
     );
   }
 );
 addFilter(
-  'portfolioBlocks.beforeAfter.renderAfterLabel',
-  'pb-gallery/premium-render-after-label',
+  'folioBlocks.beforeAfter.renderAfterLabel',
+  'folioblocks/premium-render-after-label',
   (content, { attributes }) => {
     const { showLabels, labelPosition, labelTextColor, labelBackgroundColor } = attributes;
     if (!showLabels) return content;
@@ -112,22 +112,22 @@ addFilter(
             backgroundColor: labelBackgroundColor,
           }}
         >
-          {__('After', 'pb-gallery')}
+          {__('After', 'folioblocks')}
         </div>
       </>
     );
   }
 );
 addFilter(
-	'portfolioBlocks.beforeAfter.disableRightClickToggle',
-	'pb-gallery/before-after-premium-disable-right-click',
+	'folioBlocks.beforeAfter.disableRightClickToggle',
+	'folioblocks/before-after-premium-disable-right-click',
 	(defaultContent, props) => {
 		const { attributes, setAttributes } = props;
 
 		return (
 			<ToggleControl
-				label={__('Disable Right-Click on Page', 'pb-gallery')}
-				help={__('Prevents visitors from right-clicking.', 'pb-gallery')}
+				label={__('Disable Right-Click on Page', 'folioblocks')}
+				help={__('Prevents visitors from right-clicking.', 'folioblocks')}
 				__nextHasNoMarginBottom
 				checked={!!attributes.disableRightClick}
 				onChange={(value) => setAttributes({ disableRightClick: value })}
@@ -136,15 +136,15 @@ addFilter(
 	}
 );
 addFilter(
-	'portfolioBlocks.beforeAfter.lazyLoadToggle',
-	'pb-gallery/before-after-premium-lazy-load',
+	'folioBlocks.beforeAfter.lazyLoadToggle',
+	'folioblocks/before-after-premium-lazy-load',
 	(defaultContent, props) => {
 		const { attributes, setAttributes } = props;
 
 		return (
 			<ToggleControl
-				label={__('Enable Lazy Load of Images', 'pb-gallery')}
-				help={__('Enables lazy loading of gallery images.', 'pb-gallery')}
+				label={__('Enable Lazy Load of Images', 'folioblocks')}
+				help={__('Enables lazy loading of gallery images.', 'folioblocks')}
 				__nextHasNoMarginBottom
 				checked={!!attributes.lazyLoad}
 				onChange={(value) => setAttributes({ lazyLoad: value })}
@@ -153,8 +153,8 @@ addFilter(
 	}
 );
 addFilter(
-	'portfolioBlocks.beforeAfter.colorSettingsPanel',
-	'pb-gallery/before-after-premium-colors',
+	'folioBlocks.beforeAfter.colorSettingsPanel',
+	'folioblocks/before-after-premium-colors',
 	(defaultContent, props) => {
 		const { setAttributes, attributes } = props;
 		const {
@@ -165,21 +165,21 @@ addFilter(
 
 		return (
 			<PanelColorSettings
-				title={__('Before & After Block Styles', 'pb-gallery')}
+				title={__('Before & After Block Styles', 'folioblocks')}
 				initialOpen={true}
 				colorSettings={[
 					{
-						label: __('Slider Handle & Line Color', 'pb-gallery'),
+						label: __('Slider Handle & Line Color', 'folioblocks'),
 						value: sliderColor,
 						onChange: (value) => setAttributes({ sliderColor: value }),
 					},
 					{
-						label: __('Label Text Color', 'pb-gallery'),
+						label: __('Label Text Color', 'folioblocks'),
 						value: labelTextColor,
 						onChange: (value) => setAttributes({ labelTextColor: value }),
 					},
 					{
-						label: __('Label Background Color', 'pb-gallery'),
+						label: __('Label Background Color', 'folioblocks'),
 						value: labelBackgroundColor,
 						onChange: (value) => setAttributes({ labelBackgroundColor: value }),
 					},

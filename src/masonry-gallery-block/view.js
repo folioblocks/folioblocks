@@ -1,7 +1,7 @@
 // Masonry Gallery Block - View JS
 document.addEventListener('DOMContentLoaded', () => {
 
-  const gallery = document.querySelector('.wp-block-pb-gallery-masonry-gallery-block');
+  const gallery = document.querySelector('.wp-block-folioblocks-masonry-gallery-block');
 
   if (!gallery) return;
 

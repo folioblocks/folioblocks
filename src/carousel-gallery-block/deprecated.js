@@ -91,7 +91,7 @@ registerBlockType('portfolio-blocks/carousel-gallery-block', {
 
 		useEffect(() => {
 			const newBlock = createBlock(
-				'pb-gallery/carousel-gallery-block',
+				'folioblocks/carousel-gallery-block',
 				{ ...attributes },
 				innerBlocks
 			);

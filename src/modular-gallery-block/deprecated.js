@@ -63,7 +63,7 @@ registerBlockType('portfolio-blocks/modular-gallery-block', {
 
 		useEffect(() => {
 			const newBlock = createBlock(
-				'pb-gallery/modular-gallery-block',
+				'folioblocks/modular-gallery-block',
 				{ ...attributes },
 				innerBlocks
 			);

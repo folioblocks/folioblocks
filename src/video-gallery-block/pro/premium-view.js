@@ -3,12 +3,12 @@
  * Premium View JS
  **/
 document.addEventListener('DOMContentLoaded', () => {
-	const galleries = document.querySelectorAll('.wp-block-pb-gallery-video-gallery-block');
+	const galleries = document.querySelectorAll('.wp-block-folioblocks-video-gallery-block');
 
 	galleries.forEach((galleryBlock) => {
 		
 		const filterButtons = galleryBlock.querySelectorAll('.pb-video-gallery-filters .filter-button');
-		const videoBlockWrappers = galleryBlock.querySelectorAll('.wp-block-pb-gallery-pb-video-block');
+		const videoBlockWrappers = galleryBlock.querySelectorAll('.wp-block-folioblocks-pb-video-block');
 
 		// Filter functionality
 		filterButtons.forEach((button) => {

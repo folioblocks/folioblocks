@@ -5,7 +5,7 @@
 
 
 document.addEventListener('DOMContentLoaded', () => {
-  const blocks = document.querySelectorAll('.wp-block-pb-gallery-carousel-gallery-block');
+  const blocks = document.querySelectorAll('.wp-block-folioblocks-carousel-gallery-block');
 
   blocks.forEach((block) => {
     // Guard: don’t double-init this block if something re-runs DOMContentLoaded

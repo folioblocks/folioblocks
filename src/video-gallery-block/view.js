@@ -3,7 +3,7 @@
  * View JS
  **/
 document.addEventListener('DOMContentLoaded', () => {
-	const galleries = document.querySelectorAll('.wp-block-pb-gallery-video-gallery-block');
+	const galleries = document.querySelectorAll('.wp-block-folioblocks-video-gallery-block');
 
 	galleries.forEach((galleryBlock) => {
 		// Immediately remove is-loading when DOM is ready

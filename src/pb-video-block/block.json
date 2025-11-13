@@ -1,15 +1,15 @@
 {
 "$schema": "https://schemas.wp.org/trunk/block.json",
 "apiVersion": 3,
-"name": "pb-gallery/pb-video-block",
+"name": "folioblocks/pb-video-block",
 "version": "1.0.1",
 "title": "Video Block",
-"category": "pb-gallery",
+"category": "folioblocks",
 "icon": "video-alt3",
 "example": {}, 
-"textdomain": "pb-gallery",
+"textdomain": "folioblocks",
 "parent": [
-		"pb-gallery/video-gallery-block"
+		"folioblocks/video-gallery-block"
 	],
 "supports": {
 	"inserter": false,
@@ -42,22 +42,22 @@
 	"wooProductURL": { "type": "string", "default": ""}
 },
 "usesContext": [
-	"portfolioBlocks/enableWooCommerce",
-    "portfolioBlocks/wooCartIconDisplay",
-    "portfolioBlocks/wooLightboxInfoType",
-	"portfolioBlocks/lazyLoad",
-	"portfolioBlocks/aspectRatio",
-	"portfolioBlocks/playButtonVisibility",
-	"portfolioBlocks/titleVisibility",
-	"portfolioBlocks/filterCategories",
-	"portfolioBlocks/activeFilter",
-	"portfolioBlocks/lightbox", 
-	"portfolioBlocks/lightboxLayout",
-	"portfolioBlocks/thumbnailSize",
-	"portfolioBlocks/borderWidth",
-	"portfolioBlocks/borderRadius",
-	"portfolioBlocks/borderColor", 
-	"portfolioBlocks/dropShadow"
+	"folioBlocks/enableWooCommerce",
+    "folioBlocks/wooCartIconDisplay",
+    "folioBlocks/wooLightboxInfoType",
+	"folioBlocks/lazyLoad",
+	"folioBlocks/aspectRatio",
+	"folioBlocks/playButtonVisibility",
+	"folioBlocks/titleVisibility",
+	"folioBlocks/filterCategories",
+	"folioBlocks/activeFilter",
+	"folioBlocks/lightbox", 
+	"folioBlocks/lightboxLayout",
+	"folioBlocks/thumbnailSize",
+	"folioBlocks/borderWidth",
+	"folioBlocks/borderRadius",
+	"folioBlocks/borderColor", 
+	"folioBlocks/dropShadow"
 ],
 "editorScript": "file:./index.js",
 "editorStyle": "file:./index.css",

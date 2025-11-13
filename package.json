@@ -1,6 +1,6 @@
 {
-	"name": "pb-gallery",
-	"version": "0.9.6",
+	"name": "folioblocks",
+	"version": "0.9.8",
 	"description": "A collection of blocks for making photo and video galleries.",
 	"author": "PB Team",
 	"license": "GPL-2.0-or-later",

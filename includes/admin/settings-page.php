@@ -1,34 +1,34 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly.
 
-add_action( 'admin_enqueue_scripts', 'portfolio_blocks_admin_styles' );
+add_action( 'admin_enqueue_scripts', 'folioblocks_admin_styles' );
 
-function portfolio_blocks_admin_styles( $hook ) {
-    if ( $hook !== 'toplevel_page_pb-gallery-settings' ) {
+function folioblocks_admin_styles( $hook ) {
+    if ( $hook !== 'toplevel_page_folioblocks-settings' ) {
         return;
     }
 
     wp_enqueue_style( 
-        'pb-gallery-admin', 
+        'folioblocks-admin', 
         plugin_dir_url( __FILE__ ) . 'settings-page.css',
         array(), 
         filemtime( plugin_dir_path( __FILE__ ) . 'settings-page.css' )
     );
 }
 
-function portfolio_blocks_render_settings_page() {
+function folioblocks_render_settings_page() {
 
 ?>
 	<div class="wrap">
 		<div class="pb-settings-header">	
-		<h1><?php esc_html_e( 'Portfolio Blocks', 'pb-gallery' ); ?></h1>
+		<h1><?php esc_html_e( 'FolioBlocks', 'folioblocks' ); ?></h1>
 		<div>
 
 		<div class="settings-container">
         	<div class="settings-left">
 				<?php if ( pb_fs()->can_use_premium_code() ) : ?>
 					<p>
-                	    Thank you for purchasing Portfolio Blocks Pro. Portfolio Blocks is a WordPress plugin 
+                	    Thank you for purchasing FolioBlocks Pro. FolioBlocks is a WordPress plugin 
 						purpose-built for the block editor and full site editor, giving you the tools to create 
 						beautiful photo and video galleries with ease directly in your posts or pages.
                 	</p>
@@ -42,12 +42,12 @@ function portfolio_blocks_render_settings_page() {
 					<h2>Video Tutorials:</h2>
 				<?php else : ?>
                 	<p>
-                	    Thank you for downloading Portfolio Blocks. Portfolio Blocks is a WordPress plugin 
+                	    Thank you for downloading FolioBlocks. FolioBlocks is a WordPress plugin 
 						purpose-built for the block editor and full site editor, giving you the tools to create 
 						beautiful photo and video galleries with ease directly in your posts or pages.
                 	</p>
 					<p>
-						Portfolio Blocks is a paid premiuim plugin, this free version available in the WordPress plugin repository
+						FolioBlocks is a paid premiuim plugin, this free version available in the WordPress plugin repository
 						is only meant to give you a taste of what the full version can do.
 					</p>
 					<div class="settings-features">
@@ -74,11 +74,11 @@ function portfolio_blocks_render_settings_page() {
 						</ul>
 					</div>
 					<p>
-						Purchase a license for Portfolio Blocks today and enjoy the best gallery plugin for modern WordPress and the block editor.
+						Purchase a license for FolioBlocks today and enjoy the best gallery plugin for modern WordPress and the block editor.
 					</p>
 					<p class="buy-button-wrapper">
-    					<a class="button button-primary buy-button" href="<?php echo esc_url( admin_url( 'admin.php?page=pb-gallery-settings-pricing' ) ); ?>">
-        					<?php esc_html_e( 'Upgrade Now', 'pb-gallery' ); ?>
+    					<a class="button button-primary buy-button" href="<?php echo esc_url( admin_url( 'admin.php?page=folioblocks-settings-pricing' ) ); ?>">
+        					<?php esc_html_e( 'Upgrade Now', 'folioblocks' ); ?>
     					</a>
 					</p>
 					<hr/>
@@ -137,7 +137,7 @@ function portfolio_blocks_render_settings_page() {
 				</div>
 				<hr/>
 				<?php
-    				// --- Latest News from pb-gallery.com ---
+    				// --- Latest News from folioblocks.com ---
     				// Load WordPress feed functions (SimplePie wrapper)
     				if ( ! function_exists( 'fetch_feed' ) ) {
         				require_once ABSPATH . WPINC . '/feed.php';
@@ -147,7 +147,7 @@ function portfolio_blocks_render_settings_page() {
     				$pb_feed_cache_lifetime = function( $seconds ) { return 6 * HOUR_IN_SECONDS; };
     				add_filter( 'wp_feed_cache_transient_lifetime', $pb_feed_cache_lifetime );
 
-    				$pb_rss = fetch_feed( 'https://pb-gallery.com/feed/' );
+    				$pb_rss = fetch_feed( 'https://folioblocks.com/feed/' );
 
     				// Remove our temporary cache lifetime filter
     				remove_filter( 'wp_feed_cache_transient_lifetime', $pb_feed_cache_lifetime );
@@ -162,7 +162,7 @@ function portfolio_blocks_render_settings_page() {
     				}
 				?>
 
-				<h2><?php esc_html_e( 'Latest News From Portfolio Blocks Website:', 'pb-gallery' ); ?></h2>
+				<h2><?php esc_html_e( 'Latest News From FolioBlocks Website:', 'folioblocks' ); ?></h2>
 				<ul class="pb-latest-news">
     				<?php if ( $pb_has_items ) : ?>
         				<?php foreach ( $pb_rss_items as $item ) :
@@ -190,13 +190,13 @@ function portfolio_blocks_render_settings_page() {
         			<?php endforeach; ?>
     				<?php else : ?>
         			<li class="pb-news-item--empty">
-            			<?php esc_html_e( 'No news items found right now. Please check back later.', 'pb-gallery' ); ?>
+            			<?php esc_html_e( 'No news items found right now. Please check back later.', 'folioblocks' ); ?>
         			</li>
     				<?php endif; ?>
 				</ul>
 				<p class="pb-news-view-all">
-    				<a href="https://pb-gallery.com/news/" target="_blank" rel="noopener noreferrer">
-       					 <?php esc_html_e( 'View all news', 'pb-gallery' ); ?> &rarr;
+    				<a href="https://folioblocks.com/news/" target="_blank" rel="noopener noreferrer">
+       					 <?php esc_html_e( 'View all news', 'folioblocks' ); ?> &rarr;
     				</a>
 				</p>
 			</div>

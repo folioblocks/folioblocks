@@ -3,7 +3,7 @@
  * Front-End SCSS
  **/
 
-.wp-block-pb-gallery-video-gallery-block {
+.wp-block-folioblocks-video-gallery-block {
 	opacity: 1;
 	transition: opacity 0.3s ease;
 
@@ -19,7 +19,7 @@
 	gap: var(--gap, 10px);
 	grid-template-columns: repeat(var(--columns, 4), 1fr);
 
-	>.wp-block-pb-gallery-pb-video-block {
+	>.wp-block-folioblocks-pb-video-block {
 		box-sizing: border-box;
 	}
 
@@ -44,7 +44,7 @@
 	}
 }
 
-.wp-block-pb-gallery-pb-video-block img {
+.wp-block-folioblocks-pb-video-block img {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
@@ -88,19 +88,19 @@
 	}
 }
 
-.wp-block-pb-gallery-pb-video-block.is-hidden {
+.wp-block-folioblocks-pb-video-block.is-hidden {
 	display: none !important;
 }
 
-.wp-block-pb-gallery-pb-video-block-wrapper.is-hidden {
+.wp-block-folioblocks-pb-video-block-wrapper.is-hidden {
 	display: none;
 }
 
 /* Smooth filtering transitions and layout fix */
-.wp-block-pb-gallery-pb-video-block {
+.wp-block-folioblocks-pb-video-block {
 	transition: all 0.3s ease;
 }
 
-.wp-block-pb-gallery-pb-video-block.is-hidden {
+.wp-block-folioblocks-pb-video-block.is-hidden {
 	display: none;
 }

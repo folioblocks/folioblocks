@@ -1,10 +1,10 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "pb-gallery/before-after-block",
+	"name": "folioblocks/before-after-block",
 	"version": "1.0.2",
 	"title": "Before & After Block",
-	"category": "pb-gallery",
+	"category": "folioblocks",
 	"icon": "images-alt2",
 	"description": "Provides a slider to compare two images side-by-side or top-to-bottom.",
 	"example": {
@@ -61,7 +61,7 @@
 		"disableRightClick": { "type": "boolean", "default": false },
         "lazyLoad": { "type": "boolean", "default": false }
 	},
-	"textdomain": "pb-gallery",
+	"textdomain": "folioblocks",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",

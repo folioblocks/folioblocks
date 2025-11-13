@@ -3,7 +3,7 @@
  * Premium View JS
  **/
 document.addEventListener("DOMContentLoaded", function () {
-    const galleries = document.querySelectorAll('.wp-block-pb-gallery-grid-gallery-block');
+    const galleries = document.querySelectorAll('.wp-block-folioblocks-grid-gallery-block');
 
     // Disable right-click on entire page if any gallery block has it enabled
     const disableRightClick = document.querySelector('[data-disable-right-click="true"]');

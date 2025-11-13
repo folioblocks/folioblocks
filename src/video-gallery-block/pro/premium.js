@@ -17,10 +17,10 @@ import {
 import { useEffect } from '@wordpress/element';
 import { addFilter } from '@wordpress/hooks';
 
-if (window.portfolioBlocksData?.hasWooCommerce) {
+if (window.folioBlocksData?.hasWooCommerce) {
     addFilter(
-        'portfolioBlocks.videoGallery.wooCommerceControls',
-        'pb-gallery/video-gallery-premium-woocommerce',
+        'folioBlocks.videoGallery.wooCommerceControls',
+        'folioblocks/video-gallery-premium-woocommerce',
         (defaultContent, props) => {
             const { attributes, setAttributes } = props;
             const { enableWooCommerce, wooCartIconDisplay, enableDownload } = attributes;
@@ -28,7 +28,7 @@ if (window.portfolioBlocksData?.hasWooCommerce) {
             return (
                 <>
                     <ToggleControl
-                        label={__('Enable WooCommerce Integration', 'pb-gallery')}
+                        label={__('Enable WooCommerce Integration', 'folioblocks')}
                         checked={!!enableWooCommerce}
                         onChange={(value) => {
                             setAttributes({ enableWooCommerce: value });
@@ -43,22 +43,22 @@ if (window.portfolioBlocksData?.hasWooCommerce) {
                             }
                         }}
                         __nextHasNoMarginBottom
-                        help={__('Link gallery images to WooCommerce products.', 'pb-gallery')}
+                        help={__('Link gallery images to WooCommerce products.', 'folioblocks')}
                         disabled={enableDownload}
                     />
 
                     {enableWooCommerce && (
                         <SelectControl
-                            label={__('Display Add to Cart Icon', 'pb-gallery')}
+                            label={__('Display Add to Cart Icon', 'folioblocks')}
                             value={wooCartIconDisplay}
                             options={[
-                                { label: __('On Hover', 'pb-gallery'), value: 'hover' },
-                                { label: __('Always', 'pb-gallery'), value: 'always' }
+                                { label: __('On Hover', 'folioblocks'), value: 'hover' },
+                                { label: __('Always', 'folioblocks'), value: 'always' }
                             ]}
                             onChange={(value) => setAttributes({ wooCartIconDisplay: value })}
                             __nextHasNoMarginBottom
                             __next40pxDefaultSize
-                            help={__('Choose when to display the Add to Cart icon.', 'pb-gallery')}
+                            help={__('Choose when to display the Add to Cart icon.', 'folioblocks')}
                         />
                     )}
                 </>
@@ -68,15 +68,15 @@ if (window.portfolioBlocksData?.hasWooCommerce) {
 }
 
 addFilter(
-    'portfolioBlocks.videoGallery.disableRightClickToggle',
-    'pb-gallery/video-gallery-premium-disable-right-click',
+    'folioBlocks.videoGallery.disableRightClickToggle',
+    'folioblocks/video-gallery-premium-disable-right-click',
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
 
         return (
             <ToggleControl
-                label={__('Disable Right-Click on Page', 'pb-gallery')}
-                help={__('Prevents visitors from right-clicking.', 'pb-gallery')}
+                label={__('Disable Right-Click on Page', 'folioblocks')}
+                help={__('Prevents visitors from right-clicking.', 'folioblocks')}
                 __nextHasNoMarginBottom={true}
                 checked={!!attributes.disableRightClick}
                 onChange={(value) => setAttributes({ disableRightClick: value })}
@@ -85,15 +85,15 @@ addFilter(
     }
 );
 addFilter(
-    'portfolioBlocks.videoGallery.lazyLoadToggle',
-    'pb-gallery/video-gallery-premium-lazy-load',
+    'folioBlocks.videoGallery.lazyLoadToggle',
+    'folioblocks/video-gallery-premium-lazy-load',
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
 
         return (
             <ToggleControl
-                label={__('Enable Lazy Load of Images', 'pb-gallery')}
-                help={__('Enables lazy loading of Video Gallery thumbnails.', 'pb-gallery')}
+                label={__('Enable Lazy Load of Images', 'folioblocks')}
+                help={__('Enables lazy loading of Video Gallery thumbnails.', 'folioblocks')}
                 __nextHasNoMarginBottom={true}
                 checked={!!attributes.lazyLoad}
                 onChange={(value) => setAttributes({ lazyLoad: value })}
@@ -103,29 +103,29 @@ addFilter(
 );
 
 addFilter(
-    'portfolioBlocks.videoGallery.lightboxLayout',
-    'pb-gallery/video-gallery-premium-lightbox-layout',
+    'folioBlocks.videoGallery.lightboxLayout',
+    'folioblocks/video-gallery-premium-lightbox-layout',
     (defaultContent, props) => {
         const { setAttributes, attributes } = props;
         const { enableWooCommerce } = attributes;
 
         // Base layout options
         const options = [
-            { label: __('Video Only', 'pb-gallery'), value: 'video-only' },
-            { label: __('Video + Info', 'pb-gallery'), value: 'split' },
+            { label: __('Video Only', 'folioblocks'), value: 'video-only' },
+            { label: __('Video + Info', 'folioblocks'), value: 'split' },
         ];
 
         // Add WooCommerce-specific layout option only when WooCommerce is installed and enabled
-        if (window.portfolioBlocksData?.hasWooCommerce && enableWooCommerce) {
+        if (window.folioBlocksData?.hasWooCommerce && enableWooCommerce) {
             options.push({
-                label: __('Video + Product Info', 'pb-gallery'),
+                label: __('Video + Product Info', 'folioblocks'),
                 value: 'video-product',
             });
         }
 
         return (
             <SelectControl
-                label={__('Lightbox Layout', 'pb-gallery')}
+                label={__('Lightbox Layout', 'folioblocks')}
                 value={attributes.lightboxLayout}
                 options={options}
                 onChange={(value) => setAttributes({ lightboxLayout: value })}
@@ -136,8 +136,8 @@ addFilter(
     }
 );
 addFilter(
-    'portfolioBlocks.videoGallery.filterLogic',
-    'pb-gallery/video-gallery-filter-logic',
+    'folioBlocks.videoGallery.filterLogic',
+    'folioblocks/video-gallery-filter-logic',
     (_, { attributes, setAttributes, selectedBlock }) => {
         const {
             enableFilter = false,
@@ -161,7 +161,7 @@ addFilter(
         useEffect(() => {
             if (
                 selectedBlock &&
-                selectedBlock.name === 'pb-gallery/pb-video-block'
+                selectedBlock.name === 'folioblocks/pb-video-block'
             ) {
                 const selectedCategory = selectedBlock.attributes?.filterCategory || '';
                 const isFilteredOut =
@@ -186,8 +186,8 @@ addFilter(
     }
 );
 addFilter(
-    'portfolioBlocks.videoGallery.enableFilterToggle',
-    'pb-gallery/video-gallery-premium-filter-toggle',
+    'folioBlocks.videoGallery.enableFilterToggle',
+    'folioblocks/video-gallery-premium-filter-toggle',
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
         const { enableFilter, filterAlign, filterCategories } = attributes;
@@ -204,11 +204,11 @@ addFilter(
         return (
             <>
                 <ToggleControl
-                    label={__('Enable Video Filtering', 'pb-gallery')}
+                    label={__('Enable Video Filtering', 'folioblocks')}
                     checked={!!attributes.enableFilter}
                     onChange={(val) => setAttributes({ enableFilter: val })}
                     __nextHasNoMarginBottom={true}
-                    help={__('Enable video filtering with categories.', 'pb-gallery')}
+                    help={__('Enable video filtering with categories.', 'folioblocks')}
                 />
                 {enableFilter && (
                     <>
@@ -217,8 +217,8 @@ addFilter(
                             __nextHasNoMarginBottom
                             value={filterAlign}
                             isBlock
-                            label={__('Filter Bar Alignment', 'pb-gallery')}
-                            help={__('Set alignment of the filter bar.', 'pb-gallery')}
+                            label={__('Filter Bar Alignment', 'folioblocks')}
+                            help={__('Set alignment of the filter bar.', 'folioblocks')}
                             onChange={(value) => setAttributes({ filterAlign: value })}
                         >
                             <ToggleGroupControlOption label="Left" value="left" />
@@ -227,7 +227,7 @@ addFilter(
                         </ToggleGroupControl>
 
                         <TextControl
-                            label={__('Filter Categories', 'pb-gallery')}
+                            label={__('Filter Categories', 'folioblocks')}
                             value={attributes.filtersInput || ''} // directly use attribute
                             onChange={(val) => {
                                 setAttributes({ filtersInput: val });
@@ -255,20 +255,20 @@ addFilter(
 
 
 addFilter(
-    'portfolioBlocks.videoGallery.borderColorControl',
-    'pb-gallery/video-gallery-premium-border-color',
+    'folioBlocks.videoGallery.borderColorControl',
+    'folioblocks/video-gallery-premium-border-color',
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
         return (
             <BaseControl
-                label={__('Border Color', 'pb-gallery')}
+                label={__('Border Color', 'folioblocks')}
                 __nextHasNoMarginBottom={true}
             >
                 <ColorPalette
                     value={attributes.borderColor}
                     onChange={(value) => setAttributes({ borderColor: value })}
                     clearable={false}
-                    help={__('Set border color.', 'pb-gallery')}
+                    help={__('Set border color.', 'folioblocks')}
                 />
             </BaseControl>
         );
@@ -276,14 +276,14 @@ addFilter(
 );
 
 addFilter(
-    'portfolioBlocks.videoGallery.borderWidthControl',
-    'pb-gallery/video-gallery-premium-border-width',
+    'folioBlocks.videoGallery.borderWidthControl',
+    'folioblocks/video-gallery-premium-border-width',
     (defaultContent, props) => {
         const { attributes, setAttributes, clientId, updateBlockAttributes } = props;
 
         return (
             <RangeControl
-                label={__('Border Width', 'pb-gallery')}
+                label={__('Border Width', 'folioblocks')}
                 value={attributes.borderWidth}
                 onChange={(value) => {
                     setAttributes({ borderWidth: value });
@@ -297,21 +297,21 @@ addFilter(
                 max={20}
                 __next40pxDefaultSize={true}
                 __nextHasNoMarginBottom={true}
-                help={__('Set border width in pixels.', 'pb-gallery')}
+                help={__('Set border width in pixels.', 'folioblocks')}
             />
         );
     }
 );
 
 addFilter(
-    'portfolioBlocks.videoGallery.borderRadiusControl',
-    'pb-gallery/video-gallery-premium-border-radius',
+    'folioBlocks.videoGallery.borderRadiusControl',
+    'folioblocks/video-gallery-premium-border-radius',
     (defaultContent, props) => {
         const { attributes, setAttributes, clientId, updateBlockAttributes } = props;
 
         return (
             <RangeControl
-                label={__('Border Radius', 'pb-gallery')}
+                label={__('Border Radius', 'folioblocks')}
                 value={attributes.borderRadius}
                 onChange={(value) => {
                     setAttributes({ borderRadius: value });
@@ -325,33 +325,33 @@ addFilter(
                 max={100}
                 __next40pxDefaultSize={true}
                 __nextHasNoMarginBottom={true}
-                help={__('Set border radius in pixels.', 'pb-gallery')}
+                help={__('Set border radius in pixels.', 'folioblocks')}
             />
         );
     }
 );
 
 addFilter(
-    'portfolioBlocks.videoGallery.dropShadowToggle',
-    'pb-gallery/video-gallery-premium-drop-shadow',
+    'folioBlocks.videoGallery.dropShadowToggle',
+    'folioblocks/video-gallery-premium-drop-shadow',
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
 
         return (
             <ToggleControl
-                label={__('Enable Drop Shadow', 'pb-gallery')}
+                label={__('Enable Drop Shadow', 'folioblocks')}
                 checked={!!attributes.dropShadow}
                 onChange={(newDropShadow) => setAttributes({ dropShadow: newDropShadow })}
                 __nextHasNoMarginBottom={true}
-                help={__('Applies a subtle drop shadow to images.', 'pb-gallery')}
+                help={__('Applies a subtle drop shadow to images.', 'folioblocks')}
             />
         );
     }
 );
 
 addFilter(
-    'portfolioBlocks.videoGallery.filterStylesControls',
-    'pb-gallery/video-gallery-premium-filter-styles-controls',
+    'folioBlocks.videoGallery.filterStylesControls',
+    'folioblocks/video-gallery-premium-filter-styles-controls',
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
         const {
@@ -368,29 +368,29 @@ addFilter(
 
         return (
             <PanelColorSettings
-                title={__('Filter Color Settings', 'pb-gallery')}
+                title={__('Filter Color Settings', 'folioblocks')}
                 initialOpen={true}
                 __nextHasNoMarginBottom={true}
                 colorSettings={[
                     {
                         value: activeFilterTextColor,
                         onChange: (value) => setAttributes({ activeFilterTextColor: value }),
-                        label: __('Active Text Color', 'pb-gallery'),
+                        label: __('Active Text Color', 'folioblocks'),
                     },
                     {
                         value: activeFilterBgColor,
                         onChange: (value) => setAttributes({ activeFilterBgColor: value }),
-                        label: __('Active Background Color', 'pb-gallery'),
+                        label: __('Active Background Color', 'folioblocks'),
                     },
                     {
                         value: filterTextColor,
                         onChange: (value) => setAttributes({ filterTextColor: value }),
-                        label: __('Inactive Text Color', 'pb-gallery'),
+                        label: __('Inactive Text Color', 'folioblocks'),
                     },
                     {
                         value: filterBgColor,
                         onChange: (value) => setAttributes({ filterBgColor: value }),
-                        label: __('Inactive Background Color', 'pb-gallery'),
+                        label: __('Inactive Background Color', 'folioblocks'),
                     },
                 ]}
             />
@@ -398,8 +398,8 @@ addFilter(
     }
 );
 addFilter(
-    'portfolioBlocks.videoGallery.renderFilterBar',
-    'pb-gallery/video-gallery-premium-render-filter-bar',
+    'folioBlocks.videoGallery.renderFilterBar',
+    'folioblocks/video-gallery-premium-render-filter-bar',
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
         const { enableFilter, filterAlign = 'center', filterCategories = [], activeFilter = 'All' } = attributes;

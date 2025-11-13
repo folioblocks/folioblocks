@@ -1,18 +1,18 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "pb-gallery/pb-image-row",
+	"name": "folioblocks/pb-image-row",
 	"version": "1.0.1",
 	"title": "Image Row",
-	"category": "pb-gallery",
+	"category": "folioblocks",
 	"icon": "columns",
 	"description": "Groups images into a single row, scaling them to fill the full width without cropping.",
 	"example": {},
-	"textdomain": "pb-gallery",
-	"parent": [ "pb-gallery/modular-gallery-block" ],
+	"textdomain": "folioblocks",
+	"parent": [ "folioblocks/modular-gallery-block" ],
 	"allowedBlocks": [ 
-		"pb-gallery/pb-image-block",
-		"pb-gallery/pb-image-stack"
+		"folioblocks/pb-image-block",
+		"folioblocks/pb-image-stack"
 	],
 	"supports": {
 		"inserter": false,
@@ -21,11 +21,11 @@
 		"html": false
     },
 	"providesContext": {
-        "portfolioBlocks/stackImageheight": "stackImageheight"
+        "folioBlocks/stackImageheight": "stackImageheight"
 	},
 	"usesContext": [ 
-		"portfolioBlocks/noGap",
-		"portfolioBlocks/layoutVersion"
+		"folioBlocks/noGap",
+		"folioBlocks/layoutVersion"
 	],
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",

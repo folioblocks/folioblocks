@@ -20,8 +20,8 @@ import { useEffect } from '@wordpress/element';
 import { applyThumbnails } from '../../pb-helpers/applyThumbnails';
 
 addFilter(
-	'portfolioBlocks.carouselGallery.editorEnhancements',
-	'pb-gallery/carousel-gallery-premium-thumbnails',
+	'folioBlocks.carouselGallery.editorEnhancements',
+	'folioblocks/carousel-gallery-premium-thumbnails',
 	(_, { clientId, innerBlocks, isBlockOrChildSelected }) => {
 		// This filter injects editor-only enhancements like List View thumbnails
 		useEffect(() => {
@@ -48,25 +48,25 @@ addFilter(
 );
 
 addFilter(
-    'portfolioBlocks.carouselGallery.randomizeToggle',
-    'pb-gallery/carousel-gallery-premium-toggle',
+    'folioBlocks.carouselGallery.randomizeToggle',
+    'folioblocks/carousel-gallery-premium-toggle',
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
         return (
             <ToggleControl
-                label={__('Randomize Image Order', 'pb-gallery')}
+                label={__('Randomize Image Order', 'folioblocks')}
                 checked={!!attributes.randomizeOrder}
                 onChange={(value) => setAttributes({ randomizeOrder: value })}
                 __nextHasNoMarginBottom
-                help={__('Randomize order of images.', 'pb-gallery')}
+                help={__('Randomize order of images.', 'folioblocks')}
             />
         );
     }
 );
 
 addFilter(
-    'portfolioBlocks.carouselGallery.downloadControls',
-    'pb-gallery/carousel-gallery-premium-downloads',
+    'folioBlocks.carouselGallery.downloadControls',
+    'folioblocks/carousel-gallery-premium-downloads',
     (defaultContent, props) => {
         const { attributes, setAttributes, effectiveEnableWoo } = props;
 
@@ -79,26 +79,26 @@ addFilter(
         return (
             <>
                 <ToggleControl
-                    label={__('Enable Image Downloads', 'pb-gallery')}
+                    label={__('Enable Image Downloads', 'folioblocks')}
                     checked={!!enableDownload}
                     onChange={(value) => setAttributes({ enableDownload: value })}
                     __nextHasNoMarginBottom
-                    help={__('Enable visitors to download images from the gallery.', 'pb-gallery')}
+                    help={__('Enable visitors to download images from the gallery.', 'folioblocks')}
                     disabled={effectiveEnableWoo}
                 />
 
                 {enableDownload && (
                     <SelectControl
-                        label={__('Display Image Download Icon', 'pb-gallery')}
+                        label={__('Display Image Download Icon', 'folioblocks')}
                         value={downloadOnHover ? 'hover' : 'always'}
                         options={[
-                            { label: __('Always', 'pb-gallery'), value: 'always' },
-                            { label: __('On Hover', 'pb-gallery'), value: 'hover' }
+                            { label: __('Always', 'folioblocks'), value: 'always' },
+                            { label: __('On Hover', 'folioblocks'), value: 'hover' }
                         ]}
                         onChange={(value) => setAttributes({ downloadOnHover: value === 'hover' })}
                         __nextHasNoMarginBottom
                         __next40pxDefaultSize
-                        help={__('Set display preference for Image Download icon.', 'pb-gallery')}
+                        help={__('Set display preference for Image Download icon.', 'folioblocks')}
                     />
                 )}
             </>
@@ -106,10 +106,10 @@ addFilter(
     }
 );
 
-if (window.portfolioBlocksData?.hasWooCommerce) {
+if (window.folioBlocksData?.hasWooCommerce) {
     addFilter(
-        'portfolioBlocks.carouselGallery.wooCommerceControls',
-        'pb-gallery/carousel-gallery-premium-woocommerce',
+        'folioBlocks.carouselGallery.wooCommerceControls',
+        'folioblocks/carousel-gallery-premium-woocommerce',
         (defaultContent, props) => {
             const { attributes, setAttributes } = props;
             const { enableWooCommerce, wooCartIconDisplay, enableDownload } = attributes;
@@ -117,7 +117,7 @@ if (window.portfolioBlocksData?.hasWooCommerce) {
             return (
                 <>
                     <ToggleControl
-                        label={__('Enable WooCommerce Integration', 'pb-gallery')}
+                        label={__('Enable WooCommerce Integration', 'folioblocks')}
                         checked={!!enableWooCommerce}
                         onChange={(value) => {
                             setAttributes({ enableWooCommerce: value });
@@ -132,21 +132,21 @@ if (window.portfolioBlocksData?.hasWooCommerce) {
                             }
                         }}
                         __nextHasNoMarginBottom
-                        help={__('Link gallery images to WooCommerce products.', 'pb-gallery')}
+                        help={__('Link gallery images to WooCommerce products.', 'folioblocks')}
                         disabled={enableDownload}
                     />
 
                     {enableWooCommerce && (
                         <SelectControl
-                            label={__('Display Add to Cart Icon', 'pb-gallery')}
+                            label={__('Display Add to Cart Icon', 'folioblocks')}
                             value={wooCartIconDisplay}
                             options={[
-                                { label: __('On Hover', 'pb-gallery'), value: 'hover' },
-                                { label: __('Always', 'pb-gallery'), value: 'always' }
+                                { label: __('On Hover', 'folioblocks'), value: 'hover' },
+                                { label: __('Always', 'folioblocks'), value: 'always' }
                             ]}
                             onChange={(value) => setAttributes({ wooCartIconDisplay: value })}
                             __nextHasNoMarginBottom
-                            help={__('Choose when to display the Add to Cart icon.', 'pb-gallery')}
+                            help={__('Choose when to display the Add to Cart icon.', 'folioblocks')}
                         />
                     )}
                 </>
@@ -156,15 +156,15 @@ if (window.portfolioBlocksData?.hasWooCommerce) {
 }
 
 addFilter(
-    'portfolioBlocks.carouselGallery.disableRightClickToggle',
-    'pb-gallery/carousel-gallery-premium-disable-right-click',
+    'folioBlocks.carouselGallery.disableRightClickToggle',
+    'folioblocks/carousel-gallery-premium-disable-right-click',
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
 
         return (
             <ToggleControl
-                label={__('Disable Right-Click on Page', 'pb-gallery')}
-                help={__('Prevents visitors from right-clicking.', 'pb-gallery')}
+                label={__('Disable Right-Click on Page', 'folioblocks')}
+                help={__('Prevents visitors from right-clicking.', 'folioblocks')}
                 __nextHasNoMarginBottom
                 checked={!!attributes.disableRightClick}
                 onChange={(value) => setAttributes({ disableRightClick: value })}
@@ -173,15 +173,15 @@ addFilter(
     }
 );
 addFilter(
-    'portfolioBlocks.carouselGallery.lazyLoadToggle',
-    'pb-gallery/carousel-gallery-premium-lazy-load',
+    'folioBlocks.carouselGallery.lazyLoadToggle',
+    'folioblocks/carousel-gallery-premium-lazy-load',
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
 
         return (
             <ToggleControl
-                label={__('Enable Lazy Load of Images', 'pb-gallery')}
-                help={__('Enables lazy loading of gallery images.', 'pb-gallery')}
+                label={__('Enable Lazy Load of Images', 'folioblocks')}
+                help={__('Enables lazy loading of gallery images.', 'folioblocks')}
                 __nextHasNoMarginBottom
                 checked={!!attributes.lazyLoad}
                 onChange={(value) => setAttributes({ lazyLoad: value })}
@@ -190,23 +190,23 @@ addFilter(
     }
 );
 addFilter(
-    'portfolioBlocks.carouselGallery.enableAutoplayToggle',
-    'pb-gallery/carousel-gallery-premium-controls',
+    'folioBlocks.carouselGallery.enableAutoplayToggle',
+    'folioblocks/carousel-gallery-premium-controls',
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
 
         return (
             <>
                 <ToggleControl
-                    label={__('Enable Autoplay', 'pb-gallery')}
+                    label={__('Enable Autoplay', 'folioblocks')}
                     checked={attributes.autoplay || false}
                     onChange={(value) => setAttributes({ autoplay: value })}
                     __nextHasNoMarginBottom
-                    help={__('Automatically advance to the next image in the carousel.', 'pb-gallery')}
+                    help={__('Automatically advance to the next image in the carousel.', 'folioblocks')}
                 />
                 {attributes.autoplay && (
                     <RangeControl
-                        label={__('Autoplay Speed (seconds)', 'pb-gallery')}
+                        label={__('Autoplay Speed (seconds)', 'folioblocks')}
                         value={attributes.autoplaySpeed || 3}
                         onChange={(value) => setAttributes({ autoplaySpeed: value })}
                         min={1}
@@ -214,7 +214,7 @@ addFilter(
                         step={0.25}
                         __next40pxDefaultSize
                         __nextHasNoMarginBottom
-                        help={__('Time between automatic slide transitions.', 'pb-gallery')}
+                        help={__('Time between automatic slide transitions.', 'folioblocks')}
                     />
                 )}
             </>
@@ -222,18 +222,18 @@ addFilter(
     }
 );
 addFilter(
-    'portfolioBlocks.carouselGallery.loopSlides',
-    'pb-gallery/carousel-gallery-premium-controls',
+    'folioBlocks.carouselGallery.loopSlides',
+    'folioblocks/carousel-gallery-premium-controls',
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
 
         return (
             <ToggleControl
-                label={__('Loop Carousel Slides', 'pb-gallery')}
+                label={__('Loop Carousel Slides', 'folioblocks')}
                 checked={attributes.loopSlides || false}
                 onChange={(value) => setAttributes({ loopSlides: value })}
                 __nextHasNoMarginBottom
-                help={__('Enable the carousel to loop infinitely.', 'pb-gallery')}
+                help={__('Enable the carousel to loop infinitely.', 'folioblocks')}
             />
         );
     }
@@ -241,34 +241,34 @@ addFilter(
 
 
 addFilter(
-    'portfolioBlocks.carouselGallery.showControlsToggle',
-    'pb-gallery/carousel-gallery-premium-controls',
+    'folioBlocks.carouselGallery.showControlsToggle',
+    'folioblocks/carousel-gallery-premium-controls',
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
 
         return (
             <>
                 <ToggleControl
-                    label={__('Enable Carousel Controls', 'pb-gallery')}
+                    label={__('Enable Carousel Controls', 'folioblocks')}
                     checked={attributes.showControls}
                     onChange={(value) => setAttributes({ showControls: value })}
                     __nextHasNoMarginBottom
-                    help={__('Toggle visibility of navigation arrows.', 'pb-gallery')}
+                    help={__('Toggle visibility of navigation arrows.', 'folioblocks')}
                 />
                 {attributes.showControls && (
                     <>
                         <ToggleGroupControl
-                            label={__('Controls Alignment', 'pb-gallery')}
+                            label={__('Controls Alignment', 'folioblocks')}
                             value={attributes.controlsAlignment || 'center'}
                             onChange={(newValue) => setAttributes({ controlsAlignment: newValue })}
                             isBlock
-                            help={__('Set the horizontal alignment of carousel controls.', 'pb-gallery')}
+                            help={__('Set the horizontal alignment of carousel controls.', 'folioblocks')}
                             __next40pxDefaultSize
                             __nextHasNoMarginBottom
                         >
-                            <ToggleGroupControlOption value="left" icon={alignLeft} label={__('Left', 'pb-gallery')} />
-                            <ToggleGroupControlOption value="center" icon={alignCenter} label={__('Center', 'pb-gallery')} />
-                            <ToggleGroupControlOption value="right" icon={alignRight} label={__('Right', 'pb-gallery')} />
+                            <ToggleGroupControlOption value="left" icon={alignLeft} label={__('Left', 'folioblocks')} />
+                            <ToggleGroupControlOption value="center" icon={alignCenter} label={__('Center', 'folioblocks')} />
+                            <ToggleGroupControlOption value="right" icon={alignRight} label={__('Right', 'folioblocks')} />
                         </ToggleGroupControl>
                     </>
                 )}
@@ -277,8 +277,8 @@ addFilter(
     }
 );
 addFilter(
-    'portfolioBlocks.carouselGallery.lightboxControls',
-    'pb-gallery/carousel-gallery-premium-lightbox',
+    'folioBlocks.carouselGallery.lightboxControls',
+    'folioblocks/carousel-gallery-premium-lightbox',
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
         const { lightbox, lightboxCaption, enableWooCommerce, wooLightboxInfoType } = attributes;
@@ -286,11 +286,11 @@ addFilter(
         return (
             <>
                 <ToggleControl
-                    label={__('Enable Lightbox', 'pb-gallery')}
+                    label={__('Enable Lightbox', 'folioblocks')}
                     checked={!!lightbox}
                     onChange={(newLightbox) => setAttributes({ lightbox: newLightbox })}
                     __nextHasNoMarginBottom
-                    help={__('Enable image Lightbox on click.', 'pb-gallery')}
+                    help={__('Enable image Lightbox on click.', 'folioblocks')}
                 />
 
                 {lightbox && (
@@ -298,13 +298,13 @@ addFilter(
                         <ToggleControl
                             label={
                                 enableWooCommerce
-                                    ? __('Show Image Caption or Product Info in Lightbox', 'pb-gallery')
-                                    : __('Show Image Caption in Lightbox', 'pb-gallery')
+                                    ? __('Show Image Caption or Product Info in Lightbox', 'folioblocks')
+                                    : __('Show Image Caption in Lightbox', 'folioblocks')
                             }
                             help={
                                 enableWooCommerce
-                                    ? __('Display image caption or product info inside the Lightbox.', 'pb-gallery')
-                                    : __('Display Image Caption inside the lightbox.', 'pb-gallery')
+                                    ? __('Display image caption or product info inside the Lightbox.', 'folioblocks')
+                                    : __('Display Image Caption inside the lightbox.', 'folioblocks')
                             }
                             checked={!!lightboxCaption}
                             onChange={(newLightboxCaption) =>
@@ -315,16 +315,16 @@ addFilter(
 
                         {enableWooCommerce && lightboxCaption && (
                             <SelectControl
-                                label={__('Lightbox Info', 'pb-gallery')}
+                                label={__('Lightbox Info', 'folioblocks')}
                                 value={wooLightboxInfoType}
                                 options={[
-                                    { label: __('Show Image Caption', 'pb-gallery'), value: 'caption' },
-                                    { label: __('Show Product Description', 'pb-gallery'), value: 'product' }
+                                    { label: __('Show Image Caption', 'folioblocks'), value: 'caption' },
+                                    { label: __('Show Product Description', 'folioblocks'), value: 'product' }
                                 ]}
                                 onChange={(value) => setAttributes({ wooLightboxInfoType: value })}
                                 __nextHasNoMarginBottom
                                 __next40pxDefaultSize
-                                help={__('Choose what appears below images in the lightbox.', 'pb-gallery')}
+                                help={__('Choose what appears below images in the lightbox.', 'folioblocks')}
                             />
                         )}
                     </>
@@ -335,8 +335,8 @@ addFilter(
 );
 
 addFilter(
-    'portfolioBlocks.carouselGallery.onHoverTitleToggle',
-    'pb-gallery/carousel-gallery-premium-title-toggle',
+    'folioBlocks.carouselGallery.onHoverTitleToggle',
+    'folioblocks/carousel-gallery-premium-title-toggle',
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
         const { onHoverTitle, enableWooCommerce, wooProductPriceOnHover } = attributes;
@@ -346,13 +346,13 @@ addFilter(
                 <ToggleControl
                     label={
                         enableWooCommerce
-                            ? __('Show Overlay on Hover', 'pb-gallery')
-                            : __('Show Image Title in Hover Overlay', 'pb-gallery')
+                            ? __('Show Overlay on Hover', 'folioblocks')
+                            : __('Show Image Title in Hover Overlay', 'folioblocks')
                     }
                     help={
                         enableWooCommerce
-                            ? __('Display image title or product info when hovering over images.', 'pb-gallery')
-                            : __('Display image title when hovering over image.', 'pb-gallery')
+                            ? __('Display image title or product info when hovering over images.', 'folioblocks')
+                            : __('Display image title when hovering over image.', 'folioblocks')
                     }
                     __nextHasNoMarginBottom
                     checked={!!attributes.onHoverTitle}
@@ -361,11 +361,11 @@ addFilter(
 
                 {enableWooCommerce && onHoverTitle && (
                     <SelectControl
-                        label={__('Overlay Content', 'pb-gallery')}
+                        label={__('Overlay Content', 'folioblocks')}
                         value={wooProductPriceOnHover ? 'product' : 'title'}
                         options={[
-                            { label: __('Show Image Title', 'pb-gallery'), value: 'title' },
-                            { label: __('Show Product Name & Price', 'pb-gallery'), value: 'product' }
+                            { label: __('Show Image Title', 'folioblocks'), value: 'title' },
+                            { label: __('Show Product Name & Price', 'folioblocks'), value: 'product' }
                         ]}
                         onChange={(val) => {
                             // Ensure hover info is enabled, then switch mode
@@ -376,7 +376,7 @@ addFilter(
                         }}
                         __nextHasNoMarginBottom
                         __next40pxDefaultSize
-                        help={__('Choose what appears when hovering over images.', 'pb-gallery')}
+                        help={__('Choose what appears when hovering over images.', 'folioblocks')}
                     />
                 )}
             </>
@@ -384,8 +384,8 @@ addFilter(
     }
 );
 addFilter(
-    'portfolioBlocks.carouselGallery.controlStyleSettings',
-    'pb-gallery/carousel-gallery-premium-control-styles',
+    'folioBlocks.carouselGallery.controlStyleSettings',
+    'folioblocks/carousel-gallery-premium-control-styles',
     (defaultContent, { attributes, setAttributes }) => {
         if (!attributes.showControls) {
             return null;
@@ -393,18 +393,18 @@ addFilter(
 
         return (
             <PanelColorSettings
-                title={__('Carousel Control Styles', 'pb-gallery')}
+                title={__('Carousel Control Styles', 'folioblocks')}
                 initialOpen={true}
                 colorSettings={[
                     {
                         value: attributes.controlsBackgroundColor,
                         onChange: (value) => setAttributes({ controlsBackgroundColor: value }),
-                        label: __('Control Background Color', 'pb-gallery'),
+                        label: __('Control Background Color', 'folioblocks'),
                     },
                     {
                         value: attributes.controlsIconColor,
                         onChange: (value) => setAttributes({ controlsIconColor: value }),
-                        label: __('Control Icon Color', 'pb-gallery'),
+                        label: __('Control Icon Color', 'folioblocks'),
                     },
                 ]}
             />
@@ -412,34 +412,34 @@ addFilter(
     }
 );
 addFilter(
-    'portfolioBlocks.carouselGallery.borderColorControl',
-    'pb-gallery/carousel-gallery-premium-border-color',
+    'folioBlocks.carouselGallery.borderColorControl',
+    'folioblocks/carousel-gallery-premium-border-color',
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
         return (
             <BaseControl
-                label={__('Border Color', 'pb-gallery')}
+                label={__('Border Color', 'folioblocks')}
                 __nextHasNoMarginBottom
             >
                 <ColorPalette
                     value={attributes.borderColor}
                     onChange={(value) => setAttributes({ borderColor: value })}
                     clearable={false}
-                    help={__('Set border color.', 'pb-gallery')}
+                    help={__('Set border color.', 'folioblocks')}
                 />
             </BaseControl>
         );
     }
 );
 addFilter(
-    'portfolioBlocks.carouselGallery.borderWidthControl',
-    'pb-gallery/carousel-gallery-premium-border-width',
+    'folioBlocks.carouselGallery.borderWidthControl',
+    'folioblocks/carousel-gallery-premium-border-width',
     (defaultContent, props) => {
         const { attributes, setAttributes, clientId, updateBlockAttributes } = props;
 
         return (
             <RangeControl
-                label={__('Border Width', 'pb-gallery')}
+                label={__('Border Width', 'folioblocks')}
                 value={attributes.borderWidth}
                 onChange={(value) => {
                     setAttributes({ borderWidth: value });
@@ -453,20 +453,20 @@ addFilter(
                 max={20}
                 __next40pxDefaultSize
                 __nextHasNoMarginBottom
-                help={__('Set border width in pixels.', 'pb-gallery')}
+                help={__('Set border width in pixels.', 'folioblocks')}
             />
         );
     }
 );
 addFilter(
-    'portfolioBlocks.carouselGallery.borderRadiusControl',
-    'pb-gallery/carousel-gallery-premium-border-radius',
+    'folioBlocks.carouselGallery.borderRadiusControl',
+    'folioblocks/carousel-gallery-premium-border-radius',
     (defaultContent, props) => {
         const { attributes, setAttributes, clientId, updateBlockAttributes } = props;
 
         return (
             <RangeControl
-                label={__('Border Radius', 'pb-gallery')}
+                label={__('Border Radius', 'folioblocks')}
                 value={attributes.borderRadius}
                 onChange={(value) => {
                     setAttributes({ borderRadius: value });
@@ -480,31 +480,31 @@ addFilter(
                 max={100}
                 __next40pxDefaultSize
                 __nextHasNoMarginBottom
-                help={__('Set border radius in pixels.', 'pb-gallery')}
+                help={__('Set border radius in pixels.', 'folioblocks')}
             />
         );
     }
 );
 addFilter(
-    'portfolioBlocks.carouselGallery.dropShadowToggle',
-    'pb-gallery/carousel-gallery-premium-drop-shadow',
+    'folioBlocks.carouselGallery.dropShadowToggle',
+    'folioblocks/carousel-gallery-premium-drop-shadow',
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
 
         return (
             <ToggleControl
-                label={__('Enable Drop Shadow', 'pb-gallery')}
+                label={__('Enable Drop Shadow', 'folioblocks')}
                 checked={!!attributes.dropShadow}
                 onChange={(newDropShadow) => setAttributes({ dropShadow: newDropShadow })}
                 __nextHasNoMarginBottom
-                help={__('Applies a subtle drop shadow to images.', 'pb-gallery')}
+                help={__('Applies a subtle drop shadow to images.', 'folioblocks')}
             />
         );
     }
 );
 addFilter(
-	'portfolioBlocks.carouselGallery.controlButtons',
-	'pb-gallery/carousel-gallery-premium-controls',
+	'folioBlocks.carouselGallery.controlButtons',
+	'folioblocks/carousel-gallery-premium-controls',
 	(defaultContent, { attributes, setAttributes, goToPrevSlide, goToNextSlide, isPlaying, setIsPlaying, innerBlocks }) => {
 		if (!attributes.showControls || innerBlocks.length === 0) return null;
 

@@ -1,11 +1,11 @@
-=== Portfolio Blocks ===
+=== FolioBlocks ===
 Contributors: portfolioblocks , campanellafoto
 Plugin link: https://portfolio-blocks.com/
 Tags: gallery, portfolio, image, photo, video
 Tested up to:      6.8
 Requires at least: 6.3
 Requires PHP: 7.4
-Stable tag:        0.9.6
+Stable tag:        0.9.8
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,7 +13,7 @@ Create amazing image & video galleries inside the block editor
 
 == Description ==
 
-Portfolio Blocks is a plugin developed from the ground up for the WordPress Block Editor and Full Site Editor that lets you create amazing image galleries and portfolios. Share images in grid, justified, masonry, or modular galleries. Create video galleries directly in your posts or pages. No using shortcodes, no going to the dashboard to mess with settings. Work quickly and efficiently entirely from the block editor.  
+FolioBlocks is a plugin developed from the ground up for the WordPress Block Editor and Full Site Editor that lets you create amazing image galleries and portfolios. Share images in grid, justified, masonry, or modular galleries. Create video galleries directly in your posts or pages. No using shortcodes, no going to the dashboard to mess with settings. Work quickly and efficiently entirely from the block editor.  
 
 Features: 
 
@@ -25,11 +25,11 @@ Features:
 - Modular Gallery block
 - Video Gallery block
 
-All blocks feature settings to handle responsive design. Advanced settings such as: Randomize Gallery Image Order, Download Gallery Images, Disable Right-Click, Lazy Load Galleries, Lightbox, Hover Effects, Gallery Image Filtering, and Gallery Image Style controls available with the Portfolio Blocks Pro plugin. 
+All blocks feature settings to handle responsive design. Advanced settings such as: Randomize Gallery Image Order, Download Gallery Images, Disable Right-Click, Lazy Load Galleries, Lightbox, Hover Effects, Gallery Image Filtering, and Gallery Image Style controls available with the FolioBlocks Pro plugin. 
 
 == Installation ==
 
-The easiest way to install Portfolio Blocks is by visiting your **Plugins > Add New** menu. Search for "Portfolio Blocks" and install the first result you see there.
+The easiest way to install FolioBlocks is by visiting your **Plugins > Add New** menu. Search for "FolioBlocks" and install the first result you see there.
 
 To install with the zip file downloaded from this page:
 
@@ -42,20 +42,20 @@ To install with the zip file downloaded from this page:
 
 == Frequently Asked Questions ==
 
-= What is Portfolio Blocks? =
-Portfolio Blocks is a collection of modern, responsive gallery and media blocks built specifically for the WordPress Block Editor (Gutenberg). You can create image and video galleries with advanced layouts like Grid, Masonry, Justified, Carousel, and more — all directly in the editor.
+= What is FolioBlocks? =
+FolioBlocks is a collection of modern, responsive gallery and media blocks built specifically for the WordPress Block Editor (Gutenberg). You can create image and video galleries with advanced layouts like Grid, Masonry, Justified, Carousel, and more — all directly in the editor.
 
-= Does Portfolio Blocks work with any WordPress theme? =
-Yes. Portfolio Blocks is designed to work with all modern WordPress themes. For best results, we recommend using a block theme that supports Full Site Editing.
+= Does FolioBlocks work with any WordPress theme? =
+Yes. FolioBlocks is designed to work with all modern WordPress themes. For best results, we recommend using a block theme that supports Full Site Editing.
 
 = What’s the difference between the free and Pro versions? =
 The free version includes all the core blocks and functionality, but galleries are limited to 15 images or videos. The Pro version removes this limit and unlocks additional premium features such as Randomize Order, Image Downloads, Lightbox captions, Right-Click Disable, and more.
 
-= Can I use Portfolio Blocks with page builders like Elementor or Divi? =
-Portfolio Blocks is built specifically for the WordPress Block Editor (Gutenberg). It will not work inside Elementor, Divi, or other third-party page builders.
+= Can I use FolioBlocks with page builders like Elementor or Divi? =
+FolioBlocks is built specifically for the WordPress Block Editor (Gutenberg). It will not work inside Elementor, Divi, or other third-party page builders.
 
-= Will Portfolio Blocks slow down my website? =
-No. Portfolio Blocks is optimized for performance and loads only the scripts and styles needed for each block. The Pro version also includes Lazy Load support to further improve loading speed.
+= Will FolioBlocks slow down my website? =
+No. FolioBlocks is optimized for performance and loads only the scripts and styles needed for each block. The Pro version also includes Lazy Load support to further improve loading speed.
 
 = Can I upgrade from the free version to Pro? =
 Yes. You can install the free version from the WordPress plugin directory, and upgrade to Pro at any time. Your galleries will continue to work — you’ll simply unlock unlimited images and additional features.
@@ -63,11 +63,11 @@ Yes. You can install the free version from the WordPress plugin directory, and u
 = Do you offer support? =
 Yes. Free users can post support requests on the WordPress.org plugin forum. Pro users receive priority email support directly from the developer.
 
-= Can I use Portfolio Blocks on client websites? =
-Absolutely. Portfolio Blocks is built with agencies and freelancers in mind. The Pro version offers licensing for single sites, 5 sites, or unlimited client projects depending on your plan.
+= Can I use FolioBlocks on client websites? =
+Absolutely. FolioBlocks is built with agencies and freelancers in mind. The Pro version offers licensing for single sites, 5 sites, or unlimited client projects depending on your plan.
 
 = Will my galleries stop working if I deactivate the plugin? =
-No, the galleries will remain in place on your site. However, the advanced layouts and features are powered by Portfolio Blocks, so deactivating the plugin will remove those.
+No, the galleries will remain in place on your site. However, the advanced layouts and features are powered by FolioBlocks, so deactivating the plugin will remove those.
 
 == Screenshots ==
 
@@ -80,6 +80,9 @@ No, the galleries will remain in place on your site. However, the advanced layou
 7. Video Gallery block populated with images
 
 == Changelog ==
+
+0.9.7
+- Updated slugs on all blocks to new name, Portfolio Blocks becomes FolioBlocks
 
 0.9.6
 - Before & After Block updated to remove premium code from free version

@@ -92,7 +92,7 @@ registerBlockType('portfolio-blocks/justified-gallery-block', {
 
 		useEffect(() => {
 			const newBlock = createBlock(
-				'pb-gallery/justified-gallery-block',
+				'folioblocks/justified-gallery-block',
 				{ ...attributes },
 				innerBlocks
 			);

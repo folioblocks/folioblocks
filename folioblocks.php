@@ -1,16 +1,16 @@
 <?php
 /**
- * Plugin Name:       Portfolio Blocks
+ * Plugin Name:       FolioBlocks
  * Description:       A collection of blocks for making photo and video galleries
- * Version:           0.9.6
+ * Version:           0.9.7
  * Requires at least: 6.3
  * Requires PHP:      7.4
- * Author:            Portfolio Blocks
+ * Author:            FolioBlocks
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       pb-gallery
+ * Text Domain:       folioblocks
  *
- * @package PortfolioBlocks
+ * @package FolioBlocks
  * 
  * @fs_premium_only /build/carousel-gallery-block/premium-view.asset.php, /build/carousel-gallery-block/premium-view.js, /build/carousel-gallery-block/premium.asset.php, /build/carousel-gallery-block/premium.js, /build/grid-gallery-block/premium-view.asset.php, /build/grid-gallery-block/premium-view.js, /build/grid-gallery-block/premium.asset.php, /build/grid-gallery-block/premium.js, /build/justified-gallery-block/premium-view.asset.php, /build/justified-gallery-block/premium-view.js, /build/justified-gallery-block/premium.asset.php, /build/justified-gallery-block/premium.js, /build/masonry-gallery-block/premium-view.asset.php, /build/masonry-gallery-block/premium-view.js, /build/masonry-gallery-block/premium.asset.php, /build/masonry-gallery-block/premium.js, /build/modular-gallery-block/premium-view.asset.php, /build/modular-gallery-block/premium-view.js, /build/modular-gallery-block/premium.asset.php, /build/modular-gallery-block/premium.js, /build/pb-before-after-block/premium-view.asset.php, /build/pb-before-after-block/premium-view.js, /build/pb-before-after-block/premium.asset.php, /build/pb-before-after-block/premium.js, /build/pb-image-block/premium-view.asset.php, /build/pb-image-block/premium-view.js, /build/pb-image-block/premium.asset.php, /build/pb-image-block/premium.js, /build/pb-video-block/premium-view.asset.php, /build/pb-video-block/premium-view.js, /build/pb-video-block/premium.asset.php, /build/pb-video-block/premium.js, /build/video-gallery-block/premium-view.asset.php, /build/video-gallery-block/premium-view.js, /build/video-gallery-block/premium.asset.php, /build/video-gallery-block/premium.js
  */
@@ -40,8 +40,8 @@ if ( function_exists( 'pb_fs' ) ) {
                 require_once dirname( __FILE__ ) . '/vendor/freemius/start.php';
                 $pb_fs = fs_dynamic_init( array(
                     'id'                  => '19558',
-                    'slug'                => 'pb-gallery',
-                    'premium_slug'        => 'pb-gallery-pro',
+                    'slug'                => 'folioblocks',
+                    'premium_slug'        => 'folioblocks-pro',
                     'type'                => 'plugin',
                     'public_key'          => 'pk_9719a603d337d33af1a1193508cdf',
                     'is_premium'          => true,
@@ -55,7 +55,7 @@ if ( function_exists( 'pb_fs' ) ) {
                     // auto-generated free version, delete this line before uploading to wp.org.
                     'wp_org_gatekeeper'   => 'OA7#BoRiBNqdf52FvzEf!!074aRLPs8fspif$7K1#4u4Csys1fQlCecVcUTOs2mcpeVHi#C2j9d09fOTvbC0HloPT7fFee5WdS3G',
                     'menu'                => array(
-                    'slug'           => 'pb-gallery-settings',
+                    'slug'           => 'folioblocks-settings',
                 
                 ),
             ) );
@@ -93,7 +93,7 @@ if ( function_exists( 'pb_fs' ) ) {
         ];
 
         wp_register_script(
-            'pb-gallery-shared-data',
+            'folioblocks-shared-data',
             false,                // no external src; just a container for inline data
             array(),              // no dependencies
             filemtime( __FILE__ ), // version for cache-busting
@@ -101,22 +101,22 @@ if ( function_exists( 'pb_fs' ) ) {
         );
 
         wp_add_inline_script(
-            'pb-gallery-shared-data',
-            'window.portfolioBlocksData = ' . wp_json_encode( $data ) . ';',
+            'folioblocks-shared-data',
+            'window.folioBlocksData = ' . wp_json_encode( $data ) . ';',
             'before'
         );
 
-        wp_enqueue_script( 'pb-gallery-shared-data' );
+        wp_enqueue_script( 'folioblocks-shared-data' );
     } );
 
     }
 }
 
     // Add custom category for blocks.
-    function portfolio_blocks_add_category( $categories ) {
+    function folioblocks_add_category( $categories ) {
         $new_category = array(
-            'slug'  => 'pb-gallery',
-            'title' => __( 'Portfolio Blocks', 'pb-gallery' ),
+            'slug'  => 'folioblocks',
+            'title' => __( 'FolioBlocks', 'folioblocks' ),
             'icon'  => 'portfolio',
         );
 
@@ -130,10 +130,10 @@ if ( function_exists( 'pb_fs' ) ) {
 
         return $categories;
     }
-    add_filter( 'block_categories_all', 'portfolio_blocks_add_category', 10, 2 );
+    add_filter( 'block_categories_all', 'folioblocks_add_category', 10, 2 );
 
-    // Register all Portfolio Blocks blocks.
-    function portfolio_blocks_portfolio_blocks_block_init() {
+    // Register all FolioBlocks blocks.
+    function folioblocks_folioblocks_block_init() {
         register_block_type( __DIR__ . '/build/pb-before-after-block' );
         register_block_type( __DIR__ . '/build/pb-image-block' );
         register_block_type( __DIR__ . '/build/pb-video-block' );
@@ -146,38 +146,38 @@ if ( function_exists( 'pb_fs' ) ) {
     	register_block_type( __DIR__ . '/build/modular-gallery-block' );
         register_block_type( __DIR__ . '/build/video-gallery-block' );
     }
-    add_action( 'init', 'portfolio_blocks_portfolio_blocks_block_init' );
+    add_action( 'init', 'folioblocks_folioblocks_block_init' );
 
     // Filter to load block assets on demand.
     add_filter( 'should_load_block_assets_on_demand', '__return_true' );
 
     // Add Admin settings page.
-    add_action( 'admin_menu', 'portfolio_blocks_register_settings_page' );
-    function portfolio_blocks_register_settings_page() {
+    add_action( 'admin_menu', 'folioblocks_register_settings_page' );
+    function folioblocks_register_settings_page() {
         $icon_url = plugin_dir_url( __FILE__ ) . 'includes/icons/pb-icon.svg';
     	add_menu_page(
-    		'Portfolio Blocks',        // Page title
-    		'Portfolio Blocks',        // Menu title
+    		'FolioBlocks',        // Page title
+    		'FolioBlocks',        // Menu title
     		'manage_options',          // Capability
-    		'pb-gallery-settings', // Slug
-    		'portfolio_blocks_render_settings_page', // Callback
+    		'folioblocks-settings', // Slug
+    		'folioblocks_render_settings_page', // Callback
     		$icon_url, // Icon
     		10 // Position 11 for media 80 for bottom
     	);
     }
     require_once plugin_dir_path( __FILE__ ) . 'includes/admin/settings-page.php';
-    add_action( 'admin_enqueue_scripts', 'portfolio_blocks_enqueue_admin_styles' );
-    function portfolio_blocks_enqueue_admin_styles() {
+    add_action( 'admin_enqueue_scripts', 'folioblocks_enqueue_admin_styles' );
+    function folioblocks_enqueue_admin_styles() {
     	wp_enqueue_style(
-    		'pb-gallery-settings-css',
+    		'folioblocks-settings-css',
     		plugin_dir_url( __FILE__ ) . 'includes/admin/settings-page.css',
     		array(),
     		'1.0'
     	);
     }
-    add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'portfolio_blocks_plugin_action_links' );
-    function portfolio_blocks_plugin_action_links( $links ) {
-    	$settings_link = '<a href="' . esc_url( admin_url( 'admin.php?page=pb-gallery-settings' ) ) . '">' . __( 'Settings', 'pb-gallery' ) . '</a>';
+    add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'folioblocks_plugin_action_links' );
+    function folioblocks_plugin_action_links( $links ) {
+    	$settings_link = '<a href="' . esc_url( admin_url( 'admin.php?page=folioblocks-settings' ) ) . '">' . __( 'Settings', 'folioblocks' ) . '</a>';
     	array_unshift( $links, $settings_link );
     	return $links;
     }
@@ -195,10 +195,10 @@ if ( pb_fs()->can_use_premium_code__premium_only() ) {
     });
 
     // Enqueue premium block scripts if premium is active.
-    add_action( 'enqueue_block_editor_assets', 'portfolio_blocks_enqueue_premium_scripts' );
-    add_action( 'wp_enqueue_scripts', 'portfolio_blocks_enqueue_premium_scripts' );
+    add_action( 'enqueue_block_editor_assets', 'folioblocks_enqueue_premium_scripts' );
+    add_action( 'wp_enqueue_scripts', 'folioblocks_enqueue_premium_scripts' );
 
-    function portfolio_blocks_enqueue_premium_scripts() {
+    function folioblocks_enqueue_premium_scripts() {
         if ( !pb_fs()->can_use_premium_code() ) {
             return;
         }
@@ -213,7 +213,7 @@ if ( pb_fs()->can_use_premium_code__premium_only() ) {
             $premium_js_path = $block_path . '/premium.js';
             if ( file_exists( $premium_js_path ) ) {
                 wp_enqueue_script(
-                    "pb-gallery-{$block_name}-premium",
+                    "folioblocks-{$block_name}-premium",
                     $blocks_url . "{$block_name}/premium.js",
                     [ 'wp-blocks', 'wp-element', 'wp-hooks', 'wp-components', 'wp-editor' ],
                     filemtime( $premium_js_path ),
@@ -225,7 +225,7 @@ if ( pb_fs()->can_use_premium_code__premium_only() ) {
             $premium_view_js_path = $block_path . '/premium-view.js';
             if ( file_exists( $premium_view_js_path ) ) {
                 wp_enqueue_script(
-                    "pb-gallery-{$block_name}-premium-view",
+                    "folioblocks-{$block_name}-premium-view",
                     $blocks_url . "{$block_name}/premium-view.js",
                     [],
                     filemtime( $premium_view_js_path ),
