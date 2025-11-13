@@ -81,6 +81,9 @@ No, the galleries will remain in place on your site. However, the advanced layou
 
 == Changelog ==
 
+0.9.8 
+- Fixes for WordPress.org compliance
+
 0.9.7
 - Updated slugs on all blocks to new name, Portfolio Blocks becomes FolioBlocks
 
@@ -270,3 +273,8 @@ No, the galleries will remain in place on your site. However, the advanced layou
 
 0.5.0 
 - Principal blocks Grid Gallery, Masonry Gallery, Justified Gallery, and Video Gallery feature complete. 
+
+== Source Code ==
+
+Public repository:
+https://github.com/MichaelCampanella/folioblocks
