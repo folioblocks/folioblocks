@@ -17,14 +17,13 @@ import {
 	SelectControl,
 	ToolbarGroup,
 	ToolbarButton,
-	RangeControl,
 	ToggleControl
 } from '@wordpress/components';
 import { plus } from '@wordpress/icons';
 import { decodeEntities } from '@wordpress/html-entities';
-import { subscribe, dispatch, select, useSelect, useDispatch } from '@wordpress/data';
+import { useSelect, useDispatch } from '@wordpress/data';
 import { useEffect, useCallback, useRef, useState } from '@wordpress/element';
-import { addFilter, applyFilters } from '@wordpress/hooks';
+import { applyFilters } from '@wordpress/hooks';
 import IconCarouselGallery from '../pb-helpers/IconCarouselGallery';
 import './editor.scss';
 
@@ -38,7 +37,6 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 		carouselHeight,
 		preview,
 		lightbox,
-		lightboxCaption,
 	} = attributes;
 
 	// Block Preview Image
@@ -567,18 +565,6 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 									__nextHasNoMarginBottom
 									help={__('Open images in a lightbox when clicked.', 'folioblocks')}
 								/>
-
-								{lightbox && (
-									<ToggleControl
-										label={__('Show Image Caption in Lightbox', 'folioblocks')}
-										checked={!!lightboxCaption}
-										onChange={(newLightboxCaption) =>
-											setAttributes({ lightboxCaption: newLightboxCaption })
-										}
-										__nextHasNoMarginBottom
-										help={__('Display image captions inside the lightbox.', 'folioblocks')}
-									/>
-								)}
 							</>
 						),
 						{ attributes, setAttributes }
@@ -586,15 +572,15 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 					{applyFilters(
 						'folioBlocks.carouselGallery.onHoverTitleToggle',
 						(
-							<>
-								<ToggleControl
-									label={__('Show Image Title on Hover', 'folioblocks')}
-									help={__('Display the image title when hovering over images.', 'folioblocks')}
-									__nextHasNoMarginBottom
-									checked={!!attributes.onHoverTitle}
-									onChange={(value) => setAttributes({ onHoverTitle: value })}
-								/>
-							</>
+							<div style={{ marginBottom: '8px' }}>
+								<Notice status="info" isDismissible={false}>
+									<strong>{__('Show Image Title on Hover', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'folioblocks')}
+									</a>
+								</Notice>
+							</div>
 						),
 						{ attributes, setAttributes }
 					)}
@@ -688,9 +674,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 						icon={<IconCarouselGallery />}
 						labels={{
 							title: __('Carousel Gallery', 'folioblocks'),
-							instructions: !window.folioBlocksData?.isPro
-								? __('Upload or select up to 15 images to create a carousel. Upgrade to Pro for unlimited images.', 'folioblocks')
-								: __('Upload or select images to create a carousel.', 'folioblocks'),
+							instructions: __('Upload or select images to create a carousel.', 'folioblocks'),
 						}}
 						onSelect={onSelectImages}
 						accept="image/*"

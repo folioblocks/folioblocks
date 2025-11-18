@@ -5,7 +5,7 @@ Tags: gallery, portfolio, image, photo, video
 Tested up to:      6.8
 Requires at least: 6.3
 Requires PHP: 7.4
-Stable tag:        0.9.8
+Stable tag:        1.0.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,10 +22,10 @@ Features:
 - Grid Gallery block 
 - Justified Gallery block
 - Masonry Gallery block
-- Modular Gallery block
+- Modular Gallery block (Pro Only)
 - Video Gallery block
 
-All blocks feature settings to handle responsive design. Advanced settings such as: Randomize Gallery Image Order, Download Gallery Images, Disable Right-Click, Lazy Load Galleries, Lightbox, Hover Effects, Gallery Image Filtering, and Gallery Image Style controls available with the FolioBlocks Pro plugin. 
+All blocks feature settings to handle responsive design and a simple Lightbox. Advanced settings such as: Gallery Image Filtering, WooCommerce Integration, Download Gallery Images, Randomize Gallery Image Order, Disable Right-Click, Lazy Load Galleries, Hover Effects, and Gallery Image Style controls available with the FolioBlocks Pro plugin. 
 
 == Installation ==
 
@@ -76,205 +76,203 @@ No, the galleries will remain in place on your site. However, the advanced layou
 3. Grid Gallery block populated with images
 4. Justified Gallery block populated with images
 5. Masonry Gallery block populated with images
-6. Modular Gallery block populated with images
-7. Video Gallery block populated with images
+6. Video Gallery block populated with images
 
 == Changelog ==
 
-0.9.8 
-- Fixes for WordPress.org compliance
+= 1.0.0 =
+* Public Release
+* Rebuilt the Admin Dashboard
 
-0.9.7
-- Updated slugs on all blocks to new name, Portfolio Blocks becomes FolioBlocks
+= 0.9.9 =
+* Modular Gallery Block is now available on Pro only
+* Lightbox Caption and Show Title on Hover now Pro only features
 
-0.9.6
-- Before & After Block updated to remove premium code from free version
-- Carousel Gallery Block updated to remove premium code from free version
-- Grid Gallery Block updated to remove premium code from free version
-- Justified Gallery Block updated to remove premium code from free version
-- Masonry Gallery Block updated to remove premium code from free version
-- Modular Gallery Block updated to remove premium code from free version
-- PB Image Block updated to remove premium code from free version
-- PB Video Block updated to remove premium code from free version
-- Video Gallery Block updated to remove premium code from free version
-- PB Video Block rebuilt Lightbox to match PB Image Block
+= 0.9.8 =
+* Fixes for WordPress.org compliance
 
-0.9.5
-- Changed plugin slug for WordPress.org compliance
-- Added deprecsted.js to all blocks to help transition beta tester into new slug
+= 0.9.7 =
+* Updated slugs on all blocks to new name, Portfolio Blocks becomes FolioBlocks
 
-0.9.4
-- Improved icon adjustment when border and border radius are active. 
-- Fixed TypeError on all blocks. 
-- Removed title tag from img on PB Image Block. 
-- Fixed bug in Carousel Gallery where Safari would drop image blur on hovered images.
-- Fixed bug in Grid Gallery where filtered some images would not re-appear. 
-- Fixed issues related to WordPress.org compliance. 
+= 0.9.6 =
+* Updated all blocks to remove premium code from free version
+* Updated PB Image Block and PB Video Block to remove premium code
+* Rebuilt PB Video Block Lightbox to match PB Image Block
 
-0.9.3
-- Blocks now only display Enable WooCommerce when WooCommerce is installed and active. 
-- Fixed bug on Carousel where Download & Add To Cart icons were not sized correctly. 
-- Fixed bug on Modular Gallery where Add To Cart icons affected Image Stack sizing.
-- Fixed bug in PB Image Block where Add To Cart icon was not respecting added image borders. 
+= 0.9.5 =
+* Changed plugin slug for WordPress.org compliance
+* Added deprecated.js to all blocks to help transition beta testers into new slug
 
-0.9.2
-- Add WooCommerce integration in PB Video Block. 
-- Add WooCommerce integration into Video Gallery Block. 
+= 0.9.4 =
+* Improved icon adjustment with border & border radius
+* Fixed TypeError on all blocks
+* Removed title tag from PB Image Block
+* Fixed Safari hover blur bug in Carousel Gallery
+* Fixed Grid Gallery filtering bug
+* Fixed additional WordPress.org compliance issues
 
-0.9.1
-- Replaced front end icons with PNG files to ensure sizing.
-- Fixed bug in Grid Gallery preventing layout calculation when icons were present. 
+= 0.9.3 =
+* WooCommerce toggle now only appears when WooCommerce is active
+* Fixed Carousel icon sizing bug
+* Fixed Modular Gallery Add To Cart icon sizing bug
+* Fixed PB Image Block Add To Cart icon border bug
 
-0.9.0
-- Add WooCommerce integration into Carousel Gallery Block. 
-- Added WooCommerce integration into Justified Gallery Block
-- Added WooCommerce integration into Masonry Gallery Block
-- Added WooCommerce integration into Modular Gallery Block. 
+= 0.9.2 =
+* Added WooCommerce integration to PB Video Block
+* Added WooCommerce integration to Video Gallery Block
 
-0.8.9
-- Added WooCommerce integration into Grid Gallery Block. 
-- Added WoCommerce integration into PB Image Block. 
+= 0.9.1 =
+* Replaced front-end icons with PNG files for consistent sizing
+* Fixed Grid Gallery layout issue when icons were present
 
-0.8.8
-- Rebuilt premium filters to all use the same method. 
+= 0.9.0 =
+* Added WooCommerce integration to Carousel, Justified, Masonry, and Modular Galleries
 
+= 0.8.9 =
+* Added WooCommerce integration to Grid Gallery
+* Added WooCommerce integration to PB Image Block
 
-0.8.7
-- Fixes a bug introduced in 0.8.6 
-- Fixes a bug where the Image Overlay did not completely cover the image
+= 0.8.8 =
+* Rebuilt premium filters for consistent method across all blocks
 
-0.8.6
-- Improved entrance animation on Grid, Justified, Masonry, Modular, and Video Galleries. 
-- Fixes an issue where Video blocks would not render if the Thumbnail was missing. 
+= 0.8.7 =
+* Fixed bugs introduced in 0.8.6
+* Fixed Image Overlay coverage issue
 
-0.8.5
-- Fixes bug script loading bug. 
+= 0.8.6 =
+* Improved entrance animations for all galleries
+* Fixed Video Block rendering bug when thumbnail missing
 
-0.8.4
-- Fixes Focus State bug on Carousel Gallery block.
-- Addded Lazy Load & Disable Right Click to Video Gallery Block.
-- Addded Lazy Load & Disable Right Click to Before & After Block.
+= 0.8.5 =
+* Fixed script loading bug
 
-0.8.3
-- Updated Video Gallery block with option to show Title & Description in Lightbox. 
-- Fixed Carousel gallery front-end bug where Navigation Controls became out of sync with current sldie. 
-- Removed Lightbox on Image Galleries in the Block Editor. Lightbox on Image Galleries is now front-end only. 
-- Improved the accessibility of the Video and Image lightboxes on Front-End, now works with Tab navigation. 
+= 0.8.4 =
+* Fixed focus state bug in Carousel Gallery
+* Added Lazy Load & Disable Right Click to Video Gallery
+* Added Lazy Load & Disable Right Click to Before & After Block
 
-0.8.2
-- Added FAQ section to readme.txt file. 
-- Updated Carousel Gallery icon. 
-- Placed 15 image limit on Carousel, Grid, Justified, and Masonry Galleries on Free version. 
-- Placed 15 video limit on Video Gallery block on Free version. 
-- Updated plugin admin page to show alternate text to premium users. 
-- Fixed issue in Carousel gallery that prevented certain images selected in list view from centering in the editor. 
-- Fixed issue when changing Image Orientation to Vertical on Carousel Gallery. 
+= 0.8.3 =
+* Added Title & Description in Lightbox to Video Gallery
+* Fixed Carousel navigation sync bug
+* Disabled Image Gallery Lightbox inside editor
+* Improved accessibility of Lightboxes using keyboard navigation
 
-0.8.1 
-- More fixes for issues found by WordPress Plugin Check (PCP). 
-- Fixed bug loading premium scripts.
+= 0.8.2 =
+* Added FAQ section to readme.txt
+* Updated Carousel Gallery icon
+* Added 15 image/video limit to free version galleries
+* Updated admin page to show alternate text for premium users
+* Fixed Carousel centering issue
+* Fixed Carousel vertical orientation bug
 
-0.8.0 
-- Fixes for issues found by WordPress Plugin Check (PCP). 
-- Added assets (icons, banners, & screenshots) required by WordPress plugin repository. 
+= 0.8.1 =
+* Additional fixes for WordPress Plugin Check
+* Fixed premium script loading
 
-0.7.9
-- Built in Lazy Load logic on Carousel, Grid, Justified, Masonry, and Modular galleries. 
-- Modified Modular Gallery layout logic to improve performane on servers. 
+= 0.8.0 =
+* Added required assets for WordPress.org plugin repository
+* Additional fixes for WordPress Plugin Check
 
-0.7.8
-- All locked features on free version now link to Upgrade page.
-- Changelog in Portfolio Block settings page is now automatically pulled from readme.txt
+= 0.7.9 =
+* Added Lazy Load to all galleries
+* Improved Modular Gallery layout logic performance
 
-0.7.7
-- Added hooks and toggles for Lazy Load feature to Carousel, Grid, Justified, Masony, and Modular Galleries.
-- Freemius integration bug fixes.
+= 0.7.8 =
+* All locked free-version features now link to Upgrade page
+* Changelog on admin page now auto-pulled from readme.txt
 
-0.7.6
-- Freemius integration bug fixes.
+= 0.7.7 =
+* Added Lazy Load hooks to all galleries
+* Freemius bug fixes
 
-0.7.5
-- Freemius integration bug fixes.
+= 0.7.6 =
+* Freemius bug fixes
 
-0.7.4
-- Integrated Freemius premium feature blocks on Video Gallery Block.
+= 0.7.5 =
+* Freemius bug fixes
 
-0.7.3
-- Integrated Freemius premium feature blocks on Carousel Gallery & Before & After blocks.
+= 0.7.4 =
+* Added Freemius premium feature logic to Video Gallery Block
 
-0.7.2
-- Integrated Freemius premium feature blocks on Masonry Gallery & Modular Gallery blocks.
+= 0.7.3 =
+* Added Freemius premium feature logic to Carousel & Before & After blocks
 
-0.7.1
-- Integrated Freemius SDK into plugin.
-- Integrated Freemius premium feature blocks on Grid Gallery & Justifed Gallery blocks.
+= 0.7.2 =
+* Added Freemius premium feature logic to Masonry & Modular galleries
 
-0.7.0
-- Moved Modular Gallery logic from Image Row into parent block for improved resizing performance.
-- Improved first placeholder screen on Modular Gallery.
-- Improvec first placeholder screen on Video Gallery.
+= 0.7.1 =
+* Added Freemius SDK
+* Added Freemius premium feature logic to Grid & Justified Galleries
 
-0.6.9  
-- Add Before & After comparison block.
-- Fixed block previews for all blocks.
-- Fixed bug on Carousel gallery that prevented block from re-sizing correctly before page was saved.
+= 0.7.0 =
+* Moved Modular Gallery layout logic to parent block for improved performance
+* Improved preliminary screens for Modular & Video Gallery Blocks
 
-0.6.8
-- Fixed stability on thumbnail injection into List View.
+= 0.6.9 =
+* Added Before & After comparison block
+* Fixed block previews
+* Fixed Carousel resizing bug before saving
 
-0.6.7
-- Render.php on Carousel Gallery Block complete.
-- Fixed bug container-type bug on PB Image Block.
+= 0.6.8 =
+* Improved stability when injecting thumbnails into List View
 
-0.6.6
-- Began building Carousel Gallery Block.
+= 0.6.7 =
+* Completed Carousel render.php
+* Fixed container-type bug in PB Image Block
 
-0.6.5
-- Added custom icons to all blocks. 
+= 0.6.6 =
+* Began building Carousel Gallery Block
 
-0.6.4
-- Fixed download icon in lightbox on Grid, Justified, Masonry, and Modular galleries.
-- Fixed arrow placement in lightbox on Mobile.
-- Tweaked styles for download icon.
+= 0.6.5 =
+* Added custom icons to all blocks
 
-0.6.3
-- Organized gallery settings.
+= 0.6.4 =
+* Fixed download icon in Lightbox across galleries
+* Fixed mobile arrow placement in Lightbox
+* Adjusted download icon styles
 
-0.6.2
-- Added Right-Click Prevention to Grid, Justified, Masonry, and Modular galleries.
+= 0.6.3 =
+* Organized gallery settings
 
-0.6.1
-- Fixed a bug in Masonry where adding border messed up the layout in the block editor.
-- Fixed margin-bottom bug in Justified gallery on Mobile.
+= 0.6.2 =
+* Added Right-Click Prevention to Grid, Justified, Masonry, Modular Galleries
 
-0.6.0
-- Added support for Image downloads in Grid, Justified, Masonry, and Modular galleries.
-- Switched the on Image hover to show Title instead of caption.
+= 0.6.1 =
+* Fixed Masonry border-related layout bug
+* Fixed Justified gallery mobile margin bug
 
-0.5.5
-- Added support for borders and border-radius to PB Image Block
-- Added support for borders and border-radius to Grid, Justifed, Masonry, and Modular galleries
-- Moved layout logic for Grid Gallery out of PB Image Block and into Grid Gallery
+= 0.6.0 =
+* Added Image Download support to all image galleries
+* Updated hover behavior: titles shown instead of captions
 
-0.5.4
-- Tested in WordPress 6.8
-- Moved Filter Bar color settings into Styles panel on all blocks
-- Started scaffolding the Modular Gallery and ImageRow block
+= 0.5.5 =
+* Added border & border-radius support to PB Image Block and all galleries
+* Moved Grid Gallery layout logic out of PB Image Block
 
-0.5.3 
-- Create custom component for managing columns' responsive vallues. 
-- Fixed bug in Masonry that prevented collumn value from being used in front-end
+= 0.5.4 =
+* Tested compatible with WordPress 6.8
+* Moved Filter Bar color settings into Styles panel
+* Continued scaffolding Modular Gallery and Image Row blocks
 
-0.5.2 
-- Started building license management UI.
+= 0.5.3 =
+* Added responsive column control component
+* Fixed Masonry column count bug
 
-0.5.1
-- Create settings page in WordPress admin. 
+= 0.5.2 =
+* Began license management UI
 
-0.5.0 
-- Principal blocks Grid Gallery, Masonry Gallery, Justified Gallery, and Video Gallery feature complete. 
+= 0.5.1 =
+* Created admin settings page
+
+= 0.5.0 =
+* Grid, Masonry, Justified, and Video Gallery blocks feature complete
+
+== Upgrade Notice ==
+
+= 1.0 =
+Initial public release.
 
 == Source Code ==
 
 Public repository:
-https://github.com/MichaelCampanella/folioblocks
+https://github.com/folioblocks/folioblocks

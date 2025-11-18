@@ -18,11 +18,11 @@ import {
     ToolbarGroup,
     ToolbarButton,
 } from '@wordpress/components';
-import { subscribe, dispatch, select, useDispatch, useSelect } from '@wordpress/data';
+import { useDispatch, useSelect } from '@wordpress/data';
 import { useEffect, useRef } from '@wordpress/element';
 import ResponsiveRangeControl from '../pb-helpers/ResponsiveRangeControl';
 import { plus } from '@wordpress/icons';
-import { addFilter, applyFilters } from '@wordpress/hooks';
+import { applyFilters } from '@wordpress/hooks';
 import { decodeEntities } from '@wordpress/html-entities';
 import IconMasonryGallery from '../pb-helpers/IconMasonryGallery';
 
@@ -36,7 +36,6 @@ export default function Edit({ clientId, attributes, setAttributes }) {
         tabletColumns,
         mobileColumns,
         lightbox,
-        lightboxCaption,
         preview
     } = attributes;
 
@@ -92,6 +91,32 @@ export default function Edit({ clientId, attributes, setAttributes }) {
             allowedBlocks: ALLOWED_BLOCKS,
             renderAppender: false,
         }
+    );
+    const isBlockOrChildSelected = useSelect(
+        (select) => {
+            const blockEditor = select('core/block-editor');
+            const selectedId = blockEditor.getSelectedBlockClientId();
+            if (!selectedId) return false;
+
+            // Gallery itself selected
+            if (selectedId === clientId) {
+                return true;
+            }
+
+            // A child pb-image-block inside this gallery selected
+            const selectedBlock = blockEditor.getBlock(selectedId);
+            if (!selectedBlock) return false;
+
+            if (
+                selectedBlock.name === 'folioblocks/pb-image-block' &&
+                blockEditor.getBlockRootClientId(selectedId) === clientId
+            ) {
+                return true;
+            }
+
+            return false;
+        },
+        [clientId]
     );
 
     // Select Images Handler
@@ -223,9 +248,9 @@ export default function Edit({ clientId, attributes, setAttributes }) {
             resizeObserver.disconnect(); // ✅ Cleanup observer on unmount
         };
     }, [innerBlocks, attributes.noGap, attributes.columns, attributes.tabletColumns, attributes.mobileColumns]);
- 
-    applyFilters('folioBlocks.masonryGallery.filterLogic', null, { clientId, attributes, setAttributes    });
-    applyFilters('folioBlocks.masonryGallery.editorEnhancements', null, { attributes, clientId, innerBlocks, replaceInnerBlocks, updateBlockAttributes });
+
+    applyFilters('folioBlocks.masonryGallery.filterLogic', null, { clientId, attributes, setAttributes });
+    applyFilters('folioBlocks.masonryGallery.editorEnhancements', null, { attributes, clientId, innerBlocks, replaceInnerBlocks, isBlockOrChildSelected, updateBlockAttributes });
 
     return (
         <>
@@ -388,18 +413,6 @@ export default function Edit({ clientId, attributes, setAttributes }) {
                                     __nextHasNoMarginBottom
                                     help={__('Open images in a lightbox when clicked.', 'folioblocks')}
                                 />
-
-                                {lightbox && (
-                                    <ToggleControl
-                                        label={__('Show Image Caption in Lightbox', 'folioblocks')}
-                                        checked={!!lightboxCaption}
-                                        onChange={(newLightboxCaption) =>
-                                            setAttributes({ lightboxCaption: newLightboxCaption })
-                                        }
-                                        __nextHasNoMarginBottom
-                                        help={__('Display image captions inside the lightbox.', 'folioblocks')}
-                                    />
-                                )}
                             </>
                         ),
                         { attributes, setAttributes }
@@ -407,15 +420,15 @@ export default function Edit({ clientId, attributes, setAttributes }) {
                     {applyFilters(
                         'folioBlocks.masonryGallery.onHoverTitleToggle',
                         (
-                            <>
-                                <ToggleControl
-                                    label={__('Show Image Title on Hover', 'folioblocks')}
-                                    help={__('Display the image title when hovering over images.', 'folioblocks')}
-                                    __nextHasNoMarginBottom
-                                    checked={!!attributes.onHoverTitle}
-                                    onChange={(value) => setAttributes({ onHoverTitle: value })}
-                                />
-                            </>
+                            <div style={{ marginBottom: '8px' }}>
+                                <Notice status="info" isDismissible={false}>
+                                    <strong>{__('Show Image Title on Hover', 'folioblocks')}</strong><br />
+                                    {__('This is a premium feature. Unlock all features: ', 'folioblocks')}
+                                    <a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+                                        {__('Upgrade to Pro', 'folioblocks')}
+                                    </a>
+                                </Notice>
+                            </div>
                         ),
                         { attributes, setAttributes }
                     )}
@@ -524,9 +537,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
                         icon={<IconMasonryGallery />}
                         labels={{
                             title: __('Masonry Gallery', 'folioblocks'),
-                            instructions: !window.folioBlocksData?.isPro
-                                ? __('Upload or select up to 15 images to create a Masonry Gallery. Upgrade to Pro for unlimited images.', 'folioblocks')
-                                : __('Upload or select images to create a Masonry Gallery.', 'folioblocks'),
+                            instructions: __('Upload or select images to create a Masonry Gallery.', 'folioblocks'),
                         }}
                         onSelect={onSelectImages}
                         allowedTypes={['image']}

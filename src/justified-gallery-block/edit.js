@@ -20,11 +20,11 @@ import {
 	ToolbarGroup,
 	ToolbarButton,
 } from '@wordpress/components';
-import { subscribe, dispatch, select, useSelect, useDispatch } from '@wordpress/data';
+import { useSelect, useDispatch } from '@wordpress/data';
 import { plus } from '@wordpress/icons';
 import { useCallback, useEffect, useRef } from '@wordpress/element';
 import { decodeEntities } from '@wordpress/html-entities';
-import { addFilter, applyFilters } from '@wordpress/hooks';
+import { applyFilters } from '@wordpress/hooks';
 import './editor.scss';
 
 import IconJustifiedGallery from '../pb-helpers/IconJustifiedGallery';
@@ -36,8 +36,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		rowHeight = 250,
 		noGap = false,
 		preview,
-		lightbox,
-		lightboxCaption
+		lightbox
 	} = attributes;
 
 	// Block Preview Image
@@ -457,18 +456,6 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 									__nextHasNoMarginBottom
 									help={__('Open images in a lightbox when clicked.', 'folioblocks')}
 								/>
-
-								{lightbox && (
-									<ToggleControl
-										label={__('Show Image Caption in Lightbox', 'folioblocks')}
-										checked={!!lightboxCaption}
-										onChange={(newLightboxCaption) =>
-											setAttributes({ lightboxCaption: newLightboxCaption })
-										}
-										__nextHasNoMarginBottom
-										help={__('Display image captions inside the lightbox.', 'folioblocks')}
-									/>
-								)}
 							</>
 						),
 						{ attributes, setAttributes }
@@ -476,15 +463,15 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					{applyFilters(
 						'folioBlocks.justifiedGallery.onHoverTitleToggle',
 						(
-							<>
-								<ToggleControl
-									label={__('Show Image Title on Hover', 'folioblocks')}
-									help={__('Display the image title when hovering over images.', 'folioblocks')}
-									__nextHasNoMarginBottom
-									checked={!!attributes.onHoverTitle}
-									onChange={(value) => setAttributes({ onHoverTitle: value })}
-								/>
-							</>
+							<div style={{ marginBottom: '8px' }}>
+								<Notice status="info" isDismissible={false}>
+									<strong>{__('Show Image Title on Hover', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'folioblocks')}
+									</a>
+								</Notice>
+							</div>
 						),
 						{ attributes, setAttributes }
 					)}
@@ -593,9 +580,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						icon={<IconJustifiedGallery />}
 						labels={{
 							title: __('Justified Gallery', 'folioblocks'),
-							instructions: !window.folioBlocksData?.isPro
-								? __('Upload or select up to 15 images to create a Justified Gallery. Upgrade to Pro for unlimited images.', 'folioblocks')
-								: __('Upload or select images to create a Justified Gallery.', 'folioblocks'),
+							instructions: __('Upload or select images to create a Justified Gallery.', 'folioblocks'),
 						}}
 						onSelect={onSelectImages}
 						allowedTypes={['image']}

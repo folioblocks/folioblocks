@@ -198,10 +198,6 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			return indexA - indexB;
 		});
 
-	
-
-
-
 	// Handler to add a new video block inside the gallery
 	const addVideoBlock = () => {
 		setIsVideoModalOpen(true);

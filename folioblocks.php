@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       FolioBlocks
  * Description:       A collection of blocks for making photo and video galleries
- * Version:           0.9.8
+ * Version:           1.0.0
  * Requires at least: 6.3
  * Requires PHP:      7.4
  * Author:            FolioBlocks
@@ -12,9 +12,8 @@
  *
  * @package FolioBlocks
  * 
- * @fs_premium_only /build/carousel-gallery-block/premium-view.asset.php, /build/carousel-gallery-block/premium-view.js, /build/carousel-gallery-block/premium.asset.php, /build/carousel-gallery-block/premium.js, /build/grid-gallery-block/premium-view.asset.php, /build/grid-gallery-block/premium-view.js, /build/grid-gallery-block/premium.asset.php, /build/grid-gallery-block/premium.js, /build/justified-gallery-block/premium-view.asset.php, /build/justified-gallery-block/premium-view.js, /build/justified-gallery-block/premium.asset.php, /build/justified-gallery-block/premium.js, /build/masonry-gallery-block/premium-view.asset.php, /build/masonry-gallery-block/premium-view.js, /build/masonry-gallery-block/premium.asset.php, /build/masonry-gallery-block/premium.js, /build/modular-gallery-block/premium-view.asset.php, /build/modular-gallery-block/premium-view.js, /build/modular-gallery-block/premium.asset.php, /build/modular-gallery-block/premium.js, /build/pb-before-after-block/premium-view.asset.php, /build/pb-before-after-block/premium-view.js, /build/pb-before-after-block/premium.asset.php, /build/pb-before-after-block/premium.js, /build/pb-image-block/premium-view.asset.php, /build/pb-image-block/premium-view.js, /build/pb-image-block/premium.asset.php, /build/pb-image-block/premium.js, /build/pb-video-block/premium-view.asset.php, /build/pb-video-block/premium-view.js, /build/pb-video-block/premium.asset.php, /build/pb-video-block/premium.js, /build/video-gallery-block/premium-view.asset.php, /build/video-gallery-block/premium-view.js, /build/video-gallery-block/premium.asset.php, /build/video-gallery-block/premium.js
+ * @fs_premium_only /build/modular-gallery-block/, /build/pb-image-row, /build/pb-image-stack/, /build/carousel-gallery-block/premium-view.asset.php, /build/carousel-gallery-block/premium-view.js, /build/carousel-gallery-block/premium.asset.php, /build/carousel-gallery-block/premium.js, /build/grid-gallery-block/premium-view.asset.php, /build/grid-gallery-block/premium-view.js, /build/grid-gallery-block/premium.asset.php, /build/grid-gallery-block/premium.js, /build/justified-gallery-block/premium-view.asset.php, /build/justified-gallery-block/premium-view.js, /build/justified-gallery-block/premium.asset.php, /build/justified-gallery-block/premium.js, /build/masonry-gallery-block/premium-view.asset.php, /build/masonry-gallery-block/premium-view.js, /build/masonry-gallery-block/premium.asset.php, /build/masonry-gallery-block/premium.js, /build/modular-gallery-block/premium-view.asset.php, /build/modular-gallery-block/premium-view.js, /build/modular-gallery-block/premium.asset.php, /build/modular-gallery-block/premium.js, /build/pb-before-after-block/premium-view.asset.php, /build/pb-before-after-block/premium-view.js, /build/pb-before-after-block/premium.asset.php, /build/pb-before-after-block/premium.js, /build/pb-image-block/premium-view.asset.php, /build/pb-image-block/premium-view.js, /build/pb-image-block/premium.asset.php, /build/pb-image-block/premium.js, /build/pb-video-block/premium-view.asset.php, /build/pb-video-block/premium-view.js, /build/pb-video-block/premium.asset.php, /build/pb-video-block/premium.js, /build/video-gallery-block/premium-view.asset.php, /build/video-gallery-block/premium-view.js, /build/video-gallery-block/premium.asset.php, /build/video-gallery-block/premium.js
  */
-
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -44,7 +43,7 @@ if ( function_exists( 'pb_fs' ) ) {
                     'premium_slug'        => 'folioblocks-pro',
                     'type'                => 'plugin',
                     'public_key'          => 'pk_9719a603d337d33af1a1193508cdf',
-                    'is_premium'          => true,
+                    'is_premium'          =>  true,
                     'premium_suffix'      => 'Pro',
                     // If your plugin is a serviceware, set this option to false.
                     'has_premium_version' => true,
@@ -56,7 +55,8 @@ if ( function_exists( 'pb_fs' ) ) {
                     'wp_org_gatekeeper'   => 'OA7#BoRiBNqdf52FvzEf!!074aRLPs8fspif$7K1#4u4Csys1fQlCecVcUTOs2mcpeVHi#C2j9d09fOTvbC0HloPT7fFee5WdS3G',
                     'menu'                => array(
                     'slug'           => 'folioblocks-settings',
-                
+                    'contact'        => false,
+                    'support'        => false,
                 ),
             ) );
         }
@@ -73,7 +73,7 @@ if ( function_exists( 'pb_fs' ) ) {
         
         // Use custom icon in Freemius 
         function pb_fs_custom_icon() {
-            return dirname( __FILE__ ) . '/includes/icons/pb-icon.svg';
+            return dirname( __FILE__ ) . '/includes/icons/pb-brand-icon.svg';
         }
         pb_fs()->add_filter( 'plugin_icon', 'pb_fs_custom_icon' );
     
@@ -137,14 +137,18 @@ if ( function_exists( 'pb_fs' ) ) {
         register_block_type( __DIR__ . '/build/pb-before-after-block' );
         register_block_type( __DIR__ . '/build/pb-image-block' );
         register_block_type( __DIR__ . '/build/pb-video-block' );
-    	register_block_type( __DIR__ . '/build/pb-image-row' );
-    	register_block_type( __DIR__ . '/build/pb-image-stack' );
         register_block_type( __DIR__ . '/build/carousel-gallery-block' );
         register_block_type( __DIR__ . '/build/grid-gallery-block' );
     	register_block_type( __DIR__ . '/build/justified-gallery-block' );
     	register_block_type( __DIR__ . '/build/masonry-gallery-block' );
-    	register_block_type( __DIR__ . '/build/modular-gallery-block' );
+        if ( pb_fs()->can_use_premium_code() ) {
+            register_block_type( __DIR__ . '/build/modular-gallery-block' );
+            register_block_type( __DIR__ . '/build/pb-image-row' );
+    	    register_block_type( __DIR__ . '/build/pb-image-stack' ); 	     
+        }
         register_block_type( __DIR__ . '/build/video-gallery-block' );
+        
+        
     }
     add_action( 'init', 'folioblocks_folioblocks_block_init' );
 
@@ -154,7 +158,7 @@ if ( function_exists( 'pb_fs' ) ) {
     // Add Admin settings page.
     add_action( 'admin_menu', 'folioblocks_register_settings_page' );
     function folioblocks_register_settings_page() {
-        $icon_url = plugin_dir_url( __FILE__ ) . 'includes/icons/pb-icon.svg';
+        $icon_url = plugin_dir_url( __FILE__ ) . 'includes/icons/pb-brand-icon.svg';
     	add_menu_page(
     		'FolioBlocks',        // Page title
     		'FolioBlocks',        // Menu title
@@ -164,8 +168,42 @@ if ( function_exists( 'pb_fs' ) ) {
     		$icon_url, // Icon
     		10 // Position 11 for media 80 for bottom
     	);
+        add_submenu_page(
+        'folioblocks-settings',         // Parent slug
+        'Dashboard',                      // Page title
+        'Dashboard',                      // Menu title (what appears in sidebar)
+        'manage_options',
+        'folioblocks-settings',         // SAME slug as main page
+        'folioblocks_render_settings_page'
+        );
+        if ( ! function_exists( 'pb_fs' ) ||  ! pb_fs()->can_use_premium_code() ) {
+            add_submenu_page(
+                'folioblocks-settings',
+                'Free vs Pro',
+                'Free vs Pro',
+                'manage_options',
+                'folioblocks-free-vs-pro',
+                'folioblocks_render_free_pro_page'
+            );
+        }
     }
+    
+    // Register System Info submenu page
+    add_action( 'admin_menu', function() {
+        add_submenu_page(
+           'folioblocks-settings',
+            'System Information',
+            'System Info',
+            'manage_options',
+            'folioblocks-system-info',
+            'folioblocks_render_system_info_page'
+        );
+    }, 99);
+    // Load settings + system info pages
     require_once plugin_dir_path( __FILE__ ) . 'includes/admin/settings-page.php';
+    require_once plugin_dir_path( __FILE__ ) . 'includes/admin/system-info.php';
+    require_once plugin_dir_path( __FILE__ ) . 'includes/admin/free-pro.php';
+    // Load CSS for Admin pages
     add_action( 'admin_enqueue_scripts', 'folioblocks_enqueue_admin_styles' );
     function folioblocks_enqueue_admin_styles() {
     	wp_enqueue_style(
@@ -183,7 +221,6 @@ if ( function_exists( 'pb_fs' ) ) {
     }
 
 }
-
 
 if ( pb_fs()->can_use_premium_code__premium_only() ) {
     // Removes the add-to-cart query arg from the URL after adding a product to the cart.
