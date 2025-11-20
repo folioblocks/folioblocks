@@ -1,11 +1,11 @@
 === FolioBlocks ===
 Contributors: portfolioblocks , campanellafoto
-Plugin link: https://portfolio-blocks.com/
+Plugin link: https://folioblocks.com/
 Tags: gallery, portfolio, image, photo, video
 Tested up to:      6.8
 Requires at least: 6.3
 Requires PHP: 7.4
-Stable tag:        1.0.0
+Stable tag:        1.0.1
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,7 +49,7 @@ FolioBlocks is a collection of modern, responsive gallery and media blocks built
 Yes. FolioBlocks is designed to work with all modern WordPress themes. For best results, we recommend using a block theme that supports Full Site Editing.
 
 = What’s the difference between the free and Pro versions? =
-The free version includes all the core blocks and functionality, but galleries are limited to 15 images or videos. The Pro version removes this limit and unlocks additional premium features such as Randomize Order, Image Downloads, Lightbox captions, Right-Click Disable, and more.
+The free version includes all the core blocks with the exception of the Modular Gallery. The Pro version includes the Modular Gallery block and unlocks additional premium features accross all blocks such as Gallery Filtering, WooCommerce integration, Image Downloads, Randomize Image Order, Lightbox Captions, Right-Click Disable, Lazy Load, and more.
 
 = Can I use FolioBlocks with page builders like Elementor or Divi? =
 FolioBlocks is built specifically for the WordPress Block Editor (Gutenberg). It will not work inside Elementor, Divi, or other third-party page builders.
@@ -79,6 +79,12 @@ No, the galleries will remain in place on your site. However, the advanced layou
 6. Video Gallery block populated with images
 
 == Changelog ==
+
+= 1.0.1 =
+* Added is-loading spinner to Carousel, Grid, Justified, and Masonry galleries
+* Fixed bug in Carousel gallery that prevented correct height from being set
+* Fixed bugs related to FolioBlocks domain name switch
+* Tested for WordPress 6.9 compatibility
 
 = 1.0.0 =
 * Public Release

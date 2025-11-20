@@ -19,13 +19,14 @@ import {
 	ToolbarButton,
 	ToggleControl,
 } from '@wordpress/components';
-import { useEffect, useRef, useCallback } from '@wordpress/element';
+import { useEffect, useRef, useCallback, useState } from '@wordpress/element';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { applyFilters } from '@wordpress/hooks';
 import { plus } from '@wordpress/icons';
 import { decodeEntities } from '@wordpress/html-entities';
 import ResponsiveRangeControl from '../pb-helpers/ResponsiveRangeControl';
 import IconGridGallery from '../pb-helpers/IconGridGallery';
+import IconPBSpinner from '../pb-helpers/IconPBSpinner';
 import './editor.scss';
 
 const ALLOWED_BLOCKS = ['folioblocks/pb-image-block'];
@@ -148,8 +149,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 
 	const galleryRef = useRef(null);
 	const { replaceInnerBlocks, updateBlockAttributes } = useDispatch('core/block-editor');
-
-	const checkoutUrl = window.folioBlocksData?.checkoutUrl || 'https://portfolio-blocks.com/portfolio-blocks-pricing/';
+	const [isLoading, setIsLoading] = useState(false);
+	const checkoutUrl = window.folioBlocksData?.checkoutUrl || 'https://folioblocks.com/folioblocks-pricing/';
 
 	// Runtime override: if WooCommerce is not active, force Woo features off without mutating saved attributes
 	const hasWooCommerce = window.folioBlocksData?.hasWooCommerce ?? false;
@@ -318,6 +319,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 	const onSelectImages = async (media) => {
 		if (!media || media.length === 0) return;
 
+		setIsLoading(true); // <-- start spinner
+
 		const currentBlocks = wp.data.select('core/block-editor').getBlocks(clientId);
 		const existingImageIds = currentBlocks.map((block) => block.attributes.id);
 
@@ -363,6 +366,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		setTimeout(() => {
 			updateBlockAttributes(clientId, { _forceRefresh: Date.now() });
 			applyGridLayoutWhenImagesLoaded(galleryRef);
+			setIsLoading(false); // <-- stop spinner
 		}, 300);
 	};
 
@@ -647,7 +651,12 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 
 			{/* Main Block Render */}
 			<div {...{ ...blockProps, className }}>
-				{innerBlocks.length === 0 ? (
+				{isLoading && (
+					<div className="pb-spinner-wrapper">
+						<IconPBSpinner />
+					</div>
+				)}
+				{!isLoading && innerBlocks.length === 0 ? (
 					<MediaPlaceholder
 						icon={<IconGridGallery />}
 						labels={{

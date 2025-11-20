@@ -6,7 +6,7 @@
 	"title": "Image",
 	"category": "folioblocks",
 	"icon": "format-image",
-	"description": "Custom image block used by the Portfolio Blocks gallery blocks.",
+	"description": "Custom image block used by the FolioBlocks gallery blocks.",
 	"example": {},
 	"keywords": [ "img", "photo", "picture" ],
 	"textdomain": "folioblocks",

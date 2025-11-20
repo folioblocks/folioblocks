@@ -18,3 +18,59 @@
 	transform: none !important;
 	transition: none !important;
 }
+
+.pb-spinner-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 200px; /* adjust depending on desired height */
+  opacity: 0;
+  animation: pb-spinner-fade-in 0.25s ease-out forwards;
+}
+
+.pb-spinner-wrapper svg {
+	width: 48px; 
+	height: 48px;
+	margin: 0 auto;
+
+	.fb-circle-bg { fill: #3b82f6; }
+	.fb-square     { fill: #ffffff; }
+	.fb-dot        { fill: #ffffff; }
+
+	/* Squares morph once, no looping */
+	.fb-spinner-squares {
+	  animation: fb-morph-out 0.6s ease-in-out forwards;
+	  transform-origin: 12px 12px;
+	}
+
+	/* Orbit fades in once, then spins forever */
+	.fb-spinner-orbit {
+	  opacity: 0;
+	  transform-origin: 12px 12px;
+	  animation:
+	    fb-orbit-fade-in 0.6s ease-in-out forwards,
+	    fb-orbit-rotate 1.2s linear infinite 0.6s;
+	}
+
+	@keyframes fb-morph-out {
+	  0%   { opacity: 1; transform: scale(1); }
+	  30%  { opacity: 1; transform: scale(0.85); }
+	  100% { opacity: 0; transform: scale(0.5); }
+	}
+
+	@keyframes fb-orbit-fade-in {
+	  0%   { opacity: 0; transform: scale(0.9); }
+	  100% { opacity: 1; transform: scale(1); }
+	}
+
+	@keyframes fb-orbit-rotate {
+	  0%   { transform: rotate(0deg); }
+	  100% { transform: rotate(360deg); }
+	}
+
+	@keyframes pb-spinner-fade-in {
+	  from { opacity: 0; }
+	  to   { opacity: 1; }
+	}
+}

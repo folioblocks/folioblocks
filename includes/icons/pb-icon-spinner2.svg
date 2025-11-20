@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 24 24"
+     width="120" height="120">
+  <defs>
+    <style>
+      .bg { fill: #3b82f6; }
+      .sq { fill: #fff; }
+      .dot { fill: #fff; }
+
+      /* Central squares → circles → squares */
+      .sq {
+        animation: morph 2.8s infinite ease-in-out;
+        transform-origin: 12px 12px;
+      }
+
+      /* orbiting group */
+      #orbit {
+        opacity: 0;
+        animation:
+          orbitFade 2.8s infinite ease-in-out,
+          spin 1.2s infinite linear 1.0s;
+        transform-origin: 12px 12px;
+      }
+
+      /* Squares morphing */
+      @keyframes morph {
+        0%   { rx: 0; ry: 0; transform: translate(0,0) scale(1); opacity: 1; }
+        25%  { rx: 1.6; ry: 1.6; transform: translate(0,0) scale(0.85); opacity: 1; }
+        40%  { rx: 1.6; ry: 1.6; transform: translate(var(--dx), var(--dy)) scale(0.5); opacity: 0; }
+        70%  { opacity: 0; }
+        90%  { rx: 0; ry: 0; transform: translate(0,0) scale(1); opacity: 1; }
+      }
+
+      /* Orbit fade */
+      @keyframes orbitFade {
+        0%,25%   { opacity: 0; }
+        35%,70%  { opacity: 1; }
+        90%,100% { opacity: 0; }
+      }
+
+      /* Orbit rotation */
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to   { transform: rotate(360deg); }
+      }
+    </style>
+  </defs>
+
+  <!-- Blue outer circle -->
+  <circle cx="12" cy="12" r="12" class="bg"/>
+
+  <!-- 9 Squares -->
+  <!-- Each square gets CSS variables for its outward direction -->
+  <rect class="sq" x="5.9" y="5.9" width="3.3" height="3.3" style="--dx:-3px; --dy:-3px"/>
+  <rect class="sq" x="5.9" y="10.3" width="3.3" height="3.3" style="--dx:-3px; --dy:0px"/>
+  <rect class="sq" x="5.9" y="14.7" width="3.3" height="3.3" style="--dx:-3px; --dy:3px"/>
+
+  <rect class="sq" x="10.3" y="5.9" width="3.3" height="3.3" style="--dx:0px; --dy:-3px"/>
+  <rect class="sq" x="10.3" y="10.3" width="3.3" height="3.3" style="--dx:0px; --dy:0px"/>
+  <rect class="sq" x="10.3" y="14.7" width="3.3" height="3.3" style="--dx:0px; --dy:3px"/>
+
+  <rect class="sq" x="14.7" y="5.9" width="3.3" height="3.3" style="--dx:3px; --dy:-3px"/>
+  <rect class="sq" x="14.7" y="10.3" width="3.3" height="3.3" style="--dx:3px; --dy:0px"/>
+  <rect class="sq" x="14.7" y="14.7" width="3.3" height="3.3" style="--dx:3px; --dy:3px"/>
+
+  <!-- Orbiting dots -->
+  <g id="orbit">
+    <circle class="dot" cx="12" cy="4.3" r="0.9"/>
+    <circle class="dot" cx="16" cy="5.3" r="0.9"/>
+    <circle class="dot" cx="18.5" cy="7.8" r="0.9"/>
+    <circle class="dot" cx="19.5" cy="12" r="0.9"/>
+    <circle class="dot" cx="18.5" cy="16.2" r="0.9"/>
+    <circle class="dot" cx="16" cy="18.7" r="0.9"/>
+    <circle class="dot" cx="12" cy="19.7" r="0.9"/>
+    <circle class="dot" cx="8" cy="18.7" r="0.9"/>
+  </g>
+</svg>

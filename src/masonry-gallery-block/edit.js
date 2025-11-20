@@ -19,13 +19,13 @@ import {
     ToolbarButton,
 } from '@wordpress/components';
 import { useDispatch, useSelect } from '@wordpress/data';
-import { useEffect, useRef } from '@wordpress/element';
+import { useEffect, useRef, useState } from '@wordpress/element';
 import ResponsiveRangeControl from '../pb-helpers/ResponsiveRangeControl';
 import { plus } from '@wordpress/icons';
 import { applyFilters } from '@wordpress/hooks';
 import { decodeEntities } from '@wordpress/html-entities';
 import IconMasonryGallery from '../pb-helpers/IconMasonryGallery';
-
+import IconPBSpinner from '../pb-helpers/IconPBSpinner';
 import './editor.scss';
 
 const ALLOWED_BLOCKS = ['folioblocks/pb-image-block'];
@@ -49,7 +49,8 @@ export default function Edit({ clientId, attributes, setAttributes }) {
         }
     }, [window.folioBlocksData?.hasWooCommerce]);
 
-    const checkoutUrl = window.folioBlocksData?.checkoutUrl || 'https://portfolio-blocks.com/portfolio-blocks-pricing/';
+    const [isLoading, setIsLoading] = useState(false);
+    const checkoutUrl = window.folioBlocksData?.checkoutUrl || 'https://folioblocks.com/folioblocks-pricing/';
 
     // Block Preview Image
     if (preview) {
@@ -123,6 +124,8 @@ export default function Edit({ clientId, attributes, setAttributes }) {
     const onSelectImages = async (media) => {
         if (!media || media.length === 0) return;
 
+        setIsLoading(true); // <-- start spinner
+
         const currentBlocks = wp.data.select('core/block-editor').getBlocks(clientId);
         const existingImageIds = currentBlocks.map((block) => block.attributes.id);
         const newImageIds = media.filter((image) => !existingImageIds.includes(image.id)).map((image) => image.id);
@@ -155,6 +158,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
         // Replace inner blocks with the newly created blocks
         replaceInnerBlocks(clientId, [...currentBlocks, ...newBlocks]);
         updateBlockAttributes(clientId, { _forceRefresh: Date.now() });
+        setIsLoading(false); // <-- stop spinner
     };
 
     useEffect(() => {
@@ -532,7 +536,12 @@ export default function Edit({ clientId, attributes, setAttributes }) {
             </InspectorControls>
 
             <div {...blockProps} className={`${blockProps.className} ${attributes.dropShadow ? 'drop-shadow' : ''}`}>
-                {innerBlocks.length === 0 ? (
+                {isLoading && (
+					<div className="pb-spinner-wrapper">
+						<IconPBSpinner />
+					</div>
+				)}
+				{!isLoading && innerBlocks.length === 0 ? (
                     <MediaPlaceholder
                         icon={<IconMasonryGallery />}
                         labels={{

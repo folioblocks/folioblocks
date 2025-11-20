@@ -6,6 +6,7 @@
 "title": "Video Block",
 "category": "folioblocks",
 "icon": "video-alt3",
+"description": "Custom video block used by the FolioBlocks gallery blocks.",
 "example": {}, 
 "textdomain": "folioblocks",
 "parent": [

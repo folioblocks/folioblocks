@@ -1,8 +1,8 @@
 {
 	"name": "folioblocks",
-	"version": "0.9.9",
+	"version": "1.0.1",
 	"description": "A collection of blocks for making photo and video galleries.",
-	"author": "PB Team",
+	"author": "FolioBlocks",
 	"license": "GPL-2.0-or-later",
 	"main": "build/index.js",
 	"scripts": {

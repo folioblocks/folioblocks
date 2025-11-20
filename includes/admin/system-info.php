@@ -293,6 +293,8 @@ if ( ! function_exists( 'folioblocks_render_system_info_page' ) ) {
 						</li>
 						</ul>
 					</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

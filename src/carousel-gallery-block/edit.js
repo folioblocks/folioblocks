@@ -25,13 +25,14 @@ import { useSelect, useDispatch } from '@wordpress/data';
 import { useEffect, useCallback, useRef, useState } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
 import IconCarouselGallery from '../pb-helpers/IconCarouselGallery';
+import IconPBSpinner from '../pb-helpers/IconPBSpinner';
 import './editor.scss';
 
 
 export default function Edit({ clientId, attributes, setAttributes }) {
 	const ALLOWED_BLOCKS = ['folioblocks/pb-image-block'];
-
-	const checkoutUrl = window.folioBlocksData?.checkoutUrl || 'https://portfolio-blocks.com/portfolio-blocks-pricing/';
+	const checkoutUrl = window.folioBlocksData?.checkoutUrl || 'https://folioblocks.com/folioblocks-pricing/';
+	const [isLoading, setIsLoading] = useState(false);
 
 	const {
 		carouselHeight,
@@ -86,6 +87,8 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 	const onSelectImages = async (media) => {
 		if (!media || media.length === 0) return;
 
+		setIsLoading(true); // <-- start spinner
+
 		const currentBlocks = wp.data.select('core/block-editor').getBlocks(clientId);
 		const existingImageIds = currentBlocks.map((block) => block.attributes.id);
 
@@ -127,14 +130,10 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 		// Replace inner blocks
 		replaceInnerBlocks(clientId, [...currentBlocks, ...newBlocks]);
 
-		const immediateHeight = calculateCarouselHeight();
-		if (!isNaN(immediateHeight)) {
-			setAttributes({ carouselHeight: immediateHeight });
-		}
-
 		// Trigger layout recalculation
 		setTimeout(() => {
 			updateBlockAttributes(clientId, { _forceRefresh: Date.now() });
+			setIsLoading(false); // <-- stop spinner
 		}, 300);
 	};
 
@@ -161,15 +160,18 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 
 	// Calculate and set carousel height based on aspect ratio and container width
 	const [containerWidth, setContainerWidth] = useState(0);
+	// Watch the carousel container width and update containerWidth
 	useEffect(() => {
+		if (!galleryRef.current) return;
+
 		const observer = new ResizeObserver(([entry]) => {
 			setContainerWidth(entry.contentRect.width);
 		});
-		if (galleryRef.current) {
-			observer.observe(galleryRef.current);
-		}
+
+		observer.observe(galleryRef.current);
+
 		return () => observer.disconnect();
-	}, []);
+	}, [innerBlocks.length, isLoading, attributes.align]);
 	useEffect(() => {
 		const isMobile = containerWidth <= 768;
 		const [w, h] = (isMobile && attributes.verticalOnMobile) ? [2, 3] : [3, 2];
@@ -669,7 +671,12 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 			</InspectorControls>
 
 			<div {...blockProps}>
-				{innerBlocks.length === 0 ? (
+				{isLoading && (
+					<div className="pb-spinner-wrapper">
+						<IconPBSpinner />
+					</div>
+				)}
+				{!isLoading && innerBlocks.length === 0 ? (
 					<MediaPlaceholder
 						icon={<IconCarouselGallery />}
 						labels={{
@@ -681,7 +688,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 						allowedTypes={['image']}
 						multiple
 					/>
-				) : (
+				) : !isLoading && (
 					<div
 						ref={mergedRef}
 						{...restInnerBlocksProps}

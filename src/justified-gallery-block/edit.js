@@ -22,12 +22,12 @@ import {
 } from '@wordpress/components';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { plus } from '@wordpress/icons';
-import { useCallback, useEffect, useRef } from '@wordpress/element';
+import { useCallback, useEffect, useRef, useState } from '@wordpress/element';
 import { decodeEntities } from '@wordpress/html-entities';
 import { applyFilters } from '@wordpress/hooks';
-import './editor.scss';
-
 import IconJustifiedGallery from '../pb-helpers/IconJustifiedGallery';
+import IconPBSpinner from '../pb-helpers/IconPBSpinner';
+import './editor.scss';
 
 const ALLOWED_BLOCKS = ['folioblocks/pb-image-block'];
 
@@ -58,8 +58,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		}
 	}, [window.folioBlocksData?.hasWooCommerce]);
 
-
-	const checkoutUrl = window.folioBlocksData?.checkoutUrl || 'https://portfolio-blocks.com/portfolio-blocks-pricing/';
+	const [isLoading, setIsLoading] = useState(false);
+	const checkoutUrl = window.folioBlocksData?.checkoutUrl || 'https://folioblocks.com/folioblocks-pricing/';
 	const { replaceInnerBlocks, updateBlockAttributes } = useDispatch('core/block-editor');
 
 	const innerBlocks = useSelect(
@@ -96,6 +96,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 	// Select Images Handler
 	const onSelectImages = async (media) => {
 		if (!media || media.length === 0) return;
+
+		setIsLoading(true); // <-- start spinner
 
 		// Preserve randomization logic
 		const images = attributes.randomizeOrder ? [...media].sort(() => 0.5 - Math.random()) : media;
@@ -140,6 +142,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			if (container) {
 				container.dispatchEvent(new Event('resize'));
 			}
+		setIsLoading(false); // <-- stop spinner
 		}, 100);
 	};
 
@@ -575,7 +578,12 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			</InspectorControls>
 
 			<div {...blockProps}>
-				{innerBlocks.length === 0 ? (
+				{isLoading && (
+					<div className="pb-spinner-wrapper">
+						<IconPBSpinner />
+					</div>
+				)}
+				{!isLoading && innerBlocks.length === 0 ? (
 					<MediaPlaceholder
 						icon={<IconJustifiedGallery />}
 						labels={{

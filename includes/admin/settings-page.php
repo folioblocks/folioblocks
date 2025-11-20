@@ -101,7 +101,6 @@ function folioblocks_render_settings_page() {
 				</div>
 				<?php if ( ! pb_fs()->can_use_premium_code() ) : ?>
 					<div class="pb-dashboard-box">
-						<div class="settings-features">
 						<h2>Pro Version - Features:</h2>
 						<p>
 							The pro version includes all the blocks from the free version plus Modular Gallery and unlocks all the features:
@@ -119,7 +118,6 @@ function folioblocks_render_settings_page() {
 								<li>Right-click prevention</li>
 								<li>Lazy Load galleries</li>
 							</ul>
-						</div>
 						<p>
 							Purchase a license for FolioBlocks today and enjoy the best gallery plugin for modern WordPress and the block editor.
 						</p>
