@@ -2,10 +2,10 @@
 Contributors: portfolioblocks , campanellafoto
 Plugin link: https://folioblocks.com/
 Tags: gallery, portfolio, image, photo, video
-Tested up to:      6.8
+Tested up to:      6.9
 Requires at least: 6.3
 Requires PHP: 7.4
-Stable tag:        1.0.1
+Stable tag:        1.0.2
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -79,6 +79,9 @@ No, the galleries will remain in place on your site. However, the advanced layou
 6. Video Gallery block populated with images
 
 == Changelog ==
+
+= 1.0.2 =
+* Fixed minor bugs in Grid, Justified, and Masonry galleries 
 
 = 1.0.1 =
 * Added is-loading spinner to Carousel, Grid, Justified, and Masonry galleries
@@ -272,11 +275,6 @@ No, the galleries will remain in place on your site. However, the advanced layou
 
 = 0.5.0 =
 * Grid, Masonry, Justified, and Video Gallery blocks feature complete
-
-== Upgrade Notice ==
-
-= 1.0 =
-Initial public release.
 
 == Source Code ==
 

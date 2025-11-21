@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-$pb_attributes = wp_parse_args($pb_attributes, [
+$attributes = wp_parse_args($attributes, [
     'randomizeOrder' => false,
     'noGap' => false,
 ]);
@@ -18,34 +18,34 @@ $pb_extra_class = '';
 $pb_data_attr = '';
 
 if ( pb_fs()->can_use_premium_code__premium_only() ) {
-    $enable_filter   = $pb_attributes['enableFilter'] ?? false;
-    $filter_align    = $pb_attributes['filterAlign'] ?? 'center';
+    $enable_filter   = $attributes['enableFilter'] ?? false;
+    $filter_align    = $attributes['filterAlign'] ?? 'center';
     $active_filter   = 'All';
-    $filter_categories    = $pb_attributes['filterCategories'] ?? [];
+    $filter_categories    = $attributes['filterCategories'] ?? [];
 
-    $pb_extra_class .= $pb_attributes['randomizeOrder'] ? ' pb-randomized' : '';
-    $pb_data_attr = $pb_attributes['randomizeOrder'] ? ' data-randomize="true"' : '';
+    $pb_extra_class .= $attributes['randomizeOrder'] ? ' pb-randomized' : '';
+    $pb_data_attr = $attributes['randomizeOrder'] ? ' data-randomize="true"' : '';
 
     $active_styles   = '';
     $inactive_styles = '';
 
     if ( $enable_filter ) {
-        if ( ! empty( $pb_attributes['activeFilterTextColor'] ) ) {
-            $active_styles .= '--pb--filter-active-text:' . esc_attr( $pb_attributes['activeFilterTextColor'] ) . ';';
+        if ( ! empty( $attributes['activeFilterTextColor'] ) ) {
+            $active_styles .= '--pb--filter-active-text:' . esc_attr( $attributes['activeFilterTextColor'] ) . ';';
         }
-        if ( ! empty( $pb_attributes['activeFilterBgColor'] ) ) {
-            $active_styles .= '--pb--filter-active-bg:' . esc_attr( $pb_attributes['activeFilterBgColor'] ) . ';';
+        if ( ! empty( $attributes['activeFilterBgColor'] ) ) {
+            $active_styles .= '--pb--filter-active-bg:' . esc_attr( $attributes['activeFilterBgColor'] ) . ';';
         }
-        if ( ! empty( $pb_attributes['filterTextColor'] ) ) {
-            $inactive_styles .= '--pb--filter-text-color:' . esc_attr( $pb_attributes['filterTextColor'] ) . ';';
+        if ( ! empty( $attributes['filterTextColor'] ) ) {
+            $inactive_styles .= '--pb--filter-text-color:' . esc_attr( $attributes['filterTextColor'] ) . ';';
         }
-        if ( ! empty( $pb_attributes['filterBgColor'] ) ) {
-            $inactive_styles .= '--pb--filter-bg-color:' . esc_attr( $pb_attributes['filterBgColor'] ) . ';';
+        if ( ! empty( $attributes['filterBgColor'] ) ) {
+            $inactive_styles .= '--pb--filter-bg-color:' . esc_attr( $attributes['filterBgColor'] ) . ';';
         }
     }
 }
 
-$pb_extra_class .= $pb_attributes['noGap'] ? ' no-gap' : '';
+$pb_extra_class .= $attributes['noGap'] ? ' no-gap' : '';
 
 $pb_wrapper_args = [
     'class' => trim($pb_extra_class),
@@ -58,11 +58,11 @@ if ( pb_fs()->can_use_premium_code__premium_only() ) {
         $pb_wrapper_args['data-active-filter'] = $active_filter;
     }
 
-    if ( ! empty( $pb_attributes['disableRightClick'] ) ) {
+    if ( ! empty( $attributes['disableRightClick'] ) ) {
         $pb_wrapper_args['data-disable-right-click'] = 'true';
     }
 
-    if ( ! empty( $pb_attributes['enableDownload'] ) ) {
+    if ( ! empty( $attributes['enableDownload'] ) ) {
         $pb_wrapper_args['data-enable-download'] = 'true';
     }
 }

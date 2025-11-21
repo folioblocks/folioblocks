@@ -1,0 +1,16 @@
+/**
+ * PB Loupe Block
+ * Editor SCSS
+ **/
+
+.pb-img-thumbnail-preview {
+	width: 60%;
+	margin: 0 auto;
+	display: block;
+
+	img {
+		width: 100%;
+		height: auto;
+		display: block;
+	}
+}

@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-$pb_attributes = wp_parse_args($pb_attributes, [
+$attributes = wp_parse_args($attributes, [
     'randomizeOrder' => false,
 ]);
 
@@ -20,36 +20,36 @@ $pb_wrapper_attributes_args = [
     'class' => 'is-loading',
 ];
 
+// Filtering feature
+$enable_filter      = $attributes['enableFilter'] ?? false;
+$filter_align       = $attributes['filterAlign'] ?? 'center';
+$active_filter      = 'All';
+$filter_categories  = $attributes['filterCategories'] ?? [];
+
+$active_styles   = '';
+$inactive_styles = '';
+
 //  Premium-only logic
 if ( pb_fs()->can_use_premium_code__premium_only() ) {
     // Randomize order
-    if ( ! empty( $pb_attributes['randomizeOrder'] ) ) {
+    if ( ! empty( $attributes['randomizeOrder'] ) ) {
         $pb_extra_class = ' pb-randomized';
         $pb_data_attr   = ' data-randomize="true"';
         $pb_wrapper_attributes_args['class'] .= $pb_extra_class;
     }
 
-    // Filtering feature
-    $enable_filter      = $pb_attributes['enableFilter'] ?? false;
-    $filter_align       = $pb_attributes['filterAlign'] ?? 'center';
-    $active_filter      = 'All';
-    $filter_categories  = $pb_attributes['filterCategories'] ?? [];
-
-    $active_styles   = '';
-    $inactive_styles = '';
-
     if ( $enable_filter ) {
-        if ( ! empty( $pb_attributes['activeFilterTextColor'] ) ) {
-            $active_styles .= '--pb--filter-active-text:' . esc_attr( $pb_attributes['activeFilterTextColor'] ) . ';';
+        if ( ! empty( $attributes['activeFilterTextColor'] ) ) {
+            $active_styles .= '--pb--filter-active-text:' . esc_attr( $attributes['activeFilterTextColor'] ) . ';';
         }
-        if ( ! empty( $pb_attributes['activeFilterBgColor'] ) ) {
-            $active_styles .= '--pb--filter-active-bg:' . esc_attr( $pb_attributes['activeFilterBgColor'] ) . ';';
+        if ( ! empty( $attributes['activeFilterBgColor'] ) ) {
+            $active_styles .= '--pb--filter-active-bg:' . esc_attr( $attributes['activeFilterBgColor'] ) . ';';
         }
-        if ( ! empty( $pb_attributes['filterTextColor'] ) ) {
-            $inactive_styles .= '--pb--filter-text-color:' . esc_attr( $pb_attributes['filterTextColor'] ) . ';';
+        if ( ! empty( $attributes['filterTextColor'] ) ) {
+            $inactive_styles .= '--pb--filter-text-color:' . esc_attr( $attributes['filterTextColor'] ) . ';';
         }
-        if ( ! empty( $pb_attributes['filterBgColor'] ) ) {
-            $inactive_styles .= '--pb--filter-bg-color:' . esc_attr( $pb_attributes['filterBgColor'] ) . ';';
+        if ( ! empty( $attributes['filterBgColor'] ) ) {
+            $inactive_styles .= '--pb--filter-bg-color:' . esc_attr( $attributes['filterBgColor'] ) . ';';
         }
     }
 
@@ -60,12 +60,12 @@ if ( pb_fs()->can_use_premium_code__premium_only() ) {
     }
 
     // Disable right-click
-    if ( ! empty( $pb_attributes['disableRightClick'] ) ) {
+    if ( ! empty( $attributes['disableRightClick'] ) ) {
         $pb_wrapper_attributes_args['data-disable-right-click'] = 'true';
     }
 
     // Enable download
-    if ( ! empty( $pb_attributes['enableDownload'] ) ) {
+    if ( ! empty( $attributes['enableDownload'] ) ) {
         $pb_wrapper_attributes_args['data-enable-download'] = 'true';
     }
 }

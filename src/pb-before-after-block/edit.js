@@ -15,10 +15,10 @@ function CustomPlaceholder({ beforeImage, afterImage, onSelectBefore, onSelectAf
 		<div className="pb-split-placeholder">
 			<div className="pb-placeholder-header">
 				<Icon icon={IconBeforeAfter} />
-				<h2>{__('Select two images for Before & After Block', 'folioblocks')}</h2>
+				<h2>{__('Before & After Block', 'folioblocks')}</h2>
 			</div>
 			<p className="pb-placeholder-instructions">
-				{__('For best results, use images with the same dimensions (width and height).', 'folioblocks')}
+				{__('Select two images for Before & After Block. For best results, use images with the same dimensions (width and height).', 'folioblocks')}
 			</p>
 			<div className="pb-placeholder-fields">
 				<div>

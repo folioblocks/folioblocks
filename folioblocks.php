@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       FolioBlocks
  * Description:       A collection of blocks for making photo and video galleries
- * Version:           1.0.1
+ * Version:           1.0.2
  * Requires at least: 6.3
  * Requires PHP:      7.4
  * Author:            FolioBlocks
@@ -137,6 +137,7 @@ if ( function_exists( 'pb_fs' ) ) {
     function folioblocks_folioblocks_block_init() {
         register_block_type( __DIR__ . '/build/pb-before-after-block' );
         register_block_type( __DIR__ . '/build/pb-image-block' );
+        register_block_type( __DIR__ . '/build/pb-loupe-block' );
         register_block_type( __DIR__ . '/build/pb-video-block' );
         register_block_type( __DIR__ . '/build/carousel-gallery-block' );
         register_block_type( __DIR__ . '/build/grid-gallery-block' );

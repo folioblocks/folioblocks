@@ -1,0 +1,73 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "folioblocks/pb-loupe-block",
+	"version": "0.1.0",
+	"title": "Loupe Block",
+	"category": "folioblocks",
+	"icon": "<svg viewBox=\"0 0 1247.24 1247.24\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-hidden=\"true\"><g id=\"Layer_1-2\"><g fill=\"none\" stroke=\"#000000\" strokeWidth=\"40\" strokeLinecap=\"round\" strokeLinejoin=\"round\" strokeMiterlimit=\"10\"><path d=\"M415 130H176c-25.65 0-46.53 20.89-46.53 46.57V415\"/><path d=\"M832 130h238c25.65 0 46.53 20.89 46.53 46.57V415\"/><path d=\"M1117 832v238c0 25.68-20.88 46.57-46.53 46.57H832\"/><path d=\"M415 1117H176c-25.65 0-46.53-20.89-46.53-46.57V832\"/><circle cx=\"580\" cy=\"580\" r=\"230\"/><line x1=\"745\" y1=\"745\" x2=\"950\" y2=\"950\"/></g></g></svg>",
+	"description": "Magnify part of an image with a circular loupe.",
+	"example": {
+        "attributes": {
+        "preview": true
+    }
+    },
+	"supports": {
+        "align": [ "wide", "full" ],
+		"color": {
+			"background": false,
+			"gradients": false,
+			"text": false
+		},
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
+		"anchor": true,
+		"ariaLabel": true,
+		"html": false,
+		"shadow": true,
+		"border": true,
+		"__experimentalStyle": {
+			 "shadow": { "cssProperty": "box-shadow" },
+			 "border": { "cssProperty": "border" },
+			 "borderRadius": { "cssProperty": "border-radius" }
+		},
+		"__experimentalBorder": {
+			"color": true,
+			"radius": true,
+			"style": true,
+			"width": true,
+			"__experimentalDefaultControls": {
+				"color": true,
+				"radius": true,
+				"style": true,
+				"width": true
+			}
+		}
+    },
+	"attributes": {
+    "id": { "type": "number" },
+    "url": { "type": "string" },
+	"alt": { "type": "string", "default": ""},
+	"resolution": {
+		"type": "string",
+		"default": "large"
+	},
+	"availableSize": {
+		"type": "array",
+		"items": { "type": "string" },
+		"default": []
+	},
+    "magnification": { "type": "number", "default": 10 },
+    "loupeSize": { "type": "number", "default": 150 },
+    "borderWidth": { "type": "number", "default": 2 },
+    "borderColor": { "type": "string", "default": "#ffffff" }
+  	},
+	"textdomain": "folioblocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"viewScript": "file:./view.js"
+}

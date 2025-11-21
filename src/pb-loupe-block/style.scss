@@ -1,0 +1,33 @@
+/**
+ * PB Loupe Block
+ * Front-End SCSS
+ **/
+
+.pb-loupe-block {
+	margin: 0!important;
+	padding: 0!important;
+	line-height: 0!important;
+	border-width: 0;
+	border-style: solid;
+	overflow: hidden;
+}
+.pb-loupe-block img {
+	display: block;
+	max-width: 100%;
+	height: auto;
+	border-radius: var(--wp--custom--border--radius, 0px);
+}
+.pb-loupe-container {
+	position: relative;
+	display: inline-block;
+	overflow: hidden;
+}
+
+.pb-loupe-lens {
+	position: absolute;
+	border-radius: 50%;
+	border: 2px solid #fff;
+	box-shadow: 0 0 8px rgba(0,0,0,0.3);
+	pointer-events: none;
+	background-repeat: no-repeat;
+}
