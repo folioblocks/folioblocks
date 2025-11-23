@@ -133,60 +133,6 @@ function folioblocks_render_settings_page() {
 				<?php endif; ?>
 				
 				<div class="pb-dashboard-box">
-					<h2>Video Tutorials:</h2>
-					<p>
-						If you find that you need any help using the plugin, we have prepared walktrough video tutorials on our for all YouTube channel the blocks:
-					</p>
-					<p>
-						<strong>VIDEOS COMING SOON!</strong>
-					</p>
-					<div class="video-grid">
-						<div class="video-block before-after">
-							<a href="#">
-								<span class="play-icon">▶</span>
-								<span class="video-label">Before &amp; After Block</span>
-							</a>
-						</div>
-						<div class="video-block carousel-gallery">
-							<a href="#">
-								<span class="play-icon">▶</span>
-								<span class="video-label">Carousel Gallery Block</span>
-							</a>
-						</div>
-						<div class="video-block grid-gallery">
-							<a href="#">
-								<span class="play-icon">▶</span>
-								<span class="video-label">Grid Gallery Block</span>
-							</a>
-						</div>
-						<div class="video-block justified-gallery">
-							<a href="#">
-								<span class="play-icon">▶</span>
-								<span class="video-label">Justified Gallery Block</span>
-							</a>
-						</div>
-						<div class="video-block masonry-gallery">
-							<a href="#">
-								<span class="play-icon">▶</span>
-								<span class="video-label">Masonry Gallery Block</span>
-							</a>
-						</div>
-						<div class="video-block modular-gallery">
-							<a href="#">
-								<span class="play-icon">▶</span>
-								<span class="video-label">Modular Gallery Block</span>
-							</a>
-						</div>
-						<div class="video-block video-gallery">
-							<a href="#">
-								<span class="play-icon">▶</span>
-								<span class="video-label">Video Gallery Block</span>
-							</a>
-						</div>
-					</div>
-				</div>
-				
-				<div class="pb-dashboard-box">
 					<?php
 					// --- Latest News from folioblocks.com ---
 					// Load WordPress feed functions

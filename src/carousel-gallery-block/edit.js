@@ -31,7 +31,7 @@ import './editor.scss';
 
 export default function Edit({ clientId, attributes, setAttributes }) {
 	const ALLOWED_BLOCKS = ['folioblocks/pb-image-block'];
-	const checkoutUrl = window.folioBlocksData?.checkoutUrl || 'https://folioblocks.com/folioblocks-pricing/';
+	const checkoutUrl = window.folioBlocksData?.checkoutUrl || 'https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks&utm_medium=carousel-gallery-block&utm_campaign=upgrade';
 	const [isLoading, setIsLoading] = useState(false);
 
 	const {

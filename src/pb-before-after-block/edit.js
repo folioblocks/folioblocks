@@ -74,7 +74,7 @@ export default function Edit({ attributes, setAttributes }) {
 	const containerRef = useRef(null);
 	const afterImageRef = useRef(null);
 
-	const checkoutUrl = window.folioBlocksData?.checkoutUrl || 'https://folioblocks.com/folioblocks-pricing/';
+	const checkoutUrl = window.folioBlocksData?.checkoutUrl || 'https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks&utm_medium=before-after-block&utm_campaign=upgrade';
 
 	// Block Preview Image
 	if (preview) {

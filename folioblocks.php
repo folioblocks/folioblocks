@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name:       FolioBlocks
- * Description:       A collection of blocks for making photo and video galleries
- * Version:           1.0.2
+ * Description:       Create fast and responsive photo & video galleries with grid, masonry, justified, modular, and carousel layouts — Built for photographers, videographers, and modern creative portfolios.
+ * Version:           1.0.3
  * Requires at least: 6.3
  * Requires PHP:      7.4
  * Author:            FolioBlocks
@@ -70,7 +70,12 @@ if ( function_exists( 'pb_fs' ) ) {
         // Signal that SDK was initiated.
         do_action( 'pb_fs_loaded' );
 
+        // Disable annual pricing in monthly view
         pb_fs()->add_filter( 'pricing/show_annual_in_monthly', '__return_false' );
+
+        pb_fs()->add_filter( 'pricing_url', function ( $url ) {
+            return 'https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks-plugin&utm_medium=freemius&utm_campaign=in-plugin-upgrade';
+        } );
         
         // Use custom icon in Freemius 
         function pb_fs_custom_icon() {
@@ -140,6 +145,9 @@ if ( function_exists( 'pb_fs' ) ) {
         register_block_type( __DIR__ . '/build/pb-loupe-block' );
         register_block_type( __DIR__ . '/build/pb-video-block' );
         register_block_type( __DIR__ . '/build/carousel-gallery-block' );
+        if ( pb_fs()->can_use_premium_code() ) {
+            register_block_type( __DIR__ . '/build/filmstrip-gallery-block' );     
+        }
         register_block_type( __DIR__ . '/build/grid-gallery-block' );
     	register_block_type( __DIR__ . '/build/justified-gallery-block' );
     	register_block_type( __DIR__ . '/build/masonry-gallery-block' );
@@ -233,44 +241,5 @@ if ( pb_fs()->can_use_premium_code__premium_only() ) {
 	    }
     });
 
-    // Enqueue premium block scripts if premium is active.
-    add_action( 'enqueue_block_editor_assets', 'folioblocks_enqueue_premium_scripts' );
-    add_action( 'wp_enqueue_scripts', 'folioblocks_enqueue_premium_scripts' );
-
-    function folioblocks_enqueue_premium_scripts() {
-        if ( !pb_fs()->can_use_premium_code() ) {
-            return;
-        }
-
-        $blocks_dir = plugin_dir_path( __FILE__ ) . 'build/';
-        $blocks_url = plugins_url( 'build/', __FILE__ );
-
-        foreach ( glob( $blocks_dir . '*', GLOB_ONLYDIR ) as $block_path ) {
-            $block_name = basename( $block_path );
-
-            // Editor premium script
-            $premium_js_path = $block_path . '/premium.js';
-            if ( file_exists( $premium_js_path ) ) {
-                wp_enqueue_script(
-                    "folioblocks-{$block_name}-premium",
-                    $blocks_url . "{$block_name}/premium.js",
-                    [ 'wp-blocks', 'wp-element', 'wp-hooks', 'wp-components', 'wp-editor' ],
-                    filemtime( $premium_js_path ),
-                    true
-                );
-            }
-
-            // Frontend premium script
-            $premium_view_js_path = $block_path . '/premium-view.js';
-            if ( file_exists( $premium_view_js_path ) ) {
-                wp_enqueue_script(
-                    "folioblocks-{$block_name}-premium-view",
-                    $blocks_url . "{$block_name}/premium-view.js",
-                    [],
-                    filemtime( $premium_view_js_path ),
-                    true
-                );
-            }
-        }
-    }
+   
 }

@@ -1,5 +1,5 @@
 /**
- * Grid Gallery Block
+ * Justified Gallery Block
  * Premium JS
  **/
 import { __ } from '@wordpress/i18n';
@@ -15,14 +15,14 @@ import {
     __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from '@wordpress/components';
 import { addFilter } from '@wordpress/hooks';
-import { useEffect, useRef } from '@wordpress/element';
-import { applyThumbnails } from '../../pb-helpers/applyThumbnails';
+import { useEffect } from '@wordpress/element';
+import { applyThumbnails } from '../pb-helpers/applyThumbnails';
 
 addFilter(
-    'folioBlocks.gridGallery.editorEnhancements',
-    'folioblocks/grid-gallery-premium-thumbnails',
+    'folioBlocks.justifiedGallery.editorEnhancements',
+    'folioblocks/justified-gallery-premium-thumbnails',
     (_, { clientId, innerBlocks, isBlockOrChildSelected }) => {
-        // This filter injects editor-only enhancements like List View thumbnails
+        // Apply thumbnails when this block or a child is selected
         useEffect(() => {
             if (isBlockOrChildSelected) {
                 setTimeout(() => {
@@ -31,6 +31,7 @@ addFilter(
             }
         }, [isBlockOrChildSelected]);
 
+        // Fallback: Apply thumbnails if images are present but thumbnails haven't rendered yet
         useEffect(() => {
             const hasImages = innerBlocks.length > 0;
             const listViewHasThumbnails = document.querySelector('[data-pb-thumbnail-applied="true"]');
@@ -41,52 +42,55 @@ addFilter(
                 }, 300);
             }
         }, [innerBlocks]);
+        return null;
+    }
+);
+addFilter(
+    'folioBlocks.justifiedGallery.editorEnhancements',
+    'folioblocks/justified-gallery-randomize',
+    (_, { attributes, innerBlocks, clientId, replaceInnerBlocks }) => {
+
+        // Shuffle images if randomizeOrder is enabled
+        useEffect(() => {
+            if (!attributes || !attributes.randomizeOrder || innerBlocks.length === 0) return;
+
+            // Use a small delay to avoid nested updates inside React render phase
+            const timer = setTimeout(() => {
+                const shuffled = [...innerBlocks];
+                for (let i = shuffled.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+                }
+
+                if (typeof replaceInnerBlocks === 'function') {
+                    replaceInnerBlocks(clientId, shuffled);
+                }
+            }, 100);
+
+            return () => clearTimeout(timer);
+        }, [attributes?.randomizeOrder]);
 
         return null;
     }
 );
 addFilter(
-	'folioBlocks.gridGallery.editorEnhancements',
-	'folioblocks/grid-gallery-randomize',
-	(_, props = {}) => {
-		const { clientId, innerBlocks = [], attributes = {} } = props;
-		const { randomizeOrder } = attributes;
-		const ranOnce = useRef(false);
-
-		useEffect(() => {
-			if (!randomizeOrder || innerBlocks.length === 0) return;
-			if (ranOnce.current) return; // already shuffled
-			ranOnce.current = true;
-
-			const shuffled = [...innerBlocks];
-			for (let i = shuffled.length - 1; i > 0; i--) {
-				const j = Math.floor(Math.random() * (i + 1));
-				[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-			}
-
-			wp.data.dispatch('core/block-editor').replaceInnerBlocks(clientId, shuffled, false);
-		}, [randomizeOrder]);
-
-		// Reset when user toggles randomize off
-		useEffect(() => {
-			if (!randomizeOrder) ranOnce.current = false;
-		}, [randomizeOrder]);
-
-		return null;
-	}
-);
-addFilter(
-    'folioBlocks.gridGallery.randomizeToggle',
-    'folioblocks/grid-gallery-premium-toggle',
+    'folioBlocks.justifiedGallery.randomizeToggle',
+    'folioblocks/justified-gallery-premium-toggle',
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
-
         return (
             <ToggleControl
                 label={__('Randomize Image Order', 'folioblocks')}
                 checked={!!attributes.randomizeOrder}
-                onChange={(value) => setAttributes({ randomizeOrder: value })}
-                __nextHasNoMarginBottom
+                onChange={(value) => {
+                    setAttributes({ randomizeOrder: value });
+                    if (typeof updateBlockAttributes === 'function') {
+                        setTimeout(() => {
+                            updateBlockAttributes(clientId, { _forceRefresh: Date.now() });
+                        }, 50);
+                    }
+                }}
+                __nextHasNoMarginBottom={true}
                 help={__('Randomize order of images.', 'folioblocks')}
             />
         );
@@ -94,8 +98,8 @@ addFilter(
 );
 
 addFilter(
-    'folioBlocks.gridGallery.downloadControls',
-    'folioblocks/grid-gallery-premium-downloads',
+    'folioBlocks.justifiedGallery.downloadControls',
+    'folioblocks/justified-gallery-premium-downloads',
     (defaultContent, props) => {
         const { attributes, setAttributes, effectiveEnableWoo } = props;
 
@@ -134,59 +138,58 @@ addFilter(
     }
 );
 
-if (window.folioBlocksData?.hasWooCommerce) {
-    addFilter(
-        'folioBlocks.gridGallery.wooCommerceControls',
-        'folioblocks/grid-gallery-premium-woocommerce',
-        (defaultContent, props) => {
-            const { attributes, setAttributes } = props;
-            const { enableWooCommerce, wooCartIconDisplay, enableDownload } = attributes;
+addFilter(
+    'folioBlocks.justifiedGallery.wooCommerceControls',
+    'folioblocks/justified-gallery-premium-woocommerce',
+    (defaultContent, props) => {
+        const wooActive = window.folioBlocksData?.hasWooCommerce ?? false;
+        if (!wooActive) return null;
 
-            return (
-                <>
-                    <ToggleControl
-                        label={__('Enable WooCommerce Integration', 'folioblocks')}
-                        checked={!!enableWooCommerce}
-                        onChange={(value) => {
-                            setAttributes({ enableWooCommerce: value });
+        const { attributes, setAttributes } = props;
+        const { enableWooCommerce, wooCartIconDisplay, enableDownload } = attributes;
 
-                            // Reset WooCommerce-specific settings when disabled
-                            if (!value) {
-                                setAttributes({
-                                    wooLightboxInfoType: 'caption',
-                                    wooProductPriceOnHover: false,
-                                    wooCartIconDisplay: 'hover'
-                                });
-                            }
-                        }}
+        return (
+            <>
+                <ToggleControl
+                    label={__('Enable WooCommerce Integration', 'folioblocks')}
+                    checked={!!enableWooCommerce}
+                    onChange={(value) => {
+                        setAttributes({ enableWooCommerce: value });
+
+                        if (!value) {
+                            setAttributes({
+                                wooLightboxInfoType: 'caption',
+                                wooProductPriceOnHover: false,
+                                wooCartIconDisplay: 'hover'
+                            });
+                        }
+                    }}
+                    __nextHasNoMarginBottom
+                    help={__('Link gallery images to WooCommerce products.', 'folioblocks')}
+                    disabled={enableDownload}
+                />
+
+                {enableWooCommerce && (
+                    <SelectControl
+                        label={__('Display Add to Cart Icon', 'folioblocks')}
+                        value={wooCartIconDisplay}
+                        options={[
+                            { label: __('On Hover', 'folioblocks'), value: 'hover' },
+                            { label: __('Always', 'folioblocks'), value: 'always' }
+                        ]}
+                        onChange={(value) => setAttributes({ wooCartIconDisplay: value })}
                         __nextHasNoMarginBottom
-                        help={__('Link gallery images to WooCommerce products.', 'folioblocks')}
-                        disabled={enableDownload}
+                        help={__('Choose when to display the Add to Cart icon.', 'folioblocks')}
                     />
-
-                    {enableWooCommerce && (
-                        <SelectControl
-                            label={__('Display Add to Cart Icon', 'folioblocks')}
-                            value={wooCartIconDisplay}
-                            options={[
-                                { label: __('On Hover', 'folioblocks'), value: 'hover' },
-                                { label: __('Always', 'folioblocks'), value: 'always' }
-                            ]}
-                            onChange={(value) => setAttributes({ wooCartIconDisplay: value })}
-                            __nextHasNoMarginBottom
-                            __next40pxDefaultSize
-                            help={__('Choose when to display the Add to Cart icon.', 'folioblocks')}
-                        />
-                    )}
-                </>
-            );
-        }
-    );
-}
+                )}
+            </>
+        );
+    }
+);
 
 addFilter(
-    'folioBlocks.gridGallery.disableRightClickToggle',
-    'folioblocks/grid-gallery-premium-disable-right-click',
+    'folioBlocks.justifiedGallery.disableRightClickToggle',
+    'folioblocks/justified-gallery-premium-disable-right-click',
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
 
@@ -194,17 +197,16 @@ addFilter(
             <ToggleControl
                 label={__('Disable Right-Click on Page', 'folioblocks')}
                 help={__('Prevents visitors from right-clicking.', 'folioblocks')}
-                __nextHasNoMarginBottom
+                __nextHasNoMarginBottom={true}
                 checked={!!attributes.disableRightClick}
                 onChange={(value) => setAttributes({ disableRightClick: value })}
             />
         );
     }
 );
-
 addFilter(
-    'folioBlocks.gridGallery.lazyLoadToggle',
-    'folioblocks/grid-gallery-premium-lazy-load',
+    'folioBlocks.justifiedGallery.lazyLoadToggle',
+    'folioblocks/justified-gallery-premium-lazy-load',
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
 
@@ -212,17 +214,16 @@ addFilter(
             <ToggleControl
                 label={__('Enable Lazy Load of Images', 'folioblocks')}
                 help={__('Enables lazy loading of gallery images.', 'folioblocks')}
-                __nextHasNoMarginBottom
+                __nextHasNoMarginBottom={true}
                 checked={!!attributes.lazyLoad}
                 onChange={(value) => setAttributes({ lazyLoad: value })}
             />
         );
     }
 );
-
 addFilter(
-    'folioBlocks.gridGallery.lightboxControls',
-    'folioblocks/grid-gallery-premium-lightbox',
+    'folioBlocks.justifiedGallery.lightboxControls',
+    'folioblocks/justified-gallery-premium-lightbox',
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
         const { lightbox, lightboxCaption, enableWooCommerce, wooLightboxInfoType } = attributes;
@@ -279,8 +280,8 @@ addFilter(
 );
 
 addFilter(
-    'folioBlocks.gridGallery.onHoverTitleToggle',
-    'folioblocks/grid-gallery-premium-title-toggle',
+    'folioBlocks.justifiedGallery.onHoverTitleToggle',
+    'folioblocks/justified-gallery-premium-title-toggle',
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
         const { onHoverTitle, enableWooCommerce, wooProductPriceOnHover } = attributes;
@@ -328,77 +329,81 @@ addFilter(
     }
 );
 addFilter(
-	'folioBlocks.gridGallery.filterLogic',
-	'folioblocks/grid-gallery-premium-filter-logic',
-	(_, { attributes, setAttributes, selectedBlock }) => {
-		const {
-			enableFilter = false,
-			filterAlign = 'center',
-			filtersInput = '',
-			activeFilter = 'All',
-		} = attributes;
+    'folioBlocks.justifiedGallery.filterLogic',
+    'folioblocks/justified-gallery-filter-logic',
+    (_, { attributes, setAttributes, selectedBlock }) => {
+        const {
+            enableFilter = false,
+            filterAlign = 'center',
+            filtersInput = '',
+            activeFilter = 'All',
+        } = attributes;
 
-		// Derive categories from filtersInput
-		const filterCategories = filtersInput
-			.split(',')
-			.map((s) => s.trim())
-			.filter(Boolean);
+        // Derive categories from filtersInput
+        const filterCategories = filtersInput
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean);
 
-		// Sync derived categories
-		useEffect(() => {
-			setAttributes({ filterCategories });
-		}, [filtersInput]);
+        // Sync derived categories
+        useEffect(() => {
+            setAttributes({ filterCategories });
+        }, [filtersInput]);
 
-		// Reset activeFilter if selected block becomes hidden
-		useEffect(() => {
-			if (
-				selectedBlock &&
-				selectedBlock.name === 'folioblocks/pb-image-block'
-			) {
-				const selectedCategory = selectedBlock.attributes?.filterCategory || '';
-				const isFilteredOut =
-					activeFilter !== 'All' &&
-					selectedCategory.toLowerCase() !== activeFilter.toLowerCase();
+        // Reset activeFilter if selected block becomes hidden
+        useEffect(() => {
+            if (
+                selectedBlock &&
+                selectedBlock.name === 'folioblocks/pb-image-block'
+            ) {
+                const selectedCategory = selectedBlock.attributes?.filterCategory || '';
+                const isFilteredOut =
+                    activeFilter !== 'All' &&
+                    selectedCategory.toLowerCase() !== activeFilter.toLowerCase();
 
-				if (isFilteredOut) {
-					setAttributes({ activeFilter: 'All' });
-				}
-			}
-		}, [selectedBlock, activeFilter]);
+                if (isFilteredOut) {
+                    setAttributes({ activeFilter: 'All' });
+                }
+            }
+        }, [selectedBlock, activeFilter]);
 
-		// Keep these base filter attributes consistent
-		useEffect(() => {
-			if (attributes.enableFilter !== enableFilter)
-				setAttributes({ enableFilter });
-			if (attributes.filterAlign !== filterAlign)
-				setAttributes({ filterAlign });
-		}, [enableFilter, filterAlign]);
+        // Keep these base filter attributes consistent
+        useEffect(() => {
+            if (attributes.enableFilter !== enableFilter)
+                setAttributes({ enableFilter });
+            if (attributes.filterAlign !== filterAlign)
+                setAttributes({ filterAlign });
+        }, [enableFilter, filterAlign]);
 
-		return null;
-	}
+        return null;
+    }
 );
 addFilter(
-    'folioBlocks.gridGallery.enableFilterToggle',
-    'folioblocks/grid-gallery-premium-filter-toggle',
+    'folioBlocks.justifiedGallery.enableFilterToggle',
+    'folioblocks/justified-gallery-premium-filter-toggle',
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
         const { enableFilter, filterAlign, filtersInput } = attributes;
 
-        const handleFilterInputChange = (val) => {
-            setAttributes({ filtersInput: val });
+        const handleFilterInputChange = (value) => {
+            setAttributes({ filtersInput: value });
         };
+
         const handleFilterInputBlur = () => {
-            const rawFilters = filtersInput.split(',').map((f) => f.trim());
-            const cleanFilters = rawFilters.filter(Boolean);
-            setAttributes({ filterCategories: cleanFilters });
+            const parsed = filtersInput
+                .split(',')
+                .map((item) => item.trim())
+                .filter((item) => item.length > 0);
+            setAttributes({ filterCategories: parsed });
         };
+
         return (
             <>
                 <ToggleControl
                     label={__('Enable Image Filtering', 'folioblocks')}
                     checked={!!attributes.enableFilter}
                     onChange={(val) => setAttributes({ enableFilter: val })}
-                    __nextHasNoMarginBottom
+                    __nextHasNoMarginBottom={true}
                     help={__('Enable image filtering with categories.', 'folioblocks')}
                 />
                 {enableFilter && (
@@ -412,10 +417,20 @@ addFilter(
                             help={__('Set alignment of the filter bar.', 'folioblocks')}
                             onChange={(value) => setAttributes({ filterAlign: value })}
                         >
-                            <ToggleGroupControlOption label="Left" value="left" />
-                            <ToggleGroupControlOption label="Center" value="center" />
-                            <ToggleGroupControlOption label="Right" value="right" />
+                            <ToggleGroupControlOption
+                                label="Left"
+                                value="left"
+                            />
+                            <ToggleGroupControlOption
+                                label="Center"
+                                value="center"
+                            />
+                            <ToggleGroupControlOption
+                                label="Right"
+                                value="right"
+                            />
                         </ToggleGroupControl>
+
                         <TextControl
                             label={__('Filter Categories', 'folioblocks')}
                             value={filtersInput}
@@ -433,16 +448,12 @@ addFilter(
 );
 
 addFilter(
-    'folioBlocks.gridGallery.borderColorControl',
-    'folioblocks/grid-gallery-premium-border-color',
+    'folioBlocks.justifiedGallery.borderColorControl',
+    'folioblocks/justified-gallery-premium-border-color',
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
-
         return (
-            <BaseControl
-                label={__('Border Color', 'folioblocks')}
-                __nextHasNoMarginBottom
-            >
+            <BaseControl label={__('Border Color', 'folioblocks')} __nextHasNoMarginBottom={true}>
                 <ColorPalette
                     value={attributes.borderColor}
                     onChange={(value) => setAttributes({ borderColor: value })}
@@ -455,8 +466,8 @@ addFilter(
 );
 
 addFilter(
-    'folioBlocks.gridGallery.borderWidthControl',
-    'folioblocks/grid-gallery-premium-border-width',
+    'folioBlocks.justifiedGallery.borderWidthControl',
+    'folioblocks/justified-gallery-premium-border-width',
     (defaultContent, props) => {
         const { attributes, setAttributes, clientId, updateBlockAttributes } = props;
 
@@ -474,8 +485,8 @@ addFilter(
                 }}
                 min={0}
                 max={20}
-                __next40pxDefaultSize
-                __nextHasNoMarginBottom
+                __next40pxDefaultSize={true}
+                __nextHasNoMarginBottom={true}
                 help={__('Set border width in pixels.', 'folioblocks')}
             />
         );
@@ -483,8 +494,8 @@ addFilter(
 );
 
 addFilter(
-    'folioBlocks.gridGallery.borderRadiusControl',
-    'folioblocks/grid-gallery-premium-border-radius',
+    'folioBlocks.justifiedGallery.borderRadiusControl',
+    'folioblocks/justified-gallery-premium-border-radius',
     (defaultContent, props) => {
         const { attributes, setAttributes, clientId, updateBlockAttributes } = props;
 
@@ -502,8 +513,8 @@ addFilter(
                 }}
                 min={0}
                 max={100}
-                __next40pxDefaultSize
-                __nextHasNoMarginBottom
+                __next40pxDefaultSize={true}
+                __nextHasNoMarginBottom={true}
                 help={__('Set border radius in pixels.', 'folioblocks')}
             />
         );
@@ -511,8 +522,8 @@ addFilter(
 );
 
 addFilter(
-    'folioBlocks.gridGallery.dropShadowToggle',
-    'folioblocks/grid-gallery-premium-drop-shadow',
+    'folioBlocks.justifiedGallery.dropShadowToggle',
+    'folioblocks/justified-gallery-premium-drop-shadow',
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
 
@@ -521,7 +532,7 @@ addFilter(
                 label={__('Enable Drop Shadow', 'folioblocks')}
                 checked={!!attributes.dropShadow}
                 onChange={(newDropShadow) => setAttributes({ dropShadow: newDropShadow })}
-                __nextHasNoMarginBottom
+                __nextHasNoMarginBottom={true}
                 help={__('Applies a subtle drop shadow to images.', 'folioblocks')}
             />
         );
@@ -529,8 +540,8 @@ addFilter(
 );
 
 addFilter(
-    'folioBlocks.gridGallery.filterStyleSettings',
-    'folioblocks/grid-gallery-premium-filter-styles',
+    'folioBlocks.justifiedGallery.filterStyleSettings',
+    'folioblocks/justified-gallery-premium-filter-styles',
     (defaultContent, { attributes, setAttributes }) => {
         if (!attributes.enableFilter) {
             return null;
@@ -571,33 +582,33 @@ addFilter(
 );
 
 addFilter(
-	'folioBlocks.gridGallery.renderFilterBar',
-	'folioblocks/grid-gallery-premium-filter-bar',
-	(defaultContent, { attributes, setAttributes }) => {
-		const {
-			enableFilter = false,
-			activeFilter = 'All',
-			filterCategories = [],
-			filterAlign = 'center',
-		} = attributes;
+    'folioBlocks.justifiedGallery.renderFilterBar',
+    'folioblocks/justified-gallery-premium-filter-bar',
+    (defaultContent, { attributes, setAttributes }) => {
+        const {
+            enableFilter = false,
+            activeFilter = 'All',
+            filterCategories = [],
+            filterAlign = 'center',
+        } = attributes;
 
-		if (!enableFilter || !Array.isArray(filterCategories)) {
-			return defaultContent;
-		}
+        if (!enableFilter || !Array.isArray(filterCategories)) {
+            return defaultContent;
+        }
 
-		return (
-			<div className={`pb-image-gallery-filters align-${filterAlign}`}>
-				{['All', ...filterCategories].map((term) => (
-					<button
-						key={term}
-						className={`filter-button${activeFilter === term ? ' is-active' : ''}`}
-						onClick={() => setAttributes({ activeFilter: term })}
-						type="button"
-					>
-						{term}
-					</button>
-				))}
-			</div>
-		);
-	}
+        return (
+            <div className={`pb-image-gallery-filters align-${filterAlign}`}>
+                {['All', ...filterCategories].map((term) => (
+                    <button
+                        key={term}
+                        className={`filter-button${activeFilter === term ? ' is-active' : ''}`}
+                        onClick={() => setAttributes({ activeFilter: term })}
+                        type="button"
+                    >
+                        {term}
+                    </button>
+                ))}
+            </div>
+        );
+    }
 );

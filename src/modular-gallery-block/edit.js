@@ -28,7 +28,7 @@ export default function Edit(props) {
 	const { clientId, attributes, setAttributes } = props;
 	const { noGap, lightbox, lightboxCaption, preview } = attributes;
 
-	const checkoutUrl = window.folioBlocksData?.checkoutUrl || 'https://folioblocks.com/folioblocks-pricing/';
+	const checkoutUrl = window.folioBlocksData?.checkoutUrl || 'https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks&utm_medium=modular-gallery-block&utm_campaign=upgrade';
 
 	// Block Preview Image
 	if (preview) {

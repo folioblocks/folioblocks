@@ -5,7 +5,7 @@
 	"version": "0.1.0",
 	"title": "Loupe Block",
 	"category": "folioblocks",
-	"icon": "<svg viewBox=\"0 0 1247.24 1247.24\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-hidden=\"true\"><g id=\"Layer_1-2\"><g fill=\"none\" stroke=\"#000000\" strokeWidth=\"40\" strokeLinecap=\"round\" strokeLinejoin=\"round\" strokeMiterlimit=\"10\"><path d=\"M415 130H176c-25.65 0-46.53 20.89-46.53 46.57V415\"/><path d=\"M832 130h238c25.65 0 46.53 20.89 46.53 46.57V415\"/><path d=\"M1117 832v238c0 25.68-20.88 46.57-46.53 46.57H832\"/><path d=\"M415 1117H176c-25.65 0-46.53-20.89-46.53-46.57V832\"/><circle cx=\"580\" cy=\"580\" r=\"230\"/><line x1=\"745\" y1=\"745\" x2=\"950\" y2=\"950\"/></g></g></svg>",
+	"icon": "<svg viewBox=\"0 0 1247.24 1247.24\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-hidden=\"true\"><g id=\"Layer_1-2\"><g fill=\"none\" stroke=\"currentColor\" strokeWidth=\"45\" strokeLinecap=\"round\" strokeLinejoin=\"round\" strokeMiterlimit=\"10\"><path d=\"M415 130H176c-25.65 0-46.53 20.89-46.53 46.57V415\"/><path d=\"M832 130h238c25.65 0 46.53 20.89 46.53 46.57V415\"/><path d=\"M1117 832v238c0 25.68-20.88 46.57-46.53 46.57H832\"/><path d=\"M415 1117H176c-25.65 0-46.53-20.89-46.53-46.57V832\"/><circle cx=\"580\" cy=\"580\" r=\"230\"/><line x1=\"745\" y1=\"745\" x2=\"950\" y2=\"950\"/></g></g></svg>",
 	"description": "Magnify part of an image with a circular loupe.",
 	"example": {
         "attributes": {
@@ -47,22 +47,17 @@
 		}
     },
 	"attributes": {
-    "id": { "type": "number" },
-    "url": { "type": "string" },
-	"alt": { "type": "string", "default": ""},
-	"resolution": {
-		"type": "string",
-		"default": "large"
-	},
-	"availableSize": {
-		"type": "array",
-		"items": { "type": "string" },
-		"default": []
-	},
-    "magnification": { "type": "number", "default": 10 },
-    "loupeSize": { "type": "number", "default": 150 },
-    "borderWidth": { "type": "number", "default": 2 },
-    "borderColor": { "type": "string", "default": "#ffffff" }
+    	"id": { "type": "number" },
+    	"url": { "type": "string" },
+		"alt": { "type": "string", "default": ""},
+		"resolution": { "type": "string", "default": "large" },
+		"availableSize": { "type": "array", "items": { "type": "string" }, "default": []},
+    	"magnification": { "type": "number", "default": 10 },
+    	"loupeSize": { "type": "number", "default": 150 },
+		"loupeShape": { "type": "string", "default": "circle" },
+		"loupeTheme": {	"type": "string", "default": "light" }, 
+    	"loupeBorderWidth": { "type": "number", "default": 2 },
+    	"loupeBorderColor": { "type": "string", "default": "#ffffff" }
   	},
 	"textdomain": "folioblocks",
 	"editorScript": "file:./index.js",

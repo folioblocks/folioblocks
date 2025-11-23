@@ -96,9 +96,15 @@
 		"folioBlocks/borderRadius": "borderRadius",
 		"folioBlocks/dropShadow": "dropShadow"
   	},
-	"editorScript": "file:./index.js",
+	"editorScript": [
+    "file:./index.js",
+    "file:./premium.js"
+	],
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",
 	"render": "file:./render.php",
-	"viewScript": "file:./view.js"
+	"viewScript": [
+    "file:./view.js",
+    "file:./premium-view.js"
+	]
 }

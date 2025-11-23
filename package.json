@@ -1,7 +1,7 @@
 {
 	"name": "folioblocks",
-	"version": "1.0.2",
-	"description": "A collection of blocks for making photo and video galleries.",
+	"version": "1.0.3",
+	"description": "Fast, responsive photo and video galleries with grid, masonry, justified, and carousel layouts—built for photographers, videographers, and modern creative portfolios.",
 	"author": "FolioBlocks",
 	"license": "GPL-2.0-or-later",
 	"main": "build/index.js",
@@ -18,6 +18,6 @@
 		"@wordpress/scripts": "^30.7.0"
 	},
 	"dependencies": {
-		"@wordpress/icons": "^10.20.0"
+		"@wordpress/icons": "^10.32.0"
 	}
 }

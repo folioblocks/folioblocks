@@ -59,7 +59,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 	}, [window.folioBlocksData?.hasWooCommerce]);
 
 	const [isLoading, setIsLoading] = useState(false);
-	const checkoutUrl = window.folioBlocksData?.checkoutUrl || 'https://folioblocks.com/folioblocks-pricing/';
+	const checkoutUrl = window.folioBlocksData?.checkoutUrl || 'https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks&utm_medium=justified-gallery-block&utm_campaign=upgrade';
 	const { replaceInnerBlocks, updateBlockAttributes } = useDispatch('core/block-editor');
 
 	const innerBlocks = useSelect(

@@ -1,31 +1,58 @@
 === FolioBlocks ===
 Contributors: portfolioblocks , campanellafoto
 Plugin link: https://folioblocks.com/
-Tags: gallery, portfolio, image, photo, video
+Tags: gallery, image gallery, photo gallery, video gallery, lightbox, 
 Tested up to:      6.9
 Requires at least: 6.3
 Requires PHP: 7.4
-Stable tag:        1.0.2
+Stable tag:        1.0.3
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
-Create amazing image & video galleries inside the block editor
+Fast, responsive photo and video galleries with grid, masonry, justified, and carousel layouts—built for photographers, videographers, and modern creative portfolios.
 
 == Description ==
 
-FolioBlocks is a plugin developed from the ground up for the WordPress Block Editor and Full Site Editor that lets you create amazing image galleries and portfolios. Share images in grid, justified, masonry, or modular galleries. Create video galleries directly in your posts or pages. No using shortcodes, no going to the dashboard to mess with settings. Work quickly and efficiently entirely from the block editor.  
+FolioBlocks is a modern gallery and portfolio plugin built specifically for the WordPress Block Editor (Gutenberg) and Full Site Editor. Designed for photographers, designers, artists, and creative professionals, FolioBlocks makes it easy to create beautiful, fully responsive image galleries, video galleries, and before-and-after comparison blocks—all without shortcodes or external gallery systems.
 
-Features: 
+Build professional galleries directly inside Gutenberg using flexible layouts including Grid, Justified, Masonry, Modular, Carousel, and Video Gallery blocks. Every block is performance-focused, mobile-friendly, and optimized for real portfolio use cases. FolioBlocks brings powerful visual tools into the native editor so you can work quickly and maintain full creative control.
 
-- Before & After Comparison block
-- Carousel Gallery block
-- Grid Gallery block 
-- Justified Gallery block
-- Masonry Gallery block
-- Modular Gallery block (Pro Only)
-- Video Gallery block
+Included blocks: 
 
-All blocks feature settings to handle responsive design and a simple Lightbox. Advanced settings such as: Gallery Image Filtering, WooCommerce Integration, Download Gallery Images, Randomize Gallery Image Order, Disable Right-Click, Lazy Load Galleries, Hover Effects, and Gallery Image Style controls available with the FolioBlocks Pro plugin. 
+* Before & After Block – Compare two images with an interactive slider
+* Carousel Gallery Block – Smooth, swipe-friendly horizontal image slider
+* Grid Gallery Block – Classic evenly-spaced grid layout
+* Justified Gallery Block – Professional row-based gallery with balanced heights
+* Masonry Gallery Block – Pinterest-style vertical gallery layout
+* Modular Gallery Block (Pro) – Build custom, magazine-style image layouts
+* Video Gallery Block – Showcase YouTube, Vimeo, or self-hosted videos
+
+Gallery Features: 
+
+All gallery blocks include:
+
+* Fully responsive layouts for desktop, tablet, and mobile
+* Built-in Lightbox
+* Caption support and accessibility-friendly interactions
+* Drag-and-drop image ordering
+* 100% native Gutenberg block editing (no shortcodes, no separate gallery manager)
+
+Advanced Features (Pro): 
+
+Unlock advanced tools designed for photography websites, creative portfolios, and WooCommerce-powered shops:
+
+* Gallery Image Filtering
+* WooCommerce Product Integration
+* Download Full-Resolution Images
+* Randomize Image Order
+* Disable Right-Click / Content Protection
+* Lazy Load Images for faster performance
+* Hover Effects and Image Overlays
+* Advanced Gallery Styling Controls (borders, shadows, radius, etc.)
+
+Why FolioBlocks?
+
+FolioBlocks is built for users who want fast, native, block-based galleries without the complexity of third-party gallery builders or shortcode-based plugins. If you want a clean, modern way to display photography, client work, products, portfolios, or case studies—FolioBlocks gives you those tools directly inside the editor.
 
 == Installation ==
 
@@ -79,6 +106,10 @@ No, the galleries will remain in place on your site. However, the advanced layou
 6. Video Gallery block populated with images
 
 == Changelog ==
+
+= 1.0.3 =
+* Improves loading method on premium scripts 
+* Upgrade page now redirects to pricing page on FolioBlocks website
 
 = 1.0.2 =
 * Fixed minor bugs in Grid, Justified, and Masonry galleries 

@@ -6,9 +6,9 @@ import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 import { SelectControl, PanelBody, BaseControl, RangeControl, ColorPalette } from '@wordpress/components';
 import { InspectorControls } from '@wordpress/block-editor';
-import ProductSearchControl from '../../pb-helpers/ProductSearchControl';
+import ProductSearchControl from '../pb-helpers/ProductSearchControl.js';
 import { download } from '@wordpress/icons';
-import { wooCartIcon } from '../../pb-helpers/wooCartIcon.js';
+import { wooCartIcon } from '../pb-helpers/wooCartIcon.js';
 
 addFilter(
   'folioBlocks.imageBlock.wooProductLinkControl',

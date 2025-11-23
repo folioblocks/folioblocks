@@ -50,7 +50,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
     }, [window.folioBlocksData?.hasWooCommerce]);
 
     const [isLoading, setIsLoading] = useState(false);
-    const checkoutUrl = window.folioBlocksData?.checkoutUrl || 'https://folioblocks.com/folioblocks-pricing/';
+    const checkoutUrl = window.folioBlocksData?.checkoutUrl || 'https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks&utm_medium=masonry-gallery-block&utm_campaign=upgrade';
 
     // Block Preview Image
     if (preview) {

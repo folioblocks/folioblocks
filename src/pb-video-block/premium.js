@@ -5,8 +5,8 @@
 import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 import { SelectControl } from '@wordpress/components';
-import { wooCartIcon } from '../../pb-helpers/wooCartIcon.js';
-import ProductSearchControl from '../../pb-helpers/ProductSearchControl';
+import { wooCartIcon } from '../pb-helpers/wooCartIcon.js';
+import ProductSearchControl from '../pb-helpers/ProductSearchControl.js';
 
 addFilter(
 	'folioBlocks.pbVideoBlock.inspectorControls',

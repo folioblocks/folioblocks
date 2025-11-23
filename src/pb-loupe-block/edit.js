@@ -18,14 +18,16 @@ import {
 	ToolbarGroup,
 	ToolbarButton,
 	RangeControl,
+	__experimentalToggleGroupControl as ToggleGroupControl,
+	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from '@wordpress/components';
-import { useEffect, useState, useRef } from '@wordpress/element';
+import { useState, useRef } from '@wordpress/element';
 import { media } from '@wordpress/icons';
 import IconLoupe from '../pb-helpers/IconLoupe';
 import './editor.scss';
 
 export default function Edit({ attributes, setAttributes }) {
-	const { id, url, alt, resolution, availableSize, magnification, preview } = attributes;
+	const { id, url, alt, resolution, availableSize, magnification, loupeShape, loupeTheme, preview } = attributes;
 	const wrapperRef = useRef(null);
 
 	const blockProps = useBlockProps({
@@ -41,7 +43,7 @@ export default function Edit({ attributes, setAttributes }) {
 			</div>
 		);
 	}
-	
+
 
 	const onSelectImage = (media) => {
 		if (!media || !media.url) {
@@ -74,6 +76,40 @@ export default function Edit({ attributes, setAttributes }) {
 	const containerRef = useRef(null);
 
 	const loupeSize = 150;     // will move to settings later
+
+	const lastTouchRef = useRef(0);
+
+	const handleTouchStart = (event) => {
+	    const now = Date.now();
+	    const timeSinceLast = now - lastTouchRef.current;
+
+	    const rect = event.currentTarget.getBoundingClientRect();
+	    const touch = event.touches[0];
+	    const x = touch.clientX - rect.left;
+	    const y = touch.clientY - rect.top;
+
+	    if (timeSinceLast < 300) {
+	        setLoupeVisible(false);
+	    } else {
+	        setLoupeVisible(true);
+	        setLoupePos({ x, y });
+	    }
+
+	    lastTouchRef.current = now;
+	};
+
+	const handleTouchMove = (event) => {
+	    if (!isLoupeVisible) return;
+	    const rect = event.currentTarget.getBoundingClientRect();
+	    const touch = event.touches[0];
+	    const x = touch.clientX - rect.left;
+	    const y = touch.clientY - rect.top;
+	    setLoupePos({ x, y });
+	};
+
+	const handleTouchEnd = () => {
+	    // Loupe stays visible until double-tap toggles it off
+	};
 
 	const handleMouseMove = (event) => {
 		const rect = event.currentTarget.getBoundingClientRect();
@@ -168,14 +204,15 @@ export default function Edit({ attributes, setAttributes }) {
 							value: slug,
 						}))}
 						onChange={(newSize) => {
-							setAttributes({
-								resolution: newSize,
-								url:
-									attributes.id &&
-									wp.media
-										.attachment(attributes.id)
-										.get('sizes')[newSize]?.url || url,
-							});
+						    const attachment = wp.media.attachment(attributes.id);
+						    attachment.fetch().then(() => {
+						        const sizes = attachment.get('sizes') || {};
+						        const newUrl = sizes[newSize]?.url || url;
+						        setAttributes({
+						            resolution: newSize,
+						            url: newUrl,
+						        });
+						    });
 						}}
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
@@ -194,6 +231,30 @@ export default function Edit({ attributes, setAttributes }) {
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
+					<ToggleGroupControl
+						label="Loupe Shape"
+						value={loupeShape}
+						onChange={(value) => setAttributes({ loupeShape: value })}
+						isBlock
+						help={__('Change the shape of the Loupe.')}
+						__nextHasNoMarginBottom
+						__next40pxDefaultSize
+					>
+						<ToggleGroupControlOption value="circle" label="Circle" />
+						<ToggleGroupControlOption value="square" label="Square" />
+					</ToggleGroupControl>
+					<SelectControl
+						label={__('Loupe Theme', 'pb-loupe-block')}
+						value={loupeTheme}
+						options={[
+							{ label: 'Light', value: 'light' },
+							{ label: 'Dark', value: 'dark' },
+						]}
+						onChange={(value) => setAttributes({ loupeTheme: value })}
+						help={__('Change the color of the Loupe frame.')}
+						__nextHasNoMarginBottom
+						__next40pxDefaultSize
+					/>
 				</PanelBody>
 			</InspectorControls>
 			<figure {...blockProps}>
@@ -203,6 +264,10 @@ export default function Edit({ attributes, setAttributes }) {
 					onMouseMove={handleMouseMove}
 					onMouseEnter={handleMouseEnter}
 					onMouseLeave={handleMouseLeave}
+					onTouchStart={handleTouchStart}
+					onTouchMove={handleTouchMove}
+					onTouchEnd={handleTouchEnd}
+					style={{ cursor: 'none' }}
 				>
 					<img
 						src={url}
@@ -212,16 +277,20 @@ export default function Edit({ attributes, setAttributes }) {
 
 					{isLoupeVisible && (
 						<div
-							className="pb-loupe-lens"
+							className={`pb-loupe-lens pb-loupe-${loupeShape} pb-loupe-${loupeTheme}`}
 							style={{
 								width: loupeSize,
 								height: loupeSize,
-								left: loupePos.x + 3,
-								top: loupePos.y - loupeSize + 20,
+								left: loupePos.x - loupeSize / 2,
+								top: loupePos.y - loupeSize / 2,
 								backgroundImage: `url(${url})`,
-								backgroundSize: `${zoom * 100}%`,
-								backgroundPosition: `${containerRef.current ? (loupePos.x / containerRef.current.offsetWidth) * 100 : 0
-									}% ${containerRef.current ? (loupePos.y / containerRef.current.offsetHeight) * 100 : 0
+								backgroundSize: `${zoom * (containerRef.current ? (containerRef.current.offsetWidth / 600) : 1) * 100}%`,
+								backgroundPosition: `${containerRef.current
+									? (loupePos.x / containerRef.current.offsetWidth) * 100
+									: 0
+									}% ${containerRef.current
+										? (loupePos.y / containerRef.current.offsetHeight) * 100
+										: 0
 									}%`,
 							}}
 						></div>

@@ -54,7 +54,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		wooCartIconDisplay,
 	} = attributes;
 
-	const checkoutUrl = window.folioBlocksData?.checkoutUrl || 'https://folioblocks.com/folioblocks-pricing/';
+	const checkoutUrl = window.folioBlocksData?.checkoutUrl || 'https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks&utm_medium=video-gallery-block&utm_campaign=upgrade';
 
 	// Block Preview Image
 	if (preview) {

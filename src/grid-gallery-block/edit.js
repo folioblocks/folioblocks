@@ -150,7 +150,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 	const galleryRef = useRef(null);
 	const { replaceInnerBlocks, updateBlockAttributes } = useDispatch('core/block-editor');
 	const [isLoading, setIsLoading] = useState(false);
-	const checkoutUrl = window.folioBlocksData?.checkoutUrl || 'https://folioblocks.com/folioblocks-pricing/';
+	const checkoutUrl = window.folioBlocksData?.checkoutUrl || 'https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks&utm_medium=grid-gallery-block&utm_campaign=upgrade';
 
 	// Runtime override: if WooCommerce is not active, force Woo features off without mutating saved attributes
 	const hasWooCommerce = window.folioBlocksData?.hasWooCommerce ?? false;

@@ -17,55 +17,55 @@ import {
 import { useEffect } from '@wordpress/element';
 import { addFilter } from '@wordpress/hooks';
 
-if (window.folioBlocksData?.hasWooCommerce) {
-    addFilter(
-        'folioBlocks.videoGallery.wooCommerceControls',
-        'folioblocks/video-gallery-premium-woocommerce',
-        (defaultContent, props) => {
-            const { attributes, setAttributes } = props;
-            const { enableWooCommerce, wooCartIconDisplay, enableDownload } = attributes;
+addFilter(
+    'folioBlocks.videoGallery.wooCommerceControls',
+    'folioblocks/video-gallery-premium-woocommerce',
+    (defaultContent, props) => {
+        const wooActive = window.folioBlocksData?.hasWooCommerce ?? false;
+        if (!wooActive) return null;
 
-            return (
-                <>
-                    <ToggleControl
-                        label={__('Enable WooCommerce Integration', 'folioblocks')}
-                        checked={!!enableWooCommerce}
-                        onChange={(value) => {
-                            setAttributes({ enableWooCommerce: value });
+        const { attributes, setAttributes } = props;
+        const { enableWooCommerce, wooCartIconDisplay, enableDownload } = attributes;
 
-                            // Reset WooCommerce-specific settings when disabled
-                            if (!value) {
-                                setAttributes({
-                                    wooLightboxInfoType: 'caption',
-                                    wooProductPriceOnHover: false,
-                                    wooCartIconDisplay: 'hover'
-                                });
-                            }
-                        }}
+        return (
+            <>
+                <ToggleControl
+                    label={__('Enable WooCommerce Integration', 'folioblocks')}
+                    checked={!!enableWooCommerce}
+                    onChange={(value) => {
+                        setAttributes({ enableWooCommerce: value });
+
+                        if (!value) {
+                            setAttributes({
+                                wooLightboxInfoType: 'caption',
+                                wooProductPriceOnHover: false,
+                                wooCartIconDisplay: 'hover'
+                            });
+                        }
+                    }}
+                    __nextHasNoMarginBottom
+                    help={__('Link gallery videos to WooCommerce products.', 'folioblocks')}
+                    disabled={enableDownload}
+                />
+
+                {enableWooCommerce && (
+                    <SelectControl
+                        label={__('Display Add to Cart Icon', 'folioblocks')}
+                        value={wooCartIconDisplay}
+                        options={[
+                            { label: __('On Hover', 'folioblocks'), value: 'hover' },
+                            { label: __('Always', 'folioblocks'), value: 'always' }
+                        ]}
+                        onChange={(value) => setAttributes({ wooCartIconDisplay: value })}
                         __nextHasNoMarginBottom
-                        help={__('Link gallery images to WooCommerce products.', 'folioblocks')}
-                        disabled={enableDownload}
+                        __next40pxDefaultSize
+                        help={__('Choose when to display the Add to Cart icon.', 'folioblocks')}
                     />
-
-                    {enableWooCommerce && (
-                        <SelectControl
-                            label={__('Display Add to Cart Icon', 'folioblocks')}
-                            value={wooCartIconDisplay}
-                            options={[
-                                { label: __('On Hover', 'folioblocks'), value: 'hover' },
-                                { label: __('Always', 'folioblocks'), value: 'always' }
-                            ]}
-                            onChange={(value) => setAttributes({ wooCartIconDisplay: value })}
-                            __nextHasNoMarginBottom
-                            __next40pxDefaultSize
-                            help={__('Choose when to display the Add to Cart icon.', 'folioblocks')}
-                        />
-                    )}
-                </>
-            );
-        }
-    );
-}
+                )}
+            </>
+        );
+    }
+);
 
 addFilter(
     'folioBlocks.videoGallery.disableRightClickToggle',
