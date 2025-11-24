@@ -210,7 +210,7 @@
                 <h2>Unlock Pro</h2>
                 <p>Upgrade to pro to unlock all of these features.</p>
                 <p class="buy-button-wrapper">
-    				<a class="button button-primary buy-button" href="<?php echo esc_url( admin_url( 'admin.php?page=folioblocks-settings-pricing' ) ); ?>">
+    				<a class="button button-primary buy-button" href="https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks-plugin&utm_medium=free-vs-pro-page&utm_campaign=upgrade" target="_blank" rel="noopener noreferrer">
         				<?php esc_html_e( 'Upgrade Today', 'folioblocks' ); ?>
     				</a>
 				</p>
