@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Base attributes (free features)
-$pb_wrapper_attributes = array(
+$port_wrapper_attributes = array(
 	'data-vertical-on-mobile' => empty( $attributes['verticalOnMobile'] ) ? 'false' : 'true',
 );
 
@@ -18,29 +18,29 @@ if ( pb_fs()->can_use_premium_code__premium_only() ) {
 
 	// Autoplay
 	if ( ! empty( $attributes['autoplay'] ) ) {
-		$pb_wrapper_attributes['data-autoplay']       = 'true';
-		$pb_wrapper_attributes['data-autoplay-speed'] = isset( $attributes['autoplaySpeed'] )
+		$port_wrapper_attributes['data-autoplay']       = 'true';
+		$port_wrapper_attributes['data-autoplay-speed'] = isset( $attributes['autoplaySpeed'] )
 			? esc_attr( $attributes['autoplaySpeed'] )
 			: '3';
 	}
 
 	// Downloads
 	if ( ! empty( $attributes['enableDownload'] ) ) {
-		$pb_wrapper_attributes['data-enable-download'] = 'true';
+		$port_wrapper_attributes['data-enable-download'] = 'true';
 	}
 
 	// Disable right-click
 	if ( ! empty( $attributes['disableRightClick'] ) ) {
-		$pb_wrapper_attributes['data-disable-right-click'] = 'true';
+		$port_wrapper_attributes['data-disable-right-click'] = 'true';
 	}
 }
 
-$pb_loop = isset( $attributes['loopSlides'] ) ? $attributes['loopSlides'] : false;
+$port_loop = isset( $attributes['loopSlides'] ) ? $attributes['loopSlides'] : false;
 
-$pb_wrapper_attr_string = get_block_wrapper_attributes( $pb_wrapper_attributes );
+$port_wrapper_attr_string = get_block_wrapper_attributes( $port_wrapper_attributes );
 ?>
-<div <?php echo wp_kses( $pb_wrapper_attr_string, [ 'div' => [] ] ); ?>>
-	<div class="pb-carousel-gallery" data-loop="<?php echo $pb_loop ? 'true' : 'false'; ?>">
+<div <?php echo wp_kses( $port_wrapper_attr_string, [ 'div' => [] ] ); ?>>
+	<div class="pb-carousel-gallery" data-loop="<?php echo $port_loop ? 'true' : 'false'; ?>">
 		<?php echo wp_kses_post( $content ); ?>
 	</div>
 

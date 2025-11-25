@@ -1,7 +1,7 @@
 {
 	"name": "folioblocks",
-	"version": "1.0.3",
-	"description": "Fast, responsive photo and video galleries with grid, masonry, justified, and carousel layouts—built for photographers, videographers, and modern creative portfolios.",
+	"version": "1.0.4",
+	"description": "Create fast, responsive photo and video galleries with grid, masonry, justified, modular, and carousel layouts—ideal for photographers and creatives.",
 	"author": "FolioBlocks",
 	"license": "GPL-2.0-or-later",
 	"main": "build/index.js",

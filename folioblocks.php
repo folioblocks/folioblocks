@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name:       FolioBlocks
- * Description:       Create fast, responsive photo and video galleries with grid, masonry, justified, modular, and carousel layouts — perfect for photographers and creatives.
- * Version:           1.0.3
+ * Description:       Create fast, responsive photo and video galleries with grid, masonry, justified, modular, and carousel layouts—ideal for photographers and creatives.
+ * Version:           1.0.4
  * Requires at least: 6.3
  * Requires PHP:      7.4
  * Author:            FolioBlocks

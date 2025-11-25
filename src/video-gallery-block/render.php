@@ -8,10 +8,10 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-$pb_columns_desktop = intval( $attributes['columns'] ?? 3 );
-$pb_columns_tablet  = intval( $attributes['tabletColumns'] ?? 2 );
-$pb_columns_mobile  = intval( $attributes['mobileColumns'] ?? 1 );
-$pb_gap             = intval( $attributes['gap'] ?? 10 );
+$port_columns_desktop = intval( $attributes['columns'] ?? 3 );
+$port_columns_tablet  = intval( $attributes['tabletColumns'] ?? 2 );
+$port_columns_mobile  = intval( $attributes['mobileColumns'] ?? 1 );
+$port_gap             = intval( $attributes['gap'] ?? 10 );
 
 if ( pb_fs()->can_use_premium_code__premium_only() ) {
 	$enable_filter    = ! empty( $attributes['enableFilter'] );
@@ -38,7 +38,7 @@ if ( pb_fs()->can_use_premium_code__premium_only() ) {
 	}
 
 	if ( $enable_filter ) {
-		$pb_wrapper_attributes = get_block_wrapper_attributes([
+		$port_wrapper_attributes = get_block_wrapper_attributes([
 			'data-active-filter' => $active_filter,
 			'style'              => $active_styles . $inactive_styles,
 		]);
@@ -46,10 +46,10 @@ if ( pb_fs()->can_use_premium_code__premium_only() ) {
 }
 
 if ( ! pb_fs()->can_use_premium_code__premium_only() || empty( $enable_filter ) ) {
-    $pb_wrapper_attributes = get_block_wrapper_attributes();
+    $port_wrapper_attributes = get_block_wrapper_attributes();
 }
 
-echo '<div ' . wp_kses_post( $pb_wrapper_attributes ) . '>';
+echo '<div ' . wp_kses_post( $port_wrapper_attributes ) . '>';
 
 if ( pb_fs()->can_use_premium_code__premium_only() ) {
 	if ( ! empty( $enable_filter ) && ! empty( $filter_categories ) ) {

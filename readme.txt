@@ -5,11 +5,11 @@ Tags: gallery, image gallery, photo gallery, video gallery, lightbox,
 Tested up to:      6.9
 Requires at least: 6.3
 Requires PHP: 7.4
-Stable tag:        1.0.3
+Stable tag:        1.0.4
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
-Fast, responsive photo and video galleries with grid, masonry, justified, and carousel layouts—built for photographers, videographers, and modern creative portfolios.
+Create fast, responsive photo and video galleries with grid, masonry, justified, modular, and carousel layouts—ideal for photographers and creatives.
 
 == Description ==
 
@@ -106,6 +106,10 @@ No, the galleries will remain in place on your site. However, the advanced layou
 6. Video Gallery block populated with images
 
 == Changelog ==
+
+= 1.0.4 =
+* Changed variable prefixes to comply with WordPress standards 
+* Fixed escaping issues on dashboard pages
 
 = 1.0.3 =
 * Improves loading method on premium scripts 

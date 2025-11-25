@@ -9,67 +9,67 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-$attributes = wp_parse_args($attributes, [
+$port_attributes = wp_parse_args($attributes, [
     'randomizeOrder' => false,
     'noGap' => false,
 ]);
 
-$pb_extra_class = '';
-$pb_data_attr = '';
+$port_extra_class = '';
+$port_data_attr = '';
 
 if ( pb_fs()->can_use_premium_code__premium_only() ) {
-    $enable_filter   = $attributes['enableFilter'] ?? false;
-    $filter_align    = $attributes['filterAlign'] ?? 'center';
+    $enable_filter   = $port_attributes['enableFilter'] ?? false;
+    $filter_align    = $port_attributes['filterAlign'] ?? 'center';
     $active_filter   = 'All';
-    $filter_categories    = $attributes['filterCategories'] ?? [];
+    $filter_categories    = $port_attributes['filterCategories'] ?? [];
 
-    $pb_extra_class .= $attributes['randomizeOrder'] ? ' pb-randomized' : '';
-    $pb_data_attr = $attributes['randomizeOrder'] ? ' data-randomize="true"' : '';
+    $port_extra_class .= $port_attributes['randomizeOrder'] ? ' pb-randomized' : '';
+    $port_data_attr = $port_attributes['randomizeOrder'] ? ' data-randomize="true"' : '';
 
     $active_styles   = '';
     $inactive_styles = '';
 
     if ( $enable_filter ) {
-        if ( ! empty( $attributes['activeFilterTextColor'] ) ) {
-            $active_styles .= '--pb--filter-active-text:' . esc_attr( $attributes['activeFilterTextColor'] ) . ';';
+        if ( ! empty( $port_attributes['activeFilterTextColor'] ) ) {
+            $active_styles .= '--pb--filter-active-text:' . esc_attr( $port_attributes['activeFilterTextColor'] ) . ';';
         }
-        if ( ! empty( $attributes['activeFilterBgColor'] ) ) {
-            $active_styles .= '--pb--filter-active-bg:' . esc_attr( $attributes['activeFilterBgColor'] ) . ';';
+        if ( ! empty( $port_attributes['activeFilterBgColor'] ) ) {
+            $active_styles .= '--pb--filter-active-bg:' . esc_attr( $port_attributes['activeFilterBgColor'] ) . ';';
         }
-        if ( ! empty( $attributes['filterTextColor'] ) ) {
-            $inactive_styles .= '--pb--filter-text-color:' . esc_attr( $attributes['filterTextColor'] ) . ';';
+        if ( ! empty( $port_attributes['filterTextColor'] ) ) {
+            $inactive_styles .= '--pb--filter-text-color:' . esc_attr( $port_attributes['filterTextColor'] ) . ';';
         }
-        if ( ! empty( $attributes['filterBgColor'] ) ) {
-            $inactive_styles .= '--pb--filter-bg-color:' . esc_attr( $attributes['filterBgColor'] ) . ';';
+        if ( ! empty( $port_attributes['filterBgColor'] ) ) {
+            $inactive_styles .= '--pb--filter-bg-color:' . esc_attr( $port_attributes['filterBgColor'] ) . ';';
         }
     }
 }
 
-$pb_extra_class .= $attributes['noGap'] ? ' no-gap' : '';
+$port_extra_class .= $port_attributes['noGap'] ? ' no-gap' : '';
 
-$pb_wrapper_args = [
-    'class' => trim($pb_extra_class),
+$port_wrapper_args = [
+    'class' => trim($port_extra_class),
 ];
 
 if ( pb_fs()->can_use_premium_code__premium_only() ) {
-    $pb_wrapper_args['style'] = $active_styles . $inactive_styles;
+    $port_wrapper_args['style'] = $active_styles . $inactive_styles;
 
     if ( ! empty( $enable_filter ) ) {
-        $pb_wrapper_args['data-active-filter'] = $active_filter;
+        $port_wrapper_args['data-active-filter'] = $active_filter;
     }
 
-    if ( ! empty( $attributes['disableRightClick'] ) ) {
-        $pb_wrapper_args['data-disable-right-click'] = 'true';
+    if ( ! empty( $port_attributes['disableRightClick'] ) ) {
+        $port_wrapper_args['data-disable-right-click'] = 'true';
     }
 
-    if ( ! empty( $attributes['enableDownload'] ) ) {
-        $pb_wrapper_args['data-enable-download'] = 'true';
+    if ( ! empty( $port_attributes['enableDownload'] ) ) {
+        $port_wrapper_args['data-enable-download'] = 'true';
     }
 }
 
-$pb_wrapper_attributes = get_block_wrapper_attributes( $pb_wrapper_args );
+$port_wrapper_attributes = get_block_wrapper_attributes( $port_wrapper_args );
 
-echo '<div ' . wp_kses_post( $pb_wrapper_attributes ) . wp_kses_post( $pb_data_attr ) . '>';
+echo '<div ' . wp_kses_post( $port_wrapper_attributes ) . wp_kses_post( $port_data_attr ) . '>';
 
 if ( pb_fs()->can_use_premium_code__premium_only() ) {
     if ( $enable_filter && ! empty( $filter_categories ) ) {

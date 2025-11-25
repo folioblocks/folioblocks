@@ -152,7 +152,11 @@ if ( ! function_exists( 'folioblocks_render_system_info_page' ) ) {
 		$lines[] = 'WordPress Version: ' . get_bloginfo( 'version' );
 		$lines[] = 'PHP Version: ' . PHP_VERSION;
 		$lines[] = 'MySQL Version: ' . $wpdb->db_version();
-		$lines[] = 'Server Software: ' . ( isset( $_SERVER['SERVER_SOFTWARE'] ) ? $_SERVER['SERVER_SOFTWARE'] : '' );
+		$server_software = '';
+		if ( isset( $_SERVER['SERVER_SOFTWARE'] ) ) {
+			$server_software = sanitize_text_field( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) );
+		}
+		$lines[] = 'Server Software: ' . $server_software;
 		$lines[] = '';
 
 		$lines[] = '=== Theme ===';
