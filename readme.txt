@@ -101,6 +101,11 @@ No, the galleries will remain in place on your site. However, the advanced layou
 
 == Changelog ==
 
+= 1.0.5 = 
+* New Loupe Block introduced.
+* Fixed bug that prevented Disable Right-Click on Carousel Gallery.
+* Changed variable prefixes to comply with WordPress standards.
+
 = 1.0.4 =
 * Changed variable prefixes to comply with WordPress standards 
 * Fixed escaping issues on dashboard pages

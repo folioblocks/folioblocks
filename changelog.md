@@ -4,13 +4,16 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.5] - 2025-XX-XX
+## [1.0.5] - 2025-11-27
 ### Added
 - New Loupe Block introduced.
 
 ### Fixed 
 - Fixed bug that prevented Disable Right-Click on Carousel Gallery.
 - Fixed issue where Beofre & After Block placeholder would inherit color from parent.
+
+### Changed
+- Changed variable prefixes to comply with WordPress standards.
 
 ## [1.0.4] - 2025-11-25
 ### Changed
