@@ -3,8 +3,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! function_exists( 'folioblocks_render_system_info_page' ) ) {
-	function folioblocks_render_system_info_page() {
+if ( ! function_exists( 'fbks_render_system_info_page' ) ) {
+	function fbks_render_system_info_page() {
 		global $wpdb;
 
 		// Theme info.
@@ -33,8 +33,8 @@ if ( ! function_exists( 'folioblocks_render_system_info_page' ) ) {
 
 		// Freemius / license info (safe-guarded).
 		$license_type = 'Unknown';
-		if ( function_exists( 'pb_fs' ) ) {
-			$license_type = pb_fs()->can_use_premium_code() ? 'Pro (active)' : 'Free';
+		if ( function_exists( 'fbks_fs' ) ) {
+			$license_type = fbks_fs()->can_use_premium_code() ? 'Pro (active)' : 'Free';
 		}
 
 		// WooCommerce detection.
@@ -224,7 +224,7 @@ if ( ! function_exists( 'folioblocks_render_system_info_page' ) ) {
 		<div class="pb-wrap">
 			<div class="pb-settings-header">
 				<img src="<?php echo esc_url( plugin_dir_url( __DIR__ ) . '/icons/pb-brand-icon.svg' ); ?>" alt="FolioBlocks" class="pb-settings-logo" />
-				<h1><?php esc_html_e( 'FolioBlocks', 'folioblocks' ); ?><?php if ( pb_fs()->can_use_premium_code() ) : ?> Pro<?php endif; ?> - System Information</h1>
+				<h1><?php esc_html_e( 'FolioBlocks', 'folioblocks' ); ?><?php if ( fbks_fs()->can_use_premium_code() ) : ?> Pro<?php endif; ?> - System Information</h1>
 			</div>
 			<div class="settings-container">
         		<div class="settings-left">

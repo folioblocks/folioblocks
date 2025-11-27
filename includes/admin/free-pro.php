@@ -1,6 +1,6 @@
 <?php
     if ( ! defined( 'ABSPATH' ) ) exit;
-    function folioblocks_render_free_pro_page() {
+    function fbks_render_free_pro_page() {
 ?>
 <div class="pb-wrap">
 	<div class="pb-settings-header">

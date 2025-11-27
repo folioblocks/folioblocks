@@ -9,22 +9,22 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-$port_before_image = $attributes['beforeImage'] ?? null;
-$port_after_image = $attributes['afterImage'] ?? null;
-$port_orientation = $attributes['sliderOrientation'] ?? 'horizontal';
+$fbks_before_image = $attributes['beforeImage'] ?? null;
+$fbks_after_image = $attributes['afterImage'] ?? null;
+$fbks_orientation = $attributes['sliderOrientation'] ?? 'horizontal';
 
-if (empty($port_before_image['src']) || empty($port_after_image['src'])) {
+if (empty($fbks_before_image['src']) || empty($fbks_after_image['src'])) {
 	return '';
 }
 
-$port_block_wrapper_attributes = get_block_wrapper_attributes();
+$fbks_block_wrapper_attributes = get_block_wrapper_attributes();
 
 ?>
 
-<?php echo '<div ' . wp_kses( $port_block_wrapper_attributes, [ 'div' => [] ] ) . '>'; ?>
+<?php echo '<div ' . wp_kses( $fbks_block_wrapper_attributes, [ 'div' => [] ] ) . '>'; ?>
 	<div
-		class="pb-before-after-container <?php echo $port_orientation === 'vertical' ? 'is-vertical' : ''; ?>"
-		<?php if ( pb_fs()->can_use_premium_code__premium_only() ) : ?>
+		class="pb-before-after-container <?php echo $fbks_orientation === 'vertical' ? 'is-vertical' : ''; ?>"
+		<?php if ( fbks_fs()->can_use_premium_code__premium_only() ) : ?>
 			<?php if ( !empty($attributes['disableRightClick']) ) : ?>
 				data-disable-right-click="true"
 			<?php endif; ?>
@@ -36,7 +36,7 @@ $port_block_wrapper_attributes = get_block_wrapper_attributes();
 		<div class="pb-after-wrapper">
 			<?php 
 				echo wp_get_attachment_image( 
-  					$port_after_image['id'], 
+  					$fbks_after_image['id'], 
   					'full', 
   					false, 
   					[ 
@@ -45,13 +45,13 @@ $port_block_wrapper_attributes = get_block_wrapper_attributes();
   					] 
 				); 
 			?>
-			<?php if ( pb_fs()->can_use_premium_code__premium_only() ) : 
-				$port_show_labels = !empty($attributes['showLabels']);
-				$port_label_position = $attributes['labelPosition'] ?? 'center';
-				$port_label_text_color = $attributes['labelTextColor'] ?? '#ffffff';
-				$port_label_bg_color = $attributes['labelBackgroundColor'] ?? 'rgba(0, 0, 0, 0.6)';
-				if ( $port_show_labels ) : ?>
-					<div class="pb-label pb-after-label label-<?php echo esc_attr($port_label_position); ?>" style="color: <?php echo esc_attr($port_label_text_color); ?>; background-color: <?php echo esc_attr($port_label_bg_color); ?>;">
+			<?php if ( fbks_fs()->can_use_premium_code__premium_only() ) : 
+				$fbks_show_labels = !empty($attributes['showLabels']);
+				$fbks_label_position = $attributes['labelPosition'] ?? 'center';
+				$fbks_label_text_color = $attributes['labelTextColor'] ?? '#ffffff';
+				$fbks_label_bg_color = $attributes['labelBackgroundColor'] ?? 'rgba(0, 0, 0, 0.6)';
+				if ( $fbks_show_labels ) : ?>
+					<div class="pb-label pb-after-label label-<?php echo esc_attr($fbks_label_position); ?>" style="color: <?php echo esc_attr($fbks_label_text_color); ?>; background-color: <?php echo esc_attr($fbks_label_bg_color); ?>;">
 						<?php esc_html_e('After', 'folioblocks'); ?>
 					</div>
 			<?php 
@@ -61,7 +61,7 @@ $port_block_wrapper_attributes = get_block_wrapper_attributes();
 		<div class="pb-before-wrapper">
 			<?php 
 				echo wp_get_attachment_image( 
-  					$port_before_image['id'], 
+  					$fbks_before_image['id'], 
   					'full', 
   					false, 
   					[ 
@@ -70,13 +70,13 @@ $port_block_wrapper_attributes = get_block_wrapper_attributes();
   					] 
 				); 
 			?>
-			<?php if ( pb_fs()->can_use_premium_code__premium_only() ) : 
-				$port_show_labels = !empty($attributes['showLabels']);
-				$port_label_position = $attributes['labelPosition'] ?? 'center';
-				$port_label_text_color = $attributes['labelTextColor'] ?? '#ffffff';
-				$port_label_bg_color = $attributes['labelBackgroundColor'] ?? 'rgba(0, 0, 0, 0.6)';
-				if ( $port_show_labels ) : ?>
-					<div class="pb-label pb-before-label label-<?php echo esc_attr($port_label_position); ?>" style="color: <?php echo esc_attr($port_label_text_color); ?>; background-color: <?php echo esc_attr($port_label_bg_color); ?>;">
+			<?php if ( fbks_fs()->can_use_premium_code__premium_only() ) : 
+				$fbks_show_labels = !empty($attributes['showLabels']);
+				$fbks_label_position = $attributes['labelPosition'] ?? 'center';
+				$fbks_label_text_color = $attributes['labelTextColor'] ?? '#ffffff';
+				$fbks_label_bg_color = $attributes['labelBackgroundColor'] ?? 'rgba(0, 0, 0, 0.6)';
+				if ( $fbks_show_labels ) : ?>
+					<div class="pb-label pb-before-label label-<?php echo esc_attr($fbks_label_position); ?>" style="color: <?php echo esc_attr($fbks_label_text_color); ?>; background-color: <?php echo esc_attr($fbks_label_bg_color); ?>;">
 						<?php esc_html_e('Before', 'folioblocks'); ?>
 					</div>
 			<?php 
@@ -84,14 +84,14 @@ $port_block_wrapper_attributes = get_block_wrapper_attributes();
 			endif; ?>
 		</div>
 		
-		<?php if ( pb_fs()->can_use_premium_code__premium_only() ) : 
-			$port_slider_color = $attributes['sliderColor'] ?? '#ffffff';
-			$port_starting_position = isset($attributes['startingPosition']) ? intval($attributes['startingPosition']) : 50;
+		<?php if ( fbks_fs()->can_use_premium_code__premium_only() ) : 
+			$fbks_slider_color = $attributes['sliderColor'] ?? '#ffffff';
+			$fbks_starting_position = isset($attributes['startingPosition']) ? intval($attributes['startingPosition']) : 50;
 		?>
-			<input type="range" min="0" max="100" value="<?php echo esc_attr( $port_starting_position ); ?>" class="pb-slider <?php echo $port_orientation === 'vertical' ? 'is-vertical' : ''; ?>" />
-			<div class="pb-slider-handle" style="--pb-slider-color: <?php echo esc_attr($port_slider_color); ?>; background-color: <?php echo esc_attr($port_slider_color); ?>;"></div>
+			<input type="range" min="0" max="100" value="<?php echo esc_attr( $fbks_starting_position ); ?>" class="pb-slider <?php echo $fbks_orientation === 'vertical' ? 'is-vertical' : ''; ?>" />
+			<div class="pb-slider-handle" style="--pb-slider-color: <?php echo esc_attr($fbks_slider_color); ?>; background-color: <?php echo esc_attr($fbks_slider_color); ?>;"></div>
 		<?php else : ?>
-			<input type="range" min="0" max="100" value="50" class="pb-slider <?php echo $port_orientation === 'vertical' ? 'is-vertical' : ''; ?>" />
+			<input type="range" min="0" max="100" value="50" class="pb-slider <?php echo $fbks_orientation === 'vertical' ? 'is-vertical' : ''; ?>" />
 			<div class="pb-slider-handle"></div>
 		<?php endif; ?>
 	</div>

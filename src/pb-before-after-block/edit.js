@@ -7,6 +7,7 @@ import { useBlockProps, MediaUpload, BlockControls, InspectorControls } from '@w
 import { Button, Icon, PanelBody, Notice, ToolbarGroup, ToolbarButton, SelectControl } from '@wordpress/components';
 import { useState, useRef, useEffect } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
+import { media } from '@wordpress/icons';
 import IconBeforeAfter from '../pb-helpers/IconBeforeAfter';
 import './editor.scss';
 
@@ -168,7 +169,7 @@ export default function Edit({ attributes, setAttributes }) {
 					render={({ open }) => (
 						<ToolbarButton
 							label={__('Replace Before Image', 'folioblocks')}
-							icon="format-image"
+							icon={media}
 							onClick={open}
 						>
 							{__('Replace Before Image', 'folioblocks')}
@@ -181,7 +182,7 @@ export default function Edit({ attributes, setAttributes }) {
 					render={({ open }) => (
 						<ToolbarButton
 							label={__('Replace After Image', 'folioblocks')}
-							icon="format-image"
+							icon={media}
 							onClick={open}
 						>
 							{__('Replace After Image', 'folioblocks')}

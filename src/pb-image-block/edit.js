@@ -21,6 +21,7 @@ import {
 import { useRef, useEffect } from '@wordpress/element';
 import { media } from '@wordpress/icons';
 import { applyFilters } from '@wordpress/hooks';
+import IconImageBlock from '../pb-helpers/IconImageBlock';
 import './editor.scss';
 
 export default function Edit({ attributes, setAttributes, context }) {
@@ -216,7 +217,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 				>
 					{!src ? (
 						<MediaPlaceholder
-							icon="format-image"
+							icon={<IconImageBlock/>}
 							labels={{ title: __('Select Image', 'folioblocks') }}
 							onSelect={onSelectImage}
 							allowedTypes={['image']}

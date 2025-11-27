@@ -1,9 +1,9 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly.
 
-add_action( 'admin_enqueue_scripts', 'folioblocks_admin_styles' );
+add_action( 'admin_enqueue_scripts', 'fbks_admin_styles' );
 
-function folioblocks_admin_styles( $hook ) {
+function fbks_admin_styles( $hook ) {
     if ( $hook !== 'toplevel_page_folioblocks-settings' ) {
         return;
     }
@@ -16,20 +16,20 @@ function folioblocks_admin_styles( $hook ) {
     );
 }
 
-function folioblocks_render_settings_page() {
+function fbks_render_settings_page() {
 
 ?>
 	<div class="pb-wrap">
 		<div class="pb-settings-header">
 			<img src="<?php echo esc_url( plugin_dir_url( __DIR__ ) . '/icons/pb-brand-icon.svg' ); ?>" alt="FolioBlocks" class="pb-settings-logo" />
-			<h1><?php esc_html_e( 'FolioBlocks', 'folioblocks' ); ?><?php if ( pb_fs()->can_use_premium_code() ) : ?> Pro<?php endif; ?> - Dashboard</h1>
+			<h1><?php esc_html_e( 'FolioBlocks', 'folioblocks' ); ?><?php if ( fbks_fs()->can_use_premium_code() ) : ?> Pro<?php endif; ?> - Dashboard</h1>
 		</div>
 
 		<div class="settings-container">
         	<div class="settings-left">
 				<div class="pb-dashboard-box">
-					<h2>Welcome to FolioBlocks</h2>
-					<?php if ( pb_fs()->can_use_premium_code() ) : ?>
+					<h2>Welcome to FolioBlocks:</h2>
+					<?php if ( fbks_fs()->can_use_premium_code() ) : ?>
 					<p>
                 	    Thank you for purchasing FolioBlocks Pro. FolioBlocks is a WordPress plugin 
 						purpose-built for the block editor and full site editor, giving you the tools to create 
@@ -126,6 +126,18 @@ function folioblocks_render_settings_page() {
 					        </div>
 					        <div class="pb-block-item">
 					            <div class="pb-block-icon">
+									    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1247.24 1247.24">
+  											<path d="M415 130H176c-30 0-55 25-55 55v239h55V185h239v-55zM832 130h239c30 0 55 25 55 55v239h-55V185H832v-55zM1117 832v239c0 30-25 55-55 55H832v-55h239V832h55zM415 1117H176c-30 0-55-25-55-55V832h55v239h239v46z"/>
+  											<path d="M580 350 A230 230 0 1 1 579.9 350 M580 440 A140 140 0 1 0 580.1 440"/>
+  											<path d="M707 707l243 243 40-40-243-243-40 40z"/>
+										</svg>
+								</div>
+					            <span>Loupe</span>
+								<span class="pb-pro-badge">NEW</span>
+								<a href="https://folioblocks.com/blocks/loupe-block/" target="_blank">Demo</a>
+					        </div>							
+					        <div class="pb-block-item">
+					            <div class="pb-block-icon">
 									    <svg viewBox="0 0 1247.24 1247.24" width="36" height="36" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
         									<g id="Layer_1-2">
             									<g>
@@ -143,7 +155,7 @@ function folioblocks_render_settings_page() {
 					            <span>Masonry Gallery</span>
 								<a href="https://folioblocks.com/blocks/masonry-gallery-block/" target="_blank">Demo</a>
 					        </div>
-							<div class="pb-block-item <?php if ( ! pb_fs()->can_use_premium_code() ) : ?>pb-pro-block<?php endif; ?>">
+							<div class="pb-block-item <?php if ( ! fbks_fs()->can_use_premium_code() ) : ?>pb-pro-block<?php endif; ?>">
 					            <div class="pb-block-icon">
 									<svg viewBox="0 0 1247.24 1247.24" width="36" height="36" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
         								<g id="Layer_1-2">
@@ -158,7 +170,7 @@ function folioblocks_render_settings_page() {
     								</svg>
 								</div>
 					            <span>Modular Gallery</span>
-					            <?php if ( ! pb_fs()->can_use_premium_code() ) : ?>
+					            <?php if ( ! fbks_fs()->can_use_premium_code() ) : ?>
 					                <span class="pb-pro-badge">PRO</span>
 					            <?php endif; ?>
 								<a href="https://folioblocks.com/blocks/modular-gallery-block/" target="_blank">Demo</a>
@@ -186,14 +198,14 @@ function folioblocks_render_settings_page() {
 								<a href="https://folioblocks.com/blocks/video-gallery-block/" target="_blank">Demo</a>
 					        </div>
 					    </div>
-						<?php if ( ! pb_fs()->can_use_premium_code() ) : ?>
+						<?php if ( ! fbks_fs()->can_use_premium_code() ) : ?>
 							<p>
 								Blocks on the free version are limited to only having controls for dealing with responsive design and a simple Lightbox.
 							</p>
 						<?php endif; ?>
 					</div>
 				</div>
-				<?php if ( ! pb_fs()->can_use_premium_code() ) : ?>
+				<?php if ( ! fbks_fs()->can_use_premium_code() ) : ?>
 					<div class="pb-dashboard-box">
 						<h2>Pro Version - Features:</h2>
 						<p>

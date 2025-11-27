@@ -18,16 +18,18 @@ import {
 	ToolbarGroup,
 	ToolbarButton,
 	RangeControl,
-	__experimentalToggleGroupControl as ToggleGroupControl,
-	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
+	Notice,
+	Panel,
 } from '@wordpress/components';
 import { useState, useRef } from '@wordpress/element';
+import { applyFilters } from '@wordpress/hooks';
 import { media } from '@wordpress/icons';
 import IconLoupe from '../pb-helpers/IconLoupe';
 import './editor.scss';
 
 export default function Edit({ attributes, setAttributes }) {
 	const { id, url, alt, resolution, availableSize, magnification, loupeShape, loupeTheme, preview } = attributes;
+	const checkoutUrl = window.folioBlocksData?.checkoutUrl || 'https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks&utm_medium=loupe-block&utm_campaign=upgrade';
 	const wrapperRef = useRef(null);
 
 	const blockProps = useBlockProps({
@@ -80,35 +82,35 @@ export default function Edit({ attributes, setAttributes }) {
 	const lastTouchRef = useRef(0);
 
 	const handleTouchStart = (event) => {
-	    const now = Date.now();
-	    const timeSinceLast = now - lastTouchRef.current;
+		const now = Date.now();
+		const timeSinceLast = now - lastTouchRef.current;
 
-	    const rect = event.currentTarget.getBoundingClientRect();
-	    const touch = event.touches[0];
-	    const x = touch.clientX - rect.left;
-	    const y = touch.clientY - rect.top;
+		const rect = event.currentTarget.getBoundingClientRect();
+		const touch = event.touches[0];
+		const x = touch.clientX - rect.left;
+		const y = touch.clientY - rect.top;
 
-	    if (timeSinceLast < 300) {
-	        setLoupeVisible(false);
-	    } else {
-	        setLoupeVisible(true);
-	        setLoupePos({ x, y });
-	    }
+		if (timeSinceLast < 300) {
+			setLoupeVisible(false);
+		} else {
+			setLoupeVisible(true);
+			setLoupePos({ x, y });
+		}
 
-	    lastTouchRef.current = now;
+		lastTouchRef.current = now;
 	};
 
 	const handleTouchMove = (event) => {
-	    if (!isLoupeVisible) return;
-	    const rect = event.currentTarget.getBoundingClientRect();
-	    const touch = event.touches[0];
-	    const x = touch.clientX - rect.left;
-	    const y = touch.clientY - rect.top;
-	    setLoupePos({ x, y });
+		if (!isLoupeVisible) return;
+		const rect = event.currentTarget.getBoundingClientRect();
+		const touch = event.touches[0];
+		const x = touch.clientX - rect.left;
+		const y = touch.clientY - rect.top;
+		setLoupePos({ x, y });
 	};
 
 	const handleTouchEnd = () => {
-	    // Loupe stays visible until double-tap toggles it off
+		// Loupe stays visible until double-tap toggles it off
 	};
 
 	const handleMouseMove = (event) => {
@@ -168,7 +170,7 @@ export default function Edit({ attributes, setAttributes }) {
 				)}
 			</BlockControls>
 			<InspectorControls>
-				<PanelBody title={__('Image Settings', 'pb-loupe-block')} initialOpen={true}>
+				<PanelBody title={__('Block Settings', 'pb-loupe-block')} initialOpen={true}>
 					{id && resolution && (
 						<div style={{ marginBottom: '16px' }}>
 							<div className="pb-img-thumbnail-preview">
@@ -204,20 +206,35 @@ export default function Edit({ attributes, setAttributes }) {
 							value: slug,
 						}))}
 						onChange={(newSize) => {
-						    const attachment = wp.media.attachment(attributes.id);
-						    attachment.fetch().then(() => {
-						        const sizes = attachment.get('sizes') || {};
-						        const newUrl = sizes[newSize]?.url || url;
-						        setAttributes({
-						            resolution: newSize,
-						            url: newUrl,
-						        });
-						    });
+							const attachment = wp.media.attachment(attributes.id);
+							attachment.fetch().then(() => {
+								const sizes = attachment.get('sizes') || {};
+								const newUrl = sizes[newSize]?.url || url;
+								setAttributes({
+									resolution: newSize,
+									url: newUrl,
+								});
+							});
 						}}
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 						help={__('Select the size of the source image.')}
 					/>
+					{applyFilters(
+						'folioBlocks.carouselGallery.disableRightClickToggle',
+						(
+							<div style={{ marginBottom: '8px' }}>
+								<Notice status="info" isDismissible={false}>
+									<strong>{__('Disable Right-Click', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'folioblocks')}
+									</a>
+								</Notice>
+							</div>
+						),
+						{ attributes, setAttributes }
+					)}
 				</PanelBody>
 				<PanelBody title={__('Loupe Settings', 'pb-loupe-block')} initialOpen={true}>
 					<RangeControl
@@ -231,30 +248,36 @@ export default function Edit({ attributes, setAttributes }) {
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
-					<ToggleGroupControl
-						label="Loupe Shape"
-						value={loupeShape}
-						onChange={(value) => setAttributes({ loupeShape: value })}
-						isBlock
-						help={__('Change the shape of the Loupe.')}
-						__nextHasNoMarginBottom
-						__next40pxDefaultSize
-					>
-						<ToggleGroupControlOption value="circle" label="Circle" />
-						<ToggleGroupControlOption value="square" label="Square" />
-					</ToggleGroupControl>
-					<SelectControl
-						label={__('Loupe Theme', 'pb-loupe-block')}
-						value={loupeTheme}
-						options={[
-							{ label: 'Light', value: 'light' },
-							{ label: 'Dark', value: 'dark' },
-						]}
-						onChange={(value) => setAttributes({ loupeTheme: value })}
-						help={__('Change the color of the Loupe frame.')}
-						__nextHasNoMarginBottom
-						__next40pxDefaultSize
-					/>
+					{applyFilters(
+						'folioBlocks.loupeBlock.loupeShapeControl',
+						(
+							<div style={{ marginBottom: '8px' }}>
+								<Notice status="info" isDismissible={false}>
+									<strong>{__('Loupe Shape', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'folioblocks')}
+									</a>
+								</Notice>
+							</div>
+						),
+						{ attributes, setAttributes }
+					)}
+					{applyFilters(
+						'folioBlocks.loupeBlock.loupeThemeControl',
+						(
+							<div style={{ marginBottom: '8px' }}>
+								<Notice status="info" isDismissible={false}>
+									<strong>{__('Loupe Theme', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'folioblocks')}
+									</a>
+								</Notice>
+							</div>
+						),
+						{ attributes, setAttributes }
+					)}
 				</PanelBody>
 			</InspectorControls>
 			<figure {...blockProps}>

@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ---- Premium: Disable right-click (if enabled) ----
     if (block.dataset.disableRightClick === 'true') {
-      gallery.addEventListener('contextmenu', (e) => e.preventDefault(), { passive: false });
+      document.addEventListener('contextmenu', (e) => e.preventDefault(), { passive: false });
     }
 
     // ---- Premium: Autoplay wiring ----

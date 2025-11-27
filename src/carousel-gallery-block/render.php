@@ -9,42 +9,42 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Base attributes (free features)
-$port_wrapper_attributes = array(
+$fbks_wrapper_attributes = array(
 	'data-vertical-on-mobile' => empty( $attributes['verticalOnMobile'] ) ? 'false' : 'true',
 );
 
-if ( pb_fs()->can_use_premium_code__premium_only() ) {
+if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 	// Premium-only attributes
 
 	// Autoplay
 	if ( ! empty( $attributes['autoplay'] ) ) {
-		$port_wrapper_attributes['data-autoplay']       = 'true';
-		$port_wrapper_attributes['data-autoplay-speed'] = isset( $attributes['autoplaySpeed'] )
+		$fbks_wrapper_attributes['data-autoplay']       = 'true';
+		$fbks_wrapper_attributes['data-autoplay-speed'] = isset( $attributes['autoplaySpeed'] )
 			? esc_attr( $attributes['autoplaySpeed'] )
 			: '3';
 	}
 
 	// Downloads
 	if ( ! empty( $attributes['enableDownload'] ) ) {
-		$port_wrapper_attributes['data-enable-download'] = 'true';
+		$fbks_wrapper_attributes['data-enable-download'] = 'true';
 	}
 
 	// Disable right-click
 	if ( ! empty( $attributes['disableRightClick'] ) ) {
-		$port_wrapper_attributes['data-disable-right-click'] = 'true';
+		$fbks_wrapper_attributes['data-disable-right-click'] = 'true';
 	}
 }
 
-$port_loop = isset( $attributes['loopSlides'] ) ? $attributes['loopSlides'] : false;
+$fbks_loop = isset( $attributes['loopSlides'] ) ? $attributes['loopSlides'] : false;
 
-$port_wrapper_attr_string = get_block_wrapper_attributes( $port_wrapper_attributes );
+$fbks_wrapper_attr_string = get_block_wrapper_attributes( $fbks_wrapper_attributes );
 ?>
-<div <?php echo wp_kses( $port_wrapper_attr_string, [ 'div' => [] ] ); ?>>
-	<div class="pb-carousel-gallery" data-loop="<?php echo $port_loop ? 'true' : 'false'; ?>">
+<div <?php echo wp_kses( $fbks_wrapper_attr_string, [ 'div' => [] ] ); ?>>
+	<div class="pb-carousel-gallery" data-loop="<?php echo $fbks_loop ? 'true' : 'false'; ?>">
 		<?php echo wp_kses_post( $content ); ?>
 	</div>
 
-	<?php if ( pb_fs()->can_use_premium_code__premium_only() ) : ?>
+	<?php if ( fbks_fs()->can_use_premium_code__premium_only() ) : ?>
 		<?php if ( ! empty( $attributes['showControls'] ) ) : ?>
 			<div
 				class="pb-carousel-controls align-<?php echo esc_attr( $attributes['controlsAlignment'] ?? 'center' ); ?>"

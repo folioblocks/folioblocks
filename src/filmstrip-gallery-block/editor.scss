@@ -2,6 +2,15 @@
  * Filmstrip Gallery Block
  * Editor SCSS
  **/
-.wp-block-create-block-filmstrip-gallery-block {
-	border: 1px dotted #f00;
+ .pb-block-preview {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	background: #3B82F6;
+	color: #fff; 
+	
+	svg { width: 100px; height: 100px; stroke: #fff; fill: #fff; }
 }

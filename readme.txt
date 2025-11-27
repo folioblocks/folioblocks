@@ -5,7 +5,7 @@ Tags: gallery, image gallery, photo gallery, video gallery, lightbox,
 Tested up to:      6.9
 Requires at least: 6.3
 Requires PHP: 7.4
-Stable tag:        1.0.4
+Stable tag:        1.0.5
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,29 +18,23 @@ FolioBlocks is a modern gallery and portfolio plugin built specifically for the 
 Build professional galleries directly inside Gutenberg using flexible layouts including Grid, Justified, Masonry, Modular, Carousel, and Video Gallery blocks. Every block is performance-focused, mobile-friendly, and optimized for real portfolio use cases. FolioBlocks brings powerful visual tools into the native editor so you can work quickly and maintain full creative control.
 
 Included blocks: 
-
 * Before & After Block – Compare two images with an interactive slider
+* Loupe Block - Highlight fine details with an elegant magnifying zoom effect
 * Carousel Gallery Block – Smooth, swipe-friendly horizontal image slider
 * Grid Gallery Block – Classic evenly-spaced grid layout
 * Justified Gallery Block – Professional row-based gallery with balanced heights
 * Masonry Gallery Block – Pinterest-style vertical gallery layout
-* Modular Gallery Block (Pro) – Build custom, magazine-style image layouts
+* Modular Gallery Block (Pro Only) – Build custom, magazine-style image layouts
 * Video Gallery Block – Showcase YouTube, Vimeo, or self-hosted videos
 
-Gallery Features: 
-
-All gallery blocks include:
-
+Gallery Features - All gallery blocks include:
 * Fully responsive layouts for desktop, tablet, and mobile
 * Built-in Lightbox
 * Caption support and accessibility-friendly interactions
 * Drag-and-drop image ordering
 * 100% native Gutenberg block editing (no shortcodes, no separate gallery manager)
 
-Advanced Features (Pro): 
-
-Unlock advanced tools designed for photography websites, creative portfolios, and WooCommerce-powered shops:
-
+Advanced Features (Pro) - Unlock advanced tools designed for photography websites, creative portfolios, and WooCommerce-powered shops:
 * Gallery Image Filtering
 * WooCommerce Product Integration
 * Download Full-Resolution Images

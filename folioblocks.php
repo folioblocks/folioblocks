@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       FolioBlocks
  * Description:       Create fast, responsive photo and video galleries with grid, masonry, justified, modular, and carousel layouts—ideal for photographers and creatives.
- * Version:           1.0.4
+ * Version:           1.0.5
  * Requires at least: 6.3
  * Requires PHP:      7.4
  * Author:            FolioBlocks
@@ -20,8 +20,12 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-if ( function_exists( 'pb_fs' ) ) {
-    pb_fs()->set_basename( true, __FILE__ );
+define( 'FBKS_VERSION', '1.0.5' );
+define( 'FBKS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+define( 'FBKS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+
+if ( function_exists( 'fbks_fs' ) ) {
+    fbks_fs()->set_basename( true, __FILE__ );
 } else {
 
     /**
@@ -29,16 +33,16 @@ if ( function_exists( 'pb_fs' ) ) {
      * `function_exists` CALL ABOVE TO PROPERLY WORK.
      */
 
-    if ( ! function_exists( 'pb_fs' ) ) {
-        if ( ! function_exists( 'pb_fs' ) ) {
+    if ( ! function_exists( 'fbks_fs' ) ) {
+        if ( ! function_exists( 'fbks_fs' ) ) {
             // Create a helper function for easy SDK access.
-            function pb_fs() {
-            global $pb_fs;
+            function fbks_fs() {
+            global $fbks_fs;
 
-            if ( ! isset( $pb_fs ) ) {
+            if ( ! isset( $fbks_fs ) ) {
                 // Include Freemius SDK.
                 require_once dirname( __FILE__ ) . '/vendor/freemius/start.php';
-                $pb_fs = fs_dynamic_init( array(
+                $fbks_fs = fs_dynamic_init( array(
                     'id'                  => '19558',
                     'slug'                => 'folioblocks',
                     'premium_slug'        => 'folioblocks-pro',
@@ -62,26 +66,26 @@ if ( function_exists( 'pb_fs' ) ) {
             ) );
         }
 
-        return $pb_fs;
+        return $fbks_fs;
         }
 
         // Init Freemius.
-        pb_fs();
+        fbks_fs();
         // Signal that SDK was initiated.
-        do_action( 'pb_fs_loaded' );
+        do_action( 'fbks_fs_loaded' );
 
         // Disable annual pricing in monthly view
-        pb_fs()->add_filter( 'pricing/show_annual_in_monthly', '__return_false' );
+        fbks_fs()->add_filter( 'pricing/show_annual_in_monthly', '__return_false' );
 
-        pb_fs()->add_filter( 'pricing_url', function ( $url ) {
+        fbks_fs()->add_filter( 'pricing_url', function ( $url ) {
             return 'https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks-plugin&utm_medium=freemius&utm_campaign=in-plugin-upgrade';
         } );
         
         // Use custom icon in Freemius 
-        function pb_fs_custom_icon() {
+        function fbks_fs_custom_icon() {
             return dirname( __FILE__ ) . '/includes/icons/pb-brand-icon.svg';
         }
-        pb_fs()->add_filter( 'plugin_icon', 'pb_fs_custom_icon' );
+        fbks_fs()->add_filter( 'plugin_icon', 'fbks_fs_custom_icon' );
     
         // Make url available to JS for Upgrade links and WooCommerce status
         add_action( 'enqueue_block_editor_assets', function () {
@@ -92,9 +96,9 @@ if ( function_exists( 'pb_fs' ) ) {
         $woo_active = is_plugin_active( 'woocommerce/woocommerce.php' );
 
         $data = [
-            'checkoutUrl'    => pb_fs()->pricing_url(),
+            'checkoutUrl'    => fbks_fs()->pricing_url(),
             'siteUrl'        => site_url(),
-            'isPro'          => ( function_exists( 'pb_fs' ) && pb_fs()->can_use_premium_code() ),
+            'isPro'          => ( function_exists( 'fbks_fs' ) && fbks_fs()->can_use_premium_code() ),
             'hasWooCommerce' => $woo_active,
         ];
 
@@ -119,7 +123,7 @@ if ( function_exists( 'pb_fs' ) ) {
 }
 
     // Add custom category for blocks.
-    function folioblocks_add_category( $categories ) {
+    function fbks_add_category( $categories ) {
         $new_category = array(
             'slug'  => 'folioblocks',
             'title' => __( 'FolioBlocks', 'folioblocks' ),
@@ -136,22 +140,22 @@ if ( function_exists( 'pb_fs' ) ) {
 
         return $categories;
     }
-    add_filter( 'block_categories_all', 'folioblocks_add_category', 10, 2 );
+    add_filter( 'block_categories_all', 'fbks_add_category', 10, 2 );
 
     // Register all FolioBlocks blocks.
-    function folioblocks_folioblocks_block_init() {
+    function fbks_block_init() {
         register_block_type( __DIR__ . '/build/pb-before-after-block' );
         register_block_type( __DIR__ . '/build/pb-image-block' );
         register_block_type( __DIR__ . '/build/pb-loupe-block' );
         register_block_type( __DIR__ . '/build/pb-video-block' );
         register_block_type( __DIR__ . '/build/carousel-gallery-block' );
-        if ( pb_fs()->can_use_premium_code() ) {
+        if ( fbks_fs()->can_use_premium_code() ) {
             register_block_type( __DIR__ . '/build/filmstrip-gallery-block' );     
         }
         register_block_type( __DIR__ . '/build/grid-gallery-block' );
     	register_block_type( __DIR__ . '/build/justified-gallery-block' );
     	register_block_type( __DIR__ . '/build/masonry-gallery-block' );
-        if ( pb_fs()->can_use_premium_code() ) {
+        if ( fbks_fs()->can_use_premium_code() ) {
             register_block_type( __DIR__ . '/build/modular-gallery-block' );
             register_block_type( __DIR__ . '/build/pb-image-row' );
     	    register_block_type( __DIR__ . '/build/pb-image-stack' ); 	     
@@ -160,21 +164,21 @@ if ( function_exists( 'pb_fs' ) ) {
         
         
     }
-    add_action( 'init', 'folioblocks_folioblocks_block_init' );
+    add_action( 'init', 'fbks_block_init' );
 
     // Filter to load block assets on demand.
     add_filter( 'should_load_block_assets_on_demand', '__return_true' );
 
     // Add Admin settings page.
-    add_action( 'admin_menu', 'folioblocks_register_settings_page' );
-    function folioblocks_register_settings_page() {
+    add_action( 'admin_menu', 'fbks_register_settings_page' );
+    function fbks_register_settings_page() {
         $icon_url = plugin_dir_url( __FILE__ ) . 'includes/icons/pb-brand-icon.svg';
     	add_menu_page(
     		'FolioBlocks',        // Page title
     		'FolioBlocks',        // Menu title
     		'manage_options',          // Capability
     		'folioblocks-settings', // Slug
-    		'folioblocks_render_settings_page', // Callback
+    		'fbks_render_settings_page', // Callback
     		$icon_url, // Icon
     		10 // Position 11 for media 80 for bottom
     	);
@@ -184,16 +188,16 @@ if ( function_exists( 'pb_fs' ) ) {
         'Dashboard',                      // Menu title (what appears in sidebar)
         'manage_options',
         'folioblocks-settings',         // SAME slug as main page
-        'folioblocks_render_settings_page'
+        'fbks_render_settings_page'
         );
-        if ( ! function_exists( 'pb_fs' ) ||  ! pb_fs()->can_use_premium_code() ) {
+        if ( ! function_exists( 'fbks_fs' ) ||  ! fbks_fs()->can_use_premium_code() ) {
             add_submenu_page(
                 'folioblocks-settings',
                 'Free vs Pro',
                 'Free vs Pro',
                 'manage_options',
                 'folioblocks-free-vs-pro',
-                'folioblocks_render_free_pro_page'
+                'fbks_render_free_pro_page'
             );
         }
     }
@@ -206,7 +210,7 @@ if ( function_exists( 'pb_fs' ) ) {
             'System Info',
             'manage_options',
             'folioblocks-system-info',
-            'folioblocks_render_system_info_page'
+            'fbks_render_system_info_page'
         );
     }, 99);
     // Load settings + system info pages
@@ -214,8 +218,8 @@ if ( function_exists( 'pb_fs' ) ) {
     require_once plugin_dir_path( __FILE__ ) . 'includes/admin/system-info.php';
     require_once plugin_dir_path( __FILE__ ) . 'includes/admin/free-pro.php';
     // Load CSS for Admin pages
-    add_action( 'admin_enqueue_scripts', 'folioblocks_enqueue_admin_styles' );
-    function folioblocks_enqueue_admin_styles() {
+    add_action( 'admin_enqueue_scripts', 'fbks_enqueue_admin_styles' );
+    function fbks_enqueue_admin_styles() {
     	wp_enqueue_style(
     		'folioblocks-settings-css',
     		plugin_dir_url( __FILE__ ) . 'includes/admin/settings-page.css',
@@ -223,8 +227,8 @@ if ( function_exists( 'pb_fs' ) ) {
     		'1.0'
     	);
     }
-    add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'folioblocks_plugin_action_links' );
-    function folioblocks_plugin_action_links( $links ) {
+    add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'fbks_plugin_action_links' );
+    function fbks_plugin_action_links( $links ) {
     	$settings_link = '<a href="' . esc_url( admin_url( 'admin.php?page=folioblocks-settings' ) ) . '">' . __( 'Settings', 'folioblocks' ) . '</a>';
     	array_unshift( $links, $settings_link );
     	return $links;
@@ -232,7 +236,7 @@ if ( function_exists( 'pb_fs' ) ) {
 
 }
 
-if ( pb_fs()->can_use_premium_code__premium_only() ) {
+if ( fbks_fs()->can_use_premium_code__premium_only() ) {
     // Removes the add-to-cart query arg from the URL after adding a product to the cart.
     add_action( 'template_redirect', function() {
 	    if ( isset( $_GET['add-to-cart'] ) ) {
