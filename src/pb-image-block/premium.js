@@ -170,10 +170,10 @@ addFilter(
             label={__('Hover Style', 'folioblocks')}
             value={attributes.onHoverStyle || 'blur-overlay'}
             options={[
-              { label: __('Blur Overlay Centered)', 'folioblocks'), value: 'title-hover' },
-              { label: __('Fade Overlay - Centered)', 'folioblocks'), value: 'fade-overlay' },
+              { label: __('Blur Overlay Centered', 'folioblocks'), value: 'title-hover' },
+              { label: __('Fade Overlay - Centered', 'folioblocks'), value: 'fade-overlay' },
               { label: __('Gradient Overlay - Slide-up Bottom', 'folioblocks'), value: 'gradient-bottom' },
-              { label: __('Chip Overlay - Top-Left Label)', 'folioblocks'), value: 'chip' },
+              { label: __('Chip Overlay - Top-Left Label', 'folioblocks'), value: 'chip' },
             ]}
             onChange={(v) => setAttributes({ onHoverStyle: v })}
             __nextHasNoMarginBottom
