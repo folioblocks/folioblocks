@@ -74,6 +74,7 @@ const legacyAttributes = {
  * Register the OLD block namespace as a migration shim.
  */
 registerBlockType('portfolio-blocks/grid-gallery-block', {
+	apiVersion: 3,
 	title: 'Grid Gallery (Legacy)',
 	category: 'widgets',
 	attributes: legacyAttributes,

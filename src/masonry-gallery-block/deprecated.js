@@ -74,6 +74,7 @@ const legacyAttributes = {
  * Register the OLD block namespace as a migration shim.
  */
 registerBlockType('portfolio-blocks/masonry-gallery-block', {
+	apiVersion: 3,
 	title: 'Masonry Gallery (Legacy)',
 	category: 'widgets',
 	attributes: legacyAttributes,

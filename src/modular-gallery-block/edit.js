@@ -6,8 +6,9 @@ import { __ } from '@wordpress/i18n';
 import { select, useSelect, useDispatch } from '@wordpress/data';
 import { useState, useEffect, useRef } from '@wordpress/element';
 import { BlockControls, useBlockProps, useInnerBlocksProps, InspectorControls, MediaPlaceholder } from '@wordpress/block-editor';
-import { Notice, ToolbarGroup, ToolbarButton, PanelBody, ToggleControl, SelectControl } from '@wordpress/components';
-import { plus } from '@wordpress/icons';
+import { Notice, ToolbarGroup, ToolbarButton, PanelBody, ToggleControl, SelectControl, Panel } from '@wordpress/components';
+import { createBlock } from '@wordpress/blocks';
+import { row } from '@wordpress/icons';
 import { applyFilters } from '@wordpress/hooks';
 import IconModularGallery from '../pb-helpers/IconModularGallery';
 
@@ -50,7 +51,7 @@ export default function Edit(props) {
 	}, [window.folioBlocksData?.hasWooCommerce]);
 
 
-	const { insertBlock } = useDispatch('core/block-editor');
+	const { insertBlock, replaceBlocks, selectBlock } = useDispatch('core/block-editor');
 
 	const innerBlocks = useSelect((select) => {
 		return select('core/block-editor').getBlock(clientId)?.innerBlocks || [];
@@ -87,6 +88,48 @@ export default function Edit(props) {
 			console.error('Failed to fetch image metadata:', error);
 		}
 	};
+
+	useEffect(() => {
+		const onAddToImageStack = (e) => {
+			const targetId = e?.detail?.clientId;
+			if (!targetId) return;
+
+			const beSelect = select('core/block-editor');
+			const parents = beSelect.getBlockParents(targetId, true) || [];
+			// ensure the image is inside THIS gallery instance
+			if (!parents.includes(clientId)) return;
+
+			const getName = beSelect.getBlockName;
+			const names = parents.map(getName);
+
+			// must be inside an Image Row and NOT already in an Image Stack
+			const inRow = names.includes('folioblocks/pb-image-row');
+			const inStack = names.includes('folioblocks/pb-image-stack');
+			if (!inRow || inStack) return;
+
+			const imgBlock = beSelect.getBlock(targetId);
+			if (!imgBlock || imgBlock.name !== 'folioblocks/pb-image-block') return;
+
+			// Build a new stack with a cloned image child
+			const childImage = createBlock('folioblocks/pb-image-block', { ...imgBlock.attributes });
+			const stackBlock = createBlock('folioblocks/pb-image-stack', {}, [childImage]);
+
+			// Replace the image with the new stack
+			replaceBlocks(targetId, stackBlock);
+
+			// Optional: focus the new child image
+			// setTimeout(() => {
+			//   const tree = select('core/block-editor').getBlock(stackBlock.clientId);
+			//   const newChildId = tree?.innerBlocks?.[0]?.clientId;
+			//   if (newChildId) {
+			//     selectBlock(newChildId);
+			//   }
+			// }, 0);
+		};
+
+		window.addEventListener('folioblocks:add-to-image-stack', onAddToImageStack);
+		return () => window.removeEventListener('folioblocks:add-to-image-stack', onAddToImageStack);
+	}, [clientId]);
 
 	const handleAddRow = () => {
 		const { createBlock } = wp.blocks;
@@ -326,7 +369,7 @@ export default function Edit(props) {
 			<BlockControls>
 				<ToolbarGroup>
 					<ToolbarButton
-						icon={plus}
+						icon={row}
 						label="Add Image Row"
 						onClick={handleAddRow}
 					>
@@ -377,69 +420,8 @@ export default function Edit(props) {
 						help={__('Remove gap between images.')}
 						__nextHasNoMarginBottom
 					/>
-					{applyFilters(
-						'folioBlocks.modularGallery.downloadControls',
-						(
-							<div style={{ marginBottom: '8px' }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Image Downloads', 'folioblocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'folioblocks')}
-									</a>
-								</Notice>
-							</div>
-						),
-						{ attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
-					)}
-					{window.folioBlocksData?.hasWooCommerce && applyFilters(
-						'folioBlocks.modularGallery.wooCommerceControls',
-						(
-							<div style={{ marginBottom: '8px' }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Woo Commerce', 'folioblocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'folioblocks')}
-									</a>
-								</Notice>
-							</div>
-						),
-						{ attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
-					)}
-					{applyFilters(
-						'folioBlocks.modularGallery.disableRightClickToggle',
-						(
-							<div style={{ marginBottom: '8px' }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__('Disable Right-Click', 'folioblocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'folioblocks')}
-									</a>
-								</Notice>
-							</div>
-						),
-						{ attributes, setAttributes }
-					)}
-					{applyFilters(
-						'folioBlocks.modularGallery.lazyLoadToggle',
-						(
-							<div style={{ marginBottom: '8px' }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Lazy Load of Images', 'folioblocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'folioblocks')}
-									</a>
-								</Notice>
-							</div>
-						),
-						{ attributes, setAttributes }
-					)}
-
 				</PanelBody>
-				<PanelBody title={__('Gallery Image Settings', 'folioblocks')} initialOpen={true}>
+				<PanelBody title={__('Lightbox & Hover Settings', 'folioblocks')} initialOpen={true}>
 					{applyFilters(
 						'folioBlocks.modularGallery.lightboxControls',
 						(
@@ -483,6 +465,70 @@ export default function Edit(props) {
 						{ attributes, setAttributes }
 					)}
 				</PanelBody>
+				<PanelBody title={__('E-Commerce Settings', 'folioblocks')} initialOpen={true}>
+					{applyFilters(
+						'folioBlocks.modularGallery.downloadControls',
+						(
+							<div style={{ marginBottom: '8px' }}>
+								<Notice status="info" isDismissible={false}>
+									<strong>{__('Enable Image Downloads', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'folioblocks')}
+									</a>
+								</Notice>
+							</div>
+						),
+						{ attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
+					)}
+					{window.folioBlocksData?.hasWooCommerce && applyFilters(
+						'folioBlocks.modularGallery.wooCommerceControls',
+						(
+							<div style={{ marginBottom: '8px' }}>
+								<Notice status="info" isDismissible={false}>
+									<strong>{__('Enable Woo Commerce', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'folioblocks')}
+									</a>
+								</Notice>
+							</div>
+						),
+						{ attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
+					)}
+				</PanelBody>
+			</InspectorControls>
+			<InspectorControls group="advanced">
+				{applyFilters(
+					'folioBlocks.modularGallery.disableRightClickToggle',
+					(
+						<div style={{ marginBottom: '8px' }}>
+							<Notice status="info" isDismissible={false}>
+								<strong>{__('Disable Right-Click', 'folioblocks')}</strong><br />
+								{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
+								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+									{__('Upgrade to Pro', 'folioblocks')}
+								</a>
+							</Notice>
+						</div>
+					),
+					{ attributes, setAttributes }
+				)}
+				{applyFilters(
+					'folioBlocks.modularGallery.lazyLoadToggle',
+					(
+						<div style={{ marginBottom: '8px' }}>
+							<Notice status="info" isDismissible={false}>
+								<strong>{__('Enable Lazy Load of Images', 'folioblocks')}</strong><br />
+								{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
+								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+									{__('Upgrade to Pro', 'folioblocks')}
+								</a>
+							</Notice>
+						</div>
+					),
+					{ attributes, setAttributes }
+				)}
 			</InspectorControls>
 			<InspectorControls group="styles">
 				<PanelBody title={__('Gallery Image Styles', 'folioblocks')} initialOpen={true}>

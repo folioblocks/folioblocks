@@ -10,34 +10,56 @@ import {
 	BlockControls,
 	MediaUpload,
 } from '@wordpress/block-editor';
+import { useSelect } from '@wordpress/data';
 import {
 	PanelBody,
+	Notice,
+	ToggleControl,
 	TextareaControl,
 	TextControl,
 	ToolbarGroup,
 	ToolbarButton,
 	Button,
+	SelectControl,
 } from '@wordpress/components';
 import { useRef, useEffect } from '@wordpress/element';
-import { media } from '@wordpress/icons';
+import { stack } from '@wordpress/icons';
 import { applyFilters } from '@wordpress/hooks';
 import IconImageBlock from '../pb-helpers/IconImageBlock';
 import './editor.scss';
 
-export default function Edit({ attributes, setAttributes, context }) {
+export default function Edit({ attributes, setAttributes, context, clientId }) {
 	const {
 		id, src, sizes, alt, title, caption, width, height,
 		enableLightbox, showCaptionInLightbox,
-		dropshadow, enableDownload, downloadOnHover,
+		dropshadow, enableDownload, downloadOnHover, preview
 	} = attributes;
+
+	// Block Preview Image
+	if (preview) {
+		return (
+			<div className="pb-block-preview">
+				<IconImageBlock />
+			</div>
+		);
+	}
+
+	// Back-compat normalization: unify enableLightbox vs lightbox; showCaptionInLightbox vs lightboxCaption
+	const lightbox = (attributes.lightbox ?? enableLightbox) || false;
+	const lightboxCaption = (attributes.lightboxCaption ?? showCaptionInLightbox) || false;
 
 	const {
 		'folioBlocks/enableDownload': contextEnableDownload = enableDownload,
 		'folioBlocks/downloadOnHover': contextDownloadOnHover = downloadOnHover,
 	} = context || {};
 
+	const checkoutUrl = window.folioBlocksData?.checkoutUrl || 'https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks&utm_medium=image-block&utm_campaign=upgrade';
 	const isInsideGallery = Object.keys(context || {}).some((key) => key.startsWith('folioBlocks/'));
-	const imageSize = context['folioBlocks/resolution'] || 'large';
+	const imageSizeAttr = attributes.imageSize || 'large';
+	const effectiveResolution = isInsideGallery
+		? (context['folioBlocks/resolution'] || imageSizeAttr)
+		: imageSizeAttr;
+
 
 	const imageStyle = {
 		borderColor: isInsideGallery ? context['folioBlocks/borderColor'] || '#ffffff' : attributes.borderColor || '#ffffff',
@@ -53,13 +75,58 @@ export default function Edit({ attributes, setAttributes, context }) {
 	};
 
 	const effectiveDropShadow = isInsideGallery ? context['folioBlocks/dropShadow'] : dropshadow;
-	const effectiveHoverTitle = isInsideGallery ? context['folioBlocks/onHoverTitle'] : attributes.showTitleOnHover;
+
+	const ctxHoverStyle = context?.['folioBlocks/onHoverStyle'];
+	const effectiveOnHoverStyle = ctxHoverStyle ?? attributes.onHoverStyle ?? 'fade-overlay';
+	const effectiveHoverTitle = isInsideGallery
+		? (context['folioBlocks/onHoverTitle'] ?? false)
+		: (attributes.showTitleOnHover ?? attributes.hoverTitle ?? attributes.onHoverTitle ?? false);
+
+	// Compute overlay state and matching CSS class for the chosen variant
+	const overlayEnabled =
+		(context?.['folioBlocks/onHoverTitle'] ?? attributes.onHoverTitle ?? effectiveHoverTitle) === true;
+
+	const hoverClassMap = {
+		'blur-overlay': 'pb-hover-blur-overlay',
+		'fade-overlay': 'pb-hover-fade-overlay',
+		'gradient-bottom': 'pb-hover-gradient-bottom',
+		'chip': 'pb-hover-chip',
+	};
+	const hoverVariantClass = hoverClassMap[effectiveOnHoverStyle] || 'pb-hover-fade-overlay';
+
 	const effectiveDownloadEnabled = isInsideGallery ? contextEnableDownload : enableDownload;
 	const effectiveDownloadOnHover = isInsideGallery ? contextDownloadOnHover : downloadOnHover;
 
-	const hasWooCommerce = context['folioBlocks/hasWooCommerce'] || false;
-	const enableWooCommerce = context['folioBlocks/enableWooCommerce'] || false;
+	// WooCommerce state (context when inside a gallery, runtime when standalone)
+	const hasWooCommerce = (context?.['folioBlocks/hasWooCommerce'] ?? (window.folioBlocksData?.hasWooCommerce ?? false));
+	const enableWooCommerce = (context?.['folioBlocks/enableWooCommerce'] ?? !!attributes.enableWooCommerce);
 	const effectiveWooActive = hasWooCommerce && enableWooCommerce;
+	// Alias used by premium controls (keep naming consistent with other galleries)
+	const effectiveEnableWoo = effectiveWooActive;
+
+	// Runtime override: keep hasWooCommerce attribute synced to environment (without mutating other Woo settings)
+	useEffect(() => {
+		const wooActive = window.folioBlocksData?.hasWooCommerce ?? false;
+		if (wooActive !== attributes.hasWooCommerce) {
+			setAttributes({ hasWooCommerce: wooActive });
+		}
+	}, [window.folioBlocksData?.hasWooCommerce]);
+	// Show panel if (A) we're standalone (so Download + Woo controls can render)
+	// OR (B) Woo is effectively active (so the product link control can render)
+	const showECommercePanel = (!isInsideGallery) || !!effectiveWooActive;
+
+	// Migrate legacy keys to new ones (non-destructive, only when new keys are undefined)
+	useEffect(() => {
+		if (enableLightbox !== undefined && attributes.lightbox === undefined) {
+			setAttributes({ lightbox: !!enableLightbox });
+		}
+	}, [enableLightbox]);
+
+	useEffect(() => {
+		if (showCaptionInLightbox !== undefined && attributes.lightboxCaption === undefined) {
+			setAttributes({ lightboxCaption: !!showCaptionInLightbox });
+		}
+	}, [showCaptionInLightbox]);
 
 	const filterCategories = context['folioBlocks/filterCategories'] || [];
 	const activeFilter = context?.['folioBlocks/activeFilter'] || 'All';
@@ -74,16 +141,24 @@ export default function Edit({ attributes, setAttributes, context }) {
 	const carouselHeight = context['folioBlocks/carouselHeight'] || 400;
 	const displayHeight = carouselHeight;
 
-	useEffect(() => {
-		setAttributes({ imageSize });
+	// Detect: in Image Row but NOT inside Image Stack
+	const { isInImageRow, isInImageStack } = useSelect((select) => {
+		const { getBlockParents, getBlockName } = select('core/block-editor');
+		const parents = getBlockParents(clientId, true) || [];
+		const names = parents.map((id) => getBlockName(id));
+		return {
+			isInImageRow: names.includes('folioblocks/pb-image-row'),
+			isInImageStack: names.includes('folioblocks/pb-image-stack'),
+		};
+	}, [clientId]);
 
-		if (sizes && sizes[imageSize] && sizes[imageSize].url) {
-			setAttributes({
-				src: sizes[imageSize].url,
-				imageSize: imageSize,
-			});
+	useEffect(() => {
+		if (!sizes) return;
+		const nextUrl = sizes[effectiveResolution]?.url;
+		if (nextUrl && nextUrl !== src) {
+			setAttributes({ src: nextUrl });
 		}
-	}, [imageSize, sizes]);
+	}, [effectiveResolution, sizes, src, setAttributes]);
 
 	const onSelectImage = (media) => {
 		if (!media?.id) return;
@@ -104,7 +179,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 		});
 	};
 
-	const selectedSrc = sizes?.[imageSize]?.url || src || '';
+	const selectedSrc = sizes?.[effectiveResolution]?.url || src || '';
 
 	return (
 		<>
@@ -117,7 +192,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 							value={id}
 							render={({ open }) => (
 								<ToolbarButton
-									icon={media}
+									icon={IconImageBlock}
 									label={__('Replace Image', 'folioblocks')}
 									onClick={open}
 								>
@@ -127,12 +202,29 @@ export default function Edit({ attributes, setAttributes, context }) {
 						/>
 					</ToolbarGroup>
 				)}
+				{isInImageRow && !isInImageStack && (
+					<ToolbarGroup>
+						<ToolbarButton
+							icon={stack}
+							onClick={() => {
+								window.dispatchEvent(
+									new CustomEvent('folioblocks:add-to-image-stack', {
+										detail: { clientId },
+									})
+								);
+							}}
+							label={__('Add to Image Stack', 'folioblocks')}
+						>
+							{__('Add to Image Stack', 'folioblocks')}
+						</ToolbarButton>
+					</ToolbarGroup>
+				)}
 			</BlockControls>
 			<InspectorControls>
-				<PanelBody title={__('Image Settings', 'folioblocks')} initialOpen={true}>
+				<PanelBody title={__('Image Block Settings', 'folioblocks')} initialOpen={true}>
 					{id && src && (
-						<div style={{ marginBottom: '16px' }}>
-							<div className="pb-img-thumbnail-preview">
+						<div style={{ marginBottom: '15px' }}>
+							<div className="pb-imgage-block-thumbnail-preview">
 								<img src={selectedSrc} alt={title || ''} />
 							</div>
 							<MediaUpload
@@ -149,9 +241,31 @@ export default function Edit({ attributes, setAttributes, context }) {
 							/>
 						</div>
 					)}
-
-					<hr style={{ border: '0.5px solid #e0e0e0', margin: '12px 0' }} />
-
+					{!isInsideGallery && (
+						<SelectControl
+							label={__('Resolution', 'folioblocks')}
+							value={attributes.imageSize || 'large'}
+							options={[
+								{ label: __('Thumbnail', 'folioblocks'), value: 'thumbnail' },
+								{ label: __('Medium', 'folioblocks'), value: 'medium' },
+								{ label: __('Large', 'folioblocks'), value: 'large' },
+								{ label: __('Full', 'folioblocks'), value: 'full' },
+							].filter((option) => {
+								const available = sizes ? Object.keys(sizes) : [];
+								return available.includes(option.value) || option.value === 'full';
+							})}
+							onChange={(newSize) => {
+								setAttributes({ imageSize: newSize });
+								const nextUrl = sizes?.[newSize]?.url;
+								if (nextUrl && nextUrl !== src) {
+									setAttributes({ src: nextUrl });
+								}
+							}}
+							__nextHasNoMarginBottom
+							__next40pxDefaultSize
+							help={__('Select the size of the source image.')}
+						/>
+					)}
 					<TextareaControl
 						label={__('Image Caption', 'folioblocks')}
 						value={caption}
@@ -176,18 +290,130 @@ export default function Edit({ attributes, setAttributes, context }) {
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
-					{applyFilters(
-						'folioBlocks.imageBlock.wooProductLinkControl',
-						null,
-						{ attributes, setAttributes, effectiveWooActive }
-					)}
-					{applyFilters(
-						'folioBlocks.imageBlock.filterCategoryControl',
-						null,
-						{ attributes, setAttributes, filterCategories }
-					)}
 				</PanelBody>
+				{!isInsideGallery && (
+					<>
+						<PanelBody title={__('Lightbox & Hover Settings', 'folioblocks')} initialOpen={true}>
+							{applyFilters(
+								'folioBlocks.imageBlock.lightboxControls',
+								(
+									<>
+										<ToggleControl
+											label={__('Enable Lightbox', 'folioblocks')}
+											checked={!!lightbox}
+											onChange={(newLightbox) => setAttributes({ lightbox: newLightbox, enableLightbox: newLightbox })}
+											__nextHasNoMarginBottom
+											help={__('Open images in a lightbox when clicked.', 'folioblocks')}
+										/>
+									</>
+								),
+								{ attributes, setAttributes }
+							)}
+							{applyFilters(
+								'folioBlocks.imageBlock.onHoverTitleToggle',
+								(
+									<div style={{ marginBottom: '8px' }}>
+										<Notice status="info" isDismissible={false}>
+											<strong>{__('Show Image Title on Hover', 'folioblocks')}</strong><br />
+											{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
+											<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+												{__('Upgrade to Pro', 'folioblocks')}
+											</a>
+										</Notice>
+									</div>
+								),
+								{ attributes, setAttributes }
+							)}
+						</PanelBody>
+					</>
+				)}
+				{applyFilters(
+					'folioBlocks.imageBlock.filterCategoryControl',
+					null,
+					{ attributes, setAttributes, filterCategories, context, isInsideGallery }
+				)}
+
+				{showECommercePanel && (
+					<PanelBody title={__('E-Commerce Settings', 'folioblocks')} initialOpen={true}>
+						{!isInsideGallery && (
+							<>
+								{applyFilters(
+									'folioBlocks.imageBlock.downloadControls',
+									(
+										<div style={{ marginBottom: '8px' }}>
+											<Notice status="info" isDismissible={false}>
+												<strong>{__('Enable Image Downloads', 'folioblocks')}</strong><br />
+												{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
+												<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+													{__('Upgrade to Pro', 'folioblocks')}
+												</a>
+											</Notice>
+										</div>
+									),
+									{ attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
+								)}
+
+								{window.folioBlocksData?.hasWooCommerce && applyFilters(
+									'folioBlocks.imageBlock.wooCommerceControls',
+									(
+										<div style={{ marginBottom: '8px' }}>
+											<Notice status="info" isDismissible={false}>
+												<strong>{__('Enable Woo Commerce', 'folioblocks')}</strong><br />
+												{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
+												<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+													{__('Upgrade to Pro', 'folioblocks')}
+												</a>
+											</Notice>
+										</div>
+									),
+									{ attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
+								)}
+							</>
+						)}
+
+						{applyFilters(
+							'folioBlocks.imageBlock.wooProductLinkControl',
+							null,
+							{ attributes, setAttributes, effectiveWooActive }
+						)}
+					</PanelBody>
+				)}
+
 			</InspectorControls>
+			{!isInsideGallery && (
+				<InspectorControls group="advanced">
+					{applyFilters(
+						'folioBlocks.imageBlock.disableRightClickToggle',
+						(
+							<div style={{ marginBottom: '8px' }}>
+								<Notice status="info" isDismissible={false}>
+									<strong>{__('Disable Right-Click', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'folioblocks')}
+									</a>
+								</Notice>
+							</div>
+						),
+						{ attributes, setAttributes }
+					)}
+					{applyFilters(
+						'folioBlocks.imageBlock.lazyLoadToggle',
+						(
+							<div style={{ marginBottom: '8px' }}>
+								<Notice status="info" isDismissible={false}>
+									<strong>{__('Enable Lazy Load of Images', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'folioblocks')}
+									</a>
+								</Notice>
+							</div>
+						),
+						{ attributes, setAttributes }
+					)}
+				</InspectorControls>
+			)}
 			{applyFilters(
 				'folioBlocks.imageBlock.styleControls',
 				null,
@@ -197,70 +423,68 @@ export default function Edit({ attributes, setAttributes, context }) {
 				ref={wrapperRef}
 				className={`pb-image-block-wrapper${isHidden ? ' is-hidden' : ''}`}
 			>
-				<figure
-					{...useBlockProps({
-						className: `
-							pb-image-block
-							${effectiveHoverTitle ? 'title-hover' : ''}
-							${effectiveDropShadow ? 'dropshadow' : ''}
-							${enableDownload ? 'has-download' : ''}
-							`,
-					})}
-					style={
-						context['folioBlocks/inCarousel']
-							? {
-								height: `${displayHeight}px`,
-
-							}
-							: undefined
-					}
-				>
-					{!src ? (
-						<MediaPlaceholder
-							icon={<IconImageBlock/>}
-							labels={{ title: __('Select Image', 'folioblocks') }}
-							onSelect={onSelectImage}
-							allowedTypes={['image']}
-							multiple={false}
-						/>
-					) : (
-						<>
-							<img
-								src={selectedSrc}
-								alt={alt}
-								width={width}
-								height={height}
-								className="pb-image-block-img"
-								style={imageStyle}
+				<div {...useBlockProps()}>
+					<figure
+						className={[
+							'pb-image-block',
+							overlayEnabled ? hoverVariantClass : '',
+							effectiveDropShadow ? 'dropshadow' : '',
+							enableDownload ? 'has-download' : '',
+						].filter(Boolean).join(' ')}
+						style={
+							context['folioBlocks/inCarousel']
+								? { ...imageStyle, height: `${displayHeight}px` }
+								: imageStyle
+						}
+					>
+						{!src ? (
+							<MediaPlaceholder
+								icon={<IconImageBlock />}
+								labels={{ title: __('Select Image', 'folioblocks') }}
+								onSelect={onSelectImage}
+								allowedTypes={['image']}
+								multiple={false}
 							/>
-							{effectiveHoverTitle && (
-								(Number(attributes.wooProductId) > 0 ||
-									(title && title.trim() !== '')) && (
-									<figcaption className="pb-image-block-title" style={captionStyle}>
-										{(() => {
-											const hoverContent = applyFilters(
-												'folioBlocks.imageBlock.hoverOverlayContent',
-												null,
-												{ attributes, setAttributes, effectiveWooActive, context, title }
-											);
-											return hoverContent || title;
-										})()}
-									</figcaption>
-								)
-							)}
-							{applyFilters(
-								'folioBlocks.imageBlock.downloadButton',
-								null,
-								{ attributes, setAttributes, effectiveDownloadEnabled, effectiveDownloadOnHover, sizes, src, context, isInsideGallery }
-							)}
-							{applyFilters(
-								'folioBlocks.imageBlock.addToCartButton',
-								null,
-								{ attributes, setAttributes, effectiveWooActive, context, isInsideGallery }
-							)}
-						</>
-					)}
-				</figure>
+						) : (
+							<>
+								<img
+									src={selectedSrc}
+									alt={alt}
+									width={width}
+									height={height}
+									className="pb-image-block-img"
+								/>
+								{effectiveHoverTitle && (
+									(Number(attributes.wooProductId) > 0 ||
+										(title && title.trim() !== '')) && (
+										<div className="pb-image-block-title-container">
+											<figcaption className="pb-image-block-title">
+												{(() => {
+													const hoverContent = applyFilters(
+														'folioBlocks.imageBlock.hoverOverlayContent',
+														null,
+														{ attributes, setAttributes, effectiveWooActive, context, title }
+													);
+													return hoverContent || title;
+												})()}
+											</figcaption>
+										</div>
+									)
+								)}
+								{applyFilters(
+									'folioBlocks.imageBlock.downloadButton',
+									null,
+									{ attributes, setAttributes, effectiveDownloadEnabled, effectiveDownloadOnHover, sizes, src, context, isInsideGallery }
+								)}
+								{applyFilters(
+									'folioBlocks.imageBlock.addToCartButton',
+									null,
+									{ attributes, setAttributes, effectiveWooActive, context, isInsideGallery }
+								)}
+							</>
+						)}
+					</figure>
+				</div>
 			</div>
 		</>
 	);

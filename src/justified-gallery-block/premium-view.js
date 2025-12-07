@@ -40,7 +40,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            requestAnimationFrame(() => calculateLayout());
+            requestAnimationFrame(() => {
+                if (typeof window.folioBlocksJustifiedLayout === 'function') {
+                    window.folioBlocksJustifiedLayout(container);
+                } else {
+                    // Fallback: let view.js listen for this event
+                    container.dispatchEvent(new CustomEvent('pb:justified:reflow', { bubbles: true }));
+                }
+            });
         });
     };
     window.addEventListener('load', () => {

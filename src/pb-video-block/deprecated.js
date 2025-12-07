@@ -39,6 +39,7 @@ const legacyAttributes = {
  * This MUST be loaded alongside the new block registration.
  */
 registerBlockType('portfolio-blocks/pb-video-block', {
+	apiVersion: 3,
 	title: 'PB Video Block (Legacy)',
 	category: 'widgets',
 	attributes: legacyAttributes,

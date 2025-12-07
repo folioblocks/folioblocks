@@ -264,6 +264,21 @@ addFilter(
                         help={__('Choose what appears when hovering over images.', 'folioblocks')}
                     />
                 )}
+                {onHoverTitle && (
+                    <SelectControl
+                        label={__('Hover Style', 'folioblocks')}
+                        value={attributes.onHoverStyle || 'fade-overlay'}
+                        options={[
+                            { label: __('Blur Overlay (centered)', 'folioblocks'), value: 'blur-overlay' },
+                            { label: __('Fade Overlay (centered)', 'folioblocks'), value: 'fade-overlay' },
+                            { label: __('Gradient Bottom (slide-up)', 'folioblocks'), value: 'gradient-bottom' },
+                            { label: __('Chip (top-left label)', 'folioblocks'), value: 'chip' },
+                        ]}
+                        onChange={(v) => setAttributes({ onHoverStyle: v })}
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize
+                    />
+                )}
             </>
         );
     }

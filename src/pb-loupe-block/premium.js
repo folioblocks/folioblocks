@@ -1,5 +1,6 @@
 import { addFilter } from '@wordpress/hooks';
 import {
+    ToggleControl,
     SelectControl,
     __experimentalToggleGroupControl as ToggleGroupControl,
     __experimentalToggleGroupControlOption as ToggleGroupControlOption,

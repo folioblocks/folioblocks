@@ -16,14 +16,19 @@
 	svg { width: 100px; height: 100px; stroke: #fff; fill: #fff; }
 }
 
-.pb-img-thumbnail-preview {
-	width: 60%;
+.pb-loupe-img-thumbnail-preview {
+	max-width: 100px;
+	max-height: 100px;
 	margin: 0 auto;
 	display: block;
 
 	img {
-		width: 100%;
-		height: auto;
-		display: block;
-	}
+    	max-width: 100px;
+    	max-height: 100px;
+    	width: auto;
+    	height: auto;
+    	object-fit: contain;
+    	display: block;
+		margin: 0 auto;
+  	}
 }

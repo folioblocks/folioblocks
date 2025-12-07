@@ -12,16 +12,16 @@
         "preview": true
     }
 },
-"parent": [
-		"folioblocks/video-gallery-block"
-	],
 "supports": {
-	"inserter": false,
+	"inserter": true,
 	"align": [ "wide", "full" ],
-	"html": false,
-	"reusable": false
+	"anchor": false,
+	"ariaLabel": true,
+	"html": false, 
+	"customClassName": false
 },
 "attributes": {
+	"preview": { "type": "boolean", "default": false },
 	"videoUrl": { "type": "string", "default": "" },
 	"thumbnail": { "type": "string", "default": "" },
 	"title": { "type": "string", "default": "" },
@@ -37,7 +37,10 @@
 	"borderColor": { "type": "string", "default": "#ffffff" }, 
 	"dropShadow": { "type": "boolean", "default": false }, 
 	"lazyLoad": { "type": "boolean", "default": false }, 
+	"disableRightClick": { "type": "boolean", "default": false },
+	"lightbox":        { "type": "boolean", "default": false },
 	"lightboxLayout": { "type": "string", "default": "video-only" }, 
+	"enableWooCommerce": { "type": "boolean", "default": false },
 	"wooProductId": { "type": "number", "default": 0 },
 	"wooProductName": { "type": "string", "default": ""},
 	"wooProductPrice": { "type": "string", "default": "" },

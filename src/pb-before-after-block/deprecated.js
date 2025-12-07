@@ -30,6 +30,7 @@ const legacyAttributes = {
  * This MUST be loaded alongside the new block registration.
  */
 registerBlockType('portfolio-blocks/before-after-block', {
+	apiVersion: 3,
 	title: 'Before & After (Legacy)',
 	category: 'widgets',
 	attributes: legacyAttributes,

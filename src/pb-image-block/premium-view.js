@@ -4,6 +4,12 @@
  **/
 document.addEventListener('DOMContentLoaded', () => {
 
+    // Add Disable -Right-Click
+    document.addEventListener('contextmenu', (e) => {
+        const el = e.target.closest('[data-disable-right-click]');
+        if (el) e.preventDefault();
+    }, { capture: true });
+
     // Add randomizer to galleries
     const galleries = document.querySelectorAll(".pb-randomized");
     galleries.forEach((wrapper) => {

@@ -79,6 +79,8 @@ export default function Edit({ clientId, attributes, setAttributes }) {
     });
 
     const galleryRef = useRef(null);
+    const layoutRafRef = useRef(null);
+    const itemResizeObserverRef = useRef(null);
     const { replaceInnerBlocks, updateBlockAttributes } = useDispatch('core/block-editor');
 
     const innerBlocks = useSelect(
@@ -90,6 +92,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
         { ref: galleryRef, className: `${blockProps.className} pb-masonry-gallery` },
         {
             allowedBlocks: ALLOWED_BLOCKS,
+            orientation: 'horizontal',
             renderAppender: false,
         }
     );
@@ -186,28 +189,35 @@ export default function Edit({ clientId, attributes, setAttributes }) {
         const gap = attributes.noGap ? 0 : 10;
         const columns = getColumnsForWidth(gallery.offsetWidth);
         const columnHeights = Array(columns).fill(0);
-        const columnWidth = (gallery.offsetWidth - gap * (columns - 1)) / columns;
+
+        // Use rounded column width like front-end
+        const columnWidth = Math.round((gallery.offsetWidth - gap * (columns - 1)) / columns);
 
         gallery.style.position = 'relative';
 
-        // Reset all layout styles first
-        gallery.querySelectorAll('.pb-image-block-wrapper').forEach(item => {
+        // Reset styles
+        gallery.querySelectorAll('.pb-image-block-wrapper').forEach((item) => {
             item.style.position = '';
             item.style.top = '';
             item.style.left = '';
             item.style.width = '';
         });
-        const items = gallery.querySelectorAll('.pb-image-block-wrapper:not(.is-hidden)');
 
+        const items = gallery.querySelectorAll('.pb-image-block-wrapper:not(.is-hidden)');
         items.forEach((item) => {
             const minCol = columnHeights.indexOf(Math.min(...columnHeights));
 
+            // Position with rounding like front-end
             item.style.position = 'absolute';
             item.style.width = `${columnWidth}px`;
-            item.style.top = `${columnHeights[minCol]}px`;
-            item.style.left = `${(columnWidth + gap) * minCol}px`;
+            item.style.top = `${Math.round(columnHeights[minCol])}px`;
+            item.style.left = `${Math.round((columnWidth + gap) * minCol)}px`;
 
-            columnHeights[minCol] += item.offsetHeight + gap;
+            // Include computed margin-bottom like front-end
+            const style = window.getComputedStyle(item);
+            const marginBottom = parseFloat(style.marginBottom) || 0;
+
+            columnHeights[minCol] += item.offsetHeight + gap + marginBottom;
         });
 
         gallery.style.height = `${Math.max(...columnHeights)}px`;
@@ -221,13 +231,20 @@ export default function Edit({ clientId, attributes, setAttributes }) {
         const gallery = galleryRef.current;
         if (!gallery || innerBlocks.length === 0) return;
 
+        const scheduleLayout = () => {
+            if (layoutRafRef.current) cancelAnimationFrame(layoutRafRef.current);
+            layoutRafRef.current = requestAnimationFrame(() => {
+                applyCustomMasonryLayout();
+            });
+        };
+
         const images = gallery.querySelectorAll('img');
         let loadedImages = 0;
 
         const imageLoaded = () => {
             loadedImages += 1;
             if (loadedImages === images.length) {
-                applyCustomMasonryLayout();
+                scheduleLayout();
             }
         };
 
@@ -236,19 +253,35 @@ export default function Edit({ clientId, attributes, setAttributes }) {
             else img.onload = img.onerror = imageLoaded;
         });
 
-        const fallbackTimeout = setTimeout(applyCustomMasonryLayout, 1000);
+        const fallbackTimeout = setTimeout(scheduleLayout, 1000);
 
         const resizeObserver = new ResizeObserver(() => {
-            applyCustomMasonryLayout();
+            scheduleLayout();
         });
+
+        // Observe individual items so border/shadow/style changes reflow the masonry
+        const itemObserver = new ResizeObserver(() => {
+            scheduleLayout();
+        });
+        itemResizeObserverRef.current = itemObserver;
+        const itemsForObserver = gallery.querySelectorAll('.pb-image-block-wrapper');
+        itemsForObserver.forEach((el) => itemObserver.observe(el));
 
         resizeObserver.observe(gallery);
 
-        window.addEventListener('resize', applyCustomMasonryLayout);
+        window.addEventListener('resize', scheduleLayout);
 
         return () => {
             clearTimeout(fallbackTimeout);
-            window.removeEventListener('resize', applyCustomMasonryLayout);
+            if (layoutRafRef.current) {
+                cancelAnimationFrame(layoutRafRef.current);
+                layoutRafRef.current = null;
+            }
+            if (itemResizeObserverRef.current) {
+                itemResizeObserverRef.current.disconnect();
+                itemResizeObserverRef.current = null;
+            }
+            window.removeEventListener('resize', scheduleLayout);
             resizeObserver.disconnect(); // ✅ Cleanup observer on unmount
         };
     }, [innerBlocks, attributes.noGap, attributes.columns, attributes.tabletColumns, attributes.mobileColumns]);
@@ -282,7 +315,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
                 </ToolbarGroup>
             </BlockControls>
             <InspectorControls>
-                <PanelBody title={__('General Gallery Settings', 'folioblocks')} initialOpen={true}>
+                <PanelBody title={__('Masonry Gallery Settings', 'folioblocks')} initialOpen={true}>
                     <SelectControl
                         label={__('Resolution', 'folioblocks')}
                         value={attributes.resolution || 'large'}
@@ -344,68 +377,8 @@ export default function Edit({ clientId, attributes, setAttributes }) {
                         ),
                         { attributes, setAttributes }
                     )}
-                    {applyFilters(
-                        'folioBlocks.masonryGallery.downloadControls',
-                        (
-                            <div style={{ marginBottom: '8px' }}>
-                                <Notice status="info" isDismissible={false}>
-                                    <strong>{__('Enable Image Downloads', 'folioblocks')}</strong><br />
-                                    {__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-                                    <a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-                                        {__('Upgrade to Pro', 'folioblocks')}
-                                    </a>
-                                </Notice>
-                            </div>
-                        ),
-                        { attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
-                    )}
-                    {window.folioBlocksData?.hasWooCommerce && applyFilters(
-                        'folioBlocks.masonryGallery.wooCommerceControls',
-                        (
-                            <div style={{ marginBottom: '8px' }}>
-                                <Notice status="info" isDismissible={false}>
-                                    <strong>{__('Enable Woo Commerce', 'folioblocks')}</strong><br />
-                                    {__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-                                    <a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-                                        {__('Upgrade to Pro', 'folioblocks')}
-                                    </a>
-                                </Notice>
-                            </div>
-                        ),
-                        { attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
-                    )}
-                    {applyFilters(
-                        'folioBlocks.masonryGallery.disableRightClickToggle',
-                        (
-                            <div style={{ marginBottom: '8px' }}>
-                                <Notice status="info" isDismissible={false}>
-                                    <strong>{__('Disable Right-Click', 'folioblocks')}</strong><br />
-                                    {__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-                                    <a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-                                        {__('Upgrade to Pro', 'folioblocks')}
-                                    </a>
-                                </Notice>
-                            </div>
-                        ),
-                        { attributes, setAttributes }
-                    )}
-                    {applyFilters(
-                        'folioBlocks.masonryGallery.lazyLoadToggle',
-                        (
-                            <div style={{ marginBottom: '8px' }}>
-                                <Notice status="info" isDismissible={false}>
-                                    <strong>{__('Enable Lazy Load of Images', 'folioblocks')}</strong><br />
-                                    {__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-                                    <a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-                                        {__('Upgrade to Pro', 'folioblocks')}
-                                    </a>
-                                </Notice>
-                            </div>
-                        ),
-                        { attributes, setAttributes }
-                    )}
                 </PanelBody>
-                <PanelBody title={__('Gallery Image Settings', 'folioblocks')} initialOpen={true}>
+                <PanelBody title={__('Lightbox & Hover Settings', 'folioblocks')} initialOpen={true}>
                     {applyFilters(
                         'folioBlocks.masonryGallery.lightboxControls',
                         (
@@ -437,7 +410,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
                         { attributes, setAttributes }
                     )}
                 </PanelBody>
-                <PanelBody title={__('Gallery Filter Settings', 'folioblocks')} initialOpen={true}>
+                <PanelBody title={__('Gallery Filtering Settings', 'folioblocks')} initialOpen={true}>
                     {applyFilters(
                         'folioBlocks.masonryGallery.enableFilterToggle',
                         (
@@ -454,7 +427,71 @@ export default function Edit({ clientId, attributes, setAttributes }) {
                         { attributes, setAttributes }
                     )}
                 </PanelBody>
+                <PanelBody title={__('E-Commerce Settings', 'folioblocks')} initialOpen={true}>
+                    {applyFilters(
+                        'folioBlocks.masonryGallery.downloadControls',
+                        (
+                            <div style={{ marginBottom: '8px' }}>
+                                <Notice status="info" isDismissible={false}>
+                                    <strong>{__('Enable Image Downloads', 'folioblocks')}</strong><br />
+                                    {__('This is a premium feature. Unlock all features: ', 'folioblocks')}
+                                    <a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+                                        {__('Upgrade to Pro', 'folioblocks')}
+                                    </a>
+                                </Notice>
+                            </div>
+                        ),
+                        { attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
+                    )}
+                    {window.folioBlocksData?.hasWooCommerce && applyFilters(
+                        'folioBlocks.masonryGallery.wooCommerceControls',
+                        (
+                            <div style={{ marginBottom: '8px' }}>
+                                <Notice status="info" isDismissible={false}>
+                                    <strong>{__('Enable Woo Commerce', 'folioblocks')}</strong><br />
+                                    {__('This is a premium feature. Unlock all features: ', 'folioblocks')}
+                                    <a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+                                        {__('Upgrade to Pro', 'folioblocks')}
+                                    </a>
+                                </Notice>
+                            </div>
+                        ),
+                        { attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
+                    )}
+                </PanelBody>
             </InspectorControls >
+            <InspectorControls group="advanced">
+                {applyFilters(
+                    'folioBlocks.masonryGallery.disableRightClickToggle',
+                    (
+                        <div style={{ marginBottom: '8px' }}>
+                            <Notice status="info" isDismissible={false}>
+                                <strong>{__('Disable Right-Click', 'folioblocks')}</strong><br />
+                                {__('This is a premium feature. Unlock all features: ', 'folioblocks')}
+                                <a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+                                    {__('Upgrade to Pro', 'folioblocks')}
+                                </a>
+                            </Notice>
+                        </div>
+                    ),
+                    { attributes, setAttributes }
+                )}
+                {applyFilters(
+                    'folioBlocks.masonryGallery.lazyLoadToggle',
+                    (
+                        <div style={{ marginBottom: '8px' }}>
+                            <Notice status="info" isDismissible={false}>
+                                <strong>{__('Enable Lazy Load of Images', 'folioblocks')}</strong><br />
+                                {__('This is a premium feature. Unlock all features: ', 'folioblocks')}
+                                <a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+                                    {__('Upgrade to Pro', 'folioblocks')}
+                                </a>
+                            </Notice>
+                        </div>
+                    ),
+                    { attributes, setAttributes }
+                )}
+            </InspectorControls>
             <InspectorControls group="styles">
                 <PanelBody title={__('Gallery Image Styles', 'folioblocks')} initialOpen={true}>
                     {applyFilters(
@@ -537,11 +574,11 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 
             <div {...blockProps} className={`${blockProps.className} ${attributes.dropShadow ? 'drop-shadow' : ''}`}>
                 {isLoading && (
-					<div className="pb-spinner-wrapper">
-						<IconPBSpinner />
-					</div>
-				)}
-				{!isLoading && innerBlocks.length === 0 ? (
+                    <div className="pb-spinner-wrapper">
+                        <IconPBSpinner />
+                    </div>
+                )}
+                {!isLoading && innerBlocks.length === 0 ? (
                     <MediaPlaceholder
                         icon={<IconMasonryGallery />}
                         labels={{

@@ -13,11 +13,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	let resizeTimeout;
 
-	const calculateLayout = () => {
-		const containerWidth = container.clientWidth - 1;
+	const calculateLayout = (targetContainer = container) => {
+		if (!(targetContainer instanceof Element)) {
+			targetContainer = container;
+		}
+		const containerWidth = targetContainer.clientWidth - 1;
 		if (!containerWidth) return;
 
-		const wrappers = container.querySelectorAll('.pb-image-block-wrapper:not(.is-hidden)');
+		const wrappers = targetContainer.querySelectorAll('.pb-image-block-wrapper:not(.is-hidden)');
 		const images = Array.from(wrappers).map((wrapper) => {
 			const img = wrapper.querySelector('img');
 			const width = parseInt(img.getAttribute('width')) || 1;
@@ -58,39 +61,50 @@ document.addEventListener('DOMContentLoaded', () => {
 				const finalHeight = Math.round(rowHeight * scale);
 				img.wrapper.style.setProperty('--pb-width', `${finalWidth}px`);
 				img.wrapper.style.setProperty('--pb-height', `${finalHeight}px`);
-				// Set the margin for each image in the row
-				row.forEach((img, index) => {
-					const isLast = index === row.length - 1;
-					const isFinalRowImage = isFinalRow && !noGap;
-					const isSingleImageRow = row.length === 1;
-					const isGalleryLastImage = row === rows[rows.length - 1] && index === row.length - 1;
-					const marginValue = (isLast || isGalleryLastImage || isFinalRowImage || isSingleImageRow) ? '0px' : `${gap}px`;
-					img.wrapper.style.setProperty('--pb-margin', marginValue);
-				});
+				const isLastInRow = index === row.length - 1;
+				const marginValue = (!isLastInRow && !noGap) ? `${gap}px` : '0px';
+				img.wrapper.style.setProperty('--pb-margin', marginValue);
 			});
 		});
 
-		if (wrapper) wrapper.classList.remove('is-loading');
+		const host = targetContainer.closest('.wp-block-folioblocks-justified-gallery-block');
+		if (host) host.classList.remove('is-loading');
 	};
+
+	// Expose a public reflow helper for premium-view.js (accepts either the gallery block or the inner .pb-justified-gallery)
+	window.folioBlocksJustifiedLayout = function (targetNode) {
+		let target = targetNode;
+		if (!target || !(target instanceof Element)) target = container;
+		if (target && !target.classList.contains('pb-justified-gallery')) {
+			target = target.querySelector?.('.pb-justified-gallery') || container;
+		}
+		if (!target) return;
+		requestAnimationFrame(() => calculateLayout(target));
+	};
+
+	// Also listen for an event-based reflow from premium-view.js
+	container.addEventListener('pb:justified:reflow', () => {
+		requestAnimationFrame(() => calculateLayout(container));
+	});
 
 	const handleResizeEnd = () => {
 		clearTimeout(resizeTimeout);
 		resizeTimeout = setTimeout(() => {
-			requestAnimationFrame(calculateLayout);
+			requestAnimationFrame(() => calculateLayout());
 		}, 150);
 	};
 
 	window.addEventListener('load', () => {
-		requestAnimationFrame(calculateLayout);
+		requestAnimationFrame(() => calculateLayout());
 	});
 
 	window.addEventListener('resize', () => {
-		requestAnimationFrame(calculateLayout);
+		requestAnimationFrame(() => calculateLayout());
 		handleResizeEnd();
 	});
 
 	setTimeout(() => {
-		requestAnimationFrame(calculateLayout);
+		requestAnimationFrame(() => calculateLayout());
 	}, 100);
 
 	// Sequential fade-in for justified gallery images

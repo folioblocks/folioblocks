@@ -7,9 +7,9 @@ import { useEffect, useRef } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { BlockControls, useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 import { createBlock } from '@wordpress/blocks';
-import { ToolbarGroup, ToolbarButton } from '@wordpress/components';
-import { plus } from '@wordpress/icons';
+import { ToolbarGroup, ToolbarButton, Icon } from '@wordpress/components';
 import { decodeEntities } from '@wordpress/html-entities';
+import IconImageBlock from '../pb-helpers/IconImageBlock';
 
 const ALLOWED_BLOCKS = ['folioblocks/pb-image-block'];
 
@@ -123,7 +123,7 @@ export default function Edit({ clientId, context }) {
 			<BlockControls>
 				<ToolbarGroup>
 					<ToolbarButton
-						icon={plus}
+						icon={IconImageBlock}
 						label={__('Add Image', 'folioblocks')}
 						onClick={addImageBlock}
 						disabled={innerBlocks.length >= MAX_IMAGES}

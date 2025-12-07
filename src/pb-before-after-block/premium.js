@@ -165,7 +165,7 @@ addFilter(
 
 		return (
 			<PanelColorSettings
-				title={__('Before & After Block Styles', 'folioblocks')}
+				title={__('Slider & Label Styles', 'folioblocks')}
 				initialOpen={true}
 				colorSettings={[
 					{

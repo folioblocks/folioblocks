@@ -170,10 +170,10 @@ export default function Edit({ attributes, setAttributes }) {
 				)}
 			</BlockControls>
 			<InspectorControls>
-				<PanelBody title={__('Block Settings', 'pb-loupe-block')} initialOpen={true}>
+				<PanelBody title={__('Loupe Block Settings', 'pb-loupe-block')} initialOpen={true}>
 					{id && resolution && (
 						<div style={{ marginBottom: '16px' }}>
-							<div className="pb-img-thumbnail-preview">
+							<div className="pb-loupe-img-thumbnail-preview">
 								<img src={url} alt={alt || ''} />
 							</div>
 							<MediaUpload
@@ -220,21 +220,6 @@ export default function Edit({ attributes, setAttributes }) {
 						__next40pxDefaultSize
 						help={__('Select the size of the source image.')}
 					/>
-					{applyFilters(
-						'folioBlocks.carouselGallery.disableRightClickToggle',
-						(
-							<div style={{ marginBottom: '8px' }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__('Disable Right-Click', 'folioblocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'folioblocks')}
-									</a>
-								</Notice>
-							</div>
-						),
-						{ attributes, setAttributes }
-					)}
 				</PanelBody>
 				<PanelBody title={__('Loupe Settings', 'pb-loupe-block')} initialOpen={true}>
 					<RangeControl
@@ -279,6 +264,23 @@ export default function Edit({ attributes, setAttributes }) {
 						{ attributes, setAttributes }
 					)}
 				</PanelBody>
+			</InspectorControls>
+			<InspectorControls group="advanced">
+					{applyFilters(
+						'folioBlocks.carouselGallery.disableRightClickToggle',
+						(
+							<div style={{ marginBottom: '8px' }}>
+								<Notice status="info" isDismissible={false}>
+									<strong>{__('Disable Right-Click', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'folioblocks')}
+									</a>
+								</Notice>
+							</div>
+						),
+						{ attributes, setAttributes }
+					)}
 			</InspectorControls>
 			<figure {...blockProps}>
 				<div

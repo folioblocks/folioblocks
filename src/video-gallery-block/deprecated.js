@@ -60,6 +60,7 @@ const legacyAttributes = {
  * This MUST be loaded alongside the new block registration.
  */
 registerBlockType('portfolio-blocks/video-gallery-block', {
+	apiVersion: 3,
 	title: 'Video Gallery (Legacy)',
 	category: 'widgets',
 	attributes: legacyAttributes,

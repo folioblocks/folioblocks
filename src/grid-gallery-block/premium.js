@@ -46,34 +46,34 @@ addFilter(
     }
 );
 addFilter(
-	'folioBlocks.gridGallery.editorEnhancements',
-	'folioblocks/grid-gallery-randomize',
-	(_, props = {}) => {
-		const { clientId, innerBlocks = [], attributes = {} } = props;
-		const { randomizeOrder } = attributes;
-		const ranOnce = useRef(false);
+    'folioBlocks.gridGallery.editorEnhancements',
+    'folioblocks/grid-gallery-randomize',
+    (_, props = {}) => {
+        const { clientId, innerBlocks = [], attributes = {} } = props;
+        const { randomizeOrder } = attributes;
+        const ranOnce = useRef(false);
 
-		useEffect(() => {
-			if (!randomizeOrder || innerBlocks.length === 0) return;
-			if (ranOnce.current) return; // already shuffled
-			ranOnce.current = true;
+        useEffect(() => {
+            if (!randomizeOrder || innerBlocks.length === 0) return;
+            if (ranOnce.current) return; // already shuffled
+            ranOnce.current = true;
 
-			const shuffled = [...innerBlocks];
-			for (let i = shuffled.length - 1; i > 0; i--) {
-				const j = Math.floor(Math.random() * (i + 1));
-				[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-			}
+            const shuffled = [...innerBlocks];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
 
-			wp.data.dispatch('core/block-editor').replaceInnerBlocks(clientId, shuffled, false);
-		}, [randomizeOrder]);
+            wp.data.dispatch('core/block-editor').replaceInnerBlocks(clientId, shuffled, false);
+        }, [randomizeOrder]);
 
-		// Reset when user toggles randomize off
-		useEffect(() => {
-			if (!randomizeOrder) ranOnce.current = false;
-		}, [randomizeOrder]);
+        // Reset when user toggles randomize off
+        useEffect(() => {
+            if (!randomizeOrder) ranOnce.current = false;
+        }, [randomizeOrder]);
 
-		return null;
-	}
+        return null;
+    }
 );
 addFilter(
     'folioBlocks.gridGallery.randomizeToggle',
@@ -322,59 +322,74 @@ addFilter(
                         help={__('Choose what appears when hovering over images.', 'folioblocks')}
                     />
                 )}
+                {onHoverTitle && (
+                    <SelectControl
+                        label={__('Hover Style', 'folioblocks')}
+                        value={attributes.onHoverStyle || 'fade-overlay'}
+                        options={[
+                            { label: __('Blur Overlay (centered)', 'folioblocks'), value: 'blur-overlay' },
+                            { label: __('Fade Overlay (centered)', 'folioblocks'), value: 'fade-overlay' },
+                            { label: __('Gradient Bottom (slide-up)', 'folioblocks'), value: 'gradient-bottom' },
+                            { label: __('Chip (top-left label)', 'folioblocks'), value: 'chip' },
+                        ]}
+                        onChange={(v) => setAttributes({ onHoverStyle: v })}
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize
+                    />
+                )}
             </>
         );
     }
 );
 addFilter(
-	'folioBlocks.gridGallery.filterLogic',
-	'folioblocks/grid-gallery-premium-filter-logic',
-	(_, { attributes, setAttributes, selectedBlock }) => {
-		const {
-			enableFilter = false,
-			filterAlign = 'center',
-			filtersInput = '',
-			activeFilter = 'All',
-		} = attributes;
+    'folioBlocks.gridGallery.filterLogic',
+    'folioblocks/grid-gallery-premium-filter-logic',
+    (_, { attributes, setAttributes, selectedBlock }) => {
+        const {
+            enableFilter = false,
+            filterAlign = 'center',
+            filtersInput = '',
+            activeFilter = 'All',
+        } = attributes;
 
-		// Derive categories from filtersInput
-		const filterCategories = filtersInput
-			.split(',')
-			.map((s) => s.trim())
-			.filter(Boolean);
+        // Derive categories from filtersInput
+        const filterCategories = filtersInput
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean);
 
-		// Sync derived categories
-		useEffect(() => {
-			setAttributes({ filterCategories });
-		}, [filtersInput]);
+        // Sync derived categories
+        useEffect(() => {
+            setAttributes({ filterCategories });
+        }, [filtersInput]);
 
-		// Reset activeFilter if selected block becomes hidden
-		useEffect(() => {
-			if (
-				selectedBlock &&
-				selectedBlock.name === 'folioblocks/pb-image-block'
-			) {
-				const selectedCategory = selectedBlock.attributes?.filterCategory || '';
-				const isFilteredOut =
-					activeFilter !== 'All' &&
-					selectedCategory.toLowerCase() !== activeFilter.toLowerCase();
+        // Reset activeFilter if selected block becomes hidden
+        useEffect(() => {
+            if (
+                selectedBlock &&
+                selectedBlock.name === 'folioblocks/pb-image-block'
+            ) {
+                const selectedCategory = selectedBlock.attributes?.filterCategory || '';
+                const isFilteredOut =
+                    activeFilter !== 'All' &&
+                    selectedCategory.toLowerCase() !== activeFilter.toLowerCase();
 
-				if (isFilteredOut) {
-					setAttributes({ activeFilter: 'All' });
-				}
-			}
-		}, [selectedBlock, activeFilter]);
+                if (isFilteredOut) {
+                    setAttributes({ activeFilter: 'All' });
+                }
+            }
+        }, [selectedBlock, activeFilter]);
 
-		// Keep these base filter attributes consistent
-		useEffect(() => {
-			if (attributes.enableFilter !== enableFilter)
-				setAttributes({ enableFilter });
-			if (attributes.filterAlign !== filterAlign)
-				setAttributes({ filterAlign });
-		}, [enableFilter, filterAlign]);
+        // Keep these base filter attributes consistent
+        useEffect(() => {
+            if (attributes.enableFilter !== enableFilter)
+                setAttributes({ enableFilter });
+            if (attributes.filterAlign !== filterAlign)
+                setAttributes({ filterAlign });
+        }, [enableFilter, filterAlign]);
 
-		return null;
-	}
+        return null;
+    }
 );
 addFilter(
     'folioBlocks.gridGallery.enableFilterToggle',
@@ -537,7 +552,7 @@ addFilter(
 
         return (
             <PanelColorSettings
-                title="Filter Bar Styles"
+                title="Gallery Filter Bar Styles"
                 colorSettings={[
                     {
                         label: 'Active - Text Color',
@@ -570,33 +585,33 @@ addFilter(
 );
 
 addFilter(
-	'folioBlocks.gridGallery.renderFilterBar',
-	'folioblocks/grid-gallery-premium-filter-bar',
-	(defaultContent, { attributes, setAttributes }) => {
-		const {
-			enableFilter = false,
-			activeFilter = 'All',
-			filterCategories = [],
-			filterAlign = 'center',
-		} = attributes;
+    'folioBlocks.gridGallery.renderFilterBar',
+    'folioblocks/grid-gallery-premium-filter-bar',
+    (defaultContent, { attributes, setAttributes }) => {
+        const {
+            enableFilter = false,
+            activeFilter = 'All',
+            filterCategories = [],
+            filterAlign = 'center',
+        } = attributes;
 
-		if (!enableFilter || !Array.isArray(filterCategories)) {
-			return defaultContent;
-		}
+        if (!enableFilter || !Array.isArray(filterCategories)) {
+            return defaultContent;
+        }
 
-		return (
-			<div className={`pb-image-gallery-filters align-${filterAlign}`}>
-				{['All', ...filterCategories].map((term) => (
-					<button
-						key={term}
-						className={`filter-button${activeFilter === term ? ' is-active' : ''}`}
-						onClick={() => setAttributes({ activeFilter: term })}
-						type="button"
-					>
-						{term}
-					</button>
-				))}
-			</div>
-		);
-	}
+        return (
+            <div className={`pb-image-gallery-filters align-${filterAlign}`}>
+                {['All', ...filterCategories].map((term) => (
+                    <button
+                        key={term}
+                        className={`filter-button${activeFilter === term ? ' is-active' : ''}`}
+                        onClick={() => setAttributes({ activeFilter: term })}
+                        type="button"
+                    >
+                        {term}
+                    </button>
+                ))}
+            </div>
+        );
+    }
 );

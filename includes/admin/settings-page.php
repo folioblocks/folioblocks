@@ -67,7 +67,7 @@ function fbks_render_settings_page() {
         								</g>
     								</svg>
 								</div>
-					            <span>Before &amp; After</span>
+					            <span>Before &amp; After Block</span>
 								<a href="https://folioblocks.com/blocks/before-after-block/" target="_blank">Demo</a>
 					        </div>
 					        <div class="pb-block-item">
@@ -106,6 +106,18 @@ function fbks_render_settings_page() {
 					            <span>Grid Gallery</span>
 								<a href="https://folioblocks.com/blocks/grid-gallery-block/" target="_blank">Demo</a>
 					        </div>
+							<div class="pb-block-item">
+					            <div class="pb-block-icon">
+									<svg viewBox="0 0 1247.24 1247.24" width="36" height="36" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+        								<path d="M180 180H1067C1115 180 1155 220 1155 268V979C1155 1027 1115 1067 1067 1067H180C132 1067 92 1027 92 979V268C92 220 132 180 180 180ZM180 230C150 230 124 256 124 286V961C124 991 150 1017 180 1017H1067C1097 1017 1123 991 1123 961V286C1123 256 1097 230 1067 230H180Z" />
+        								<circle cx="455" cy="420" r="85" />
+        								<path d="M820 520c17 0 33 9 41 24l205 355c8 14 8 31 0 45-8 14-24 24-41 24H300c-17 0-32-9-41-24-9-15-8-33 3-47l125-170c8-11 21-18 35-18 14 0 27 6 35 18l45 65 95-160c8-14 24-24 41-24Z" />
+    								</svg>
+								</div>
+					            <span>Image Block</span>
+								<span class="pb-pro-badge">NEW</span>
+								<a href="https://folioblocks.com/blocks/image-block/" target="_blank">Demo</a>
+					        </div>							
 					        <div class="pb-block-item">
 					            <div class="pb-block-icon">
 									<svg viewBox="0 0 1247.24 1247.24" width="36" height="36" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
@@ -132,7 +144,7 @@ function fbks_render_settings_page() {
   											<path d="M707 707l243 243 40-40-243-243-40 40z"/>
 										</svg>
 								</div>
-					            <span>Loupe</span>
+					            <span>Loupe Block</span>
 								<span class="pb-pro-badge">NEW</span>
 								<a href="https://folioblocks.com/blocks/loupe-block/" target="_blank">Demo</a>
 					        </div>							
@@ -178,6 +190,17 @@ function fbks_render_settings_page() {
 					        <div class="pb-block-item">
 					            <div class="pb-block-icon">
 									<svg viewBox="0 0 1247.24 1247.24" width="36" height="36" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+        								<path d="M180 180H1067C1115 180 1155 220 1155 268V979C1155 1027 1115 1067 1067 1067H180C132 1067 92 1027 92 979V268C92 220 132 180 180 180ZM180 230C150 230 124 256 124 286V961C124 991 150 1027 180 1027H1067C1097 1027 1123 991 1123 961V286C1123 256 1097 230 1067 230H180Z" />
+        								<path d="M460 445v360c0 15 10 25 24 25 6 0 12-2 17-6l268-180c19-13 19-43 0-56L501 394c-5-4-11-6-17-6-14 0-24 10-24 25z" />
+    								</svg>
+								</div>
+					            <span>Video Block</span>
+								<span class="pb-pro-badge">NEW</span>
+								<a href="https://folioblocks.com/blocks/video-block/" target="_blank">Demo</a>
+					        </div>							
+					        <div class="pb-block-item">
+					            <div class="pb-block-icon">
+									<svg viewBox="0 0 1247.24 1247.24" width="36" height="36" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
         								<g id="Layer_1-2">
             								<g>
                 								<path d="M563,83.62H105.05c-11.84,0-21.43,9.95-21.43,22.23v455.58c0,12.28,9.59,22.23,21.43,22.23h457.95c11.84,0,21.43-9.95,21.43-22.23V105.85c0-12.28-9.59-22.23-21.43-22.23ZM538.49,536.01H129.55V131.27h408.94v404.74h0Z" />
@@ -186,7 +209,7 @@ function fbks_render_settings_page() {
                 								<path d="M1142.19,663.58h-457.95c-11.84,0-21.43,9.95-21.43,22.23v455.58c0,12.28,9.59,22.23,21.43,22.23h457.95c11.83,0,21.43-9.95,21.43-22.23v-455.58c0-12.28-9.6-22.23-21.43-22.23h0ZM1117.69,1115.97h-408.94v-404.74h408.94v404.74Z" />
                 								<g>
                     								<path d="M394.91,320.93l-106.53-63.99c-4.64-2.78-10.21-2.85-14.9-.19-4.71,2.67-7.52,7.49-7.52,12.9v127.97c0,5.41,2.82,10.24,7.52,12.9,2.3,1.3,4.79,1.95,7.29,1.95s5.24-.71,7.62-2.14l106.52-63.98c4.49-2.71,7.19-7.46,7.19-12.7s-2.69-10-7.19-12.71h0Z" />
-                    								<path d="M852.67,410.52c2.3,1.3,4.79,1.95,7.29,1.95s5.24-.71,7.62-2.14l106.52-63.98c4.49-2.71,7.18-7.46,7.18-12.7s-2.69-10-7.18-12.71l-106.53-63.99c-4.64-2.78-10.21-2.85-14.9-.19-4.71,2.67-7.52,7.49-7.52,12.9v127.97c0,5.41,2.82,10.24,7.52,12.9h0Z" />
+                   									<path d="M852.67,410.52c2.3,1.3,4.79,1.95,7.29,1.95s5.24-.71,7.62-2.14l106.52-63.98c4.49-2.71,7.18-7.46,7.18-12.7s-2.69-10-7.18-12.71l-106.53-63.99c-4.64-2.78-10.21-2.85-14.9-.19-4.71,2.67-7.52,7.49-7.52,12.9v127.97c0,5.41,2.82,10.24,7.52,12.9h0Z" />
                     								<path d="M394.91,900.89l-106.52-63.98c-4.65-2.79-10.21-2.86-14.91-.19-4.71,2.66-7.52,7.49-7.52,12.9v127.97c0,5.41,2.81,10.23,7.52,12.9,2.3,1.3,4.79,1.95,7.3,1.95s5.23-.71,7.61-2.13l106.52-63.99c4.49-2.71,7.19-7.46,7.19-12.71s-2.69-10-7.19-12.7v-.02Z" />
                     								<path d="M974.1,900.89l-106.52-63.98c-4.65-2.79-10.21-2.86-14.91-.19-4.71,2.66-7.52,7.49-7.52,12.9v127.97c0,5.41,2.81,10.23,7.52,12.9,2.3,1.3,4.79,1.95,7.3,1.95s5.23-.71,7.61-2.13l106.52-63.99c4.49-2.71,7.18-7.46,7.18-12.71s-2.69-10-7.18-12.7v-.02Z" />
                 								</g>

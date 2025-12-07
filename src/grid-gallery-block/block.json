@@ -24,7 +24,8 @@
 			"margin": true,
 			"padding": true
 		},
-		"anchor": true,
+        "customClassName": false,
+		"anchor": false,
 		"ariaLabel": true,
 		"html": false
     },
@@ -42,6 +43,7 @@
         "lightbox": { "type": "boolean", "default": false },
         "lightboxCaption": { "type": "boolean", "default": false },
         "onHoverTitle": { "type": "boolean", "default": false },
+        "onHoverStyle": { "type": "string", "enum": ["fade-overlay","gradient-bottom","chip","blur-overlay"], "default": "blur-overlay"},
         "randomizeOrder": { "type": "boolean", "default": false },
         "disableRightClick": { "type": "boolean", "default": false },
         "lazyLoad": { "type": "boolean", "default": false },
@@ -90,6 +92,8 @@
         "folioBlocks/lightbox": "lightbox", 
         "folioBlocks/lightboxCaption": "lightboxCaption",
         "folioBlocks/onHoverTitle": "onHoverTitle",
+        "folioBlocks/onHoverStyle": "onHoverStyle",
+        "folioBlocks/enableFilter": "enableFilter",
         "folioBlocks/filterCategories": "filterCategories",
         "folioBlocks/activeFilter": "activeFilter",
         "folioBlocks/enableDownload": "enableDownload",

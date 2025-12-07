@@ -72,6 +72,7 @@ const legacyAttributes = {
  * This MUST be loaded alongside the new block registration.
  */
 registerBlockType('portfolio-blocks/carousel-gallery-block', {
+	apiVersion: 3,
 	title: 'Carousel Gallery (Legacy)',
 	category: 'widgets',
 	attributes: legacyAttributes,

@@ -20,31 +20,31 @@ import { useEffect } from '@wordpress/element';
 import { applyThumbnails } from '../pb-helpers/applyThumbnails';
 
 addFilter(
-	'folioBlocks.carouselGallery.editorEnhancements',
-	'folioblocks/carousel-gallery-premium-thumbnails',
-	(_, { clientId, innerBlocks, isBlockOrChildSelected }) => {
-		// This filter injects editor-only enhancements like List View thumbnails
-		useEffect(() => {
-			if (isBlockOrChildSelected) {
-				setTimeout(() => {
-					applyThumbnails(clientId);
-				}, 200);
-			}
-		}, [isBlockOrChildSelected]);
+    'folioBlocks.carouselGallery.editorEnhancements',
+    'folioblocks/carousel-gallery-premium-thumbnails',
+    (_, { clientId, innerBlocks, isBlockOrChildSelected }) => {
+        // This filter injects editor-only enhancements like List View thumbnails
+        useEffect(() => {
+            if (isBlockOrChildSelected) {
+                setTimeout(() => {
+                    applyThumbnails(clientId);
+                }, 200);
+            }
+        }, [isBlockOrChildSelected]);
 
-		useEffect(() => {
-			const hasImages = innerBlocks.length > 0;
-			const listViewHasThumbnails = document.querySelector('[data-pb-thumbnail-applied="true"]');
+        useEffect(() => {
+            const hasImages = innerBlocks.length > 0;
+            const listViewHasThumbnails = document.querySelector('[data-pb-thumbnail-applied="true"]');
 
-			if (hasImages && !listViewHasThumbnails) {
-				setTimeout(() => {
-					applyThumbnails(clientId);
-				}, 300);
-			}
-		}, [innerBlocks]);
+            if (hasImages && !listViewHasThumbnails) {
+                setTimeout(() => {
+                    applyThumbnails(clientId);
+                }, 300);
+            }
+        }, [innerBlocks]);
 
-		return null;
-	}
+        return null;
+    }
 );
 
 addFilter(
@@ -379,6 +379,21 @@ addFilter(
                         help={__('Choose what appears when hovering over images.', 'folioblocks')}
                     />
                 )}
+                {onHoverTitle && (
+                    <SelectControl
+                        label={__('Hover Style', 'folioblocks')}
+                        value={attributes.onHoverStyle || 'fade-overlay'}
+                        options={[
+                            { label: __('Blur Overlay (centered)', 'folioblocks'), value: 'blur-overlay' },
+                            { label: __('Fade Overlay (centered)', 'folioblocks'), value: 'fade-overlay' },
+                            { label: __('Gradient Bottom (slide-up)', 'folioblocks'), value: 'gradient-bottom' },
+                            { label: __('Chip (top-left label)', 'folioblocks'), value: 'chip' },
+                        ]}
+                        onChange={(v) => setAttributes({ onHoverStyle: v })}
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize
+                    />
+                )}
             </>
         );
     }
@@ -503,63 +518,63 @@ addFilter(
     }
 );
 addFilter(
-	'folioBlocks.carouselGallery.controlButtons',
-	'folioblocks/carousel-gallery-premium-controls',
-	(defaultContent, { attributes, setAttributes, goToPrevSlide, goToNextSlide, isPlaying, setIsPlaying, innerBlocks }) => {
-		if (!attributes.showControls || innerBlocks.length === 0) return null;
+    'folioBlocks.carouselGallery.controlButtons',
+    'folioblocks/carousel-gallery-premium-controls',
+    (defaultContent, { attributes, setAttributes, goToPrevSlide, goToNextSlide, isPlaying, setIsPlaying, innerBlocks }) => {
+        if (!attributes.showControls || innerBlocks.length === 0) return null;
 
-		return (
-			<>
-				<div className={`pb-carousel-controls align-${attributes.controlsAlignment || 'center'}`}>
-					<button
-						onClick={goToPrevSlide}
-						className="pb-carousel-chevron prev"
-						style={{
-							backgroundColor: attributes.controlsBackgroundColor || 'rgba(0, 0, 0, 0.5)',
-							color: attributes.controlsIconColor || '#ffffff',
-						}}
-					>
-						<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true">
-							<path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
-						</svg>
-					</button>
+        return (
+            <>
+                <div className={`pb-carousel-controls align-${attributes.controlsAlignment || 'center'}`}>
+                    <button
+                        onClick={goToPrevSlide}
+                        className="pb-carousel-chevron prev"
+                        style={{
+                            backgroundColor: attributes.controlsBackgroundColor || 'rgba(0, 0, 0, 0.5)',
+                            color: attributes.controlsIconColor || '#ffffff',
+                        }}
+                    >
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true">
+                            <path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                        </svg>
+                    </button>
 
-					{attributes.autoplay && (
-						<button
-							className="pb-carousel-play-button"
-							aria-label={isPlaying ? 'Pause' : 'Play'}
-							onClick={() => setIsPlaying((prev) => !prev)}
-							style={{
-								backgroundColor: attributes.controlsBackgroundColor || 'rgba(0, 0, 0, 0.5)',
-								color: attributes.controlsIconColor || '#ffffff',
-							}}
-						>
-							{isPlaying ? (
-								<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
-									<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-								</svg>
-							) : (
-								<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
-									<path d="M8 5v14l11-7z" />
-								</svg>
-							)}
-						</button>
-					)}
+                    {attributes.autoplay && (
+                        <button
+                            className="pb-carousel-play-button"
+                            aria-label={isPlaying ? 'Pause' : 'Play'}
+                            onClick={() => setIsPlaying((prev) => !prev)}
+                            style={{
+                                backgroundColor: attributes.controlsBackgroundColor || 'rgba(0, 0, 0, 0.5)',
+                                color: attributes.controlsIconColor || '#ffffff',
+                            }}
+                        >
+                            {isPlaying ? (
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+                                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                                </svg>
+                            ) : (
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+                                    <path d="M8 5v14l11-7z" />
+                                </svg>
+                            )}
+                        </button>
+                    )}
 
-					<button
-						onClick={goToNextSlide}
-						className="pb-carousel-chevron next"
-						style={{
-							backgroundColor: attributes.controlsBackgroundColor || 'rgba(0, 0, 0, 0.5)',
-							color: attributes.controlsIconColor || '#ffffff',
-						}}
-					>
-						<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true">
-							<path d="M8.59 16.59 10 18l6-6-6-6-1.41 1.41L13.17 12z" />
-						</svg>
-					</button>
-				</div>
-			</>
-		);
-	}
+                    <button
+                        onClick={goToNextSlide}
+                        className="pb-carousel-chevron next"
+                        style={{
+                            backgroundColor: attributes.controlsBackgroundColor || 'rgba(0, 0, 0, 0.5)',
+                            color: attributes.controlsIconColor || '#ffffff',
+                        }}
+                    >
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true">
+                            <path d="M8.59 16.59 10 18l6-6-6-6-1.41 1.41L13.17 12z" />
+                        </svg>
+                    </button>
+                </div>
+            </>
+        );
+    }
 );

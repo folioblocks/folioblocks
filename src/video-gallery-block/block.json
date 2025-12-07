@@ -26,10 +26,10 @@
 			"margin": true,
 			"padding": true
 		},
-		"anchor": true,
+		"anchor": false,
 		"ariaLabel": true,
 		"html": false, 
-		"className": true
+		"customClassName": false
 	},
   	"attributes": {
 		"preview": { "type": "boolean", "default": false },   

@@ -37,7 +37,7 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 	$fbks_lazy_load = ! empty( $attributes['lazyLoad'] );
 
 	$fbks_woo_active = is_plugin_active( 'woocommerce/woocommerce.php' );
-	$fbks_enable_woo = ( $fbks_context['folioBlocks/enableWooCommerce'] ?? false ) && $fbks_woo_active;
+	$fbks_enable_woo = ( $fbks_context['folioBlocks/enableWooCommerce'] ?? ( $attributes['enableWooCommerce'] ?? false ) ) && $fbks_woo_active;
 
 	// Per-block WooCommerce product info resets
 	$fbks_woo_product_name = $attributes['wooProductName'] ?? '';
@@ -100,26 +100,13 @@ $fbks_lightbox_id = uniqid('pbv_', false);
 		}
 	?>
 	<div class="pb-video-block aspect-<?php echo esc_attr( str_replace( ':', '-', $fbks_aspect ) ); ?><?php echo esc_attr( $fbks_overlay_class ); ?><?php if ( fbks_fs()->can_use_premium_code__premium_only() ) { echo $fbks_drop_shadow ? ' drop-shadow' : ''; } ?>"
-		data-filter="<?php echo esc_attr( $fbks_filter_category ); ?>"
+		<?php if ( ! empty( $fbks_filter_category ) ) : ?>
+		    data-filter="<?php echo esc_attr( $fbks_filter_category ); ?>"
+		<?php endif; ?>
 		data-video-url="<?php echo esc_url( $fbks_video_url ); ?>"
 		data-lbx="<?php echo esc_attr( $fbks_lightbox_id ); ?>"
-		data-video-title="<?php echo esc_attr( $fbks_title ); ?>"
-		<?php if ( fbks_fs()->can_use_premium_code__premium_only() ) : ?>
-		    <?php if ( ! empty( $attributes['wooProductName'] ) ) : ?>
-		        data-product-name="<?php echo esc_attr( $attributes['wooProductName'] ); ?>"
-		    <?php endif; ?>
-		    <?php if ( ! empty( $attributes['wooProductPrice'] ) ) : ?>
-		        data-product-price="<?php echo esc_attr( $attributes['wooProductPrice'] ); ?>"
-		    <?php endif; ?>
-		    <?php if ( ! empty( $attributes['wooProductDescription'] ) ) : ?>
-		        data-product-description="<?php echo esc_attr( wp_strip_all_tags( $attributes['wooProductDescription'] ) ); ?>"
-		    <?php endif; ?>
-		    <?php if ( ! empty( $attributes['wooProductURL'] ) ) : ?>
-		        data-product-url="<?php echo esc_url( $attributes['wooProductURL'] ); ?>"
-		    <?php endif; ?>
-		<?php endif; ?>
-		<?php if ( ! empty( $attributes['description'] ) ) : ?>
-			data-video-description="<?php echo esc_attr( $attributes['description'] ); ?>"
+		<?php if ( fbks_fs()->can_use_premium_code__premium_only() && ! empty( $attributes['disableRightClick'] ) ) : ?>
+			data-disable-right-click="true"
 		<?php endif; ?>
 		style="<?php echo esc_attr( $fbks_style ); ?>">
 

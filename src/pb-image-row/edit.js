@@ -8,8 +8,9 @@ import { useSelect, useDispatch } from '@wordpress/data';
 import { BlockControls, useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 import { createBlock } from '@wordpress/blocks';
 import { ToolbarGroup, ToolbarButton } from '@wordpress/components';
-import { plus } from '@wordpress/icons';
+import { stack } from '@wordpress/icons';
 import { decodeEntities } from '@wordpress/html-entities';
+import IconImageBlock from '../pb-helpers/IconImageBlock';
 
 const ALLOWED_BLOCKS = ['folioblocks/pb-image-block', 'folioblocks/pb-image-stack'];
 
@@ -110,7 +111,7 @@ export default function Edit({ clientId, context }) {
 			<BlockControls>
 				<ToolbarGroup>
 					<ToolbarButton
-						icon={plus}
+						icon={IconImageBlock}
 						label={__('Add Image', 'folioblocks')}
 						onClick={addImageBlock}
 						disabled={innerBlocks.length >= MAX_IMAGES}
@@ -118,7 +119,7 @@ export default function Edit({ clientId, context }) {
 						{__('Add Image', 'folioblocks')}
 					</ToolbarButton>
 					<ToolbarButton
-						icon={plus}
+						icon={stack}
 						label={__('Add Image Stack', 'folioblocks')}
 						onClick={() => {
 							const newStackBlock = createBlock('folioblocks/pb-image-stack');

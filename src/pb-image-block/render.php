@@ -29,19 +29,32 @@ $fbks_loading_attr = 'eager';
 
 $fbks_context = $block->context ?? [];
 
-$fbks_lightbox         = $fbks_context['folioBlocks/lightbox'] ?? ! empty( $attributes['enableLightbox'] );
-$fbks_caption_lightbox = $fbks_context['folioBlocks/lightboxCaption'] ?? ! empty( $attributes['showCaptionInLightbox'] );
+$fbks_lightbox         = $fbks_context['folioBlocks/lightbox'] ?? ( ! empty( $attributes['lightbox'] ) || ! empty( $attributes['enableLightbox'] ) );
+$fbks_caption_lightbox = $fbks_context['folioBlocks/lightboxCaption'] ?? ( ! empty( $attributes['lightboxCaption'] ) || ! empty( $attributes['showCaptionInLightbox'] ) );
 $fbks_title_hover = $fbks_context['folioBlocks/onHoverTitle'] ?? ( isset( $attributes['showTitleOnHover'] ) ? (bool) $attributes['showTitleOnHover'] : false );
 
 if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 	$fbks_woo_active = is_plugin_active( 'woocommerce/woocommerce.php' );
-	$fbks_enable_woo = ( $fbks_context['folioBlocks/enableWooCommerce'] ?? false ) && $fbks_woo_active;
-	$fbks_woo_cart_display = $fbks_context['folioBlocks/wooCartIconDisplay'] ?? 'always';
-	$fbks_woo_hover_info = $fbks_context['folioBlocks/wooProductPriceOnHover'] ?? false;
-	$fbks_woo_lightbox_info = $fbks_context['folioBlocks/wooLightboxInfoType'] ?? 'caption';
+	$fbks_enable_woo = ( $fbks_context['folioBlocks/enableWooCommerce'] ?? ( $attributes['enableWooCommerce'] ?? false ) ) && $fbks_woo_active;
+	$fbks_woo_cart_display = $fbks_context['folioBlocks/wooCartIconDisplay'] ?? ( $attributes['wooCartIconDisplay'] ?? 'hover' );
+	$fbks_woo_hover_info = $fbks_context['folioBlocks/wooProductPriceOnHover'] ?? ( $attributes['wooProductPriceOnHover'] ?? false );
+	$fbks_woo_lightbox_info = $fbks_context['folioBlocks/wooLightboxInfoType'] ?? ( $attributes['wooLightboxInfoType'] ?? 'caption' );
 
-	$fbks_lazy_load = $block->context['folioBlocks/lazyLoad'] ?? false;
-	$fbks_loading_attr = $fbks_lazy_load ? 'lazy' : 'eager';
+	// Resolve effective hover style (context wins, then attribute, then default) — Premium only
+	$fbks_on_hover_style = $fbks_context['folioBlocks/onHoverStyle'] ?? ( $attributes['onHoverStyle'] ?? 'blur-overlay' );
+	$fbks_hover_class_map = [
+		'blur-overlay'   => 'pb-hover-blur-overlay',
+		'fade-overlay'    => 'pb-hover-fade-overlay',
+		'gradient-bottom' => 'pb-hover-gradient-bottom',
+		'chip'            => 'pb-hover-chip',
+	];
+	$fbks_hover_variant_class = $fbks_hover_class_map[ $fbks_on_hover_style ] ?? 'pb-hover-fade-overlay';
+
+	$fbks_lazy_from_context = isset( $fbks_context['folioBlocks/lazyLoad'] ) ? (bool) $fbks_context['folioBlocks/lazyLoad'] : null;
+    $fbks_lazy_from_attr    = isset( $attributes['lazyLoad'] ) ? (bool) $attributes['lazyLoad'] : null;
+    $fbks_effective_lazy    = ( null !== $fbks_lazy_from_context ) ? $fbks_lazy_from_context : ( $fbks_lazy_from_attr ?? false );
+    $fbks_loading_attr      = $fbks_effective_lazy ? 'lazy' : 'eager';
+
 	$fbks_dropshadow       = $fbks_context['folioBlocks/dropShadow'] ?? ! empty( $attributes['dropshadow'] );
 
 
@@ -63,9 +76,22 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 		}
 }
 
-$fbks_wrapper_attributes = get_block_wrapper_attributes( [
+// Disable right-click (Pro): parent context wins; fallback to block attribute
+$fbks_disable_right_click = false;
+if ( fbks_fs()->can_use_premium_code__premium_only() ) {
+	$fbks_disable_right_click = (bool) (
+		$fbks_context['folioBlocks/disableRightClick'] ??
+		( $attributes['disableRightClick'] ?? false )
+	);
+}
+
+$fbks_wrapper_attributes_args = [
 	'class' => 'pb-image-block-wrapper',
-] );
+];
+if ( ! empty( $fbks_disable_right_click ) ) {
+	$fbks_wrapper_attributes_args['data-disable-right-click'] = 'true';
+}
+$fbks_wrapper_attributes = get_block_wrapper_attributes( $fbks_wrapper_attributes_args );
 
 ?>
 
@@ -76,25 +102,27 @@ $fbks_wrapper_attributes = get_block_wrapper_attributes( [
 	<?php endif; endif; ?>
 >
 	<figure
-		class="pb-image-block <?php echo esc_attr( $fbks_title_hover ? 'title-hover' : '' ); ?> 
-		<?php if ( fbks_fs()->can_use_premium_code__premium_only() ) { if ( $fbks_dropshadow ) { echo esc_attr( 'dropshadow' ); } } ?>"
+		class="pb-image-block
+      <?php if ( fbks_fs()->can_use_premium_code__premium_only() && $fbks_title_hover ) { echo ' title-hover ' . esc_attr( $fbks_hover_variant_class ); } ?>
+      <?php if ( fbks_fs()->can_use_premium_code__premium_only() ) { echo ( ! empty( $fbks_dropshadow ) ) ? ' dropshadow' : ''; } ?>"
+		<?php if ( fbks_fs()->can_use_premium_code__premium_only() && ! empty( $fbks_img_styles ) ) : ?>
+			style="<?php echo esc_attr( $fbks_img_styles ); ?>"
+		<?php endif; ?>
 		<?php if ( fbks_fs()->can_use_premium_code__premium_only() ) { if ( ! empty( $attributes['enableDownload'] ) ) : ?>
 			data-enable-download="true"
 		<?php endif; } ?>
 	>
 		<?php if ( $fbks_lightbox ) : ?>
 			<?php
-			// Build dynamic lightbox caption
+			// Build dynamic lightbox caption (only when explicitly enabled)
 			if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 				$fbks_lightbox_caption = '';
 				if ( $fbks_caption_lightbox ) {
-				
 					if ( $fbks_enable_woo && $fbks_woo_lightbox_info === 'product' ) {
 						$fbks_product_name  = $attributes['wooProductName'] ?? '';
 						$fbks_product_price = $attributes['wooProductPrice'] ?? '';
 
 						if ( ! empty( $fbks_product_name ) || ! empty( $fbks_product_price ) ) {
-							// Proper HTML for WooCommerce product info
 							$fbks_lightbox_caption  = '<div class="pb-lightbox-product-info">';
 							if ( ! empty( $fbks_product_name ) ) {
 								$fbks_lightbox_caption .= '<h4 class="pb-product-name">' . esc_html( $fbks_product_name ) . '</h4>';
@@ -110,8 +138,6 @@ $fbks_wrapper_attributes = get_block_wrapper_attributes( [
 					} elseif ( ! empty( $fbks_caption ) ) {
 						$fbks_lightbox_caption = wpautop( wp_kses_post( $fbks_caption ) );
 					}
-				} elseif ( ! empty( $fbks_caption ) ) {
-					$fbks_lightbox_caption = wpautop( wp_kses_post( $fbks_caption ) );
 				}
 			}
 			?>
@@ -122,23 +148,13 @@ $fbks_wrapper_attributes = get_block_wrapper_attributes( [
 				<?php if ( ! empty( $fbks_lightbox_caption ) ) : ?>
 					data-caption="<?php echo esc_attr( $fbks_lightbox_caption ); ?>"
 				<?php endif; ?>
-				<?php if ( fbks_fs()->can_use_premium_code__premium_only() ) : ?>
-					<?php if ( $fbks_enable_woo && ! empty( $attributes['wooProductId'] ) ) : ?>
-						data-product-id="<?php echo intval( $attributes['wooProductId'] ); ?>"
-						data-product-name="<?php echo esc_attr( $attributes['wooProductName'] ?? '' ); ?>"
-						data-product-price="<?php echo esc_attr( wp_strip_all_tags( $attributes['wooProductPrice'] ?? '' ) ); ?>"
-					<?php endif; ?>
-				<?php endif; ?>
 			>
 				<?php
 				$fbks_img_attributes = [
 					'class'    => 'pb-image-block-img wp-image-' . esc_attr( $fbks_id ),
-					'loading'  => 'eager',
+					'loading'  => $fbks_loading_attr,
 					'decoding' => 'async',
 				];
-				if ( fbks_fs()->can_use_premium_code__premium_only() ) {
-    				$fbks_img_attributes['style'] = $fbks_img_styles;
-				}
 				if ( ! empty( $fbks_alt ) ) {
 					$fbks_img_attributes['alt'] = $fbks_alt;
 				}
@@ -153,9 +169,6 @@ $fbks_wrapper_attributes = get_block_wrapper_attributes( [
 				'loading' => $fbks_loading_attr,
 				'decoding' => 'async',
 			];
-			if ( fbks_fs()->can_use_premium_code__premium_only() ) {
-    			$fbks_img_attributes['style'] = $fbks_img_styles;
-			}
 			if ( ! empty( $fbks_alt ) ) {
 				$fbks_img_attributes['alt'] = $fbks_alt;
 			}
@@ -175,7 +188,7 @@ $fbks_wrapper_attributes = get_block_wrapper_attributes( [
 
 					if ( ! empty( $fbks_product_name ) || ! empty( $fbks_product_price ) ) {
 						echo '<div class="pb-image-block-title-container">';
-						echo '<figcaption class="pb-image-block-title" style="' . esc_attr( $fbks_img_styles ) . '">';
+						echo '<figcaption class="pb-image-block-title">';
 					if ( ! empty( $fbks_product_name ) ) {
 						echo '<span class="pb-product-name">' . esc_html( $fbks_product_name ) . '</span>';
 					}
@@ -186,20 +199,20 @@ $fbks_wrapper_attributes = get_block_wrapper_attributes( [
 				} elseif ( ! empty( $fbks_title ) ) {
 					// Fallback to image title if no product info
 					echo '<div class="pb-image-block-title-container">';
-					echo '<figcaption class="pb-image-block-title" style="' . esc_attr( $fbks_img_styles ) . '">';
+					echo '<figcaption class="pb-image-block-title">';
 					echo wp_kses_post( $fbks_title );
 					echo '</figcaption></div>';
 				}
 				} elseif ( $fbks_enable_woo && ! $fbks_woo_hover_info ) {
 					if ( ! empty( $fbks_title ) ) {	
 						echo '<div class="pb-image-block-title-container">';
-						echo '<figcaption class="pb-image-block-title" style="' . esc_attr( $fbks_img_styles ) . '">';
+						echo '<figcaption class="pb-image-block-title">';
 						echo wp_kses_post( $fbks_title );
 						echo '</figcaption></div>';
 					}
 				} elseif ( ! empty( $fbks_title ) ) {
 					echo '<div class="pb-image-block-title-container">';
-					echo '<figcaption class="pb-image-block-title" style="' . esc_attr( $fbks_img_styles ) . '">';
+					echo '<figcaption class="pb-image-block-title">';
 					echo wp_kses_post( $fbks_title );
 					echo '</figcaption></div>';
 				}
@@ -212,7 +225,6 @@ $fbks_wrapper_attributes = get_block_wrapper_attributes( [
 					class="pb-add-to-cart-icon <?php echo $fbks_woo_cart_display === 'hover' ? 'hover-only' : ''; ?>"
 					data-add-to-cart="<?php echo esc_attr( intval( $attributes['wooProductId'] ) ); ?>"
 					aria-label="<?php esc_attr_e( 'Add to Cart', 'folioblocks' ); ?>"
-	    			style="top: calc(10px + max(<?php echo esc_attr( $fbks_border_width ); ?>px, <?php echo esc_attr( $fbks_border_radius ); ?>px * 0.15)); right: calc(10px + max(<?php echo esc_attr( $fbks_border_width ); ?>px, <?php echo esc_attr( $fbks_border_radius ); ?>px * 0.30));"
 				>
 					<img src="<?php echo esc_url( plugins_url( 'includes/icons/add-to-cart.png', dirname( __FILE__, 2 ) ) ); ?>" alt="<?php esc_attr_e( 'Add to Cart', 'folioblocks' ); ?>" width="24" height="24" />
 				</button>
@@ -223,7 +235,6 @@ $fbks_wrapper_attributes = get_block_wrapper_attributes( [
 	    		<button 
 	    			class="pb-image-block-download <?php echo !empty($fbks_context['folioBlocks/downloadOnHover']) ? 'hover-only' : ''; ?>" 
 	    			aria-label="<?php esc_attr_e( 'Download Image', 'folioblocks' ); ?>"
-	    			style="top: calc(10px + max(<?php echo esc_attr( $fbks_border_width ); ?>px, <?php echo esc_attr( $fbks_border_radius ); ?>px * 0.15)); right: calc(10px + max(<?php echo esc_attr( $fbks_border_width ); ?>px, <?php echo esc_attr( $fbks_border_radius ); ?>px * 0.30));"
 	    			data-full-src="<?php echo esc_url( $fbks_full_src ); ?>"
 				>
 					<img src="<?php echo esc_url( plugins_url( 'includes/icons/download.png', dirname( __FILE__, 2 ) ) ); ?>" alt="<?php esc_attr_e( 'Download Image', 'folioblocks' ); ?>" width="24" height="24" />

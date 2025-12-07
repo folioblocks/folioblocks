@@ -50,7 +50,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		activeFilterTextColor,
 		activeFilterBgColor,
 		preview,
-		enableWooCommerce, 
+		enableWooCommerce,
 		wooCartIconDisplay,
 	} = attributes;
 
@@ -70,7 +70,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 	 */
 
 	// Local state for filter input field
-	
+
 	const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 
 	// Selected block in the editor
@@ -297,8 +297,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			)}
 
 			<InspectorControls>
-				{/* Gallery Settings Panel */}
-				<PanelBody title={__('General Gallery Settings', 'folioblocks')} initialOpen={true}>
+				<PanelBody title={__('Video Gallery Settings', 'folioblocks')} initialOpen={true}>
 					<ResponsiveRangeControl
 						label={__('Columns', 'folioblocks')}
 						columns={columns}
@@ -317,54 +316,15 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						__next40pxDefaultSize
 						help={__('Set gap size between Thumbnails.')}
 					/>
-					{ window.folioBlocksData?.hasWooCommerce && applyFilters(
-						'folioBlocks.videoGallery.wooCommerceControls',
-						(
-							<div style={{ marginBottom: '8px' }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Woo Commerce', 'folioblocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'folioblocks')}
-									</a>
-								</Notice>
-							</div>
-						),
-						{ attributes, setAttributes }
-					)}
-					{applyFilters(
-						'folioBlocks.videoGallery.disableRightClickToggle',
-						(
-							<div style={{ marginBottom: '8px' }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__('Disable Right-Click', 'folioblocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'folioblocks')}
-									</a>
-								</Notice>
-							</div>
-						),
-						{ attributes, setAttributes }
-					)}
-					{applyFilters(
-						'folioBlocks.videoGallery.lazyLoadToggle',
-						(
-							<div style={{ marginBottom: '8px' }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Lazy Load of Images', 'folioblocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'folioblocks')}
-									</a>
-								</Notice>
-							</div>
-						),
-						{ attributes, setAttributes }
-					)}
-				</PanelBody>
-
-				<PanelBody title={__('Gallery Thumbnail Settings', 'folioblocks')} initialOpen={true}>
+					<SelectControl
+						label={__('Thumbnail Resolution', 'folioblocks')}
+						value={thumbnailSize}
+						onChange={(val) => setAttributes({ thumbnailSize: val })}
+						options={imageSizeOptions}
+						help={__('Set thumbnail resolution.')}
+						__nextHasNoMarginBottom
+						__next40pxDefaultSize
+					/>
 					<SelectControl
 						label={__('Thumbnail Aspect Ratio', 'folioblocks')}
 						value={aspectRatio}
@@ -381,15 +341,31 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
-					<SelectControl
-						label={__('Thumbnail Resolution', 'folioblocks')}
-						value={thumbnailSize}
-						onChange={(val) => setAttributes({ thumbnailSize: val })}
-						options={imageSizeOptions}
-						help={__('Set thumbnail resolution.')}
+				</PanelBody>
+				<PanelBody title={__('Lightbox & Hover Settings', 'folioblocks')} initialOpen={true}>
+					<ToggleControl
+						label={__('Enable Lightbox in Editor', 'folioblocks')}
+						checked={!!lightbox}
+						onChange={(val) => setAttributes({ lightbox: !!val })}
 						__nextHasNoMarginBottom
-						__next40pxDefaultSize
+						help={__('Allows videos to open in a Lightbox while editing.', 'folioblocks')}
 					/>
+					{applyFilters(
+						'folioBlocks.videoGallery.lightboxLayout',
+						(
+							<div style={{ marginBottom: '8px' }}>
+								<Notice status="info" isDismissible={false}>
+									<strong>{__('Lightbox Layout', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'folioblocks')}
+									</a>
+								</Notice>
+							</div>
+						),
+						{ attributes, setAttributes }
+					)}
+					<hr style={{ border: '0.5px solid #e0e0e0', margin: '12px 0' }} />
 					<SelectControl
 						label={__('Play Button Visibility', 'folioblocks')}
 						value={playButtonVisibility}
@@ -417,31 +393,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						__next40pxDefaultSize
 					/>
 				</PanelBody>
-				<PanelBody title={__('Gallery Lightbox Settings', 'folioblocks')} initialOpen={true}>
-					<ToggleControl
-						label={__('Disable Lightbox in Editor', 'folioblocks')}
-						checked={!lightbox}
-						onChange={(val) => setAttributes({ lightbox: !val })}
-						__nextHasNoMarginBottom
-						help={__('Prevent videos from opening in a Lightbox while editing.')}
-					/>
-					{applyFilters(
-						'folioBlocks.videoGallery.lightboxLayout',
-						(
-							<div style={{ marginBottom: '8px' }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__('Lightbox Layout', 'folioblocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'folioblocks')}
-									</a>
-								</Notice>
-							</div>
-						),
-						{ attributes, setAttributes }
-					)}
-				</PanelBody>
-				<PanelBody title={__('Gallery Filter Settings', 'folioblocks')} initialOpen={true}>
+				<PanelBody title={__('Gallery Filtering Settings', 'folioblocks')} initialOpen={true}>
 					{applyFilters(
 						'folioBlocks.videoGallery.enableFilterToggle',
 						(
@@ -458,9 +410,56 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						{ attributes, setAttributes }
 					)}
 				</PanelBody>
-
+				<PanelBody title={__('E-Commerce Settings', 'folioblocks')} initialOpen={false}>
+					{window.folioBlocksData?.hasWooCommerce && applyFilters(
+						'folioBlocks.videoGallery.wooCommerceControls',
+						(
+							<div style={{ marginBottom: '8px' }}>
+								<Notice status="info" isDismissible={false}>
+									<strong>{__('Enable Woo Commerce', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'folioblocks')}
+									</a>
+								</Notice>
+							</div>
+						),
+						{ attributes, setAttributes }
+					)}
+				</PanelBody>
 			</InspectorControls>
-
+			<InspectorControls group="advanced">
+				{applyFilters(
+					'folioBlocks.videoGallery.disableRightClickToggle',
+					(
+						<div style={{ marginBottom: '8px' }}>
+							<Notice status="info" isDismissible={false}>
+								<strong>{__('Disable Right-Click', 'folioblocks')}</strong><br />
+								{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
+								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+									{__('Upgrade to Pro', 'folioblocks')}
+								</a>
+							</Notice>
+						</div>
+					),
+					{ attributes, setAttributes }
+				)}
+				{applyFilters(
+					'folioBlocks.videoGallery.lazyLoadToggle',
+					(
+						<div style={{ marginBottom: '8px' }}>
+							<Notice status="info" isDismissible={false}>
+								<strong>{__('Enable Lazy Load of Images', 'folioblocks')}</strong><br />
+								{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
+								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+									{__('Upgrade to Pro', 'folioblocks')}
+								</a>
+							</Notice>
+						</div>
+					),
+					{ attributes, setAttributes }
+				)}
+			</InspectorControls>
 			<InspectorControls group="styles">
 				<PanelBody title={__('Video Thumbnail Styles', 'folioblocks')} initialOpen={true}>
 					{applyFilters(

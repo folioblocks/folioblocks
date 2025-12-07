@@ -77,7 +77,7 @@ addFilter(
     'folioBlocks.justifiedGallery.randomizeToggle',
     'folioblocks/justified-gallery-premium-toggle',
     (defaultContent, props) => {
-        const { attributes, setAttributes } = props;
+        const { attributes, setAttributes, clientId, updateBlockAttributes } = props;
         return (
             <ToggleControl
                 label={__('Randomize Image Order', 'folioblocks')}
@@ -324,6 +324,21 @@ addFilter(
                         help={__('Choose what appears when hovering over images.', 'folioblocks')}
                     />
                 )}
+                {onHoverTitle && (
+                    <SelectControl
+                        label={__('Hover Style', 'folioblocks')}
+                        value={attributes.onHoverStyle || 'fade-overlay'}
+                        options={[
+                            { label: __('Blur Overlay (centered)', 'folioblocks'), value: 'blur-overlay' },
+                            { label: __('Fade Overlay (centered)', 'folioblocks'), value: 'fade-overlay' },
+                            { label: __('Gradient Bottom (slide-up)', 'folioblocks'), value: 'gradient-bottom' },
+                            { label: __('Chip (top-left label)', 'folioblocks'), value: 'chip' },
+                        ]}
+                        onChange={(v) => setAttributes({ onHoverStyle: v })}
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize
+                    />
+                )}
             </>
         );
     }
@@ -549,7 +564,7 @@ addFilter(
 
         return (
             <PanelColorSettings
-                title="Filter Bar Styles"
+                title="Gallery Filter Bar Styles"
                 colorSettings={[
                     {
                         label: 'Active - Text Color',

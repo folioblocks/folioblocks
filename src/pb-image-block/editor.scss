@@ -3,19 +3,36 @@
  * Editor SCSS
  **/
 
+.pb-block-preview {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	background: #3B82F6;
+	
+	svg { width: 100px; height: 100px; fill: #fff; }
+}
 
 // Thumbnail Preview Styles
-.pb-img-thumbnail-preview {
-	width: 60%;
+.pb-imgage-block-thumbnail-preview {
+	width: 100px;
 	margin: 0 auto;
-	display: block;
+	max-height: 100px;
+	height: auoto;
 
 	img {
-		width: 100%;
-		height: auto;
-		display: block;
-	}
+    	max-width: 100px;
+    	max-height: 100px;
+    	width: auto;
+    	height: auto;
+    	object-fit: contain;
+    	display: block;
+		margin: 0 auto;
+  	}
 }
+
 
 .pb-product-search-item {
 	/* individual search result item styling */

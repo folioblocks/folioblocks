@@ -73,6 +73,7 @@ const legacyAttributes = {
  * Register the OLD block namespace as a migration shim.
  */
 registerBlockType('portfolio-blocks/justified-gallery-block', {
+	apiVersion: 3,
 	title: 'Justified Gallery (Legacy)',
 	category: 'widgets',
 	attributes: legacyAttributes,

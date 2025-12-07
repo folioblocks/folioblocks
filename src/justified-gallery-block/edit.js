@@ -135,6 +135,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		});
 
 		replaceInnerBlocks(clientId, newBlocks);
+		updateBlockAttributes(clientId, { _forceRefresh: Date.now() });
 
 		// Trigger a layout recalculation
 		setTimeout(() => {
@@ -142,7 +143,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			if (container) {
 				container.dispatchEvent(new Event('resize'));
 			}
-		setIsLoading(false); // <-- stop spinner
+			setIsLoading(false); // <-- stop spinner
 		}, 100);
 	};
 
@@ -161,21 +162,18 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		const container = galleryRef.current;
 
 		const calculateLayout = () => {
-			const container = galleryRef.current;
-
-			if (!container) {
-				console.warn('❌ No container found');
-				return;
+			const node = container; // use the captured element observed by ResizeObserver
+			if (!node || !node.isConnected) {
+				return; // element not mounted anymore; abort silently
 			}
 
-			const containerWidth = container.clientWidth - 1;
+			const containerWidth = node.clientWidth - 1;
 
 			if (!containerWidth) {
-				console.warn('❌ Container width is 0');
 				return;
 			}
 
-			const wrappers = container.querySelectorAll('.pb-image-block-wrapper:not(.is-hidden)');
+			const wrappers = node.querySelectorAll('.pb-image-block-wrapper:not(.is-hidden)');
 			const images = Array.from(wrappers).map((wrapper) => {
 				const img = wrapper.querySelector('img');
 				const width = parseInt(img.getAttribute('width')) || 1;
@@ -291,6 +289,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		},
 		[]
 	);
+
 	applyFilters('folioBlocks.justifiedGallery.filterLogic', null, { clientId, attributes, setAttributes, selectedBlock });
 	applyFilters('folioBlocks.justifiedGallery.editorEnhancements', null, { clientId, attributes, innerBlocks, isBlockOrChildSelected, replaceInnerBlocks });
 
@@ -321,7 +320,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			</BlockControls>
 
 			<InspectorControls>
-				<PanelBody title={__('General Gallery Settings', 'folioblocks')} initialOpen={true}>
+				<PanelBody title={__('Justified Gallery Settings', 'folioblocks')} initialOpen={true}>
 					<SelectControl
 						label={__('Resolution', 'folioblocks')}
 						value={attributes.resolution || 'large'}
@@ -385,69 +384,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						),
 						{ attributes, setAttributes }
 					)}
-					{applyFilters(
-						'folioBlocks.justifiedGallery.downloadControls',
-						(
-							<div style={{ marginBottom: '8px' }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Image Downloads', 'folioblocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'folioblocks')}
-									</a>
-								</Notice>
-							</div>
-						),
-						{ attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
-					)}
-					{window.folioBlocksData?.hasWooCommerce && applyFilters(
-						'folioBlocks.justifiedGallery.wooCommerceControls',
-						(
-							<div style={{ marginBottom: '8px' }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Woo Commerce', 'folioblocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'folioblocks')}
-									</a>
-								</Notice>
-							</div>
-						),
-						{ attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
-					)}
-					{applyFilters(
-						'folioBlocks.justifiedGallery.disableRightClickToggle',
-						(
-							<div style={{ marginBottom: '8px' }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__('Disable Right-Click', 'folioblocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'folioblocks')}
-									</a>
-								</Notice>
-							</div>
-						),
-						{ attributes, setAttributes }
-					)}
-					{applyFilters(
-						'folioBlocks.justifiedGallery.lazyLoadToggle',
-						(
-							<div style={{ marginBottom: '8px' }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Lazy Load of Images', 'folioblocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'folioblocks')}
-									</a>
-								</Notice>
-							</div>
-						),
-						{ attributes, setAttributes }
-					)}
-
 				</PanelBody>
-				<PanelBody title={__('Gallery Image Settings', 'folioblocks')} initialOpen={true}>
+				<PanelBody title={__('Lightbox & Hover Settings', 'folioblocks')} initialOpen={true}>
 					{applyFilters(
 						'folioBlocks.justifiedGallery.lightboxControls',
 						(
@@ -479,7 +417,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						{ attributes, setAttributes }
 					)}
 				</PanelBody>
-				<PanelBody title={__('Gallery Filter Settings', 'folioblocks')} initialOpen={true}>
+				<PanelBody title={__('Gallery Filtering Settings', 'folioblocks')} initialOpen={true}>
 					{applyFilters(
 						'folioBlocks.justifiedGallery.enableFilterToggle',
 						(
@@ -496,6 +434,70 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						{ attributes, setAttributes }
 					)}
 				</PanelBody>
+				<PanelBody title={__('E-Commerce Settings', 'folioblocks')} initialOpen={true}>
+					{applyFilters(
+						'folioBlocks.justifiedGallery.downloadControls',
+						(
+							<div style={{ marginBottom: '8px' }}>
+								<Notice status="info" isDismissible={false}>
+									<strong>{__('Enable Image Downloads', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'folioblocks')}
+									</a>
+								</Notice>
+							</div>
+						),
+						{ attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
+					)}
+					{window.folioBlocksData?.hasWooCommerce && applyFilters(
+						'folioBlocks.justifiedGallery.wooCommerceControls',
+						(
+							<div style={{ marginBottom: '8px' }}>
+								<Notice status="info" isDismissible={false}>
+									<strong>{__('Enable Woo Commerce', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'folioblocks')}
+									</a>
+								</Notice>
+							</div>
+						),
+						{ attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
+					)}
+				</PanelBody>
+			</InspectorControls>
+			<InspectorControls group="advanced">
+				{applyFilters(
+					'folioBlocks.justifiedGallery.disableRightClickToggle',
+					(
+						<div style={{ marginBottom: '8px' }}>
+							<Notice status="info" isDismissible={false}>
+								<strong>{__('Disable Right-Click', 'folioblocks')}</strong><br />
+								{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
+								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+									{__('Upgrade to Pro', 'folioblocks')}
+								</a>
+							</Notice>
+						</div>
+					),
+					{ attributes, setAttributes }
+				)}
+				{applyFilters(
+					'folioBlocks.justifiedGallery.lazyLoadToggle',
+					(
+						<div style={{ marginBottom: '8px' }}>
+							<Notice status="info" isDismissible={false}>
+								<strong>{__('Enable Lazy Load of Images', 'folioblocks')}</strong><br />
+								{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
+								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+									{__('Upgrade to Pro', 'folioblocks')}
+								</a>
+							</Notice>
+						</div>
+					),
+					{ attributes, setAttributes }
+				)}
 			</InspectorControls>
 			<InspectorControls group="styles">
 				<PanelBody title={__('Gallery Image Styles', 'folioblocks')} initialOpen={true}>

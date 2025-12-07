@@ -424,7 +424,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 				</ToolbarGroup>
 			</BlockControls>
 			<InspectorControls>
-				<PanelBody title={__('General Gallery Settings', 'folioblocks')} initialOpen={true}>
+				<PanelBody title={__('Carousel Gallery Settings', 'folioblocks')} initialOpen={true}>
 					<SelectControl
 						label={__('Resolution', 'folioblocks')}
 						value={attributes.resolution || 'large'}
@@ -464,68 +464,6 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
-					{applyFilters(
-						'folioBlocks.carouselGallery.downloadControls',
-						(
-							<div style={{ marginBottom: '8px' }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Image Downloads', 'folioblocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'folioblocks')}
-									</a>
-								</Notice>
-							</div>
-						),
-						{ attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
-					)}
-					{window.folioBlocksData?.hasWooCommerce && applyFilters(
-						'folioBlocks.carouselGallery.wooCommerceControls',
-						(
-							<div style={{ marginBottom: '8px' }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Woo Commerce', 'folioblocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'folioblocks')}
-									</a>
-								</Notice>
-							</div>
-						),
-						{ attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
-					)}
-					{applyFilters(
-						'folioBlocks.carouselGallery.disableRightClickToggle',
-						(
-							<div style={{ marginBottom: '8px' }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__('Disable Right-Click', 'folioblocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'folioblocks')}
-									</a>
-								</Notice>
-							</div>
-						),
-						{ attributes, setAttributes }
-					)}
-					{applyFilters(
-						'folioBlocks.carouselGallery.lazyLoadToggle',
-						(
-							<div style={{ marginBottom: '8px' }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Lazy Load of Images', 'folioblocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'folioblocks')}
-									</a>
-								</Notice>
-							</div>
-						),
-						{ attributes, setAttributes }
-					)}
-				</PanelBody>
-				<PanelBody title={__('Gallery Control Settings', 'folioblocks')} initialOpen={true}>
 					{applyFilters('folioBlocks.carouselGallery.enableAutoplayToggle',
 						(
 							<div style={{ marginBottom: '8px' }}>
@@ -555,7 +493,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 						{ attributes, setAttributes, }
 					)}
 				</PanelBody>
-				<PanelBody title={__('Gallery Image Settings', 'folioblocks')} initialOpen={true}>
+				<PanelBody title={__('Lightbox & Hover Settings', 'folioblocks')} initialOpen={true}>
 					{applyFilters(
 						'folioBlocks.carouselGallery.lightboxControls',
 						(
@@ -588,8 +526,71 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 					)}
 
 				</PanelBody>
+				<PanelBody title={__('E-Commerce Settings', 'folioblocks')} initialOpen={true}>
+					{applyFilters(
+						'folioBlocks.carouselGallery.downloadControls',
+						(
+							<div style={{ marginBottom: '8px' }}>
+								<Notice status="info" isDismissible={false}>
+									<strong>{__('Enable Image Downloads', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'folioblocks')}
+									</a>
+								</Notice>
+							</div>
+						),
+						{ attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
+					)}
+					{window.folioBlocksData?.hasWooCommerce && applyFilters(
+						'folioBlocks.carouselGallery.wooCommerceControls',
+						(
+							<div style={{ marginBottom: '8px' }}>
+								<Notice status="info" isDismissible={false}>
+									<strong>{__('Enable Woo Commerce', 'folioblocks')}</strong><br />
+									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__('Upgrade to Pro', 'folioblocks')}
+									</a>
+								</Notice>
+							</div>
+						),
+						{ attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
+					)}
+				</PanelBody>
 			</InspectorControls>
-
+			<InspectorControls group="advanced">
+				{applyFilters(
+					'folioBlocks.carouselGallery.disableRightClickToggle',
+					(
+						<div style={{ marginBottom: '8px' }}>
+							<Notice status="info" isDismissible={false}>
+								<strong>{__('Disable Right-Click', 'folioblocks')}</strong><br />
+								{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
+								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+									{__('Upgrade to Pro', 'folioblocks')}
+								</a>
+							</Notice>
+						</div>
+					),
+					{ attributes, setAttributes }
+				)}
+				{applyFilters(
+					'folioBlocks.carouselGallery.lazyLoadToggle',
+					(
+						<div style={{ marginBottom: '8px' }}>
+							<Notice status="info" isDismissible={false}>
+								<strong>{__('Enable Lazy Load of Images', 'folioblocks')}</strong><br />
+								{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
+								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+									{__('Upgrade to Pro', 'folioblocks')}
+								</a>
+							</Notice>
+						</div>
+					),
+					{ attributes, setAttributes }
+				)}
+			</InspectorControls>
 			<InspectorControls group="styles">
 				{applyFilters(
 					'folioBlocks.carouselGallery.controlStyleSettings',

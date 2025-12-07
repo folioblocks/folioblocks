@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       FolioBlocks
  * Description:       Create fast, responsive photo and video galleries with grid, masonry, justified, modular, and carousel layouts—ideal for photographers and creatives.
- * Version:           1.0.5
+ * Version:           1.0.6
  * Requires at least: 6.3
  * Requires PHP:      7.4
  * Author:            FolioBlocks
@@ -13,14 +13,14 @@
  *
  * @package FolioBlocks
  * 
- * @fs_premium_only /build/modular-gallery-block/, /build/pb-image-row, /build/pb-image-stack/, /build/carousel-gallery-block/premium-view.asset.php, /build/carousel-gallery-block/premium-view.js, /build/carousel-gallery-block/premium.asset.php, /build/carousel-gallery-block/premium.js, /build/grid-gallery-block/premium-view.asset.php, /build/grid-gallery-block/premium-view.js, /build/grid-gallery-block/premium.asset.php, /build/grid-gallery-block/premium.js, /build/justified-gallery-block/premium-view.asset.php, /build/justified-gallery-block/premium-view.js, /build/justified-gallery-block/premium.asset.php, /build/justified-gallery-block/premium.js, /build/masonry-gallery-block/premium-view.asset.php, /build/masonry-gallery-block/premium-view.js, /build/masonry-gallery-block/premium.asset.php, /build/masonry-gallery-block/premium.js, /build/modular-gallery-block/premium-view.asset.php, /build/modular-gallery-block/premium-view.js, /build/modular-gallery-block/premium.asset.php, /build/modular-gallery-block/premium.js, /build/pb-before-after-block/premium-view.asset.php, /build/pb-before-after-block/premium-view.js, /build/pb-before-after-block/premium.asset.php, /build/pb-before-after-block/premium.js, /build/pb-image-block/premium-view.asset.php, /build/pb-image-block/premium-view.js, /build/pb-image-block/premium.asset.php, /build/pb-image-block/premium.js, /build/pb-video-block/premium-view.asset.php, /build/pb-video-block/premium-view.js, /build/pb-video-block/premium.asset.php, /build/pb-video-block/premium.js, /build/video-gallery-block/premium-view.asset.php, /build/video-gallery-block/premium-view.js, /build/video-gallery-block/premium.asset.php, /build/video-gallery-block/premium.js
+ * @fs_premium_only /build/modular-gallery-block/, /build/pb-image-row, /build/pb-image-stack/, /build/carousel-gallery-block/premium-view.asset.php, /build/carousel-gallery-block/premium-view.js, /build/carousel-gallery-block/premium.asset.php, /build/carousel-gallery-block/premium.js, /build/grid-gallery-block/premium-view.asset.php, /build/grid-gallery-block/premium-view.js, /build/grid-gallery-block/premium.asset.php, /build/grid-gallery-block/premium.js, /build/justified-gallery-block/premium-view.asset.php, /build/justified-gallery-block/premium-view.js, /build/justified-gallery-block/premium.asset.php, /build/justified-gallery-block/premium.js, /build/masonry-gallery-block/premium-view.asset.php, /build/masonry-gallery-block/premium-view.js, /build/masonry-gallery-block/premium.asset.php, /build/masonry-gallery-block/premium.js, /build/modular-gallery-block/premium-view.asset.php, /build/modular-gallery-block/premium-view.js, /build/modular-gallery-block/premium.asset.php, /build/modular-gallery-block/premium.js, /build/pb-before-after-block/premium-view.asset.php, /build/pb-before-after-block/premium-view.js, /build/pb-before-after-block/premium.asset.php, /build/pb-before-after-block/premium.js, /build/pb-image-block/premium-view.asset.php, /build/pb-image-block/premium-view.js, /build/pb-image-block/premium.asset.php, /build/pb-image-block/premium.js, /build/pb-image-block/premium-view.asset.php, /build/pb-loupe-block/premium-view.js, /build/pb-loupe-block/premium.asset.php, /build/pb-loupe-block/premium.js, /build/pb-video-block/premium-view.asset.php, /build/pb-video-block/premium-view.js, /build/pb-video-block/premium.asset.php, /build/pb-video-block/premium.js, /build/video-gallery-block/premium-view.asset.php, /build/video-gallery-block/premium-view.js, /build/video-gallery-block/premium.asset.php, /build/video-gallery-block/premium.js
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'FBKS_VERSION', '1.0.5' );
+define( 'FBKS_VERSION', '1.0.6' );
 define( 'FBKS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'FBKS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
@@ -144,24 +144,24 @@ if ( function_exists( 'fbks_fs' ) ) {
 
     // Register all FolioBlocks blocks.
     function fbks_block_init() {
+        
         register_block_type( __DIR__ . '/build/pb-before-after-block' );
-        register_block_type( __DIR__ . '/build/pb-image-block' );
-        register_block_type( __DIR__ . '/build/pb-loupe-block' );
-        register_block_type( __DIR__ . '/build/pb-video-block' );
         register_block_type( __DIR__ . '/build/carousel-gallery-block' );
         if ( fbks_fs()->can_use_premium_code() ) {
             register_block_type( __DIR__ . '/build/filmstrip-gallery-block' );     
         }
         register_block_type( __DIR__ . '/build/grid-gallery-block' );
+        register_block_type( __DIR__ . '/build/pb-image-block' );
     	register_block_type( __DIR__ . '/build/justified-gallery-block' );
+        register_block_type( __DIR__ . '/build/pb-loupe-block' );
     	register_block_type( __DIR__ . '/build/masonry-gallery-block' );
         if ( fbks_fs()->can_use_premium_code() ) {
             register_block_type( __DIR__ . '/build/modular-gallery-block' );
             register_block_type( __DIR__ . '/build/pb-image-row' );
     	    register_block_type( __DIR__ . '/build/pb-image-stack' ); 	     
         }
+        register_block_type( __DIR__ . '/build/pb-video-block' );
         register_block_type( __DIR__ . '/build/video-gallery-block' );
-        
         
     }
     add_action( 'init', 'fbks_block_init' );

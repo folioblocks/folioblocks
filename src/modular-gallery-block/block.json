@@ -30,7 +30,8 @@
 			"margin": true,
 			"padding": true
 		},
-		"anchor": true,
+		"customClassName": false,
+		"anchor": false,
 		"ariaLabel": true,
 		"html": false
 	},
@@ -73,6 +74,11 @@
 			"type": "boolean",
 			"default": false
 		},
+		"onHoverStyle": {
+			"type": "string",
+			"enum": ["fade-overlay","gradient-bottom","chip","blur-overlay"],
+			"default": "blur-overlay"
+		},
 		"enableDownload": {
 			"type": "boolean",
 			"default": false
@@ -97,6 +103,7 @@
 		"folioBlocks/lightbox": "lightbox",
 		"folioBlocks/lightboxCaption": "lightboxCaption",
 		"folioBlocks/onHoverTitle": "onHoverTitle",
+		"folioBlocks/onHoverStyle": "onHoverStyle",
 		"folioBlocks/layoutVersion": "layoutVersion",
 		"folioBlocks/enableDownload": "enableDownload",
 		"folioBlocks/downloadOnHover": "downloadOnHover",

@@ -202,7 +202,7 @@ export default function Edit({ attributes, setAttributes }) {
 			{beforeImage?.src && afterImage?.src && (
 				<>
 					<InspectorControls>
-						<PanelBody title={__('Image Order', 'folioblocks')} initialOpen={true}>
+						<PanelBody title={__('Before & After Block Settings', 'folioblocks')} initialOpen={true}>
 							<div className="pb-thumbnail-row">
 								<div className="pb-thumbnail">
 									<p>{__('Before', 'folioblocks')}</p>
@@ -217,7 +217,7 @@ export default function Edit({ attributes, setAttributes }) {
 									</div>
 								</div>
 							</div>
-							<div className="pb-swap-button">
+							<div className="pb-swap-button" marginBottom="15px">
 								<Button
 									variant="secondary"
 									onClick={() =>
@@ -230,8 +230,7 @@ export default function Edit({ attributes, setAttributes }) {
 									{__('Swap Position', 'folioblocks')}
 								</Button>
 							</div>
-						</PanelBody>
-						<PanelBody title={__('General Settings', 'folioblocks')} initialOpen={true}>
+							<hr style={{ border: '0.5px solid #e0e0e0', margin: '12px 0' }} />
 							<SelectControl
 								label={__('Resolution', 'folioblocks')}
 								value={attributes.resolution}
@@ -289,6 +288,9 @@ export default function Edit({ attributes, setAttributes }) {
 								),
 								{ attributes, setAttributes }
 							)}
+						</PanelBody>
+					</InspectorControls>
+					<InspectorControls group="advanced">
 							{applyFilters(
 								'folioBlocks.beforeAfter.disableRightClickToggle',
 								(
@@ -319,16 +321,15 @@ export default function Edit({ attributes, setAttributes }) {
 								),
 								{ attributes, setAttributes }
 							)}
-						</PanelBody>
 					</InspectorControls>
 					<InspectorControls group="styles">
 						{applyFilters(
 							'folioBlocks.beforeAfter.colorSettingsPanel',
 							(
-								<PanelBody title={__('Before & After Block Styles', 'folioblocks')} initialOpen={true}>
+								<PanelBody title={__('Slider & Label Styles', 'folioblocks')} initialOpen={true}>
 									<div style={{ marginBottom: '8px' }}>
 										<Notice status="info" isDismissible={false}>
-											<strong>{__('Enable Before & After Style Controls', 'folioblocks')}</strong><br />
+											<strong>{__('Enable Slider & Label Style Controls', 'folioblocks')}</strong><br />
 											{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
 											<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
 												{__('Upgrade to Pro', 'folioblocks')}

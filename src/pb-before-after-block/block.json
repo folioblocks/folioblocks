@@ -23,7 +23,8 @@
 			"margin": true,
 			"padding": true
 		},
-		"anchor": true,
+		"customClassName": false,
+		"anchor": false,
 		"ariaLabel": true,
 		"html": false,
 		"shadow": true,
