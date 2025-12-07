@@ -104,17 +104,17 @@ No, the galleries will remain in place on your site. However, the advanced layou
 == Changelog ==
 
 = 1.0.6 = 
-- Updates the organization of controls on Before & After Block Carousel Gallery, Grid Gallery, Image Block, Justified Gallery, Loupe Block, Masonry Gallery, Modular Gallery, Video Block, and Video Gallery blocks. 
-- Add controls to access new Hover styles to Carousel, Grid, Justified, Masonery, and Modular galleries.
-- Additional Hover Styles built into Image Block. 
-- Adds Image Block and Video Block as standalone blocks. 
-- Adds Lightbox, WooCommerce, Lazy Load, and Disable Right-click options to Video Block when used individually. 
-- Adds Resolution, Lightbox, Hover, WooCommerce, Image Download, Lazy Load, Disable Right-Click options to Image Block when used individually.
-- Added API Version to migration script in deprecated.js to prevent false warnings in WordPress 6.9. 
-- Fixed layout issue with Justified Gallery when using Gallery Filtering
-- Fixed block previews on Image Block and Video Block
-- Fixed escaping issue on Loupe block
-- Fixed a layout issue with the final row on Justified Gallery
+* Adds Image Block and Video Block as standalone blocks. 
+* Updates the organization of controls on Before & After Block Carousel Gallery, Grid Gallery, Image Block, Justified Gallery, Loupe Block, Masonry Gallery, Modular Gallery, Video Block, and Video Gallery blocks. 
+* Add controls to access new Hover styles to Carousel, Grid, Justified, Masonery, and Modular galleries.
+* Additional Hover Styles built into Image Block. 
+* Adds Lightbox, WooCommerce, Lazy Load, and Disable Right-click options to Video Block when used individually. 
+* Adds Resolution, Lightbox, Hover, WooCommerce, Image Download, Lazy Load, Disable Right-Click options to Image Block when used individually.
+* Added API Version to migration script in deprecated.js to prevent false warnings in WordPress 6.9. 
+* Fixed layout issue with Justified Gallery when using Gallery Filtering
+* Fixed block previews on Image Block and Video Block
+* Fixed escaping issue on Loupe block
+* Fixed a layout issue with the final row on Justified Gallery
 
 = 1.0.5 = 
 * New Loupe Block introduced.
