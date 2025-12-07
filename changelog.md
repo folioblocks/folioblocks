@@ -4,6 +4,25 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.6] - 2025-12-XX
+
+### Fixed 
+- Fixed layout issue with Justified Gallery when using Gallery Filtering
+- Fixed block previews on Image Block and Video Block
+- Fixed escaping issue on Loupe block
+- Fixed a layout issue with the final row on Justified Gallery
+
+### Added
+- Add controls to access new Hover styles to Carousel, Grid, Justified, Masonery, and Modular galleries.
+- Additional Hover Styles built into Image Block. 
+- Adds Image Block and Video Block as standalone blocks. 
+- Adds Lightbox, WooCommerce, Lazy Load, and Disable Right-click options to Video Block when used individually. 
+- Adds Resolution, Lightbox, Hover, WooCommerce, Image Download, Lazy Load, Disable Right-Click options to Image Block when used individually.
+- Added API Version to migration script in deprecated.js to prevent false warnings in WordPress 6.9. 
+
+### Changed
+- Updates the organization of controls on Before & After Block Carousel Gallery, Grid Gallery, Image Block, Justified Gallery, Loupe Block, Masonry Gallery, Modular Gallery, Video Block, and Video Gallery blocks. 
+
 ## [1.0.5] - 2025-11-27
 ### Added
 - New Loupe Block introduced.
