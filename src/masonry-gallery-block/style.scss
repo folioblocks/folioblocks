@@ -24,7 +24,7 @@
     row-gap: var(--row-gap, 10px);
     grid-template-columns: repeat(var(--columns, 4), 1fr);
 }
-.pb-masonry-gallery .pb-image-block-wrapper {
+.pb-masonry-gallery .wp-block-folioblocks-pb-image-block {
 	margin: 0!important; 
 	padding: 0!important; 
 	line-height: 0; 
@@ -72,6 +72,6 @@
 		}
 	}
 }
-.pb-image-block-wrapper.is-hidden {
+.wp-block-folioblocks-pb-image-block.is-hidden {
 	display: none !important;
 }

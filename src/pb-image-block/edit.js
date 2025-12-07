@@ -141,6 +141,10 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	const carouselHeight = context['folioBlocks/carouselHeight'] || 400;
 	const displayHeight = carouselHeight;
 
+	const blockProps = useBlockProps({
+		className: isHidden ? 'is-hidden' : undefined,
+	});
+
 	// Detect: in Image Row but NOT inside Image Stack
 	const { isInImageRow, isInImageStack } = useSelect((select) => {
 		const { getBlockParents, getBlockName } = select('core/block-editor');
@@ -419,72 +423,67 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 				null,
 				{ attributes, setAttributes, isInsideGallery }
 			)}
-			<div
-				ref={wrapperRef}
-				className={`pb-image-block-wrapper${isHidden ? ' is-hidden' : ''}`}
-			>
-				<div {...useBlockProps()}>
-					<figure
-						className={[
-							'pb-image-block',
-							overlayEnabled ? hoverVariantClass : '',
-							effectiveDropShadow ? 'dropshadow' : '',
-							enableDownload ? 'has-download' : '',
-						].filter(Boolean).join(' ')}
-						style={
-							context['folioBlocks/inCarousel']
-								? { ...imageStyle, height: `${displayHeight}px` }
-								: imageStyle
-						}
-					>
-						{!src ? (
-							<MediaPlaceholder
-								icon={<IconImageBlock />}
-								labels={{ title: __('Select Image', 'folioblocks') }}
-								onSelect={onSelectImage}
-								allowedTypes={['image']}
-								multiple={false}
+			<div ref={wrapperRef} {...blockProps}>
+				<figure
+					className={[
+						'pb-image-block',
+						overlayEnabled ? hoverVariantClass : '',
+						effectiveDropShadow ? 'dropshadow' : '',
+						enableDownload ? 'has-download' : '',
+					].filter(Boolean).join(' ')}
+					style={
+						context['folioBlocks/inCarousel']
+							? { ...imageStyle, height: `${displayHeight}px` }
+							: imageStyle
+					}
+				>
+					{!src ? (
+						<MediaPlaceholder
+							icon={<IconImageBlock />}
+							labels={{ title: __('Select Image', 'folioblocks') }}
+							onSelect={onSelectImage}
+							allowedTypes={['image']}
+							multiple={false}
+						/>
+					) : (
+						<>
+							<img
+								src={selectedSrc}
+								alt={alt}
+								width={width}
+								height={height}
+								className="pb-image-block-img"
 							/>
-						) : (
-							<>
-								<img
-									src={selectedSrc}
-									alt={alt}
-									width={width}
-									height={height}
-									className="pb-image-block-img"
-								/>
-								{effectiveHoverTitle && (
-									(Number(attributes.wooProductId) > 0 ||
-										(title && title.trim() !== '')) && (
-										<div className="pb-image-block-title-container">
-											<figcaption className="pb-image-block-title">
-												{(() => {
-													const hoverContent = applyFilters(
-														'folioBlocks.imageBlock.hoverOverlayContent',
-														null,
-														{ attributes, setAttributes, effectiveWooActive, context, title }
-													);
-													return hoverContent || title;
-												})()}
-											</figcaption>
-										</div>
-									)
-								)}
-								{applyFilters(
-									'folioBlocks.imageBlock.downloadButton',
-									null,
-									{ attributes, setAttributes, effectiveDownloadEnabled, effectiveDownloadOnHover, sizes, src, context, isInsideGallery }
-								)}
-								{applyFilters(
-									'folioBlocks.imageBlock.addToCartButton',
-									null,
-									{ attributes, setAttributes, effectiveWooActive, context, isInsideGallery }
-								)}
-							</>
-						)}
-					</figure>
-				</div>
+							{effectiveHoverTitle && (
+								(Number(attributes.wooProductId) > 0 ||
+									(title && title.trim() !== '')) && (
+									<div className="pb-image-block-title-container">
+										<figcaption className="pb-image-block-title">
+											{(() => {
+												const hoverContent = applyFilters(
+													'folioBlocks.imageBlock.hoverOverlayContent',
+													null,
+													{ attributes, setAttributes, effectiveWooActive, context, title }
+												);
+												return hoverContent || title;
+											})()}
+										</figcaption>
+									</div>
+								)
+							)}
+							{applyFilters(
+								'folioBlocks.imageBlock.downloadButton',
+								null,
+								{ attributes, setAttributes, effectiveDownloadEnabled, effectiveDownloadOnHover, sizes, src, context, isInsideGallery }
+							)}
+							{applyFilters(
+								'folioBlocks.imageBlock.addToCartButton',
+								null,
+								{ attributes, setAttributes, effectiveWooActive, context, isInsideGallery }
+							)}
+						</>
+					)}
+				</figure>
 			</div>
 		</>
 	);

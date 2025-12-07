@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		const containerWidth = targetContainer.clientWidth - 1;
 		if (!containerWidth) return;
 
-		const wrappers = targetContainer.querySelectorAll('.pb-image-block-wrapper:not(.is-hidden)');
+		const wrappers = targetContainer.querySelectorAll('.wp-block-folioblocks-pb-image-block:not(.is-hidden)');
 		const images = Array.from(wrappers).map((wrapper) => {
 			const img = wrapper.querySelector('img');
 			const width = parseInt(img.getAttribute('width')) || 1;

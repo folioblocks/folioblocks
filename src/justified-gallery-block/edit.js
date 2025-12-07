@@ -173,7 +173,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 				return;
 			}
 
-			const wrappers = node.querySelectorAll('.pb-image-block-wrapper:not(.is-hidden)');
+			const wrappers = node.querySelectorAll('.wp-block-folioblocks-pb-image-block:not(.is-hidden)');
 			const images = Array.from(wrappers).map((wrapper) => {
 				const img = wrapper.querySelector('img');
 				const width = parseInt(img.getAttribute('width')) || 1;

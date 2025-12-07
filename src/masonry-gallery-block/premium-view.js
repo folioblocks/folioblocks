@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             // Show/hide items only within this gallery
-            const items = gallery.querySelectorAll('.pb-image-block-wrapper');
+            const items = gallery.querySelectorAll('.wp-block-folioblocks-pb-image-block');
             items.forEach((item) => {
                 const category = item.getAttribute('data-filter');
                 if (selected === 'All' || (category && category.toLowerCase() === selected.toLowerCase())) {

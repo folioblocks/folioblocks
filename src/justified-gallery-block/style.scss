@@ -18,7 +18,7 @@
 	flex-wrap: wrap;
 	gap: 0; // gap is now handled via --pb-margin
 
-	.pb-image-block-wrapper {
+	.wp-block-folioblocks-pb-image-block {
 		width: var(--pb-width);
 		height: var(--pb-height);
 		margin-right: var(--pb-margin, 10px);
@@ -76,6 +76,6 @@
 		}
 	}
 }
-.pb-image-block-wrapper.is-hidden {
+.wp-block-folioblocks-pb-image-block.is-hidden {
 	display: none !important;
 }

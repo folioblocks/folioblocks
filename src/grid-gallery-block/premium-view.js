@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Gallery filtering logic 
     galleries.forEach((galleryBlock) => {
         const filterButtons = galleryBlock.querySelectorAll('.pb-image-gallery-filters .filter-button');
-        const imageBlockWrappers = galleryBlock.querySelectorAll('.pb-image-block-wrapper');
+        const imageBlockWrappers = galleryBlock.querySelectorAll('.wp-block-folioblocks-pb-image-block');
 
         filterButtons.forEach((button) => {
             button.addEventListener('click', () => {

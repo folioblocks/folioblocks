@@ -94,7 +94,7 @@ export default function Edit({ clientId, context }) {
 		const layouts = rowLayouts[0]; // Adjust row index if needed
 		if (!layouts) return;
 		const wrappers = document.querySelectorAll(
-			`[data-block="${clientId}"] .pb-image-block-wrapper, 
+			`[data-block="${clientId}"] .wp-block-folioblocks-pb-image-block, 
 			 [data-block="${clientId}"] .wp-block-folioblocks-pb-image-stack`
 		);
 		wrappers.forEach((wrapper, index) => {

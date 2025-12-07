@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // Reset layout styles
-    gallery.querySelectorAll('.pb-image-block-wrapper').forEach(item => {
+    gallery.querySelectorAll('.wp-block-folioblocks-pb-image-block').forEach(item => {
       item.style.position = '';
       item.style.top = '';
       item.style.left = '';
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Only visible items
-    const items = gallery.querySelectorAll('.pb-image-block-wrapper:not(.is-hidden)');
+    const items = gallery.querySelectorAll('.wp-block-folioblocks-pb-image-block:not(.is-hidden)');
 
     items.forEach((item) => {
       const minCol = columnHeights.indexOf(Math.min(...columnHeights));
@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Sequential fade-in for masonry gallery images
-	const gridBlocks = document.querySelectorAll('.pb-image-block-wrapper');
+	const gridBlocks = document.querySelectorAll('.wp-block-folioblocks-pb-image-block');
 	gridBlocks.forEach((block, index) => {
 		block.style.opacity = 0;
 		block.style.transform = 'translateY(20px)';

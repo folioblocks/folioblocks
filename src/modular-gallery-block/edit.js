@@ -150,7 +150,7 @@ export default function Edit(props) {
 		rowWrappers.forEach((row, rowIndex) => {
 			const wrappers = Array.from(row.children).filter(
 				(child) =>
-					child.classList.contains('pb-image-block-wrapper') ||
+					child.classList.contains('wp-block-folioblocks-pb-image-block') ||
 					child.classList.contains('wp-block-folioblocks-pb-image-stack')
 			);
 			if (!wrappers.length) return;
@@ -176,7 +176,7 @@ export default function Edit(props) {
 				let ratio;
 				let isStack = false;
 
-				if (wrapper.classList.contains('pb-image-block-wrapper')) {
+				if (wrapper.classList.contains('wp-block-folioblocks-pb-image-block')) {
 					const img = wrapper.querySelector('img');
 					if (img && img.naturalWidth && img.naturalHeight) {
 						ratio = img.naturalWidth / img.naturalHeight;

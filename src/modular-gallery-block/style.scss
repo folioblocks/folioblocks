@@ -22,7 +22,7 @@
 	flex-direction: row;
 	align-items: flex-start;
 }
-.pb-image-row .pb-image-block-wrapper { 
+.pb-image-row .wp-block-folioblocks-pb-image-block { 
 	width: auto!important; 
 	line-height: 0;
 	opacity: 0;
@@ -51,7 +51,7 @@
 			display: block;
 		}
 
-		.pb-image-block-wrapper,
+		.wp-block-folioblocks-pb-image-block,
 		.wp-block-folioblocks-pb-image-stack {
 			width: 100% !important;
 			height: auto !important;

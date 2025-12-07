@@ -118,6 +118,7 @@ addFilter(
                             { label: __('Always', 'folioblocks'), value: 'always' }
                         ]}
                         onChange={(value) => setAttributes({ wooCartIconDisplay: value })}
+                        __next40pxDefaultSize
                         __nextHasNoMarginBottom
                         help={__('Choose when to display the Add to Cart icon.', 'folioblocks')}
                     />

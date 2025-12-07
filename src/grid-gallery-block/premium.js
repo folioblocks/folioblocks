@@ -126,6 +126,7 @@ addFilter(
                         ]}
                         onChange={(value) => setAttributes({ downloadOnHover: value === 'hover' })}
                         __nextHasNoMarginBottom
+                        __next40pxDefaultSize
                         help={__('Set display preference for Image Download icon.', 'folioblocks')}
                     />
                 )}
@@ -175,6 +176,7 @@ addFilter(
                         ]}
                         onChange={(value) => setAttributes({ wooCartIconDisplay: value })}
                         __nextHasNoMarginBottom
+                        __next40pxDefaultSize
                         help={__('Choose when to display the Add to Cart icon.', 'folioblocks')}
                     />
                 )}

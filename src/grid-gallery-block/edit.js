@@ -31,65 +31,83 @@ import './editor.scss';
 
 const ALLOWED_BLOCKS = ['folioblocks/pb-image-block'];
 
-// Improved layout calculation for grid gallery: clears previous styles, uses bounding rect, and accounts for border
-const applyGridLayout = (galleryRef) => {
+// Improved layout calculation for grid gallery: uses gallery width and column settings
+const applyGridLayout = (galleryRef, { columns, tabletColumns, mobileColumns } = {}) => {
 	const gallery = galleryRef?.current;
 	if (!gallery) return;
 
-	const wrappers = gallery.querySelectorAll('.pb-image-block-wrapper');
+	// Determine active column count based on viewport (approximate breakpoints)
+	let columnCount = columns || 1;
+	const viewportWidth = window.innerWidth || document.documentElement.clientWidth || 1024;
 
-	wrappers.forEach((wrapper) => {
-		const figure = wrapper.querySelector('figure');
-		// Skip hidden wrappers
-		if (wrapper.classList.contains('is-hidden')) return;
-		const img = wrapper.querySelector('img');
+	if (viewportWidth <= 600 && mobileColumns) {
+		columnCount = mobileColumns;
+	} else if (viewportWidth <= 960 && tabletColumns) {
+		columnCount = tabletColumns;
+	}
 
-		if (!figure || !img || !img.naturalWidth || !img.naturalHeight) return;
+	if (!columnCount) return;
 
-		// Reset existing styles to get accurate bounding sizes
+	// Use the gallery width to derive the grid cell size
+	const galleryRect = gallery.getBoundingClientRect();
+	const galleryWidth = galleryRect.width || 0;
+	if (!galleryWidth) return;
+
+	// Cell size = full grid cell, figure size = 85% of that
+	const cellSize = galleryWidth / columnCount;
+	const figureMaxSize = cellSize * 0.80;
+
+	// Optionally expose the cell size as a CSS variable for grid-auto-rows, etc.
+	gallery.style.setProperty('--pb-grid-cell-size', `${cellSize}px`);
+
+	// Target each image block inside the grid
+	const blocks = gallery.querySelectorAll('.wp-block-folioblocks-pb-image-block');
+
+	blocks.forEach((block) => {
+		// Skip items that are hidden by filtering
+		if (block.classList.contains('is-hidden')) return;
+
+		const figure = block.querySelector('figure');
+		const img = figure?.querySelector('img');
+		if (!figure || !img) return;
+
+		// Reset existing sizing
 		figure.style.width = '';
 		figure.style.height = '';
-
-		const borderWidth = parseFloat(getComputedStyle(img).borderWidth) || 0;
-		const aspectRatio = img.naturalWidth / img.naturalHeight;
-
-		// Use getBoundingClientRect for accurate, real-time dimensions
-		const wrapperRect = wrapper.getBoundingClientRect();
-		const wrapperWidth = wrapperRect.width;
-		const wrapperHeight = wrapperRect.height;
-
-		const maxWidth = wrapperWidth * 0.85;
-		const maxHeight = wrapperHeight * 0.85;
-
-		let scaledWidth = maxWidth;
-		let scaledHeight = scaledWidth / aspectRatio;
-
-		if (scaledHeight > maxHeight) {
-			scaledHeight = maxHeight;
-			scaledWidth = scaledHeight * aspectRatio;
-		}
-
-		// Add borderWidth * 2 to figure size to make space for borders inside the bounding box
-		const adjustedWidth = scaledWidth + borderWidth * 2;
-		const adjustedHeight = scaledHeight + borderWidth * 2;
-
-		// Apply width/height to figure
-		figure.style.width = `${adjustedWidth}px`;
-		figure.style.height = `${adjustedHeight}px`;
-
-		// Ensure img doesn't override layout
 		img.style.width = '';
 		img.style.height = '';
+
+		const { naturalWidth, naturalHeight } = img;
+
+		// If we don't yet know the image's intrinsic size, bail for this one.
+		if (!naturalWidth || !naturalHeight) return;
+
+		// Compute a uniform scale so the image fits within figureMaxSize on both sides
+		const maxSize = figureMaxSize;
+		const scaleX = maxSize / naturalWidth;
+		const scaleY = maxSize / naturalHeight;
+		const scale = Math.min(scaleX, scaleY);
+
+		// Fallback guard in case of invalid dimensions
+		if (!isFinite(scale) || scale <= 0) return;
+
+		const targetWidth = naturalWidth * scale;
+		const targetHeight = naturalHeight * scale;
+
+		// Always set explicit width and height on the figure to avoid `auto`
+		figure.style.width = `${targetWidth}px`;
+		figure.style.height = `${targetHeight}px`;
+
+		// Ensure the image fills the figure box; these are also explicit values
+		img.style.width = '100%';
+		img.style.height = '100%';
 	});
 };
 
 // Utility: Wait for all images in gallery to load before applying layout (robust version)
-const applyGridLayoutWhenImagesLoaded = (galleryRef) => {
+const applyGridLayoutWhenImagesLoaded = (galleryRef, columnSettings) => {
 	const gallery = galleryRef?.current;
 	if (!gallery) return;
-
-	const wrappers = gallery.querySelectorAll('.pb-image-block-wrapper');
-	if (!wrappers.length) return;
 
 	const allImages = gallery.querySelectorAll('img');
 	if (!allImages.length) return;
@@ -101,7 +119,7 @@ const applyGridLayoutWhenImagesLoaded = (galleryRef) => {
 		if (loadedCount < allImages.length) return;
 		// Delay to improve reliability on first load
 		setTimeout(() => {
-			requestAnimationFrame(() => applyGridLayout(galleryRef));
+			requestAnimationFrame(() => applyGridLayout(galleryRef, columnSettings));
 		}, 100);
 	};
 
@@ -219,7 +237,11 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			height: block.attributes.height,
 		}));
 		setAttributes({ images: updatedImages });
-		applyGridLayoutWhenImagesLoaded(galleryRef);
+		applyGridLayoutWhenImagesLoaded(galleryRef, {
+			columns,
+			tabletColumns,
+			mobileColumns,
+		});
 	}, [innerBlocks]);
 
 
@@ -227,7 +249,11 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 	useEffect(() => {
 		const applyLayout = () => {
 			setTimeout(() => {
-				applyGridLayoutWhenImagesLoaded(galleryRef);
+				applyGridLayoutWhenImagesLoaded(galleryRef, {
+					columns,
+					tabletColumns,
+					mobileColumns,
+				});
 			}, 50);
 		};
 		applyLayout();
@@ -257,7 +283,11 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		if (!galleryRef.current) return;
 		const observer = new MutationObserver(() => {
 			setTimeout(() => {
-				applyGridLayoutWhenImagesLoaded(galleryRef);
+				applyGridLayoutWhenImagesLoaded(galleryRef, {
+					columns,
+					tabletColumns,
+					mobileColumns,
+				});
 			}, 100);
 		});
 		observer.observe(galleryRef.current, {
@@ -366,7 +396,11 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		// Trigger layout recalculation
 		setTimeout(() => {
 			updateBlockAttributes(clientId, { _forceRefresh: Date.now() });
-			applyGridLayoutWhenImagesLoaded(galleryRef);
+			applyGridLayoutWhenImagesLoaded(galleryRef, {
+				columns,
+				tabletColumns,
+				mobileColumns,
+			});
 			setIsLoading(false); // <-- stop spinner
 		}, 300);
 	};

@@ -21,7 +21,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added API Version to migration script in deprecated.js to prevent false warnings in WordPress 6.9. 
 
 ### Changed
-- Updates the organization of controls on Before & After Block Carousel Gallery, Grid Gallery, Image Block, Justified Gallery, Loupe Block, Masonry Gallery, Modular Gallery, Video Block, and Video Gallery blocks. 
+- Updated Grid Gallery layout logic. 
+- Removed pb-image-block-wrapper from Image Block 
+- Updates the organization of controls on all bblocks. 
 
 ## [1.0.5] - 2025-11-27
 ### Added

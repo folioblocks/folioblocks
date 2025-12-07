@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!container) return;
 
         const filterBar = document.querySelector('.pb-image-gallery-filters');
-        const allItems = container.querySelectorAll('.pb-image-block-wrapper');
+        const allItems = container.querySelectorAll('.wp-block-folioblocks-pb-image-block');
 
         if (!filterBar) return;
 

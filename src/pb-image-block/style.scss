@@ -78,7 +78,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
 
-        .pb-product-name,
+      .pb-product-name,
 	    .pb-product-price {
 		    display: block; 
 		    text-align: center; /* optional, to match gallery alignment */
@@ -273,12 +273,14 @@
 }
 
 /* Base overlay constraints for captioned variants */
+.pb-image-block.pb-hover-blur-overlay,
 .pb-image-block.pb-hover-fade-overlay,
 .pb-image-block.pb-hover-gradient-bottom,
 .pb-image-block.pb-hover-chip {
   position: relative;
   overflow: hidden; /* respect figure border radius */
 }
+.pb-image-block.pb-hover-blur-overlay .pb-image-block-title-container,
 .pb-image-block.pb-hover-fade-overlay .pb-image-block-title-container,
 .pb-image-block.pb-hover-gradient-bottom .pb-image-block-title-container,
 .pb-image-block.pb-hover-chip .pb-image-block-title-container {

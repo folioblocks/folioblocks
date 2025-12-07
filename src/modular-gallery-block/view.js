@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		const gap = container.closest('.no-gap') ? 0 : 10;
 		const children = Array.from(container.children);
 		const totalAspectRatio = children.reduce((sum, child) => {
-			if (child.classList.contains('pb-image-block-wrapper')) {
+			if (child.classList.contains('wp-block-folioblocks-pb-image-block')) {
 				const img = child.querySelector('img.pb-image-block-img');
 				if (img) {
 					const width = img.naturalWidth || img.width;
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		const targetHeight = (containerWidth - gap * (children.length - 1)) / totalAspectRatio;
 
 		children.forEach((child) => {
-			if (child.classList.contains('pb-image-block-wrapper')) {
+			if (child.classList.contains('wp-block-folioblocks-pb-image-block')) {
 				const img = child.querySelector('figure img.pb-image-block-img');
 				if (img) {
 					const aspectRatio = img.naturalWidth / img.naturalHeight;
@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		// Remove right margin from last child
 		if (children.length > 0) {
 			const lastChild = children[children.length - 1];
-			if (lastChild.classList.contains('pb-image-block-wrapper')) {
+			if (lastChild.classList.contains('wp-block-folioblocks-pb-image-block')) {
 				const figure = lastChild.querySelector('.pb-image-block');
 				if (figure) {
 					figure.style.marginRight = '0';
@@ -191,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 
 	// Sequential fade-in for Modular gallery images
-	const gridBlocks = document.querySelectorAll('.pb-image-block-wrapper');
+	const gridBlocks = document.querySelectorAll('.wp-block-folioblocks-pb-image-block');
 	gridBlocks.forEach((block, index) => {
 		block.style.opacity = 0;
 		block.style.transform = 'translateY(20px)';
