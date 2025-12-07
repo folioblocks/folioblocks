@@ -105,7 +105,7 @@ No, the galleries will remain in place on your site. However, the advanced layou
 
 = 1.0.6 = 
 * Adds Image Block and Video Block as standalone blocks. 
-* Updates the organization of controls on Before & After Block Carousel Gallery, Grid Gallery, Image Block, Justified Gallery, Loupe Block, Masonry Gallery, Modular Gallery, Video Block, and Video Gallery blocks. 
+* Updates the organization of controls on all blocks. 
 * Additional Hover Styles built into Image Block. 
 * Add controls to access new Hover styles to Carousel, Grid, Justified, Masonery, and Modular galleries.
 * Adds Lightbox, WooCommerce, Lazy Load, and Disable Right-click options to Video Block when used individually. 

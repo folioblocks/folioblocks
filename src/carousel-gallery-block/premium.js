@@ -383,12 +383,12 @@ addFilter(
                 {onHoverTitle && (
                     <SelectControl
                         label={__('Hover Style', 'folioblocks')}
-                        value={attributes.onHoverStyle || 'fade-overlay'}
+                        value={attributes.onHoverStyle || 'blur-overlay'}
                         options={[
-                            { label: __('Blur Overlay (centered)', 'folioblocks'), value: 'blur-overlay' },
-                            { label: __('Fade Overlay (centered)', 'folioblocks'), value: 'fade-overlay' },
-                            { label: __('Gradient Bottom (slide-up)', 'folioblocks'), value: 'gradient-bottom' },
-                            { label: __('Chip (top-left label)', 'folioblocks'), value: 'chip' },
+                            { label: __('Blur Overlay Centered)', 'folioblocks'), value: 'blur-overlay' },
+                            { label: __('Fade Overlay - Centered)', 'folioblocks'), value: 'fade-overlay' },
+                            { label: __('Gradient Overlay - Slide-up Bottom', 'folioblocks'), value: 'gradient-bottom' },
+                            { label: __('Chip Overlay - Top-Left Label)', 'folioblocks'), value: 'chip' },
                         ]}
                         onChange={(v) => setAttributes({ onHoverStyle: v })}
                         __nextHasNoMarginBottom
