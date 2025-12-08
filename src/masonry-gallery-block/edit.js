@@ -196,14 +196,14 @@ export default function Edit({ clientId, attributes, setAttributes }) {
         gallery.style.position = 'relative';
 
         // Reset styles
-        gallery.querySelectorAll('.wp-block-folioblocks-pb-image-block').forEach((item) => {
+        gallery.querySelectorAll('.pb-image-block-wrapper').forEach((item) => {
             item.style.position = '';
             item.style.top = '';
             item.style.left = '';
             item.style.width = '';
         });
 
-        const items = gallery.querySelectorAll('.wp-block-folioblocks-pb-image-block:not(.is-hidden)');
+        const items = gallery.querySelectorAll('.pb-image-block-wrapper:not(.is-hidden)');
         items.forEach((item) => {
             const minCol = columnHeights.indexOf(Math.min(...columnHeights));
 

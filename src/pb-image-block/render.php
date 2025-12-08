@@ -85,9 +85,8 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 	);
 }
 
-$fbks_wrapper_attributes_args = [
-	'class' => 'pb-image-block-wrapper',
-];
+$fbks_wrapper_attributes_args = [];
+
 if ( ! empty( $fbks_disable_right_click ) ) {
 	$fbks_wrapper_attributes_args['data-disable-right-click'] = 'true';
 }

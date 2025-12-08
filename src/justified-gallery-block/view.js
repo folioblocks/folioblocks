@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	const gap = noGap ? 0 : 10;
 
 	let resizeTimeout;
+	let hasAnimated = false;
 
 	const calculateLayout = (targetContainer = container) => {
 		if (!(targetContainer instanceof Element)) {
@@ -69,6 +70,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		const host = targetContainer.closest('.wp-block-folioblocks-justified-gallery-block');
 		if (host) host.classList.remove('is-loading');
+
+		// One-time sequential fade-in for this justified gallery only
+		if (!hasAnimated) {
+			hasAnimated = true;
+			const gridBlocks = targetContainer.querySelectorAll('.wp-block-folioblocks-pb-image-block');
+			gridBlocks.forEach((block, index) => {
+				block.style.opacity = 0;
+				block.style.transform = 'translateY(20px)';
+				block.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+				setTimeout(() => {
+					block.style.opacity = 1;
+					block.style.transform = 'translateY(0)';
+				}, index * 150);
+			});
+		}
 	};
 
 	// Expose a public reflow helper for premium-view.js (accepts either the gallery block or the inner .pb-justified-gallery)
@@ -107,15 +123,4 @@ document.addEventListener('DOMContentLoaded', () => {
 		requestAnimationFrame(() => calculateLayout());
 	}, 100);
 
-	// Sequential fade-in for justified gallery images
-	const gridBlocks = document.querySelectorAll('.pb-image-block-wrapper');
-	gridBlocks.forEach((block, index) => {
-		block.style.opacity = 0;
-		block.style.transform = 'translateY(20px)';
-		block.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-		setTimeout(() => {
-			block.style.opacity = 1;
-			block.style.transform = 'translateY(0)';
-		}, index * 150);
-	});
 });
