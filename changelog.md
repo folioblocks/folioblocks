@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.6] - 2025-12-07
 
 ### Fixed 
+- Fixed bug in Safari with Blur Overlay
 - Fixed layout issue with Justified Gallery when using Gallery Filtering
 - Fixed block previews on Image Block and Video Block
 - Fixed escaping issue on Loupe block
@@ -22,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Updated Grid Gallery layout logic. 
-- Removed pb-image-block-wrapper from Image Block 
+- Removed pb-image-block-wrapper from Image Block except for on Masonry Gallery to improve dragability. 
 - Updates the organization of controls on all bblocks. 
 
 ## [1.0.5] - 2025-11-27
