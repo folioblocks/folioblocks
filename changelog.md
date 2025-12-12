@@ -5,8 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.0.6] - 2025-12-07
-
 ### Fixed 
+- Fixed bug in Before & After block where slider could hide block outline
 - Fixed bug in Safari with Blur Overlay
 - Fixed layout issue with Justified Gallery when using Gallery Filtering
 - Fixed block previews on Image Block and Video Block
