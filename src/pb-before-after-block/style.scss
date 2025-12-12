@@ -3,7 +3,7 @@
  * Front-End SCSS
  **/
  
-.wp-block-folioblocks-before-after-block {overflow: hidden;}
+.wp-block-folioblocks-before-after-block {overflow: hidden; padding: 2px;}
 
 .pb-before-after-container {
 	position: relative;
@@ -184,6 +184,7 @@
 
 	.pb-after-wrapper {
 		z-index: 1;
+		overflow: hidden;
 	}
 }
 // Before/After label styles
