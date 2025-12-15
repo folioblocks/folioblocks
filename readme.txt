@@ -5,7 +5,7 @@ Tags: gallery, image gallery, photo gallery, video gallery, lightbox,
 Tested up to:      6.9
 Requires at least: 6.3
 Requires PHP: 7.4
-Stable tag:        1.0.6
+Stable tag:        1.0.7
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -102,6 +102,9 @@ No, the galleries will remain in place on your site. However, the advanced layou
 6. Video Gallery block populated with images
 
 == Changelog ==
+
+= 1.0.7 = 
+* Fixed bug in Grid Gallery that clipped images when set to content width.
 
 = 1.0.6 = 
 * Adds Image Block and Video Block as standalone blocks. 

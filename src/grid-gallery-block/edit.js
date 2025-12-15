@@ -36,22 +36,22 @@ const applyGridLayout = (galleryRef, { columns, tabletColumns, mobileColumns } =
 	const gallery = galleryRef?.current;
 	if (!gallery) return;
 
-	// Determine active column count based on viewport (approximate breakpoints)
-	let columnCount = columns || 1;
-	const viewportWidth = window.innerWidth || document.documentElement.clientWidth || 1024;
+	// Use the gallery width (container) to determine responsive columns
+	const galleryRect = gallery.getBoundingClientRect();
+	const galleryWidth = galleryRect.width || 0;
+	if (!galleryWidth) return;
 
-	if (viewportWidth <= 600 && mobileColumns) {
+	// Determine active column count based on the *container width*
+	let columnCount = columns || 1;
+
+	// These are container breakpoints (not viewport breakpoints) so narrow content widths behave correctly.
+	if (galleryWidth <= 600 && mobileColumns) {
 		columnCount = mobileColumns;
-	} else if (viewportWidth <= 960 && tabletColumns) {
+	} else if (galleryWidth <= 960 && tabletColumns) {
 		columnCount = tabletColumns;
 	}
 
 	if (!columnCount) return;
-
-	// Use the gallery width to derive the grid cell size
-	const galleryRect = gallery.getBoundingClientRect();
-	const galleryWidth = galleryRect.width || 0;
-	if (!galleryWidth) return;
 
 	// Cell size = full grid cell, figure size = 85% of that
 	const cellSize = galleryWidth / columnCount;

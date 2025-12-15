@@ -36,21 +36,27 @@ document.addEventListener('DOMContentLoaded', function () {
 		 * which already respects the current breakpoint.
 		 */
 		const getColumns = () => {
-			const style = window.getComputedStyle(grid);
-
-			// Primary: count tracks from grid-template-columns
-			const template = style.gridTemplateColumns;
+			// Primary: derive tracks from grid-template-columns.
+			// Some browsers return expanded tracks ("1fr 1fr ..."), while others may keep repeat().
+			const template = window.getComputedStyle(grid).gridTemplateColumns;
 			if (template && template !== 'none') {
+				// Handle repeat(N, ...) form
+				const repeatMatch = template.match(/repeat\((\d+)\s*,/i);
+				if (repeatMatch && repeatMatch[1]) {
+					const n = parseInt(repeatMatch[1], 10);
+					if (!isNaN(n) && n > 0) return n;
+				}
+
+				// Otherwise count expanded tracks
 				const parts = template
 					.split(' ')
 					.filter((p) => p && p.trim() !== '');
 				const count = parts.length;
-				if (count > 0) {
-					return count;
-				}
+				if (count > 0) return count;
 			}
 
 			// Fallback: try custom vars, then data attribute
+			const style = window.getComputedStyle(grid);
 			const desktopVar = parseInt(
 				style.getPropertyValue('--grid-cols-desktop'),
 				10
@@ -97,8 +103,17 @@ document.addEventListener('DOMContentLoaded', function () {
 			const columns = getColumns();
 			if (!columns) return;
 
-			// Cell size = full grid cell; figure max size = 80% of that
-			const cellSize = galleryWidth / columns;
+			// Cell size = usable width per column (account for padding + column gaps).
+			const style = window.getComputedStyle(grid);
+			const paddingLeft = parseFloat(style.paddingLeft) || 0;
+			const paddingRight = parseFloat(style.paddingRight) || 0;
+			const columnGap = parseFloat(style.columnGap) || 0;
+
+			const usableWidth =
+				galleryWidth - paddingLeft - paddingRight - columnGap * (columns - 1);
+			if (!isFinite(usableWidth) || usableWidth <= 0) return;
+
+			const cellSize = usableWidth / columns;
 			const figureMaxSize = cellSize * 0.8;
 
 			// Expose the cell size as a CSS variable (optional but mirrors editor)

@@ -18,7 +18,7 @@
     display: grid;
     overflow: hidden;
 	align-items: center; 
-	gap: 40px;
+	gap: clamp(12px, 3vw, 40px);
 	grid-template-columns: repeat(var(--grid-cols-desktop), 1fr);
 
 	@media (max-width: 1024px) {
