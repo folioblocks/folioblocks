@@ -3,7 +3,6 @@
  * Front-End SCSS
  **/
 
-
 .wp-block-folioblocks-grid-gallery-block {
 	opacity: 1;
 	transition: opacity 0.3s ease;
@@ -13,12 +12,14 @@
 	}
 }
 
-/* Grid Gallery Container */ 
+/* Grid Gallery Container */
 .pb-grid-gallery {
-    display: grid;
-    overflow: hidden;
-	align-items: center; 
-	gap: clamp(12px, 3vw, 40px);
+	display: grid;
+	overflow: hidden;
+	align-items: center;
+	row-gap: 40px;
+	column-gap: 10px;
+	padding: 0 20px;
 	grid-template-columns: repeat(var(--grid-cols-desktop), 1fr);
 
 	@media (max-width: 1024px) {
@@ -33,7 +34,9 @@
 	justify-self: center;
 	opacity: 0;
 	transform: translateY(20px);
-	transition: opacity 0.6s ease, transform 0.6s ease;
+	transition:
+		opacity 0.6s ease,
+		transform 0.6s ease;
 }
 
 /* Visible state: fade/slide in */
@@ -43,7 +46,7 @@
 }
 
 .pb-grid-gallery .pb-image-block {
-	box-sizing: content-box!important;
+	box-sizing: content-box !important;
 }
 
 // Filter bar styles
@@ -51,7 +54,7 @@
 	display: flex;
 	flex-wrap: wrap;
 	gap: 10px;
-    padding-top: 1rem;
+	padding-top: 1rem;
 	margin-bottom: 1rem;
 
 	&.align-left {
@@ -87,4 +90,3 @@
 .wp-block-folioblocks-pb-image-block.is-hidden {
 	display: none !important;
 }
-

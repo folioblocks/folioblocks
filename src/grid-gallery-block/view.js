@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			if (!isFinite(usableWidth) || usableWidth <= 0) return;
 
 			const cellSize = usableWidth / columns;
-			const figureMaxSize = cellSize * 0.8;
+			const figureMaxSize = cellSize * 0.75;
 
 			// Expose the cell size as a CSS variable (optional but mirrors editor)
 			grid.style.setProperty('--pb-grid-cell-size', `${cellSize}px`);

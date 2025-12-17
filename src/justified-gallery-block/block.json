@@ -61,7 +61,7 @@
         "activeFilter": { "type": "string", "default": "All" },
         "hasWooCommerce": { "type": "boolean", "default": false },
         "enableDownload": { "type": "boolean", "default": false },
-        "downloadOnHover": { "type": "boolean", "default": false },
+        "downloadOnHover": { "type": "boolean", "default": "hover" }, 
         "enableWooCommerce": { "type": "boolean", "default": false },
         "wooCartIconDisplay": { "type": "string", "enum": ["hover", "always"], "default": "hover"},
         "wooLightboxInfoType": { "type": "string", "enum": ["caption", "product"], "default": "caption" },

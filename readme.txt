@@ -5,7 +5,7 @@ Tags: gallery, image gallery, photo gallery, video gallery, lightbox,
 Tested up to:      6.9
 Requires at least: 6.3
 Requires PHP: 7.4
-Stable tag:        1.0.7
+Stable tag:        1.0.8
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -102,6 +102,15 @@ No, the galleries will remain in place on your site. However, the advanced layou
 6. Video Gallery block populated with images
 
 == Changelog ==
+
+= 1.0.8 = 
+* Fixed bug in Grid Gallery layout logic
+* Fixed bug in Image block when using border-radius. 
+* Reduced availble border-width in all galleries to a maximum of 15px. 
+* Reduced available border-radius on all galleries to a maximum of 50px. 
+* Changed label names on all Gallery blocks to ensure matching language.
+* Changed default setting for Image Downloads to "On Hover" to match default in WooCommerce Integration.
+
 
 = 1.0.7 = 
 * Fixed bug in Grid Gallery that clipped images when set to content width.

@@ -83,10 +83,7 @@
 			"type": "boolean",
 			"default": false
 		},
-		"downloadOnHover": {
-			"type": "boolean",
-			"default": false
-		},
+		"downloadOnHover": { "type": "boolean", "default": "hover" }, 
 		"hasWooCommerce": { "type": "boolean", "default": false },
 		"enableWooCommerce": { "type": "boolean", "default": false },
         "wooCartIconDisplay": { "type": "string", "enum": ["hover", "always"], "default": "hover"},

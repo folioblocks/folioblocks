@@ -86,7 +86,7 @@ const ResponsiveRangeControl = ({
 
 			<RangeControl
 				min={1}
-				max={device === 'desktop' ? 12 : columns}
+				max={device === 'desktop' ? 8 : columns}
 				value={getValue()}
 				onChange={setValue}
 				help={`Adjust the default amount of columns on ${device.charAt(0).toUpperCase() + device.slice(1)}.`}

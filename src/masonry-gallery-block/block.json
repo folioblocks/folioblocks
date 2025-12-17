@@ -36,7 +36,7 @@
 		"onHoverStyle": { "type": "string", "enum": ["fade-overlay","gradient-bottom","chip","blur-overlay"], "default": "blur-overlay"},
 		"randomizeOrder": { "type": "boolean", "default": false },
 		"enableDownload": { "type": "boolean", "default": false },
-		"downloadOnHover": { "type": "boolean", "default": false },
+		"downloadOnHover": { "type": "boolean", "default": "hover" }, 
 		"hasWooCommerce": { "type": "boolean", "default": false },
 		"enableWooCommerce": { "type": "boolean", "default": false },
         "wooCartIconDisplay": { "type": "string", "enum": ["hover", "always"], "default": "hover"},
