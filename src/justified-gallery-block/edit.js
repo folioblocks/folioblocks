@@ -356,7 +356,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						onChange={(value) => setAttributes({ rowHeight: value })}
 						min={100}
 						max={500}
-						help={__('Target row height for justified layout.')}
+						help={__('Approximate target Row Height for Justified layout.')}
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>

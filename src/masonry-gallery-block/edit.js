@@ -196,14 +196,24 @@ export default function Edit({ clientId, attributes, setAttributes }) {
         gallery.style.position = 'relative';
 
         // Reset styles
+        // NOTE: Filtering logic may apply `.is-hidden` to the inner block element.
+        // We normalize that state by mirroring `.is-hidden` on the OUTER wrapper so
+        // the masonry layout can reliably exclude hidden items.
         gallery.querySelectorAll('.pb-image-block-wrapper').forEach((item) => {
             item.style.position = '';
             item.style.top = '';
             item.style.left = '';
             item.style.width = '';
+
+            // If the inner pb-image-block is hidden, also hide the wrapper.
+            const inner = item.querySelector('.wp-block-folioblocks-pb-image-block');
+            const shouldBeHidden = !!inner?.classList.contains('is-hidden');
+            item.classList.toggle('is-hidden', shouldBeHidden);
         });
 
-        const items = gallery.querySelectorAll('.pb-image-block-wrapper:not(.is-hidden)');
+        const items = gallery.querySelectorAll(
+            '.pb-image-block-wrapper:not(.is-hidden):not(:has(.wp-block-folioblocks-pb-image-block.is-hidden))'
+        );
         items.forEach((item) => {
             const minCol = columnHeights.indexOf(Math.min(...columnHeights));
 
