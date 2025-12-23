@@ -141,6 +141,12 @@ export default function Edit(props) {
 	const [rowLayouts, setRowLayouts] = useState({});
 	const prevLayouts = useRef({});
 
+	// Used to prevent a jarring first paint (images briefly appear at natural size)
+	// by fading the gallery in only after we have applied the first successful layout.
+	const [isLayoutReady, setIsLayoutReady] = useState(false);
+	// Only fade-in once (initial load). After that, never hide the gallery during edits/reordering.
+	const hasCompletedInitialFade = useRef(false);
+
 	const recalculateLayout = () => {
 		if (!containerRef.current) return;
 		const rowWrappers = containerRef.current.querySelectorAll('.pb-image-row');
@@ -230,11 +236,15 @@ export default function Edit(props) {
 				if (!layout) return;
 
 				if (!layout.isStack) {
+					wrapper.style.width = `${layout.width}px`;
+					wrapper.style.height = `${layout.height}px`;
+					wrapper.style.marginRight = layout.marginRight;
+
 					const figure = wrapper.querySelector('.pb-image-block');
 					if (figure) {
-						figure.style.width = `${layout.width}px`;
-						figure.style.height = `${layout.height}px`;
-						figure.style.marginRight = layout.marginRight;
+						figure.style.width = '';
+						figure.style.height = '';
+						figure.style.marginRight = '';
 					}
 				} else {
 					// Stack logic (already present above)
@@ -270,8 +280,22 @@ export default function Edit(props) {
 			});
 		});
 
-		// If any row's images are not loaded, skip layout recalculation
-		if (!allRowsReady) return;
+		// If any row's images are not loaded, skip layout recalculation.
+		// IMPORTANT: we only hide during the initial load fade-in.
+		if (!allRowsReady) {
+			if (!hasCompletedInitialFade.current) {
+				// Keep hidden until we can apply the first full layout.
+				if (isLayoutReady) setIsLayoutReady(false);
+			}
+			return;
+		}
+
+		// At this point the layout has been applied for all rows.
+		// Only fade in once. After that, keep the gallery visible even when reordering.
+		if (!hasCompletedInitialFade.current) {
+			if (!isLayoutReady) setIsLayoutReady(true);
+			hasCompletedInitialFade.current = true;
+		}
 
 		const layoutsEqual = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 		if (!layoutsEqual(prevLayouts.current, layouts)) {
@@ -282,6 +306,14 @@ export default function Edit(props) {
 	};
 
 	const recalculateLayoutDebounced = debounce(recalculateLayout, 150);
+
+
+	// Recalculate after add/remove/reorder. This does NOT hide the gallery.
+	useEffect(() => {
+		requestAnimationFrame(() => {
+			recalculateLayoutDebounced();
+		});
+	}, [innerBlocks, noGap]);
 
 	useEffect(() => {
 		const observer = new ResizeObserver(() => {
@@ -310,7 +342,12 @@ export default function Edit(props) {
 				'pb-modular-gallery',
 				noGap ? 'no-row-gap' : '',
 				attributes.collapseOnMobile ? 'collapse-on-mobile' : ''
-			].filter(Boolean).join(' ')
+			].filter(Boolean).join(' '),
+			style: {
+				opacity: isLayoutReady ? 1 : 0,
+				transition: 'opacity 200ms ease',
+				willChange: 'opacity',
+			}
 		},
 		{
 			allowedBlocks: ALLOWED_BLOCKS,
