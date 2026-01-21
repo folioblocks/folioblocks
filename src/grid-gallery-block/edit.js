@@ -32,11 +32,7 @@ import "./editor.scss";
 const ALLOWED_BLOCKS = ["folioblocks/pb-image-block"];
 
 // Improved layout calculation for grid gallery: uses gallery width and column settings
-const applyGridLayout = (
-	galleryRef,
-	wrapperRef,
-	{ columns } = {},
-) => {
+const applyGridLayout = (galleryRef, wrapperRef, { columns } = {}) => {
 	const gallery = galleryRef?.current;
 	if (!gallery) return;
 
@@ -88,7 +84,7 @@ const applyGridLayout = (
 
 	// Cell size = full grid cell, figure size = 70% of that
 	const cellSize = galleryWidth / columnCount;
-	const figureMaxSize = cellSize * 0.70;
+	const figureMaxSize = cellSize * 0.7;
 
 	// Optionally expose the cell size as a CSS variable for grid-auto-rows, etc.
 	gallery.style.setProperty("--pb-grid-cell-size", `${cellSize}px`);
@@ -705,67 +701,10 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					initialOpen={true}
 				>
 					{applyFilters(
-						"folioBlocks.gridGallery.borderColorControl",
+						"folioBlocks.gridGallery.imageStyles",
 						<div style={{ marginBottom: "8px" }}>
 							<Notice status="info" isDismissible={false}>
-								<strong>
-									{__("Enable Image Border Color", "folioblocks")}
-								</strong>
-								<br />
-								{__(
-									"This is a premium feature. Unlock all features: ",
-									"folioblocks",
-								)}
-								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-									{__("Upgrade to Pro", "folioblocks")}
-								</a>
-							</Notice>
-						</div>,
-						{ attributes, setAttributes },
-					)}
-					{applyFilters(
-						"folioBlocks.gridGallery.borderWidthControl",
-						<div style={{ marginBottom: "8px" }}>
-							<Notice status="info" isDismissible={false}>
-								<strong>
-									{__("Enable Image Border Width", "folioblocks")}
-								</strong>
-								<br />
-								{__(
-									"This is a premium feature. Unlock all features: ",
-									"folioblocks",
-								)}
-								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-									{__("Upgrade to Pro", "folioblocks")}
-								</a>
-							</Notice>
-						</div>,
-						{ attributes, setAttributes },
-					)}
-					{applyFilters(
-						"folioBlocks.gridGallery.borderRadiusControl",
-						<div style={{ marginBottom: "8px" }}>
-							<Notice status="info" isDismissible={false}>
-								<strong>
-									{__("Enable Image Border Radius", "folioblocks")}
-								</strong>
-								<br />
-								{__(
-									"This is a premium feature. Unlock all features: ",
-									"folioblocks",
-								)}
-								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-									{__("Upgrade to Pro", "folioblocks")}
-								</a>
-							</Notice>
-						</div>,
-						{ attributes, setAttributes },
-					)}
-					{applyFilters(
-						"folioBlocks.gridGallery.dropShadowToggle",
-						<div style={{ marginBottom: "8px" }}>
-							<Notice status="info" isDismissible={false}>
-								<strong>{__("Enable Image Drop Shadow", "folioblocks")}</strong>
+								<strong>{__("Enable Image Styles", "folioblocks")}</strong>
 								<br />
 								{__(
 									"This is a premium feature. Unlock all features: ",
@@ -796,6 +735,10 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					</div>,
 					{ attributes, setAttributes },
 				)}
+				{applyFilters("folioBlocks.gridGallery.iconStyleControls", null, {
+					attributes,
+					setAttributes,
+				})}
 			</InspectorControls>
 
 			{/* Main Block Render */}

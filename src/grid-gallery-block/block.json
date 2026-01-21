@@ -1,20 +1,20 @@
 {
-    "$schema": "https://schemas.wp.org/trunk/block.json",
-    "apiVersion": 3,
-    "name": "folioblocks/grid-gallery-block",
-    "version": "1.0.5",
-    "title": "Grid Gallery",
-    "category": "folioblocks",
-    "allowedBlocks": [ "folioblocks/pb-image-block" ],
-    "icon": "<svg viewBox=\"0 0 1247.24 1247.24\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-hidden=\"true\"><g><path d=\"M392.02,146.83H130.15c-25.65,0-46.53,20.89-46.53,46.57v136.1c0,25.68,20.88,46.57,46.53,46.57h261.86c25.66,0,46.53-20.89,46.53-46.57v-136.1c0-25.68-20.87-46.57-46.53-46.57ZM390.43,327.91H131.74v-132.92h258.69v132.92Z\"/><path d=\"M544.94,439.27h160.11c25.66,0,46.53-20.89,46.53-46.57V130.19c0-25.68-20.87-46.57-46.53-46.57h-160.11c-25.66,0-46.53,20.89-46.53,46.57v262.51c0,25.68,20.88,46.57,46.53,46.57ZM546.52,131.78h156.93v259.33h-156.93V131.78Z\"/><path d=\"M344.07,799.73c25.66,0,46.53-20.89,46.53-46.57v-262.51c0-25.68-20.87-46.57-46.53-46.57h-160.11c-25.66,0-46.53,20.89-46.53,46.57v262.51c0,25.68,20.88,46.57,46.53,46.57h160.11ZM185.55,492.24h156.93v259.33h-156.93v-259.33Z\"/><path d=\"M893.92,801.05h184.78c25.66,0,46.53-20.89,46.53-46.57v-234c0-25.68-20.87-46.57-46.53-46.57h-184.78c-25.66,0-46.53,20.89-46.53,46.57v234c0,25.68,20.87,46.57,46.53,46.57ZM895.51,522.07h181.6v230.82h-181.6v-230.82Z\"/><path d=\"M711.36,807.97h-172.37c-25.66,0-46.53,20.89-46.53,46.57v262.51c0,25.68,20.87,46.57,46.53,46.57h172.37c25.66,0,46.53-20.89,46.53-46.57v-262.51c0-25.68-20.87-46.57-46.53-46.57ZM709.77,1115.46h-169.2v-259.33h169.2v259.33Z\"/><path d=\"M896.89,420.06h178.74c25.66,0,46.53-20.89,46.53-46.57v-243.3c0-25.68-20.87-46.57-46.53-46.57h-178.74c-25.66,0-46.53,20.89-46.53,46.57v243.29c0,25.68,20.87,46.57,46.53,46.57ZM898.48,131.78h175.56v240.11h-175.56v-240.11Z\"/><path d=\"M746.01,494.8h-250.41c-25.66,0-46.53,20.89-46.53,46.57v161.07c0,25.68,20.88,46.57,46.53,46.57h250.41c25.66,0,46.53-20.89,46.53-46.57v-161.07c0-25.68-20.87-46.57-46.53-46.57ZM744.42,700.85h-247.24v-157.89h247.24v157.89Z\"/><path d=\"M1117.09,858.69h-261.87c-25.66,0-46.53,20.89-46.53,46.57v161.07c0,25.68,20.87,46.57,46.53,46.57h261.87c25.66,0,46.53-20.89,46.53-46.57v-161.07c0-25.68-20.87-46.57-46.53-46.57ZM1115.5,1064.74h-258.69v-157.89h258.69v157.89Z\"/><path d=\"M392.02,858.69H130.15c-25.66,0-46.53,20.89-46.53,46.57v161.07c0,25.68,20.88,46.57,46.53,46.57h261.86c25.66,0,46.53-20.89,46.53-46.57v-161.07c0-25.68-20.87-46.57-46.53-46.57ZM390.43,1064.74H131.74v-157.89h258.69v157.89Z\"/></g></svg>",
-    "description": "Shows images in a clean, responsive grid while maintaining original proportions.",
-    "example": {
-        "attributes": {
-        "preview": true
-    }
-    },
-    "supports": {
-        "align": [ "wide", "full" ],
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "folioblocks/grid-gallery-block",
+	"version": "1.1.0",
+	"title": "Grid Gallery",
+	"category": "folioblocks",
+	"allowedBlocks": ["folioblocks/pb-image-block"],
+	"icon": "<svg viewBox=\"0 0 1247.24 1247.24\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-hidden=\"true\"><g><path d=\"M392.02,146.83H130.15c-25.65,0-46.53,20.89-46.53,46.57v136.1c0,25.68,20.88,46.57,46.53,46.57h261.86c25.66,0,46.53-20.89,46.53-46.57v-136.1c0-25.68-20.87-46.57-46.53-46.57ZM390.43,327.91H131.74v-132.92h258.69v132.92Z\"/><path d=\"M544.94,439.27h160.11c25.66,0,46.53-20.89,46.53-46.57V130.19c0-25.68-20.87-46.57-46.53-46.57h-160.11c-25.66,0-46.53,20.89-46.53,46.57v262.51c0,25.68,20.88,46.57,46.53,46.57ZM546.52,131.78h156.93v259.33h-156.93V131.78Z\"/><path d=\"M344.07,799.73c25.66,0,46.53-20.89,46.53-46.57v-262.51c0-25.68-20.87-46.57-46.53-46.57h-160.11c-25.66,0-46.53,20.89-46.53,46.57v262.51c0,25.68,20.88,46.57,46.53,46.57h160.11ZM185.55,492.24h156.93v259.33h-156.93v-259.33Z\"/><path d=\"M893.92,801.05h184.78c25.66,0,46.53-20.89,46.53-46.57v-234c0-25.68-20.87-46.57-46.53-46.57h-184.78c-25.66,0-46.53,20.89-46.53,46.57v234c0,25.68,20.87,46.57,46.53,46.57ZM895.51,522.07h181.6v230.82h-181.6v-230.82Z\"/><path d=\"M711.36,807.97h-172.37c-25.66,0-46.53,20.89-46.53,46.57v262.51c0,25.68,20.87,46.57,46.53,46.57h172.37c25.66,0,46.53-20.89,46.53-46.57v-262.51c0-25.68-20.87-46.57-46.53-46.57ZM709.77,1115.46h-169.2v-259.33h169.2v259.33Z\"/><path d=\"M896.89,420.06h178.74c25.66,0,46.53-20.89,46.53-46.57v-243.3c0-25.68-20.87-46.57-46.53-46.57h-178.74c-25.66,0-46.53,20.89-46.53,46.57v243.29c0,25.68,20.87,46.57,46.53,46.57ZM898.48,131.78h175.56v240.11h-175.56v-240.11Z\"/><path d=\"M746.01,494.8h-250.41c-25.66,0-46.53,20.89-46.53,46.57v161.07c0,25.68,20.88,46.57,46.53,46.57h250.41c25.66,0,46.53-20.89,46.53-46.57v-161.07c0-25.68-20.87-46.57-46.53-46.57ZM744.42,700.85h-247.24v-157.89h247.24v157.89Z\"/><path d=\"M1117.09,858.69h-261.87c-25.66,0-46.53,20.89-46.53,46.57v161.07c0,25.68,20.87,46.57,46.53,46.57h261.87c25.66,0,46.53-20.89,46.53-46.57v-161.07c0-25.68-20.87-46.57-46.53-46.57ZM1115.5,1064.74h-258.69v-157.89h258.69v157.89Z\"/><path d=\"M392.02,858.69H130.15c-25.66,0-46.53,20.89-46.53,46.57v161.07c0,25.68,20.88,46.57,46.53,46.57h261.86c25.66,0,46.53-20.89,46.53-46.57v-161.07c0-25.68-20.87-46.57-46.53-46.57ZM390.43,1064.74H131.74v-157.89h258.69v157.89Z\"/></g></svg>",
+	"description": "Shows images in a clean, responsive grid while maintaining original proportions.",
+	"example": {
+		"attributes": {
+			"preview": true
+		}
+	},
+	"supports": {
+		"align": ["wide", "full"],
 		"color": {
 			"background": true,
 			"gradients": true,
@@ -24,97 +24,129 @@
 			"margin": true,
 			"padding": true
 		},
-        "customClassName": false,
+		"customClassName": false,
 		"anchor": false,
 		"ariaLabel": true,
 		"html": false
-    },
-    "attributes": {
-        "preview": { "type": "boolean", "default": false },
-        "isGridGallery": { "type": "boolean", "default": true },
-        "columns": { "type": "number", "default": 6 },
-        "tabletColumns": { "type": "number", "default": 4 },
-        "mobileColumns": { "type": "number", "default": 2 },
-        "resolution": { "type": "string", "default": "large" },
-        "borderWidth": { "type": "number", "default": 0 }, 
+	},
+	"attributes": {
+		"preview": { "type": "boolean", "default": false },
+		"isGridGallery": { "type": "boolean", "default": true },
+		"columns": { "type": "number", "default": 6 },
+		"tabletColumns": { "type": "number", "default": 4 },
+		"mobileColumns": { "type": "number", "default": 2 },
+		"resolution": { "type": "string", "default": "large" },
+		"borderWidth": { "type": "number", "default": 0 },
 		"borderRadius": { "type": "number", "default": 0 },
-  		"borderColor": { "type": "string", "default": "#ffffff" },
-        "dropShadow": { "type": "boolean", "default": false },
-        "lightbox": { "type": "boolean", "default": false },
-        "lightboxCaption": { "type": "boolean", "default": false },
-        "onHoverTitle": { "type": "boolean", "default": false },
-        "onHoverStyle": { "type": "string", "enum": ["fade-overlay","gradient-bottom","chip","blur-overlay"], "default": "blur-overlay"},
-        "randomizeOrder": { "type": "boolean", "default": false },
-        "disableRightClick": { "type": "boolean", "default": false },
-        "lazyLoad": { "type": "boolean", "default": false },
-        "enableFilter": { "type": "boolean", "default": false },
-        "filterCategories": { "type": "array", "items": { "type": "string"}, "default": [] },
-        "filtersInput": { "type": "string", "default": ""},
-        "filterAlign": { "type": "string", "default": "center"},
-        "filterTextColor": { "type": "string", "default": "#000000" },
-		"filterBgColor": { "type": "string", "default": "transparent"}, 
-        "activeFilterTextColor": { "type": "string", "default": "#ffffff"},
+		"borderColor": { "type": "string", "default": "#ffffff" },
+		"dropShadow": { "type": "boolean", "default": false },
+		"lightbox": { "type": "boolean", "default": false },
+		"lightboxCaption": { "type": "boolean", "default": false },
+		"onHoverTitle": { "type": "boolean", "default": false },
+		"onHoverStyle": {
+			"type": "string",
+			"enum": ["fade-overlay", "gradient-bottom", "chip", "blur-overlay"],
+			"default": "blur-overlay"
+		},
+		"randomizeOrder": { "type": "boolean", "default": false },
+		"disableRightClick": { "type": "boolean", "default": false },
+		"lazyLoad": { "type": "boolean", "default": false },
+		"enableFilter": { "type": "boolean", "default": false },
+		"filterCategories": {
+			"type": "array",
+			"items": { "type": "string" },
+			"default": []
+		},
+		"filtersInput": { "type": "string", "default": "" },
+		"filterAlign": { "type": "string", "default": "center" },
+		"filterTextColor": { "type": "string", "default": "#000000" },
+		"filterBgColor": { "type": "string", "default": "transparent" },
+		"filterFontFamily": { "type": "string", "default": "" },
+		"filterFontSize": { "type": "number", "default": 14 },
+		"filterFontWeight": { "type": "string", "default": "" },
+		"filterFontStyle": {
+			"type": "string",
+			"enum": ["normal", "italic"],
+			"default": "normal"
+		},
+		"filterLineHeight": { "type": "number", "default": 1.2 },
+		"filterLetterSpacing": { "type": "number", "default": 0 },
+		"filterTextDecoration": {
+			"type": "string",
+			"enum": ["none", "underline", "line-through"],
+			"default": "none"
+		},
+		"filterTextTransform": {
+			"type": "string",
+			"enum": ["none", "uppercase", "lowercase", "capitalize"],
+			"default": "none"
+		},
+		"activeFilterTextColor": { "type": "string", "default": "#ffffff" },
 		"activeFilterBgColor": { "type": "string", "default": "#000000" },
-        "activeFilter": { "type": "string", "default": "All" },
-        "enableDownload": { "type": "boolean", "default": false},
-        "downloadOnHover": { "type": "boolean", "default": "hover" }, 
-        "hasWooCommerce": { "type": "boolean", "default": false },
-        "enableWooCommerce": { "type": "boolean", "default": false },
-        "wooCartIconDisplay": { "type": "string", "enum": ["hover", "always"], "default": "hover"},
-        "wooLightboxInfoType": { "type": "string", "enum": ["caption", "product"], "default": "caption" },
-        "wooProductPriceOnHover": { "type": "boolean", "default": true },
-        "images": {
-            "type": "array",
-            "default": [],
-            "items": {
-                "type": "object",
-                "properties": {
-                    "id": { "type": "number" },
-                    "src": { "type": "string"},
-                    "alt": { "type": "string"},
-                    "title": { "type": "string" },
-                    "caption": { "type": "string"},
-                    "sizes": { "type": "object" },
-                    "width": { "type": "number" },   
-                    "height": { "type": "number" },
-                    "filterCategory": { "type": "string" }
-                }
-            }
-        }
-    },
-    "usesContext": [],
-    "providesContext": {
-        "folioBlocks/resolution": "resolution",
-        "folioBlocks/borderColor": "borderColor",
+		"activeFilter": { "type": "string", "default": "All" },
+		"enableDownload": { "type": "boolean", "default": false },
+		"downloadOnHover": { "type": "boolean", "default": true },
+		"downloadIconColor": { "type": "string", "default": "" },
+		"downloadIconBgColor": { "type": "string", "default": "" },
+		"hasWooCommerce": { "type": "boolean", "default": false },
+		"enableWooCommerce": { "type": "boolean", "default": false },
+		"wooCartIconDisplay": { "type": "string", "enum": ["hover", "always"], "default": "hover" },
+        "cartIconColor": { "type": "string", "default": "" },
+        "cartIconBgColor": { "type": "string", "default": "" }, 
+		"wooDefaultLinkAction": { "type": "string", "enum": ["product", "add_to_cart"],"default": "add_to_cart" },
+		"wooLightboxInfoType": { "type": "string", "enum": ["caption", "product"], "default": "caption" },
+		"wooProductPriceOnHover": { "type": "boolean", "default": true },
+		"images": {
+			"type": "array",
+			"default": [],
+			"items": {
+				"type": "object",
+				"properties": {
+					"id": { "type": "number" },
+					"src": { "type": "string" },
+					"alt": { "type": "string" },
+					"title": { "type": "string" },
+					"caption": { "type": "string" },
+					"sizes": { "type": "object" },
+					"width": { "type": "number" },
+					"height": { "type": "number" },
+					"filterCategory": { "type": "string" }
+				}
+			}
+		}
+	},
+	"usesContext": [],
+	"providesContext": {
+		"folioBlocks/resolution": "resolution",
+		"folioBlocks/borderColor": "borderColor",
 		"folioBlocks/borderWidth": "borderWidth",
 		"folioBlocks/borderRadius": "borderRadius",
-        "folioBlocks/dropShadow": "dropShadow",
-        "folioBlocks/lightbox": "lightbox", 
-        "folioBlocks/lightboxCaption": "lightboxCaption",
-        "folioBlocks/onHoverTitle": "onHoverTitle",
-        "folioBlocks/onHoverStyle": "onHoverStyle",
-        "folioBlocks/enableFilter": "enableFilter",
-        "folioBlocks/filterCategories": "filterCategories",
-        "folioBlocks/activeFilter": "activeFilter",
-        "folioBlocks/enableDownload": "enableDownload",
-        "folioBlocks/downloadOnHover": "downloadOnHover",
-        "folioBlocks/hasWooCommerce": "hasWooCommerce",
-        "folioBlocks/enableWooCommerce": "enableWooCommerce",
-        "folioBlocks/wooCartIconDisplay": "wooCartIconDisplay",
-        "folioBlocks/wooLightboxInfoType": "wooLightboxInfoType",
-        "folioBlocks/wooProductPriceOnHover": "wooProductPriceOnHover",
-        "folioBlocks/lazyLoad": "lazyLoad"
-    },
-    "textdomain": "folioblocks",
-    "editorScript": [
-    "file:./index.js",
-    "file:./premium.js"
-	],
-    "editorStyle": "file:./index.css",
-    "style": "file:./style-index.css",
-    "render": "file:./render.php",
-    "viewScript": [
-    "file:./view.js",
-    "file:./premium-view.js"
-	]
+		"folioBlocks/dropShadow": "dropShadow",
+		"folioBlocks/lightbox": "lightbox",
+		"folioBlocks/lightboxCaption": "lightboxCaption",
+		"folioBlocks/onHoverTitle": "onHoverTitle",
+		"folioBlocks/onHoverStyle": "onHoverStyle",
+		"folioBlocks/enableFilter": "enableFilter",
+		"folioBlocks/filterCategories": "filterCategories",
+		"folioBlocks/activeFilter": "activeFilter",
+		"folioBlocks/enableDownload": "enableDownload",
+		"folioBlocks/downloadOnHover": "downloadOnHover",
+        "folioBlocks/downloadIconColor": "downloadIconColor",
+        "folioBlocks/downloadIconBgColor": "downloadIconBgColor",
+        "folioBlocks/cartIconColor": "cartIconColor",
+        "folioBlocks/cartIconBgColor": "cartIconBgColor",
+		"folioBlocks/hasWooCommerce": "hasWooCommerce",
+		"folioBlocks/enableWooCommerce": "enableWooCommerce",
+		"folioBlocks/wooCartIconDisplay": "wooCartIconDisplay",
+		"folioBlocks/wooDefaultLinkAction": "wooDefaultLinkAction",
+		"folioBlocks/wooLightboxInfoType": "wooLightboxInfoType",
+		"folioBlocks/wooProductPriceOnHover": "wooProductPriceOnHover",
+		"folioBlocks/lazyLoad": "lazyLoad"
+	},
+	"textdomain": "folioblocks",
+	"editorScript": ["file:./index.js", "file:./premium.js"],
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"viewScript": ["file:./view.js", "file:./premium-view.js"]
 }

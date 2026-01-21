@@ -6,13 +6,17 @@ import { __ } from "@wordpress/i18n";
 import {
 	ToggleControl,
 	SelectControl,
-	BaseControl,
-	ColorPalette,
 	RangeControl,
+	__experimentalToolsPanel as ToolsPanel,
+	__experimentalToolsPanelItem as ToolsPanelItem,
 } from "@wordpress/components";
 import { useEffect } from "@wordpress/element";
 import { addFilter } from "@wordpress/hooks";
 import { applyThumbnails } from "../pb-helpers/applyThumbnails";
+import CompactColorControl, {
+	CompactTwoColorControl,
+} from "../pb-helpers/CompactColorControl";
+
 
 addFilter(
 	"folioBlocks.modularGallery.editorEnhancements",
@@ -102,8 +106,12 @@ addFilter(
 		if (!wooActive) return null;
 
 		const { attributes, setAttributes } = props;
-		const { enableWooCommerce, wooCartIconDisplay, enableDownload } =
-			attributes;
+		const {
+			enableWooCommerce,
+			wooCartIconDisplay,
+			wooDefaultLinkAction,
+			enableDownload,
+		} = attributes;
 
 		return (
 			<>
@@ -130,21 +138,46 @@ addFilter(
 				/>
 
 				{enableWooCommerce && (
-					<SelectControl
-						label={__("Display Add to Cart Icon", "folioblocks")}
-						value={wooCartIconDisplay}
-						options={[
-							{ label: __("On Hover", "folioblocks"), value: "hover" },
-							{ label: __("Always", "folioblocks"), value: "always" },
-						]}
-						onChange={(value) => setAttributes({ wooCartIconDisplay: value })}
-						__next40pxDefaultSize
-						__nextHasNoMarginBottom
-						help={__(
-							"Choose when to display the Add to Cart icon.",
-							"folioblocks",
-						)}
-					/>
+					<>
+						<SelectControl
+							label={__("Display Add to Cart Icon", "folioblocks")}
+							value={wooCartIconDisplay}
+							options={[
+								{ label: __("On Hover", "folioblocks"), value: "hover" },
+								{ label: __("Always", "folioblocks"), value: "always" },
+							]}
+							onChange={(value) => setAttributes({ wooCartIconDisplay: value })}
+							__nextHasNoMarginBottom
+							__next40pxDefaultSize
+							help={__(
+								"Choose when to display the Add to Cart icon.",
+								"folioblocks",
+							)}
+						/>
+						<SelectControl
+							label={__("Default Add To Cart Icon Behavior", "folioblocks")}
+							value={wooDefaultLinkAction}
+							options={[
+								{
+									label: __("Add to Cart", "folioblocks"),
+									value: "add_to_cart",
+								},
+								{
+									label: __("Open Product Page", "folioblocks"),
+									value: "product",
+								},
+							]}
+							onChange={(value) =>
+								setAttributes({ wooDefaultLinkAction: value })
+							}
+							__nextHasNoMarginBottom
+							__next40pxDefaultSize
+							help={__(
+								"Sets the default action for Add To Cart icons in this gallery. Individual images can override this setting.",
+								"folioblocks",
+							)}
+						/>
+					</>
 				)}
 			</>
 		);
@@ -355,100 +388,159 @@ addFilter(
 );
 
 addFilter(
-	"folioBlocks.modularGallery.borderColorControl",
-	"folioblocks/modular-gallery-premium-border-color",
+	"folioBlocks.modularGallery.imageStyles",
+	"folioblocks/modular-gallery-premium-image-styles",
 	(defaultContent, props) => {
-		const { attributes, setAttributes } = props;
+		const { attributes, setAttributes, clientId, updateBlockAttributes } =
+			props;
+
+		const forceRefresh = () => {
+			if (typeof updateBlockAttributes === "function") {
+				setTimeout(() => {
+					updateBlockAttributes(clientId, { _forceRefresh: Date.now() });
+				}, 50);
+			}
+		};
+
 		return (
-			<BaseControl
-				label={__("Border Color", "folioblocks")}
-				__nextHasNoMarginBottom={true}
-			>
-				<ColorPalette
+			<>
+				<CompactColorControl
+					label={__("Border Color", "folioblocks")}
 					value={attributes.borderColor}
-					onChange={(value) => setAttributes({ borderColor: value })}
-					clearable={false}
-					help={__("Set border color.", "folioblocks")}
+					onChange={(borderColor) => {
+						setAttributes({ borderColor });
+						forceRefresh();
+					}}
+					help={__("Set Image border color.", "folioblocks")}
 				/>
-			</BaseControl>
-		);
-	},
-);
 
-addFilter(
-	"folioBlocks.modularGallery.borderWidthControl",
-	"folioblocks/modular-gallery-premium-border-width",
-	(defaultContent, props) => {
-		const { attributes, setAttributes, clientId, updateBlockAttributes } =
-			props;
+				<RangeControl
+					label={__("Border Width", "folioblocks")}
+					value={attributes.borderWidth}
+					onChange={(value) => {
+						setAttributes({ borderWidth: value });
+						forceRefresh();
+					}}
+					min={0}
+					max={15}
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
+					help={__("Set Image border width.", "folioblocks")}
+				/>
 
-		return (
-			<RangeControl
-				label={__("Border Width", "folioblocks")}
-				value={attributes.borderWidth}
-				onChange={(value) => {
-					setAttributes({ borderWidth: value });
-					if (typeof updateBlockAttributes === "function") {
-						setTimeout(() => {
-							updateBlockAttributes(clientId, { _forceRefresh: Date.now() });
-						}, 50);
+				<RangeControl
+					label={__("Border Radius", "folioblocks")}
+					value={attributes.borderRadius}
+					onChange={(value) => {
+						setAttributes({ borderRadius: value });
+						forceRefresh();
+					}}
+					min={0}
+					max={50}
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
+					help={__("Set Image border radius.", "folioblocks")}
+				/>
+
+				<ToggleControl
+					label={__("Enable Drop Shadow", "folioblocks")}
+					checked={!!attributes.dropShadow}
+					onChange={(newDropShadow) =>
+						setAttributes({ dropShadow: newDropShadow })
 					}
-				}}
-				min={0}
-				max={15}
-				__next40pxDefaultSize
-				__nextHasNoMarginBottom
-				help={__("Set border width in pixels.", "folioblocks")}
-			/>
+					__nextHasNoMarginBottom
+					help={__("Applies a subtle drop shadow to images.", "folioblocks")}
+				/>
+			</>
 		);
 	},
 );
 
 addFilter(
-	"folioBlocks.modularGallery.borderRadiusControl",
-	"folioblocks/modular-gallery-premium-border-radius",
-	(defaultContent, props) => {
-		const { attributes, setAttributes, clientId, updateBlockAttributes } =
-			props;
+  "folioBlocks.modularGallery.iconStyleControls",
+  "folioblocks/modular-gallery-icon-style-controls",
+  (Original, { attributes, setAttributes }) => {
+	const enableDownload = !!attributes.enableDownload;
+	const enableWooCommerce = !!attributes.enableWooCommerce;
 
-		return (
-			<RangeControl
-				label={__("Border Radius", "folioblocks")}
-				value={attributes.borderRadius}
-				onChange={(value) => {
-					setAttributes({ borderRadius: value });
-					if (typeof updateBlockAttributes === "function") {
-						setTimeout(() => {
-							updateBlockAttributes(clientId, { _forceRefresh: Date.now() });
-						}, 50);
-					}
+	if (!enableDownload && !enableWooCommerce) return null;
+
+	return (
+		<ToolsPanel
+		  label={__("E-Commerce Styles", "folioblocks")}
+		  resetAll={() =>
+			setAttributes({
+			  downloadIconColor: "",
+			  downloadIconBgColor: "",
+			  cartIconColor: "",
+			  cartIconBgColor: "",
+			})
+		  }
+		>
+		  {enableDownload && (
+			<ToolsPanelItem
+			  label={__("Download Icon Colors", "folioblocks")}
+			  hasValue={() =>
+				!!attributes.downloadIconColor || !!attributes.downloadIconBgColor
+			  }
+			  onDeselect={() =>
+				setAttributes({
+				  downloadIconColor: "",
+				  downloadIconBgColor: "",
+				})
+			  }
+			  isShownByDefault
+			>
+			  <CompactTwoColorControl
+				label={__("Download Icon", "folioblocks")}
+				value={{
+				  first: attributes.downloadIconColor,
+				  second: attributes.downloadIconBgColor,
 				}}
-				min={0}
-				max={50}
-				__next40pxDefaultSize
-				__nextHasNoMarginBottom
-				help={__("Set border radius in pixels.", "folioblocks")}
-			/>
-		);
-	},
-);
-
-addFilter(
-	"folioBlocks.modularGallery.dropShadowToggle",
-	"folioblocks/modular-gallery-premium-drop-shadow",
-	(defaultContent, props) => {
-		const { attributes, setAttributes } = props;
-
-		return (
-			<ToggleControl
-				label={__("Enable Drop Shadow", "folioblocks")}
-				checked={!!attributes.dropShadow}
-				onChange={(newDropShadow) =>
-					setAttributes({ dropShadow: newDropShadow })
+				onChange={(next) =>
+				  setAttributes({
+					downloadIconColor: next?.first || "",
+					downloadIconBgColor: next?.second || "",
+				  })
 				}
-				__nextHasNoMarginBottom={true}
-				help={__("Applies a subtle drop shadow to images.", "folioblocks")}
-			/>
-		);
-	},
+				firstLabel={__("Icon", "folioblocks")}
+				secondLabel={__("Background", "folioblocks")}
+			  />
+			</ToolsPanelItem>
+		  )}
+
+		  {enableWooCommerce && (
+			<ToolsPanelItem
+			  label={__("Add to Cart Icon Colors", "folioblocks")}
+			  hasValue={() =>
+				!!attributes.cartIconColor || !!attributes.cartIconBgColor
+			  }
+			  onDeselect={() =>
+				setAttributes({
+				  cartIconColor: "",
+				  cartIconBgColor: "",
+				})
+			  }
+			  isShownByDefault
+			>
+			  <CompactTwoColorControl
+				label={__("Add to Cart Icon", "folioblocks")}
+				value={{
+				  first: attributes.cartIconColor,
+				  second: attributes.cartIconBgColor,
+				}}
+				onChange={(next) =>
+				  setAttributes({
+					cartIconColor: next?.first || "",
+					cartIconBgColor: next?.second || "",
+				  })
+				}
+				firstLabel={__("Icon", "folioblocks")}
+				secondLabel={__("Background", "folioblocks")}
+			  />
+			</ToolsPanelItem>
+		  )}
+		</ToolsPanel>
+	);
+  }
 );

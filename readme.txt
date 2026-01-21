@@ -5,7 +5,7 @@ Tags: gallery, image gallery, photo gallery, video gallery, lightbox,
 Tested up to:      6.9
 Requires at least: 6.3
 Requires PHP: 7.4
-Stable tag:        1.0.9
+Stable tag:        1.1.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -102,6 +102,15 @@ No, the galleries will remain in place on your site. However, the advanced layou
 6. Video Gallery block populated with images
 
 == Changelog ==
+
+= 1.1.0 = 
+* Added style controls to set icon color and background color on Add To Cart and Download icons. 
+* Added Drop Shadow control to Image Block. 
+* Added new compact Border color component.
+* WooCommerce Add To Cart Links now uses Ajax. 
+* Images linked with WooCommerce can now select if the Add To Cart button Adds Product to Shopping Cart or leads to Product Page. 
+* Fixed visual bug in Modular gallery where margin bottom in stacked images created gap between image and the selection outline. 
+* Changed Gallery Image Styles now all inside of a single filter. 
 
 = 1.0.10 = 
 * Bug in Modular Gallery border controls.

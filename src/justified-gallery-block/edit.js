@@ -2,15 +2,15 @@
  * Justified Gallery Block
  * Edit JS
  **/
-import { __ } from '@wordpress/i18n';
+import { __ } from "@wordpress/i18n";
 import {
 	useBlockProps,
 	useInnerBlocksProps,
 	InspectorControls,
 	BlockControls,
 	MediaPlaceholder,
-	store as blockEditorStore
-} from '@wordpress/block-editor';
+	store as blockEditorStore,
+} from "@wordpress/block-editor";
 import {
 	PanelBody,
 	Notice,
@@ -19,25 +19,20 @@ import {
 	SelectControl,
 	ToolbarGroup,
 	ToolbarButton,
-} from '@wordpress/components';
-import { useSelect, useDispatch } from '@wordpress/data';
-import { plus } from '@wordpress/icons';
-import { useCallback, useEffect, useRef, useState } from '@wordpress/element';
-import { decodeEntities } from '@wordpress/html-entities';
-import { applyFilters } from '@wordpress/hooks';
-import IconJustifiedGallery from '../pb-helpers/IconJustifiedGallery';
-import IconPBSpinner from '../pb-helpers/IconPBSpinner';
-import './editor.scss';
+} from "@wordpress/components";
+import { useSelect, useDispatch } from "@wordpress/data";
+import { plus } from "@wordpress/icons";
+import { useCallback, useEffect, useRef, useState } from "@wordpress/element";
+import { decodeEntities } from "@wordpress/html-entities";
+import { applyFilters } from "@wordpress/hooks";
+import IconJustifiedGallery from "../pb-helpers/IconJustifiedGallery";
+import IconPBSpinner from "../pb-helpers/IconPBSpinner";
+import "./editor.scss";
 
-const ALLOWED_BLOCKS = ['folioblocks/pb-image-block'];
+const ALLOWED_BLOCKS = ["folioblocks/pb-image-block"];
 
 export default function Edit({ attributes, setAttributes, clientId }) {
-	const {
-		rowHeight = 250,
-		noGap = false,
-		preview,
-		lightbox
-	} = attributes;
+	const { rowHeight = 250, noGap = false, preview, lightbox } = attributes;
 
 	// Block Preview Image
 	if (preview) {
@@ -50,7 +45,9 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 
 	// Runtime override: if WooCommerce is not active, force Woo features off without mutating saved attributes
 	const hasWooCommerce = window.folioBlocksData?.hasWooCommerce ?? false;
-	const effectiveEnableWoo = hasWooCommerce ? (attributes.enableWooCommerce || false) : false;
+	const effectiveEnableWoo = hasWooCommerce
+		? attributes.enableWooCommerce || false
+		: false;
 	useEffect(() => {
 		const wooActive = window.folioBlocksData?.hasWooCommerce ?? false;
 		if (wooActive !== attributes.hasWooCommerce) {
@@ -59,23 +56,26 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 	}, [window.folioBlocksData?.hasWooCommerce]);
 
 	const [isLoading, setIsLoading] = useState(false);
-	const checkoutUrl = window.folioBlocksData?.checkoutUrl || 'https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks&utm_medium=justified-gallery-block&utm_campaign=upgrade';
-	const { replaceInnerBlocks, updateBlockAttributes } = useDispatch('core/block-editor');
+	const checkoutUrl =
+		window.folioBlocksData?.checkoutUrl ||
+		"https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks&utm_medium=justified-gallery-block&utm_campaign=upgrade";
+	const { replaceInnerBlocks, updateBlockAttributes } =
+		useDispatch("core/block-editor");
 
 	const innerBlocks = useSelect(
-		select => select('core/block-editor').getBlocks(clientId),
-		[clientId]
+		(select) => select("core/block-editor").getBlocks(clientId),
+		[clientId],
 	);
 
 	const galleryRef = useRef(null);
 
 	const innerBlocksProps = useInnerBlocksProps(
-		{ className: 'pb-justified-gallery' },
+		{ className: "pb-justified-gallery" },
 		{
 			allowedBlocks: ALLOWED_BLOCKS,
-			orientation: 'horizontal',
+			orientation: "horizontal",
 			renderAppender: false,
-		}
+		},
 	);
 
 	const { ref: innerRef, ...restInnerBlocksProps } = innerBlocksProps;
@@ -83,14 +83,14 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 	const combinedRef = useCallback(
 		(node) => {
 			galleryRef.current = node;
-			if (typeof innerRef === 'function') {
+			if (typeof innerRef === "function") {
 				innerRef(node);
-			} else if (innerRef && typeof innerRef === 'object') {
+			} else if (innerRef && typeof innerRef === "object") {
 				innerRef.current = node;
 			}
 			// console.log('📌 combinedRef node:', node);
 		},
-		[innerRef]
+		[innerRef],
 	);
 
 	// Select Images Handler
@@ -100,18 +100,20 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		setIsLoading(true); // <-- start spinner
 
 		// Preserve randomization logic
-		const images = attributes.randomizeOrder ? [...media].sort(() => 0.5 - Math.random()) : media;
+		const images = attributes.randomizeOrder
+			? [...media].sort(() => 0.5 - Math.random())
+			: media;
 
 		// Fetch titles in a single batch for performance
 		const imageIds = images.map((image) => image.id);
 		const titleMap = {};
 		try {
 			const responses = await wp.apiFetch({
-				path: `/wp/v2/media?include=${imageIds.join(',')}&per_page=100`,
+				path: `/wp/v2/media?include=${imageIds.join(",")}&per_page=100`,
 			});
 
 			responses.forEach((item) => {
-				titleMap[item.id] = decodeEntities(item.title?.rendered || '');
+				titleMap[item.id] = decodeEntities(item.title?.rendered || "");
 			});
 		} catch (error) {
 			console.error("Failed to fetch image titles:", error);
@@ -122,12 +124,12 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			const width = fullSize.width || image.width || 1;
 			const height = fullSize.height || image.height || 1;
 
-			return wp.blocks.createBlock('folioblocks/pb-image-block', {
+			return wp.blocks.createBlock("folioblocks/pb-image-block", {
 				id: image.id,
 				src: image.url,
-				alt: image.alt || '',
-				title: titleMap[image.id] || image.title || '',
-				caption: image.caption || '',
+				alt: image.alt || "",
+				title: titleMap[image.id] || image.title || "",
+				caption: image.caption || "",
 				width,
 				height,
 				sizes: image.sizes || {},
@@ -141,7 +143,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		setTimeout(() => {
 			const container = galleryRef.current;
 			if (container) {
-				container.dispatchEvent(new Event('resize'));
+				container.dispatchEvent(new Event("resize"));
 			}
 			setIsLoading(false); // <-- stop spinner
 		}, 100);
@@ -173,11 +175,13 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 				return;
 			}
 
-			const wrappers = node.querySelectorAll('.wp-block-folioblocks-pb-image-block:not(.is-hidden)');
+			const wrappers = node.querySelectorAll(
+				".wp-block-folioblocks-pb-image-block:not(.is-hidden)",
+			);
 			const images = Array.from(wrappers).map((wrapper) => {
-				const img = wrapper.querySelector('img');
-				const width = parseInt(img.getAttribute('width')) || 1;
-				const height = parseInt(img.getAttribute('height')) || 1;
+				const img = wrapper.querySelector("img");
+				const width = parseInt(img.getAttribute("width")) || 1;
+				const height = parseInt(img.getAttribute("height")) || 1;
 				return { wrapper, width, height };
 			});
 
@@ -205,20 +209,29 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			}
 
 			rows.forEach((row) => {
-				const totalScaledWidth = row.reduce((sum, img) => sum + img.scaledWidth, 0);
+				const totalScaledWidth = row.reduce(
+					(sum, img) => sum + img.scaledWidth,
+					0,
+				);
 				const totalGaps = (row.length - 1) * gap;
 				const isFinalRow = row === rows[rows.length - 1];
 				const rowFillRatio = (totalScaledWidth + totalGaps) / containerWidth;
 				const shouldScale = !isFinalRow || rowFillRatio > 0.9;
-				const scale = shouldScale ? Math.min((containerWidth - totalGaps) / totalScaledWidth, 1) : 1;
+				const scale = shouldScale
+					? Math.min((containerWidth - totalGaps) / totalScaledWidth, 1)
+					: 1;
 
 				row.forEach((img, index) => {
 					const isLast = index === row.length - 1;
-					const finalWidth = Math.round(img.scaledWidth * scale) - (isLast ? 1 : 0);
+					const finalWidth =
+						Math.round(img.scaledWidth * scale) - (isLast ? 1 : 0);
 					const finalHeight = Math.round(targetRowHeight * scale);
-					img.wrapper.style.setProperty('--pb-width', `${finalWidth}px`);
-					img.wrapper.style.setProperty('--pb-height', `${finalHeight}px`);
-					img.wrapper.style.setProperty('--pb-margin', index !== row.length - 1 ? `${gap}px` : `0px`);
+					img.wrapper.style.setProperty("--pb-width", `${finalWidth}px`);
+					img.wrapper.style.setProperty("--pb-height", `${finalHeight}px`);
+					img.wrapper.style.setProperty(
+						"--pb-margin",
+						index !== row.length - 1 ? `${gap}px` : `0px`,
+					);
 				});
 			});
 		};
@@ -245,16 +258,16 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 
 	const blockProps = useBlockProps({
 		context: {
-			'folioBlocks/activeFilter': attributes.activeFilter,
-			'folioBlocks/filterCategories': attributes.filterCategories,
-			'folioBlocks/enableWooCommerce': effectiveEnableWoo,
-			'folioBlocks/hasWooCommerce': hasWooCommerce,
+			"folioBlocks/activeFilter": attributes.activeFilter,
+			"folioBlocks/filterCategories": attributes.filterCategories,
+			"folioBlocks/enableWooCommerce": effectiveEnableWoo,
+			"folioBlocks/hasWooCommerce": hasWooCommerce,
 		},
 		style: {
-			'--pb--filter-text-color': attributes.filterTextColor || '#000',
-			'--pb--filter-bg-color': attributes.filterBgColor || 'transparent',
-			'--pb--filter-active-text': attributes.activeFilterTextColor || '#fff',
-			'--pb--filter-active-bg': attributes.activeFilterBgColor || '#000',
+			"--pb--filter-text-color": attributes.filterTextColor || "#000",
+			"--pb--filter-bg-color": attributes.filterBgColor || "transparent",
+			"--pb--filter-active-text": attributes.activeFilterTextColor || "#fff",
+			"--pb--filter-active-bg": attributes.activeFilterBgColor || "#000",
 		},
 	});
 
@@ -272,7 +285,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 
 			// Check if selected block is a pb-image-block inside this gallery
 			if (
-				selectedBlock.name === 'folioblocks/pb-image-block' &&
+				selectedBlock.name === "folioblocks/pb-image-block" &&
 				select(blockEditorStore).getBlockRootClientId(selectedId) === clientId
 			) {
 				return true;
@@ -280,18 +293,26 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 
 			return false;
 		},
-		[clientId]
+		[clientId],
 	);
-	const selectedBlock = useSelect(
-		(select) => {
-			const { getSelectedBlock } = select(blockEditorStore);
-			return getSelectedBlock();
-		},
-		[]
-	);
+	const selectedBlock = useSelect((select) => {
+		const { getSelectedBlock } = select(blockEditorStore);
+		return getSelectedBlock();
+	}, []);
 
-	applyFilters('folioBlocks.justifiedGallery.filterLogic', null, { clientId, attributes, setAttributes, selectedBlock });
-	applyFilters('folioBlocks.justifiedGallery.editorEnhancements', null, { clientId, attributes, innerBlocks, isBlockOrChildSelected, replaceInnerBlocks });
+	applyFilters("folioBlocks.justifiedGallery.filterLogic", null, {
+		clientId,
+		attributes,
+		setAttributes,
+		selectedBlock,
+	});
+	applyFilters("folioBlocks.justifiedGallery.editorEnhancements", null, {
+		clientId,
+		attributes,
+		innerBlocks,
+		isBlockOrChildSelected,
+		replaceInnerBlocks,
+	});
 
 	return (
 		<>
@@ -299,46 +320,56 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 				<ToolbarGroup>
 					<ToolbarButton
 						icon={plus}
-						label={__('Add Images', 'folioblocks')}
+						label={__("Add Images", "folioblocks")}
 						onClick={() => {
 							wp.media({
-								title: __('Select Images', 'folioblocks'),
+								title: __("Select Images", "folioblocks"),
 								multiple: true,
-								library: { type: 'image' },
-								button: { text: __('Add to Gallery', 'folioblocks') },
+								library: { type: "image" },
+								button: { text: __("Add to Gallery", "folioblocks") },
 							})
-								.on('select', () => {
-									const selection = wp.media.frame.state().get('selection').toJSON();
+								.on("select", () => {
+									const selection = wp.media.frame
+										.state()
+										.get("selection")
+										.toJSON();
 									onSelectImages(selection);
 								})
 								.open();
 						}}
 					>
-						{__('Add Images', 'folioblocks')}
+						{__("Add Images", "folioblocks")}
 					</ToolbarButton>
 				</ToolbarGroup>
 			</BlockControls>
 
 			<InspectorControls>
-				<PanelBody title={__('Justified Gallery Settings', 'folioblocks')} initialOpen={true}>
+				<PanelBody
+					title={__("Justified Gallery Settings", "folioblocks")}
+					initialOpen={true}
+				>
 					<SelectControl
-						label={__('Resolution', 'folioblocks')}
-						value={attributes.resolution || 'large'}
+						label={__("Resolution", "folioblocks")}
+						value={attributes.resolution || "large"}
 						options={[
-							{ label: __('Thumbnail', 'folioblocks'), value: 'thumbnail' },
-							{ label: __('Medium', 'folioblocks'), value: 'medium' },
-							{ label: __('Large', 'folioblocks'), value: 'large' },
-							{ label: __('Full', 'folioblocks'), value: 'full' }
-						].filter(option => {
+							{ label: __("Thumbnail", "folioblocks"), value: "thumbnail" },
+							{ label: __("Medium", "folioblocks"), value: "medium" },
+							{ label: __("Large", "folioblocks"), value: "large" },
+							{ label: __("Full", "folioblocks"), value: "full" },
+						].filter((option) => {
 							// Check all images for available sizes
-							const allSizes = innerBlocks.flatMap(block => Object.keys(block.attributes.sizes || {}));
-							return allSizes.includes(option.value) || option.value === 'full';
+							const allSizes = innerBlocks.flatMap((block) =>
+								Object.keys(block.attributes.sizes || {}),
+							);
+							return allSizes.includes(option.value) || option.value === "full";
 						})}
 						onChange={(newResolution) => {
 							setAttributes({ resolution: newResolution });
 
 							innerBlocks.forEach((block) => {
-								const newSrc = block.attributes.sizes?.[newResolution]?.url || block.attributes.src;
+								const newSrc =
+									block.attributes.sizes?.[newResolution]?.url ||
+									block.attributes.src;
 
 								updateBlockAttributes(block.clientId, {
 									src: newSrc,
@@ -348,235 +379,233 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						}}
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
-						help={__('Select the size of the source image.')}
+						help={__("Select the size of the source image.")}
 					/>
 					<RangeControl
-						label={__('Row Height', 'folioblocks')}
+						label={__("Row Height", "folioblocks")}
 						value={rowHeight}
 						onChange={(value) => setAttributes({ rowHeight: value })}
 						min={100}
 						max={500}
-						help={__('Approximate target Row Height for Justified layout.')}
+						help={__("Approximate target Row Height for Justified layout.")}
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
 					<ToggleControl
-						label={__('Remove Image Gap', 'folioblocks')}
+						label={__("Remove Image Gap", "folioblocks")}
 						checked={noGap}
 						onChange={(value) => setAttributes({ noGap: value })}
-						help={__('Remove image gap from gallery.')}
+						help={__("Remove image gap from gallery.")}
 						__nextHasNoMarginBottom
 					/>
 
-
 					{applyFilters(
-						'folioBlocks.justifiedGallery.randomizeToggle',
-						(
-							<div style={{ marginBottom: '8px' }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__('Randomize Image Order', 'folioblocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'folioblocks')}
-									</a>
-								</Notice>
-							</div>
-						),
-						{ attributes, setAttributes }
+						"folioBlocks.justifiedGallery.randomizeToggle",
+						<div style={{ marginBottom: "8px" }}>
+							<Notice status="info" isDismissible={false}>
+								<strong>{__("Randomize Image Order", "folioblocks")}</strong>
+								<br />
+								{__(
+									"This is a premium feature. Unlock all features: ",
+									"folioblocks",
+								)}
+								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+									{__("Upgrade to Pro", "folioblocks")}
+								</a>
+							</Notice>
+						</div>,
+						{ attributes, setAttributes },
 					)}
 				</PanelBody>
-				<PanelBody title={__('Lightbox & Hover Settings', 'folioblocks')} initialOpen={true}>
+				<PanelBody
+					title={__("Lightbox & Hover Settings", "folioblocks")}
+					initialOpen={true}
+				>
 					{applyFilters(
-						'folioBlocks.justifiedGallery.lightboxControls',
-						(
-							<>
-								<ToggleControl
-									label={__('Enable Lightbox', 'folioblocks')}
-									checked={!!lightbox}
-									onChange={(newLightbox) => setAttributes({ lightbox: newLightbox })}
-									__nextHasNoMarginBottom
-									help={__('Open images in a lightbox when clicked.', 'folioblocks')}
-								/>
-							</>
-						),
-						{ attributes, setAttributes }
+						"folioBlocks.justifiedGallery.lightboxControls",
+						<>
+							<ToggleControl
+								label={__("Enable Lightbox", "folioblocks")}
+								checked={!!lightbox}
+								onChange={(newLightbox) =>
+									setAttributes({ lightbox: newLightbox })
+								}
+								__nextHasNoMarginBottom
+								help={__(
+									"Open images in a lightbox when clicked.",
+									"folioblocks",
+								)}
+							/>
+						</>,
+						{ attributes, setAttributes },
 					)}
 					{applyFilters(
-						'folioBlocks.justifiedGallery.onHoverTitleToggle',
-						(
-							<div style={{ marginBottom: '8px' }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__('Show Image Title on Hover', 'folioblocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'folioblocks')}
-									</a>
-								</Notice>
-							</div>
-						),
-						{ attributes, setAttributes }
+						"folioBlocks.justifiedGallery.onHoverTitleToggle",
+						<div style={{ marginBottom: "8px" }}>
+							<Notice status="info" isDismissible={false}>
+								<strong>
+									{__("Show Image Title on Hover", "folioblocks")}
+								</strong>
+								<br />
+								{__(
+									"This is a premium feature. Unlock all features: ",
+									"folioblocks",
+								)}
+								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+									{__("Upgrade to Pro", "folioblocks")}
+								</a>
+							</Notice>
+						</div>,
+						{ attributes, setAttributes },
 					)}
 				</PanelBody>
-				<PanelBody title={__('Gallery Filtering Settings', 'folioblocks')} initialOpen={true}>
+				<PanelBody
+					title={__("Gallery Filtering Settings", "folioblocks")}
+					initialOpen={true}
+				>
 					{applyFilters(
-						'folioBlocks.justifiedGallery.enableFilterToggle',
-						(
-							<div style={{ marginBottom: '8px' }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Image Filtering', 'folioblocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'folioblocks')}
-									</a>
-								</Notice>
-							</div>
-						),
-						{ attributes, setAttributes }
+						"folioBlocks.justifiedGallery.enableFilterToggle",
+						<div style={{ marginBottom: "8px" }}>
+							<Notice status="info" isDismissible={false}>
+								<strong>{__("Enable Image Filtering", "folioblocks")}</strong>
+								<br />
+								{__(
+									"This is a premium feature. Unlock all features: ",
+									"folioblocks",
+								)}
+								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+									{__("Upgrade to Pro", "folioblocks")}
+								</a>
+							</Notice>
+						</div>,
+						{ attributes, setAttributes },
 					)}
 				</PanelBody>
-				<PanelBody title={__('E-Commerce Settings', 'folioblocks')} initialOpen={true}>
+				<PanelBody
+					title={__("E-Commerce Settings", "folioblocks")}
+					initialOpen={true}
+				>
 					{applyFilters(
-						'folioBlocks.justifiedGallery.downloadControls',
-						(
-							<div style={{ marginBottom: '8px' }}>
+						"folioBlocks.justifiedGallery.downloadControls",
+						<div style={{ marginBottom: "8px" }}>
+							<Notice status="info" isDismissible={false}>
+								<strong>{__("Enable Image Downloads", "folioblocks")}</strong>
+								<br />
+								{__(
+									"This is a premium feature. Unlock all features: ",
+									"folioblocks",
+								)}
+								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+									{__("Upgrade to Pro", "folioblocks")}
+								</a>
+							</Notice>
+						</div>,
+						{ attributes, setAttributes, hasWooCommerce, effectiveEnableWoo },
+					)}
+					{window.folioBlocksData?.hasWooCommerce &&
+						applyFilters(
+							"folioBlocks.justifiedGallery.wooCommerceControls",
+							<div style={{ marginBottom: "8px" }}>
 								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Image Downloads', 'folioblocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'folioblocks')}
+									<strong>{__("Enable Woo Commerce", "folioblocks")}</strong>
+									<br />
+									{__(
+										"This is a premium feature. Unlock all features: ",
+										"folioblocks",
+									)}
+									<a
+										href={checkoutUrl}
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										{__("Upgrade to Pro", "folioblocks")}
 									</a>
 								</Notice>
-							</div>
-						),
-						{ attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
-					)}
-					{window.folioBlocksData?.hasWooCommerce && applyFilters(
-						'folioBlocks.justifiedGallery.wooCommerceControls',
-						(
-							<div style={{ marginBottom: '8px' }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Woo Commerce', 'folioblocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'folioblocks')}
-									</a>
-								</Notice>
-							</div>
-						),
-						{ attributes, setAttributes, hasWooCommerce, effectiveEnableWoo }
-					)}
+							</div>,
+							{ attributes, setAttributes, hasWooCommerce, effectiveEnableWoo },
+						)}
 				</PanelBody>
 			</InspectorControls>
 			<InspectorControls group="advanced">
 				{applyFilters(
-					'folioBlocks.justifiedGallery.disableRightClickToggle',
-					(
-						<div style={{ marginBottom: '8px' }}>
-							<Notice status="info" isDismissible={false}>
-								<strong>{__('Disable Right-Click', 'folioblocks')}</strong><br />
-								{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-									{__('Upgrade to Pro', 'folioblocks')}
-								</a>
-							</Notice>
-						</div>
-					),
-					{ attributes, setAttributes }
+					"folioBlocks.justifiedGallery.disableRightClickToggle",
+					<div style={{ marginBottom: "8px" }}>
+						<Notice status="info" isDismissible={false}>
+							<strong>{__("Disable Right-Click", "folioblocks")}</strong>
+							<br />
+							{__(
+								"This is a premium feature. Unlock all features: ",
+								"folioblocks",
+							)}
+							<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+								{__("Upgrade to Pro", "folioblocks")}
+							</a>
+						</Notice>
+					</div>,
+					{ attributes, setAttributes },
 				)}
 				{applyFilters(
-					'folioBlocks.justifiedGallery.lazyLoadToggle',
-					(
-						<div style={{ marginBottom: '8px' }}>
-							<Notice status="info" isDismissible={false}>
-								<strong>{__('Enable Lazy Load of Images', 'folioblocks')}</strong><br />
-								{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-									{__('Upgrade to Pro', 'folioblocks')}
-								</a>
-							</Notice>
-						</div>
-					),
-					{ attributes, setAttributes }
+					"folioBlocks.justifiedGallery.lazyLoadToggle",
+					<div style={{ marginBottom: "8px" }}>
+						<Notice status="info" isDismissible={false}>
+							<strong>{__("Enable Lazy Load of Images", "folioblocks")}</strong>
+							<br />
+							{__(
+								"This is a premium feature. Unlock all features: ",
+								"folioblocks",
+							)}
+							<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+								{__("Upgrade to Pro", "folioblocks")}
+							</a>
+						</Notice>
+					</div>,
+					{ attributes, setAttributes },
 				)}
 			</InspectorControls>
 			<InspectorControls group="styles">
-				<PanelBody title={__('Gallery Image Styles', 'folioblocks')} initialOpen={true}>
+				<PanelBody
+					title={__("Gallery Image Styles", "folioblocks")}
+					initialOpen={true}
+				>
 					{applyFilters(
-						'folioBlocks.justifiedGallery.borderColorControl',
-						(
-							<div style={{ marginBottom: '8px' }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Image Border Color', 'folioblocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'folioblocks')}
-									</a>
-								</Notice>
-							</div>
-						),
-						{ attributes, setAttributes }
-					)}
-					{applyFilters(
-						'folioBlocks.justifiedGallery.borderWidthControl',
-						(
-							<div style={{ marginBottom: '8px' }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Image Border Width', 'folioblocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'folioblocks')}
-									</a>
-								</Notice>
-							</div>
-						),
-						{ attributes, setAttributes }
-					)}
-					{applyFilters(
-						'folioBlocks.justifiedGallery.borderRadiusControl',
-						(
-							<div style={{ marginBottom: '8px' }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Image Border Radius', 'folioblocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'folioblocks')}
-									</a>
-								</Notice>
-							</div>
-						),
-						{ attributes, setAttributes }
-					)}
-					{applyFilters(
-						'folioBlocks.justifiedGallery.dropShadowToggle',
-						(
-							<div style={{ marginBottom: '8px' }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Image Drop Shadow', 'folioblocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'folioblocks')}
-									</a>
-								</Notice>
-							</div>
-						),
-						{ attributes, setAttributes }
+						"folioBlocks.justifiedGallery.imageStyles",
+						<div style={{ marginBottom: "8px" }}>
+							<Notice status="info" isDismissible={false}>
+								<strong>{__("Enable Image Styles", "folioblocks")}</strong>
+								<br />
+								{__(
+									"This is a premium feature. Unlock all features: ",
+									"folioblocks",
+								)}
+								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+									{__("Upgrade to Pro", "folioblocks")}
+								</a>
+							</Notice>
+						</div>,
+						{ attributes, setAttributes },
 					)}
 				</PanelBody>
 				{applyFilters(
-					'folioBlocks.justifiedGallery.filterStyleSettings',
-					(
-						<div style={{ marginBottom: '8px' }}>
-							<Notice status="info" isDismissible={false}>
-								<strong>{__('Filter Bar Styles', 'folioblocks')}</strong><br />
-								{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-									{__('Upgrade to Pro', 'folioblocks')}
-								</a>
-							</Notice>
-						</div>
-					),
-					{ attributes, setAttributes }
+					"folioBlocks.justifiedGallery.filterStyleSettings",
+					<div style={{ marginBottom: "8px" }}>
+						<Notice status="info" isDismissible={false}>
+							<strong>{__("Filter Bar Styles", "folioblocks")}</strong>
+							<br />
+							{__(
+								"This is a premium feature. Unlock all features: ",
+								"folioblocks",
+							)}
+							<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+								{__("Upgrade to Pro", "folioblocks")}
+							</a>
+						</Notice>
+					</div>,
+					{ attributes, setAttributes },
 				)}
+				{applyFilters("folioBlocks.justifiedGallery.iconStyleControls", null, {
+					attributes,
+					setAttributes,
+				})}
 			</InspectorControls>
 
 			<div {...blockProps}>
@@ -589,19 +618,22 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					<MediaPlaceholder
 						icon={<IconJustifiedGallery />}
 						labels={{
-							title: __('Justified Gallery', 'folioblocks'),
-							instructions: __('Upload or select images to create a Justified Gallery.', 'folioblocks'),
+							title: __("Justified Gallery", "folioblocks"),
+							instructions: __(
+								"Upload or select images to create a Justified Gallery.",
+								"folioblocks",
+							),
 						}}
 						onSelect={onSelectImages}
-						allowedTypes={['image']}
+						allowedTypes={["image"]}
 						multiple
 					/>
 				) : (
 					<>
 						{applyFilters(
-							'folioBlocks.justifiedGallery.renderFilterBar',
+							"folioBlocks.justifiedGallery.renderFilterBar",
 							null,
-							{ attributes, setAttributes }
+							{ attributes, setAttributes },
 						)}
 						<div ref={combinedRef} {...restInnerBlocksProps} />
 					</>

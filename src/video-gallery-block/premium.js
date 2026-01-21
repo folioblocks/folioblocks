@@ -3,19 +3,37 @@
  * Premium JS
  **/
 import { __ } from '@wordpress/i18n';
-import { PanelColorSettings } from '@wordpress/block-editor';
 import {
-    ToggleControl,
-    BaseControl,
-    ColorPalette,
-    RangeControl,
-    SelectControl,
-    TextControl,
-    __experimentalToggleGroupControl as ToggleGroupControl,
-    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
-} from '@wordpress/components';
+	LineHeightControl,
+	__experimentalUnitControl as UnitControl,
+	__experimentalTextDecorationControl as TextDecorationControl,
+	__experimentalTextTransformControl as TextTransformControl,
+	__experimentalFontAppearanceControl as FontAppearanceControl,
+	useSettings,
+} from "@wordpress/block-editor";
+import {
+	ToggleControl,
+	SelectControl,
+	RangeControl,
+	TextControl,
+	FontSizePicker,
+	__experimentalToggleGroupControl as ToggleGroupControl,
+	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
+	__experimentalToolsPanel as ToolsPanel,
+	__experimentalToolsPanelItem as ToolsPanelItem,
+} from "@wordpress/components";
 import { useEffect } from '@wordpress/element';
 import { addFilter } from '@wordpress/hooks';
+import CompactColorControl, {
+	CompactTwoColorControl,
+} from "../pb-helpers/CompactColorControl";
+import {
+	getFontFamilyOptions,
+	normalizeFontFamilies,
+	normalizeFontSizes,
+	getFontSizeOptions,
+	getFilterTypographyCSS,
+} from "../pb-helpers/GetThemeSettings";
 
 addFilter(
     'folioBlocks.videoGallery.wooCommerceControls',
@@ -260,17 +278,12 @@ addFilter(
     (defaultContent, props) => {
         const { attributes, setAttributes } = props;
         return (
-            <BaseControl
-                label={__('Border Color', 'folioblocks')}
-                __nextHasNoMarginBottom={true}
-            >
-                <ColorPalette
-                    value={attributes.borderColor}
-                    onChange={(value) => setAttributes({ borderColor: value })}
-                    clearable={false}
-                    help={__('Set border color.', 'folioblocks')}
-                />
-            </BaseControl>
+            <CompactColorControl
+                label={__("Border Color", "folioblocks")}
+                value={attributes.borderColor}
+                onChange={(borderColor) => setAttributes({ borderColor })}
+                help={__("Set Video block border color.")}
+            />
         );
     }
 );
@@ -297,7 +310,7 @@ addFilter(
                 max={20}
                 __next40pxDefaultSize={true}
                 __nextHasNoMarginBottom={true}
-                help={__('Set border width in pixels.', 'folioblocks')}
+                help={__('Set Video block border width.', 'folioblocks')}
             />
         );
     }
@@ -322,10 +335,10 @@ addFilter(
                     }
                 }}
                 min={0}
-                max={100}
+                max={50}
                 __next40pxDefaultSize={true}
                 __nextHasNoMarginBottom={true}
-                help={__('Set border radius in pixels.', 'folioblocks')}
+                help={__('Set Video block border radius.', 'folioblocks')}
             />
         );
     }
@@ -343,7 +356,7 @@ addFilter(
                 checked={!!attributes.dropShadow}
                 onChange={(newDropShadow) => setAttributes({ dropShadow: newDropShadow })}
                 __nextHasNoMarginBottom={true}
-                help={__('Applies a subtle drop shadow to images.', 'folioblocks')}
+                help={__('Applies a subtle drop shadow.', 'folioblocks')}
             />
         );
     }
@@ -352,76 +365,365 @@ addFilter(
 addFilter(
     'folioBlocks.videoGallery.filterStylesControls',
     'folioblocks/video-gallery-premium-filter-styles-controls',
-    (defaultContent, props) => {
-        const { attributes, setAttributes } = props;
-        const {
-            enableFilter,
-            activeFilterTextColor,
-            activeFilterBgColor,
-            filterTextColor,
-            filterBgColor,
-        } = attributes;
+    	(defaultContent, { attributes, setAttributes }) => {
+		// IMPORTANT: Hooks must be called in the same order on every render.
+		// We call useSettings() unconditionally, then decide what to render.
+		const [themeFontSizes] = useSettings("typography.fontSizes");
+		const normalizedFontSizes = normalizeFontSizes(themeFontSizes);
+		const fontSizeOptions = getFontSizeOptions(normalizedFontSizes);
 
-        if (!enableFilter) {
-            return null;
-        }
+		// Pull font families from theme.json / Global Styles.
+		// Depending on WP version, this can be an array or an object with groups (e.g. { theme: [], custom: [] }).
+		const [fontFamilies] = useSettings("typography.fontFamilies");
+		const families = normalizeFontFamilies(fontFamilies);
+		const fontFamilyOptions = getFontFamilyOptions(families, __);
 
-        return (
-            <PanelColorSettings
-                title={__('Filter Color Settings', 'folioblocks')}
-                initialOpen={true}
-                __nextHasNoMarginBottom={true}
-                colorSettings={[
-                    {
-                        value: activeFilterTextColor,
-                        onChange: (value) => setAttributes({ activeFilterTextColor: value }),
-                        label: __('Active Text Color', 'folioblocks'),
-                    },
-                    {
-                        value: activeFilterBgColor,
-                        onChange: (value) => setAttributes({ activeFilterBgColor: value }),
-                        label: __('Active Background Color', 'folioblocks'),
-                    },
-                    {
-                        value: filterTextColor,
-                        onChange: (value) => setAttributes({ filterTextColor: value }),
-                        label: __('Inactive Text Color', 'folioblocks'),
-                    },
-                    {
-                        value: filterBgColor,
-                        onChange: (value) => setAttributes({ filterBgColor: value }),
-                        label: __('Inactive Background Color', 'folioblocks'),
-                    },
-                ]}
-            />
-        );
-    }
+		if (!attributes.enableFilter) {
+			return null;
+		}
+
+		return (
+			<>
+				<ToolsPanel
+					label={__("Filter Bar Styles", "folioblocks")}
+					resetAll={() =>
+						setAttributes({
+							filterFontFamily: "",
+							filterFontSize: 16,
+							filterFontWeight: "",
+							filterFontStyle: "",
+							filterLineHeight: null,
+							filterLetterSpacing: 0,
+							filterTextDecoration: "none",
+							filterTextTransform: "none",
+						})
+					}
+				>
+					<ToolsPanelItem
+						label={__("Font Family", "folioblocks")}
+						hasValue={() => !!attributes.filterFontFamily}
+						onDeselect={() => setAttributes({ filterFontFamily: "" })}
+						isShownByDefault
+					>
+						<SelectControl
+							label={__("Font Family", "folioblocks")}
+							value={attributes.filterFontFamily || ""}
+							options={fontFamilyOptions}
+							onChange={(value) => setAttributes({ filterFontFamily: value })}
+							__next40pxDefaultSize
+							__nextHasNoMarginBottom
+							help={
+								fontFamilyOptions.length > 1
+									? __(
+											"Uses fonts from your theme’s Global Styles.",
+											"folioblocks",
+									  )
+									: __(
+											"No theme fonts found. Add font families in theme.json or Global Styles.",
+											"folioblocks",
+									  )
+							}
+						/>
+					</ToolsPanelItem>
+
+					<ToolsPanelItem
+						label={__("Font Size", "folioblocks")}
+						hasValue={() => (attributes.filterFontSize ?? 16) !== 16}
+						onDeselect={() => setAttributes({ filterFontSize: 16 })}
+						isShownByDefault
+					>
+						<FontSizePicker
+							__next40pxDefaultSize
+							fontSizes={fontSizeOptions}
+							value={
+								typeof attributes.filterFontSize === "number"
+									? attributes.filterFontSize
+									: 16
+							}
+							onChange={(size) => {
+								// FontSizePicker should return a number (px). Guard to avoid persisting invalid values.
+								const next =
+									typeof size === "number" && Number.isFinite(size) ? size : 16;
+								setAttributes({ filterFontSize: next });
+							}}
+						/>
+					</ToolsPanelItem>
+					<ToolsPanelItem
+						label={__("Appearance", "folioblocks")}
+						hasValue={() =>
+							!!attributes.filterFontWeight ||
+							!!attributes.filterFontStyle ||
+							(attributes.filterLineHeight != null &&
+								attributes.filterLineHeight !== "")
+						}
+						onDeselect={() =>
+							setAttributes({
+								filterFontWeight: "",
+								filterFontStyle: "",
+								filterLineHeight: null,
+							})
+						}
+						isShownByDefault
+					>
+						<div
+							style={{
+								display: "flex",
+								gap: "12px",
+								alignItems: "flex-start",
+							}}
+						>
+							<div style={{ flex: "1 1 0", minWidth: 0 }}>
+								<FontAppearanceControl
+									label={__("Appearance", "folioblocks")}
+									value={{
+										fontWeight: attributes.filterFontWeight || undefined,
+										fontStyle: attributes.filterFontStyle || undefined,
+									}}
+									onChange={(next) => {
+										setAttributes({
+											filterFontWeight: next?.fontWeight || "",
+											filterFontStyle: next?.fontStyle || "",
+										});
+									}}
+									__next40pxDefaultSize
+									help={__(
+										"Select the font’s weight and style (matches WordPress Typography → Appearance).",
+										"folioblocks",
+									)}
+								/>
+							</div>
+
+							<div style={{ flex: "1 1 0", minWidth: 0 }}>
+								<LineHeightControl
+									label={__("Line Height", "folioblocks")}
+									value={
+										attributes.filterLineHeight == null ||
+										attributes.filterLineHeight === ""
+											? undefined
+											: attributes.filterLineHeight
+									}
+									__next40pxDefaultSize
+									__unstableInputWidth="100px"
+									onChange={(value) =>
+										setAttributes({ filterLineHeight: value })
+									}
+								/>
+							</div>
+						</div>
+					</ToolsPanelItem>
+
+					<ToolsPanelItem
+						label={__("Typography", "folioblocks")}
+						hasValue={() =>
+							(attributes.filterLetterSpacing ?? 0) !== 0 ||
+							(attributes.filterTextDecoration || "none") !== "none"
+						}
+						onDeselect={() =>
+							setAttributes({
+								filterLetterSpacing: 0,
+								filterTextDecoration: "none",
+							})
+						}
+						isShownByDefault
+					>
+						<div
+							style={{
+								display: "flex",
+								gap: "12px",
+								alignItems: "flex-start",
+							}}
+						>
+							<div style={{ flex: "1 1 0", minWidth: 0 }}>
+								<UnitControl
+									label={__("Letter spacing", "folioblocks")}
+									value={attributes.filterLetterSpacing}
+									onChange={(value) =>
+										setAttributes({ filterLetterSpacing: value })
+									}
+									min={0}
+									max={0.2}
+									step={0.01}
+									__next40pxDefaultSize
+								/>
+							</div>
+
+							<div style={{ flex: "1 1 0", minWidth: 0 }}>
+								<TextDecorationControl
+									value={attributes.filterTextDecoration || "none"}
+									onChange={(value) =>
+										setAttributes({ filterTextDecoration: value })
+									}
+								/>
+							</div>
+						</div>
+					</ToolsPanelItem>
+
+					<ToolsPanelItem
+						label={__("Letter case", "folioblocks")}
+						hasValue={() =>
+							(attributes.filterTextTransform || "none") !== "none"
+						}
+						onDeselect={() => setAttributes({ filterTextTransform: "none" })}
+						isShownByDefault
+					>
+						<TextTransformControl
+							value={attributes.filterTextTransform || "none"}
+							onChange={(value) =>
+								setAttributes({ filterTextTransform: value })
+							}
+						/>
+					</ToolsPanelItem>
+
+					<ToolsPanelItem
+						label={__("Filter Bar Colors", "folioblocks")}
+						hasValue={() =>
+							!!attributes.activeFilterTextColor ||
+							!!attributes.activeFilterBgColor ||
+							!!attributes.filterTextColor ||
+							!!attributes.filterBgColor
+						}
+						onDeselect={() => {
+							setAttributes({
+								activeFilterTextColor: undefined,
+								activeFilterBgColor: undefined,
+								filterTextColor: undefined,
+								filterBgColor: undefined,
+							});
+							forceRefresh();
+						}}
+						isShownByDefault
+					>
+						<div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+							<CompactTwoColorControl
+								label={__("Active Item Colors", "folioblocks")}
+								value={{
+									first: attributes.activeFilterTextColor,
+									second: attributes.activeFilterBgColor,
+								}}
+								onChange={(next) => {
+									setAttributes({
+										activeFilterTextColor: next?.first,
+										activeFilterBgColor: next?.second,
+									});
+									forceRefresh();
+								}}
+								firstLabel={__("Text", "folioblocks")}
+								secondLabel={__("Background", "folioblocks")}
+							/>
+
+							<CompactTwoColorControl
+								label={__("Inactive Item Colors", "folioblocks")}
+								value={{
+									first: attributes.filterTextColor,
+									second: attributes.filterBgColor,
+								}}
+								onChange={(next) => {
+									setAttributes({
+										filterTextColor: next?.first,
+										filterBgColor: next?.second,
+									});
+									forceRefresh();
+								}}
+								firstLabel={__("Text", "folioblocks")}
+								secondLabel={__("Background", "folioblocks")}
+							/>
+						</div>
+					</ToolsPanelItem>
+				</ToolsPanel>
+			</>
+		);
+	},
 );
+
 addFilter(
     'folioBlocks.videoGallery.renderFilterBar',
     'folioblocks/video-gallery-premium-render-filter-bar',
-    (defaultContent, props) => {
-        const { attributes, setAttributes } = props;
-        const { enableFilter, filterAlign = 'center', filterCategories = [], activeFilter = 'All' } = attributes;
+	(defaultContent, { attributes, setAttributes }) => {
+		const {
+			enableFilter = false,
+			activeFilter = "All",
+			filterCategories = [],
+			filterAlign = "center",
+		} = attributes;
 
-        // Only render filter bar if enabled and categories is an array
-        if (!enableFilter || !Array.isArray(filterCategories)) {
-            return null;
-        }
+		if (!enableFilter || !Array.isArray(filterCategories)) {
+			return defaultContent;
+		}
 
-        return (
-            <div className={`pb-video-gallery-filters align-${filterAlign}`}>
-                {['All', ...filterCategories].map((term) => (
-                    <button
-                        key={term}
-                        className={`filter-button${activeFilter === term ? ' is-active' : ''}`}
-                        onClick={() => setAttributes({ activeFilter: term })}
-                        type="button"
-                    >
-                        {term}
-                    </button>
-                ))}
-            </div>
-        );
-    }
+		const { decorationClass, cssVars } = getFilterTypographyCSS(attributes);
+
+		return (
+			<div
+				className={`pb-video-gallery-filters align-${filterAlign} ${decorationClass}`}
+				style={cssVars}
+			>
+				{["All", ...filterCategories].map((term) => (
+					<button
+						key={term}
+						className={`filter-button${
+							activeFilter === term ? " is-active" : ""
+						}`}
+						onClick={() => setAttributes({ activeFilter: term })}
+						type="button"
+					>
+						{term}
+					</button>
+				))}
+			</div>
+		);
+	},
+);
+
+addFilter(
+	"folioBlocks.videoGallery.iconStyleControls",
+	"folioblocks/video-gallery-icon-style-controls",
+	(_, { attributes, setAttributes }) => {
+		const wooActive = window.folioBlocksData?.hasWooCommerce ?? false;
+		if (!wooActive) return null;
+
+		const enableWooCommerce = !!attributes.enableWooCommerce;
+		if (!enableWooCommerce) return null;
+
+		return (
+					<ToolsPanel
+						label={__("E-Commerce Styles", "folioblocks")}
+						resetAll={() =>
+							setAttributes({
+								cartIconColor: "",
+								cartIconBgColor: "",
+							})
+						}
+					>
+						<ToolsPanelItem
+							label={__("Add to Cart Icon Colors", "folioblocks")}
+							hasValue={() =>
+								!!attributes.cartIconColor || !!attributes.cartIconBgColor
+							}
+							onDeselect={() =>
+								setAttributes({
+									cartIconColor: "",
+									cartIconBgColor: "",
+								})
+							}
+							isShownByDefault
+						>
+							<CompactTwoColorControl
+								label={__("Add to Cart Icon", "folioblocks")}
+								value={{
+									first: attributes.cartIconColor,
+									second: attributes.cartIconBgColor,
+								}}
+								onChange={(next) =>
+									setAttributes({
+										cartIconColor: next?.first || "",
+										cartIconBgColor: next?.second || "",
+									})
+								}
+								firstLabel={__("Icon", "folioblocks")}
+								secondLabel={__("Background", "folioblocks")}
+							/>
+						</ToolsPanelItem>
+					</ToolsPanel>
+		);
+	},
 );

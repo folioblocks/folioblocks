@@ -4,6 +4,21 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-01-21
+
+### Added
+- Added style controls to set icon color and background color on Add To Cart and Download icons. 
+- Added Drop Shadow control to Image Block. 
+- Added new compact Border color component.
+- WooCommerce Add To Cart Links now uses Ajax. 
+- Images linked with WooCommerce can now select if the Add To Cart button Adds Product to Shopping Cart or leads to Product Page. 
+
+### Fixed
+- Visual bug in Modular gallery where margin bottom in stacked images created gap between image and the selection outline. 
+
+### Changed
+- Gallery Image Styles now all inside of a single filter. 
+
 ## [1.0.10] - 2025-12-23
 ### Fixed
 - Bug in Modular Gallery border controls.

@@ -2,34 +2,18 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
 	"name": "folioblocks/modular-gallery-block",
-	"version": "1.0.4",
+	"version": "1.1.0",
 	"title": "Modular Gallery",
 	"category": "folioblocks",
 	"icon": "<svg viewBox=\"0 0 1247.24 1247.24\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-hidden=\"true\"><g id=\"Layer_1-2\"><g><path d=\"M1141.13,83.62h-599.75c-12.42,0-22.49,10.07-22.49,22.49v279.01c0,12.42,10.07,22.49,22.49,22.49h599.74c12.42,0,22.49-10.07,22.49-22.49V106.11c.01-12.42-10.06-22.49-22.48-22.49ZM1115.45,359.45h-548.39v-227.66h548.39v227.66Z\"/><path d=\"M1141.13,461.62h-408.62c-12.42,0-22.49,10.07-22.49,22.49v279.01c0,12.42,10.07,22.49,22.49,22.49h408.62c12.42,0,22.49-10.07,22.49-22.49v-279.01c0-12.42-10.07-22.49-22.49-22.49ZM1115.45,737.45h-357.27v-227.66h357.27v227.66Z\"/><path d=\"M1141.13,839.62h-408.62c-12.42,0-22.49,10.07-22.49,22.49v279.01c0,12.42,10.07,22.49,22.49,22.49h408.62c12.42,0,22.49-10.07,22.49-22.49v-279.01c0-12.42-10.07-22.49-22.49-22.49ZM1115.45,1115.45h-357.27v-227.66h357.27v227.66Z\"/><path d=\"M633.99,461.62H106.11c-12.42,0-22.49,10.07-22.49,22.49v657.01c0,12.42,10.07,22.49,22.49,22.49h527.88c12.42,0,22.49-10.07,22.49-22.49V484.11c0-12.42-10.07-22.49-22.49-22.49ZM608.32,1115.45H131.79V509.79h476.53v605.66Z\"/><path d=\"M106.11,407.62h336.76c12.42,0,22.49-10.07,22.49-22.49V106.11c.01-12.42-10.07-22.49-22.49-22.49H106.11c-12.42,0-22.49,10.07-22.49,22.49v279.01c0,12.42,10.07,22.49,22.49,22.49ZM131.79,131.79h285.41v227.66H131.79v-227.66Z\"/></g></g></svg>",
 	"description": "Organizes images into custom rows for precise control over layout and spacing.",
-	"example": {
-        "attributes": {
-        "preview": true
-    }
-    },
+	"example": { "attributes": { "preview": true} },
 	"textdomain": "folioblocks",
-	"allowedBlocks": [
-		"folioblocks/pb-image-row"
-	],
+	"allowedBlocks": [ "folioblocks/pb-image-row" ],
 	"supports": {
-		"align": [
-			"wide",
-			"full"
-		],
-		"color": {
-			"background": true,
-			"gradients": true,
-			"text": false
-		},
-		"spacing": {
-			"margin": true,
-			"padding": true
-		},
+		"align": [ "wide", "full" ],
+		"color": { "background": true, "gradients": true, "text": false },
+		"spacing": { "margin": true, "padding": true },
 		"customClassName": false,
 		"anchor": false,
 		"ariaLabel": true,
@@ -39,54 +23,27 @@
 		"preview": { "type": "boolean", "default": false }, 
 		"resolution": { "type": "string", "default": "large" },
 		"collapseOnMobile": { "type": "boolean", "default": false },
-		"dropShadow": {
-			"type": "boolean",
-			"default": false
-		},
-		"borderWidth": {
-			"type": "number",
-			"default": 0
-		},
-		"borderRadius": {
-			"type": "number",
-			"default": 0
-		},
-		"borderColor": {
-			"type": "string",
-			"default": "#ffffff"
-		},
-		"noGap": {
-			"type": "boolean",
-			"default": false
-		},
+		"dropShadow": { "type": "boolean", "default": false },
+		"borderWidth": { "type": "number", "default": 0 },
+		"borderRadius": { "type": "number", "default": 0 },
+		"borderColor": { "type": "string", "default": "#ffffff" },
+		"noGap": { "type": "boolean", "default": false },
 		"disableRightClick": { "type": "boolean", "default": false },
 		"lazyLoad": { "type": "boolean", "default": false },
-
-		"lightbox": {
-			"type": "boolean",
-			"default": false
-		},
-		"lightboxCaption": {
-			"type": "boolean",
-			"default": false
-		},
-		"onHoverTitle": {
-			"type": "boolean",
-			"default": false
-		},
-		"onHoverStyle": {
-			"type": "string",
-			"enum": ["fade-overlay","gradient-bottom","chip","blur-overlay"],
-			"default": "blur-overlay"
-		},
-		"enableDownload": {
-			"type": "boolean",
-			"default": false
-		},
-		"downloadOnHover": { "type": "boolean", "default": "hover" }, 
+		"lightbox": { "type": "boolean", "default": false },
+		"lightboxCaption": { "type": "boolean", "default": false },
+		"onHoverTitle": { "type": "boolean", "default": false },
+		"onHoverStyle": { "type": "string", "enum": ["fade-overlay","gradient-bottom","chip","blur-overlay"], "default": "blur-overlay" },
+		"enableDownload": { "type": "boolean", "default": false },
+       	"downloadOnHover": { "type": "boolean", "default": true },
+		"downloadIconColor": { "type": "string", "default": "" },
+		"downloadIconBgColor": { "type": "string", "default": "" },
 		"hasWooCommerce": { "type": "boolean", "default": false },
 		"enableWooCommerce": { "type": "boolean", "default": false },
         "wooCartIconDisplay": { "type": "string", "enum": ["hover", "always"], "default": "hover"},
+		"cartIconColor": { "type": "string", "default": "" },
+		"cartIconBgColor": { "type": "string", "default": "" },
+		"wooDefaultLinkAction": { "type": "string", "enum": ["product", "add_to_cart"], "default": "add_to_cart" },
         "wooLightboxInfoType": { "type": "string", "enum": ["caption", "product"], "default": "caption" },
         "wooProductPriceOnHover": { "type": "boolean", "default": true }
 	},
@@ -104,9 +61,14 @@
 		"folioBlocks/layoutVersion": "layoutVersion",
 		"folioBlocks/enableDownload": "enableDownload",
 		"folioBlocks/downloadOnHover": "downloadOnHover",
+		"folioBlocks/downloadIconColor": "downloadIconColor",
+        "folioBlocks/downloadIconBgColor": "downloadIconBgColor",
+        "folioBlocks/cartIconColor": "cartIconColor",
+        "folioBlocks/cartIconBgColor": "cartIconBgColor",
 		"folioBlocks/hasWooCommerce": "hasWooCommerce",
 		"folioBlocks/enableWooCommerce": "enableWooCommerce",
         "folioBlocks/wooCartIconDisplay": "wooCartIconDisplay",
+		"folioBlocks/wooDefaultLinkAction": "wooDefaultLinkAction",
         "folioBlocks/wooLightboxInfoType": "wooLightboxInfoType",
         "folioBlocks/wooProductPriceOnHover": "wooProductPriceOnHover",
 		"folioBlocks/lazyLoad": "lazyLoad"

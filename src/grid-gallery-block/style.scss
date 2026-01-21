@@ -50,12 +50,16 @@
 }
 
 // Filter bar styles
-.pb-image-gallery-filters {
+.wp-block-folioblocks-grid-gallery-block .pb-image-gallery-filters {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 10px;
 	padding-top: 1rem;
 	margin-bottom: 1rem;
+	font-family: var(--pb-filter-font-family, inherit);
+	font-size: var(--pb-filter-font-size, 16px);
+	--pb-filter-decoration-active: none;
+	--pb-filter-decoration-inactive: none;
 
 	&.align-left {
 		justify-content: flex-start;
@@ -70,13 +74,19 @@
 	}
 
 	.filter-button {
-		font-family: var(--wp--preset--font-family--body, inherit);
+		font-family: var(--pb-filter-font-family, inherit);
+		font-size: var(--pb-filter-font-size, 16px);
+		font-weight: var(--pb-filter-font-weight, 400);
+		font-style: var(--pb-filter-font-style, normal);
+		line-height: var(--pb-filter-line-height, 1.5);
+		letter-spacing: var(--pb-filter-letter-spacing, 0px);
+		text-transform: var(--pb-filter-text-transform, none);
+		text-decoration: none;
 		background: none;
 		border: none;
 		color: var(--pb--filter-text-color, #000);
 		background-color: var(--pb--filter-bg-color, transparent);
 		padding: 6px 12px;
-		font-size: 14px;
 		border-radius: 4px;
 		cursor: pointer;
 		transition: all 0.2s ease;
@@ -84,7 +94,24 @@
 		&.is-active {
 			color: var(--pb--filter-active-text, #fff);
 			background-color: var(--pb--filter-active-bg, #000);
+			text-decoration: var(--pb-filter-decoration-active, none);
 		}
+	}
+
+	.filter-button:not(.is-active) {
+		text-decoration: var(--pb-filter-decoration-inactive, none);
+	}
+
+	/* If the chosen decoration is underline, decorate ONLY the active item. */
+	&[style*="--pb-filter-text-decoration: underline"] {
+		--pb-filter-decoration-active: underline;
+		--pb-filter-decoration-inactive: none;
+	}
+
+	/* If the chosen decoration is line-through, decorate ONLY the non-active items. */
+	&[style*="--pb-filter-text-decoration: line-through"] {
+		--pb-filter-decoration-active: none;
+		--pb-filter-decoration-inactive: line-through;
 	}
 }
 .wp-block-folioblocks-pb-image-block.is-hidden {

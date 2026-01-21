@@ -7,13 +7,13 @@ import { __ } from "@wordpress/i18n";
 import {
 	SelectControl,
 	PanelBody,
-	BaseControl,
 	RangeControl,
-	ColorPalette,
 	ToggleControl,
+	__experimentalToolsPanel as ToolsPanel,
+	__experimentalToolsPanelItem as ToolsPanelItem,
 } from "@wordpress/components";
-import { InspectorControls } from "@wordpress/block-editor";
 import ProductSearchControl from "../pb-helpers/ProductSearchControl.js";
+import CompactColorControl, { CompactTwoColorControl } from "../pb-helpers/CompactColorControl.js";
 import { download } from "@wordpress/icons";
 import { wooCartIcon } from "../pb-helpers/wooCartIcon.js";
 
@@ -45,14 +45,12 @@ addFilter(
 				{enableDownload && (
 					<SelectControl
 						label={__("Display Image Download Icon", "folioblocks")}
-						value={downloadOnHover ?? true ? "hover" : "always"}
+						value={downloadOnHover ? "hover" : "always"}
 						options={[
 							{ label: __("On Hover", "folioblocks"), value: "hover" },
 							{ label: __("Always", "folioblocks"), value: "always" },
 						]}
-						onChange={(value) =>
-							setAttributes({ downloadOnHover: value === "hover" })
-						}
+						onChange={(value) => setAttributes({ downloadOnHover: value === "hover" })}
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 						help={__(
@@ -329,13 +327,35 @@ addFilter(
 	"folioblocks/pb-image-block-woo",
 	(
 		Original,
-		{ attributes, setAttributes, effectiveWooActive, isInsideGallery },
+		{
+			attributes,
+			setAttributes,
+			effectiveWooActive,
+			isInsideGallery,
+			contextWooDefaultLinkAction,
+		},
 	) => {
 		if (!effectiveWooActive) return null;
 
+		const hasGalleryDefault =
+			isInsideGallery &&
+			typeof contextWooDefaultLinkAction === "string" &&
+			contextWooDefaultLinkAction.length > 0;
+
+		const effectiveDefault = hasGalleryDefault
+			? contextWooDefaultLinkAction
+			: "add_to_cart";
+
+		const currentAction =
+			attributes.wooLinkAction && attributes.wooLinkAction !== "inherit"
+				? attributes.wooLinkAction
+				: "inherit";
+
+		const selectValue = hasGalleryDefault ? currentAction : effectiveDefault;
+
 		return (
 			<>
-				{isInsideGallery && (
+				{!isInsideGallery && (
 					<hr style={{ border: "0.5px solid #e0e0e0", margin: "12px 0" }} />
 				)}
 				<ProductSearchControl
@@ -371,6 +391,53 @@ addFilter(
 						});
 					}}
 				/>
+				{Number(attributes.wooProductId) > 0 && (
+					<SelectControl
+						label={__("Default Add To Cart Icon Behavior", "folioblocks")}
+						value={selectValue}
+						options={
+							hasGalleryDefault
+								? [
+										{
+											label: __("Inherit (Gallery Default)", "folioblocks"),
+											value: "inherit",
+										},
+										{
+											label: __("Add to Cart", "folioblocks"),
+											value: "add_to_cart",
+										},
+										{
+											label: __("Open Product Page", "folioblocks"),
+											value: "product",
+										},
+								  ]
+								: [
+										{
+											label: __("Add to Cart", "folioblocks"),
+											value: "add_to_cart",
+										},
+										{
+											label: __("Open Product Page", "folioblocks"),
+											value: "product",
+										},
+								  ]
+						}
+						onChange={(value) => setAttributes({ wooLinkAction: value })}
+						__nextHasNoMarginBottom
+						__next40pxDefaultSize
+						help={
+							hasGalleryDefault
+								? __(
+										"Choose what happens when visitors click the Add To Cart icon. Select Inherit to follow the gallery default.",
+										"folioblocks",
+								  )
+								: __(
+										"Choose what happens when visitors click the Add To Cart icon.",
+										"folioblocks",
+								  )
+						}
+					/>
+				)}
 			</>
 		);
 	},
@@ -464,21 +531,16 @@ addFilter(
 		if (isInsideGallery) return null;
 
 		return (
-			<InspectorControls group="styles">
 				<PanelBody
 					title={__("Image Styles", "pb-image-block")}
 					initialOpen={true}
 				>
-					<BaseControl
+					<CompactColorControl
 						label={__("Border Color", "folioblocks")}
-						__nextHasNoMarginBottom
-					>
-						<ColorPalette
-							value={attributes.borderColor}
-							onChange={(value) => setAttributes({ borderColor: value })}
-							help={__("Set border color.")}
-						/>
-					</BaseControl>
+						value={attributes.borderColor}
+						onChange={(borderColor) => setAttributes({ borderColor })}
+						help={__("Set Image border color.")}
+					/>
 					<RangeControl
 						label={__("Border Width", "folioblocks")}
 						value={attributes.borderWidth}
@@ -487,7 +549,7 @@ addFilter(
 						max={20}
 						__next40pxDefaultSize
 						__nextHasNoMarginBottom
-						help={__("Set border width in pixels.")}
+						help={__("Set Image border width.")}
 					/>
 					<RangeControl
 						label={__("Border Radius", "folioblocks")}
@@ -497,13 +559,115 @@ addFilter(
 						max={50}
 						__next40pxDefaultSize
 						__nextHasNoMarginBottom
-						help={__("Set border radius in pixels.")}
+						help={__("Set Image border radius.")}
+					/>
+					<ToggleControl
+						label={__("Enable Drop Shadow", "folioblocks")}
+						checked={!!attributes.dropShadow}
+						onChange={(newDropShadow) =>
+							setAttributes({ dropShadow: newDropShadow })
+						}
+						__nextHasNoMarginBottom
+						help={__("Applies a subtle drop shadow to images.", "folioblocks")}
 					/>
 				</PanelBody>
-			</InspectorControls>
 		);
 	},
 );
+
+addFilter(
+	"folioBlocks.imageBlock.iconStyleControls",
+	"folioblocks/pb-image-block-icon-style-controls",
+	(Original, { attributes, setAttributes, isInsideGallery }) => {
+		// Standalone only. In galleries, the parent controls icon styling via context.
+		if (isInsideGallery) return null;
+
+		const enableDownload = !!attributes.enableDownload;
+		const enableWooCommerce = !!attributes.enableWooCommerce;
+
+		if (!enableDownload && !enableWooCommerce) return null;
+
+		return (
+					<ToolsPanel
+						label={__("E-Commerce Styles", "folioblocks")}
+						resetAll={() =>
+							setAttributes({
+								downloadIconColor: "",
+								downloadIconBgColor: "",
+								cartIconColor: "",
+								cartIconBgColor: "",
+							})
+						}
+					>
+						{enableDownload && (
+							<ToolsPanelItem
+								label={__("Download Icon Colors", "folioblocks")}
+								hasValue={() =>
+									!!attributes.downloadIconColor ||
+									!!attributes.downloadIconBgColor
+								}
+								onDeselect={() =>
+									setAttributes({
+										downloadIconColor: "",
+										downloadIconBgColor: "",
+									})
+								}
+								isShownByDefault
+							>
+								<CompactTwoColorControl
+									label={__("Download Icon", "folioblocks")}
+									value={{
+										first: attributes.downloadIconColor,
+										second: attributes.downloadIconBgColor,
+									}}
+									onChange={(next) =>
+										setAttributes({
+											downloadIconColor: next?.first || "",
+											downloadIconBgColor: next?.second || "",
+										})
+									}
+									firstLabel={__("Icon", "folioblocks")}
+									secondLabel={__("Background", "folioblocks")}
+								/>
+							</ToolsPanelItem>
+						)}
+
+						{enableWooCommerce && (
+							<ToolsPanelItem
+								label={__("Add to Cart Icon Colors", "folioblocks")}
+								hasValue={() =>
+									!!attributes.cartIconColor || !!attributes.cartIconBgColor
+								}
+								onDeselect={() =>
+									setAttributes({
+										cartIconColor: "",
+										cartIconBgColor: "",
+									})
+								}
+								isShownByDefault
+							>
+								<CompactTwoColorControl
+									label={__("Add to Cart Icon", "folioblocks")}
+									value={{
+										first: attributes.cartIconColor,
+										second: attributes.cartIconBgColor,
+									}}
+									onChange={(next) =>
+										setAttributes({
+											cartIconColor: next?.first || "",
+											cartIconBgColor: next?.second || "",
+										})
+									}
+									firstLabel={__("Icon", "folioblocks")}
+									secondLabel={__("Background", "folioblocks")}
+								/>
+							</ToolsPanelItem>
+						)}
+					</ToolsPanel>
+		);
+	},
+);
+
 addFilter(
 	"folioBlocks.imageBlock.downloadButton",
 	"folioblocks/pb-image-block-download-button",
@@ -518,6 +682,7 @@ addFilter(
 			src,
 			context,
 			isInsideGallery,
+			downloadIconStyleVars,
 		},
 	) => {
 		if (!effectiveDownloadEnabled || !src) return null;
@@ -543,6 +708,7 @@ addFilter(
 				className={`pb-image-block-download ${
 					effectiveDownloadOnHover ? "hover-only" : ""
 				}`}
+				style={downloadIconStyleVars}
 				onClick={handleDownload}
 				aria-label={__("Download Image", "folioblocks")}
 			>
@@ -602,7 +768,7 @@ addFilter(
 	"folioblocks/pb-image-block-add-to-cart-button",
 	(
 		Original,
-		{ attributes, setAttributes, effectiveWooActive, context, isInsideGallery },
+		{ attributes, setAttributes, effectiveWooActive, context, isInsideGallery, cartIconStyleVars },
 	) => {
 		if (!effectiveWooActive || Number(attributes.wooProductId) <= 0)
 			return null;
@@ -610,14 +776,27 @@ addFilter(
 			context?.["folioBlocks/wooCartIconDisplay"] ??
 			attributes.wooCartIconDisplay ??
 			"hover";
+		const galleryDefault = context?.["folioBlocks/wooDefaultLinkAction"];
+		const attrAction = attributes.wooLinkAction ?? "inherit";
+		const linkAction =
+			attrAction && attrAction !== "inherit"
+				? attrAction
+				: galleryDefault || "add_to_cart";
 
 		return (
 			<button
 				className={`pb-add-to-cart-icon ${
 					cartDisplay === "hover" ? "hover-only" : ""
 				}`}
-				aria-label={__("Add to Cart", "folioblocks")}
+				style={cartIconStyleVars}
+				aria-label={
+					linkAction === "add_to_cart"
+						? __("Add to Cart", "folioblocks")
+						: __("View Product", "folioblocks")
+				}
+				data-woo-action={linkAction}
 				onClick={(e) => {
+					e.preventDefault();
 					e.stopPropagation();
 				}}
 			>

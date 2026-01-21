@@ -2,15 +2,15 @@
  * PB Video Block
  * Edit JS
  **/
-import { __ } from '@wordpress/i18n';
+import { __ } from "@wordpress/i18n";
 import {
 	useBlockProps,
 	InspectorControls,
 	MediaUpload,
 	MediaUploadCheck,
 	BlockControls,
-	MediaPlaceholder
-} from '@wordpress/block-editor';
+	MediaPlaceholder,
+} from "@wordpress/block-editor";
 import {
 	PanelBody,
 	TextControl,
@@ -20,17 +20,16 @@ import {
 	ToolbarButton,
 	ToolbarGroup,
 	Modal,
-	BaseControl,
-	ColorPalette,
 	RangeControl,
-	ToggleControl, 
-	Notice
-} from '@wordpress/components';
-import { useState, useEffect } from '@wordpress/element';
-import { useSelect } from '@wordpress/data';
-import { applyFilters } from '@wordpress/hooks';
-import IconVideoBlock from '../pb-helpers/IconVideoBlock';
-import './editor.scss';
+	ToggleControl,
+	Notice,
+} from "@wordpress/components";
+import { useState, useEffect } from "@wordpress/element";
+import { useSelect } from "@wordpress/data";
+import { applyFilters } from "@wordpress/hooks";
+import IconVideoBlock from "../pb-helpers/IconVideoBlock";
+import CompactColorControl from "../pb-helpers/CompactColorControl.js";
+import "./editor.scss";
 
 const ASPECT_RATIOS = {
 	"21:9": "aspect-21-9",
@@ -38,9 +37,11 @@ const ASPECT_RATIOS = {
 	"9:16": "aspect-9-16",
 	"4:3": "aspect-4-3",
 	"3:2": "aspect-3-2",
-	"1:1": "aspect-1-1"
+	"1:1": "aspect-1-1",
 };
-const checkoutUrl = window.folioBlocksData?.checkoutUrl || 'https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks&utm_medium=video-block&utm_campaign=upgrade';
+const checkoutUrl =
+	window.folioBlocksData?.checkoutUrl ||
+	"https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks&utm_medium=video-block&utm_campaign=upgrade";
 
 // Function to support YouTube & Vimeo Videos
 function getVideoEmbedMarkup(videoUrl) {
@@ -48,23 +49,23 @@ function getVideoEmbedMarkup(videoUrl) {
 	if (!videoUrl) return null;
 
 	// Handle YouTube URLs
-	if (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) {
-		let videoId = '';
+	if (videoUrl.includes("youtube.com") || videoUrl.includes("youtu.be")) {
+		let videoId = "";
 		try {
 			const url = new URL(videoUrl);
-			if (url.hostname.includes('youtu.be')) {
-				videoId = url.pathname.replace('/', '');
-			} else if (url.searchParams.has('v')) {
-				videoId = url.searchParams.get('v');
+			if (url.hostname.includes("youtu.be")) {
+				videoId = url.pathname.replace("/", "");
+			} else if (url.searchParams.has("v")) {
+				videoId = url.searchParams.get("v");
 			}
 		} catch (e) {
-			console.warn('Invalid YouTube URL:', videoUrl);
+			console.warn("Invalid YouTube URL:", videoUrl);
 		}
 		if (videoId) {
 			return (
 				<iframe
 					src={`https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1`}
-					style={{ border: 'none' }}
+					style={{ border: "none" }}
 					allow="autoplay; fullscreen"
 					allowFullScreen
 					title="YouTube Video"
@@ -75,12 +76,12 @@ function getVideoEmbedMarkup(videoUrl) {
 		}
 	}
 	// Handle Vimeo URLs
-	if (videoUrl.includes('vimeo.com')) {
-		const videoId = videoUrl.split('/').pop().split('?')[0];
+	if (videoUrl.includes("vimeo.com")) {
+		const videoId = videoUrl.split("/").pop().split("?")[0];
 		return (
 			<iframe
 				src={`https://player.vimeo.com/video/${videoId}`}
-				style={{ border: 'none' }}
+				style={{ border: "none" }}
 				allow="autoplay; fullscreen"
 				allowFullScreen
 				title="Vimeo Video"
@@ -92,7 +93,6 @@ function getVideoEmbedMarkup(videoUrl) {
 }
 
 export default function Edit({ attributes, setAttributes, context }) {
-
 	const {
 		videoUrl,
 		thumbnail,
@@ -105,8 +105,10 @@ export default function Edit({ attributes, setAttributes, context }) {
 		filterCategory,
 		thumbnailSize,
 		lightbox,
-		lightboxLayout, 
-		preview
+		lightboxLayout,
+		preview,
+		cartIconColor,
+		cartIconBgColor,
 	} = attributes;
 
 	// Block Preview Image
@@ -124,48 +126,53 @@ export default function Edit({ attributes, setAttributes, context }) {
 	// Effect: Listen for Escape key to close lightbox
 	useEffect(() => {
 		const handleKeyDown = (e) => {
-			if (e.key === 'Escape') {
+			if (e.key === "Escape") {
 				setLightboxOpen(false);
 			}
 		};
-		document.addEventListener('keydown', handleKeyDown);
-		return () => document.removeEventListener('keydown', handleKeyDown);
+		document.addEventListener("keydown", handleKeyDown);
+		return () => document.removeEventListener("keydown", handleKeyDown);
 	}, []);
 
-
-	const parentAspectRatio = context?.['folioBlocks/aspectRatio'];
-	const parentPlayButton = context?.['folioBlocks/playButtonVisibility'];
-	const parentTitleVisibility = context?.['folioBlocks/titleVisibility'];
+	const parentAspectRatio = context?.["folioBlocks/aspectRatio"];
+	const parentPlayButton = context?.["folioBlocks/playButtonVisibility"];
+	const parentTitleVisibility = context?.["folioBlocks/titleVisibility"];
 	const lightboxEnabled =
-		(typeof context?.['folioBlocks/lightbox'] !== 'undefined')
-			? !!context['folioBlocks/lightbox']
+		typeof context?.["folioBlocks/lightbox"] !== "undefined"
+			? !!context["folioBlocks/lightbox"]
 			: !!attributes.lightbox;
 
 	const effectiveLightboxLayout =
-		(typeof context?.['folioBlocks/lightboxLayout'] !== 'undefined')
-			? context['folioBlocks/lightboxLayout']
-			: (attributes.lightboxLayout || 'video-only');
-	const inheritedAspectRatio = context?.['folioBlocks/aspectRatio'];
-	const inheritedPlayButtonVisibility = context?.['folioBlocks/playButtonVisibility'];
-	const inheritedTitleVisibility = context?.['folioBlocks/titleVisibility'];
-	const inheritedThumbnailSize = context?.['folioBlocks/thumbnailSize'];
-	const isInVideoGallery = typeof context?.['folioBlocks/gallery'] !== 'undefined';
-	const isInsideGallery = isInVideoGallery;
-	const activeFilter = context?.['folioBlocks/activeFilter'] || 'All';
+		typeof context?.["folioBlocks/lightboxLayout"] !== "undefined"
+			? context["folioBlocks/lightboxLayout"]
+			: attributes.lightboxLayout || "video-only";
+	const inheritedAspectRatio = context?.["folioBlocks/aspectRatio"];
+	const inheritedPlayButtonVisibility =
+		context?.["folioBlocks/playButtonVisibility"];
+	const inheritedTitleVisibility = context?.["folioBlocks/titleVisibility"];
+	const inheritedThumbnailSize = context?.["folioBlocks/thumbnailSize"];
 
-	const lazyLoad = context?.['folioBlocks/lazyLoad'];
+	const isInVideoGallery =
+		typeof context?.["folioBlocks/gallery"] !== "undefined" ||
+		typeof context?.["folioBlocks/thumbnailSize"] !== "undefined" ||
+		typeof context?.["folioBlocks/aspectRatio"] !== "undefined" ||
+		typeof context?.["folioBlocks/enableWooCommerce"] !== "undefined";
+	const isInsideGallery = isInVideoGallery;
+	const activeFilter = context?.["folioBlocks/activeFilter"] || "All";
+
+	const lazyLoad = context?.["folioBlocks/lazyLoad"];
 	const enableWooCommerce =
-		(typeof context?.['folioBlocks/enableWooCommerce'] !== 'undefined')
-			? !!context['folioBlocks/enableWooCommerce']
+		typeof context?.["folioBlocks/enableWooCommerce"] !== "undefined"
+			? !!context["folioBlocks/enableWooCommerce"]
 			: !!attributes.enableWooCommerce;
 	const hasWooCommerce = window.folioBlocksData?.hasWooCommerce || false;
-	const inheritedBorderColor = context?.['folioBlocks/borderColor'];
-	const inheritedBorderWidth = context?.['folioBlocks/borderWidth'];
-	const inheritedBorderRadius = context?.['folioBlocks/borderRadius'];
-	const inheritedDropShadow = context?.['folioBlocks/dropShadow'];
-
-
-
+	const inheritedBorderColor = context?.["folioBlocks/borderColor"];
+	const inheritedBorderWidth = context?.["folioBlocks/borderWidth"];
+	const inheritedBorderRadius = context?.["folioBlocks/borderRadius"];
+	const inheritedDropShadow = context?.["folioBlocks/dropShadow"];
+	// Cart icon styling (provided by Video Gallery via context)
+	const inheritedCartIconColor = context?.["folioBlocks/cartIconColor"];
+	const inheritedCartIconBgColor = context?.["folioBlocks/cartIconBgColor"];
 
 	// Effect: Sync with parent/inherited values
 	useEffect(() => {
@@ -200,11 +207,11 @@ export default function Edit({ attributes, setAttributes, context }) {
 		if (!hasWooCommerce) {
 			setAttributes({
 				wooProductId: 0,
-				wooProductName: '',
-				wooProductPrice: '',
-				wooProductURL: '',
-				wooProductDescription: '',
-				wooProductImage: '',
+				wooProductName: "",
+				wooProductPrice: "",
+				wooProductURL: "",
+				wooProductDescription: "",
+				wooProductImage: "",
 			});
 		}
 	}, [
@@ -217,7 +224,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 		inheritedDropShadow,
 		lazyLoad,
 		lightboxLayout,
-		hasWooCommerce
+		hasWooCommerce,
 	]);
 
 	// ---------------------------
@@ -225,22 +232,49 @@ export default function Edit({ attributes, setAttributes, context }) {
 	// ---------------------------
 	const effectiveThumbnailSize = inheritedThumbnailSize ?? thumbnailSize;
 	const effectiveAspectRatio = inheritedAspectRatio || aspectRatio;
-	const effectivePlayButtonVisibility = inheritedPlayButtonVisibility ?? playButtonVisibility ?? 'always';
-	const effectiveTitleVisibility = inheritedTitleVisibility ?? titleVisibility ?? 'always';
-	const currentCategory = filterCategory?.trim() || '';
-	const isHidden = activeFilter !== 'All' && currentCategory.toLowerCase() !== activeFilter.toLowerCase();
-	const showOverlayAlways = effectivePlayButtonVisibility === 'always' || effectiveTitleVisibility === 'always';
-	const showOverlayOnHover = effectivePlayButtonVisibility === 'onHover' || effectiveTitleVisibility === 'onHover';
+	const effectivePlayButtonVisibility =
+		inheritedPlayButtonVisibility ?? playButtonVisibility ?? "always";
+	const effectiveTitleVisibility =
+		inheritedTitleVisibility ?? titleVisibility ?? "always";
+	const currentCategory = filterCategory?.trim() || "";
+	const isHidden =
+		activeFilter !== "All" &&
+		currentCategory.toLowerCase() !== activeFilter.toLowerCase();
+	const showOverlayAlways =
+		effectivePlayButtonVisibility === "always" ||
+		effectiveTitleVisibility === "always";
+	const showOverlayOnHover =
+		effectivePlayButtonVisibility === "onHover" ||
+		effectiveTitleVisibility === "onHover";
+
+	// ---------------------------
+	// Icon styles (context > attribute)
+	// ---------------------------
+	const effectiveCartIconColor = isInsideGallery
+		? (inheritedCartIconColor ?? "")
+		: (cartIconColor ?? "");
+	const effectiveCartIconBgColor = isInsideGallery
+		? (inheritedCartIconBgColor ?? "")
+		: (cartIconBgColor ?? "");
+
+	const cartIconStyleVars = {
+		...(effectiveCartIconColor
+			? { "--pb-cart-icon-color": effectiveCartIconColor }
+			: {}),
+		...(effectiveCartIconBgColor
+			? { "--pb-cart-icon-bg": effectiveCartIconBgColor }
+			: {}),
+	};
 
 	const imageSizeOptions = wp.data
-		.select('core/block-editor')
-		.getSettings().imageSizes
-		.map((size) => ({
+		.select("core/block-editor")
+		.getSettings()
+		.imageSizes.map((size) => ({
 			label: size.name,
 			value: size.slug,
 		}))
 		.sort((a, b) => {
-			const order = ['thumbnail', 'medium', 'large', 'full'];
+			const order = ["thumbnail", "medium", "large", "full"];
 			const indexA = order.indexOf(a.value);
 			const indexB = order.indexOf(b.value);
 			if (indexA === -1 && indexB === -1) return 0;
@@ -252,9 +286,10 @@ export default function Edit({ attributes, setAttributes, context }) {
 	// Effective border values (context > attribute)
 	const effectiveBorderColor = inheritedBorderColor ?? attributes.borderColor;
 	const effectiveBorderWidth = inheritedBorderWidth ?? attributes.borderWidth;
-	const effectiveBorderRadius = inheritedBorderRadius ?? attributes.borderRadius;
+	const effectiveBorderRadius =
+		inheritedBorderRadius ?? attributes.borderRadius;
 
-	// Set Block Thumbnail 
+	// Set Block Thumbnail
 	const setThumbnail = (media) => {
 		if (!media || !media.url || !media.id) return;
 		setAttributes({
@@ -266,22 +301,25 @@ export default function Edit({ attributes, setAttributes, context }) {
 		(select) => {
 			if (!thumbnailId) return null;
 			// WP 6.9+: use core.getEntityRecord for attachments
-			return select('core').getEntityRecord('postType', 'attachment', thumbnailId) || null;
+			return (
+				select("core").getEntityRecord("postType", "attachment", thumbnailId) ||
+				null
+			);
 		},
-		[thumbnailId, effectiveThumbnailSize]
+		[thumbnailId, effectiveThumbnailSize],
 	);
 	const resolvedThumbnailUrl =
 		thumbnailData?.media_details?.sizes?.[effectiveThumbnailSize]?.source_url ||
 		thumbnail;
 	const openMediaLibrary = () => {
 		const frame = wp.media({
-			title: __('Select a video', 'folioblocks'),
-			library: { type: 'video' },
+			title: __("Select a video", "folioblocks"),
+			library: { type: "video" },
 			multiple: false,
-			button: { text: __('Use this video', 'folioblocks') }
+			button: { text: __("Use this video", "folioblocks") },
 		});
-		frame.on('select', () => {
-			const media = frame.state().get('selection').first().toJSON();
+		frame.on("select", () => {
+			const media = frame.state().get("selection").first().toJSON();
 			if (media && media.url) {
 				setAttributes({ videoUrl: media.url });
 			}
@@ -289,7 +327,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 		frame.open();
 	};
 	const blockProps = useBlockProps({
-		className: isHidden ? 'is-hidden' : undefined
+		className: isHidden ? "is-hidden" : undefined,
 	});
 
 	return (
@@ -297,11 +335,11 @@ export default function Edit({ attributes, setAttributes, context }) {
 			<BlockControls>
 				<ToolbarGroup>
 					<ToolbarButton
-						label={__('Change Video', 'folioblocks')}
+						label={__("Change Video", "folioblocks")}
 						icon="format-video"
 						onClick={() => setIsVideoModalOpen(true)}
 					>
-						{__('Change Video', 'folioblocks')}
+						{__("Change Video", "folioblocks")}
 					</ToolbarButton>
 					<MediaUploadCheck>
 						<MediaUpload
@@ -312,29 +350,32 @@ export default function Edit({ attributes, setAttributes, context }) {
 									thumbnail: media.url,
 								});
 							}}
-							allowedTypes={['image']}
+							allowedTypes={["image"]}
 							render={({ open }) => (
 								<ToolbarButton
-									label={__('Change Thumbnail', 'folioblocks')}
+									label={__("Change Thumbnail", "folioblocks")}
 									icon="format-image"
 									onClick={open}
 								>
-									{__('Change Thumbnail', 'folioblocks')}
+									{__("Change Thumbnail", "folioblocks")}
 								</ToolbarButton>
 							)}
 						/>
 					</MediaUploadCheck>
 					{isVideoModalOpen && (
 						<Modal
-							title={__('Select or Insert Video', 'folioblocks')}
+							title={__("Select or Insert Video", "folioblocks")}
 							onRequestClose={() => setIsVideoModalOpen(false)}
 						>
 							<MediaPlaceholder
 								labels={{
-									title: __('Select or Insert Video', 'folioblocks'),
-									instructions: __('Upload, select from media library or insert from URL.', 'folioblocks'),
+									title: __("Select or Insert Video", "folioblocks"),
+									instructions: __(
+										"Upload, select from media library or insert from URL.",
+										"folioblocks",
+									),
 								}}
-								allowedTypes={['video']}
+								allowedTypes={["video"]}
 								accept="video/*"
 								onSelect={(media) => {
 									setAttributes({ videoUrl: media.url });
@@ -354,20 +395,31 @@ export default function Edit({ attributes, setAttributes, context }) {
 			</BlockControls>
 
 			<InspectorControls>
-				<PanelBody title={__('Video Block Settings', 'folioblocks')} initialOpen={true}>
+				<PanelBody
+					title={__("Video Block Settings", "folioblocks")}
+					initialOpen={true}
+				>
 					{thumbnail && (
-						<div style={{ marginBottom: '16px' }}>
-							<div className={`pb-video-thumbnail-preview ${ASPECT_RATIOS[effectiveAspectRatio]}`} >
-								<img src={resolvedThumbnailUrl} alt={title || ''} />
+						<div style={{ marginBottom: "16px" }}>
+							<div
+								className={`pb-video-thumbnail-preview ${ASPECT_RATIOS[effectiveAspectRatio]}`}
+							>
+								<img src={resolvedThumbnailUrl} alt={title || ""} />
 							</div>
 							<MediaUploadCheck>
 								<MediaUpload
 									onSelect={setThumbnail}
-									allowedTypes={['image']}
+									allowedTypes={["image"]}
 									render={({ open }) => (
-										<div style={{ display: 'flex', justifyContent: 'center', marginTop: '8px' }}>
+										<div
+											style={{
+												display: "flex",
+												justifyContent: "center",
+												marginTop: "8px",
+											}}
+										>
 											<Button onClick={open} variant="secondary">
-												{__('Change Thumbnail', 'folioblocks')}
+												{__("Change Thumbnail", "folioblocks")}
 											</Button>
 										</div>
 									)}
@@ -376,26 +428,34 @@ export default function Edit({ attributes, setAttributes, context }) {
 						</div>
 					)}
 					<TextControl
-						label={__('Video URL', 'folioblocks')}
+						label={__("Video URL", "folioblocks")}
 						value={videoUrl}
 						onChange={(val) => setAttributes({ videoUrl: val })}
-						help={(
+						help={
 							<>
-								{__('Supports YouTube, Vimeo, or ')}
-								<a href="#" onClick={(e) => { e.preventDefault(); openMediaLibrary(); }}>
-									{__('self-hosted videos')}
+								{__("Supports YouTube, Vimeo, or ")}
+								<a
+									href="#"
+									onClick={(e) => {
+										e.preventDefault();
+										openMediaLibrary();
+									}}
+								>
+									{__("self-hosted videos")}
 								</a>
-								{'. Note: Some YouTube & Vimeo videos may not work due to privacy settings.'}
+								{
+									". Note: Some YouTube & Vimeo videos may not work due to privacy settings."
+								}
 							</>
-						)}
+						}
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
 					{!inheritedThumbnailSize && (
 						<>
-							<hr style={{ border: '0.5px solid #e0e0e0', margin: '12px 0' }} />
+							<hr style={{ border: "0.5px solid #e0e0e0", margin: "12px 0" }} />
 							<SelectControl
-								label={__('Thumbnail Resolution', 'folioblocks')}
+								label={__("Thumbnail Resolution", "folioblocks")}
 								value={thumbnailSize}
 								onChange={(val) => setAttributes({ thumbnailSize: val })}
 								options={imageSizeOptions}
@@ -407,97 +467,113 @@ export default function Edit({ attributes, setAttributes, context }) {
 					{!inheritedAspectRatio && (
 						<>
 							<SelectControl
-								label={__('Thumbnail Aspect Ratio', 'folioblocks')}
+								label={__("Thumbnail Aspect Ratio", "folioblocks")}
 								value={aspectRatio}
 								onChange={(val) => setAttributes({ aspectRatio: val })}
-								options={Object.keys(ASPECT_RATIOS).map((ratio) => ({ label: ratio, value: ratio }))}
-								help={__('Set video Thumbnail aspect ratio.')}
+								options={Object.keys(ASPECT_RATIOS).map((ratio) => ({
+									label: ratio,
+									value: ratio,
+								}))}
+								help={__("Set video Thumbnail aspect ratio.")}
 								__nextHasNoMarginBottom
 								__next40pxDefaultSize
 							/>
 						</>
 					)}
 					<TextControl
-						label={__('Video Title', 'folioblocks')}
+						label={__("Video Title", "folioblocks")}
 						value={title}
 						onChange={(val) => {
 							setAttributes({
 								title: val,
-								alt: val // keep alt synced with title edits
+								alt: val, // keep alt synced with title edits
 							});
 						}}
-						help={__('Set Video Title used in the Hover Overlay, Lightbox, and for Alt-text.')}
+						help={__(
+							"Set Video Title used in the Hover Overlay, Lightbox, and for Alt-text.",
+						)}
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
 					<TextareaControl
-						label={__('Description', 'folioblocks')}
+						label={__("Description", "folioblocks")}
 						value={description}
 						onChange={(value) => setAttributes({ description: value })}
-						help={__('Shown in the lightbox when enabled in Gallery Lightbox Settings.', 'folioblocks')}
+						help={__(
+							"Shown in the lightbox when enabled in Gallery Lightbox Settings.",
+							"folioblocks",
+						)}
 						__nextHasNoMarginBottom
 					/>
-					{applyFilters('folioBlocks.pbVideoBlock.filterCategories', null, {
+					{applyFilters("folioBlocks.pbVideoBlock.filterCategories", null, {
 						attributes,
 						setAttributes,
 						context,
 					})}
 				</PanelBody>
 
-				{typeof inheritedPlayButtonVisibility === 'undefined' && (
+				{typeof inheritedPlayButtonVisibility === "undefined" && (
 					<>
-						<PanelBody title={__('Lightbox & Hover Settings', 'folioblocks')} initialOpen={true}>
+						<PanelBody
+							title={__("Lightbox & Hover Settings", "folioblocks")}
+							initialOpen={true}
+						>
 							<ToggleControl
-								label={__('Enable Lightbox in Editor', 'folioblocks')}
+								label={__("Enable Lightbox in Editor", "folioblocks")}
 								checked={!!lightbox}
 								onChange={(val) => setAttributes({ lightbox: !!val })}
 								__nextHasNoMarginBottom
-								help={__('Allows video to open in a Lightbox while editing.', 'folioblocks')}
+								help={__(
+									"Allows video to open in a Lightbox while editing.",
+									"folioblocks",
+								)}
 							/>
-							{applyFilters(
-								'folioBlocks.videoBlock.lightboxLayout',
-								null,
-								{ attributes, setAttributes, isInsideGallery }
-							)}
-							<hr style={{ border: '0.5px solid #e0e0e0', margin: '12px 0' }} />
+							{applyFilters("folioBlocks.videoBlock.lightboxLayout", null, {
+								attributes,
+								setAttributes,
+								isInsideGallery,
+							})}
+							<hr style={{ border: "0.5px solid #e0e0e0", margin: "12px 0" }} />
 							<SelectControl
-								label={__('Play Button Visibility', 'folioblocks')}
+								label={__("Play Button Visibility", "folioblocks")}
 								value={playButtonVisibility}
 								onChange={(val) => setAttributes({ playButtonVisibility: val })}
 								options={[
-									{ label: __('Always Show', 'folioblocks'), value: 'always' },
-									{ label: __('On Hover', 'folioblocks'), value: 'onHover' },
-									{ label: __('Hidden', 'folioblocks'), value: 'hidden' }
+									{ label: __("Always Show", "folioblocks"), value: "always" },
+									{ label: __("On Hover", "folioblocks"), value: "onHover" },
+									{ label: __("Hidden", "folioblocks"), value: "hidden" },
 								]}
-								help={__('Set video Play button visibility state.')}
+								help={__("Set video Play button visibility state.")}
 								__nextHasNoMarginBottom
 								__next40pxDefaultSize
 							/>
 							<SelectControl
-								label={__('Title Visibility', 'folioblocks')}
+								label={__("Title Visibility", "folioblocks")}
 								value={titleVisibility}
 								onChange={(val) => setAttributes({ titleVisibility: val })}
 								options={[
-									{ label: __('Always Show', 'folioblocks'), value: 'always' },
-									{ label: __('On Hover', 'folioblocks'), value: 'onHover' },
-									{ label: __('Hidden', 'folioblocks'), value: 'hidden' }
+									{ label: __("Always Show", "folioblocks"), value: "always" },
+									{ label: __("On Hover", "folioblocks"), value: "onHover" },
+									{ label: __("Hidden", "folioblocks"), value: "hidden" },
 								]}
-								help={__('Set video Title visibility state.')}
+								help={__("Set video Title visibility state.")}
 								__nextHasNoMarginBottom
 								__next40pxDefaultSize
 							/>
-
 						</PanelBody>
 					</>
 				)}
-				{typeof inheritedPlayButtonVisibility === 'undefined' && (
-					<PanelBody title={__('E-Commerce Settings', 'folioblocks')} initialOpen={true}>
-						{applyFilters(
-							'folioBlocks.videoBlock.wooCommerceControls',
-							null,
-							{ attributes, setAttributes, isInsideGallery: isInVideoGallery }
-						)}
-						{applyFilters('folioBlocks.pbVideoBlock.WooProductSearch', null, {
+				{typeof inheritedPlayButtonVisibility === "undefined" && (
+					<PanelBody
+						title={__("E-Commerce Settings", "folioblocks")}
+						initialOpen={true}
+					>
+						{applyFilters("folioBlocks.videoBlock.wooCommerceControls", null, {
+							attributes,
+							setAttributes,
+							isInsideGallery: isInVideoGallery,
+						})}
+						{applyFilters("folioBlocks.pbVideoBlock.WooProductSearch", null, {
 							attributes,
 							setAttributes,
 							hasWooCommerce,
@@ -509,86 +585,104 @@ export default function Edit({ attributes, setAttributes, context }) {
 			{!isInsideGallery && (
 				<InspectorControls group="advanced">
 					{applyFilters(
-						'folioBlocks.videoBlock.disableRightClickToggle',
-						(
-							<div style={{ marginBottom: '8px' }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__('Disable Right-Click', 'folioblocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'folioblocks')}
-									</a>
-								</Notice>
-							</div>
-						),
-						{ attributes, setAttributes }
+						"folioBlocks.videoBlock.disableRightClickToggle",
+						<div style={{ marginBottom: "8px" }}>
+							<Notice status="info" isDismissible={false}>
+								<strong>{__("Disable Right-Click", "folioblocks")}</strong>
+								<br />
+								{__(
+									"This is a premium feature. Unlock all features: ",
+									"folioblocks",
+								)}
+								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+									{__("Upgrade to Pro", "folioblocks")}
+								</a>
+							</Notice>
+						</div>,
+						{ attributes, setAttributes },
 					)}
 					{applyFilters(
-						'folioBlocks.videoBlock.lazyLoadToggle',
-						(
-							<div style={{ marginBottom: '8px' }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__('Enable Lazy Load of Images', 'folioblocks')}</strong><br />
-									{__('This is a premium feature. Unlock all features: ', 'folioblocks')}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__('Upgrade to Pro', 'folioblocks')}
-									</a>
-								</Notice>
-							</div>
-						),
-						{ attributes, setAttributes }
+						"folioBlocks.videoBlock.lazyLoadToggle",
+						<div style={{ marginBottom: "8px" }}>
+							<Notice status="info" isDismissible={false}>
+								<strong>
+									{__("Enable Lazy Load of Images", "folioblocks")}
+								</strong>
+								<br />
+								{__(
+									"This is a premium feature. Unlock all features: ",
+									"folioblocks",
+								)}
+								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+									{__("Upgrade to Pro", "folioblocks")}
+								</a>
+							</Notice>
+						</div>,
+						{ attributes, setAttributes },
 					)}
 				</InspectorControls>
 			)}
-			{typeof inheritedBorderColor === 'undefined' &&
-				typeof inheritedBorderWidth === 'undefined' &&
-				typeof inheritedBorderRadius === 'undefined' && (
+			{typeof inheritedBorderColor === "undefined" &&
+				typeof inheritedBorderWidth === "undefined" &&
+				typeof inheritedBorderRadius === "undefined" && (
 					<InspectorControls group="styles">
-						<PanelBody title={__('Video Block Styles', 'pb-video-block')} initialOpen={true}>
-							<BaseControl label={__('Border Color', 'folioblocks')} __nextHasNoMarginBottom>
-								<ColorPalette
-									value={attributes.borderColor}
-									onChange={(value) => setAttributes({ borderColor: value || undefined })}
-									clearable={false}
-									help={__('Set border color.')}
-								/>
-							</BaseControl>
+						<PanelBody
+							title={__("Video Block Styles", "pb-video-block")}
+							initialOpen={true}
+						>
+							<CompactColorControl
+								label={__("Border Color", "folioblocks")}
+								value={attributes.borderColor}
+								onChange={(borderColor) => setAttributes({ borderColor })}
+								help={__("Set Video border color.")}
+							/>
 							<RangeControl
-								label={__('Border Width', 'folioblocks')}
+								label={__("Border Width", "folioblocks")}
 								value={attributes.borderWidth}
 								onChange={(value) => setAttributes({ borderWidth: value })}
 								min={0}
 								max={20}
 								__next40pxDefaultSize
 								__nextHasNoMarginBottom
-								help={__('Set border width in pixels.')}
+								help={__("Set Video border width.")}
 							/>
 							<RangeControl
-								label={__('Border Radius', 'folioblocks')}
+								label={__("Border Radius", "folioblocks")}
 								value={attributes.borderRadius}
 								onChange={(value) => setAttributes({ borderRadius: value })}
 								min={0}
 								max={100}
 								__next40pxDefaultSize
 								__nextHasNoMarginBottom
-								help={__('Set border radius in pixels.')}
+								help={__("Set Video border radius.")}
 							/>
 							<ToggleControl
-								label={__('Enable Drop Shadow', 'folioblocks')}
+								label={__("Enable Drop Shadow", "folioblocks")}
 								checked={!!attributes.dropShadow}
 								onChange={(value) => setAttributes({ dropShadow: value })}
-								help={__('Enable drop shadow effect.')}
+								help={__("Enable drop shadow effect.")}
 							/>
 						</PanelBody>
+						{applyFilters("folioBlocks.videoBlock.iconStyleControls", null, {
+								attributes,
+								setAttributes,
+								isInsideGallery,
+								enableWooCommerce,
+								hasWooCommerce,
+							})}
 					</InspectorControls>
 				)}
 
 			{/* Visual layout: thumbnail or placeholder or video */}
 			<div {...blockProps}>
 				{!thumbnail ? (
-					<div className={`pb-video-block ${ASPECT_RATIOS[effectiveAspectRatio]}`}>
+					<div
+						className={`pb-video-block ${ASPECT_RATIOS[effectiveAspectRatio]}`}
+					>
 						<div className="video-thumbnail-placeholder">
-							<span className="placeholder-label">{__('No Thumbnail Selected', 'folioblocks')}</span>
+							<span className="placeholder-label">
+								{__("No Thumbnail Selected", "folioblocks")}
+							</span>
 							<MediaUploadCheck>
 								<MediaUpload
 									onSelect={(media) => {
@@ -597,7 +691,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 									allowedTypes={["image"]}
 									render={({ open }) => (
 										<Button onClick={open} variant="secondary">
-											{__('Select Thumbnail', 'folioblocks')}
+											{__("Select Thumbnail", "folioblocks")}
 										</Button>
 									)}
 								/>
@@ -607,8 +701,8 @@ export default function Edit({ attributes, setAttributes, context }) {
 				) : !videoUrl ? (
 					<MediaPlaceholder
 						icon="format-video"
-						labels={{ title: __('Add Video', 'folioblocks') }}
-						allowedTypes={['video']}
+						labels={{ title: __("Add Video", "folioblocks") }}
+						allowedTypes={["video"]}
 						onSelect={(media) => setAttributes({ videoUrl: media.url })}
 						onSelectURL={(url) => setAttributes({ videoUrl: url })}
 						accept="video/*"
@@ -617,12 +711,20 @@ export default function Edit({ attributes, setAttributes, context }) {
 					/>
 				) : (
 					<div
-						className={`pb-video-block ${ASPECT_RATIOS[effectiveAspectRatio]}${showOverlayAlways ? ' has-overlay-always' : ''}${showOverlayOnHover ? ' has-overlay-hover' : ''}${attributes.dropShadow ? ' drop-shadow' : ''}`}
+						className={`pb-video-block ${ASPECT_RATIOS[effectiveAspectRatio]}${
+							showOverlayAlways ? " has-overlay-always" : ""
+						}${showOverlayOnHover ? " has-overlay-hover" : ""}${
+							attributes.dropShadow ? " drop-shadow" : ""
+						}`}
 						style={{
-							borderWidth: effectiveBorderWidth ? `${effectiveBorderWidth}px` : undefined,
-							borderStyle: effectiveBorderWidth ? 'solid' : undefined,
+							borderWidth: effectiveBorderWidth
+								? `${effectiveBorderWidth}px`
+								: undefined,
+							borderStyle: effectiveBorderWidth ? "solid" : undefined,
 							borderColor: effectiveBorderColor || undefined,
-							borderRadius: effectiveBorderRadius ? `${effectiveBorderRadius}px` : undefined
+							borderRadius: effectiveBorderRadius
+								? `${effectiveBorderRadius}px`
+								: undefined,
 						}}
 						data-filter={currentCategory}
 						onClick={() => {
@@ -632,17 +734,34 @@ export default function Edit({ attributes, setAttributes, context }) {
 					>
 						<img
 							src={resolvedThumbnailUrl}
-							alt={title || ''}
+							alt={title || ""}
 							className="pb-video-block-img"
 						/>
-						{applyFilters('folioBlocks.pbVideoBlock.renderAddToCart', null, { attributes, context, isInVideoGallery, })}
+						
+						{applyFilters("folioBlocks.pbVideoBlock.renderAddToCart", null, {
+							attributes,
+							context,
+							isInVideoGallery,
+							isInsideGallery,
+							cartIconStyleVars,
+							effectiveCartIconColor,
+							effectiveCartIconBgColor,
+						})}
 						<div className="video-overlay">
 							<div className="overlay-content">
-								{title && effectiveTitleVisibility !== 'hidden' && (
-									<div className={`video-title-overlay ${effectiveTitleVisibility}`}>{title}</div>
+								{title && effectiveTitleVisibility !== "hidden" && (
+									<div
+										className={`video-title-overlay ${effectiveTitleVisibility}`}
+									>
+										{title}
+									</div>
 								)}
-								{effectivePlayButtonVisibility !== 'hidden' && (
-									<div className={`video-play-button ${effectivePlayButtonVisibility}`}>▶</div>
+								{effectivePlayButtonVisibility !== "hidden" && (
+									<div
+										className={`video-play-button ${effectivePlayButtonVisibility}`}
+									>
+										▶
+									</div>
 								)}
 							</div>
 						</div>
@@ -651,11 +770,13 @@ export default function Edit({ attributes, setAttributes, context }) {
 
 				{isLightboxOpen && (
 					<div
-						className={`pb-video-lightbox ${isLightboxOpen ? 'active' : ''
-							} ${lightboxLayout === 'split' ? 'split-layout' : ''} ${lightboxLayout === 'video-product' ? 'video-product-layout' : ''
-							}`}
+						className={`pb-video-lightbox ${isLightboxOpen ? "active" : ""} ${
+							lightboxLayout === "split" ? "split-layout" : ""
+						} ${
+							lightboxLayout === "video-product" ? "video-product-layout" : ""
+						}`}
 						onClick={(e) => {
-							if (e.target.classList.contains('pb-video-lightbox')) {
+							if (e.target.classList.contains("pb-video-lightbox")) {
 								setLightboxOpen(false);
 							}
 						}}
@@ -664,30 +785,54 @@ export default function Edit({ attributes, setAttributes, context }) {
 							<button
 								className="pb-video-lightbox-close"
 								onClick={() => setLightboxOpen(false)}
-								aria-label={__('Close lightbox', 'folioblocks')}
+								aria-label={__("Close lightbox", "folioblocks")}
 							>
 								×
 							</button>
 
-							{effectiveLightboxLayout === 'video-only' && (
+							{effectiveLightboxLayout === "video-only" && (
 								<div className="pb-video-lightbox-video">
-									{getVideoEmbedMarkup(videoUrl, isInVideoGallery ? { controls: false } : undefined)}
+									{getVideoEmbedMarkup(
+										videoUrl,
+										isInVideoGallery ? { controls: false } : undefined,
+									)}
 								</div>
 							)}
 
-							{effectiveLightboxLayout === 'split' && (
+							{effectiveLightboxLayout === "split" && (
 								<>
-									<div className="pb-video-lightbox-video" style={{ flex: '0 0 70%' }}>
-										{getVideoEmbedMarkup(videoUrl, isInVideoGallery ? { controls: false } : undefined)}
+									<div
+										className="pb-video-lightbox-video"
+										style={{ flex: "0 0 70%" }}
+									>
+										{getVideoEmbedMarkup(
+											videoUrl,
+											isInVideoGallery ? { controls: false } : undefined,
+										)}
 									</div>
-									<div className="pb-video-lightbox-info" style={{ flex: '0 0 30%' }}>
+									<div
+										className="pb-video-lightbox-info"
+										style={{ flex: "0 0 30%" }}
+									>
 										{title && <h2 className="lightbox-title">{title}</h2>}
-										{description && <p className="lightbox-description">{description}</p>}
+										{description && (
+											<p className="lightbox-description">{description}</p>
+										)}
 									</div>
 								</>
 							)}
 
-							{applyFilters('folioBlocks.pbVideoBlock.renderLightbox', null, { attributes, videoUrl, isInVideoGallery, lightboxLayout: effectiveLightboxLayout, enableWooCommerce, getVideoEmbedMarkup, title, description, __ })}
+							{applyFilters("folioBlocks.pbVideoBlock.renderLightbox", null, {
+								attributes,
+								videoUrl,
+								isInVideoGallery,
+								lightboxLayout: effectiveLightboxLayout,
+								enableWooCommerce,
+								getVideoEmbedMarkup,
+								title,
+								description,
+								__,
+							})}
 						</div>
 					</div>
 				)}

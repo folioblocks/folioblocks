@@ -34,8 +34,41 @@ $fbks_caption_lightbox = $fbks_context['folioBlocks/lightboxCaption'] ?? ( ! emp
 $fbks_title_hover = $fbks_context['folioBlocks/onHoverTitle'] ?? ( isset( $attributes['showTitleOnHover'] ) ? (bool) $attributes['showTitleOnHover'] : false );
 
 if ( fbks_fs()->can_use_premium_code__premium_only() ) {
+	// Icon styles (context wins; fallback to image block attributes when used standalone)
+	$fbks_download_icon_color = $fbks_context['folioBlocks/downloadIconColor'] ?? ( $attributes['downloadIconColor'] ?? '' );
+	$fbks_download_icon_bg    = $fbks_context['folioBlocks/downloadIconBgColor'] ?? ( $attributes['downloadIconBgColor'] ?? '' );
+	$fbks_cart_icon_color     = $fbks_context['folioBlocks/cartIconColor'] ?? ( $attributes['cartIconColor'] ?? '' );
+	$fbks_cart_icon_bg        = $fbks_context['folioBlocks/cartIconBgColor'] ?? ( $attributes['cartIconBgColor'] ?? '' );
+
+	$fbks_download_button_style = '';
+	if ( $fbks_download_icon_color !== '' ) {
+		$fbks_download_button_style .= '--pb-download-icon-color:' . $fbks_download_icon_color . ';';
+	}
+	if ( $fbks_download_icon_bg !== '' ) {
+		$fbks_download_button_style .= '--pb-download-icon-bg:' . $fbks_download_icon_bg . ';';
+	}
+
+	$fbks_cart_button_style = '';
+	if ( $fbks_cart_icon_color !== '' ) {
+		$fbks_cart_button_style .= '--pb-cart-icon-color:' . $fbks_cart_icon_color . ';';
+	}
+	if ( $fbks_cart_icon_bg !== '' ) {
+		$fbks_cart_button_style .= '--pb-cart-icon-bg:' . $fbks_cart_icon_bg . ';';
+	}
+
+	// Download icon display (boolean): context wins; fallback to block attribute.
+	$fbks_download_on_hover = (bool) ( $fbks_context['folioBlocks/downloadOnHover'] ?? ( $attributes['downloadOnHover'] ?? true ) );
+
 	$fbks_woo_active = is_plugin_active( 'woocommerce/woocommerce.php' );
 	$fbks_enable_woo = ( $fbks_context['folioBlocks/enableWooCommerce'] ?? ( $attributes['enableWooCommerce'] ?? false ) ) && $fbks_woo_active;
+
+	// Woo link action: image attribute can override; otherwise inherit gallery default via context.
+	$fbks_woo_gallery_default = $fbks_context['folioBlocks/wooDefaultLinkAction'] ?? null;
+	$fbks_woo_attr_action     = $attributes['wooLinkAction'] ?? 'inherit';
+	$fbks_woo_link_action     = ( $fbks_woo_attr_action && $fbks_woo_attr_action !== 'inherit' )
+		? $fbks_woo_attr_action
+		: ( $fbks_woo_gallery_default ?: 'add_to_cart' );
+
 	$fbks_woo_cart_display = $fbks_context['folioBlocks/wooCartIconDisplay'] ?? ( $attributes['wooCartIconDisplay'] ?? 'hover' );
 	$fbks_woo_hover_info = $fbks_context['folioBlocks/wooProductPriceOnHover'] ?? ( $attributes['wooProductPriceOnHover'] ?? false );
 	$fbks_woo_lightbox_info = $fbks_context['folioBlocks/wooLightboxInfoType'] ?? ( $attributes['wooLightboxInfoType'] ?? 'caption' );
@@ -222,21 +255,40 @@ $fbks_wrapper_attributes = get_block_wrapper_attributes( $fbks_wrapper_attribute
 				<button
 					type="button"
 					class="pb-add-to-cart-icon <?php echo $fbks_woo_cart_display === 'hover' ? 'hover-only' : ''; ?>"
-					data-add-to-cart="<?php echo esc_attr( intval( $attributes['wooProductId'] ) ); ?>"
-					aria-label="<?php esc_attr_e( 'Add to Cart', 'folioblocks' ); ?>"
+					data-woo-action="<?php echo esc_attr( $fbks_woo_link_action ); ?>"
+					data-product-id="<?php echo esc_attr( intval( $attributes['wooProductId'] ) ); ?>"
+					<?php if ( ! empty( $attributes['wooProductURL'] ) ) : ?>
+						data-product-url="<?php echo esc_url( $attributes['wooProductURL'] ); ?>"
+					<?php endif; ?>
+					<?php if ( $fbks_cart_button_style !== '' ) : ?>
+						style="<?php echo esc_attr( $fbks_cart_button_style ); ?>"
+					<?php endif; ?>
+					aria-label="<?php echo $fbks_woo_link_action === 'product' ? esc_attr__( 'View Product', 'folioblocks' ) : esc_attr__( 'Add to Cart', 'folioblocks' ); ?>"
 				>
-					<img src="<?php echo esc_url( plugins_url( 'includes/icons/add-to-cart.png', dirname( __FILE__, 2 ) ) ); ?>" alt="<?php esc_attr_e( 'Add to Cart', 'folioblocks' ); ?>" width="24" height="24" />
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+						<g transform="scale(0.75)">
+							<circle cx="12.6667" cy="24.6667" r="2" fill="currentColor"></circle>
+							<circle cx="23.3333" cy="24.6667" r="2" fill="currentColor"></circle>
+							<path d="M9.28491 10.0356C9.47481 9.80216 9.75971 9.66667 10.0606 9.66667H25.3333C25.6232 9.66667 25.8989 9.79247 26.0888 10.0115C26.2787 10.2305 26.3643 10.5211 26.3233 10.8081L24.99 20.1414C24.9196 20.6341 24.4977 21 24 21H12C11.5261 21 11.1173 20.6674 11.0209 20.2034L9.08153 10.8701C9.02031 10.5755 9.09501 10.269 9.28491 10.0356ZM11.2898 11.6667L12.8136 19H23.1327L24.1803 11.6667H11.2898Z" fill="currentColor"></path>
+							<path d="M5.66669 6.66667C5.66669 6.11438 6.1144 5.66667 6.66669 5.66667H9.33335C9.81664 5.66667 10.2308 6.01229 10.3172 6.48778L11.0445 10.4878C11.1433 11.0312 10.7829 11.5517 10.2395 11.6505C9.69614 11.7493 9.17555 11.3889 9.07676 10.8456L8.49878 7.66667H6.66669C6.1144 7.66667 5.66669 7.21895 5.66669 6.66667Z" fill="currentColor"></path>
+						</g>
+					</svg>
 				</button>
 			<?php endif; ?>
 		<?php endif; ?>
 		<?php if ( fbks_fs()->can_use_premium_code__premium_only() ) : ?>
 			<?php if ( ( ! $fbks_enable_woo ) && ( ! empty( $fbks_context['folioBlocks/enableDownload'] ) || ! empty( $attributes['enableDownload'] ) ) ) : ?>
 	    		<button 
-	    			class="pb-image-block-download <?php echo !empty($fbks_context['folioBlocks/downloadOnHover']) ? 'hover-only' : ''; ?>" 
+	    			class="pb-image-block-download <?php echo $fbks_download_on_hover ? 'hover-only' : ''; ?>" 
+	    			<?php if ( $fbks_download_button_style !== '' ) : ?>
+	    				style="<?php echo esc_attr( $fbks_download_button_style ); ?>"
+	    			<?php endif; ?>
 	    			aria-label="<?php esc_attr_e( 'Download Image', 'folioblocks' ); ?>"
 	    			data-full-src="<?php echo esc_url( $fbks_full_src ); ?>"
 				>
-					<img src="<?php echo esc_url( plugins_url( 'includes/icons/download.png', dirname( __FILE__, 2 ) ) ); ?>" alt="<?php esc_attr_e( 'Download Image', 'folioblocks' ); ?>" width="24" height="24" />
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+						<path d="M18 11.3l-1-1.1-4 4V3h-1.5v11.3L7 10.2l-1 1.1 6.2 5.8 5.8-5.8zm.5 3.7v3.5h-13V15H4v5h16v-5h-1.5z" fill="currentColor"></path>
+					</svg>
 				</button>
 			<?php endif; ?>
 		<?php endif; ?>
