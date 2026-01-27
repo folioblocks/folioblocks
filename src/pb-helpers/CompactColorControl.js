@@ -7,16 +7,67 @@ import {
 } from "@wordpress/components";
 import { useState, useRef } from "@wordpress/element";
 import { useSelect } from "@wordpress/data";
+import { useSetting } from "@wordpress/block-editor";
 import { __ } from "@wordpress/i18n";
 
 function useThemePalette() {
-	return useSelect((select) => {
-		const settings = select("core/block-editor").getSettings();
+	// WordPress can expose palettes as a combined list OR split into theme/default/custom.
+	// In some contexts `color.palette` may only contain custom colors, so we read all.
+	const paletteCombinedSetting = useSetting("color.palette");
+	const paletteThemeSetting = useSetting("color.palette.theme");
+	const paletteDefaultSetting = useSetting("color.palette.default");
+	const paletteCustomSetting = useSetting("color.palette.custom");
+	const customColorsSetting = useSetting("color.custom");
+
+	const legacy = useSelect((select) => {
+		const settings = select("core/block-editor")?.getSettings?.();
+		const features = settings?.__experimentalFeatures;
+		const palette = features?.color?.palette;
+
 		return {
-			themeColors: settings?.colors ?? [],
+			// Older shape sometimes uses `settings.colors`.
+			colors: settings?.colors ?? [],
+			// Newer shape can split palettes by source.
+			paletteTheme: palette?.theme ?? [],
+			paletteDefault: palette?.default ?? [],
+			paletteCustom: palette?.custom ?? [],
 			disableCustomColors: !!settings?.disableCustomColors,
 		};
 	}, []);
+
+	// Build palettes by source. We prefer Theme + Custom merged (matches your desired UX).
+	const themePalette = paletteThemeSetting ?? legacy.paletteTheme ?? [];
+	const customPalette = paletteCustomSetting ?? legacy.paletteCustom ?? [];
+	const defaultPalette = paletteDefaultSetting ?? legacy.paletteDefault ?? [];
+
+	// Primary palette: Theme + Custom.
+	let palette = [...themePalette, ...customPalette];
+
+	// Fallback: Default palette.
+	if (!palette.length) {
+		palette = [...defaultPalette];
+	}
+
+	// Final fallback: whatever WP exposes as a combined palette / legacy colors.
+	if (!palette.length) {
+		palette = paletteCombinedSetting ?? legacy.colors ?? [];
+	}
+
+	// De-dupe by color value or slug to avoid showing duplicates.
+	const seen = new Set();
+	const themeColors = (palette || []).filter((c) => {
+		const key = c?.color || c?.slug || JSON.stringify(c);
+		if (seen.has(key)) return false;
+		seen.add(key);
+		return true;
+	});
+
+	// If `color.custom` is explicitly false, disable custom colors.
+	// Otherwise fall back to legacy `disableCustomColors`.
+	const disableCustomColors =
+		customColorsSetting === false ? true : legacy.disableCustomColors;
+
+	return { themeColors, disableCustomColors };
 }
 
 export default function CompactColorControl({ label, value, onChange, help }) {
