@@ -445,10 +445,35 @@ addFilter(
 								label: __("Chip Overlay - Top-Left Label", "folioblocks"),
 								value: "chip",
 							},
+							{
+								label: __("Color Overlay - Custom Colors", "folioblocks"),
+								value: "color-overlay",
+							},
 						]}
 						onChange={(v) => setAttributes({ onHoverStyle: v })}
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
+					/>
+				)}
+				{onHoverTitle && attributes.onHoverStyle === "color-overlay" && (
+					<CompactTwoColorControl
+						label={__("Overlay Colors", "folioblocks")}
+						value={{
+							first: attributes.overlayBgColor,
+							second: attributes.overlayTextColor,
+						}}
+						onChange={({ first, second }) =>
+							setAttributes({
+								overlayBgColor: first || "",
+								overlayTextColor: second || "",
+							})
+						}
+						firstLabel={__("Background", "folioblocks")}
+						secondLabel={__("Text", "folioblocks")}
+						help={__(
+							"Pick custom background and text colors for the overlay.",
+							"folioblocks",
+						)}
 					/>
 				)}
 			</>

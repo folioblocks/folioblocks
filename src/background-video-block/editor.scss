@@ -1,0 +1,31 @@
+/**
+ * Background Video Block
+ * Editor SCSS
+ *
+ * Notes:
+ * - The editor should closely match the front-end layering contract.
+ * - We keep this CSS editor-only; the shared front-end styles will live in style.scss.
+ */
+
+ /*
+ * Optional: subtle outline so it's easier to see the block bounds while editing.
+ * (This is not the dotted red debug border from the scaffold.)
+ */
+
+.pb-block-preview {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	background: #3B82F6;
+	
+	svg { width: 100px; height: 100px; fill: #fff; }
+}
+
+
+.pb-bgvid {
+	outline: 1px dashed rgba(0, 0, 0, 0.15);
+	outline-offset: -1px;
+}

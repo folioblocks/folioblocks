@@ -80,8 +80,11 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 		'fade-overlay'    => 'pb-hover-fade-overlay',
 		'gradient-bottom' => 'pb-hover-gradient-bottom',
 		'chip'            => 'pb-hover-chip',
+		'color-overlay'   => 'pb-hover-color-overlay',
 	];
 	$fbks_hover_variant_class = $fbks_hover_class_map[ $fbks_on_hover_style ] ?? 'pb-hover-fade-overlay';
+	$fbks_overlay_bg   = $fbks_context['folioBlocks/overlayBgColor'] ?? ( $attributes['overlayBgColor'] ?? '' );
+	$fbks_overlay_text = $fbks_context['folioBlocks/overlayTextColor'] ?? ( $attributes['overlayTextColor'] ?? '' );
 
 	$fbks_lazy_from_context = isset( $fbks_context['folioBlocks/lazyLoad'] ) ? (bool) $fbks_context['folioBlocks/lazyLoad'] : null;
     $fbks_lazy_from_attr    = isset( $attributes['lazyLoad'] ) ? (bool) $attributes['lazyLoad'] : null;
@@ -106,6 +109,14 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 		}
 		if ( $fbks_border_radius > 0 ) {
 			$fbks_img_styles .= '--pb-border-radius: ' . esc_attr( $fbks_border_radius ) . 'px;';
+		}
+		if ( 'color-overlay' === $fbks_on_hover_style ) {
+			if ( $fbks_overlay_bg ) {
+				$fbks_img_styles .= '--pb-overlay-bg: ' . esc_attr( $fbks_overlay_bg ) . ';';
+			}
+			if ( $fbks_overlay_text ) {
+				$fbks_img_styles .= '--pb-overlay-color: ' . esc_attr( $fbks_overlay_text ) . ';';
+			}
 		}
 }
 

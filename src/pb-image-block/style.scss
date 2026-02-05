@@ -276,6 +276,7 @@
 	--pb-hover-duration: 0.35s;
 	--pb-hover-scale: 1.065;
 	--pb-overlay-bg: rgba(0, 0, 0, 0.65);
+	--pb-overlay-color: #fff;
 	--pb-overlay-pad: 12px 16px;
 	--pb-gradient-bottom-gap: 6px; /* raises gradient panel slightly */
 	--pb-chip-offset: 15px;
@@ -286,14 +287,16 @@
 .pb-image-block.pb-hover-blur-overlay,
 .pb-image-block.pb-hover-fade-overlay,
 .pb-image-block.pb-hover-gradient-bottom,
-.pb-image-block.pb-hover-chip {
+.pb-image-block.pb-hover-chip,
+.pb-image-block.pb-hover-color-overlay {
 	position: relative;
 	overflow: hidden; /* respect figure border radius */
 }
 .pb-image-block.pb-hover-blur-overlay .pb-image-block-title-container,
 .pb-image-block.pb-hover-fade-overlay .pb-image-block-title-container,
 .pb-image-block.pb-hover-gradient-bottom .pb-image-block-title-container,
-.pb-image-block.pb-hover-chip .pb-image-block-title-container {
+.pb-image-block.pb-hover-chip .pb-image-block-title-container,
+.pb-image-block.pb-hover-color-overlay .pb-image-block-title-container {
 	position: absolute;
 	inset: 0;
 	pointer-events: none; /* overlays shouldn't block icons/links */
@@ -301,15 +304,18 @@
 
 /* Shared caption text rules (product name / price supported) */
 .pb-image-block.pb-hover-fade-overlay .pb-image-block-title,
+.pb-image-block.pb-hover-color-overlay .pb-image-block-title,
 .pb-image-block.pb-hover-gradient-bottom .pb-image-block-title,
 .pb-image-block.pb-hover-chip .pb-image-block-title {
 	box-sizing: border-box;
-	color: #fff;
+	color: var(--pb-overlay-color, #fff);
 }
 .pb-image-block.pb-hover-fade-overlay .pb-product-name,
+.pb-image-block.pb-hover-color-overlay .pb-product-name,
 .pb-image-block.pb-hover-gradient-bottom .pb-product-name,
 .pb-image-block.pb-hover-chip .pb-product-name,
 .pb-image-block.pb-hover-fade-overlay .pb-product-price,
+.pb-image-block.pb-hover-color-overlay .pb-product-price,
 .pb-image-block.pb-hover-gradient-bottom .pb-product-price,
 .pb-image-block.pb-hover-chip .pb-product-price {
 	display: block;
@@ -317,6 +323,7 @@
 	width: 100%;
 }
 .pb-image-block.pb-hover-fade-overlay .pb-product-price,
+.pb-image-block.pb-hover-color-overlay .pb-product-price,
 .pb-image-block.pb-hover-gradient-bottom .pb-product-price,
 .pb-image-block.pb-hover-chip .pb-product-price {
 	margin-top: 2px;
@@ -342,6 +349,30 @@
 		transform var(--pb-hover-duration) ease;
 }
 .pb-image-block.pb-hover-fade-overlay:hover .pb-image-block-title {
+	opacity: 1;
+	transform: scale(1);
+}
+
+/* 4b) Full-cover color overlay (custom colors) */
+.pb-image-block.pb-hover-color-overlay .pb-image-block-title {
+	position: absolute;
+	inset: -0.5px;
+	width: calc(100% + 1px);
+	height: calc(100% + 1px);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: var(--pb-overlay-pad);
+	background: var(--pb-overlay-bg, rgba(0, 0, 0, 0.65));
+	color: var(--pb-overlay-color, #fff);
+	font-size: clamp(0.8rem, 5cqi, 1rem);
+	opacity: 0;
+	transform: scale(0.98);
+	transition:
+		opacity var(--pb-hover-duration) ease,
+		transform var(--pb-hover-duration) ease;
+}
+.pb-image-block.pb-hover-color-overlay:hover .pb-image-block-title {
 	opacity: 1;
 	transform: scale(1);
 }
@@ -402,6 +433,7 @@
 	.pb-image-block.pb-hover-tilt img,
 	.pb-image-block.pb-hover-pan img,
 	.pb-image-block.pb-hover-fade-overlay .pb-image-block-title,
+	.pb-image-block.pb-hover-color-overlay .pb-image-block-title,
 	.pb-image-block.pb-hover-gradient-bottom .pb-image-block-title,
 	.pb-image-block.pb-hover-chip .pb-image-block-title,
 	.pb-image-block.pb-hover-glare::after,

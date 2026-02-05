@@ -137,6 +137,12 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	const ctxHoverStyle = context?.["folioBlocks/onHoverStyle"];
 	const effectiveOnHoverStyle =
 		ctxHoverStyle ?? attributes.onHoverStyle ?? "fade-overlay";
+	const overlayBgColor = isInsideGallery
+		? context?.["folioBlocks/overlayBgColor"] ?? ""
+		: attributes.overlayBgColor ?? "";
+	const overlayTextColor = isInsideGallery
+		? context?.["folioBlocks/overlayTextColor"] ?? ""
+		: attributes.overlayTextColor ?? "";
 	const effectiveHoverTitle = isInsideGallery
 		? context["folioBlocks/onHoverTitle"] ?? false
 		: attributes.showTitleOnHover ??
@@ -155,9 +161,19 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		"fade-overlay": "pb-hover-fade-overlay",
 		"gradient-bottom": "pb-hover-gradient-bottom",
 		chip: "pb-hover-chip",
+		"color-overlay": "pb-hover-color-overlay",
 	};
 	const hoverVariantClass =
 		hoverClassMap[effectiveOnHoverStyle] || "pb-hover-fade-overlay";
+	const overlayStyleVars =
+		effectiveOnHoverStyle === "color-overlay"
+			? {
+					...(overlayBgColor ? { "--pb-overlay-bg": overlayBgColor } : {}),
+					...(overlayTextColor
+						? { "--pb-overlay-color": overlayTextColor }
+						: {}),
+			  }
+			: {};
 
 	const effectiveDownloadEnabled = isInsideGallery
 		? contextEnableDownload
@@ -251,6 +267,10 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	const blockProps = useBlockProps({
 		className: isHidden ? "is-hidden" : undefined,
 	});
+	const baseFigureStyle = { ...imageStyle, ...overlayStyleVars };
+	const figureStyle = context["folioBlocks/inCarousel"]
+		? { ...baseFigureStyle, height: `${displayHeight}px` }
+		: baseFigureStyle;
 
 	// Detect: in Image Row, Image Stack, or Masonry Gallery
 	const { isInImageRow, isInImageStack, isInMasonryGallery } = useSelect(
@@ -621,17 +641,13 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 						<figure
 							className={[
 								"pb-image-block",
-								overlayEnabled ? hoverVariantClass : "",
-								effectiveDropShadow ? "dropshadow" : "",
-								effectiveDownloadEnabled ? "has-download" : "",
-							]
-								.filter(Boolean)
-								.join(" ")}
-							style={
-								context["folioBlocks/inCarousel"]
-									? { ...imageStyle, height: `${displayHeight}px` }
-									: imageStyle
-							}
+							overlayEnabled ? hoverVariantClass : "",
+							effectiveDropShadow ? "dropshadow" : "",
+							effectiveDownloadEnabled ? "has-download" : "",
+						]
+							.filter(Boolean)
+							.join(" ")}
+							style={figureStyle}
 						>
 							{!src ? (
 								<MediaPlaceholder
@@ -715,11 +731,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 						]
 							.filter(Boolean)
 							.join(" ")}
-						style={
-							context["folioBlocks/inCarousel"]
-								? { ...imageStyle, height: `${displayHeight}px` }
-								: imageStyle
-						}
+						style={figureStyle}
 					>
 						{!src ? (
 							<MediaPlaceholder

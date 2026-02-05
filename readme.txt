@@ -18,6 +18,7 @@ FolioBlocks is a modern gallery and portfolio plugin built specifically for the 
 Build professional galleries directly inside Gutenberg using flexible layouts including Grid, Justified, Masonry, Modular, Carousel, and Video Gallery blocks. Every block is performance-focused, mobile-friendly, and optimized for real portfolio use cases. FolioBlocks brings powerful visual tools into the native editor so you can work quickly and maintain full creative control.
 
 Included blocks: 
+* Background Video Block - Add an autoplaying, responsive background video with overlay content on top
 * Before & After Block – Compare two images with an interactive slider
 * Loupe Block - Highlight fine details with an elegant magnifying zoom effect
 * Carousel Gallery Block – Smooth, swipe-friendly horizontal image slider
@@ -102,6 +103,10 @@ No, the galleries will remain in place on your site. However, the advanced layou
 6. Video Gallery block populated with images
 
 == Changelog ==
+
+= 1.1.1 = 
+* Added new Background Video Block.
+* Added new Color Overlay option for all photo galeries (Carousel, Grid, Justified, Masonry, & Modular) and Image Block. 
 
 = 1.1.0 = 
 * Added style controls to set icon color and background color on Add To Cart and Download icons. 
