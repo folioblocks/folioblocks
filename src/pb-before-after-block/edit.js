@@ -8,7 +8,7 @@ import { Button, Icon, PanelBody, Notice, ToolbarGroup, ToolbarButton, SelectCon
 import { useState, useRef, useEffect } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
 import { media } from '@wordpress/icons';
-import IconBeforeAfter from '../pb-helpers/IconBeforeAfter';
+import { IconBeforeAfter } from '../pb-helpers/icons';
 import './editor.scss';
 
 function CustomPlaceholder({ beforeImage, afterImage, onSelectBefore, onSelectAfter }) {

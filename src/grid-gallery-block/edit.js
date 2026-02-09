@@ -25,8 +25,7 @@ import { applyFilters } from "@wordpress/hooks";
 import { plus } from "@wordpress/icons";
 import { decodeEntities } from "@wordpress/html-entities";
 import ResponsiveRangeControl from "../pb-helpers/ResponsiveRangeControl";
-import IconGridGallery from "../pb-helpers/IconGridGallery";
-import IconPBSpinner from "../pb-helpers/IconPBSpinner";
+import { IconGridGallery, IconPBSpinner } from "../pb-helpers/icons";
 import "./editor.scss";
 
 const ALLOWED_BLOCKS = ["folioblocks/pb-image-block"];

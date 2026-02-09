@@ -26,7 +26,7 @@ import {
 import { useEffect, useMemo, useRef, useState } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
 import CompactColorControl from "../pb-helpers/CompactColorControl";
-import IconBackgroundVideo from '../pb-helpers/IconBackgroundVideo';
+import { IconBackgroundVideo } from '../pb-helpers/icons';
 import './editor.scss';
 
 
@@ -619,6 +619,25 @@ export default function Edit({ attributes, setAttributes }) {
 						/>
 					</MediaUploadCheck>
 				</PanelBody>
+			</InspectorControls>
+			<InspectorControls group="advanced">
+				{applyFilters(
+					"folioBlocks.backgroundVideoBlock.disableRightClickToggle",
+					<div style={{ marginBottom: "8px" }}>
+						<Notice status="info" isDismissible={false}>
+							<strong>{__("Disable Right-Click", "folioblocks")}</strong>
+							<br />
+							{__(
+								"This is a premium feature. Unlock all features: ",
+								"folioblocks",
+							)}
+							<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+								{__("Upgrade to Pro", "folioblocks")}
+							</a>
+						</Notice>
+					</div>,
+					{ attributes, setAttributes },
+				)}
 			</InspectorControls>
 			<InspectorControls group="styles">
 				<PanelBody title={__('Background Video Overlay Styles', 'folioblocks')} initialOpen={true}>

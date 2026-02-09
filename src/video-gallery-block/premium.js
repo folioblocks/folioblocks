@@ -153,6 +153,51 @@ addFilter(
         );
     }
 );
+
+addFilter(
+	'folioBlocks.videoGallery.customOverlayControls',
+	'folioblocks/video-gallery-premium-custom-overlay',
+	(defaultContent, props) => {
+		const { attributes, setAttributes, combinedVisibility } = props;
+
+		if (combinedVisibility !== 'onHover') return null;
+
+		return (
+			<>
+				<SelectControl
+					label={__('Overlay Style', 'folioblocks')}
+					value={attributes.overlayStyle || 'default'}
+					onChange={(value) => setAttributes({ overlayStyle: value })}
+					options={[
+						{ label: __('Default Overlay', 'folioblocks'), value: 'default' },
+						{ label: __('Blur Overlay', 'folioblocks'), value: 'blur' },
+						{ label: __('Color Overlay', 'folioblocks'), value: 'color' },
+					]}
+					help={__('Choose the hover overlay style.', 'folioblocks')}
+					__nextHasNoMarginBottom
+					__next40pxDefaultSize
+				/>
+				{(attributes.overlayStyle || 'default') === 'color' && (
+					<CompactTwoColorControl
+						label={__('Overlay Colors', 'folioblocks')}
+						value={{
+							first: attributes.overlayBgColor,
+							second: attributes.overlayTextColor,
+						}}
+						onChange={(next) =>
+							setAttributes({
+								overlayBgColor: next?.first || '',
+								overlayTextColor: next?.second || '',
+							})
+						}
+						firstLabel={__('Background', 'folioblocks')}
+						secondLabel={__('Text', 'folioblocks')}
+					/>
+				)}
+			</>
+		);
+	}
+);
 addFilter(
     'folioBlocks.videoGallery.filterLogic',
     'folioblocks/video-gallery-filter-logic',

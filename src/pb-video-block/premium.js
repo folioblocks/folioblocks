@@ -14,6 +14,18 @@ import { wooCartIcon } from "../pb-helpers/wooCartIcon.js";
 import ProductSearchControl from "../pb-helpers/ProductSearchControl.js";
 import CompactColorControl, { CompactTwoColorControl } from "../pb-helpers/CompactColorControl.js";
 
+const sanitizeExternalUrl = (url) => {
+	if (typeof url !== "string" || url.trim() === "") return "";
+	try {
+		const parsedUrl = new URL(url, window.location.origin);
+		return parsedUrl.protocol === "http:" || parsedUrl.protocol === "https:"
+			? parsedUrl.href
+			: "";
+	} catch {
+		return "";
+	}
+};
+
 
 addFilter(
 	"folioBlocks.videoBlock.lightboxLayout",
@@ -47,6 +59,51 @@ addFilter(
 				__nextHasNoMarginBottom
 				__next40pxDefaultSize
 			/>
+		);
+	},
+);
+
+addFilter(
+	"folioBlocks.videoBlock.customOverlayControls",
+	"folioblocks/video-block-premium-custom-overlay",
+	(defaultContent, props) => {
+		const { attributes, setAttributes, combinedVisibility } = props;
+
+		if (combinedVisibility !== "onHover") return null;
+
+		return (
+			<>
+				<SelectControl
+					label={__("Overlay Style", "folioblocks")}
+					value={attributes.overlayStyle || "default"}
+					onChange={(value) => setAttributes({ overlayStyle: value })}
+					options={[
+						{ label: __("Default Overlay", "folioblocks"), value: "default" },
+						{ label: __("Blur Overlay", "folioblocks"), value: "blur" },
+						{ label: __("Color Overlay", "folioblocks"), value: "color" },
+					]}
+					help={__("Choose the hover overlay style.", "folioblocks")}
+					__nextHasNoMarginBottom
+					__next40pxDefaultSize
+				/>
+				{(attributes.overlayStyle || "default") === "color" && (
+					<CompactTwoColorControl
+						label={__("Overlay Colors", "folioblocks")}
+						value={{
+							first: attributes.overlayBgColor,
+							second: attributes.overlayTextColor,
+						}}
+						onChange={(next) =>
+							setAttributes({
+								overlayBgColor: next?.first || "",
+								overlayTextColor: next?.second || "",
+							})
+						}
+						firstLabel={__("Background", "folioblocks")}
+						secondLabel={__("Text", "folioblocks")}
+					/>
+				)}
+			</>
 		);
 	},
 );
@@ -382,13 +439,14 @@ addFilter(
 		}
 
 		// Product data
-		const {
-			wooProductId,
-			wooProductName,
-			wooProductPrice,
-			wooProductDescription,
-			wooProductURL,
-		} = attributes;
+			const {
+				wooProductId,
+				wooProductName,
+				wooProductPrice,
+				wooProductDescription,
+				wooProductURL,
+			} = attributes;
+			const safeWooProductURL = sanitizeExternalUrl(wooProductURL);
 
 		// If a product is linked
 		if (wooProductId > 0) {
@@ -418,12 +476,12 @@ addFilter(
 								dangerouslySetInnerHTML={{ __html: wooProductDescription }}
 							/>
 						)}
-						{wooProductURL && (
-							<a
-								href={wooProductURL}
-								className="pb-view-product-button"
-								target="_blank"
-								rel="noopener noreferrer"
+							{safeWooProductURL && (
+								<a
+									href={safeWooProductURL}
+									className="pb-view-product-button"
+									target="_blank"
+									rel="noopener noreferrer"
 							>
 								{__("View Product", "folioblocks")}
 							</a>

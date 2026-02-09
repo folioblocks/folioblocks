@@ -24,7 +24,7 @@ import {
 import { createBlock } from "@wordpress/blocks";
 import { row } from "@wordpress/icons";
 import { applyFilters } from "@wordpress/hooks";
-import IconModularGallery from "../pb-helpers/IconModularGallery";
+import { IconModularGallery } from "../pb-helpers/icons";
 
 import "./editor.scss";
 

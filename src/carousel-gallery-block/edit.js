@@ -24,8 +24,7 @@ import { decodeEntities } from "@wordpress/html-entities";
 import { useSelect, useDispatch } from "@wordpress/data";
 import { useEffect, useCallback, useRef, useState } from "@wordpress/element";
 import { applyFilters } from "@wordpress/hooks";
-import IconCarouselGallery from "../pb-helpers/IconCarouselGallery";
-import IconPBSpinner from "../pb-helpers/IconPBSpinner";
+import { IconCarouselGallery, IconPBSpinner } from "../pb-helpers/icons";
 import "./editor.scss";
 
 export default function Edit({ clientId, attributes, setAttributes }) {

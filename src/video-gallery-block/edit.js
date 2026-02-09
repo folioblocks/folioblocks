@@ -31,7 +31,7 @@ import { useState, useEffect } from "@wordpress/element";
 import { applyFilters } from "@wordpress/hooks";
 import { plus } from "@wordpress/icons";
 import ResponsiveRangeControl from "../pb-helpers/ResponsiveRangeControl";
-import IconVideoGallery from "../pb-helpers/IconVideoGallery";
+import { IconVideoGallery } from "../pb-helpers/icons";
 import "./editor.scss";
 
 export default function Edit({ attributes, setAttributes, clientId }) {
@@ -50,6 +50,9 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		thumbnailSize,
 		playButtonVisibility,
 		titleVisibility,
+		overlayStyle,
+		overlayBgColor,
+		overlayTextColor,
 		activeFilter = "All",
 		filterTextColor,
 		filterBgColor,
@@ -59,6 +62,12 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		enableWooCommerce,
 		wooCartIconDisplay,
 	} = attributes;
+	const combinedVisibility =
+		titleVisibility === "hidden" && playButtonVisibility !== "hidden"
+			? playButtonVisibility
+			: titleVisibility;
+	const hidePlayButton =
+		combinedVisibility !== "hidden" && playButtonVisibility === "hidden";
 
 	const checkoutUrl =
 		window.folioBlocksData?.checkoutUrl ||
@@ -146,6 +155,9 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			"folioBlocks/aspectRatio": aspectRatio,
 			"folioBlocks/playButtonVisibility": playButtonVisibility,
 			"folioBlocks/titleVisibility": titleVisibility,
+			"folioBlocks/overlayStyle": overlayStyle,
+			"folioBlocks/overlayBgColor": overlayBgColor,
+			"folioBlocks/overlayTextColor": overlayTextColor,
 			"folioBlocks/activeFilter": activeFilter,
 			"folioBlocks/lightbox": lightbox,
 			"folioBlocks/lightboxLayout": lightboxLayout,
@@ -174,6 +186,9 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 				"folioBlocks/aspectRatio": aspectRatio,
 				"folioBlocks/playButtonVisibility": playButtonVisibility,
 				"folioBlocks/titleVisibility": titleVisibility,
+				"folioBlocks/overlayStyle": overlayStyle,
+				"folioBlocks/overlayBgColor": overlayBgColor,
+				"folioBlocks/overlayTextColor": overlayTextColor,
 				"folioBlocks/activeFilter": activeFilter,
 				"folioBlocks/lightbox": lightbox,
 				"folioBlocks/lightboxLayout": lightboxLayout,
@@ -405,33 +420,62 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						</div>,
 						{ attributes, setAttributes },
 					)}
-					<hr style={{ border: "0.5px solid #e0e0e0", margin: "12px 0" }} />
 					<SelectControl
-						label={__("Play Button Visibility", "folioblocks")}
-						value={playButtonVisibility}
-						onChange={(val) => setAttributes({ playButtonVisibility: val })}
+						label={__("Title & Play Button Visibility", "folioblocks")}
+						value={combinedVisibility}
+						onChange={(val) => {
+							if (val === "hidden") {
+								setAttributes({
+									titleVisibility: "hidden",
+									playButtonVisibility: "hidden",
+								});
+								return;
+							}
+							setAttributes({
+								titleVisibility: val,
+								playButtonVisibility: hidePlayButton ? "hidden" : val,
+							});
+						}}
 						options={[
 							{ label: __("Always Show", "folioblocks"), value: "always" },
 							{ label: __("On Hover", "folioblocks"), value: "onHover" },
 							{ label: __("Hidden", "folioblocks"), value: "hidden" },
 						]}
-						help={__("Settings for the Play button overlay.")}
+						help={__("Set visibility for title and play button overlays.")}
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
-					<SelectControl
-						label={__("Title Visibility", "folioblocks")}
-						value={titleVisibility}
-						onChange={(val) => setAttributes({ titleVisibility: val })}
-						options={[
-							{ label: __("Always Show", "folioblocks"), value: "always" },
-							{ label: __("On Hover", "folioblocks"), value: "onHover" },
-							{ label: __("Hidden", "folioblocks"), value: "hidden" },
-						]}
-						help={__("Settings for the Video Title overlay.")}
-						__nextHasNoMarginBottom
-						__next40pxDefaultSize
-					/>
+					{combinedVisibility !== "hidden" && (
+						<ToggleControl
+							label={__("Hide Play Button", "folioblocks")}
+							checked={hidePlayButton}
+							onChange={(val) =>
+								setAttributes({
+									playButtonVisibility: val ? "hidden" : combinedVisibility,
+								})
+							}
+							help={__("Hide only the play button overlay.")}
+							__nextHasNoMarginBottom
+						/>
+					)}
+					{combinedVisibility === "onHover" &&
+						applyFilters(
+							"folioBlocks.videoGallery.customOverlayControls",
+							<div style={{ marginBottom: "8px" }}>
+								<Notice status="info" isDismissible={false}>
+									<strong>{__("Custom Overlay", "folioblocks")}</strong>
+									<br />
+									{__(
+										"This is a premium feature. Unlock all features: ",
+										"folioblocks",
+									)}
+									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+										{__("Upgrade to Pro", "folioblocks")}
+									</a>
+								</Notice>
+							</div>,
+							{ attributes, setAttributes, combinedVisibility },
+						)}
 				</PanelBody>
 				<PanelBody
 					title={__("Gallery Filtering Settings", "folioblocks")}

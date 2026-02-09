@@ -9,7 +9,7 @@ import { BlockControls, useBlockProps, useInnerBlocksProps } from '@wordpress/bl
 import { createBlock } from '@wordpress/blocks';
 import { ToolbarGroup, ToolbarButton, Icon } from '@wordpress/components';
 import { decodeEntities } from '@wordpress/html-entities';
-import IconImageBlock from '../pb-helpers/IconImageBlock';
+import { IconImageBlock } from '../pb-helpers/icons';
 
 const ALLOWED_BLOCKS = ['folioblocks/pb-image-block'];
 

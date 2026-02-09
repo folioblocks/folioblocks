@@ -24,7 +24,7 @@ import {
 import { useState, useRef } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
 import { media } from '@wordpress/icons';
-import IconLoupe from '../pb-helpers/IconLoupe';
+import { IconLoupe } from '../pb-helpers/icons';
 import './editor.scss';
 
 export default function Edit({ attributes, setAttributes }) {

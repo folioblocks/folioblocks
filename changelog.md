@@ -4,6 +4,30 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.3] - 2026-02-09
+
+###
+- Added Overlay styles (Default, Blur, & Color) to Video Block & Video Gallery.
+
+### Fixed
+- Bug in Color and Fade Overlay that affected image title rendering. 
+
+### Changed
+- Merged Title and Play button visibility into one control on Video Block & Video Gallery. 
+- Replaced Play button icon on Video Block with SVG variant. 
+- Combined all icon helper files into one file. 
+
+## [1.1.2] - 2026-02-06
+
+### Added 
+- Added keyboard full-screen support (F) for the Video Lightbox. 
+- Added support for Disable Right Click to Background Video Block. 
+- Added block transforms on Grid Gallery, Justified Gallery, and Masonry Gallery. 
+
+### Changed
+- Updated the Free Vs Pro page to include new blocks and new features.
+- Prevent all blocks from transforming into Groups, Columns, or Details blocks. 
+
 ## [1.1.1] - 2026-02-05
 
 ### Added 

@@ -25,8 +25,7 @@ import { plus } from "@wordpress/icons";
 import { useCallback, useEffect, useRef, useState } from "@wordpress/element";
 import { decodeEntities } from "@wordpress/html-entities";
 import { applyFilters } from "@wordpress/hooks";
-import IconJustifiedGallery from "../pb-helpers/IconJustifiedGallery";
-import IconPBSpinner from "../pb-helpers/IconPBSpinner";
+import { IconJustifiedGallery, IconPBSpinner } from "../pb-helpers/icons";
 import "./editor.scss";
 
 const ALLOWED_BLOCKS = ["folioblocks/pb-image-block"];

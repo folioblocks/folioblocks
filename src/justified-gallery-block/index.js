@@ -9,6 +9,12 @@ import Edit from './edit';
 import Save from './save';
 import deprecated from './deprecated';
 import metadata from './block.json';
+import {
+	buildGalleryTransforms,
+	disableGalleryWrapperTransforms,
+} from '../pb-helpers/galleryTransforms';
+
+disableGalleryWrapperTransforms();
 
 registerBlockType(
 	metadata,
@@ -30,6 +36,7 @@ registerBlockType(
 		},
 		edit: Edit,
 		save: Save,
-		deprecated
+		deprecated,
+		transforms: buildGalleryTransforms(metadata.name)
 	}
 );

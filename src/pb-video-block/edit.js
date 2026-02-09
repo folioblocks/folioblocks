@@ -27,7 +27,7 @@ import {
 import { useState, useEffect } from "@wordpress/element";
 import { useSelect } from "@wordpress/data";
 import { applyFilters } from "@wordpress/hooks";
-import IconVideoBlock from "../pb-helpers/IconVideoBlock";
+import { IconVideoBlock, IconPlayButton } from "../pb-helpers/icons";
 import CompactColorControl from "../pb-helpers/CompactColorControl.js";
 import "./editor.scss";
 
@@ -102,6 +102,9 @@ export default function Edit({ attributes, setAttributes, context }) {
 		aspectRatio,
 		playButtonVisibility,
 		titleVisibility,
+		overlayStyle,
+		overlayBgColor,
+		overlayTextColor,
 		filterCategory,
 		thumbnailSize,
 		lightbox,
@@ -150,6 +153,9 @@ export default function Edit({ attributes, setAttributes, context }) {
 	const inheritedPlayButtonVisibility =
 		context?.["folioBlocks/playButtonVisibility"];
 	const inheritedTitleVisibility = context?.["folioBlocks/titleVisibility"];
+	const inheritedOverlayStyle = context?.["folioBlocks/overlayStyle"];
+	const inheritedOverlayBgColor = context?.["folioBlocks/overlayBgColor"];
+	const inheritedOverlayTextColor = context?.["folioBlocks/overlayTextColor"];
 	const inheritedThumbnailSize = context?.["folioBlocks/thumbnailSize"];
 
 	const isInVideoGallery =
@@ -236,6 +242,21 @@ export default function Edit({ attributes, setAttributes, context }) {
 		inheritedPlayButtonVisibility ?? playButtonVisibility ?? "always";
 	const effectiveTitleVisibility =
 		inheritedTitleVisibility ?? titleVisibility ?? "always";
+	const effectiveOverlayStyle = inheritedOverlayStyle ?? overlayStyle ?? "default";
+	const effectiveOverlayBgColor = inheritedOverlayBgColor ?? overlayBgColor ?? "";
+	const effectiveOverlayTextColor =
+		inheritedOverlayTextColor ?? overlayTextColor ?? "";
+	const combinedVisibility =
+		titleVisibility === "hidden" && playButtonVisibility !== "hidden"
+			? playButtonVisibility
+			: titleVisibility;
+	const hidePlayButton =
+		combinedVisibility !== "hidden" && playButtonVisibility === "hidden";
+	const effectiveCombinedVisibility =
+		effectiveTitleVisibility === "hidden" &&
+		effectivePlayButtonVisibility !== "hidden"
+			? effectivePlayButtonVisibility
+			: effectiveTitleVisibility;
 	const currentCategory = filterCategory?.trim() || "";
 	const isHidden =
 		activeFilter !== "All" &&
@@ -246,6 +267,20 @@ export default function Edit({ attributes, setAttributes, context }) {
 	const showOverlayOnHover =
 		effectivePlayButtonVisibility === "onHover" ||
 		effectiveTitleVisibility === "onHover";
+	const isColorOverlayOnHover =
+		effectiveOverlayStyle === "color" &&
+		effectiveCombinedVisibility === "onHover";
+	const isBlurOverlayOnHover =
+		effectiveOverlayStyle === "blur" &&
+		effectiveCombinedVisibility === "onHover";
+	const overlayStyleVars = {
+		...(isColorOverlayOnHover && effectiveOverlayBgColor
+			? { "--pb-video-overlay-bg": effectiveOverlayBgColor }
+			: {}),
+		...(isColorOverlayOnHover && effectiveOverlayTextColor
+			? { "--pb-video-overlay-text": effectiveOverlayTextColor }
+			: {}),
+	};
 
 	// ---------------------------
 	// Icon styles (context > attribute)
@@ -533,33 +568,68 @@ export default function Edit({ attributes, setAttributes, context }) {
 								setAttributes,
 								isInsideGallery,
 							})}
-							<hr style={{ border: "0.5px solid #e0e0e0", margin: "12px 0" }} />
 							<SelectControl
-								label={__("Play Button Visibility", "folioblocks")}
-								value={playButtonVisibility}
-								onChange={(val) => setAttributes({ playButtonVisibility: val })}
+								label={__("Title & Play Button Visibility", "folioblocks")}
+								value={combinedVisibility}
+								onChange={(val) => {
+									if (val === "hidden") {
+										setAttributes({
+											titleVisibility: "hidden",
+											playButtonVisibility: "hidden",
+										});
+										return;
+									}
+									setAttributes({
+										titleVisibility: val,
+										playButtonVisibility: hidePlayButton ? "hidden" : val,
+									});
+								}}
 								options={[
 									{ label: __("Always Show", "folioblocks"), value: "always" },
 									{ label: __("On Hover", "folioblocks"), value: "onHover" },
 									{ label: __("Hidden", "folioblocks"), value: "hidden" },
 								]}
-								help={__("Set video Play button visibility state.")}
+								help={__("Set visibility for title and play button overlays.")}
 								__nextHasNoMarginBottom
 								__next40pxDefaultSize
 							/>
-							<SelectControl
-								label={__("Title Visibility", "folioblocks")}
-								value={titleVisibility}
-								onChange={(val) => setAttributes({ titleVisibility: val })}
-								options={[
-									{ label: __("Always Show", "folioblocks"), value: "always" },
-									{ label: __("On Hover", "folioblocks"), value: "onHover" },
-									{ label: __("Hidden", "folioblocks"), value: "hidden" },
-								]}
-								help={__("Set video Title visibility state.")}
-								__nextHasNoMarginBottom
-								__next40pxDefaultSize
-							/>
+							{combinedVisibility !== "hidden" && (
+								<ToggleControl
+									label={__("Hide Play Button", "folioblocks")}
+									checked={hidePlayButton}
+									onChange={(val) =>
+										setAttributes({
+											playButtonVisibility: val
+												? "hidden"
+												: combinedVisibility,
+										})
+									}
+									help={__("Hide only the play button overlay.")}
+									__nextHasNoMarginBottom
+								/>
+							)}
+							{combinedVisibility === "onHover" &&
+								applyFilters(
+									"folioBlocks.videoBlock.customOverlayControls",
+									<div style={{ marginBottom: "8px" }}>
+										<Notice status="info" isDismissible={false}>
+											<strong>{__("Custom Overlay", "folioblocks")}</strong>
+											<br />
+											{__(
+												"This is a premium feature. Unlock all features: ",
+												"folioblocks",
+											)}
+											<a
+												href={checkoutUrl}
+												target="_blank"
+												rel="noopener noreferrer"
+											>
+												{__("Upgrade to Pro", "folioblocks")}
+											</a>
+										</Notice>
+									</div>,
+									{ attributes, setAttributes, combinedVisibility, isInsideGallery },
+								)}
 						</PanelBody>
 					</>
 				)}
@@ -714,6 +784,8 @@ export default function Edit({ attributes, setAttributes, context }) {
 						className={`pb-video-block ${ASPECT_RATIOS[effectiveAspectRatio]}${
 							showOverlayAlways ? " has-overlay-always" : ""
 						}${showOverlayOnHover ? " has-overlay-hover" : ""}${
+							isColorOverlayOnHover ? " has-color-overlay" : ""
+						}${isBlurOverlayOnHover ? " has-blur-overlay" : ""}${
 							attributes.dropShadow ? " drop-shadow" : ""
 						}`}
 						style={{
@@ -725,6 +797,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 							borderRadius: effectiveBorderRadius
 								? `${effectiveBorderRadius}px`
 								: undefined,
+							...overlayStyleVars,
 						}}
 						data-filter={currentCategory}
 						onClick={() => {
@@ -760,7 +833,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 									<div
 										className={`video-play-button ${effectivePlayButtonVisibility}`}
 									>
-										▶
+										<IconPlayButton />
 									</div>
 								)}
 							</div>

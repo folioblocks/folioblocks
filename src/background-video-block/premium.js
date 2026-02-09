@@ -4,6 +4,7 @@
  **/
 import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
+import { ToggleControl } from '@wordpress/components';
 import ResponsiveHeightRangeControl from '../pb-helpers/ResponsiveHeightRangeControl';
 
 addFilter(
@@ -59,4 +60,21 @@ addFilter(
 			/>
 		</>
 	),
+);
+addFilter(
+	"folioBlocks.backgroundVideoBlock.disableRightClickToggle",
+	"folioblocks/background-video-block-disable-right-click",
+	(defaultContent, props) => {
+		const { attributes, setAttributes } = props;
+
+		return (
+			<ToggleControl
+				label={__("Disable Right-Click on Page", "folioblocks")}
+				help={__("Prevents visitors from right-clicking.", "folioblocks")}
+				__nextHasNoMarginBottom
+				checked={!!attributes.disableRightClick}
+				onChange={(value) => setAttributes({ disableRightClick: value })}
+			/>
+		);
+	},
 );

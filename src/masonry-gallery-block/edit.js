@@ -24,8 +24,7 @@ import ResponsiveRangeControl from "../pb-helpers/ResponsiveRangeControl";
 import { plus } from "@wordpress/icons";
 import { applyFilters } from "@wordpress/hooks";
 import { decodeEntities } from "@wordpress/html-entities";
-import IconMasonryGallery from "../pb-helpers/IconMasonryGallery";
-import IconPBSpinner from "../pb-helpers/IconPBSpinner";
+import { IconMasonryGallery, IconPBSpinner } from "../pb-helpers/icons";
 import "./editor.scss";
 
 const ALLOWED_BLOCKS = ["folioblocks/pb-image-block"];

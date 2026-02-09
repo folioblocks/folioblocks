@@ -8,6 +8,18 @@ import { useState, useEffect } from '@wordpress/element';
 import { useDebounce } from '@wordpress/compose';
 import apiFetch from '@wordpress/api-fetch';
 
+const sanitizeExternalUrl = (url) => {
+    if (typeof url !== 'string' || url.trim() === '') return '';
+    try {
+        const parsedUrl = new URL(url, window.location.origin);
+        return parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:'
+            ? parsedUrl.href
+            : '';
+    } catch {
+        return '';
+    }
+};
+
 export default function ProductSearchControl({ value, onSelect }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
@@ -48,6 +60,8 @@ export default function ProductSearchControl({ value, onSelect }) {
     useEffect(() => {
         debouncedSearch(searchTerm);
     }, [searchTerm]);
+
+    const safePermalink = sanitizeExternalUrl(value?.permalink || '');
 
     return (
         <BaseControl label={__('Linked WooCommerce Product', 'folioblocks')} __nextHasNoMarginBottom>
@@ -137,22 +151,36 @@ export default function ProductSearchControl({ value, onSelect }) {
                             </button>
                         </div>
                     )}
-                    <a
-                        href={value.permalink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="pb-linked-product-link"
-                    >
-                        <div className="pb-linked-product-info">
-                            <strong>{value.name}</strong>
-                            {value.price_html && (
-                                <div
-                                    className="pb-linked-product-price"
-                                    dangerouslySetInnerHTML={{ __html: value.price_html }}
-                                />
-                            )}
+                    {safePermalink ? (
+                        <a
+                            href={safePermalink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="pb-linked-product-link"
+                        >
+                            <div className="pb-linked-product-info">
+                                <strong>{value.name}</strong>
+                                {value.price_html && (
+                                    <div
+                                        className="pb-linked-product-price"
+                                        dangerouslySetInnerHTML={{ __html: value.price_html }}
+                                    />
+                                )}
+                            </div>
+                        </a>
+                    ) : (
+                        <div className="pb-linked-product-link">
+                            <div className="pb-linked-product-info">
+                                <strong>{value.name}</strong>
+                                {value.price_html && (
+                                    <div
+                                        className="pb-linked-product-price"
+                                        dangerouslySetInnerHTML={{ __html: value.price_html }}
+                                    />
+                                )}
+                            </div>
                         </div>
-                    </a>
+                    )}
                 </div>
             )}
         </BaseControl>

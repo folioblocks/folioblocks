@@ -14,6 +14,7 @@
     },
 	"attributes": {
 		"preview": { "type": "boolean", "default": false },
+		"disableRightClick": { "type": "boolean", "default": false },
 		"layout": { "type": "object" },
 		"sourceProvider": { "type": "string", "default": "self" },
 
@@ -54,6 +55,7 @@
 	"supports": {
 		"html": false,
 		"anchor": false,
+		"customClassName": false,
 		"align": ["wide", "full"],
 		"spacing": { "padding": true, "margin": true, "blockGap": true },
 		"color": { "background": true, "text": true, "gradients": true },

@@ -25,7 +25,7 @@ import {
 import { useRef, useEffect } from "@wordpress/element";
 import { stack } from "@wordpress/icons";
 import { applyFilters } from "@wordpress/hooks";
-import IconImageBlock from "../pb-helpers/IconImageBlock";
+import { IconImageBlock } from "../pb-helpers/icons";
 import "./editor.scss";
 
 export default function Edit({ attributes, setAttributes, context, clientId }) {

@@ -4,7 +4,7 @@
  **/
 import { __ } from '@wordpress/i18n';
 import { useBlockProps } from '@wordpress/block-editor';
-import IconFilmstripGallery from '../pb-helpers/IconFilmstripGallery';
+import { IconFilmstripGallery } from '../pb-helpers/icons';
 import './editor.scss';
 
 export default function Edit({ attributes }) {

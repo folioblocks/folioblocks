@@ -5,7 +5,7 @@ Tags: gallery, image gallery, photo gallery, video gallery, lightbox,
 Tested up to:      6.9
 Requires at least: 6.3
 Requires PHP: 7.4
-Stable tag:        1.1.0
+Stable tag:        1.1.3
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -103,6 +103,21 @@ No, the galleries will remain in place on your site. However, the advanced layou
 6. Video Gallery block populated with images
 
 == Changelog ==
+
+= 1.1.3 = 
+- Added Overlay styles (Default, Blur, & Color) to Video Block & Video Gallery.
+- Fixed bug in Color and Fade Overlay that affected image title rendering. 
+- Merged Title and Play button visibility into one control on Video Block & Video Gallery. 
+- Replaced Play button icon on Video Block with SVG variant. 
+- Combined all icon helper files into one file. 
+
+= 1.1.2 = 
+* Added keyboard full-screen support (F) for the Video Lightbox. 
+* Added support for Disable Right Click to Background Video Block. 
+* Added block transforms on Grid Gallery, Justified Gallery, and Masonry Gallery. 
+* Updated the Free Vs Pro page to include new blocks and new features.
+* Prevent all blocks from transforming into Groups, Columns, or Details blocks. 
+
 
 = 1.1.1 = 
 * Added new Background Video Block.
