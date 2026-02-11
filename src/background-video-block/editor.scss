@@ -7,7 +7,7 @@
  * - We keep this CSS editor-only; the shared front-end styles will live in style.scss.
  */
 
- /*
+/*
  * Optional: subtle outline so it's easier to see the block bounds while editing.
  * (This is not the dotted red debug border from the scaffold.)
  */
@@ -19,9 +19,13 @@
 	padding: 20px;
 	border: 1px solid #ccc;
 	border-radius: 8px;
-	background: #3B82F6;
-	
-	svg { width: 100px; height: 100px; fill: #fff; }
+	background: #3b82f6;
+
+	svg {
+		width: 100px;
+		height: 100px;
+		fill: #fff;
+	}
 }
 
 

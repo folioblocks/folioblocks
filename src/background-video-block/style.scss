@@ -6,30 +6,36 @@
 .pb-bgvid {
 	position: relative;
 	overflow: hidden;
+
 	/* Height variable is set inline in edit.js for preview */
 	height: var(--pb-bgvid-h-desktop, 70vh);
+
 	/* Responsive focal point mapping (defaults to desktop). */
 	--pb-bgvid-pos-x: var(--pb-bgvid-pos-x-desktop, 50%);
 	--pb-bgvid-pos-y: var(--pb-bgvid-pos-y-desktop, 50%);
+
 	/* Make sure inner blocks are comfortably editable */
 	padding: 0;
 }
+
 /* Tablet */
 @media (max-width: 1024px) {
-  .pb-bgvid {
-    height: var(--pb-bgvid-h-tablet);
-    --pb-bgvid-pos-x: var(--pb-bgvid-pos-x-tablet, var(--pb-bgvid-pos-x-desktop, 50%));
-    --pb-bgvid-pos-y: var(--pb-bgvid-pos-y-tablet, var(--pb-bgvid-pos-y-desktop, 50%));
-  }
+
+	.pb-bgvid {
+		height: var(--pb-bgvid-h-tablet);
+		--pb-bgvid-pos-x: var(--pb-bgvid-pos-x-tablet, var(--pb-bgvid-pos-x-desktop, 50%));
+		--pb-bgvid-pos-y: var(--pb-bgvid-pos-y-tablet, var(--pb-bgvid-pos-y-desktop, 50%));
+	}
 }
 
 /* Mobile */
 @media (max-width: 768px) {
-  .pb-bgvid {
-    height: var(--pb-bgvid-h-mobile);
-    --pb-bgvid-pos-x: var(--pb-bgvid-pos-x-mobile, var(--pb-bgvid-pos-x-desktop, 50%));
-    --pb-bgvid-pos-y: var(--pb-bgvid-pos-y-mobile, var(--pb-bgvid-pos-y-desktop, 50%));
-  }
+
+	.pb-bgvid {
+		height: var(--pb-bgvid-h-mobile);
+		--pb-bgvid-pos-x: var(--pb-bgvid-pos-x-mobile, var(--pb-bgvid-pos-x-desktop, 50%));
+		--pb-bgvid-pos-y: var(--pb-bgvid-pos-y-mobile, var(--pb-bgvid-pos-y-desktop, 50%));
+	}
 }
 
 .pb-bgvid__media {
@@ -56,7 +62,7 @@
 /* Keep poster as a fallback, but don't let it hide loaded media */
 .pb-bgvid.has-media .pb-bgvid__poster,
 .pb-bgvid.is-playing .pb-bgvid__poster {
-  opacity: 0;
+	opacity: 0;
 }
 
 .pb-bgvid__video {

@@ -3,17 +3,22 @@
  * Editor SCSS
  **/
 
- .pb-block-preview {
+.pb-block-preview {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	padding: 20px;
 	border: 1px solid #ccc;
 	border-radius: 8px;
-	background: #3B82F6;
-	color: #fff; 
-	
-	svg { width: 100px; height: 100px; stroke: #fff; fill: #fff; }
+	background: #3b82f6;
+	color: #fff;
+
+	svg {
+		width: 100px;
+		height: 100px;
+		stroke: #fff;
+		fill: #fff;
+	}
 }
 
 .pb-loupe-img-thumbnail-preview {
@@ -23,12 +28,12 @@
 	display: block;
 
 	img {
-    	max-width: 100px;
-    	max-height: 100px;
-    	width: auto;
-    	height: auto;
-    	object-fit: contain;
-    	display: block;
+		max-width: 100px;
+		max-height: 100px;
+		width: auto;
+		height: auto;
+		object-fit: contain;
+		display: block;
 		margin: 0 auto;
-  	}
+	}
 }

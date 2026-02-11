@@ -2,15 +2,371 @@
  * Filmstrip Gallery Block
  * Editor SCSS
  **/
- .pb-block-preview {
+.pb-block-preview {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	padding: 20px;
 	border: 1px solid #ccc;
 	border-radius: 8px;
-	background: #3B82F6;
-	color: #fff; 
-	
-	svg { width: 100px; height: 100px; stroke: #fff; fill: #fff; }
+	background: #3b82f6;
+	color: #fff;
+
+	svg {
+		width: 100px;
+		height: 100px;
+		stroke: #fff;
+		fill: #fff;
+	}
+}
+
+.pb-filmstrip-gallery-editor {
+	position: relative;
+	--pb-filmstrip-main-bg: #f6f7f7;
+	--pb-filmstrip-surface: #fff;
+	--pb-filmstrip-border: #dcdcde;
+	--pb-filmstrip-text: #1e1e1e;
+	--pb-filmstrip-muted: #50575e;
+	--pb-filmstrip-nav-bg: rgba(255, 255, 255, 0.9);
+	--pb-filmstrip-nav-border: #dcdcde;
+	--pb-filmstrip-nav-color: #1e1e1e;
+	--pb-filmstrip-active: #007cba;
+}
+
+.pb-filmstrip-gallery-editor.is-theme-dark {
+	--pb-filmstrip-main-bg: #141b22;
+	--pb-filmstrip-surface: #1f2933;
+	--pb-filmstrip-border: #435160;
+	--pb-filmstrip-text: #f3f6f8;
+	--pb-filmstrip-muted: #c1ccd6;
+	--pb-filmstrip-nav-bg: rgba(31, 41, 51, 0.92);
+	--pb-filmstrip-nav-border: #5b6c7d;
+	--pb-filmstrip-nav-color: #f3f6f8;
+	--pb-filmstrip-active: #7db3ff;
+}
+
+.pb-filmstrip-gallery-preview {
+	--pb-filmstrip-side-height: clamp(360px, 46vw, 560px);
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.pb-filmstrip-gallery-preview.is-left,
+.pb-filmstrip-gallery-preview.is-right {
+	flex-direction: row;
+	align-items: stretch;
+}
+
+.pb-filmstrip-gallery-main {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 360px;
+	padding-block: 6px;
+	background: var(--pb-filmstrip-main-bg);
+	border: 1px solid var(--pb-filmstrip-border);
+	border-radius: 6px;
+	overflow: hidden;
+	flex: 1 1 auto;
+}
+
+.pb-filmstrip-gallery-preview.is-left .pb-filmstrip-gallery-main {
+	order: 2;
+	height: var(--pb-filmstrip-side-height);
+}
+
+.pb-filmstrip-gallery-preview.is-right .pb-filmstrip-gallery-main {
+	order: 1;
+	height: var(--pb-filmstrip-side-height);
+}
+
+.pb-filmstrip-gallery-nav {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	z-index: 3;
+	width: 34px;
+	height: 34px;
+	border: 1px solid var(--pb-filmstrip-nav-border);
+	background: var(--pb-filmstrip-nav-bg);
+	color: var(--pb-filmstrip-nav-color);
+	border-radius: 50%;
+	font-size: 22px;
+	line-height: 1;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+}
+
+.pb-filmstrip-gallery-nav-prev {
+	left: 10px;
+}
+
+.pb-filmstrip-gallery-nav-next {
+	right: 10px;
+}
+
+.pb-filmstrip-gallery-main img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	max-height: 560px;
+	object-fit: contain;
+}
+
+.pb-filmstrip-gallery-main .pb-image-block-download {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	z-index: 4;
+	width: 24px !important;
+	height: 24px !important;
+	border: none;
+	border-radius: 4px;
+	padding: 2px !important;
+	cursor: pointer;
+	color: var(--pb-download-icon-color, var(--pb-filmstrip-text));
+	background-color: var(--pb-download-icon-bg, var(--pb-filmstrip-nav-bg));
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.pb-filmstrip-gallery-main .pb-image-block-download svg path,
+.pb-filmstrip-gallery-main .pb-add-to-cart-icon svg path,
+.pb-filmstrip-gallery-main .pb-add-to-cart-icon svg circle {
+	fill: currentcolor;
+}
+
+.pb-filmstrip-gallery-main .pb-add-to-cart-icon {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	z-index: 4;
+	width: 24px !important;
+	height: 24px !important;
+	border: none;
+	border-radius: 4px;
+	padding: 2px !important;
+	cursor: pointer;
+	color: var(--pb-cart-icon-color, var(--pb-filmstrip-text));
+	background-color: var(--pb-cart-icon-bg, var(--pb-filmstrip-nav-bg));
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.pb-filmstrip-gallery-main .pb-image-block-download.hover-only,
+.pb-filmstrip-gallery-main .pb-add-to-cart-icon.hover-only {
+	opacity: 0;
+}
+
+.pb-filmstrip-gallery-main:hover .pb-image-block-download.hover-only,
+.pb-filmstrip-gallery-main:hover .pb-add-to-cart-icon.hover-only {
+	opacity: 1;
+}
+
+.pb-filmstrip-gallery-main-empty {
+	padding: 16px;
+	font-size: 13px;
+	color: var(--pb-filmstrip-muted);
+}
+
+.pb-filmstrip-gallery-bottom-controls {
+	position: absolute;
+	bottom: 8px;
+	right: 8px;
+	z-index: 2;
+	display: inline-flex;
+	gap: 6px;
+}
+
+.pb-filmstrip-gallery-fullscreen-button,
+.pb-filmstrip-gallery-autoplay-button {
+	border: 1px solid var(--pb-filmstrip-border);
+	background: var(--pb-filmstrip-surface);
+	color: var(--pb-filmstrip-text);
+	border-radius: 4px;
+	width: 24px;
+	height: 24px;
+	padding: 2px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.pb-filmstrip-gallery-fullscreen-button {
+	cursor: default;
+}
+
+.pb-filmstrip-gallery-autoplay-button {
+	cursor: pointer;
+}
+
+.pb-filmstrip-gallery-main .pb-filmstrip-gallery-fullscreen-button svg {
+	width: 16px;
+	height: 16px;
+	color: currentcolor;
+}
+
+.pb-filmstrip-gallery-main .pb-filmstrip-gallery-fullscreen-button svg path {
+	fill: currentcolor;
+	stroke: currentcolor;
+}
+
+.pb-filmstrip-gallery-main .pb-filmstrip-gallery-autoplay-button svg path {
+	fill: currentcolor;
+}
+
+.pb-filmstrip-gallery-thumbnails-wrapper {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.pb-filmstrip-gallery-preview.is-left .pb-filmstrip-gallery-thumbnails-wrapper {
+	order: 1;
+}
+
+.pb-filmstrip-gallery-preview.is-right
+.pb-filmstrip-gallery-thumbnails-wrapper {
+	order: 2;
+}
+
+.pb-filmstrip-gallery-strip-nav {
+	flex: 0 0 30px;
+	width: 30px;
+	height: 30px;
+	border: 1px solid var(--pb-filmstrip-nav-border);
+	background: var(--pb-filmstrip-surface);
+	color: var(--pb-filmstrip-text);
+	border-radius: 50%;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 20px;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.pb-filmstrip-gallery-thumbnails {
+	display: flex;
+	flex: 1 1 auto;
+	gap: 8px;
+	overflow: auto;
+	padding-bottom: 2px;
+}
+
+.pb-filmstrip-gallery-preview.is-left .pb-filmstrip-gallery-thumbnails-wrapper,
+.pb-filmstrip-gallery-preview.is-right
+.pb-filmstrip-gallery-thumbnails-wrapper {
+	flex: 0 0 118px;
+	flex-direction: column;
+	align-items: stretch;
+	width: 118px;
+	height: var(--pb-filmstrip-side-height);
+	max-height: var(--pb-filmstrip-side-height);
+	min-height: 0;
+	align-self: stretch;
+}
+
+.pb-filmstrip-gallery-strip-nav.is-vertical {
+	align-self: center;
+}
+
+.pb-filmstrip-gallery-preview.is-left .pb-filmstrip-gallery-thumbnails,
+.pb-filmstrip-gallery-preview.is-right .pb-filmstrip-gallery-thumbnails {
+	flex-direction: column;
+	width: 100%;
+	height: 100%;
+	max-height: 100%;
+	min-height: 0;
+	overflow-y: auto;
+	overflow-x: hidden;
+	padding-bottom: 0;
+	padding-right: 2px;
+}
+
+.pb-filmstrip-gallery-thumb {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 96px;
+	height: 74px;
+	padding: 0;
+	background: var(--pb-filmstrip-surface);
+	border: 1px solid var(--pb-filmstrip-border);
+	border-radius: 4px;
+	overflow: hidden;
+	cursor: pointer;
+}
+
+.pb-filmstrip-gallery-preview.is-left .pb-filmstrip-gallery-thumb,
+.pb-filmstrip-gallery-preview.is-right .pb-filmstrip-gallery-thumb {
+	width: 100%;
+	flex: 0 0 auto;
+	height: 74px;
+}
+
+.pb-filmstrip-gallery-thumb img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.pb-filmstrip-gallery-thumb.is-active {
+	border-color: var(--pb-filmstrip-active);
+	box-shadow: 0 0 0 1px var(--pb-filmstrip-active);
+}
+
+.pb-filmstrip-gallery-inner-blocks {
+	display: none;
+}
+
+@media (max-width: 782px) {
+
+	.pb-filmstrip-gallery-preview.is-left,
+	.pb-filmstrip-gallery-preview.is-right {
+		flex-direction: column;
+	}
+
+	.pb-filmstrip-gallery-preview.is-left .pb-filmstrip-gallery-main,
+	.pb-filmstrip-gallery-preview.is-right .pb-filmstrip-gallery-main {
+		order: 1;
+	}
+
+	.pb-filmstrip-gallery-preview.is-left
+	.pb-filmstrip-gallery-thumbnails-wrapper,
+	.pb-filmstrip-gallery-preview.is-right
+	.pb-filmstrip-gallery-thumbnails-wrapper {
+		order: 2;
+		flex-direction: row;
+		align-items: center;
+		width: auto;
+		height: auto;
+		max-height: none;
+		flex: 1 1 auto;
+	}
+
+	.pb-filmstrip-gallery-preview.is-left .pb-filmstrip-gallery-thumbnails,
+	.pb-filmstrip-gallery-preview.is-right .pb-filmstrip-gallery-thumbnails {
+		flex-direction: row;
+		width: auto;
+		height: auto;
+		max-height: none;
+		overflow-x: auto;
+		overflow-y: hidden;
+		padding-right: 0;
+		padding-bottom: 2px;
+	}
+
+	.pb-filmstrip-gallery-preview.is-left .pb-filmstrip-gallery-thumb,
+	.pb-filmstrip-gallery-preview.is-right .pb-filmstrip-gallery-thumb {
+		width: auto;
+		flex: 0 0 96px;
+	}
 }

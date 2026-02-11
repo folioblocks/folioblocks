@@ -28,18 +28,23 @@
 	&.aspect-21-9 {
 		aspect-ratio: 21 / 9;
 	}
+
 	&.aspect-16-9 {
 		aspect-ratio: 16 / 9;
 	}
+
 	&.aspect-9-16 {
 		aspect-ratio: 9 / 16;
 	}
+
 	&.aspect-4-3 {
 		aspect-ratio: 4 / 3;
 	}
+
 	&.aspect-3-2 {
 		aspect-ratio: 3 / 2;
 	}
+
 	&.aspect-1-1 {
 		aspect-ratio: 1 / 1;
 	}
@@ -62,6 +67,7 @@
 		background: #f3f3f3;
 		overflow: hidden;
 	}
+
 	.pb-video-placeholder .pb-video-missing {
 		color: #999;
 		font-size: 1rem;
@@ -94,14 +100,15 @@
 	.video-title-overlay,
 	.video-play-button svg {
 		color: white !important;
-		fill: currentColor;
-		stroke: currentColor;
+		fill: currentcolor;
+		stroke: currentcolor;
 		text-shadow: 0 0 4px rgba(0, 0, 0, 0.7);
 		transition: opacity 0.3s ease;
 		pointer-events: none;
 	}
 
 	&.has-color-overlay {
+
 		.video-title-overlay,
 		.video-play-button svg {
 			color: var(--pb-video-overlay-text, #fff) !important;
@@ -109,11 +116,8 @@
 	}
 
 	.video-title-overlay {
-		font-size: clamp(
-			0.9rem,
-			5cqi,
-			1.8rem
-		); // 5cqi = 5% of container inline size
+		font-size:
+ clamp(0.9rem, 5cqi, 1.8rem); // 5cqi = 5% of container inline size
 		font-weight: 600;
 		margin-bottom: 10px;
 		max-width: 90%;
@@ -122,16 +126,14 @@
 		text-overflow: ellipsis;
 	}
 
-	.video-play-button{
-		font-size: clamp(
-			0.9rem,
-			5cqi,
-			1.8rem
-		); // 5cqi = 5% of container inline size
+	.video-play-button {
+		font-size:
+ clamp(0.9rem, 5cqi, 1.8rem); // 5cqi = 5% of container inline size
 		display: flex;
 		align-items: center;
 		justify-content: center;
 	}
+
 	.video-play-button svg {
 		width: 1em;
 		height: 1em;
@@ -186,6 +188,7 @@
 
 // WooCommerce Add to Cart Button Styles
 .pb-video-block {
+
 	.pb-video-add-to-cart {
 		color: var(--pb-cart-icon-color, currentColor);
 		background-color: var(--pb-cart-icon-bg, transparent);
@@ -202,10 +205,10 @@
 		cursor: pointer;
 		transition: opacity 0.3s ease;
 		z-index: 10;
-		padding-inline-start: 0px !important;
-		padding-inline-end: 0px !important;
-		padding-block-start: 0px !important;
-		padding-block-end: 0px !important;
+		padding-inline-start: 0 !important;
+		padding-inline-end: 0 !important;
+		padding-block-start: 0 !important;
+		padding-block-end: 0 !important;
 
 		svg {
 			width: 100%;
@@ -228,7 +231,6 @@
 // Base Lightbox Layout
 
 .pb-video-lightbox {
-	display: none;
 	opacity: 0;
 	visibility: hidden;
 	transition: opacity 0.3s ease;
@@ -263,6 +265,7 @@
 	.pb-video-lightbox-video {
 		position: relative;
 		padding-top: 56.25%;
+
 		iframe,
 		video {
 			position: absolute;
@@ -295,6 +298,7 @@
 // Shared layout logic
 .pb-video-lightbox.split-layout,
 .pb-video-lightbox.video-product-layout {
+
 	.pb-video-lightbox-inner {
 		display: flex;
 		align-items: stretch;
@@ -319,6 +323,7 @@
 			line-height: 1.6;
 			margin: 0;
 		}
+
 		.pb-view-product-button {
 			color: #fff;
 			border: 1px solid #fff;
@@ -331,6 +336,7 @@
 
 // Video + Product Layout (unique differences)
 .pb-video-lightbox.video-product-layout {
+
 	.pb-video-lightbox-video {
 		flex: 0 0 70%;
 	}
@@ -383,6 +389,7 @@
 
 // Responsive
 @media (max-width: 768px) {
+
 	.pb-video-lightbox.split-layout .pb-video-lightbox-inner,
 	.pb-video-lightbox.video-product-layout .pb-video-lightbox-inner {
 		flex-direction: column;

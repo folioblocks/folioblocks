@@ -6,11 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.1.3] - 2026-02-09
 
-###
+### Added
+- Added new Filmstrip Gallery block. 
 - Added Overlay styles (Default, Blur, & Color) to Video Block & Video Gallery.
 
 ### Fixed
 - Bug in Color and Fade Overlay that affected image title rendering. 
+- Moved wooCartIcon into new icons helper file. 
 
 ### Changed
 - Merged Title and Play button visibility into one control on Video Block & Video Gallery. 

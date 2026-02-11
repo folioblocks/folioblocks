@@ -11,13 +11,18 @@
 	padding: 20px;
 	border: 1px solid #ccc;
 	border-radius: 8px;
-	background: #3B82F6;
-	
-	svg { width: 100px; height: 100px; fill: #fff; }
+	background: #3b82f6;
+
+	svg {
+		width: 100px;
+		height: 100px;
+		fill: #fff;
+	}
 }
-.pb-image-row .wp-block-folioblocks-pb-image-block { 
+
+.pb-image-row .wp-block-folioblocks-pb-image-block {
 	line-height: 0;
-  	opacity: 1 !important;
-  	transform: none !important;
-  	transition: none !important;
+	opacity: 1 !important;
+	transform: none !important;
+	transition: none !important;
 }

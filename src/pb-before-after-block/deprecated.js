@@ -1,7 +1,7 @@
 /**
  * Before & After Block
  * Deprecated JS
- **/
+ */
 import { createBlock, registerBlockType } from '@wordpress/blocks';
 import { useEffect } from '@wordpress/element';
 import { useDispatch } from '@wordpress/data';
@@ -29,7 +29,7 @@ const legacyAttributes = {
  * Register the OLD block namespace as a migration shim.
  * This MUST be loaded alongside the new block registration.
  */
-registerBlockType('portfolio-blocks/before-after-block', {
+registerBlockType( 'portfolio-blocks/before-after-block', {
 	apiVersion: 3,
 	title: 'Before & After (Legacy)',
 	category: 'widgets',
@@ -43,20 +43,21 @@ registerBlockType('portfolio-blocks/before-after-block', {
 	/**
 	 * On mount, immediately replace this legacy block instance
 	 * with the new block, preserving attributes and any inner blocks.
+	 * @param props
 	 */
-	edit(props) {
+	edit( props ) {
 		const { clientId, attributes, innerBlocks } = props;
-		const { replaceBlocks } = useDispatch('core/block-editor');
+		const { replaceBlocks } = useDispatch( 'core/block-editor' );
 
-		useEffect(() => {
+		useEffect( () => {
 			const newBlock = createBlock(
 				'folioblocks/before-after-block',
 				{ ...attributes },
 				innerBlocks
 			);
-			replaceBlocks(clientId, newBlock);
+			replaceBlocks( clientId, newBlock );
 			// eslint-disable-next-line react-hooks/exhaustive-deps
-		}, []);
+		}, [] );
 
 		return null; // No UI – auto-migrates silently
 	},
@@ -65,6 +66,6 @@ registerBlockType('portfolio-blocks/before-after-block', {
 	save() {
 		return null;
 	},
-});
+} );
 
 export default null;

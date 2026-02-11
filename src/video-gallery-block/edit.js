@@ -1,8 +1,8 @@
 /**
  * Video Gallery Block
  * Edit JS
- **/
-import { __ } from "@wordpress/i18n";
+ */
+import { __ } from '@wordpress/i18n';
 import {
 	InspectorControls,
 	useBlockProps,
@@ -10,7 +10,7 @@ import {
 	BlockControls,
 	store as blockEditorStore,
 	MediaPlaceholder,
-} from "@wordpress/block-editor";
+} from '@wordpress/block-editor';
 import {
 	PanelBody,
 	Notice,
@@ -19,22 +19,22 @@ import {
 	ToggleControl,
 	ToolbarButton,
 	Modal,
-} from "@wordpress/components";
+} from '@wordpress/components';
 import {
 	subscribe,
 	select,
 	dispatch,
 	useDispatch,
 	useSelect,
-} from "@wordpress/data";
-import { useState, useEffect } from "@wordpress/element";
-import { applyFilters } from "@wordpress/hooks";
-import { plus } from "@wordpress/icons";
-import ResponsiveRangeControl from "../pb-helpers/ResponsiveRangeControl";
-import { IconVideoGallery } from "../pb-helpers/icons";
-import "./editor.scss";
+} from '@wordpress/data';
+import { useState, useEffect } from '@wordpress/element';
+import { applyFilters } from '@wordpress/hooks';
+import { plus } from '@wordpress/icons';
+import ResponsiveRangeControl from '../pb-helpers/ResponsiveRangeControl';
+import { IconVideoGallery } from '../pb-helpers/icons';
+import './editor.scss';
 
-export default function Edit({ attributes, setAttributes, clientId }) {
+export default function Edit( { attributes, setAttributes, clientId } ) {
 	/**
 	 * Attribute Destructuring
 	 */
@@ -53,7 +53,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		overlayStyle,
 		overlayBgColor,
 		overlayTextColor,
-		activeFilter = "All",
+		activeFilter = 'All',
 		filterTextColor,
 		filterBgColor,
 		activeFilterTextColor,
@@ -63,18 +63,18 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		wooCartIconDisplay,
 	} = attributes;
 	const combinedVisibility =
-		titleVisibility === "hidden" && playButtonVisibility !== "hidden"
+		titleVisibility === 'hidden' && playButtonVisibility !== 'hidden'
 			? playButtonVisibility
 			: titleVisibility;
 	const hidePlayButton =
-		combinedVisibility !== "hidden" && playButtonVisibility === "hidden";
+		combinedVisibility !== 'hidden' && playButtonVisibility === 'hidden';
 
 	const checkoutUrl =
 		window.folioBlocksData?.checkoutUrl ||
-		"https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks&utm_medium=video-gallery-block&utm_campaign=upgrade";
+		'https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks&utm_medium=video-gallery-block&utm_campaign=upgrade';
 
 	// Block Preview Image
-	if (preview) {
+	if ( preview ) {
 		return (
 			<div className="pb-block-preview">
 				<IconVideoGallery />
@@ -88,140 +88,153 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 
 	// Local state for filter input field
 
-	const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+	const [ isVideoModalOpen, setIsVideoModalOpen ] = useState( false );
 
 	// Selected block in the editor
-	const selectedBlock = useSelect((select) => {
-		const { getSelectedBlock } = select(blockEditorStore);
+	const selectedBlock = useSelect( ( select ) => {
+		const { getSelectedBlock } = select( blockEditorStore );
 		return getSelectedBlock();
-	}, []);
-	applyFilters("folioBlocks.videoGallery.filterLogic", null, {
+	}, [] );
+	applyFilters( 'folioBlocks.videoGallery.filterLogic', null, {
 		clientId,
 		attributes,
 		setAttributes,
 		selectedBlock,
-	});
+	} );
 
 	// Reset activeFilter to 'All' if selected block's category doesn't match
-	useEffect(() => {
-		if (selectedBlock && selectedBlock.name === "folioblocks/pb-video-block") {
-			const selectedCategory = selectedBlock.attributes?.filterCategory || "";
+	useEffect( () => {
+		if (
+			selectedBlock &&
+			selectedBlock.name === 'folioblocks/pb-video-block'
+		) {
+			const selectedCategory =
+				selectedBlock.attributes?.filterCategory || '';
 
 			if (
-				activeFilter !== "All" &&
+				activeFilter !== 'All' &&
 				selectedCategory.toLowerCase() !== activeFilter.toLowerCase()
 			) {
-				setAttributes({ activeFilter: "All" });
+				setAttributes( { activeFilter: 'All' } );
 			}
 		}
-	}, [selectedBlock, activeFilter, setAttributes]);
+	}, [ selectedBlock, activeFilter, setAttributes ] );
 
 	// Force layout update in editor after filtering to fix rendering issues
-	useEffect(() => {
-		if (wp?.data?.select("core/block-editor").isBlockSelected(clientId)) {
+	useEffect( () => {
+		if (
+			wp?.data?.select( 'core/block-editor' ).isBlockSelected( clientId )
+		) {
 			const container = document.querySelector(
-				`[data-block="${clientId}"] .pb-video-gallery`,
+				`[data-block="${ clientId }"] .pb-video-gallery`
 			);
-			if (container) {
-				container.style.display = "none";
-				requestAnimationFrame(() => {
-					container.style.display = "";
-				});
+			if ( container ) {
+				container.style.display = 'none';
+				requestAnimationFrame( () => {
+					container.style.display = '';
+				} );
 			}
 		}
-	}, [activeFilter, clientId]);
+	}, [ activeFilter, clientId ] );
 
 	// Handler to add first video via MediaPlaceholder
-	const { replaceInnerBlocks, insertBlock } = useDispatch("core/block-editor");
-	const handleVideoSelect = (media) => {
-		if (!media || !media.url) return;
+	const { replaceInnerBlocks, insertBlock } =
+		useDispatch( 'core/block-editor' );
+	const handleVideoSelect = ( media ) => {
+		if ( ! media || ! media.url ) {
+			return;
+		}
 		const defaultTitle =
-			media.title && media.title.trim() !== ""
+			media.title && media.title.trim() !== ''
 				? media.title
-				: __("Video", "folioblocks");
-		const newBlock = wp.blocks.createBlock("folioblocks/pb-video-block", {
+				: __( 'Video', 'folioblocks' );
+		const newBlock = wp.blocks.createBlock( 'folioblocks/pb-video-block', {
 			videoUrl: media.url,
 			title: defaultTitle,
 			alt: defaultTitle,
-		});
-		replaceInnerBlocks(clientId, [newBlock], false);
+		} );
+		replaceInnerBlocks( clientId, [ newBlock ], false );
 	};
 
 	/**
 	 * Context
 	 */
-	const blockProps = useBlockProps({
+	const blockProps = useBlockProps( {
 		context: {
-			"folioBlocks/aspectRatio": aspectRatio,
-			"folioBlocks/playButtonVisibility": playButtonVisibility,
-			"folioBlocks/titleVisibility": titleVisibility,
-			"folioBlocks/overlayStyle": overlayStyle,
-			"folioBlocks/overlayBgColor": overlayBgColor,
-			"folioBlocks/overlayTextColor": overlayTextColor,
-			"folioBlocks/activeFilter": activeFilter,
-			"folioBlocks/lightbox": lightbox,
-			"folioBlocks/lightboxLayout": lightboxLayout,
-			"folioBlocks/lazyLoad": lazyLoad,
-			"folioBlocks/enableWooCommerce": enableWooCommerce,
-			"folioBlocks/wooCartIconDisplay": wooCartIconDisplay,
+			'folioBlocks/aspectRatio': aspectRatio,
+			'folioBlocks/playButtonVisibility': playButtonVisibility,
+			'folioBlocks/titleVisibility': titleVisibility,
+			'folioBlocks/overlayStyle': overlayStyle,
+			'folioBlocks/overlayBgColor': overlayBgColor,
+			'folioBlocks/overlayTextColor': overlayTextColor,
+			'folioBlocks/activeFilter': activeFilter,
+			'folioBlocks/lightbox': lightbox,
+			'folioBlocks/lightboxLayout': lightboxLayout,
+			'folioBlocks/lazyLoad': lazyLoad,
+			'folioBlocks/enableWooCommerce': enableWooCommerce,
+			'folioBlocks/wooCartIconDisplay': wooCartIconDisplay,
 		},
 		style: {
-			"--pb--filter-text-color": filterTextColor || "#000",
-			"--pb--filter-bg-color": filterBgColor || "transparent",
-			"--pb--filter-active-text": activeFilterTextColor || "#fff",
-			"--pb--filter-active-bg": activeFilterBgColor || "#000",
+			'--pb--filter-text-color': filterTextColor || '#000',
+			'--pb--filter-bg-color': filterBgColor || 'transparent',
+			'--pb--filter-active-text': activeFilterTextColor || '#fff',
+			'--pb--filter-active-bg': activeFilterBgColor || '#000',
 		},
-	});
+	} );
 
 	const innerBlocksProps = useInnerBlocksProps(
 		{
-			className: `pb-video-gallery cols-d-${columns} cols-t-${tabletColumns} cols-m-${mobileColumns}`,
-			style: { "--gap": `${gap}px` },
+			className: `pb-video-gallery cols-d-${ columns } cols-t-${ tabletColumns } cols-m-${ mobileColumns }`,
+			style: { '--gap': `${ gap }px` },
 		},
 		{
-			allowedBlocks: ["folioblocks/pb-video-block"],
-			orientation: "horizontal",
+			allowedBlocks: [ 'folioblocks/pb-video-block' ],
+			orientation: 'horizontal',
 			templateLock: false,
 			context: {
-				"folioBlocks/aspectRatio": aspectRatio,
-				"folioBlocks/playButtonVisibility": playButtonVisibility,
-				"folioBlocks/titleVisibility": titleVisibility,
-				"folioBlocks/overlayStyle": overlayStyle,
-				"folioBlocks/overlayBgColor": overlayBgColor,
-				"folioBlocks/overlayTextColor": overlayTextColor,
-				"folioBlocks/activeFilter": activeFilter,
-				"folioBlocks/lightbox": lightbox,
-				"folioBlocks/lightboxLayout": lightboxLayout,
-				"folioBlocks/lazyLoad": lazyLoad,
+				'folioBlocks/aspectRatio': aspectRatio,
+				'folioBlocks/playButtonVisibility': playButtonVisibility,
+				'folioBlocks/titleVisibility': titleVisibility,
+				'folioBlocks/overlayStyle': overlayStyle,
+				'folioBlocks/overlayBgColor': overlayBgColor,
+				'folioBlocks/overlayTextColor': overlayTextColor,
+				'folioBlocks/activeFilter': activeFilter,
+				'folioBlocks/lightbox': lightbox,
+				'folioBlocks/lightboxLayout': lightboxLayout,
+				'folioBlocks/lazyLoad': lazyLoad,
 			},
-		},
+		}
 	);
 
 	/**
 	 * Derived / Effective Values
 	 */
 	const imageSizeOptions = wp.data
-		.select("core/block-editor")
+		.select( 'core/block-editor' )
 		.getSettings()
-		.imageSizes.map((size) => ({
+		.imageSizes.map( ( size ) => ( {
 			label: size.name,
 			value: size.slug,
-		}))
-		.sort((a, b) => {
-			const order = ["thumbnail", "medium", "large", "full"];
-			const indexA = order.indexOf(a.value);
-			const indexB = order.indexOf(b.value);
-			if (indexA === -1 && indexB === -1) {
+		} ) )
+		.sort( ( a, b ) => {
+			const order = [ 'thumbnail', 'medium', 'large', 'full' ];
+			const indexA = order.indexOf( a.value );
+			const indexB = order.indexOf( b.value );
+			if ( indexA === -1 && indexB === -1 ) {
 				return 0;
 			}
-			if (indexA === -1) return 1;
-			if (indexB === -1) return -1;
+			if ( indexA === -1 ) {
+				return 1;
+			}
+			if ( indexB === -1 ) {
+				return -1;
+			}
 			return indexA - indexB;
-		});
+		} );
 
 	// Handler to add a new video block inside the gallery
 	const addVideoBlock = () => {
-		setIsVideoModalOpen(true);
+		setIsVideoModalOpen( true );
 	};
 
 	/**
@@ -229,48 +242,55 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 	 */
 	// If no videos yet, show MediaPlaceholder
 	const innerBlocks = useSelect(
-		(select) =>
-			select("core/block-editor").getBlock(clientId)?.innerBlocks || [],
-		[clientId],
+		( select ) =>
+			select( 'core/block-editor' ).getBlock( clientId )?.innerBlocks ||
+			[],
+		[ clientId ]
 	);
 
-	if (innerBlocks.length === 0) {
-		const isPro = !!window.folioBlocksData?.isPro;
+	if ( innerBlocks.length === 0 ) {
+		const isPro = !! window.folioBlocksData?.isPro;
 		return (
-			<div {...blockProps}>
+			<div { ...blockProps }>
 				<MediaPlaceholder
-					icon={<IconVideoGallery />}
-					labels={{
-						title: __("Video Gallery", "folioblocks"),
+					icon={ <IconVideoGallery /> }
+					labels={ {
+						title: __( 'Video Gallery', 'folioblocks' ),
 						instructions: __(
-							"Add first video. Upload, select from media library, or insert from URL.",
-							"folioblocks",
+							'Add first video. Upload, select from media library, or insert from URL.',
+							'folioblocks'
 						),
-					}}
-					allowedTypes={["video"]}
-					onSelect={(media) => {
-						handleVideoSelect(media);
-					}}
-					onSelectURL={(url) => {
-						if (!url) return;
+					} }
+					allowedTypes={ [ 'video' ] }
+					onSelect={ ( media ) => {
+						handleVideoSelect( media );
+					} }
+					onSelectURL={ ( url ) => {
+						if ( ! url ) {
+							return;
+						}
 
-						const defaultTitle = __("Video", "folioblocks");
+						const defaultTitle = __( 'Video', 'folioblocks' );
 						const newBlock = wp.blocks.createBlock(
-							"folioblocks/pb-video-block",
+							'folioblocks/pb-video-block',
 							{
 								videoUrl: url,
 								title: defaultTitle,
 								alt: defaultTitle,
-							},
+							}
 						);
 
 						// Use replaceInnerBlocks instead of insertBlock to handle empty galleries
 						wp.data
-							.dispatch("core/block-editor")
-							.replaceInnerBlocks(clientId, [newBlock], false);
-					}}
+							.dispatch( 'core/block-editor' )
+							.replaceInnerBlocks(
+								clientId,
+								[ newBlock ],
+								false
+							);
+					} }
 					accept="video/*"
-					multiple={false}
+					multiple={ false }
 				/>
 			</div>
 		);
@@ -280,400 +300,527 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		<>
 			<BlockControls>
 				<ToolbarButton
-					icon={plus}
-					label={__("Add Videos", "folioblocks")}
-					onClick={addVideoBlock}
+					icon={ plus }
+					label={ __( 'Add Videos', 'folioblocks' ) }
+					onClick={ addVideoBlock }
 				>
-					{__("Add Videos", "folioblocks")}
+					{ __( 'Add Videos', 'folioblocks' ) }
 				</ToolbarButton>
 			</BlockControls>
-			{isVideoModalOpen && (
+			{ isVideoModalOpen && (
 				<Modal
-					title={__("Select or Insert Video", "folioblocks")}
-					onRequestClose={() => setIsVideoModalOpen(false)}
+					title={ __( 'Select or Insert Video', 'folioblocks' ) }
+					onRequestClose={ () => setIsVideoModalOpen( false ) }
 				>
 					<MediaPlaceholder
-						labels={{
-							title: __("Select or Insert Video", "folioblocks"),
-							instructions: __(
-								"Upload, select from media library, or insert from URL.",
-								"folioblocks",
+						labels={ {
+							title: __(
+								'Select or Insert Video',
+								'folioblocks'
 							),
-						}}
-						allowedTypes={["video"]}
+							instructions: __(
+								'Upload, select from media library, or insert from URL.',
+								'folioblocks'
+							),
+						} }
+						allowedTypes={ [ 'video' ] }
 						accept="video/*"
-						multiple={false}
-						onSelect={(media) => {
+						multiple={ false }
+						onSelect={ ( media ) => {
 							const defaultTitle =
-								media.title && media.title.trim() !== ""
+								media.title && media.title.trim() !== ''
 									? media.title
-									: __("Video", "folioblocks");
+									: __( 'Video', 'folioblocks' );
 							const newBlock = wp.blocks.createBlock(
-								"folioblocks/pb-video-block",
+								'folioblocks/pb-video-block',
 								{
 									videoUrl: media.url,
 									title: defaultTitle,
 									alt: defaultTitle,
-								},
+								}
 							);
 							wp.data
-								.dispatch("core/block-editor")
-								.insertBlock(newBlock, undefined, clientId);
-							setIsVideoModalOpen(false);
-						}}
-						onSelectURL={(url) => {
-							const defaultTitle = __("Video", "folioblocks");
+								.dispatch( 'core/block-editor' )
+								.insertBlock( newBlock, undefined, clientId );
+							setIsVideoModalOpen( false );
+						} }
+						onSelectURL={ ( url ) => {
+							const defaultTitle = __( 'Video', 'folioblocks' );
 							const newBlock = wp.blocks.createBlock(
-								"folioblocks/pb-video-block",
+								'folioblocks/pb-video-block',
 								{
 									videoUrl: url,
 									title: defaultTitle,
 									alt: defaultTitle,
-								},
+								}
 							);
 							wp.data
-								.dispatch("core/block-editor")
-								.insertBlock(newBlock, undefined, clientId);
-							setIsVideoModalOpen(false);
-						}}
+								.dispatch( 'core/block-editor' )
+								.insertBlock( newBlock, undefined, clientId );
+							setIsVideoModalOpen( false );
+						} }
 					/>
 				</Modal>
-			)}
+			) }
 
 			<InspectorControls>
 				<PanelBody
-					title={__("Video Gallery Settings", "folioblocks")}
-					initialOpen={true}
+					title={ __( 'Video Gallery Settings', 'folioblocks' ) }
+					initialOpen={ true }
 				>
 					<ResponsiveRangeControl
-						label={__("Columns", "folioblocks")}
-						columns={columns}
-						tabletColumns={tabletColumns}
-						mobileColumns={mobileColumns}
-						onChange={(newValues) => setAttributes(newValues)}
+						label={ __( 'Columns', 'folioblocks' ) }
+						columns={ columns }
+						tabletColumns={ tabletColumns }
+						mobileColumns={ mobileColumns }
+						onChange={ ( newValues ) => setAttributes( newValues ) }
 					/>
 					<RangeControl
-						label={__("Gap Between Items (px)", "folioblocks")}
-						value={gap}
-						onChange={(val) => setAttributes({ gap: val })}
-						min={0}
-						max={40}
-						step={1}
+						label={ __( 'Gap Between Items (px)', 'folioblocks' ) }
+						value={ gap }
+						onChange={ ( val ) => setAttributes( { gap: val } ) }
+						min={ 0 }
+						max={ 40 }
+						step={ 1 }
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
-						help={__("Set gap size between Thumbnails.")}
+						help={ __( 'Set gap size between Thumbnails.' ) }
 					/>
 					<SelectControl
-						label={__("Thumbnail Resolution", "folioblocks")}
-						value={thumbnailSize}
-						onChange={(val) => setAttributes({ thumbnailSize: val })}
-						options={imageSizeOptions}
-						help={__("Set thumbnail resolution.")}
+						label={ __( 'Thumbnail Resolution', 'folioblocks' ) }
+						value={ thumbnailSize }
+						onChange={ ( val ) =>
+							setAttributes( { thumbnailSize: val } )
+						}
+						options={ imageSizeOptions }
+						help={ __( 'Set thumbnail resolution.' ) }
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
 					<SelectControl
-						label={__("Thumbnail Aspect Ratio", "folioblocks")}
-						value={aspectRatio}
-						onChange={(val) => setAttributes({ aspectRatio: val })}
-						options={[
-							{ label: "21:9", value: "21:9" },
-							{ label: "16:9", value: "16:9" },
-							{ label: "9:16", value: "9:16" },
-							{ label: "4:3", value: "4:3" },
-							{ label: "3:2", value: "3:2" },
-							{ label: "1:1", value: "1:1" },
-						]}
-						help={__("Set thumbnail aspect ratio.")}
+						label={ __( 'Thumbnail Aspect Ratio', 'folioblocks' ) }
+						value={ aspectRatio }
+						onChange={ ( val ) =>
+							setAttributes( { aspectRatio: val } )
+						}
+						options={ [
+							{ label: '21:9', value: '21:9' },
+							{ label: '16:9', value: '16:9' },
+							{ label: '9:16', value: '9:16' },
+							{ label: '4:3', value: '4:3' },
+							{ label: '3:2', value: '3:2' },
+							{ label: '1:1', value: '1:1' },
+						] }
+						help={ __( 'Set thumbnail aspect ratio.' ) }
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
 				</PanelBody>
 				<PanelBody
-					title={__("Lightbox & Hover Settings", "folioblocks")}
-					initialOpen={true}
+					title={ __( 'Lightbox & Hover Settings', 'folioblocks' ) }
+					initialOpen={ true }
 				>
 					<ToggleControl
-						label={__("Enable Lightbox in Editor", "folioblocks")}
-						checked={!!lightbox}
-						onChange={(val) => setAttributes({ lightbox: !!val })}
+						label={ __(
+							'Enable Lightbox in Editor',
+							'folioblocks'
+						) }
+						checked={ !! lightbox }
+						onChange={ ( val ) =>
+							setAttributes( { lightbox: !! val } )
+						}
 						__nextHasNoMarginBottom
-						help={__(
-							"Allows videos to open in a Lightbox while editing.",
-							"folioblocks",
-						)}
+						help={ __(
+							'Allows videos to open in a Lightbox while editing.',
+							'folioblocks'
+						) }
 					/>
-					{applyFilters(
-						"folioBlocks.videoGallery.lightboxLayout",
-						<div style={{ marginBottom: "8px" }}>
-							<Notice status="info" isDismissible={false}>
-								<strong>{__("Lightbox Layout", "folioblocks")}</strong>
+					{ applyFilters(
+						'folioBlocks.videoGallery.lightboxLayout',
+						<div style={ { marginBottom: '8px' } }>
+							<Notice status="info" isDismissible={ false }>
+								<strong>
+									{ __( 'Lightbox Layout', 'folioblocks' ) }
+								</strong>
 								<br />
-								{__(
-									"This is a premium feature. Unlock all features: ",
-									"folioblocks",
-								)}
-								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-									{__("Upgrade to Pro", "folioblocks")}
+								{ __(
+									'This is a premium feature. Unlock all features:',
+									'folioblocks'
+								) }
+								<a
+									href={ checkoutUrl }
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									{ __( 'Upgrade to Pro', 'folioblocks' ) }
 								</a>
 							</Notice>
 						</div>,
-						{ attributes, setAttributes },
-					)}
+						{ attributes, setAttributes }
+					) }
 					<SelectControl
-						label={__("Title & Play Button Visibility", "folioblocks")}
-						value={combinedVisibility}
-						onChange={(val) => {
-							if (val === "hidden") {
-								setAttributes({
-									titleVisibility: "hidden",
-									playButtonVisibility: "hidden",
-								});
+						label={ __(
+							'Title & Play Button Visibility',
+							'folioblocks'
+						) }
+						value={ combinedVisibility }
+						onChange={ ( val ) => {
+							if ( val === 'hidden' ) {
+								setAttributes( {
+									titleVisibility: 'hidden',
+									playButtonVisibility: 'hidden',
+								} );
 								return;
 							}
-							setAttributes({
+							setAttributes( {
 								titleVisibility: val,
-								playButtonVisibility: hidePlayButton ? "hidden" : val,
-							});
-						}}
-						options={[
-							{ label: __("Always Show", "folioblocks"), value: "always" },
-							{ label: __("On Hover", "folioblocks"), value: "onHover" },
-							{ label: __("Hidden", "folioblocks"), value: "hidden" },
-						]}
-						help={__("Set visibility for title and play button overlays.")}
+								playButtonVisibility: hidePlayButton
+									? 'hidden'
+									: val,
+							} );
+						} }
+						options={ [
+							{
+								label: __( 'Always Show', 'folioblocks' ),
+								value: 'always',
+							},
+							{
+								label: __( 'On Hover', 'folioblocks' ),
+								value: 'onHover',
+							},
+							{
+								label: __( 'Hidden', 'folioblocks' ),
+								value: 'hidden',
+							},
+						] }
+						help={ __(
+							'Set visibility for title and play button overlays.'
+						) }
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
-					{combinedVisibility !== "hidden" && (
+					{ combinedVisibility !== 'hidden' && (
 						<ToggleControl
-							label={__("Hide Play Button", "folioblocks")}
-							checked={hidePlayButton}
-							onChange={(val) =>
-								setAttributes({
-									playButtonVisibility: val ? "hidden" : combinedVisibility,
-								})
+							label={ __( 'Hide Play Button', 'folioblocks' ) }
+							checked={ hidePlayButton }
+							onChange={ ( val ) =>
+								setAttributes( {
+									playButtonVisibility: val
+										? 'hidden'
+										: combinedVisibility,
+								} )
 							}
-							help={__("Hide only the play button overlay.")}
+							help={ __( 'Hide only the play button overlay.' ) }
 							__nextHasNoMarginBottom
 						/>
-					)}
-					{combinedVisibility === "onHover" &&
+					) }
+					{ combinedVisibility === 'onHover' &&
 						applyFilters(
-							"folioBlocks.videoGallery.customOverlayControls",
-							<div style={{ marginBottom: "8px" }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__("Custom Overlay", "folioblocks")}</strong>
+							'folioBlocks.videoGallery.customOverlayControls',
+							<div style={ { marginBottom: '8px' } }>
+								<Notice status="info" isDismissible={ false }>
+									<strong>
+										{ __(
+											'Custom Overlay',
+											'folioblocks'
+										) }
+									</strong>
 									<br />
-									{__(
-										"This is a premium feature. Unlock all features: ",
-										"folioblocks",
-									)}
-									<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-										{__("Upgrade to Pro", "folioblocks")}
-									</a>
-								</Notice>
-							</div>,
-							{ attributes, setAttributes, combinedVisibility },
-						)}
-				</PanelBody>
-				<PanelBody
-					title={__("Gallery Filtering Settings", "folioblocks")}
-					initialOpen={true}
-				>
-					{applyFilters(
-						"folioBlocks.videoGallery.enableFilterToggle",
-						<div style={{ marginBottom: "8px" }}>
-							<Notice status="info" isDismissible={false}>
-								<strong>{__("Enable Video Filtering", "folioblocks")}</strong>
-								<br />
-								{__(
-									"This is a premium feature. Unlock all features: ",
-									"folioblocks",
-								)}
-								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-									{__("Upgrade to Pro", "folioblocks")}
-								</a>
-							</Notice>
-						</div>,
-						{ attributes, setAttributes },
-					)}
-				</PanelBody>
-				<PanelBody
-					title={__("E-Commerce Settings", "folioblocks")}
-					initialOpen={false}
-				>
-					{window.folioBlocksData?.hasWooCommerce &&
-						applyFilters(
-							"folioBlocks.videoGallery.wooCommerceControls",
-							<div style={{ marginBottom: "8px" }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__("Enable Woo Commerce", "folioblocks")}</strong>
-									<br />
-									{__(
-										"This is a premium feature. Unlock all features: ",
-										"folioblocks",
-									)}
+									{ __(
+										'This is a premium feature. Unlock all features:',
+										'folioblocks'
+									) }
 									<a
-										href={checkoutUrl}
+										href={ checkoutUrl }
 										target="_blank"
 										rel="noopener noreferrer"
 									>
-										{__("Upgrade to Pro", "folioblocks")}
+										{ __(
+											'Upgrade to Pro',
+											'folioblocks'
+										) }
 									</a>
 								</Notice>
 							</div>,
-							{ attributes, setAttributes },
-						)}
+							{ attributes, setAttributes, combinedVisibility }
+						) }
+				</PanelBody>
+				<PanelBody
+					title={ __( 'Gallery Filtering Settings', 'folioblocks' ) }
+					initialOpen={ true }
+				>
+					{ applyFilters(
+						'folioBlocks.videoGallery.enableFilterToggle',
+						<div style={ { marginBottom: '8px' } }>
+							<Notice status="info" isDismissible={ false }>
+								<strong>
+									{ __(
+										'Enable Video Filtering',
+										'folioblocks'
+									) }
+								</strong>
+								<br />
+								{ __(
+									'This is a premium feature. Unlock all features:',
+									'folioblocks'
+								) }
+								<a
+									href={ checkoutUrl }
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									{ __( 'Upgrade to Pro', 'folioblocks' ) }
+								</a>
+							</Notice>
+						</div>,
+						{ attributes, setAttributes }
+					) }
+				</PanelBody>
+				<PanelBody
+					title={ __( 'E-Commerce Settings', 'folioblocks' ) }
+					initialOpen={ false }
+				>
+					{ window.folioBlocksData?.hasWooCommerce &&
+						applyFilters(
+							'folioBlocks.videoGallery.wooCommerceControls',
+							<div style={ { marginBottom: '8px' } }>
+								<Notice status="info" isDismissible={ false }>
+									<strong>
+										{ __(
+											'Enable Woo Commerce',
+											'folioblocks'
+										) }
+									</strong>
+									<br />
+									{ __(
+										'This is a premium feature. Unlock all features:',
+										'folioblocks'
+									) }
+									<a
+										href={ checkoutUrl }
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										{ __(
+											'Upgrade to Pro',
+											'folioblocks'
+										) }
+									</a>
+								</Notice>
+							</div>,
+							{ attributes, setAttributes }
+						) }
 				</PanelBody>
 			</InspectorControls>
 			<InspectorControls group="advanced">
-				{applyFilters(
-					"folioBlocks.videoGallery.disableRightClickToggle",
-					<div style={{ marginBottom: "8px" }}>
-						<Notice status="info" isDismissible={false}>
-							<strong>{__("Disable Right-Click", "folioblocks")}</strong>
+				{ applyFilters(
+					'folioBlocks.videoGallery.disableRightClickToggle',
+					<div style={ { marginBottom: '8px' } }>
+						<Notice status="info" isDismissible={ false }>
+							<strong>
+								{ __( 'Disable Right-Click', 'folioblocks' ) }
+							</strong>
 							<br />
-							{__(
-								"This is a premium feature. Unlock all features: ",
-								"folioblocks",
-							)}
-							<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-								{__("Upgrade to Pro", "folioblocks")}
+							{ __(
+								'This is a premium feature. Unlock all features:',
+								'folioblocks'
+							) }
+							<a
+								href={ checkoutUrl }
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								{ __( 'Upgrade to Pro', 'folioblocks' ) }
 							</a>
 						</Notice>
 					</div>,
-					{ attributes, setAttributes },
-				)}
-				{applyFilters(
-					"folioBlocks.videoGallery.lazyLoadToggle",
-					<div style={{ marginBottom: "8px" }}>
-						<Notice status="info" isDismissible={false}>
-							<strong>{__("Enable Lazy Load of Images", "folioblocks")}</strong>
+					{ attributes, setAttributes }
+				) }
+				{ applyFilters(
+					'folioBlocks.videoGallery.lazyLoadToggle',
+					<div style={ { marginBottom: '8px' } }>
+						<Notice status="info" isDismissible={ false }>
+							<strong>
+								{ __(
+									'Enable Lazy Load of Images',
+									'folioblocks'
+								) }
+							</strong>
 							<br />
-							{__(
-								"This is a premium feature. Unlock all features: ",
-								"folioblocks",
-							)}
-							<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-								{__("Upgrade to Pro", "folioblocks")}
+							{ __(
+								'This is a premium feature. Unlock all features:',
+								'folioblocks'
+							) }
+							<a
+								href={ checkoutUrl }
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								{ __( 'Upgrade to Pro', 'folioblocks' ) }
 							</a>
 						</Notice>
 					</div>,
-					{ attributes, setAttributes },
-				)}
+					{ attributes, setAttributes }
+				) }
 			</InspectorControls>
 			<InspectorControls group="styles">
 				<PanelBody
-					title={__("Video Thumbnail Styles", "folioblocks")}
-					initialOpen={true}
+					title={ __( 'Video Thumbnail Styles', 'folioblocks' ) }
+					initialOpen={ true }
 				>
-					{applyFilters(
-						"folioBlocks.videoGallery.borderColorControl",
-						<div style={{ marginBottom: "8px" }}>
-							<Notice status="info" isDismissible={false}>
+					{ applyFilters(
+						'folioBlocks.videoGallery.borderColorControl',
+						<div style={ { marginBottom: '8px' } }>
+							<Notice status="info" isDismissible={ false }>
 								<strong>
-									{__("Enable Image Border Color", "folioblocks")}
+									{ __(
+										'Enable Image Border Color',
+										'folioblocks'
+									) }
 								</strong>
 								<br />
-								{__(
-									"This is a premium feature. Unlock all features: ",
-									"folioblocks",
-								)}
-								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-									{__("Upgrade to Pro", "folioblocks")}
+								{ __(
+									'This is a premium feature. Unlock all features:',
+									'folioblocks'
+								) }
+								<a
+									href={ checkoutUrl }
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									{ __( 'Upgrade to Pro', 'folioblocks' ) }
 								</a>
 							</Notice>
 						</div>,
-						{ attributes, setAttributes },
-					)}
-					{applyFilters(
-						"folioBlocks.videoGallery.borderWidthControl",
-						<div style={{ marginBottom: "8px" }}>
-							<Notice status="info" isDismissible={false}>
+						{ attributes, setAttributes }
+					) }
+					{ applyFilters(
+						'folioBlocks.videoGallery.borderWidthControl',
+						<div style={ { marginBottom: '8px' } }>
+							<Notice status="info" isDismissible={ false }>
 								<strong>
-									{__("Enable Image Border Width", "folioblocks")}
+									{ __(
+										'Enable Image Border Width',
+										'folioblocks'
+									) }
 								</strong>
 								<br />
-								{__(
-									"This is a premium feature. Unlock all features: ",
-									"folioblocks",
-								)}
-								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-									{__("Upgrade to Pro", "folioblocks")}
+								{ __(
+									'This is a premium feature. Unlock all features:',
+									'folioblocks'
+								) }
+								<a
+									href={ checkoutUrl }
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									{ __( 'Upgrade to Pro', 'folioblocks' ) }
 								</a>
 							</Notice>
 						</div>,
-						{ attributes, setAttributes },
-					)}
-					{applyFilters(
-						"folioBlocks.videoGallery.borderRadiusControl",
-						<div style={{ marginBottom: "8px" }}>
-							<Notice status="info" isDismissible={false}>
+						{ attributes, setAttributes }
+					) }
+					{ applyFilters(
+						'folioBlocks.videoGallery.borderRadiusControl',
+						<div style={ { marginBottom: '8px' } }>
+							<Notice status="info" isDismissible={ false }>
 								<strong>
-									{__("Enable Image Border Radius", "folioblocks")}
+									{ __(
+										'Enable Image Border Radius',
+										'folioblocks'
+									) }
 								</strong>
 								<br />
-								{__(
-									"This is a premium feature. Unlock all features: ",
-									"folioblocks",
-								)}
-								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-									{__("Upgrade to Pro", "folioblocks")}
+								{ __(
+									'This is a premium feature. Unlock all features:',
+									'folioblocks'
+								) }
+								<a
+									href={ checkoutUrl }
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									{ __( 'Upgrade to Pro', 'folioblocks' ) }
 								</a>
 							</Notice>
 						</div>,
-						{ attributes, setAttributes },
-					)}
-					{applyFilters(
-						"folioBlocks.videoGallery.dropShadowToggle",
-						<div style={{ marginBottom: "8px" }}>
-							<Notice status="info" isDismissible={false}>
-								<strong>{__("Enable Image Drop Shadow", "folioblocks")}</strong>
+						{ attributes, setAttributes }
+					) }
+					{ applyFilters(
+						'folioBlocks.videoGallery.dropShadowToggle',
+						<div style={ { marginBottom: '8px' } }>
+							<Notice status="info" isDismissible={ false }>
+								<strong>
+									{ __(
+										'Enable Image Drop Shadow',
+										'folioblocks'
+									) }
+								</strong>
 								<br />
-								{__(
-									"This is a premium feature. Unlock all features: ",
-									"folioblocks",
-								)}
-								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-									{__("Upgrade to Pro", "folioblocks")}
+								{ __(
+									'This is a premium feature. Unlock all features:',
+									'folioblocks'
+								) }
+								<a
+									href={ checkoutUrl }
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									{ __( 'Upgrade to Pro', 'folioblocks' ) }
 								</a>
 							</Notice>
 						</div>,
-						{ attributes, setAttributes },
-					)}
+						{ attributes, setAttributes }
+					) }
 				</PanelBody>
 
-				{applyFilters(
-					"folioBlocks.videoGallery.filterStylesControls",
-					<div style={{ marginBottom: "8px" }}>
-						<Notice status="info" isDismissible={false}>
-							<strong>{__("Filter Styles Controls", "folioblocks")}</strong>
+				{ applyFilters(
+					'folioBlocks.videoGallery.filterStylesControls',
+					<div style={ { marginBottom: '8px' } }>
+						<Notice status="info" isDismissible={ false }>
+							<strong>
+								{ __(
+									'Filter Styles Controls',
+									'folioblocks'
+								) }
+							</strong>
 							<br />
-							{__(
-								"This is a premium feature. Unlock all features: ",
-								"folioblocks",
-							)}
-							<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-								{__("Upgrade to Pro", "folioblocks")}
+							{ __(
+								'This is a premium feature. Unlock all features:',
+								'folioblocks'
+							) }
+							<a
+								href={ checkoutUrl }
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								{ __( 'Upgrade to Pro', 'folioblocks' ) }
 							</a>
 						</Notice>
 					</div>,
-					{ attributes, setAttributes },
-				)}
+					{ attributes, setAttributes }
+				) }
 
-				{applyFilters("folioBlocks.videoGallery.iconStyleControls", null, {
-					attributes,
-					setAttributes,
-				})}
+				{ applyFilters(
+					'folioBlocks.videoGallery.iconStyleControls',
+					null,
+					{
+						attributes,
+						setAttributes,
+					}
+				) }
 			</InspectorControls>
 
-			<div {...blockProps}>
-				{applyFilters("folioBlocks.videoGallery.renderFilterBar", null, {
-					attributes,
-					setAttributes,
-				})}
-				<div {...innerBlocksProps} />
+			<div { ...blockProps }>
+				{ applyFilters(
+					'folioBlocks.videoGallery.renderFilterBar',
+					null,
+					{
+						attributes,
+						setAttributes,
+					}
+				) }
+				<div { ...innerBlocksProps } />
 			</div>
 		</>
 	);

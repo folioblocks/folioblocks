@@ -1,7 +1,7 @@
 /**
  * PB Video Block
  * Save JS
- **/
+ */
 import { useBlockProps } from '@wordpress/block-editor';
 
 export default function save() {

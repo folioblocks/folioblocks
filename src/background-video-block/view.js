@@ -15,10 +15,14 @@
  * Note:
  * - In View Source you'll see escaped sequences like `\/` and `&quot;`.
  * - In the DOM, `getAttribute()` typically returns a decoded string.
+ * @param el
+ * @param attrName
  */
 const parseJsonAttribute = ( el, attrName ) => {
 	const raw = el.getAttribute( attrName );
-	if ( ! raw ) return null;
+	if ( ! raw ) {
+		return null;
+	}
 
 	try {
 		return JSON.parse( raw );
@@ -37,16 +41,23 @@ const parseJsonAttribute = ( el, attrName ) => {
 };
 
 const prefersReducedMotion = () => {
-	return !! ( window.matchMedia && window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches );
+	return !! (
+		window.matchMedia &&
+		window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches
+	);
 };
 
 const isMobileBreakpoint = () => {
 	// WordPress commonly treats <=782px as "mobile".
-	return !! ( window.matchMedia && window.matchMedia( '(max-width: 782px)' ).matches );
+	return !! (
+		window.matchMedia && window.matchMedia( '(max-width: 782px)' ).matches
+	);
 };
 
 const attemptPlay = async ( videoEl ) => {
-	if ( ! videoEl ) return false;
+	if ( ! videoEl ) {
+		return false;
+	}
 
 	try {
 		const playPromise = videoEl.play();
@@ -60,8 +71,12 @@ const attemptPlay = async ( videoEl ) => {
 };
 
 const setupPauseWhenOffscreen = ( rootEl, videoEl ) => {
-	if ( ! videoEl ) return;
-	if ( ! ( 'IntersectionObserver' in window ) ) return;
+	if ( ! videoEl ) {
+		return;
+	}
+	if ( ! ( 'IntersectionObserver' in window ) ) {
+		return;
+	}
 
 	const io = new IntersectionObserver(
 		( entries ) => {
@@ -89,17 +104,25 @@ const setupPauseWhenOffscreen = ( rootEl, videoEl ) => {
 const shouldAllowAutoplay = ( data ) => {
 	// Autoplay is always desired for background video.
 	// We only block it when the environment indicates we should.
-	if ( prefersReducedMotion() ) return false;
-	if ( data.disableMobile && isMobileBreakpoint() ) return false;
+	if ( prefersReducedMotion() ) {
+		return false;
+	}
+	if ( data.disableMobile && isMobileBreakpoint() ) {
+		return false;
+	}
 	return true;
 };
 
 const mountSelfHosted = async ( rootEl, data ) => {
 	const videoEl = rootEl.querySelector( '.pb-bgvid__video' );
-	if ( ! videoEl ) return;
+	if ( ! videoEl ) {
+		return;
+	}
 
 	const url = data?.url;
-	if ( ! url ) return;
+	if ( ! url ) {
+		return;
+	}
 
 	// If disabled on mobile, keep poster-only.
 	if ( data?.disableMobile && isMobileBreakpoint() ) {
@@ -117,7 +140,10 @@ const mountSelfHosted = async ( rootEl, data ) => {
 
 	// Set source if needed.
 	// NOTE: videoEl.src will resolve to an absolute URL; compare using endsWith as a cheap guard.
-	if ( ! videoEl.currentSrc && ( ! videoEl.src || ! videoEl.src.endsWith( url.split( '/' ).pop() ) ) ) {
+	if (
+		! videoEl.currentSrc &&
+		( ! videoEl.src || ! videoEl.src.endsWith( url.split( '/' ).pop() ) )
+	) {
 		videoEl.src = url;
 	}
 
@@ -140,9 +166,13 @@ const mountSelfHosted = async ( rootEl, data ) => {
 	// Optional hover behavior.
 	if ( data.playOnHover ) {
 		rootEl.addEventListener( 'mouseenter', () => {
-			if ( prefersReducedMotion() ) return;
+			if ( prefersReducedMotion() ) {
+				return;
+			}
 			attemptPlay( videoEl ).then( ( ok ) => {
-				if ( ok ) rootEl.classList.add( 'is-playing' );
+				if ( ok ) {
+					rootEl.classList.add( 'is-playing' );
+				}
 			} );
 		} );
 		rootEl.addEventListener( 'mouseleave', () => {
@@ -153,7 +183,6 @@ const mountSelfHosted = async ( rootEl, data ) => {
 		} );
 	}
 };
-
 
 const buildVimeoSrc = ( vimeoId, { autoplay, loop } ) => {
 	// Vimeo background mode. Also enable Do Not Track by default.
@@ -172,13 +201,19 @@ const buildVimeoSrc = ( vimeoId, { autoplay, loop } ) => {
 };
 
 const fetchVimeoAspectRatio = async ( vimeoId ) => {
-	if ( ! vimeoId ) return null;
+	if ( ! vimeoId ) {
+		return null;
+	}
 
 	try {
 		// oEmbed returns the original width/height.
-		const url = `https://vimeo.com/api/oembed.json?url=${ encodeURIComponent( `https://vimeo.com/${ vimeoId }` ) }`;
+		const url = `https://vimeo.com/api/oembed.json?url=${ encodeURIComponent(
+			`https://vimeo.com/${ vimeoId }`
+		) }`;
 		const res = await fetch( url, { method: 'GET' } );
-		if ( ! res.ok ) return null;
+		if ( ! res.ok ) {
+			return null;
+		}
 		const data = await res.json();
 		const w = Number( data?.width );
 		const h = Number( data?.height );
@@ -192,7 +227,9 @@ const fetchVimeoAspectRatio = async ( vimeoId ) => {
 };
 
 const readPercentVar = ( el, varName, fallback = 50 ) => {
-	if ( ! el ) return fallback;
+	if ( ! el ) {
+		return fallback;
+	}
 	const raw = getComputedStyle( el ).getPropertyValue( varName ).trim();
 	const num = parseFloat( raw );
 	return Number.isFinite( num ) ? num : fallback;
@@ -204,9 +241,22 @@ const readPercentVar = ( el, varName, fallback = 50 ) => {
  * Vimeo's background player keeps the video at its native aspect ratio *inside* the iframe.
  * So even if the iframe is 100% x 100%, you may see letterboxing. To fix that, we oversize
  * the iframe based on container aspect ratio vs the video's aspect ratio, then center it.
+ * @param wrapEl
+ * @param iframeEl
+ * @param videoRatio
+ * @param posX
+ * @param posY
  */
-const applyVimeoCover = ( wrapEl, iframeEl, videoRatio, posX = 50, posY = 50 ) => {
-	if ( ! wrapEl || ! iframeEl ) return;
+const applyVimeoCover = (
+	wrapEl,
+	iframeEl,
+	videoRatio,
+	posX = 50,
+	posY = 50
+) => {
+	if ( ! wrapEl || ! iframeEl ) {
+		return;
+	}
 	if ( ! ( 'ResizeObserver' in window ) ) {
 		// Fallback: still fill the wrapper.
 		iframeEl.style.position = 'absolute';
@@ -216,14 +266,17 @@ const applyVimeoCover = ( wrapEl, iframeEl, videoRatio, posX = 50, posY = 50 ) =
 		return;
 	}
 
-	const safeRatio = Number.isFinite( videoRatio ) && videoRatio > 0 ? videoRatio : 16 / 9;
+	const safeRatio =
+		Number.isFinite( videoRatio ) && videoRatio > 0 ? videoRatio : 16 / 9;
 
 	const compute = () => {
 		const rect = wrapEl.getBoundingClientRect();
 		// Round up container size to avoid fractional rects.
 		const cw = Math.ceil( rect.width );
 		const ch = Math.ceil( rect.height );
-		if ( ! cw || ! ch ) return;
+		if ( ! cw || ! ch ) {
+			return;
+		}
 
 		const containerRatio = cw / ch;
 		let width;
@@ -279,7 +332,9 @@ const applyVimeoCover = ( wrapEl, iframeEl, videoRatio, posX = 50, posY = 50 ) =
 
 const mountVimeo = ( rootEl, data ) => {
 	const vimeoId = data?.vimeoId;
-	if ( ! vimeoId ) return;
+	if ( ! vimeoId ) {
+		return;
+	}
 
 	// If disabled on mobile, keep poster-only.
 	if ( data?.disableMobile && isMobileBreakpoint() ) {
@@ -294,7 +349,9 @@ const mountVimeo = ( rootEl, data ) => {
 	}
 
 	const mediaLayer = rootEl.querySelector( '.pb-bgvid__media' );
-	if ( ! mediaLayer ) return;
+	if ( ! mediaLayer ) {
+		return;
+	}
 
 	// Avoid double mount.
 	if ( mediaLayer.querySelector( '.pb-bgvid__vimeo' ) ) {
@@ -350,7 +407,9 @@ const mountVimeo = ( rootEl, data ) => {
 		const tick = () => {
 			applyVimeoCover( wrap, iframe, ratio, posX, posY );
 			i += 1;
-			if ( i < 4 ) requestAnimationFrame( tick );
+			if ( i < 4 ) {
+				requestAnimationFrame( tick );
+			}
 		};
 		requestAnimationFrame( tick );
 	} );
@@ -363,7 +422,9 @@ const init = () => {
 
 	blocks.forEach( ( rootEl ) => {
 		const data = parseJsonAttribute( rootEl, 'data-fbks-bgvid' );
-		if ( ! data || ! data.provider ) return;
+		if ( ! data || ! data.provider ) {
+			return;
+		}
 
 		if ( data.provider === 'self' ) {
 			mountSelfHosted( rootEl, data );

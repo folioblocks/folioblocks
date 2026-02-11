@@ -1,118 +1,154 @@
 // Masonry Gallery Block - View JS
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener( 'DOMContentLoaded', () => {
+	const gallery = document.querySelector(
+		'.wp-block-folioblocks-masonry-gallery-block'
+	);
 
-  const gallery = document.querySelector('.wp-block-folioblocks-masonry-gallery-block');
+	if ( ! gallery ) {
+		return;
+	}
 
-  if (!gallery) return;
+	gallery.classList.add( 'is-loading' );
 
-  gallery.classList.add('is-loading');
+	const getColumnsForWidth = ( width ) => {
+		const innerGallery = gallery.querySelector( '.pb-masonry-gallery' );
+		if ( ! innerGallery ) {
+			return 4;
+		} // default fallback
 
-  const getColumnsForWidth = (width) => {
-    const innerGallery = gallery.querySelector('.pb-masonry-gallery');
-    if (!innerGallery) return 4; // default fallback
+		const desktopCols = parseInt(
+			innerGallery.className.match( /cols-d-(\d+)/ )?.[ 1 ] || 6,
+			10
+		);
+		const tabletCols = parseInt(
+			innerGallery.className.match( /cols-t-(\d+)/ )?.[ 1 ] || 4,
+			10
+		);
+		const mobileCols = parseInt(
+			innerGallery.className.match( /cols-m-(\d+)/ )?.[ 1 ] || 2,
+			10
+		);
 
-    const desktopCols = parseInt(innerGallery.className.match(/cols-d-(\d+)/)?.[1] || 6, 10);
-    const tabletCols = parseInt(innerGallery.className.match(/cols-t-(\d+)/)?.[1] || 4, 10);
-    const mobileCols = parseInt(innerGallery.className.match(/cols-m-(\d+)/)?.[1] || 2, 10);
+		if ( width <= 600 ) {
+			return mobileCols;
+		}
+		if ( width <= 1024 ) {
+			return tabletCols;
+		}
+		return desktopCols;
+	};
 
-    if (width <= 600) return mobileCols;
-    if (width <= 1024) return tabletCols;
-    return desktopCols;
-  };
+	const applyCustomMasonryLayout = () => {
+		if ( ! gallery ) {
+			return;
+		}
 
-  const applyCustomMasonryLayout = () => {
-    if (!gallery) return;
+		// Get the inner container for setting height
+		const innerGallery = gallery.querySelector( '.pb-masonry-gallery' );
+		if ( ! innerGallery ) {
+			return;
+		}
 
-    // Get the inner container for setting height
-    const innerGallery = gallery.querySelector('.pb-masonry-gallery');
-    if (!innerGallery) return;
+		const gap = gallery.closest( '.no-gap' ) ? 0 : 10;
+		const columns = getColumnsForWidth( innerGallery.offsetWidth );
+		const columnHeights = Array( columns ).fill( 0 );
+		const columnWidth = Math.round(
+			( innerGallery.offsetWidth - gap * ( columns - 1 ) ) / columns
+		);
 
-    const gap = gallery.closest('.no-gap') ? 0 : 10;
-    const columns = getColumnsForWidth(innerGallery.offsetWidth);
-    const columnHeights = Array(columns).fill(0);
-    const columnWidth = Math.round((innerGallery.offsetWidth - gap * (columns - 1)) / columns);
+		// Reset layout styles
+		gallery
+			.querySelectorAll( '.wp-block-folioblocks-pb-image-block' )
+			.forEach( ( item ) => {
+				item.style.position = '';
+				item.style.top = '';
+				item.style.left = '';
+				item.style.width = '';
+			} );
 
+		// Only visible items
+		const items = gallery.querySelectorAll(
+			'.wp-block-folioblocks-pb-image-block:not(.is-hidden)'
+		);
 
-    // Reset layout styles
-    gallery.querySelectorAll('.wp-block-folioblocks-pb-image-block').forEach(item => {
-      item.style.position = '';
-      item.style.top = '';
-      item.style.left = '';
-      item.style.width = '';
-    });
+		items.forEach( ( item ) => {
+			const minCol = columnHeights.indexOf(
+				Math.min( ...columnHeights )
+			);
 
-    // Only visible items
-    const items = gallery.querySelectorAll('.wp-block-folioblocks-pb-image-block:not(.is-hidden)');
+			item.style.position = 'absolute';
+			item.style.width = `${ columnWidth }px`;
+			item.style.top = `${ Math.round( columnHeights[ minCol ] ) }px`;
+			item.style.left = `${ Math.round(
+				( columnWidth + gap ) * minCol
+			) }px`;
 
-    items.forEach((item) => {
-      const minCol = columnHeights.indexOf(Math.min(...columnHeights));
+			const style = window.getComputedStyle( item );
+			const marginBottom = parseFloat( style.marginBottom ) || 0;
+			columnHeights[ minCol ] += item.offsetHeight + gap + marginBottom;
+		} );
 
-      item.style.position = 'absolute';
-      item.style.width = `${columnWidth}px`;
-      item.style.top = `${Math.round(columnHeights[minCol])}px`;
-      item.style.left = `${Math.round((columnWidth + gap) * minCol)}px`;
+		innerGallery.style.height = `${ Math.max( ...columnHeights ) }px`;
+	};
 
-      const style = window.getComputedStyle(item);
-      const marginBottom = parseFloat(style.marginBottom) || 0;
-      columnHeights[minCol] += item.offsetHeight + gap + marginBottom;
-    });
+	const images = gallery.querySelectorAll( 'img' );
 
-    innerGallery.style.height = `${Math.max(...columnHeights)}px`;
-  };
+	const observer = new IntersectionObserver(
+		( entries ) => {
+			let shouldRecalculate = false;
+			entries.forEach( ( entry ) => {
+				if ( entry.isIntersecting ) {
+					shouldRecalculate = true;
+					observer.unobserve( entry.target );
+				}
+			} );
+			if ( shouldRecalculate ) {
+				applyCustomMasonryLayout();
+				gallery.classList.remove( 'is-loading' );
+			}
+		},
+		{
+			rootMargin: '200px',
+			threshold: 0.1,
+		}
+	);
 
-  const images = gallery.querySelectorAll('img');
+	images.forEach( ( img ) => {
+		if ( img.complete && img.naturalHeight !== 0 ) {
+			applyCustomMasonryLayout();
+			gallery.classList.remove( 'is-loading' );
+		} else {
+			observer.observe( img );
+		}
+	} );
 
-  const observer = new IntersectionObserver((entries) => {
-    let shouldRecalculate = false;
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        shouldRecalculate = true;
-        observer.unobserve(entry.target);
-      }
-    });
-    if (shouldRecalculate) {
-      applyCustomMasonryLayout();
-      gallery.classList.remove('is-loading');
-    }
-  }, {
-    rootMargin: '200px',
-    threshold: 0.1,
-  });
+	const fallbackTimeout = setTimeout( applyCustomMasonryLayout, 1000 );
 
-  images.forEach((img) => {
-    if (img.complete && img.naturalHeight !== 0) {
-      applyCustomMasonryLayout();
-      gallery.classList.remove('is-loading');
-    } else {
-      observer.observe(img);
-    }
-  });
+	const resizeObserver = new ResizeObserver( () => {
+		applyCustomMasonryLayout();
+	} );
 
-  const fallbackTimeout = setTimeout(applyCustomMasonryLayout, 1000);
+	resizeObserver.observe( gallery );
 
-  const resizeObserver = new ResizeObserver(() => {
-    applyCustomMasonryLayout();
-  });
+	window.addEventListener( 'resize', applyCustomMasonryLayout );
 
-  resizeObserver.observe(gallery);
+	window.addEventListener( 'pagehide', () => {
+		clearTimeout( fallbackTimeout );
+		window.removeEventListener( 'resize', applyCustomMasonryLayout );
+		resizeObserver.disconnect();
+	} );
 
-  window.addEventListener('resize', applyCustomMasonryLayout);
-
-  window.addEventListener('pagehide', () => {
-    clearTimeout(fallbackTimeout);
-    window.removeEventListener('resize', applyCustomMasonryLayout);
-    resizeObserver.disconnect();
-  });
-
-  // Sequential fade-in for masonry gallery images
-	const gridBlocks = document.querySelectorAll('.wp-block-folioblocks-pb-image-block');
-	gridBlocks.forEach((block, index) => {
+	// Sequential fade-in for masonry gallery images
+	const gridBlocks = document.querySelectorAll(
+		'.wp-block-folioblocks-pb-image-block'
+	);
+	gridBlocks.forEach( ( block, index ) => {
 		block.style.opacity = 0;
 		block.style.transform = 'translateY(20px)';
 		block.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-		setTimeout(() => {
+		setTimeout( () => {
 			block.style.opacity = 1;
 			block.style.transform = 'translateY(0)';
-		}, index * 150);
-	});
-});
+		}, index * 150 );
+	} );
+} );

@@ -1,201 +1,239 @@
 /**
  * PB Image Block
  * View JS
- **/
-document.addEventListener('DOMContentLoaded', () => {
+ */
+document.addEventListener( 'DOMContentLoaded', () => {
+	// Track input method for focus visibility control
+	let userUsedKeyboard = false;
+	window.addEventListener( 'keydown', ( e ) => {
+		if ( e.key === 'Tab' || e.key === 'Enter' || e.key === ' ' ) {
+			userUsedKeyboard = true;
+		}
+	} );
+	window.addEventListener( 'mousedown', () => {
+		userUsedKeyboard = false;
+	} );
+	window.addEventListener( 'touchstart', () => {
+		userUsedKeyboard = false;
+	} );
 
-    // Track input method for focus visibility control
-    let userUsedKeyboard = false;
-    window.addEventListener('keydown', (e) => {
-        if (e.key === 'Tab' || e.key === 'Enter' || e.key === ' ') {
-            userUsedKeyboard = true;
-        }
-    });
-    window.addEventListener('mousedown', () => {
-        userUsedKeyboard = false;
-    });
-    window.addEventListener('touchstart', () => {
-        userUsedKeyboard = false;
-    });
+	// Add lightbox functionality to image blocks
+	document.body.addEventListener( 'click', ( event ) => {
+		const isAddToCart = event.target.closest( '.pb-add-to-cart-icon' );
+		const isDownload = event.target.closest( '.pb-image-block-download' );
+		if ( isAddToCart || isDownload ) {
+			return;
+		}
 
+		const trigger = event.target.closest( '.pb-image-block-lightbox' );
+		if ( ! trigger ) {
+			return;
+		}
 
-    // Add lightbox functionality to image blocks
-    document.body.addEventListener('click', (event) => {
-        const isAddToCart = event.target.closest('.pb-add-to-cart-icon');
-        const isDownload = event.target.closest('.pb-image-block-download');
-        if (isAddToCart || isDownload) return;
+		event.preventDefault();
+		event.stopPropagation();
 
-        const trigger = event.target.closest('.pb-image-block-lightbox');
-        if (!trigger) return;
+		const allImages = Array.from(
+			document.querySelectorAll( '.pb-image-block-lightbox' )
+		);
+		let currentIndex = allImages.indexOf( trigger );
 
-        event.preventDefault();
-        event.stopPropagation();
+		const existing = document.querySelector( '.pb-image-lightbox' );
+		if ( existing ) {
+			existing.remove();
+		}
 
-        const allImages = Array.from(document.querySelectorAll('.pb-image-block-lightbox'));
-        let currentIndex = allImages.indexOf(trigger);
+		const wrapper = document.createElement( 'div' );
+		wrapper.className = 'pb-image-lightbox';
 
-        const existing = document.querySelector('.pb-image-lightbox');
-        if (existing) existing.remove();
+		const previouslyFocused = document.activeElement;
 
-        const wrapper = document.createElement('div');
-        wrapper.className = 'pb-image-lightbox';
+		const inner = document.createElement( 'div' );
+		inner.className = 'lightbox-inner';
 
-        const previouslyFocused = document.activeElement;
+		wrapper.appendChild( inner );
+		document.body.appendChild( wrapper );
 
-        const inner = document.createElement('div');
-        inner.className = 'lightbox-inner';
+		document.body.classList.add( 'pb-lightbox-open' );
 
-        wrapper.appendChild(inner);
-        document.body.appendChild(wrapper);
+		const focusStart = document.createElement( 'span' );
+		focusStart.tabIndex = 0;
+		focusStart.className = 'pb-focus-sentinel-start';
 
-        document.body.classList.add('pb-lightbox-open');
+		const focusEnd = document.createElement( 'span' );
+		focusEnd.tabIndex = 0;
+		focusEnd.className = 'pb-focus-sentinel-end';
 
-        const focusStart = document.createElement('span');
-        focusStart.tabIndex = 0;
-        focusStart.className = 'pb-focus-sentinel-start';
+		document.body.insertBefore( focusStart, wrapper );
+		document.body.insertBefore( focusEnd, wrapper.nextSibling );
 
-        const focusEnd = document.createElement('span');
-        focusEnd.tabIndex = 0;
-        focusEnd.className = 'pb-focus-sentinel-end';
+		focusStart.addEventListener( 'focus', () => {
+			const focusable = wrapper.querySelectorAll(
+				'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+			);
+			if ( focusable.length ) {
+				focusable[ focusable.length - 1 ].focus();
+			}
+		} );
+		focusEnd.addEventListener( 'focus', () => {
+			const focusable = wrapper.querySelectorAll(
+				'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+			);
+			if ( focusable.length ) {
+				focusable[ 0 ].focus();
+			}
+		} );
 
-        document.body.insertBefore(focusStart, wrapper);
-        document.body.insertBefore(focusEnd, wrapper.nextSibling);
+		// Close lightbox when clicking outside the image and controls (on the backdrop)
+		wrapper.addEventListener( 'click', ( e ) => {
+			if ( e.target === wrapper ) {
+				wrapper.remove();
+				document.body.classList.remove( 'pb-lightbox-open' );
+				focusStart.remove();
+				focusEnd.remove();
+				document.removeEventListener( 'keydown', keyHandler );
+				if (
+					previouslyFocused &&
+					typeof previouslyFocused.focus === 'function'
+				) {
+					previouslyFocused.focus();
+				}
+			}
+		} );
 
-        focusStart.addEventListener('focus', () => {
-            const focusable = wrapper.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-            if (focusable.length) focusable[focusable.length - 1].focus();
-        });
-        focusEnd.addEventListener('focus', () => {
-            const focusable = wrapper.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-            if (focusable.length) focusable[0].focus();
-        });
+		function renderLightbox( index ) {
+			const imageData = allImages[ index ];
+			if ( ! imageData ) {
+				return;
+			}
 
-        // Close lightbox when clicking outside the image and controls (on the backdrop)
-        wrapper.addEventListener('click', (e) => {
-            if (e.target === wrapper) {
-                wrapper.remove();
-                document.body.classList.remove('pb-lightbox-open');
-                focusStart.remove();
-                focusEnd.remove();
-                document.removeEventListener('keydown', keyHandler);
-                if (previouslyFocused && typeof previouslyFocused.focus === 'function') {
-                    previouslyFocused.focus();
-                }
-            }
-        });
+			const src = imageData.getAttribute( 'data-src' );
+			const caption = imageData.getAttribute( 'data-caption' );
 
-        function renderLightbox(index) {
-            const imageData = allImages[index];
-            if (!imageData) return;
+			inner.innerHTML = '';
 
-            const src = imageData.getAttribute('data-src');
-            const caption = imageData.getAttribute('data-caption');
+			const close = document.createElement( 'button' );
+			close.className = 'lightbox-close';
+			close.innerHTML = '&times;';
+			close.setAttribute( 'aria-label', 'Close lightbox' );
+			close.addEventListener( 'click', () => {
+				wrapper.remove();
+				document.body.classList.remove( 'pb-lightbox-open' );
+				focusStart.remove();
+				focusEnd.remove();
+				document.removeEventListener( 'keydown', keyHandler );
+				if (
+					previouslyFocused &&
+					typeof previouslyFocused.focus === 'function'
+				) {
+					previouslyFocused.focus();
+				}
+			} );
 
-            inner.innerHTML = '';
+			const imageWrapper = document.createElement( 'div' );
+			imageWrapper.className = 'lightbox-image';
 
-            const close = document.createElement('button');
-            close.className = 'lightbox-close';
-            close.innerHTML = '&times;';
-            close.setAttribute('aria-label', 'Close lightbox');
-            close.addEventListener('click', () => {
-                wrapper.remove();
-                document.body.classList.remove('pb-lightbox-open');
-                focusStart.remove();
-                focusEnd.remove();
-                document.removeEventListener('keydown', keyHandler);
-                if (previouslyFocused && typeof previouslyFocused.focus === 'function') {
-                    previouslyFocused.focus();
-                }
-            });
+			const img = document.createElement( 'img' );
+			img.src = src;
+			img.alt = '';
 
-            const imageWrapper = document.createElement('div');
-            imageWrapper.className = 'lightbox-image';
+			imageWrapper.appendChild( img );
 
-            const img = document.createElement('img');
-            img.src = src;
-            img.alt = '';
+			if ( caption ) {
+				const captionEl = document.createElement( 'div' );
+				captionEl.className = 'lightbox-caption';
+				captionEl.innerHTML = caption;
+				imageWrapper.appendChild( captionEl );
+			}
 
-            imageWrapper.appendChild(img);
+			inner.appendChild( close );
+			inner.appendChild( imageWrapper );
+			if ( allImages.length > 1 ) {
+				const prev = document.createElement( 'button' );
+				prev.className = 'lightbox-prev';
+				prev.innerHTML = '&#10094;';
+				prev.setAttribute( 'aria-label', 'Previous image' );
+				prev.addEventListener( 'click', () => {
+					currentIndex =
+						( currentIndex - 1 + allImages.length ) %
+						allImages.length;
+					renderLightbox( currentIndex );
+				} );
 
-            if (caption) {
-                const captionEl = document.createElement('div');
-                captionEl.className = 'lightbox-caption';
-                captionEl.innerHTML = caption;
-                imageWrapper.appendChild(captionEl);
-            }
+				const next = document.createElement( 'button' );
+				next.className = 'lightbox-next';
+				next.innerHTML = '&#10095;';
+				next.setAttribute( 'aria-label', 'Next image' );
+				next.addEventListener( 'click', () => {
+					currentIndex = ( currentIndex + 1 ) % allImages.length;
+					renderLightbox( currentIndex );
+				} );
 
-            inner.appendChild(close);
-            inner.appendChild(imageWrapper);
-            if (allImages.length > 1) {
-                const prev = document.createElement('button');
-                prev.className = 'lightbox-prev';
-                prev.innerHTML = '&#10094;';
-                prev.setAttribute('aria-label', 'Previous image');
-                prev.addEventListener('click', () => {
-                    currentIndex = (currentIndex - 1 + allImages.length) % allImages.length;
-                    renderLightbox(currentIndex);
-                });
+				// Append outside of .lightbox-inner so they’re overlaying the entire wrapper
+				wrapper.appendChild( prev );
+				wrapper.appendChild( next );
+			}
+			const closeBtn = wrapper.querySelector( '.lightbox-close' );
+			if ( closeBtn && userUsedKeyboard ) {
+				closeBtn.focus();
+			}
+		}
 
-                const next = document.createElement('button');
-                next.className = 'lightbox-next';
-                next.innerHTML = '&#10095;';
-                next.setAttribute('aria-label', 'Next image');
-                next.addEventListener('click', () => {
-                    currentIndex = (currentIndex + 1) % allImages.length;
-                    renderLightbox(currentIndex);
-                });
+		function keyHandler( e ) {
+			if ( e.key === 'Escape' ) {
+				wrapper.remove();
+				document.body.classList.remove( 'pb-lightbox-open' );
+				focusStart.remove();
+				focusEnd.remove();
+				document.removeEventListener( 'keydown', keyHandler );
+				if (
+					previouslyFocused &&
+					typeof previouslyFocused.focus === 'function'
+				) {
+					previouslyFocused.focus();
+				}
+			} else if ( e.key === 'ArrowRight' ) {
+				currentIndex = ( currentIndex + 1 ) % allImages.length;
+				renderLightbox( currentIndex );
+			} else if ( e.key === 'ArrowLeft' ) {
+				currentIndex =
+					( currentIndex - 1 + allImages.length ) % allImages.length;
+				renderLightbox( currentIndex );
+			}
+		}
 
-                // Append outside of .lightbox-inner so they’re overlaying the entire wrapper
-                wrapper.appendChild(prev);
-                wrapper.appendChild(next);
-            }
-            const closeBtn = wrapper.querySelector('.lightbox-close');
-            if (closeBtn && userUsedKeyboard) {
-                closeBtn.focus();
-            }
-        }
+		document.addEventListener( 'keydown', keyHandler );
+		renderLightbox( currentIndex );
 
-        function keyHandler(e) {
-            if (e.key === 'Escape') {
-                wrapper.remove();
-                document.body.classList.remove('pb-lightbox-open');
-                focusStart.remove();
-                focusEnd.remove();
-                document.removeEventListener('keydown', keyHandler);
-                if (previouslyFocused && typeof previouslyFocused.focus === 'function') {
-                    previouslyFocused.focus();
-                }
-            } else if (e.key === 'ArrowRight') {
-                currentIndex = (currentIndex + 1) % allImages.length;
-                renderLightbox(currentIndex);
-            } else if (e.key === 'ArrowLeft') {
-                currentIndex = (currentIndex - 1 + allImages.length) % allImages.length;
-                renderLightbox(currentIndex);
-            }
-        }
+		// Handle Tab and Shift+Tab navigation inside the lightbox (explicit control)
+		wrapper.addEventListener( 'keydown', ( e ) => {
+			if ( e.key !== 'Tab' ) {
+				return;
+			}
 
-        document.addEventListener('keydown', keyHandler);
-        renderLightbox(currentIndex);
+			const focusable = Array.from(
+				wrapper.querySelectorAll(
+					'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+				)
+			).filter( ( el ) => ! el.disabled && el.offsetParent !== null );
 
-        // Handle Tab and Shift+Tab navigation inside the lightbox (explicit control)
-        wrapper.addEventListener('keydown', (e) => {
-            if (e.key !== 'Tab') return;
+			if ( ! focusable.length ) {
+				return;
+			}
 
-            const focusable = Array.from(
-                wrapper.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
-            ).filter(el => !el.disabled && el.offsetParent !== null);
+			const currentIndex = focusable.indexOf( document.activeElement );
+			let nextIndex = e.shiftKey ? currentIndex - 1 : currentIndex + 1;
 
-            if (!focusable.length) return;
+			// Loop focus when reaching start or end
+			if ( nextIndex >= focusable.length ) {
+				nextIndex = 0;
+			}
+			if ( nextIndex < 0 ) {
+				nextIndex = focusable.length - 1;
+			}
 
-            const currentIndex = focusable.indexOf(document.activeElement);
-            let nextIndex = e.shiftKey ? currentIndex - 1 : currentIndex + 1;
-
-            // Loop focus when reaching start or end
-            if (nextIndex >= focusable.length) nextIndex = 0;
-            if (nextIndex < 0) nextIndex = focusable.length - 1;
-
-            e.preventDefault();
-            focusable[nextIndex].focus();
-        });
-    });
-});
+			e.preventDefault();
+			focusable[ nextIndex ].focus();
+		} );
+	} );
+} );

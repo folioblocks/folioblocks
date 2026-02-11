@@ -6,6 +6,7 @@
 .wp-block-folioblocks-carousel-gallery-block {
 	position: relative;
 }
+
 .pb-carousel-gallery {
 	margin: 0;
 	padding: 20px 0;
@@ -66,7 +67,7 @@
 	.pb-carousel-play-button {
 		pointer-events: all;
 		background-color: var(--pb-controls-bg, rgba(0, 0, 0, 0.5));
-		color: var(--pb-controls-icon, #ffffff);
+		color: var(--pb-controls-icon, #fff);
 		border: none;
 		border-radius: 50%;
 		width: 36px;
@@ -83,8 +84,9 @@
 			background: rgba(0, 0, 0, 0.7);
 		}
 	}
+
 	.pb-carousel-chevron {
-		font-weight: bold; // makes chevrons visually thicker
+		font-weight: 700; // makes chevrons visually thicker
 		font-size: 30px; // slightly larger than play to balance optical weight
 		padding-left: 1px; // subtle centering nudge
 		padding-right: 1px;

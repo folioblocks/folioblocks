@@ -5,14 +5,14 @@
 	"version": "1.0.0",
 	"title": "Filmstrip Gallery",
 	"category": "folioblocks",
-    "allowedBlocks": [ "folioblocks/pb-image-block" ],
+	"allowedBlocks": ["folioblocks/pb-image-block"],
 	"icon": "<svg viewBox=\"0 0 1247.24 1247.24\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-hidden=\"true\"><g id=\"Layer_1-2\"><path d=\"M1095.04 145.72v677.92H159.54V145.72h935.5m25.03-46.24h-984.27c-11.54 0-21.17 9.77-21.17 21.49v727.41c0 11.72 9.63 21.49 21.17 21.49h983.62c11.54 0 21.17-9.77 21.17-21.49V120.97c0-11.72-9.63-21.49-21.17-21.49z\"/><path d=\"M1093.75 969.51v125.03H882.01V969.51h211.74m24.38-46.23h-260.5c-11.54 0-21.17 9.77-21.17 21.49v174.53c0 11.72 9.63 21.49 21.17 21.49h260.5c11.54 0 21.17-9.77 21.17-21.49V944.78c0-11.72-9.63-21.49-21.17-21.49z\"/><path d=\"M733.16 969.51v125.03H521.42V969.51h211.74m24.38-46.23h-260.5c-11.54 0-21.17 9.77-21.17 21.49v174.53c0 11.72 9.63 21.49 21.17 21.49h260.5c11.54 0 21.17-9.77 21.17-21.49V944.78c0-11.72-9.63-21.49-21.17-21.49z\"/><path d=\"M372.57 969.51v125.03H160.83V969.51h211.74m24.38-46.23h-260.5c-11.54 0-21.17 9.77-21.17 21.49v174.53c0 11.72 9.63 21.49 21.17 21.49h260.5c11.54 0 21.17-9.77 21.17-21.49V944.78c0-11.72-9.63-21.49-21.17-21.49z\"/><path d=\"M873.03 605.49c-5.14 0-10.26-1.95-13.47-7.17-5.14-7.17-3.21-18.88 3.21-24.1l79.56-59.91-79.56-59.91c-7.06-5.21-8.35-16.93-3.21-24.1 5.14-7.17 16.68-8.47 23.74-3.26l98.17 73.58c5.14 3.26 7.06 8.47 7.06 13.67s-3.21 10.41-7.06 13.67l-98.17 73.58c-3.21 1.95-7.06 3.26-10.26 3.26z\"/><path d=\"M381.54 605.49c-3.21 0-7.06-1.95-10.26-3.26l-98.17-73.58c-5.14-3.26-7.06-8.47-7.06-13.67s3.21-10.41 7.06-13.67l98.17-73.58c7.06-5.21 18.61-3.26 23.74 3.26 5.14 7.17 3.21 18.88-3.21 24.1l-79.56 59.91 79.56 59.91c7.06 5.21 8.35 16.93 3.21 24.1-3.21 3.26-8.35 7.17-13.47 7.17z\"/></g></svg>",
-   "description": "Display images in a filmstrip gallery.",
-    "example": {
-        "attributes": {
-        "preview": true
-    }
-    },
+	"description": "Display images in a filmstrip gallery.",
+	"example": {
+		"attributes": {
+			"preview": true
+		}
+	},
 	"supports": {
 		"align": ["wide", "full"],
 		"color": {
@@ -32,25 +32,61 @@
 	"attributes": {
 		"preview": { "type": "boolean", "default": false },
 		"resolution": { "type": "string", "default": "large" },
+		"colorMode": {
+			"type": "string",
+			"enum": ["light", "dark"],
+			"default": "light"
+		},
+		"filmstripPosition": {
+			"type": "string",
+			"enum": ["bottom", "left", "right"],
+			"default": "bottom"
+		},
+		"enableFullscreen": { "type": "boolean", "default": false },
 		"lightbox": { "type": "boolean", "default": false },
-        "lightboxCaption": { "type": "boolean", "default": false },
-        "onHoverTitle": { "type": "boolean", "default": false },
-        "onHoverStyle": { "type": "string", "enum": ["fade-overlay", "gradient-bottom", "chip", "blur-overlay", "color-overlay"], "default": "blur-overlay" },
-        "overlayBgColor": { "type": "string", "default": "" },
-        "overlayTextColor": { "type": "string", "default": "" },
+		"lightboxCaption": { "type": "boolean", "default": false },
+		"onHoverTitle": { "type": "boolean", "default": false },
+		"onHoverStyle": {
+			"type": "string",
+			"enum": [
+				"fade-overlay",
+				"gradient-bottom",
+				"chip",
+				"blur-overlay",
+				"color-overlay"
+			],
+			"default": "blur-overlay"
+		},
+		"overlayBgColor": { "type": "string", "default": "" },
+		"overlayTextColor": { "type": "string", "default": "" },
 		"disableRightClick": { "type": "boolean", "default": false },
 		"lazyLoad": { "type": "boolean", "default": false },
+		"autoplay": { "type": "boolean", "default": false },
+		"autoplaySpeed": { "type": "number", "default": 3 },
+		"pauseOnHover": { "type": "boolean", "default": false },
 		"enableDownload": { "type": "boolean", "default": false },
 		"downloadOnHover": { "type": "boolean", "default": true },
 		"downloadIconColor": { "type": "string", "default": "" },
 		"downloadIconBgColor": { "type": "string", "default": "" },
 		"hasWooCommerce": { "type": "boolean", "default": false },
 		"enableWooCommerce": { "type": "boolean", "default": false },
-		"wooCartIconDisplay": { "type": "string", "enum": ["hover", "always"], "default": "hover" },
-        "cartIconColor": { "type": "string", "default": "" },
-        "cartIconBgColor": { "type": "string", "default": "" }, 
-		"wooDefaultLinkAction": { "type": "string", "enum": ["product", "add_to_cart"],"default": "add_to_cart" },
-		"wooLightboxInfoType": { "type": "string", "enum": ["caption", "product"], "default": "caption" },
+		"wooCartIconDisplay": {
+			"type": "string",
+			"enum": ["hover", "always"],
+			"default": "hover"
+		},
+		"cartIconColor": { "type": "string", "default": "" },
+		"cartIconBgColor": { "type": "string", "default": "" },
+		"wooDefaultLinkAction": {
+			"type": "string",
+			"enum": ["product", "add_to_cart"],
+			"default": "add_to_cart"
+		},
+		"wooLightboxInfoType": {
+			"type": "string",
+			"enum": ["caption", "product"],
+			"default": "caption"
+		},
 		"wooProductPriceOnHover": { "type": "boolean", "default": true },
 		"images": {
 			"type": "array",
@@ -73,6 +109,8 @@
 	"usesContext": [],
 	"providesContext": {
 		"folioBlocks/resolution": "resolution",
+		"folioBlocks/filmstripPosition": "filmstripPosition",
+		"folioBlocks/enableFullscreen": "enableFullscreen",
 		"folioBlocks/lightbox": "lightbox",
 		"folioBlocks/lightboxCaption": "lightboxCaption",
 		"folioBlocks/onHoverTitle": "onHoverTitle",
@@ -81,10 +119,10 @@
 		"folioBlocks/overlayTextColor": "overlayTextColor",
 		"folioBlocks/enableDownload": "enableDownload",
 		"folioBlocks/downloadOnHover": "downloadOnHover",
-        "folioBlocks/downloadIconColor": "downloadIconColor",
-        "folioBlocks/downloadIconBgColor": "downloadIconBgColor",
-        "folioBlocks/cartIconColor": "cartIconColor",
-        "folioBlocks/cartIconBgColor": "cartIconBgColor",
+		"folioBlocks/downloadIconColor": "downloadIconColor",
+		"folioBlocks/downloadIconBgColor": "downloadIconBgColor",
+		"folioBlocks/cartIconColor": "cartIconColor",
+		"folioBlocks/cartIconBgColor": "cartIconBgColor",
 		"folioBlocks/hasWooCommerce": "hasWooCommerce",
 		"folioBlocks/enableWooCommerce": "enableWooCommerce",
 		"folioBlocks/wooCartIconDisplay": "wooCartIconDisplay",

@@ -2,8 +2,11 @@
  * Before & After Block
  * Front-End SCSS
  **/
- 
-.wp-block-folioblocks-before-after-block {overflow: hidden; padding: 2px;}
+
+.wp-block-folioblocks-before-after-block {
+	overflow: hidden;
+	padding: 2px;
+}
 
 .pb-before-after-container {
 	position: relative;
@@ -189,9 +192,10 @@
 }
 // Before/After label styles
 .pb-before-after-container {
+
 	.pb-label {
 		position: absolute;
-		margin: 0; 
+		margin: 0;
 		padding: 0.25em 0.75em;
 		font-size: 0.875rem;
 		font-weight: 600;
@@ -203,15 +207,18 @@
 
 	// Horizontal placements
 	&:not(.is-vertical) {
+
 		.pb-before-label.label-top {
 			top: 10px;
 			left: 10px;
 		}
+
 		.pb-before-label.label-center {
 			top: 50%;
 			left: 10px;
 			transform: translateY(-50%);
 		}
+
 		.pb-before-label.label-bottom {
 			bottom: 10px;
 			left: 10px;
@@ -221,11 +228,13 @@
 			top: 10px;
 			right: 10px;
 		}
+
 		.pb-after-label.label-center {
 			top: 50%;
 			right: 10px;
 			transform: translateY(-50%);
 		}
+
 		.pb-after-label.label-bottom {
 			bottom: 10px;
 			right: 10px;
@@ -234,15 +243,18 @@
 
 	// Vertical placements
 	&.is-vertical {
+
 		.pb-before-label.label-left {
 			top: 10px;
 			left: 10px;
 		}
+
 		.pb-before-label.label-center {
 			top: 10px;
 			left: 50%;
 			transform: translateX(-50%);
 		}
+
 		.pb-before-label.label-right {
 			top: 10px;
 			right: 10px;
@@ -252,11 +264,13 @@
 			bottom: 10px;
 			left: 10px;
 		}
+
 		.pb-after-label.label-center {
 			bottom: 10px;
 			left: 50%;
 			transform: translateX(-50%);
 		}
+
 		.pb-after-label.label-right {
 			bottom: 10px;
 			right: 10px;

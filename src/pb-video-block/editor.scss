@@ -9,6 +9,7 @@
 	transform: none !important;
 	transition: none !important;
 }
+
 .pb-video-block .video-thumbnail-placeholder {
 	display: flex;
 	flex-direction: column;
@@ -42,12 +43,29 @@
 	overflow: hidden;
 	container-type: inline-size;
 
-	&.aspect-21-9 { aspect-ratio: 21 / 9; }
-	&.aspect-16-9 { aspect-ratio: 16 / 9; }
-	&.aspect-9-16 { aspect-ratio: 9 / 16; }
-	&.aspect-4-3 { aspect-ratio: 4 / 3; }
-	&.aspect-3-2 { aspect-ratio: 3 / 2; }
-	&.aspect-1-1 { aspect-ratio: 1 / 1; }
+	&.aspect-21-9 {
+		aspect-ratio: 21 / 9;
+	}
+
+	&.aspect-16-9 {
+		aspect-ratio: 16 / 9;
+	}
+
+	&.aspect-9-16 {
+		aspect-ratio: 9 / 16;
+	}
+
+	&.aspect-4-3 {
+		aspect-ratio: 4 / 3;
+	}
+
+	&.aspect-3-2 {
+		aspect-ratio: 3 / 2;
+	}
+
+	&.aspect-1-1 {
+		aspect-ratio: 1 / 1;
+	}
 
 	img {
 		position: absolute;
@@ -61,4 +79,4 @@
 // Hide blocks in editor
 .pb-video-block.is-hidden {
 	display: none;
-} 
+}

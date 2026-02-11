@@ -1,7 +1,7 @@
 /**
  * Carousel Gallery Block
  * Deprecated JS
- **/
+ */
 import { createBlock, registerBlockType } from '@wordpress/blocks';
 import { useEffect } from '@wordpress/element';
 import { useDispatch } from '@wordpress/data';
@@ -31,12 +31,12 @@ const legacyAttributes = {
 	enableWooCommerce: { type: 'boolean', default: false },
 	wooCartIconDisplay: {
 		type: 'string',
-		enum: ['hover', 'always'],
+		enum: [ 'hover', 'always' ],
 		default: 'hover',
 	},
 	wooLightboxInfoType: {
 		type: 'string',
-		enum: ['caption', 'product'],
+		enum: [ 'caption', 'product' ],
 		default: 'caption',
 	},
 	wooProductPriceOnHover: { type: 'boolean', default: true },
@@ -71,7 +71,7 @@ const legacyAttributes = {
  * Register the OLD block namespace as a migration shim.
  * This MUST be loaded alongside the new block registration.
  */
-registerBlockType('portfolio-blocks/carousel-gallery-block', {
+registerBlockType( 'portfolio-blocks/carousel-gallery-block', {
 	apiVersion: 3,
 	title: 'Carousel Gallery (Legacy)',
 	category: 'widgets',
@@ -85,20 +85,21 @@ registerBlockType('portfolio-blocks/carousel-gallery-block', {
 	/**
 	 * On mount, immediately replace this legacy block instance
 	 * with the new block, preserving attributes and any inner blocks.
+	 * @param props
 	 */
-	edit(props) {
+	edit( props ) {
 		const { clientId, attributes, innerBlocks } = props;
-		const { replaceBlocks } = useDispatch('core/block-editor');
+		const { replaceBlocks } = useDispatch( 'core/block-editor' );
 
-		useEffect(() => {
+		useEffect( () => {
 			const newBlock = createBlock(
 				'folioblocks/carousel-gallery-block',
 				{ ...attributes },
 				innerBlocks
 			);
-			replaceBlocks(clientId, newBlock);
+			replaceBlocks( clientId, newBlock );
 			// eslint-disable-next-line react-hooks/exhaustive-deps
-		}, []);
+		}, [] );
 
 		return null; // No UI – auto-migrates silently
 	},
@@ -107,6 +108,6 @@ registerBlockType('portfolio-blocks/carousel-gallery-block', {
 	save() {
 		return null;
 	},
-});
+} );
 
 export default null;

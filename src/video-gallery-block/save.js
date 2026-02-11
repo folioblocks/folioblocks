@@ -1,10 +1,10 @@
 /**
  * Video Gallery Block
  * Save JS
- **/
+ */
 import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
 
-export default function save({ attributes }) {
+export default function save( { attributes } ) {
 	const {
 		columns,
 		tabletColumns,
@@ -15,12 +15,12 @@ export default function save({ attributes }) {
 	} = attributes;
 
 	return (
-		<div {...useBlockProps.save()}>
+		<div { ...useBlockProps.save() }>
 			<div
-				className={`pb-video-gallery cols-d-${columns} cols-t-${tabletColumns} cols-m-${mobileColumns}`}
-				style={{ '--gap': `${gap}px` }}
-				data-lightbox-layout={lightboxLayout}
-				data-disable-right-click={disableRightClick}
+				className={ `pb-video-gallery cols-d-${ columns } cols-t-${ tabletColumns } cols-m-${ mobileColumns }` }
+				style={ { '--gap': `${ gap }px` } }
+				data-lightbox-layout={ lightboxLayout }
+				data-disable-right-click={ disableRightClick }
 			>
 				<InnerBlocks.Content />
 			</div>

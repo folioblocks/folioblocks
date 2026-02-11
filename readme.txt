@@ -105,11 +105,11 @@ No, the galleries will remain in place on your site. However, the advanced layou
 == Changelog ==
 
 = 1.1.3 = 
-- Added Overlay styles (Default, Blur, & Color) to Video Block & Video Gallery.
-- Fixed bug in Color and Fade Overlay that affected image title rendering. 
-- Merged Title and Play button visibility into one control on Video Block & Video Gallery. 
-- Replaced Play button icon on Video Block with SVG variant. 
-- Combined all icon helper files into one file. 
+* Added Overlay styles (Default, Blur, & Color) to Video Block & Video Gallery.
+* Fixed bug in Color and Fade Overlay that affected image title rendering. 
+* Merged Title and Play button visibility into one control on Video Block & Video Gallery. 
+* Replaced Play button icon on Video Block with SVG variant. 
+* Combined all icon helper files into one file. 
 
 = 1.1.2 = 
 * Added keyboard full-screen support (F) for the Video Lightbox. 

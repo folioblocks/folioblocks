@@ -1,7 +1,7 @@
 /**
  * Video Gallery Block
  * Deprecated JS
- **/
+ */
 import { createBlock, registerBlockType } from '@wordpress/blocks';
 import { useEffect } from '@wordpress/element';
 import { useDispatch } from '@wordpress/data';
@@ -16,8 +16,16 @@ const legacyAttributes = {
 	mobileColumns: { type: 'number', default: 1 },
 	gap: { type: 'number', default: 10 },
 	enableWooCommerce: { type: 'boolean', default: false },
-	wooCartIconDisplay: { type: 'string', enum: ['hover', 'always'], default: 'hover' },
-	wooLightboxInfoType: { type: 'string', enum: ['caption', 'product'], default: 'caption' },
+	wooCartIconDisplay: {
+		type: 'string',
+		enum: [ 'hover', 'always' ],
+		default: 'hover',
+	},
+	wooLightboxInfoType: {
+		type: 'string',
+		enum: [ 'caption', 'product' ],
+		default: 'caption',
+	},
 	disableRightClick: { type: 'boolean', default: false },
 	lazyLoad: { type: 'boolean', default: false },
 	borderWidth: { type: 'number', default: 0 },
@@ -59,7 +67,7 @@ const legacyAttributes = {
  * Register the OLD block namespace as a migration shim.
  * This MUST be loaded alongside the new block registration.
  */
-registerBlockType('portfolio-blocks/video-gallery-block', {
+registerBlockType( 'portfolio-blocks/video-gallery-block', {
 	apiVersion: 3,
 	title: 'Video Gallery (Legacy)',
 	category: 'widgets',
@@ -73,20 +81,21 @@ registerBlockType('portfolio-blocks/video-gallery-block', {
 	/**
 	 * On mount, immediately replace this legacy block instance
 	 * with the new block, preserving attributes and any inner blocks.
+	 * @param props
 	 */
-	edit(props) {
+	edit( props ) {
 		const { clientId, attributes, innerBlocks } = props;
-		const { replaceBlocks } = useDispatch('core/block-editor');
+		const { replaceBlocks } = useDispatch( 'core/block-editor' );
 
-		useEffect(() => {
+		useEffect( () => {
 			const newBlock = createBlock(
 				'folioblocks/video-gallery-block',
 				{ ...attributes },
 				innerBlocks
 			);
-			replaceBlocks(clientId, newBlock);
+			replaceBlocks( clientId, newBlock );
 			// eslint-disable-next-line react-hooks/exhaustive-deps
-		}, []);
+		}, [] );
 
 		return null; // No UI – auto-migrates silently
 	},
@@ -95,6 +104,6 @@ registerBlockType('portfolio-blocks/video-gallery-block', {
 	save() {
 		return null;
 	},
-});
+} );
 
 export default null;

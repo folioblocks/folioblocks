@@ -3,7 +3,7 @@
  * Editor SCSS
  **/
 
- 
+
 .pb-block-preview {
 	display: flex;
 	align-items: center;
@@ -11,9 +11,13 @@
 	padding: 20px;
 	border: 1px solid #ccc;
 	border-radius: 8px;
-	background: #3B82F6;
-	
-	svg { width: 100px; height: 100px; fill: #fff; }
+	background: #3b82f6;
+
+	svg {
+		width: 100px;
+		height: 100px;
+		fill: #fff;
+	}
 }
 
 .pb-split-placeholder {
@@ -23,7 +27,7 @@
 	align-items: left;
 	padding: 20px;
 	color: #000;
-	background: #ffffff;
+	background: #fff;
 	border: 1px solid #000;
 	border-radius: 2px;
 	min-height: 180px;
@@ -84,6 +88,7 @@
 		}
 	}
 }
+
 .pb-thumbnail-row {
 	display: flex;
 	gap: 12px;
@@ -112,8 +117,9 @@
 		border-radius: 4px;
 	}
 }
+
 .pb-swap-button {
-	display: flex; 
+	display: flex;
 	align-items: center;
 	justify-content: center;
 }

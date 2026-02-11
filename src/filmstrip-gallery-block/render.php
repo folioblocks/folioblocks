@@ -3,7 +3,13 @@
  * Filmstrip Gallery Block
  * Render PHP
  **/
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+$fbks_wrapper_attributes = get_block_wrapper_attributes();
 ?>
-<p <?php echo get_block_wrapper_attributes(); ?>>
-	<?php esc_html_e( 'Filmstrip Gallery Block – hello from a dynamic block!', 'filmstrip-gallery-block' ); ?>
-</p>
+<div <?php echo wp_kses( $fbks_wrapper_attributes, [ 'div' => [] ] ); ?>>
+	<?php echo wp_kses_post( $content ); ?>
+</div>

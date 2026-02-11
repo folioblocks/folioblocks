@@ -1,17 +1,17 @@
 /**
  * Modular Gallery Block
  * Edit JS
- **/
-import { __ } from "@wordpress/i18n";
-import { select, useSelect, useDispatch } from "@wordpress/data";
-import { useState, useEffect, useRef } from "@wordpress/element";
+ */
+import { __ } from '@wordpress/i18n';
+import { select, useSelect, useDispatch } from '@wordpress/data';
+import { useState, useEffect, useRef } from '@wordpress/element';
 import {
 	BlockControls,
 	useBlockProps,
 	useInnerBlocksProps,
 	InspectorControls,
 	MediaPlaceholder,
-} from "@wordpress/block-editor";
+} from '@wordpress/block-editor';
 import {
 	Notice,
 	ToolbarGroup,
@@ -20,35 +20,35 @@ import {
 	ToggleControl,
 	SelectControl,
 	Panel,
-} from "@wordpress/components";
-import { createBlock } from "@wordpress/blocks";
-import { row } from "@wordpress/icons";
-import { applyFilters } from "@wordpress/hooks";
-import { IconModularGallery } from "../pb-helpers/icons";
+} from '@wordpress/components';
+import { createBlock } from '@wordpress/blocks';
+import { row } from '@wordpress/icons';
+import { applyFilters } from '@wordpress/hooks';
+import { IconModularGallery } from '../pb-helpers/icons';
 
-import "./editor.scss";
+import './editor.scss';
 
-const ALLOWED_BLOCKS = ["folioblocks/pb-image-row"];
+const ALLOWED_BLOCKS = [ 'folioblocks/pb-image-row' ];
 
 // Debounce utility to throttle function calls
-const debounce = (fn, delay) => {
+const debounce = ( fn, delay ) => {
 	let timer;
-	return (...args) => {
-		clearTimeout(timer);
-		timer = setTimeout(() => fn(...args), delay);
+	return ( ...args ) => {
+		clearTimeout( timer );
+		timer = setTimeout( () => fn( ...args ), delay );
 	};
 };
 
-export default function Edit(props) {
+export default function Edit( props ) {
 	const { clientId, attributes, setAttributes } = props;
 	const { noGap, lightbox, lightboxCaption, preview } = attributes;
 
 	const checkoutUrl =
 		window.folioBlocksData?.checkoutUrl ||
-		"https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks&utm_medium=modular-gallery-block&utm_campaign=upgrade";
+		'https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks&utm_medium=modular-gallery-block&utm_campaign=upgrade';
 
 	// Block Preview Image
-	if (preview) {
+	if ( preview ) {
 		return (
 			<div className="pb-block-preview">
 				<IconModularGallery />
@@ -61,87 +61,105 @@ export default function Edit(props) {
 	const effectiveEnableWoo = hasWooCommerce
 		? attributes.enableWooCommerce || false
 		: false;
-	useEffect(() => {
+	useEffect( () => {
 		const wooActive = window.folioBlocksData?.hasWooCommerce ?? false;
-		if (wooActive !== attributes.hasWooCommerce) {
-			setAttributes({ hasWooCommerce: wooActive });
+		if ( wooActive !== attributes.hasWooCommerce ) {
+			setAttributes( { hasWooCommerce: wooActive } );
 		}
-	}, [window.folioBlocksData?.hasWooCommerce]);
+	}, [ window.folioBlocksData?.hasWooCommerce ] );
 
 	const { insertBlock, replaceBlocks, selectBlock } =
-		useDispatch("core/block-editor");
+		useDispatch( 'core/block-editor' );
 
 	const innerBlocks = useSelect(
-		(select) => {
-			return select("core/block-editor").getBlock(clientId)?.innerBlocks || [];
+		( select ) => {
+			return (
+				select( 'core/block-editor' ).getBlock( clientId )
+					?.innerBlocks || []
+			);
 		},
-		[clientId],
+		[ clientId ]
 	);
 
-	const handleImageSelect = async (media) => {
+	const handleImageSelect = async ( media ) => {
 		try {
 			// Fetch the full media object to ensure we get raw fields
-			const response = await wp.apiFetch({
-				path: `/wp/v2/media/${media.id}`,
-			});
+			const response = await wp.apiFetch( {
+				path: `/wp/v2/media/${ media.id }`,
+			} );
 
-			const title = response.title?.rendered || "";
+			const title = response.title?.rendered || '';
 			// Prefer raw caption, fallback to media.caption
-			const caption = response.caption?.raw || media.caption || "";
-			const alt = response.alt_text || media.alt || "";
+			const caption = response.caption?.raw || media.caption || '';
+			const alt = response.alt_text || media.alt || '';
 
-			const rowBlock = wp.blocks.createBlock("folioblocks/pb-image-row", {}, [
-				wp.blocks.createBlock("folioblocks/pb-image-block", {
-					id: media.id,
-					src: media.url,
-					alt,
-					title,
-					caption,
-					sizes: media.sizes || {},
-					width: media.width || 0,
-					height: media.height || 0,
-				}),
-			]);
+			const rowBlock = wp.blocks.createBlock(
+				'folioblocks/pb-image-row',
+				{},
+				[
+					wp.blocks.createBlock( 'folioblocks/pb-image-block', {
+						id: media.id,
+						src: media.url,
+						alt,
+						title,
+						caption,
+						sizes: media.sizes || {},
+						width: media.width || 0,
+						height: media.height || 0,
+					} ),
+				]
+			);
 
 			wp.data
-				.dispatch("core/block-editor")
-				.replaceInnerBlocks(clientId, [rowBlock], false);
-		} catch (error) {
-			console.error("Failed to fetch image metadata:", error);
+				.dispatch( 'core/block-editor' )
+				.replaceInnerBlocks( clientId, [ rowBlock ], false );
+		} catch ( error ) {
+			console.error( 'Failed to fetch image metadata:', error );
 		}
 	};
 
-	useEffect(() => {
-		const onAddToImageStack = (e) => {
+	useEffect( () => {
+		const onAddToImageStack = ( e ) => {
 			const targetId = e?.detail?.clientId;
-			if (!targetId) return;
+			if ( ! targetId ) {
+				return;
+			}
 
-			const beSelect = select("core/block-editor");
-			const parents = beSelect.getBlockParents(targetId, true) || [];
+			const beSelect = select( 'core/block-editor' );
+			const parents = beSelect.getBlockParents( targetId, true ) || [];
 			// ensure the image is inside THIS gallery instance
-			if (!parents.includes(clientId)) return;
+			if ( ! parents.includes( clientId ) ) {
+				return;
+			}
 
 			const getName = beSelect.getBlockName;
-			const names = parents.map(getName);
+			const names = parents.map( getName );
 
 			// must be inside an Image Row and NOT already in an Image Stack
-			const inRow = names.includes("folioblocks/pb-image-row");
-			const inStack = names.includes("folioblocks/pb-image-stack");
-			if (!inRow || inStack) return;
+			const inRow = names.includes( 'folioblocks/pb-image-row' );
+			const inStack = names.includes( 'folioblocks/pb-image-stack' );
+			if ( ! inRow || inStack ) {
+				return;
+			}
 
-			const imgBlock = beSelect.getBlock(targetId);
-			if (!imgBlock || imgBlock.name !== "folioblocks/pb-image-block") return;
+			const imgBlock = beSelect.getBlock( targetId );
+			if (
+				! imgBlock ||
+				imgBlock.name !== 'folioblocks/pb-image-block'
+			) {
+				return;
+			}
 
 			// Build a new stack with a cloned image child
-			const childImage = createBlock("folioblocks/pb-image-block", {
+			const childImage = createBlock( 'folioblocks/pb-image-block', {
 				...imgBlock.attributes,
-			});
-			const stackBlock = createBlock("folioblocks/pb-image-stack", {}, [
+			} );
+			const stackBlock = createBlock( 'folioblocks/pb-image-stack', {}, [
 				childImage,
-			]);
+			] );
 
 			// Replace the image with the new stack
-			replaceBlocks(targetId, stackBlock);
+			replaceBlocks( targetId, stackBlock );
 
 			// Optional: focus the new child image
 			// setTimeout(() => {
@@ -154,50 +172,61 @@ export default function Edit(props) {
 		};
 
 		window.addEventListener(
-			"folioblocks:add-to-image-stack",
-			onAddToImageStack,
+			'folioblocks:add-to-image-stack',
+			onAddToImageStack
 		);
 		return () =>
 			window.removeEventListener(
-				"folioblocks:add-to-image-stack",
-				onAddToImageStack,
+				'folioblocks:add-to-image-stack',
+				onAddToImageStack
 			);
-	}, [clientId]);
+	}, [ clientId ] );
 
 	const handleAddRow = () => {
 		const { createBlock } = wp.blocks;
-		const newRow = createBlock("folioblocks/pb-image-row");
-		insertBlock(newRow, innerBlocks.length, clientId);
+		const newRow = createBlock( 'folioblocks/pb-image-row' );
+		insertBlock( newRow, innerBlocks.length, clientId );
 	};
-	const [layoutVersion, setLayoutVersion] = useState(0);
-	const containerRef = useRef(null);
-	const [rowLayouts, setRowLayouts] = useState({});
-	const prevLayouts = useRef({});
+	const [ layoutVersion, setLayoutVersion ] = useState( 0 );
+	const containerRef = useRef( null );
+	const [ rowLayouts, setRowLayouts ] = useState( {} );
+	const prevLayouts = useRef( {} );
 
 	// Used to prevent a jarring first paint (images briefly appear at natural size)
 	// by fading the gallery in only after we have applied the first successful layout.
-	const [isLayoutReady, setIsLayoutReady] = useState(false);
+	const [ isLayoutReady, setIsLayoutReady ] = useState( false );
 	// Only fade-in once (initial load). After that, never hide the gallery during edits/reordering.
-	const hasCompletedInitialFade = useRef(false);
+	const hasCompletedInitialFade = useRef( false );
 
 	const recalculateLayout = () => {
-		if (!containerRef.current) return;
-		const rowWrappers = containerRef.current.querySelectorAll(".pb-image-row");
+		if ( ! containerRef.current ) {
+			return;
+		}
+		const rowWrappers =
+			containerRef.current.querySelectorAll( '.pb-image-row' );
 		const layouts = {};
 		let allRowsReady = true;
 
-		rowWrappers.forEach((row, rowIndex) => {
-			const wrappers = Array.from(row.children).filter(
-				(child) =>
-					child.classList.contains("wp-block-folioblocks-pb-image-block") ||
-					child.classList.contains("wp-block-folioblocks-pb-image-stack"),
+		rowWrappers.forEach( ( row, rowIndex ) => {
+			const wrappers = Array.from( row.children ).filter(
+				( child ) =>
+					child.classList.contains(
+						'wp-block-folioblocks-pb-image-block'
+					) ||
+					child.classList.contains(
+						'wp-block-folioblocks-pb-image-stack'
+					)
 			);
-			if (!wrappers.length) return;
+			if ( ! wrappers.length ) {
+				return;
+			}
 
 			// Guard: Only proceed if all images in the row are fully loaded
-			const images = row.querySelectorAll("img");
-			const anyNotLoaded = Array.from(images).some((img) => !img.complete);
-			if (anyNotLoaded) {
+			const images = row.querySelectorAll( 'img' );
+			const anyNotLoaded = Array.from( images ).some(
+				( img ) => ! img.complete
+			);
+			if ( anyNotLoaded ) {
 				allRowsReady = false;
 				return;
 			}
@@ -205,256 +234,289 @@ export default function Edit(props) {
 			// Proceed with layout calculation for the row (unchanged)
 			const containerWidth = row.clientWidth;
 			const gap = noGap ? 0 : 10;
-			const totalGaps = gap * (wrappers.length - 1);
+			const totalGaps = gap * ( wrappers.length - 1 );
 
 			const aspectRatios = [];
 			let totalNaturalWidth = 0;
 			const stackMeta = [];
 
-			wrappers.forEach((wrapper) => {
+			wrappers.forEach( ( wrapper ) => {
 				let ratio;
 				let isStack = false;
 
-				if (wrapper.classList.contains("wp-block-folioblocks-pb-image-block")) {
-					const img = wrapper.querySelector("img");
-					if (img && img.naturalWidth && img.naturalHeight) {
+				if (
+					wrapper.classList.contains(
+						'wp-block-folioblocks-pb-image-block'
+					)
+				) {
+					const img = wrapper.querySelector( 'img' );
+					if ( img && img.naturalWidth && img.naturalHeight ) {
 						ratio = img.naturalWidth / img.naturalHeight;
 					}
 				} else if (
-					wrapper.classList.contains("wp-block-folioblocks-pb-image-stack")
+					wrapper.classList.contains(
+						'wp-block-folioblocks-pb-image-stack'
+					)
 				) {
 					isStack = true;
-					const images = wrapper.querySelectorAll("img");
+					const images = wrapper.querySelectorAll( 'img' );
 					let totalStackHeight = 0;
-					images.forEach((img) => {
-						if (img.naturalWidth && img.naturalHeight) {
-							totalStackHeight += img.naturalHeight / img.naturalWidth;
+					images.forEach( ( img ) => {
+						if ( img.naturalWidth && img.naturalHeight ) {
+							totalStackHeight +=
+								img.naturalHeight / img.naturalWidth;
 						}
-					});
-					if (totalStackHeight > 0) {
+					} );
+					if ( totalStackHeight > 0 ) {
 						ratio = 1 / totalStackHeight;
 					}
 				}
 
-				if (ratio) {
-					aspectRatios.push(ratio);
+				if ( ratio ) {
+					aspectRatios.push( ratio );
 					totalNaturalWidth += ratio;
-					stackMeta.push({ isStack, wrapper });
+					stackMeta.push( { isStack, wrapper } );
 				}
-			});
+			} );
 
-			if (aspectRatios.length !== wrappers.length || totalNaturalWidth === 0)
+			if (
+				aspectRatios.length !== wrappers.length ||
+				totalNaturalWidth === 0
+			) {
 				return;
+			}
 
 			const targetHeight = Math.round(
-				(containerWidth - totalGaps) / totalNaturalWidth,
+				( containerWidth - totalGaps ) / totalNaturalWidth
 			);
 
 			let usedWidth = 0;
-			const widths = aspectRatios.map((ratio) =>
-				Math.floor(ratio * targetHeight),
+			const widths = aspectRatios.map( ( ratio ) =>
+				Math.floor( ratio * targetHeight )
 			);
-			widths.forEach((width) => {
+			widths.forEach( ( width ) => {
 				usedWidth += width;
-			});
+			} );
 			const remainingWidth = containerWidth - usedWidth - totalGaps;
 
-			const widthAdjustments = new Array(wrappers.length).fill(0);
-			for (let i = 0; i < remainingWidth; i++) {
-				widthAdjustments[i % wrappers.length]++;
+			const widthAdjustments = new Array( wrappers.length ).fill( 0 );
+			for ( let i = 0; i < remainingWidth; i++ ) {
+				widthAdjustments[ i % wrappers.length ]++;
 			}
 
-			layouts[rowIndex] = widths.map((w, i) => ({
-				width: w + widthAdjustments[i],
+			layouts[ rowIndex ] = widths.map( ( w, i ) => ( {
+				width: w + widthAdjustments[ i ],
 				height: targetHeight,
-				marginRight: i === wrappers.length - 1 ? "0" : `${gap}px`,
-				isStack: stackMeta[i].isStack,
-			}));
+				marginRight: i === wrappers.length - 1 ? '0' : `${ gap }px`,
+				isStack: stackMeta[ i ].isStack,
+			} ) );
 
-			wrappers.forEach((wrapper, index) => {
-				const layout = layouts[rowIndex][index];
-				if (!layout) return;
+			wrappers.forEach( ( wrapper, index ) => {
+				const layout = layouts[ rowIndex ][ index ];
+				if ( ! layout ) {
+					return;
+				}
 
-				if (!layout.isStack) {
-					wrapper.style.width = `${layout.width}px`;
-					wrapper.style.height = `${layout.height}px`;
+				if ( ! layout.isStack ) {
+					wrapper.style.width = `${ layout.width }px`;
+					wrapper.style.height = `${ layout.height }px`;
 					wrapper.style.marginRight = layout.marginRight;
 
-					const figure = wrapper.querySelector(".pb-image-block");
-					if (figure) {
-						figure.style.width = "";
-						figure.style.height = "";
-						figure.style.marginRight = "";
+					const figure = wrapper.querySelector( '.pb-image-block' );
+					if ( figure ) {
+						figure.style.width = '';
+						figure.style.height = '';
+						figure.style.marginRight = '';
 					}
 				} else {
 					// Stack logic (already present above)
 					const stackWrapper = wrapper;
-					stackWrapper.style.width = `${layout.width}px`;
-					stackWrapper.style.height = `${layout.height}px`;
+					stackWrapper.style.width = `${ layout.width }px`;
+					stackWrapper.style.height = `${ layout.height }px`;
 					stackWrapper.style.marginRight = layout.marginRight;
 
-					const images = stackWrapper.querySelectorAll("img");
+					const images = stackWrapper.querySelectorAll( 'img' );
 					let totalRatio = 0;
 					const ratios = [];
-					images.forEach((img) => {
-						if (img.naturalWidth && img.naturalHeight) {
+					images.forEach( ( img ) => {
+						if ( img.naturalWidth && img.naturalHeight ) {
 							const r = img.naturalHeight / img.naturalWidth;
-							ratios.push(r);
+							ratios.push( r );
 							totalRatio += r;
 						}
-					});
+					} );
 
-					const totalStackGaps = noGap ? 0 : (images.length - 1) * 10;
+					const totalStackGaps = noGap
+						? 0
+						: ( images.length - 1 ) * 10;
 					const usableHeight = layout.height - totalStackGaps;
 
-					images.forEach((img, idx) => {
-						const share = ratios[idx] / totalRatio;
-						const imgHeight = Math.round(share * usableHeight);
+					images.forEach( ( img, idx ) => {
+						const share = ratios[ idx ] / totalRatio;
+						const imgHeight = Math.round( share * usableHeight );
 
 						// The <figure> is inside a wrapper div that receives block props.
 						// If we put margin on the <figure>, the selection outline (on the wrapper)
 						// ends up with an empty gap below the image when selected.
 						// So: set height on the figure, but set spacing on the wrapper.
-						const figure = img.closest(".pb-image-block");
+						const figure = img.closest( '.pb-image-block' );
 						const blockWrapper = img.closest(
-							".wp-block-folioblocks-pb-image-block",
+							'.wp-block-folioblocks-pb-image-block'
 						);
 
-						if (figure) {
-							figure.style.height = `${imgHeight}px`;
+						if ( figure ) {
+							figure.style.height = `${ imgHeight }px`;
 							// Ensure we don't create a visual gap between the selection border and the image.
-							figure.style.marginBottom = "0px";
+							figure.style.marginBottom = '0px';
 						}
 
-						if (blockWrapper) {
+						if ( blockWrapper ) {
 							blockWrapper.style.marginBottom =
-								noGap || idx === images.length - 1 ? "0px" : "10px";
+								noGap || idx === images.length - 1
+									? '0px'
+									: '10px';
 						}
-					});
+					} );
 				}
-			});
-		});
+			} );
+		} );
 
 		// If any row's images are not loaded, skip layout recalculation.
 		// IMPORTANT: we only hide during the initial load fade-in.
-		if (!allRowsReady) {
-			if (!hasCompletedInitialFade.current) {
+		if ( ! allRowsReady ) {
+			if ( ! hasCompletedInitialFade.current ) {
 				// Keep hidden until we can apply the first full layout.
-				if (isLayoutReady) setIsLayoutReady(false);
+				if ( isLayoutReady ) {
+					setIsLayoutReady( false );
+				}
 			}
 			return;
 		}
 
 		// At this point the layout has been applied for all rows.
 		// Only fade in once. After that, keep the gallery visible even when reordering.
-		if (!hasCompletedInitialFade.current) {
-			if (!isLayoutReady) setIsLayoutReady(true);
+		if ( ! hasCompletedInitialFade.current ) {
+			if ( ! isLayoutReady ) {
+				setIsLayoutReady( true );
+			}
 			hasCompletedInitialFade.current = true;
 		}
 
-		const layoutsEqual = (a, b) => JSON.stringify(a) === JSON.stringify(b);
-		if (!layoutsEqual(prevLayouts.current, layouts)) {
-			setRowLayouts(layouts);
-			setLayoutVersion(Date.now());
+		const layoutsEqual = ( a, b ) =>
+			JSON.stringify( a ) === JSON.stringify( b );
+		if ( ! layoutsEqual( prevLayouts.current, layouts ) ) {
+			setRowLayouts( layouts );
+			setLayoutVersion( Date.now() );
 			prevLayouts.current = layouts;
 		}
 	};
 
-	const recalculateLayoutDebounced = debounce(recalculateLayout, 150);
+	const recalculateLayoutDebounced = debounce( recalculateLayout, 150 );
 
 	// Recalculate after add/remove/reorder. This does NOT hide the gallery.
-	useEffect(() => {
-		requestAnimationFrame(() => {
+	useEffect( () => {
+		requestAnimationFrame( () => {
 			recalculateLayoutDebounced();
-		});
-	}, [innerBlocks, noGap]);
+		} );
+	}, [ innerBlocks, noGap ] );
 
-	useEffect(() => {
-		const observer = new ResizeObserver(() => {
-			requestAnimationFrame(() => {
+	useEffect( () => {
+		const observer = new ResizeObserver( () => {
+			requestAnimationFrame( () => {
 				recalculateLayoutDebounced();
-			});
-		});
+			} );
+		} );
 		const container = containerRef.current;
-		if (container) observer.observe(container);
+		if ( container ) {
+			observer.observe( container );
+		}
 		return () => observer.disconnect();
-	}, [innerBlocks, noGap]);
+	}, [ innerBlocks, noGap ] );
 
-	const blockProps = useBlockProps({
+	const blockProps = useBlockProps( {
 		ref: containerRef,
 		context: {
-			"folioBlocks/noGap": noGap,
-			"folioBlocks/layoutVersion": layoutVersion,
-			"folioBlocks/rowLayouts": rowLayouts,
-			"folioBlocks/enableWooCommerce": effectiveEnableWoo,
-			"folioBlocks/hasWooCommerce": hasWooCommerce,
+			'folioBlocks/noGap': noGap,
+			'folioBlocks/layoutVersion': layoutVersion,
+			'folioBlocks/rowLayouts': rowLayouts,
+			'folioBlocks/enableWooCommerce': effectiveEnableWoo,
+			'folioBlocks/hasWooCommerce': hasWooCommerce,
 		},
-	});
+	} );
 	const innerBlocksProps = useInnerBlocksProps(
 		{
 			className: [
-				"pb-modular-gallery",
-				noGap ? "no-row-gap" : "",
-				attributes.collapseOnMobile ? "collapse-on-mobile" : "",
+				'pb-modular-gallery',
+				noGap ? 'no-row-gap' : '',
+				attributes.collapseOnMobile ? 'collapse-on-mobile' : '',
 			]
-				.filter(Boolean)
-				.join(" "),
+				.filter( Boolean )
+				.join( ' ' ),
 			style: {
 				opacity: isLayoutReady ? 1 : 0,
-				transition: "opacity 200ms ease",
-				willChange: "opacity",
+				transition: 'opacity 200ms ease',
+				willChange: 'opacity',
 			},
 		},
 		{
 			allowedBlocks: ALLOWED_BLOCKS,
-			orientation: "vertical",
-			template: [["folioblocks/pb-image-row"]],
+			orientation: 'vertical',
+			template: [ [ 'folioblocks/pb-image-row' ] ],
 			templateLock: false,
-		},
+		}
 	);
 
 	// Determine if the Modular Gallery block or any of its children is selected
 	const isBlockOrChildSelected = useSelect(
-		(select) => {
-			const blockEditorStore = "core/block-editor";
-			const selectedId = select(blockEditorStore).getSelectedBlockClientId();
-			if (!selectedId) return false;
+		( select ) => {
+			const blockEditorStore = 'core/block-editor';
+			const selectedId =
+				select( blockEditorStore ).getSelectedBlockClientId();
+			if ( ! selectedId ) {
+				return false;
+			}
 
-			const selectedBlock = select(blockEditorStore).getBlock(selectedId);
-			if (!selectedBlock) return false;
+			const selectedBlock =
+				select( blockEditorStore ).getBlock( selectedId );
+			if ( ! selectedBlock ) {
+				return false;
+			}
 
 			// Direct selection
-			if (selectedBlock.clientId === clientId) return true;
+			if ( selectedBlock.clientId === clientId ) {
+				return true;
+			}
 
 			// Check if selected block is a pb-image-block nested within a pb-image-row or pb-image-stack
-			if (selectedBlock.name === "folioblocks/pb-image-block") {
-				const parents = select(blockEditorStore).getBlockParents(selectedId);
-				return parents.includes(clientId);
+			if ( selectedBlock.name === 'folioblocks/pb-image-block' ) {
+				const parents =
+					select( blockEditorStore ).getBlockParents( selectedId );
+				return parents.includes( clientId );
 			}
 
 			return false;
 		},
-		[clientId],
+		[ clientId ]
 	);
 
 	// Always call editorEnhancements filter for consistent hook ordering
-	applyFilters("folioBlocks.modularGallery.editorEnhancements", null, {
+	applyFilters( 'folioBlocks.modularGallery.editorEnhancements', null, {
 		attributes,
 		clientId,
 		innerBlocks,
 		isBlockOrChildSelected,
-	});
+	} );
 
-	if (innerBlocks.length === 0) {
+	if ( innerBlocks.length === 0 ) {
 		return (
-			<div {...blockProps}>
+			<div { ...blockProps }>
 				<MediaPlaceholder
-					icon={<IconModularGallery />}
-					labels={{ title: "Add First Image" }}
+					icon={ <IconModularGallery /> }
+					labels={ { title: 'Add First Image' } }
 					accept="image/*"
-					allowedTypes={["image"]}
-					multiple={false}
-					onSelect={handleImageSelect}
+					allowedTypes={ [ 'image' ] }
+					multiple={ false }
+					onSelect={ handleImageSelect }
 				/>
 			</div>
 		);
@@ -465,235 +527,325 @@ export default function Edit(props) {
 			<BlockControls>
 				<ToolbarGroup>
 					<ToolbarButton
-						icon={row}
+						icon={ row }
 						label="Add Image Row"
-						onClick={handleAddRow}
+						onClick={ handleAddRow }
 					>
-						{__("Add Image Row", "folioblocks")}
+						{ __( 'Add Image Row', 'folioblocks' ) }
 					</ToolbarButton>
 				</ToolbarGroup>
 			</BlockControls>
 			<InspectorControls>
 				<PanelBody
-					title={__("General Gallery Settings", "folioblocks")}
-					initialOpen={true}
+					title={ __( 'General Gallery Settings', 'folioblocks' ) }
+					initialOpen={ true }
 				>
-					{(() => {
-						const allSizes = innerBlocks.flatMap((rowBlock) => {
-							const rowInnerBlocks = select("core/block-editor").getBlocks(
-								rowBlock.clientId,
+					{ ( () => {
+						const allSizes = innerBlocks.flatMap( ( rowBlock ) => {
+							const rowInnerBlocks = select(
+								'core/block-editor'
+							).getBlocks( rowBlock.clientId );
+							return rowInnerBlocks.flatMap( ( imageBlock ) =>
+								Object.keys(
+									imageBlock.attributes?.sizes || {}
+								)
 							);
-							return rowInnerBlocks.flatMap((imageBlock) =>
-								Object.keys(imageBlock.attributes?.sizes || {}),
-							);
-						});
+						} );
 						const resolutionOptions = [
-							{ label: __("Thumbnail", "folioblocks"), value: "thumbnail" },
-							{ label: __("Medium", "folioblocks"), value: "medium" },
-							{ label: __("Large", "folioblocks"), value: "large" },
-							{ label: __("Full", "folioblocks"), value: "full" },
+							{
+								label: __( 'Thumbnail', 'folioblocks' ),
+								value: 'thumbnail',
+							},
+							{
+								label: __( 'Medium', 'folioblocks' ),
+								value: 'medium',
+							},
+							{
+								label: __( 'Large', 'folioblocks' ),
+								value: 'large',
+							},
+							{
+								label: __( 'Full', 'folioblocks' ),
+								value: 'full',
+							},
 						].filter(
-							(option) =>
-								allSizes.includes(option.value) || option.value === "full",
+							( option ) =>
+								allSizes.includes( option.value ) ||
+								option.value === 'full'
 						);
 						return (
 							<SelectControl
-								label={__("Image Resolution", "folioblocks")}
-								value={attributes.resolution}
-								options={resolutionOptions}
-								onChange={(value) => {
-									setAttributes({ resolution: value });
-								}}
+								label={ __(
+									'Image Resolution',
+									'folioblocks'
+								) }
+								value={ attributes.resolution }
+								options={ resolutionOptions }
+								onChange={ ( value ) => {
+									setAttributes( { resolution: value } );
+								} }
 								__nextHasNoMarginBottom
 								__next40pxDefaultSize
-								help={__("Select the size of the source image.")}
+								help={ __(
+									'Select the size of the source image.'
+								) }
 							/>
 						);
-					})()}
+					} )() }
 					<ToggleControl
-						label={__("Collapse layout on Mobile", "folioblocks")}
-						checked={attributes.collapseOnMobile}
-						onChange={(value) => setAttributes({ collapseOnMobile: value })}
+						label={ __(
+							'Collapse layout on Mobile',
+							'folioblocks'
+						) }
+						checked={ attributes.collapseOnMobile }
+						onChange={ ( value ) =>
+							setAttributes( { collapseOnMobile: value } )
+						}
 						__nextHasNoMarginBottom
-						help={__(
-							"Stack all images vertically on mobile devices.",
-							"folioblocks",
-						)}
+						help={ __(
+							'Stack all images vertically on mobile devices.',
+							'folioblocks'
+						) }
 					/>
 					<ToggleControl
-						label={__("Remove Image Gap", "folioblocks")}
-						checked={attributes.noGap || false}
-						onChange={(noGap) => setAttributes({ noGap })}
-						help={__("Remove gap between images.")}
+						label={ __( 'Remove Image Gap', 'folioblocks' ) }
+						checked={ attributes.noGap || false }
+						onChange={ ( noGap ) => setAttributes( { noGap } ) }
+						help={ __( 'Remove gap between images.' ) }
 						__nextHasNoMarginBottom
 					/>
 				</PanelBody>
 				<PanelBody
-					title={__("Lightbox & Hover Settings", "folioblocks")}
-					initialOpen={true}
+					title={ __( 'Lightbox & Hover Settings', 'folioblocks' ) }
+					initialOpen={ true }
 				>
-					{applyFilters(
-						"folioBlocks.modularGallery.lightboxControls",
+					{ applyFilters(
+						'folioBlocks.modularGallery.lightboxControls',
 						<>
 							<ToggleControl
-								label={__("Enable Lightbox", "folioblocks")}
-								checked={!!lightbox}
-								onChange={(newLightbox) =>
-									setAttributes({ lightbox: newLightbox })
+								label={ __( 'Enable Lightbox', 'folioblocks' ) }
+								checked={ !! lightbox }
+								onChange={ ( newLightbox ) =>
+									setAttributes( { lightbox: newLightbox } )
 								}
 								__nextHasNoMarginBottom
-								help={__(
-									"Open images in a lightbox when clicked.",
-									"folioblocks",
-								)}
+								help={ __(
+									'Open images in a lightbox when clicked.',
+									'folioblocks'
+								) }
 							/>
 
-							{lightbox && (
+							{ lightbox && (
 								<ToggleControl
-									label={__("Show Image Caption in Lightbox", "folioblocks")}
-									checked={!!lightboxCaption}
-									onChange={(newLightboxCaption) =>
-										setAttributes({ lightboxCaption: newLightboxCaption })
+									label={ __(
+										'Show Image Caption in Lightbox',
+										'folioblocks'
+									) }
+									checked={ !! lightboxCaption }
+									onChange={ ( newLightboxCaption ) =>
+										setAttributes( {
+											lightboxCaption: newLightboxCaption,
+										} )
 									}
 									__nextHasNoMarginBottom
-									help={__(
-										"Display image captions inside the lightbox.",
-										"folioblocks",
-									)}
+									help={ __(
+										'Display image captions inside the lightbox.',
+										'folioblocks'
+									) }
 								/>
-							)}
+							) }
 						</>,
-						{ attributes, setAttributes },
-					)}
-					{applyFilters(
-						"folioBlocks.modularGallery.onHoverTitleToggle",
+						{ attributes, setAttributes }
+					) }
+					{ applyFilters(
+						'folioBlocks.modularGallery.onHoverTitleToggle',
 						<>
 							<ToggleControl
-								label={__("Show Image Title on Hover", "folioblocks")}
-								help={__(
-									"Display the image title when hovering over images.",
-									"folioblocks",
-								)}
+								label={ __(
+									'Show Image Title on Hover',
+									'folioblocks'
+								) }
+								help={ __(
+									'Display the image title when hovering over images.',
+									'folioblocks'
+								) }
 								__nextHasNoMarginBottom
-								checked={!!attributes.onHoverTitle}
-								onChange={(value) => setAttributes({ onHoverTitle: value })}
+								checked={ !! attributes.onHoverTitle }
+								onChange={ ( value ) =>
+									setAttributes( { onHoverTitle: value } )
+								}
 							/>
 						</>,
-						{ attributes, setAttributes },
-					)}
+						{ attributes, setAttributes }
+					) }
 				</PanelBody>
 				<PanelBody
-					title={__("E-Commerce Settings", "folioblocks")}
-					initialOpen={true}
+					title={ __( 'E-Commerce Settings', 'folioblocks' ) }
+					initialOpen={ true }
 				>
-					{applyFilters(
-						"folioBlocks.modularGallery.downloadControls",
-						<div style={{ marginBottom: "8px" }}>
-							<Notice status="info" isDismissible={false}>
-								<strong>{__("Enable Image Downloads", "folioblocks")}</strong>
+					{ applyFilters(
+						'folioBlocks.modularGallery.downloadControls',
+						<div style={ { marginBottom: '8px' } }>
+							<Notice status="info" isDismissible={ false }>
+								<strong>
+									{ __(
+										'Enable Image Downloads',
+										'folioblocks'
+									) }
+								</strong>
 								<br />
-								{__(
-									"This is a premium feature. Unlock all features: ",
-									"folioblocks",
-								)}
-								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-									{__("Upgrade to Pro", "folioblocks")}
+								{ __(
+									'This is a premium feature. Unlock all features:',
+									'folioblocks'
+								) }
+								<a
+									href={ checkoutUrl }
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									{ __( 'Upgrade to Pro', 'folioblocks' ) }
 								</a>
 							</Notice>
 						</div>,
-						{ attributes, setAttributes, hasWooCommerce, effectiveEnableWoo },
-					)}
-					{window.folioBlocksData?.hasWooCommerce &&
+						{
+							attributes,
+							setAttributes,
+							hasWooCommerce,
+							effectiveEnableWoo,
+						}
+					) }
+					{ window.folioBlocksData?.hasWooCommerce &&
 						applyFilters(
-							"folioBlocks.modularGallery.wooCommerceControls",
-							<div style={{ marginBottom: "8px" }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__("Enable Woo Commerce", "folioblocks")}</strong>
+							'folioBlocks.modularGallery.wooCommerceControls',
+							<div style={ { marginBottom: '8px' } }>
+								<Notice status="info" isDismissible={ false }>
+									<strong>
+										{ __(
+											'Enable Woo Commerce',
+											'folioblocks'
+										) }
+									</strong>
 									<br />
-									{__(
-										"This is a premium feature. Unlock all features: ",
-										"folioblocks",
-									)}
+									{ __(
+										'This is a premium feature. Unlock all features:',
+										'folioblocks'
+									) }
 									<a
-										href={checkoutUrl}
+										href={ checkoutUrl }
 										target="_blank"
 										rel="noopener noreferrer"
 									>
-										{__("Upgrade to Pro", "folioblocks")}
+										{ __(
+											'Upgrade to Pro',
+											'folioblocks'
+										) }
 									</a>
 								</Notice>
 							</div>,
-							{ attributes, setAttributes, hasWooCommerce, effectiveEnableWoo },
-						)}
+							{
+								attributes,
+								setAttributes,
+								hasWooCommerce,
+								effectiveEnableWoo,
+							}
+						) }
 				</PanelBody>
 			</InspectorControls>
 			<InspectorControls group="advanced">
-				{applyFilters(
-					"folioBlocks.modularGallery.disableRightClickToggle",
-					<div style={{ marginBottom: "8px" }}>
-						<Notice status="info" isDismissible={false}>
-							<strong>{__("Disable Right-Click", "folioblocks")}</strong>
+				{ applyFilters(
+					'folioBlocks.modularGallery.disableRightClickToggle',
+					<div style={ { marginBottom: '8px' } }>
+						<Notice status="info" isDismissible={ false }>
+							<strong>
+								{ __( 'Disable Right-Click', 'folioblocks' ) }
+							</strong>
 							<br />
-							{__(
-								"This is a premium feature. Unlock all features: ",
-								"folioblocks",
-							)}
-							<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-								{__("Upgrade to Pro", "folioblocks")}
+							{ __(
+								'This is a premium feature. Unlock all features:',
+								'folioblocks'
+							) }
+							<a
+								href={ checkoutUrl }
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								{ __( 'Upgrade to Pro', 'folioblocks' ) }
 							</a>
 						</Notice>
 					</div>,
-					{ attributes, setAttributes },
-				)}
-				{applyFilters(
-					"folioBlocks.modularGallery.lazyLoadToggle",
-					<div style={{ marginBottom: "8px" }}>
-						<Notice status="info" isDismissible={false}>
-							<strong>{__("Enable Lazy Load of Images", "folioblocks")}</strong>
+					{ attributes, setAttributes }
+				) }
+				{ applyFilters(
+					'folioBlocks.modularGallery.lazyLoadToggle',
+					<div style={ { marginBottom: '8px' } }>
+						<Notice status="info" isDismissible={ false }>
+							<strong>
+								{ __(
+									'Enable Lazy Load of Images',
+									'folioblocks'
+								) }
+							</strong>
 							<br />
-							{__(
-								"This is a premium feature. Unlock all features: ",
-								"folioblocks",
-							)}
-							<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-								{__("Upgrade to Pro", "folioblocks")}
+							{ __(
+								'This is a premium feature. Unlock all features:',
+								'folioblocks'
+							) }
+							<a
+								href={ checkoutUrl }
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								{ __( 'Upgrade to Pro', 'folioblocks' ) }
 							</a>
 						</Notice>
 					</div>,
-					{ attributes, setAttributes },
-				)}
+					{ attributes, setAttributes }
+				) }
 			</InspectorControls>
 			<InspectorControls group="styles">
 				<PanelBody
-					title={__("Gallery Image Styles", "folioblocks")}
-					initialOpen={true}
+					title={ __( 'Gallery Image Styles', 'folioblocks' ) }
+					initialOpen={ true }
 				>
-					{applyFilters(
-						"folioBlocks.modularGallery.imageStyles",
-						<div style={{ marginBottom: "8px" }}>
-							<Notice status="info" isDismissible={false}>
-								<strong>{__("Enable Image Styles", "folioblocks")}</strong>
+					{ applyFilters(
+						'folioBlocks.modularGallery.imageStyles',
+						<div style={ { marginBottom: '8px' } }>
+							<Notice status="info" isDismissible={ false }>
+								<strong>
+									{ __(
+										'Enable Image Styles',
+										'folioblocks'
+									) }
+								</strong>
 								<br />
-								{__(
-									"This is a premium feature. Unlock all features: ",
-									"folioblocks",
-								)}
-								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-									{__("Upgrade to Pro", "folioblocks")}
+								{ __(
+									'This is a premium feature. Unlock all features:',
+									'folioblocks'
+								) }
+								<a
+									href={ checkoutUrl }
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									{ __( 'Upgrade to Pro', 'folioblocks' ) }
 								</a>
 							</Notice>
 						</div>,
-						{ attributes, setAttributes },
-					)}
+						{ attributes, setAttributes }
+					) }
 				</PanelBody>
-				{applyFilters("folioBlocks.modularGallery.iconStyleControls", null, {
-					attributes,
-					setAttributes,
-				})}
+				{ applyFilters(
+					'folioBlocks.modularGallery.iconStyleControls',
+					null,
+					{
+						attributes,
+						setAttributes,
+					}
+				) }
 			</InspectorControls>
 
-			<div {...blockProps}>
-				<div {...innerBlocksProps} />
+			<div { ...blockProps }>
+				<div { ...innerBlocksProps } />
 			</div>
 		</>
 	);
