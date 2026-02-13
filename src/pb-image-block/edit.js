@@ -497,7 +497,7 @@ export default function Edit( {
 					<>
 						<PanelBody
 							title={ __(
-								'Lightbox & Hover Settings',
+								'Lightbox & Hover Overlay Settings',
 								'folioblocks'
 							) }
 							initialOpen={ true }

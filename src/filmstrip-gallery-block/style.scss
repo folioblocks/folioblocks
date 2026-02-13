@@ -1,10 +1,517 @@
 /**
  * Filmstrip Gallery Block
- * Front-END SCSS
+ * Front-End SCSS
  **/
 
-.wp-block-create-block-filmstrip-gallery-block {
-	background-color: #21759b;
+/*
+ * Use container query units so height scales with the block width (content/wide/full)
+ * instead of the viewport width. This fixes the block being too tall in content width.
+ */
+.wp-block-folioblocks-filmstrip-gallery-block {
+	container-type: inline-size;
+}
+
+@supports (width: 1cqw) {
+	/* Default (content width): keep the stage more compact */
+	.wp-block-folioblocks-filmstrip-gallery-block:not(.alignwide):not(
+			.alignfull
+		) {
+		--pb-filmstrip-main-height: clamp(280px, 62cqw, 560px);
+		--pb-filmstrip-side-height: clamp(260px, 55cqw, 520px);
+		--pb-filmstrip-main-max-vh: 70vh;
+	}
+
+	/* Wide / Full: allow a bigger stage */
+	.wp-block-folioblocks-filmstrip-gallery-block.alignwide,
+	.wp-block-folioblocks-filmstrip-gallery-block.alignfull {
+		--pb-filmstrip-main-height: clamp(360px, 70cqw, 820px);
+		--pb-filmstrip-side-height: clamp(320px, 60cqw, 620px);
+		--pb-filmstrip-main-max-vh: 85vh;
+	}
+}
+
+.pb-filmstrip-gallery {
+	position: relative;
+	--pb-filmstrip-main-bg: #f6f7f7;
+	--pb-filmstrip-surface: #fff;
+	--pb-filmstrip-border: #dcdcde;
+	--pb-filmstrip-text: #1e1e1e;
+	--pb-filmstrip-muted: #50575e;
+	--pb-filmstrip-nav-bg: rgba(255, 255, 255, 0.9);
+	--pb-filmstrip-nav-border: #dcdcde;
+	--pb-filmstrip-nav-color: #1e1e1e;
+	--pb-filmstrip-active: #007cba;
+	border: 1px solid var(--pb-filmstrip-border);
+	border-radius: 6px;
+	padding: 6px;
+	background: var(--pb-filmstrip-main-bg);
+}
+
+.pb-filmstrip-gallery-a11y-status,
+.pb-filmstrip-gallery-a11y-instructions {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	border: 0;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	white-space: nowrap;
+}
+
+.pb-filmstrip-gallery.is-theme-dark {
+	background: var(--pb-filmstrip-main-bg);
+	--pb-filmstrip-main-bg: #141b22;
+	--pb-filmstrip-surface: #1f2933;
+	--pb-filmstrip-border: #435160;
+	--pb-filmstrip-text: #f3f6f8;
+	--pb-filmstrip-muted: #c1ccd6;
+	--pb-filmstrip-nav-bg: rgba(31, 41, 51, 0.92);
+	--pb-filmstrip-nav-border: #5b6c7d;
+	--pb-filmstrip-nav-color: #f3f6f8;
+	--pb-filmstrip-active: #7db3ff;
+}
+.pb-filmstrip-gallery.is-fullscreen {
+	--pb-filmstrip-main-bg: #000;
+	--pb-filmstrip-surface: #1f2933;
+	--pb-filmstrip-border: ##000;
+	--pb-filmstrip-text: #f3f6f8;
+	--pb-filmstrip-muted: #c1ccd6;
+	--pb-filmstrip-nav-bg: rgba(31, 41, 51, 0.92);
+	--pb-filmstrip-nav-border: ##000;
+	--pb-filmstrip-nav-color: #f3f6f8;
+	--pb-filmstrip-active: #7db3ff;
+	max-height: 90vh;
+}
+.pb-filmstrip-gallery-preview {
+	--pb-filmstrip-side-height: var(
+		--pb-filmstrip-side-height,
+		clamp(360px, 46vw, 560px)
+	);
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.pb-filmstrip-gallery-preview.is-left,
+.pb-filmstrip-gallery-preview.is-right {
+	flex-direction: row;
+	align-items: stretch;
+}
+
+.pb-filmstrip-gallery-main {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	min-height: 360px;
+	overflow: hidden;
+	flex: 1 1 auto;
+	padding: 6px 0;
+}
+
+.pb-filmstrip-gallery-main:focus {
+	outline: none;
+	box-shadow: none;
+}
+
+.pb-filmstrip-gallery-main:focus-visible {
+	outline: 2px solid var(--pb-filmstrip-active);
+	outline-offset: 2px;
+}
+
+.pb-filmstrip-gallery:not(:fullscreen):not(:-webkit-full-screen):not(
+		.is-fullscreen
+	)
+	.pb-filmstrip-gallery-main {
+	height: var(--pb-filmstrip-main-height, clamp(500px, 62vw, 1100px));
+	max-height: var(--pb-filmstrip-main-max-vh, 85vh);
+}
+.pb-filmstrip-gallery.is-bottom.is-fullscreen,
+.pb-filmstrip-gallery.is-bottom.is-fullscreen
+	.pb-filmstrip-gallery-preview.is-bottom {
+	height: 100vh;
+}
+.pb-filmstrip-gallery-preview.is-left .pb-filmstrip-gallery-main {
+	order: 2;
+	height: var(--pb-filmstrip-side-height);
+}
+
+.pb-filmstrip-gallery-preview.is-right .pb-filmstrip-gallery-main {
+	order: 1;
+	height: var(--pb-filmstrip-side-height);
+}
+
+.pb-filmstrip-gallery.is-fullscreen
+	.pb-filmstrip-gallery-preview.is-left
+	.pb-filmstrip-gallery-main,
+.pb-filmstrip-gallery.is-fullscreen
+	.pb-filmstrip-gallery-preview.is-right
+	.pb-filmstrip-gallery-main {
+	height: 100vh;
+}
+
+.pb-filmstrip-gallery-nav {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	z-index: 3;
+	width: 34px;
+	height: 34px;
+	border: 1px solid var(--pb-filmstrip-nav-border);
+	background: var(--pb-filmstrip-nav-bg);
+	color: var(--pb-filmstrip-nav-color);
+	border-radius: 50%;
+	font-size: 22px;
+	line-height: 1;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+}
+
+.pb-filmstrip-gallery-nav-prev {
+	left: 10px;
+}
+
+.pb-filmstrip-gallery-nav-next {
+	right: 10px;
+}
+
+.pb-filmstrip-gallery-nav:focus-visible,
+.pb-filmstrip-gallery-strip-nav:focus-visible,
+.pb-filmstrip-gallery-thumb:focus-visible,
+.pb-filmstrip-gallery-fullscreen-button:focus-visible,
+.pb-filmstrip-gallery-autoplay-button:focus-visible,
+.pb-filmstrip-gallery-main .pb-image-block-download:focus-visible,
+.pb-filmstrip-gallery-main .pb-add-to-cart-icon:focus-visible {
+	outline: 2px solid var(--pb-filmstrip-active);
+	outline-offset: 2px;
+}
+
+.pb-filmstrip-gallery-main img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	overflow: hidden;
+}
+
+.pb-filmstrip-gallery-main-overlay-container {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	pointer-events: none;
+	display: flex;
+	align-items: flex-end;
+	overflow: hidden;
+}
+
+.pb-filmstrip-gallery-main-overlay {
+	width: 100%;
+	padding: 16px;
+	background: linear-gradient(
+		to top,
+		rgba(0, 0, 0, 0.78) 0%,
+		rgba(0, 0, 0, 0.45) 38%,
+		rgba(0, 0, 0, 0) 100%
+	);
 	color: #fff;
+	font-size: 14px;
+	line-height: 1.4;
+	opacity: 0;
+	transform: translateY(10px);
+	transition:
+		opacity 0.2s ease,
+		transform 0.2s ease;
+}
+
+.pb-filmstrip-gallery-main:hover .pb-filmstrip-gallery-main-overlay {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.pb-filmstrip-gallery-main-overlay .pb-product-name {
+	font-weight: 600;
+}
+
+.pb-filmstrip-gallery-main-overlay .pb-product-price {
+	margin-top: 4px;
+	font-weight: 500;
+}
+
+.pb-filmstrip-gallery-main-overlay .pb-product-price,
+.pb-filmstrip-gallery-main-overlay .pb-product-price * {
+	color: inherit;
+}
+
+.pb-filmstrip-gallery-main .pb-image-block-download {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	z-index: 4;
+	width: 24px !important;
+	height: 24px !important;
+	border: none;
+	border-radius: 4px;
+	padding: 2px !important;
+	cursor: pointer;
+	color: var(--pb-download-icon-color, var(--pb-filmstrip-text));
+	background-color: var(--pb-download-icon-bg, var(--pb-filmstrip-nav-bg));
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.pb-filmstrip-gallery-main .pb-image-block-download svg path,
+.pb-filmstrip-gallery-main .pb-add-to-cart-icon svg path,
+.pb-filmstrip-gallery-main .pb-add-to-cart-icon svg circle {
+	fill: currentcolor;
+}
+
+.pb-filmstrip-gallery-main .pb-add-to-cart-icon {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	z-index: 4;
+	width: 24px !important;
+	height: 24px !important;
+	border: none;
+	border-radius: 4px;
+	padding: 2px !important;
+	cursor: pointer;
+	color: var(--pb-cart-icon-color, var(--pb-filmstrip-text));
+	background-color: var(--pb-cart-icon-bg, var(--pb-filmstrip-nav-bg));
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.pb-filmstrip-gallery-main .pb-image-block-download.hover-only,
+.pb-filmstrip-gallery-main .pb-add-to-cart-icon.hover-only {
+	opacity: 0;
+}
+
+.pb-filmstrip-gallery-main:hover .pb-image-block-download.hover-only,
+.pb-filmstrip-gallery-main:hover .pb-add-to-cart-icon.hover-only {
+	opacity: 1;
+}
+
+.pb-filmstrip-gallery-main .pb-image-block-download.hover-only:focus-visible,
+.pb-filmstrip-gallery-main .pb-add-to-cart-icon.hover-only:focus-visible {
+	opacity: 1;
+}
+
+.pb-filmstrip-gallery-main-empty {
+	padding: 16px;
+	font-size: 13px;
+	color: var(--pb-filmstrip-muted);
+}
+
+.pb-filmstrip-gallery-bottom-controls {
+	position: absolute;
+	bottom: 8px;
+	right: 8px;
+	z-index: 2;
+	display: inline-flex;
+	gap: 6px;
+}
+
+.pb-filmstrip-gallery-fullscreen-button,
+.pb-filmstrip-gallery-autoplay-button {
+	border: 1px solid var(--pb-filmstrip-border);
+	background: var(--pb-filmstrip-surface);
+	color: var(--pb-filmstrip-text);
+	border-radius: 4px;
+	width: 24px;
+	height: 24px;
 	padding: 2px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.pb-filmstrip-gallery-fullscreen-button {
+	cursor: pointer;
+}
+
+.pb-filmstrip-gallery-autoplay-button {
+	cursor: pointer;
+}
+
+.pb-filmstrip-gallery-main .pb-filmstrip-gallery-fullscreen-button svg {
+	width: 16px;
+	height: 16px;
+	color: currentcolor;
+}
+
+.pb-filmstrip-gallery-main .pb-filmstrip-gallery-fullscreen-button svg path {
+	fill: currentcolor;
+	stroke: currentcolor;
+}
+
+.pb-filmstrip-gallery-main .pb-filmstrip-gallery-autoplay-button svg path {
+	fill: currentcolor;
+}
+
+.pb-filmstrip-gallery-thumbnails-wrapper {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 6px;
+}
+
+.pb-filmstrip-gallery-preview.is-left .pb-filmstrip-gallery-thumbnails-wrapper {
+	order: 1;
+}
+
+.pb-filmstrip-gallery-preview.is-right
+	.pb-filmstrip-gallery-thumbnails-wrapper {
+	order: 2;
+}
+
+.pb-filmstrip-gallery-strip-nav {
+	flex: 0 0 30px;
+	width: 30px;
+	height: 30px;
+	border: 1px solid var(--pb-filmstrip-nav-border);
+	background: var(--pb-filmstrip-surface);
+	color: var(--pb-filmstrip-text);
+	border-radius: 50%;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 20px;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.pb-filmstrip-gallery-thumbnails {
+	display: flex;
+	flex: 1 1 auto;
+	gap: 8px;
+	overflow: auto;
+	padding-bottom: 2px;
+}
+
+.pb-filmstrip-gallery-preview.is-left .pb-filmstrip-gallery-thumbnails-wrapper,
+.pb-filmstrip-gallery-preview.is-right
+	.pb-filmstrip-gallery-thumbnails-wrapper {
+	flex: 0 0 118px;
+	flex-direction: column;
+	align-items: stretch;
+	width: 118px;
+	height: var(--pb-filmstrip-main-height, clamp(500px, 62vw, 1100px));
+	min-height: 0;
+	align-self: stretch;
+	padding: 6px 0;
+	box-sizing: border-box;
+}
+.is-fullscreen
+	.pb-filmstrip-gallery-preview.is-left
+	.pb-filmstrip-gallery-thumbnails-wrapper,
+.is-fullscreen
+	.pb-filmstrip-gallery-preview.is-right
+	.pb-filmstrip-gallery-thumbnails-wrapper {
+	height: 100vh !important;
+}
+
+.pb-filmstrip-gallery-strip-nav.is-vertical {
+	align-self: center;
+}
+
+.pb-filmstrip-gallery-preview.is-left .pb-filmstrip-gallery-thumbnails,
+.pb-filmstrip-gallery-preview.is-right .pb-filmstrip-gallery-thumbnails {
+	flex-direction: column;
+	width: 100%;
+	height: 100%;
+	max-height: 100%;
+	min-height: 0;
+	overflow-y: auto;
+	overflow-x: hidden;
+	padding-bottom: 0;
+	padding-right: 2px;
+}
+
+.pb-filmstrip-gallery-thumb {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 96px;
+	height: 74px;
+	padding: 0;
+	background: var(--pb-filmstrip-surface);
+	border: 1px solid var(--pb-filmstrip-border);
+	border-radius: 4px;
+	overflow: hidden;
+	cursor: pointer;
+}
+
+.pb-filmstrip-gallery-preview.is-left .pb-filmstrip-gallery-thumb,
+.pb-filmstrip-gallery-preview.is-right .pb-filmstrip-gallery-thumb {
+	width: 100%;
+	flex: 0 0 auto;
+	height: 74px;
+}
+
+.pb-filmstrip-gallery-thumb img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.pb-filmstrip-gallery-thumb.is-active {
+	border-color: var(--pb-filmstrip-active);
+	box-shadow: 0 0 0 1px var(--pb-filmstrip-active);
+}
+
+.pb-filmstrip-gallery-inner-blocks {
+	display: none;
+}
+
+@media (max-width: 782px) {
+	.pb-filmstrip-gallery-preview.is-left,
+	.pb-filmstrip-gallery-preview.is-right {
+		flex-direction: column;
+	}
+
+	.pb-filmstrip-gallery-preview.is-left .pb-filmstrip-gallery-main,
+	.pb-filmstrip-gallery-preview.is-right .pb-filmstrip-gallery-main {
+		order: 1;
+		height: clamp(300px, 58vw, 520px);
+	}
+
+	.pb-filmstrip-gallery-preview.is-left
+		.pb-filmstrip-gallery-thumbnails-wrapper,
+	.pb-filmstrip-gallery-preview.is-right
+		.pb-filmstrip-gallery-thumbnails-wrapper {
+		order: 2;
+		flex-direction: row;
+		align-items: center;
+		width: auto;
+		height: auto;
+		max-height: none;
+		flex: 1 1 auto;
+	}
+
+	.pb-filmstrip-gallery-preview.is-left .pb-filmstrip-gallery-thumbnails,
+	.pb-filmstrip-gallery-preview.is-right .pb-filmstrip-gallery-thumbnails {
+		flex-direction: row;
+		width: auto;
+		height: auto;
+		max-height: none;
+		overflow-x: auto;
+		overflow-y: hidden;
+		padding-right: 0;
+		padding-bottom: 2px;
+	}
+
+	.pb-filmstrip-gallery-preview.is-left .pb-filmstrip-gallery-thumb,
+	.pb-filmstrip-gallery-preview.is-right .pb-filmstrip-gallery-thumb {
+		width: auto;
+		flex: 0 0 96px;
+	}
 }

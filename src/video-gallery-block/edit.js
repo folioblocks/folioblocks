@@ -417,7 +417,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					/>
 				</PanelBody>
 				<PanelBody
-					title={ __( 'Lightbox & Hover Settings', 'folioblocks' ) }
+					title={ __( 'Lightbox & Hover Overlay Settings', 'folioblocks' ) }
 					initialOpen={ true }
 				>
 					<ToggleControl

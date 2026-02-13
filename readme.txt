@@ -5,7 +5,7 @@ Tags: gallery, image gallery, photo gallery, video gallery, lightbox,
 Tested up to:      6.9
 Requires at least: 6.3
 Requires PHP: 7.4
-Stable tag:        1.1.3
+Stable tag:        1.1.5
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -103,6 +103,17 @@ No, the galleries will remain in place on your site. However, the advanced layou
 6. Video Gallery block populated with images
 
 == Changelog ==
+
+= 1.1.5 =
+* Fixed visual layout bugs related to responsive design in Filmstrip Gallery. 
+* Updated Filmstrip Gallery to set image ID and srcset size. 
+* Updated Carousel Gallery to use custom CompactTwoColorControl. 
+
+= 1.1.4 =
+* Build initial render.php file for Filmstrip Gallery.
+* Added support for Block Transforms for Carousel Gallery and Filmstrip Gallery. 
+* Filmstrip Gallery block now supports setting image resolution. 
+* Filmstrip Gallery now supports showing title on hover. 
 
 = 1.1.3 = 
 * Added Overlay styles (Default, Blur, & Color) to Video Block & Video Gallery.

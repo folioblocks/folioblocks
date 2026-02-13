@@ -9,6 +9,17 @@ import Edit from './edit';
 import Save from './save';
 import deprecated from './deprecated';
 import metadata from './block.json';
+import {
+	buildGalleryTransforms,
+	disableGalleryWrapperTransforms,
+} from '../pb-helpers/galleryTransforms';
+
+disableGalleryWrapperTransforms();
+
+const CAROUSEL_FILMSTRIP_TRANSFORM_BLOCKS = [
+	'folioblocks/carousel-gallery-block',
+	'folioblocks/filmstrip-gallery-block',
+];
 
 registerBlockType( metadata.name, {
 	icon: {
@@ -60,4 +71,8 @@ registerBlockType( metadata.name, {
 	edit: Edit,
 	save: Save,
 	deprecated,
+	transforms: buildGalleryTransforms(
+		metadata.name,
+		CAROUSEL_FILMSTRIP_TRANSFORM_BLOCKS
+	),
 } );

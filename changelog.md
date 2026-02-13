@@ -4,6 +4,23 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.5] - 2026-02-13
+
+### Fixed
+- Fixed visual layout bugs in Filmstrip Gallery. 
+
+### Changed
+- Updated Filmstrip Gallery to set image ID and srcset size. 
+- Updated Carousel Gallery to use custom CompactTwoColorControl. 
+
+## [1.1.4] - 2026-02-11
+
+### Added
+- Build initial render.php file for Filmstrip Gallery.
+- Added support for Block Transforms for Carousel Gallery and Filmstrip Gallery. 
+- Filmstrip Gallery block now supports setting image resolution. 
+- Filmstrip Gallery now supports showing title on hover. 
+
 ## [1.1.3] - 2026-02-09
 
 ### Added

@@ -4,7 +4,6 @@
  */
 
 import { __ } from '@wordpress/i18n';
-import { PanelColorSettings } from '@wordpress/block-editor';
 import {
 	ToggleControl,
 	SelectControl,
@@ -651,23 +650,24 @@ addFilter(
 		}
 
 		return (
-			<PanelColorSettings
-				title={ __( 'Carousel Control Styles', 'folioblocks' ) }
-				initialOpen={ true }
-				colorSettings={ [
-					{
-						value: attributes.controlsBackgroundColor,
-						onChange: ( value ) =>
-							setAttributes( { controlsBackgroundColor: value } ),
-						label: __( 'Control Background Color', 'folioblocks' ),
-					},
-					{
-						value: attributes.controlsIconColor,
-						onChange: ( value ) =>
-							setAttributes( { controlsIconColor: value } ),
-						label: __( 'Control Icon Color', 'folioblocks' ),
-					},
-				] }
+			<CompactTwoColorControl
+				label={ __( 'Carousel Control Colors', 'folioblocks' ) }
+				value={ {
+					first: attributes.controlsBackgroundColor,
+					second: attributes.controlsIconColor,
+				} }
+				onChange={ ( next ) =>
+					setAttributes( {
+						controlsBackgroundColor: next?.first || '',
+						controlsIconColor: next?.second || '',
+					} )
+				}
+				firstLabel={ __( 'Background', 'folioblocks' ) }
+				secondLabel={ __( 'Icon', 'folioblocks' ) }
+				help={ __(
+					'Set background and icon colors for the carousel controls.',
+					'folioblocks'
+				) }
 			/>
 		);
 	}

@@ -1,6 +1,6 @@
 import { createBlock, getBlockType } from '@wordpress/blocks';
 
-const GALLERY_BLOCKS = [
+const DEFAULT_GALLERY_BLOCKS = [
 	'folioblocks/grid-gallery-block',
 	'folioblocks/justified-gallery-block',
 	'folioblocks/masonry-gallery-block',
@@ -96,8 +96,11 @@ export const disableGalleryWrapperTransforms = () => {
 	hasPatchedWrapperTransforms = true;
 };
 
-export const buildGalleryTransforms = ( currentBlockName ) => {
-	const sourceBlocks = GALLERY_BLOCKS.filter(
+export const buildGalleryTransforms = (
+	currentBlockName,
+	sourceBlockNames = DEFAULT_GALLERY_BLOCKS
+) => {
+	const sourceBlocks = sourceBlockNames.filter(
 		( blockName ) => blockName !== currentBlockName
 	);
 

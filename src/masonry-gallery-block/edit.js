@@ -489,7 +489,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 					) }
 				</PanelBody>
 				<PanelBody
-					title={ __( 'Lightbox & Hover Settings', 'folioblocks' ) }
+					title={ __( 'Lightbox & Hover Overlay Settings', 'folioblocks' ) }
 					initialOpen={ true }
 				>
 					{ applyFilters(

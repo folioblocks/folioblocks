@@ -7,6 +7,18 @@ import './style.scss';
 import Edit from './edit';
 import Save from './save';
 import metadata from './block.json';
+import {
+	buildGalleryTransforms,
+	disableGalleryWrapperTransforms,
+} from '../pb-helpers/galleryTransforms';
+
+disableGalleryWrapperTransforms();
+
+const FILMSTRIP_CAROUSEL_TRANSFORM_BLOCKS = [
+	'folioblocks/filmstrip-gallery-block',
+	'folioblocks/carousel-gallery-block',
+];
+
 registerBlockType( metadata, {
 	icon: {
 		src: (
@@ -32,4 +44,8 @@ registerBlockType( metadata, {
 	},
 	edit: Edit,
 	save: Save,
+	transforms: buildGalleryTransforms(
+		metadata.name,
+		FILMSTRIP_CAROUSEL_TRANSFORM_BLOCKS
+	),
 } );

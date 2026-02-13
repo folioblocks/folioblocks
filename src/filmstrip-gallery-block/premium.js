@@ -185,6 +185,70 @@ addFilter(
 );
 
 addFilter(
+	'folioBlocks.filmstripGallery.onHoverTitleToggle',
+	'folioblocks/filmstrip-gallery-premium-title-toggle',
+	( defaultContent, props ) => {
+		const { attributes, setAttributes } = props;
+		const { onHoverTitle, enableWooCommerce, wooProductPriceOnHover } =
+			attributes;
+
+		return (
+			<>
+				<ToggleControl
+					label={ __( 'Show Overlay on Hover', 'folioblocks' ) }
+					help={
+						enableWooCommerce
+							? __(
+									'Display Image title or Product Info when hovering over images.',
+									'folioblocks'
+							  )
+							: __(
+									'Display Image title when hovering over image.',
+									'folioblocks'
+							  )
+					}
+					__nextHasNoMarginBottom
+					checked={ !! attributes.onHoverTitle }
+					onChange={ ( value ) =>
+						setAttributes( { onHoverTitle: value } )
+					}
+				/>
+
+				{ enableWooCommerce && onHoverTitle && (
+					<SelectControl
+						label={ __( 'Overlay Content', 'folioblocks' ) }
+						value={ wooProductPriceOnHover ? 'product' : 'title' }
+						options={ [
+							{
+								label: __( 'Show Image Title', 'folioblocks' ),
+								value: 'title',
+							},
+							{
+								label: __( 'Show Product Info', 'folioblocks' ),
+								value: 'product',
+							},
+						] }
+						onChange={ ( val ) => {
+							// Ensure hover info is enabled, then switch mode
+							setAttributes( {
+								onHoverTitle: true,
+								wooProductPriceOnHover: val === 'product',
+							} );
+						} }
+						__nextHasNoMarginBottom
+						__next40pxDefaultSize
+						help={ __(
+							'Choose what appears when hovering over images.',
+							'folioblocks'
+						) }
+					/>
+				) }
+			</>
+		);
+	}
+);
+
+addFilter(
 	'folioBlocks.filmstripGallery.downloadControls',
 	'folioblocks/filmstrip-gallery-premium-downloads',
 	( defaultContent, props ) => {
