@@ -7,6 +7,7 @@
 import { __ } from '@wordpress/i18n';
 import {
 	InspectorControls,
+	MediaPlaceholder,
 	MediaUpload,
 	MediaUploadCheck,
 	useBlockProps,
@@ -317,29 +318,35 @@ export default function Edit( { attributes, setAttributes } ) {
 	}, [ mediaDesktop ] );
 
 	const hasAnyBackground = isSelfHosted || isVimeo;
+	const showInitialPlaceholder = ! hasAnyBackground;
+	const blockStyle = hasAnyBackground
+		? {
+				// Mirror the front-end variables we will output in render.php.
+				'--pb-bgvid-h-desktop': `${ heightDesktop }vh`,
+				'--pb-bgvid-h-tablet': `${ heightTablet }vh`,
+				'--pb-bgvid-h-mobile': `${ heightMobile }vh`,
+
+				// Responsive focal point vars (front end will switch them via media queries).
+				'--pb-bgvid-pos-x-desktop': `${ objectPositionXDesktop }%`,
+				'--pb-bgvid-pos-x-tablet': `${ objectPositionXTablet }%`,
+				'--pb-bgvid-pos-x-mobile': `${ objectPositionXMobile }%`,
+				'--pb-bgvid-pos-y-desktop': `${ objectPositionYDesktop }%`,
+				'--pb-bgvid-pos-y-tablet': `${ objectPositionYTablet }%`,
+				'--pb-bgvid-pos-y-mobile': `${ objectPositionYMobile }%`,
+
+				// Editor preview uses the active viewport breakpoint.
+				'--pb-bgvid-pos-x': `${ previewPosX }%`,
+				'--pb-bgvid-pos-y': `${ previewPosY }%`,
+
+				'--pb-bgvid-overlay': `rgba(0,0,0,0)`,
+		  }
+		: {};
 
 	const blockProps = useBlockProps( {
-		className: `pb-bgvid${ hasAnyBackground ? ' has-media' : '' }`,
-		style: {
-			// Mirror the front-end variables we will output in render.php.
-			'--pb-bgvid-h-desktop': `${ heightDesktop }vh`,
-			'--pb-bgvid-h-tablet': `${ heightTablet }vh`,
-			'--pb-bgvid-h-mobile': `${ heightMobile }vh`,
-
-			// Responsive focal point vars (front end will switch them via media queries).
-			'--pb-bgvid-pos-x-desktop': `${ objectPositionXDesktop }%`,
-			'--pb-bgvid-pos-x-tablet': `${ objectPositionXTablet }%`,
-			'--pb-bgvid-pos-x-mobile': `${ objectPositionXMobile }%`,
-			'--pb-bgvid-pos-y-desktop': `${ objectPositionYDesktop }%`,
-			'--pb-bgvid-pos-y-tablet': `${ objectPositionYTablet }%`,
-			'--pb-bgvid-pos-y-mobile': `${ objectPositionYMobile }%`,
-
-			// Editor preview uses the active viewport breakpoint.
-			'--pb-bgvid-pos-x': `${ previewPosX }%`,
-			'--pb-bgvid-pos-y': `${ previewPosY }%`,
-
-			'--pb-bgvid-overlay': `rgba(0,0,0,0)`,
-		},
+		className: `pb-bgvid${ hasAnyBackground ? ' has-media' : '' }${
+			showInitialPlaceholder ? ' is-placeholder' : ''
+		}`,
+		style: blockStyle,
 	} );
 
 	// We store overlay as color + opacity, but preview via a computed rgba-like overlay.
@@ -381,6 +388,37 @@ export default function Edit( { attributes, setAttributes } ) {
 			mediaDesktop: id
 				? { provider: 'vimeo', id, url: nextUrl }
 				: { provider: 'vimeo', id: null, url: nextUrl },
+		} );
+	};
+
+	const onSelectVideoUrl = ( url ) => {
+		if ( ! url ) {
+			return;
+		}
+
+		const isLikelyVimeo = /vimeo\.com/i.test( url );
+		const vimeoId = extractVimeoId( url );
+
+		if ( isLikelyVimeo ) {
+			setAttributes( {
+				sourceProvider: 'vimeo',
+				mediaDesktop: {
+					provider: 'vimeo',
+					id: vimeoId,
+					url,
+				},
+			} );
+			return;
+		}
+
+		setAttributes( {
+			sourceProvider: 'self',
+			mediaDesktop: {
+				provider: 'self',
+				id: null,
+				url,
+				mime: '',
+			},
 		} );
 	};
 
@@ -882,15 +920,25 @@ export default function Edit( { attributes, setAttributes } ) {
 				</div>
 
 				<div { ...innerBlocksProps }>
-					{ ! hasAnyBackground && (
-						<div style={ { marginBottom: 12 } }>
-							<Notice status="warning" isDismissible={ false }>
-								{ __(
-									'Select a self-hosted video or paste a Vimeo URL to set the background. You can still add blocks inside right away.',
+					{ showInitialPlaceholder && (
+						<MediaPlaceholder
+							icon={ <IconBackgroundVideo /> }
+							labels={ {
+								title: __(
+									'Add Background Video',
 									'folioblocks'
-								) }
-							</Notice>
-						</div>
+								),
+								instructions: __(
+									'Upload a video, select one from your media library, or insert a URL (including Vimeo).',
+									'folioblocks'
+								),
+							} }
+							allowedTypes={ [ 'video' ] }
+							accept="video/*"
+							multiple={ false }
+							onSelect={ onSelectDesktopVideo }
+							onSelectURL={ onSelectVideoUrl }
+						/>
 					) }
 					{ innerBlocksProps.children }
 				</div>

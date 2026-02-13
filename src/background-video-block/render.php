@@ -49,26 +49,36 @@ $fbks_view_data = array(
 	'playOnHover'    => $fbks_play_on_hover,
 );
 
+$fbks_has_media = (
+	( 'self' === $fbks_media_provider && ! empty( $fbks_media_url ) ) ||
+	( 'vimeo' === $fbks_media_provider && ! empty( $fbks_vimeo_id ) )
+);
+
+$fbks_wrapper_style = '';
+if ( $fbks_has_media ) {
+	$fbks_wrapper_style = sprintf(
+		'--pb-bgvid-h-desktop:%1$svh;--pb-bgvid-h-tablet:%2$svh;--pb-bgvid-h-mobile:%3$svh;'
+		. '--pb-bgvid-pos-x-desktop:%4$s%%;--pb-bgvid-pos-x-tablet:%5$s%%;--pb-bgvid-pos-x-mobile:%6$s%%;'
+		. '--pb-bgvid-pos-y-desktop:%7$s%%;--pb-bgvid-pos-y-tablet:%8$s%%;--pb-bgvid-pos-y-mobile:%9$s%%;'
+		. '--pb-bgvid-pos-x:%4$s%%;--pb-bgvid-pos-y:%7$s%%;'
+		. '--pb-bgvid-overlay:%10$s;',
+		esc_attr( $fbks_height_desktop ),
+		esc_attr( $fbks_height_tablet ),
+		esc_attr( $fbks_height_mobile ),
+		esc_attr( $fbks_object_pos_x_desktop ),
+		esc_attr( $fbks_object_pos_x_tablet ),
+		esc_attr( $fbks_object_pos_x_mobile ),
+		esc_attr( $fbks_object_pos_y_desktop ),
+		esc_attr( $fbks_object_pos_y_tablet ),
+		esc_attr( $fbks_object_pos_y_mobile ),
+		esc_attr( sprintf( 'rgba(0,0,0,0)' ) )
+	);
+}
+
 $fbks_wrapper_attributes = get_block_wrapper_attributes(
 	array(
-		'class' => 'pb-bgvid',
-		'style' => sprintf(
-			'--pb-bgvid-h-desktop:%1$svh;--pb-bgvid-h-tablet:%2$svh;--pb-bgvid-h-mobile:%3$svh;'
-			. '--pb-bgvid-pos-x-desktop:%4$s%%;--pb-bgvid-pos-x-tablet:%5$s%%;--pb-bgvid-pos-x-mobile:%6$s%%;'
-			. '--pb-bgvid-pos-y-desktop:%7$s%%;--pb-bgvid-pos-y-tablet:%8$s%%;--pb-bgvid-pos-y-mobile:%9$s%%;'
-			. '--pb-bgvid-pos-x:%4$s%%;--pb-bgvid-pos-y:%7$s%%;'
-			. '--pb-bgvid-overlay:%10$s;',
-			esc_attr( $fbks_height_desktop ),
-			esc_attr( $fbks_height_tablet ),
-			esc_attr( $fbks_height_mobile ),
-			esc_attr( $fbks_object_pos_x_desktop ),
-			esc_attr( $fbks_object_pos_x_tablet ),
-			esc_attr( $fbks_object_pos_x_mobile ),
-			esc_attr( $fbks_object_pos_y_desktop ),
-			esc_attr( $fbks_object_pos_y_tablet ),
-			esc_attr( $fbks_object_pos_y_mobile ),
-			esc_attr( sprintf( 'rgba(0,0,0,0)' ) )
-		)
+		'class' => $fbks_has_media ? 'pb-bgvid has-media' : 'pb-bgvid',
+		'style' => $fbks_wrapper_style,
 	)
 );
 

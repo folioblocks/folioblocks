@@ -33,3 +33,12 @@
 	outline: 1px dashed rgba(0, 0, 0, 0.15);
 	outline-offset: -1px;
 }
+
+/* Hide inner block inserters while initial media placeholder is active. */
+.pb-bgvid.is-placeholder {
+	.block-list-appender,
+	.block-editor-default-block-appender,
+	.block-editor-button-block-appender {
+		display: none;
+	}
+}

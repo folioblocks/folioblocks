@@ -7,8 +7,8 @@
 	position: relative;
 	overflow: hidden;
 
-	/* Height variable is set inline in edit.js for preview */
-	height: var(--pb-bgvid-h-desktop, 70vh);
+	/* Keep natural flow until media is selected. */
+	height: auto;
 
 	/* Responsive focal point mapping (defaults to desktop). */
 	--pb-bgvid-pos-x: var(--pb-bgvid-pos-x-desktop, 50%);
@@ -18,10 +18,15 @@
 	padding: 0;
 }
 
+.pb-bgvid.has-media {
+	/* Height variable is set inline in edit.js/render.php only when media exists. */
+	height: var(--pb-bgvid-h-desktop, 70vh);
+}
+
 /* Tablet */
 @media (max-width: 1024px) {
 
-	.pb-bgvid {
+	.pb-bgvid.has-media {
 		height: var(--pb-bgvid-h-tablet);
 		--pb-bgvid-pos-x: var(--pb-bgvid-pos-x-tablet, var(--pb-bgvid-pos-x-desktop, 50%));
 		--pb-bgvid-pos-y: var(--pb-bgvid-pos-y-tablet, var(--pb-bgvid-pos-y-desktop, 50%));
@@ -31,7 +36,7 @@
 /* Mobile */
 @media (max-width: 768px) {
 
-	.pb-bgvid {
+	.pb-bgvid.has-media {
 		height: var(--pb-bgvid-h-mobile);
 		--pb-bgvid-pos-x: var(--pb-bgvid-pos-x-mobile, var(--pb-bgvid-pos-x-desktop, 50%));
 		--pb-bgvid-pos-y: var(--pb-bgvid-pos-y-mobile, var(--pb-bgvid-pos-y-desktop, 50%));
