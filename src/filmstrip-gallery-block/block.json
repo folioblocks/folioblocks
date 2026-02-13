@@ -16,8 +16,8 @@
 	"supports": {
 		"align": ["wide", "full"],
 		"color": {
-			"background": true,
-			"gradients": true,
+			"background": false,
+			"gradients": false,
 			"text": false
 		},
 		"spacing": {

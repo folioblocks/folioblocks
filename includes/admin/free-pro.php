@@ -77,11 +77,34 @@
                     <tr><td>Carousel Playback Controls</td><td class="unavailable">❌</td><td>✅</td></tr>
                     <tr><td>Lightbox</td><td>✅</td><td>✅</td></tr>
                     <tr><td>Show Caption in Lightbox</td><td>✅</td><td>✅</td></tr>
-                    <tr><td>Show Title in Overlay on Hover</td><td>✅</td><td>✅</td></tr>
+                    <tr><td>Show Title in Overlay on Hover</td><td>❌</td><td>✅</td></tr>
                     <tr><td>Custom Hover Overlays (Blur, Fade, Gradient, Chip, & Color)</td><td>❌</td><td>✅</td></tr>
                     <tr><td>Carousel Playback Control Styles</td><td class="unavailable">❌</td><td>✅</td></tr>
                     <tr><td>Custom Border &amp; Border Radius on Slides</td><td class="unavailable">❌</td><td>✅</td></tr>
                     <tr><td>Drop Shadow Effect on Images</td><td class="unavailable">❌</td><td>✅</td></tr>
+                    </tbody>
+                </table>
+
+                <table class="pb-comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Filmstrip Gallery Block</th>
+                            <th>Free</th>
+                            <th>Pro</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr><td>Set Image Resolution on Slides</td><td>✅</td><td>✅</td></tr>
+                    <tr><td>Responsive Design works on Desktop, Tablet, and Mobile</td><td>✅</td><td>✅</td></tr>
+                    <tr><td>Multiple Layout Options</td><td class="unavailable">✅</td><td>✅</td></tr>
+                    <tr><td>Light Mode & Dark Mode Styles</td><td class="unavailable">❌</td><td>✅</td></tr>
+                    <tr><td>Enable Image Downloads</td><td class="unavailable">❌</td><td>✅</td></tr>
+                    <tr><td>Link to store products with WooCommerce Integration</td><td class="unavailable">❌</td><td>✅</td></tr>
+                    <tr><td>Disable Right-Click</td><td class="unavailable">❌</td><td>✅</td></tr>
+                    <tr><td>Custom Lazy Load</td><td class="unavailable">❌</td><td>✅</td></tr>
+                    <tr><td>Autoplay Gallery</td><td class="unavailable">❌</td><td>✅</td></tr>
+                    <tr><td>Full-Screen Mode</td><td>❌</td><td>✅</td></tr>
+                    <tr><td>Show Title in Overlay on Hover</td><td>❌</td><td>✅</td></tr>
                     </tbody>
                 </table>
 

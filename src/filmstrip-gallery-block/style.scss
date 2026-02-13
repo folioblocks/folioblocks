@@ -254,7 +254,7 @@
 	z-index: 4;
 	width: 24px !important;
 	height: 24px !important;
-	border: none;
+	border: 1px solid var(--pb-filmstrip-border);
 	border-radius: 4px;
 	padding: 2px !important;
 	cursor: pointer;
@@ -278,7 +278,7 @@
 	z-index: 4;
 	width: 24px !important;
 	height: 24px !important;
-	border: none;
+	border: 1px solid var(--pb-filmstrip-border);
 	border-radius: 4px;
 	padding: 2px !important;
 	cursor: pointer;

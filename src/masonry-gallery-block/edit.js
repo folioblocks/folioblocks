@@ -473,7 +473,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 								</strong>
 								<br />
 								{ __(
-									'This is a premium feature. Unlock all features:',
+									'This is a premium feature. Unlock all features: ',
 									'folioblocks'
 								) }
 								<a
@@ -522,7 +522,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 								</strong>
 								<br />
 								{ __(
-									'This is a premium feature. Unlock all features:',
+									'This is a premium feature. Unlock all features: ',
 									'folioblocks'
 								) }
 								<a
@@ -553,7 +553,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 								</strong>
 								<br />
 								{ __(
-									'This is a premium feature. Unlock all features:',
+									'This is a premium feature. Unlock all features: ',
 									'folioblocks'
 								) }
 								<a
@@ -584,7 +584,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 								</strong>
 								<br />
 								{ __(
-									'This is a premium feature. Unlock all features:',
+									'This is a premium feature. Unlock all features: ',
 									'folioblocks'
 								) }
 								<a
@@ -616,7 +616,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 									</strong>
 									<br />
 									{ __(
-										'This is a premium feature. Unlock all features:',
+										'This is a premium feature. Unlock all features: ',
 										'folioblocks'
 									) }
 									<a
@@ -650,7 +650,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 							</strong>
 							<br />
 							{ __(
-								'This is a premium feature. Unlock all features:',
+								'This is a premium feature. Unlock all features: ',
 								'folioblocks'
 							) }
 							<a
@@ -676,7 +676,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 							</strong>
 							<br />
 							{ __(
-								'This is a premium feature. Unlock all features:',
+								'This is a premium feature. Unlock all features: ',
 								'folioblocks'
 							) }
 							<a
@@ -708,7 +708,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 								</strong>
 								<br />
 								{ __(
-									'This is a premium feature. Unlock all features:',
+									'This is a premium feature. Unlock all features: ',
 									'folioblocks'
 								) }
 								<a
@@ -732,7 +732,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 							</strong>
 							<br />
 							{ __(
-								'This is a premium feature. Unlock all features:',
+								'This is a premium feature. Unlock all features: ',
 								'folioblocks'
 							) }
 							<a

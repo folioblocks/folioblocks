@@ -19,3 +19,10 @@
 		fill: #fff;
 	}
 }
+
+/* Keep the initial MediaPlaceholder state visually neutral in the editor. */
+.wp-block-folioblocks-filmstrip-gallery-block.pb-filmstrip-gallery.is-editor-empty {
+	border: 0;
+	padding: 0;
+	background: transparent;
+}

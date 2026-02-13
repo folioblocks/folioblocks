@@ -14,7 +14,6 @@ import {
 	PanelBody,
 	Notice,
 	SelectControl,
-	ToggleControl,
 	ToolbarGroup,
 	ToolbarButton,
 } from '@wordpress/components';
@@ -401,8 +400,11 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		];
 	}
 
+	const hasGalleryContent = innerBlocks.length > 0;
 	const blockProps = useBlockProps( {
-		className: `pb-filmstrip-gallery is-${ filmstripPosition } is-theme-${ colorMode }`,
+		className: hasGalleryContent
+			? `pb-filmstrip-gallery is-${ filmstripPosition } is-theme-${ colorMode }`
+			: 'pb-filmstrip-gallery is-editor-empty',
 	} );
 
 	applyFilters( 'folioBlocks.filmstripGallery.editorEnhancements', null, {
@@ -842,18 +844,32 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
-					<ToggleControl
-						label={ __( 'Show Fullscreen Button', 'folioblocks' ) }
-						checked={ enableFullscreen }
-						onChange={ ( value ) =>
-							setAttributes( { enableFullscreen: value } )
-						}
-						help={ __(
-							'Displays a fullscreen button. It is non-interactive in the editor preview.',
-							'folioblocks'
-						) }
-						__nextHasNoMarginBottom
-					/>
+					{ applyFilters(
+						'folioBlocks.filmstripGallery.enableFullscreenToggle',
+						<div style={ { marginBottom: '8px' } }>
+							<Notice status="info" isDismissible={ false }>
+								<strong>
+									{ __(
+										'Enable Full-Screen Mode',
+										'folioblocks'
+									) }
+								</strong>
+								<br />
+								{ __(
+									'This is a premium feature. Unlock all features:',
+									'folioblocks'
+								) }
+								<a
+									href={ checkoutUrl }
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									{ __( 'Upgrade to Pro', 'folioblocks' ) }
+								</a>
+							</Notice>
+						</div>,
+						{ attributes, setAttributes }
+					) }
 				</PanelBody>
 				<PanelBody
 					title={ __( 'Hover Overlay Settings', 'folioblocks' ) }
@@ -1016,7 +1032,25 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				>
 					{ applyFilters(
 						'folioBlocks.filmstripGallery.colorModeControl',
-						null,
+						<div style={ { marginBottom: '8px' } }>
+							<Notice status="info" isDismissible={ false }>
+								<strong>
+									{ __( 'Color Mode', 'folioblocks' ) }
+								</strong>
+								<br />
+								{ __(
+									'This is a premium feature. Unlock all features:',
+									'folioblocks'
+								) }
+								<a
+									href={ checkoutUrl }
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									{ __( 'Upgrade to Pro', 'folioblocks' ) }
+								</a>
+							</Notice>
+						</div>,
 						{
 							attributes,
 							setAttributes,

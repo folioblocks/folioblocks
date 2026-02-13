@@ -166,19 +166,23 @@ addFilter(
 );
 
 addFilter(
-	'folioBlocks.filmstripGallery.randomizeToggle',
-	'folioblocks/filmstrip-gallery-premium-toggle',
+	'folioBlocks.filmstripGallery.enableFullscreenToggle',
+	'folioblocks/filmstrip-gallery-premium-fullscreen',
 	( defaultContent, props ) => {
 		const { attributes, setAttributes } = props;
+
 		return (
 			<ToggleControl
-				label={ __( 'Randomize Image Order', 'folioblocks' ) }
-				checked={ !! attributes.randomizeOrder }
+				label={ __( 'Enable Full-Screen Mode', 'folioblocks' ) }
+				checked={ !! attributes.enableFullscreen }
 				onChange={ ( value ) =>
-					setAttributes( { randomizeOrder: value } )
+					setAttributes( { enableFullscreen: value } )
 				}
+				help={ __(
+					'Enable Full-Screen Mode for the gallery on the frontend.',
+					'folioblocks'
+				) }
 				__nextHasNoMarginBottom
-				help={ __( 'Randomize order of images.', 'folioblocks' ) }
 			/>
 		);
 	}

@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.1.5] - 2026-02-13
 
 ### Fixed
+- Moved Enable Full Screen into premium.js 
 - Fixed visual layout bugs in Filmstrip Gallery. 
 
 ### Changed

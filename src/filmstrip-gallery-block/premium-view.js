@@ -74,6 +74,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		if ( ! main ) {
 			return;
 		}
+		const isPro = !! window.folioBlocksData?.isPro;
 		main.setAttribute( 'tabindex', '-1' );
 
 		const overlayContainer = galleryRoot.querySelector(
@@ -92,6 +93,8 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		const fullscreenButton = galleryRoot.querySelector(
 			'.pb-filmstrip-gallery-fullscreen-button'
 		);
+		const canUseFullscreen =
+			isPro && !! settings.enableFullscreen && !! fullscreenButton;
 		const playIcon = autoplayButton?.querySelector(
 			'.pb-filmstrip-icon-play'
 		);
@@ -99,20 +102,25 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			'.pb-filmstrip-icon-pause'
 		);
 
-		const statusNode = document.createElement( 'p' );
-		statusNode.className = 'pb-filmstrip-gallery-a11y-status';
-		statusNode.setAttribute( 'aria-live', 'polite' );
-		statusNode.setAttribute( 'aria-atomic', 'true' );
+		let statusNode = null;
+		let instructionsNode = null;
+		if ( canUseFullscreen ) {
+			statusNode = document.createElement( 'p' );
+			statusNode.className = 'pb-filmstrip-gallery-a11y-status';
+			statusNode.setAttribute( 'aria-live', 'polite' );
+			statusNode.setAttribute( 'aria-atomic', 'true' );
 
-		const instructionsNode = document.createElement( 'p' );
-		instructionsNode.className = 'pb-filmstrip-gallery-a11y-instructions';
-		instructionsNode.id = `pb-filmstrip-gallery-fs-help-${
-			galleryIndex + 1
-		}`;
-		instructionsNode.textContent =
-			'Fullscreen mode active. Use left and right arrow keys to navigate images. Press Escape to exit fullscreen.';
-		galleryRoot.appendChild( statusNode );
-		galleryRoot.appendChild( instructionsNode );
+			instructionsNode = document.createElement( 'p' );
+			instructionsNode.className =
+				'pb-filmstrip-gallery-a11y-instructions';
+			instructionsNode.id = `pb-filmstrip-gallery-fs-help-${
+				galleryIndex + 1
+			}`;
+			instructionsNode.textContent =
+				'Fullscreen mode active. Use left and right arrow keys to navigate images. Press Escape to exit fullscreen.';
+			galleryRoot.appendChild( statusNode );
+			galleryRoot.appendChild( instructionsNode );
+		}
 
 		const baseMainDescribedBy = String(
 			main.getAttribute( 'aria-describedby' ) || ''
@@ -134,7 +142,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		};
 
 		const announce = ( message ) => {
-			if ( ! message ) {
+			if ( ! canUseFullscreen || ! statusNode || ! message ) {
 				return;
 			}
 
@@ -154,6 +162,10 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		};
 
 		const setMainDescribedBy = ( includeInstructions ) => {
+			if ( ! canUseFullscreen || ! instructionsNode ) {
+				return;
+			}
+
 			const describedBy = [ ...baseMainDescribedBy ];
 			if ( includeInstructions ) {
 				describedBy.push( instructionsNode.id );
@@ -209,7 +221,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		};
 
 		const syncFullscreenButtonState = () => {
-			if ( ! fullscreenButton ) {
+			if ( ! canUseFullscreen || ! fullscreenButton ) {
 				return;
 			}
 
@@ -226,7 +238,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		};
 
 		const requestGalleryFullscreen = () => {
-			if ( ! settings.enableFullscreen || ! fullscreenButton ) {
+			if ( ! canUseFullscreen ) {
 				return;
 			}
 
@@ -253,7 +265,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		};
 
 		const exitGalleryFullscreen = () => {
-			if ( ! isGalleryFullscreen() ) {
+			if ( ! canUseFullscreen || ! isGalleryFullscreen() ) {
 				return;
 			}
 
@@ -268,6 +280,10 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		};
 
 		const toggleFullscreen = () => {
+			if ( ! canUseFullscreen ) {
+				return;
+			}
+
 			if ( isGalleryFullscreen() ) {
 				exitGalleryFullscreen();
 			} else {
@@ -276,7 +292,11 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		};
 
 		const trapFullscreenFocus = ( event ) => {
-			if ( ! isGalleryFullscreen() || event.key !== 'Tab' ) {
+			if (
+				! canUseFullscreen ||
+				! isGalleryFullscreen() ||
+				event.key !== 'Tab'
+			) {
 				return;
 			}
 
@@ -310,6 +330,10 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		};
 
 		const syncFullscreenClass = () => {
+			if ( ! canUseFullscreen ) {
+				return;
+			}
+
 			const isFullscreen = isGalleryFullscreen();
 
 			galleryRoot.classList.toggle( 'is-fullscreen', isFullscreen );
@@ -561,15 +585,14 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 			if (
 				( event.key === 'f' || event.key === 'F' ) &&
-				settings.enableFullscreen &&
-				fullscreenButton
+				canUseFullscreen
 			) {
 				event.preventDefault();
 				toggleFullscreen();
 				return;
 			}
 
-			if ( ! isGalleryFullscreen() ) {
+			if ( ! canUseFullscreen || ! isGalleryFullscreen() ) {
 				return;
 			}
 
@@ -590,18 +613,23 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 		document.addEventListener( 'keydown', handleKeydown );
 
-		if ( fullscreenButton ) {
+		if ( canUseFullscreen && fullscreenButton ) {
 			fullscreenButton.addEventListener( 'click', ( event ) => {
 				event.preventDefault();
 				toggleFullscreen();
 			} );
 		}
 
-		document.addEventListener( 'fullscreenchange', syncFullscreenClass );
-		document.addEventListener(
-			'webkitfullscreenchange',
-			syncFullscreenClass
-		);
+		if ( canUseFullscreen ) {
+			document.addEventListener(
+				'fullscreenchange',
+				syncFullscreenClass
+			);
+			document.addEventListener(
+				'webkitfullscreenchange',
+				syncFullscreenClass
+			);
+		}
 
 		// Initialize premium UI state for the current active image.
 		const initialImage = api.getImages()[ api.getActiveIndex() ];
@@ -624,33 +652,41 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		}
 		syncAutoplayIcons();
 		restartAutoplay();
-		syncFullscreenButtonState();
-		syncFullscreenClass();
+		if ( canUseFullscreen ) {
+			syncFullscreenButtonState();
+			syncFullscreenClass();
+		}
 
 		window.addEventListener( 'pagehide', () => {
 			if ( autoplayTimer ) {
 				window.clearInterval( autoplayTimer );
 				autoplayTimer = null;
 			}
-			galleryRoot.classList.remove( 'is-fullscreen' );
-			if ( fullscreenTarget !== galleryRoot ) {
-				fullscreenTarget.classList.remove( 'is-fullscreen' );
+			if ( canUseFullscreen ) {
+				galleryRoot.classList.remove( 'is-fullscreen' );
+				if ( fullscreenTarget !== galleryRoot ) {
+					fullscreenTarget.classList.remove( 'is-fullscreen' );
+				}
+				document.removeEventListener(
+					'fullscreenchange',
+					syncFullscreenClass
+				);
+				document.removeEventListener(
+					'webkitfullscreenchange',
+					syncFullscreenClass
+				);
 			}
-			document.removeEventListener(
-				'fullscreenchange',
-				syncFullscreenClass
-			);
-			document.removeEventListener(
-				'webkitfullscreenchange',
-				syncFullscreenClass
-			);
 			document.removeEventListener( 'keydown', handleKeydown );
 			if ( announceTimer ) {
 				window.clearTimeout( announceTimer );
 				announceTimer = null;
 			}
-			statusNode.remove();
-			instructionsNode.remove();
+			if ( statusNode ) {
+				statusNode.remove();
+			}
+			if ( instructionsNode ) {
+				instructionsNode.remove();
+			}
 		} );
 	} );
 } );

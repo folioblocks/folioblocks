@@ -33,8 +33,10 @@ $fbks_lazy_load = false;
 $fbks_disable_right_click = false;
 $fbks_download_icon_style = '';
 $fbks_cart_icon_style = '';
+$fbks_can_use_premium = fbks_fs()->can_use_premium_code__premium_only();
+$fbks_enable_fullscreen = $fbks_can_use_premium && ! empty( $attributes['enableFullscreen'] );
 
-if ( fbks_fs()->can_use_premium_code__premium_only() ) {
+if ( $fbks_can_use_premium ) {
 	$fbks_autoplay = ! empty( $attributes['autoplay'] );
 	$fbks_autoplay_speed = isset( $attributes['autoplaySpeed'] ) ? (float) $attributes['autoplaySpeed'] : 3.0;
 	if ( $fbks_autoplay_speed <= 0 ) {
@@ -42,7 +44,6 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 	}
 
 	$fbks_pause_on_hover = ! empty( $attributes['pauseOnHover'] );
-	$fbks_enable_fullscreen = ! empty( $attributes['enableFullscreen'] );
 
 	if ( ! function_exists( 'is_plugin_active' ) ) {
 		include_once ABSPATH . 'wp-admin/includes/plugin.php';
@@ -165,7 +166,7 @@ if ( is_array( $fbks_inner_blocks ) && ! empty( $fbks_inner_blocks ) ) {
 		$fbks_woo_product_url = '';
 		$fbks_woo_link_action = $fbks_woo_default_link_action;
 
-		if ( fbks_fs()->can_use_premium_code__premium_only() ) {
+		if ( $fbks_can_use_premium ) {
 			$fbks_woo_product_id = isset( $fbks_image_attrs['wooProductId'] ) ? (int) $fbks_image_attrs['wooProductId'] : 0;
 			$fbks_woo_product_name = isset( $fbks_image_attrs['wooProductName'] ) ? (string) $fbks_image_attrs['wooProductName'] : '';
 			$fbks_woo_product_price = isset( $fbks_image_attrs['wooProductPrice'] ) ? wp_kses_post( (string) $fbks_image_attrs['wooProductPrice'] ) : '';
@@ -242,7 +243,7 @@ $fbks_active_image = ! empty( $fbks_images ) ? $fbks_images[0] : null;
 $fbks_has_multiple_images = count( $fbks_images ) > 1;
 
 $fbks_overlay_html = '';
-if ( fbks_fs()->can_use_premium_code__premium_only() ) {
+if ( $fbks_can_use_premium ) {
 	if ( $fbks_on_hover_title && is_array( $fbks_active_image ) ) {
 		$fbks_has_hover_title = '' !== trim( (string) ( $fbks_active_image['title'] ?? '' ) );
 		$fbks_has_product = (int) ( $fbks_active_image['wooProductId'] ?? 0 ) > 0;
@@ -268,7 +269,7 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 $fbks_wrapper_args = [
 	'class' => 'pb-filmstrip-gallery is-' . $fbks_position . ' is-theme-' . $fbks_color_mode,
 ];
-if ( fbks_fs()->can_use_premium_code__premium_only() ) {
+if ( $fbks_can_use_premium ) {
 	if ( $fbks_disable_right_click ) {
 		$fbks_wrapper_args['data-disable-right-click'] = 'true';
 	}
@@ -322,7 +323,7 @@ if ( false === $fbks_data_json ) {
 				</button>
 			<?php endif; ?>
 
-			<?php if ( fbks_fs()->can_use_premium_code__premium_only() ) : ?>
+			<?php if ( $fbks_can_use_premium ) : ?>
 				<?php if ( $fbks_autoplay || $fbks_enable_fullscreen ) : ?>
 					<div class="pb-filmstrip-gallery-bottom-controls">
 						<?php if ( $fbks_autoplay ) : ?>
