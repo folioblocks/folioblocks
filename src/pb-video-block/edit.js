@@ -641,15 +641,7 @@ export default function Edit( { attributes, setAttributes, context } ) {
 						) }
 						__nextHasNoMarginBottom
 					/>
-					{ applyFilters(
-						'folioBlocks.pbVideoBlock.filterCategories',
-						null,
-						{
-							attributes,
-							setAttributes,
-							context,
-						}
-					) }
+					
 				</PanelBody>
 
 				{ typeof inheritedPlayButtonVisibility === 'undefined' && (
@@ -789,6 +781,15 @@ export default function Edit( { attributes, setAttributes, context } ) {
 								) }
 						</PanelBody>
 					</>
+				) }
+				{ applyFilters(
+						'folioBlocks.pbVideoBlock.filterCategories',
+						null,
+						{
+							attributes,
+							setAttributes,
+							context,
+						}
 				) }
 				{ ( ! isInsideGallery || enableWooCommerce ) && (
 					<PanelBody

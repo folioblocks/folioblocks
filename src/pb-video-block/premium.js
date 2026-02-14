@@ -5,6 +5,7 @@
 import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 import {
+	PanelBody,
 	CheckboxControl,
 	SelectControl,
 	ToggleControl,
