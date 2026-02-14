@@ -28,6 +28,26 @@ import { applyFilters } from '@wordpress/hooks';
 import { IconImageBlock } from '../pb-helpers/icons';
 import './editor.scss';
 
+const getAssignedFilterCategories = ( attributes = {} ) => {
+	const assignedCategories = Array.isArray( attributes.filterCategories )
+		? attributes.filterCategories
+				.map( ( category ) =>
+					typeof category === 'string' ? category.trim() : ''
+				)
+				.filter( Boolean )
+		: [];
+
+	if ( assignedCategories.length > 0 ) {
+		return [ ...new Set( assignedCategories ) ];
+	}
+
+	const legacyCategory =
+		typeof attributes.filterCategory === 'string'
+			? attributes.filterCategory.trim()
+			: '';
+	return legacyCategory ? [ legacyCategory ] : [];
+};
+
 export default function Edit( {
 	attributes,
 	setAttributes,
@@ -265,11 +285,16 @@ export default function Edit( {
 
 	const filterCategories = context[ 'folioBlocks/filterCategories' ] || [];
 	const activeFilter = context?.[ 'folioBlocks/activeFilter' ] || 'All';
-	const filterCategory = attributes.filterCategory || '';
+	const assignedCategories = getAssignedFilterCategories( attributes );
+	const normalizedActiveFilter =
+		typeof activeFilter === 'string'
+			? activeFilter.trim().toLowerCase()
+			: 'all';
 	const isHidden =
-		activeFilter !== 'All' &&
-		( ! filterCategory ||
-			filterCategory.toLowerCase() !== activeFilter.toLowerCase() );
+		normalizedActiveFilter !== 'all' &&
+		! assignedCategories.some(
+			( category ) => category.toLowerCase() === normalizedActiveFilter
+		);
 
 	const carouselHeight = context[ 'folioBlocks/carouselHeight' ] || 400;
 	const displayHeight = carouselHeight;

@@ -33,6 +33,7 @@
 	"overlayBgColor": { "type": "string", "default": "" },
 	"overlayTextColor": { "type": "string", "default": "" },
 	"filterCategory": { "type": "string", "default": ""},
+	"filterCategories": { "type": "array", "items": { "type": "string" }, "default": [] },
 	"thumbnailSize": { "type": "string", "default": "large" }, 
 	"thumbnailId": { "type": "number" },
 	"borderWidth": { "type": "number", "default": 0 }, 

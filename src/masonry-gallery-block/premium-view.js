@@ -3,6 +3,21 @@
  * Premium View JS
  */
 document.addEventListener( 'DOMContentLoaded', () => {
+	const getBlockCategories = ( wrapper ) => {
+		const categoriesAttr = wrapper?.getAttribute( 'data-filters' ) || '';
+		const categories = categoriesAttr
+			.split( ',' )
+			.map( ( category ) => category.trim() )
+			.filter( Boolean );
+
+		if ( categories.length > 0 ) {
+			return categories;
+		}
+
+		const legacyCategory = wrapper?.getAttribute( 'data-filter' ) || '';
+		return legacyCategory.trim() ? [ legacyCategory.trim() ] : [];
+	};
+
 	// Disable right-click on entire page if any gallery block has it enabled
 	const disableRightClick = document.querySelector(
 		'[data-disable-right-click="true"]'
@@ -47,7 +62,9 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				return;
 			}
 
-			const selected = btn.textContent.trim();
+			const selected =
+				btn.getAttribute( 'data-filter' ) || btn.textContent.trim();
+			const normalizedSelected = selected.trim().toLowerCase();
 
 			// Update active state only within this filter bar
 			filterBar.querySelectorAll( '.filter-button' ).forEach( ( b ) => {
@@ -59,12 +76,14 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				'.wp-block-folioblocks-pb-image-block'
 			);
 			items.forEach( ( item ) => {
-				const category = item.getAttribute( 'data-filter' );
-				if (
-					selected === 'All' ||
-					( category &&
-						category.toLowerCase() === selected.toLowerCase() )
-				) {
+				const categories = getBlockCategories( item );
+				const matchesFilter =
+					normalizedSelected === 'all' ||
+					categories.some(
+						( category ) =>
+							category.toLowerCase() === normalizedSelected
+					);
+				if ( matchesFilter ) {
 					item.classList.remove( 'is-hidden' );
 				} else {
 					item.classList.add( 'is-hidden' );

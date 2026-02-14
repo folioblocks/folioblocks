@@ -25,7 +25,24 @@ $fbks_overlay_bg_color = '';
 $fbks_overlay_text_color = '';
 $fbks_has_color_overlay = false;
 $fbks_has_blur_overlay = false;
-$fbks_filter_category = $attributes['filterCategory'] ?? '';
+$fbks_filter_categories = [];
+if (! empty($attributes['filterCategories']) && is_array($attributes['filterCategories'])) {
+	foreach ($attributes['filterCategories'] as $fbks_category) {
+		$fbks_category = is_string($fbks_category) ? trim($fbks_category) : '';
+		if ($fbks_category !== '') {
+			$fbks_filter_categories[] = $fbks_category;
+		}
+	}
+	$fbks_filter_categories = array_values(array_unique($fbks_filter_categories));
+}
+if (empty($fbks_filter_categories) && ! empty($attributes['filterCategory']) && is_string($attributes['filterCategory'])) {
+	$fbks_legacy_filter_category = trim($attributes['filterCategory']);
+	if ($fbks_legacy_filter_category !== '') {
+		$fbks_filter_categories = [$fbks_legacy_filter_category];
+	}
+}
+$fbks_filter_category = $fbks_filter_categories[0] ?? '';
+$fbks_filter_categories_attr = implode(',', $fbks_filter_categories);
 
 $fbks_woo_product_name        = '';
 $fbks_woo_product_price       = '';
@@ -152,6 +169,9 @@ $fbks_play_label = $fbks_title ? sprintf(__('Play video: %s', 'folioblocks'), $f
 		aria-haspopup="dialog"
 		aria-controls="<?php echo esc_attr($fbks_lightbox_dom_id); ?>"
 		aria-expanded="false"
+		<?php if (! empty($fbks_filter_categories_attr)) : ?>
+		data-filters="<?php echo esc_attr($fbks_filter_categories_attr); ?>"
+		<?php endif; ?>
 		<?php if (! empty($fbks_filter_category)) : ?>
 		data-filter="<?php echo esc_attr($fbks_filter_category); ?>"
 		<?php endif; ?>

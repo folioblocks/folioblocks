@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.1.5] - 2026-02-13
 
-### Added
+### 
+- Added support for setting multiple categories per image when filtering in Grid, Justified, and Masonry Galleries. 
+- Added support for setting multiple categories per video when filtering in Video Gallery. 
 - MediaPlaceholder for initial state on Background Video Block. 
 
 ### Fixed

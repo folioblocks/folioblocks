@@ -46,6 +46,7 @@
 		"overlayTextColor": { "type": "string", "default": "" },
 		"dropshadow": { "type": "boolean", "default": false },
 		"filterCategory": { "type": "string", "default": ""}, 
+		"filterCategories": { "type": "array", "items": { "type": "string" }, "default": [] },
 		"enableDownload": { "type": "boolean" },
        	"downloadOnHover": { "type": "boolean", "default": true },
 		"downloadIconColor": { "type": "string", "default": "" },

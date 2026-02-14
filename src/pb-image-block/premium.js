@@ -5,6 +5,7 @@
 import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 import {
+	CheckboxControl,
 	SelectControl,
 	PanelBody,
 	RangeControl,
@@ -18,6 +19,26 @@ import CompactColorControl, {
 } from '../pb-helpers/CompactColorControl.js';
 import { download } from '@wordpress/icons';
 import { wooCartIcon } from '../pb-helpers/icons.js';
+
+const getAssignedFilterCategories = ( attributes = {} ) => {
+	const assignedCategories = Array.isArray( attributes.filterCategories )
+		? attributes.filterCategories
+				.map( ( category ) =>
+					typeof category === 'string' ? category.trim() : ''
+				)
+				.filter( Boolean )
+		: [];
+
+	if ( assignedCategories.length > 0 ) {
+		return [ ...new Set( assignedCategories ) ];
+	}
+
+	const legacyCategory =
+		typeof attributes.filterCategory === 'string'
+			? attributes.filterCategory.trim()
+			: '';
+	return legacyCategory ? [ legacyCategory ] : [];
+};
 
 // Premium: Standalone PB Image Block Download Controls
 addFilter(
@@ -603,32 +624,76 @@ addFilter(
 			return null;
 		}
 
+		const assignedCategories = getAssignedFilterCategories( attributes );
+		const availableCategories = [
+			...new Set( [ ...filterCategories, ...assignedCategories ] ),
+		];
+
+		const updateAssignedCategories = ( nextCategories ) => {
+			const cleanedCategories = [
+				...new Set(
+					nextCategories
+						.map( ( category ) =>
+							typeof category === 'string'
+								? category.trim()
+								: ''
+						)
+						.filter( Boolean )
+				),
+			];
+
+			setAttributes( {
+				filterCategories: cleanedCategories,
+				// Keep legacy attribute in sync for backward compatibility.
+				filterCategory: cleanedCategories[ 0 ] || '',
+			} );
+		};
+
 		return (
 			<>
 				<PanelBody
 					title={ __( 'Gallery Filtering Settings', 'folioblocks' ) }
 					initialOpen={ true }
 				>
-					<SelectControl
-						label={ __( 'Filter Category', 'folioblocks' ) }
-						value={ attributes.filterCategory }
-						onChange={ ( val ) =>
-							setAttributes( { filterCategory: val } )
-						}
-						options={ [
-							{ label: __( 'None', 'folioblocks' ), value: '' },
-							...filterCategories.map( ( cat ) => ( {
-								label: cat,
-								value: cat,
-							} ) ),
-						] }
-						help={ __(
-							'Set image filter category.',
+					<p
+						style={ {
+							fontSize: '11px',
+							fontWeight: 500,
+							lineHeight: 1.4,
+							textTransform: 'uppercase',
+						} }
+					>
+						{ __( 'Filter Categories', 'folioblocks' ) }
+					</p>
+					{ availableCategories.map( ( category ) => (
+						<CheckboxControl
+							key={ category }
+							label={ category }
+							checked={ assignedCategories.includes( category ) }
+							onChange={ ( isChecked ) => {
+								const nextCategories = isChecked
+									? [ ...assignedCategories, category ]
+									: assignedCategories.filter(
+											( assignedCategory ) =>
+												assignedCategory !== category
+									  );
+								updateAssignedCategories( nextCategories );
+							} }
+							__nextHasNoMarginBottom
+						/>
+					) ) }
+					<p
+						style={ {
+							fontSize: '12px',
+							fontStyle: 'normal',
+							color: 'rgb(117, 117, 117)',
+						} }
+					>
+						{ __(
+							'Select one or more categories for this image.',
 							'folioblocks'
 						) }
-						__nextHasNoMarginBottom
-						__next40pxDefaultSize
-					/>
+					</p>
 				</PanelBody>
 			</>
 		);

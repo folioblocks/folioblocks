@@ -43,6 +43,26 @@ const checkoutUrl =
 	window.folioBlocksData?.checkoutUrl ||
 	'https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks&utm_medium=video-block&utm_campaign=upgrade';
 
+const getAssignedFilterCategories = ( attributes = {} ) => {
+	const categories = Array.isArray( attributes.filterCategories )
+		? attributes.filterCategories
+				.map( ( category ) =>
+					typeof category === 'string' ? category.trim() : ''
+				)
+				.filter( Boolean )
+		: [];
+
+	if ( categories.length > 0 ) {
+		return [ ...new Set( categories ) ];
+	}
+
+	const legacyCategory =
+		typeof attributes.filterCategory === 'string'
+			? attributes.filterCategory.trim()
+			: '';
+	return legacyCategory ? [ legacyCategory ] : [];
+};
+
 // Function to support YouTube & Vimeo Videos
 function getVideoEmbedMarkup( videoUrl ) {
 	const origin = window.location.origin;
@@ -111,6 +131,7 @@ export default function Edit( { attributes, setAttributes, context } ) {
 		overlayBgColor,
 		overlayTextColor,
 		filterCategory,
+		filterCategories,
 		thumbnailSize,
 		lightbox,
 		lightboxLayout,
@@ -268,10 +289,21 @@ export default function Edit( { attributes, setAttributes, context } ) {
 		effectivePlayButtonVisibility !== 'hidden'
 			? effectivePlayButtonVisibility
 			: effectiveTitleVisibility;
-	const currentCategory = filterCategory?.trim() || '';
+	const assignedCategories = getAssignedFilterCategories( {
+		filterCategory,
+		filterCategories,
+	} );
+	const normalizedActiveFilter =
+		typeof activeFilter === 'string'
+			? activeFilter.trim().toLowerCase()
+			: 'all';
 	const isHidden =
-		activeFilter !== 'All' &&
-		currentCategory.toLowerCase() !== activeFilter.toLowerCase();
+		normalizedActiveFilter !== 'all' &&
+		! assignedCategories.some(
+			( category ) => category.toLowerCase() === normalizedActiveFilter
+		);
+	const primaryCategory = assignedCategories[ 0 ] || '';
+	const allCategories = assignedCategories.join( ',' );
 	const showOverlayAlways =
 		effectivePlayButtonVisibility === 'always' ||
 		effectiveTitleVisibility === 'always';
@@ -758,20 +790,21 @@ export default function Edit( { attributes, setAttributes, context } ) {
 						</PanelBody>
 					</>
 				) }
-				{ typeof inheritedPlayButtonVisibility === 'undefined' && (
+				{ ( ! isInsideGallery || enableWooCommerce ) && (
 					<PanelBody
 						title={ __( 'E-Commerce Settings', 'folioblocks' ) }
 						initialOpen={ true }
 					>
-						{ applyFilters(
-							'folioBlocks.videoBlock.wooCommerceControls',
-							null,
-							{
-								attributes,
-								setAttributes,
-								isInsideGallery: isInVideoGallery,
-							}
-						) }
+						{ ! isInsideGallery &&
+							applyFilters(
+								'folioBlocks.videoBlock.wooCommerceControls',
+								null,
+								{
+									attributes,
+									setAttributes,
+									isInsideGallery,
+								}
+							) }
 						{ applyFilters(
 							'folioBlocks.pbVideoBlock.WooProductSearch',
 							null,
@@ -779,8 +812,7 @@ export default function Edit( { attributes, setAttributes, context } ) {
 								attributes,
 								setAttributes,
 								hasWooCommerce,
-								enableWooCommerce:
-									attributes.enableWooCommerce ?? false,
+								enableWooCommerce,
 							}
 						) }
 					</PanelBody>
@@ -981,7 +1013,8 @@ export default function Edit( { attributes, setAttributes, context } ) {
 								: undefined,
 							...overlayStyleVars,
 						} }
-						data-filter={ currentCategory }
+						data-filter={ primaryCategory }
+						data-filters={ allCategories }
 						onClick={ () => {
 							if ( ! lightboxEnabled ) {
 								return;

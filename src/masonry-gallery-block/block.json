@@ -79,13 +79,14 @@
 					"alt": { "type": "string" },
 					"title": { "type": "string" },
 					"caption": { "type": "string" },
-					"width": { "type": "number" },
-					"height": { "type": "number" },
-					"sizes": { "type": "object" },
-					"filterCategory": { "type": "string" }
+						"width": { "type": "number" },
+						"height": { "type": "number" },
+						"sizes": { "type": "object" },
+						"filterCategory": { "type": "string" },
+						"filterCategories": { "type": "array", "items": { "type": "string" } }
+					}
 				}
 			}
-		}
 	},
 	"providesContext": {
 		"folioBlocks/resolution": "resolution",

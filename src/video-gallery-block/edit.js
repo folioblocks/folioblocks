@@ -34,6 +34,26 @@ import ResponsiveRangeControl from '../pb-helpers/ResponsiveRangeControl';
 import { IconVideoGallery } from '../pb-helpers/icons';
 import './editor.scss';
 
+const getVideoBlockFilterCategories = ( blockAttributes = {} ) => {
+	const assignedCategories = Array.isArray( blockAttributes.filterCategories )
+		? blockAttributes.filterCategories
+				.map( ( category ) =>
+					typeof category === 'string' ? category.trim() : ''
+				)
+				.filter( Boolean )
+		: [];
+
+	if ( assignedCategories.length > 0 ) {
+		return [ ...new Set( assignedCategories ) ];
+	}
+
+	const legacyCategory =
+		typeof blockAttributes.filterCategory === 'string'
+			? blockAttributes.filterCategory.trim()
+			: '';
+	return legacyCategory ? [ legacyCategory ] : [];
+};
+
 export default function Edit( { attributes, setAttributes, clientId } ) {
 	/**
 	 * Attribute Destructuring
@@ -108,13 +128,19 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			selectedBlock &&
 			selectedBlock.name === 'folioblocks/pb-video-block'
 		) {
-			const selectedCategory =
-				selectedBlock.attributes?.filterCategory || '';
+			const selectedCategories = getVideoBlockFilterCategories(
+				selectedBlock.attributes || {}
+			);
+			const normalizedActiveFilter = activeFilter.toLowerCase();
 
-			if (
+			const isFilteredOut =
 				activeFilter !== 'All' &&
-				selectedCategory.toLowerCase() !== activeFilter.toLowerCase()
-			) {
+				! selectedCategories.some(
+					( category ) =>
+						category.toLowerCase() === normalizedActiveFilter
+				);
+
+			if ( isFilteredOut ) {
 				setAttributes( { activeFilter: 'All' } );
 			}
 		}

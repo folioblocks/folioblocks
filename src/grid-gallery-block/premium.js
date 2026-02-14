@@ -36,6 +36,26 @@ import {
 	getFilterTypographyCSS,
 } from '../pb-helpers/GetThemeSettings';
 
+const getImageBlockFilterCategories = ( blockAttributes = {} ) => {
+	const assignedCategories = Array.isArray( blockAttributes.filterCategories )
+		? blockAttributes.filterCategories
+				.map( ( category ) =>
+					typeof category === 'string' ? category.trim() : ''
+				)
+				.filter( Boolean )
+		: [];
+
+	if ( assignedCategories.length > 0 ) {
+		return [ ...new Set( assignedCategories ) ];
+	}
+
+	const legacyCategory =
+		typeof blockAttributes.filterCategory === 'string'
+			? blockAttributes.filterCategory.trim()
+			: '';
+	return legacyCategory ? [ legacyCategory ] : [];
+};
+
 addFilter(
 	'folioBlocks.gridGallery.editorEnhancements',
 	'folioblocks/grid-gallery-premium-thumbnails',
@@ -603,12 +623,16 @@ addFilter(
 				selectedBlock &&
 				selectedBlock.name === 'folioblocks/pb-image-block'
 			) {
-				const selectedCategory =
-					selectedBlock.attributes?.filterCategory || '';
+				const selectedCategories = getImageBlockFilterCategories(
+					selectedBlock.attributes || {}
+				);
+				const normalizedActiveFilter = activeFilter.toLowerCase();
 				const isFilteredOut =
 					activeFilter !== 'All' &&
-					selectedCategory.toLowerCase() !==
-						activeFilter.toLowerCase();
+					! selectedCategories.some(
+						( category ) =>
+							category.toLowerCase() === normalizedActiveFilter
+					);
 
 				if ( isFilteredOut ) {
 					setAttributes( { activeFilter: 'All' } );

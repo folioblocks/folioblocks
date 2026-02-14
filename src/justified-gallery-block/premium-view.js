@@ -3,6 +3,21 @@
  * Premium View JS
  */
 document.addEventListener( 'DOMContentLoaded', () => {
+	const getBlockCategories = ( wrapper ) => {
+		const categoriesAttr = wrapper?.getAttribute( 'data-filters' ) || '';
+		const categories = categoriesAttr
+			.split( ',' )
+			.map( ( category ) => category.trim() )
+			.filter( Boolean );
+
+		if ( categories.length > 0 ) {
+			return categories;
+		}
+
+		const legacyCategory = wrapper?.getAttribute( 'data-filter' ) || '';
+		return legacyCategory.trim() ? [ legacyCategory.trim() ] : [];
+	};
+
 	// Disable right-click on entire page if any gallery block has it enabled
 	const disableRightClick = document.querySelector(
 		'[data-disable-right-click="true"]'
@@ -34,19 +49,24 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				return;
 			}
 
-			const selected = e.target.textContent.trim();
+			const selected =
+				e.target.getAttribute( 'data-filter' ) ||
+				e.target.textContent.trim();
+			const normalizedSelected = selected.trim().toLowerCase();
 
 			document.querySelectorAll( '.filter-button' ).forEach( ( btn ) => {
 				btn.classList.toggle( 'is-active', btn === e.target );
 			} );
 
 			allItems.forEach( ( item ) => {
-				const category = item.getAttribute( 'data-filter' );
-				if (
-					selected === 'All' ||
-					( category &&
-						category.toLowerCase() === selected.toLowerCase() )
-				) {
+				const categories = getBlockCategories( item );
+				const matchesFilter =
+					normalizedSelected === 'all' ||
+					categories.some(
+						( category ) =>
+							category.toLowerCase() === normalizedSelected
+					);
+				if ( matchesFilter ) {
 					item.classList.remove( 'is-hidden' );
 				} else {
 					item.classList.add( 'is-hidden' );

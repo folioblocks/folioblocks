@@ -3,6 +3,21 @@
  * Premium View JS
  */
 document.addEventListener( 'DOMContentLoaded', function () {
+	const getBlockCategories = ( wrapper ) => {
+		const categoriesAttr = wrapper?.getAttribute( 'data-filters' ) || '';
+		const categories = categoriesAttr
+			.split( ',' )
+			.map( ( category ) => category.trim() )
+			.filter( Boolean );
+
+		if ( categories.length > 0 ) {
+			return categories;
+		}
+
+		const legacyCategory = wrapper?.getAttribute( 'data-filter' ) || '';
+		return legacyCategory.trim() ? [ legacyCategory.trim() ] : [];
+	};
+
 	const galleries = document.querySelectorAll(
 		'.wp-block-folioblocks-grid-gallery-block'
 	);
@@ -29,6 +44,9 @@ document.addEventListener( 'DOMContentLoaded', function () {
 		filterButtons.forEach( ( button ) => {
 			button.addEventListener( 'click', () => {
 				const selected = button.getAttribute( 'data-filter' );
+				const normalizedSelected = ( selected || '' )
+					.trim()
+					.toLowerCase();
 
 				// Toggle active state
 				filterButtons.forEach( ( btn ) =>
@@ -38,10 +56,15 @@ document.addEventListener( 'DOMContentLoaded', function () {
 
 				// Show/hide full wrapper blocks based on filter
 				imageBlockWrappers.forEach( ( wrapper ) => {
-					const blockCategory =
-						wrapper.getAttribute( 'data-filter' ) || '';
+					const blockCategories = getBlockCategories( wrapper );
+					const matchesFilter =
+						normalizedSelected === 'all' ||
+						blockCategories.some(
+							( category ) =>
+								category.toLowerCase() === normalizedSelected
+						);
 
-					if ( selected === 'All' || blockCategory === selected ) {
+					if ( matchesFilter ) {
 						wrapper.classList.remove( 'is-hidden' );
 					} else {
 						wrapper.classList.add( 'is-hidden' );

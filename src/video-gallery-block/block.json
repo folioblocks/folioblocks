@@ -88,10 +88,11 @@
 					"overlayStyle": { "type": "string" },
 					"overlayBgColor": { "type": "string" },
 					"overlayTextColor": { "type": "string" },
-        			"filterCategory": { "type": "string" }
-      			}
-    		}
-  		}
+					"filterCategory": { "type": "string" },
+					"filterCategories": { "type": "array", "items": { "type": "string" } }
+				}
+			}
+		}
 	},
   	"usesContext": ["postId"],
   	"providesContext": {

@@ -110,12 +110,13 @@
 					"title": { "type": "string" },
 					"caption": { "type": "string" },
 					"sizes": { "type": "object" },
-					"width": { "type": "number" },
-					"height": { "type": "number" },
-					"filterCategory": { "type": "string" }
+						"width": { "type": "number" },
+						"height": { "type": "number" },
+						"filterCategory": { "type": "string" },
+						"filterCategories": { "type": "array", "items": { "type": "string" } }
+					}
 				}
 			}
-		}
 	},
 	"usesContext": [],
 	"providesContext": {

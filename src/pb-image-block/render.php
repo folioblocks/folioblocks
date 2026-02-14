@@ -94,7 +94,24 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 	$fbks_dropshadow       = $fbks_context['folioBlocks/dropShadow'] ?? ! empty( $attributes['dropshadow'] );
 
 
-	$fbks_filter_category = $attributes['filterCategory'] ?? '';
+	$fbks_filter_categories = [];
+	if ( ! empty( $attributes['filterCategories'] ) && is_array( $attributes['filterCategories'] ) ) {
+		foreach ( $attributes['filterCategories'] as $fbks_category ) {
+			$fbks_category = is_string( $fbks_category ) ? trim( $fbks_category ) : '';
+			if ( '' !== $fbks_category ) {
+				$fbks_filter_categories[] = $fbks_category;
+			}
+		}
+		$fbks_filter_categories = array_values( array_unique( $fbks_filter_categories ) );
+	}
+	if ( empty( $fbks_filter_categories ) && ! empty( $attributes['filterCategory'] ) && is_string( $attributes['filterCategory'] ) ) {
+		$fbks_legacy_filter_category = trim( $attributes['filterCategory'] );
+		if ( '' !== $fbks_legacy_filter_category ) {
+			$fbks_filter_categories = [ $fbks_legacy_filter_category ];
+		}
+	}
+	$fbks_filter_category       = $fbks_filter_categories[0] ?? '';
+	$fbks_filter_categories_attr = implode( ',', $fbks_filter_categories );
 
 	$fbks_border_width  = isset( $fbks_context['folioBlocks/borderWidth'] ) ? $fbks_context['folioBlocks/borderWidth'] : ( $attributes['borderWidth'] ?? 0 );
 	$fbks_border_radius = isset( $fbks_context['folioBlocks/borderRadius'] ) ? $fbks_context['folioBlocks/borderRadius'] : ( $attributes['borderRadius'] ?? 0 );
@@ -140,6 +157,9 @@ $fbks_wrapper_attributes = get_block_wrapper_attributes( $fbks_wrapper_attribute
 
 <div 
 	<?php echo wp_kses_post( $fbks_wrapper_attributes ); ?> 
+	<?php if ( fbks_fs()->can_use_premium_code__premium_only() ) : if ( '' !== $fbks_filter_categories_attr ) : ?>
+		data-filters="<?php echo esc_attr( $fbks_filter_categories_attr ); ?>"
+	<?php endif; endif; ?>
 	<?php if ( fbks_fs()->can_use_premium_code__premium_only() ) : if ( $fbks_filter_category !== '' ) : ?>
 		data-filter="<?php echo esc_attr( $fbks_filter_category ); ?>"
 	<?php endif; endif; ?>
