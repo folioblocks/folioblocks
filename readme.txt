@@ -22,6 +22,7 @@ Included blocks:
 * Before & After Block – Compare two images with an interactive slider
 * Loupe Block - Highlight fine details with an elegant magnifying zoom effect
 * Carousel Gallery Block – Smooth, swipe-friendly horizontal image slider
+* Filmstrip Gallery Block – Scroll through large images with thumbnail navigation below
 * Grid Gallery Block – Classic evenly-spaced grid layout
 * Image Block - Display a single image with lightbox, hover overlay, optional downloads, and WooCommerce linking
 * Justified Gallery Block – Professional row-based gallery with balanced heights
@@ -36,6 +37,7 @@ Gallery Features - All gallery blocks include:
 * Caption support and accessibility-friendly interactions
 * Drag-and-drop image ordering
 * 100% native Gutenberg block editing (no shortcodes, no separate gallery manager)
+* Block Transforms covert galleires in one click (Grid, Justified, or Masonry and Carousel or Filmstrip)
 
 Advanced Features (Pro) - Unlock advanced tools designed for photography websites, creative portfolios, and WooCommerce-powered shops:
 * Gallery Image Filtering
@@ -105,7 +107,11 @@ No, the galleries will remain in place on your site. However, the advanced layou
 == Changelog ==
 
 = 1.1.5 =
-* Fixed visual layout bugs related to responsive design in Filmstrip Gallery. 
+* Added support for setting multiple categories per image when filtering in Grid, Justified, and Masonry Galleries. 
+* Added support for setting multiple categories per video when filtering in Video Gallery. 
+* Updated to a MediaPlaceholder for initial state on Background Video Block. 
+* Moved Enable Full-Screen Mode feature on Filmstrip Gallery into premium.js 
+* Fixed visual layout bugs in Filmstrip Gallery. 
 * Updated Filmstrip Gallery to set image ID and srcset size. 
 * Updated Carousel Gallery to use custom CompactTwoColorControl. 
 
