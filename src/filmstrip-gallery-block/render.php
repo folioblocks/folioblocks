@@ -22,6 +22,7 @@ $fbks_autoplay = false;
 $fbks_autoplay_speed = 3.0;
 $fbks_pause_on_hover = false;
 $fbks_enable_fullscreen = false;
+$fbks_randomize_order = false;
 $fbks_enable_woo = false;
 $fbks_enable_download = false;
 $fbks_download_on_hover = true;
@@ -44,6 +45,7 @@ if ( $fbks_can_use_premium ) {
 	}
 
 	$fbks_pause_on_hover = ! empty( $attributes['pauseOnHover'] );
+	$fbks_randomize_order = ! empty( $attributes['randomizeOrder'] );
 
 	if ( ! function_exists( 'is_plugin_active' ) ) {
 		include_once ABSPATH . 'wp-admin/includes/plugin.php';
@@ -239,6 +241,10 @@ if ( empty( $fbks_images ) && ! empty( $attributes['images'] ) && is_array( $att
 	}
 }
 
+if ( $fbks_can_use_premium && $fbks_randomize_order && count( $fbks_images ) > 1 ) {
+	shuffle( $fbks_images );
+}
+
 $fbks_active_image = ! empty( $fbks_images ) ? $fbks_images[0] : null;
 $fbks_has_multiple_images = count( $fbks_images ) > 1;
 
@@ -281,6 +287,7 @@ $fbks_data_payload = [
 		'autoplay'               => $fbks_autoplay,
 		'autoplaySpeed'          => $fbks_autoplay_speed,
 		'pauseOnHover'           => $fbks_pause_on_hover,
+		'randomizeOrder'         => $fbks_randomize_order,
 		'enableFullscreen'       => $fbks_enable_fullscreen,
 		'enableWooCommerce'      => $fbks_enable_woo,
 		'wooCartIconDisplay'     => $fbks_woo_cart_icon_display,

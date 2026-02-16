@@ -91,7 +91,9 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
     $fbks_effective_lazy    = ( null !== $fbks_lazy_from_context ) ? $fbks_lazy_from_context : ( $fbks_lazy_from_attr ?? false );
     $fbks_loading_attr      = $fbks_effective_lazy ? 'lazy' : 'eager';
 
-	$fbks_dropshadow       = $fbks_context['folioBlocks/dropShadow'] ?? ! empty( $attributes['dropshadow'] );
+	$fbks_dropshadow = isset( $fbks_context['folioBlocks/dropShadow'] )
+		? (bool) $fbks_context['folioBlocks/dropShadow']
+		: ( ! empty( $attributes['dropShadow'] ) || ! empty( $attributes['dropshadow'] ) );
 
 
 	$fbks_filter_categories = [];

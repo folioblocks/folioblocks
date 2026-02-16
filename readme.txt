@@ -5,7 +5,7 @@ Tags: gallery, image gallery, photo gallery, video gallery, lightbox,
 Tested up to:      6.9
 Requires at least: 6.3
 Requires PHP: 7.4
-Stable tag:        1.1.6
+Stable tag:        1.1.7
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -105,6 +105,11 @@ No, the galleries will remain in place on your site. However, the advanced layou
 6. Video Gallery block populated with images
 
 == Changelog ==
+
+= 1.1.7 =
+* Prevent Filmstirp Gallery coming into focus when autoplay is enabled in the editor.
+* Added Randomize Image Order feature to Filmstrip Gallery.
+* Fixed a bug in Image Block that prevent drop shadow from being applied when used individually.
 
 = 1.1.6 =
 * Layout related bugs on Background Video Block. 

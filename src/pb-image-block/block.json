@@ -44,7 +44,7 @@
 		"onHoverStyle": { "type": "string", "enum": ["fade-overlay","gradient-bottom","chip","blur-overlay","color-overlay"], "default": "blur-overlay"},
 		"overlayBgColor": { "type": "string", "default": "" },
 		"overlayTextColor": { "type": "string", "default": "" },
-		"dropshadow": { "type": "boolean", "default": false },
+		"dropShadow": { "type": "boolean", "default": false },
 		"filterCategory": { "type": "string", "default": ""}, 
 		"filterCategories": { "type": "array", "items": { "type": "string" }, "default": [] },
 		"enableDownload": { "type": "boolean" },

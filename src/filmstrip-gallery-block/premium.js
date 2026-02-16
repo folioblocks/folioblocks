@@ -4,7 +4,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { addFilter } from '@wordpress/hooks';
-import { useEffect } from '@wordpress/element';
+import { useEffect, useRef } from '@wordpress/element';
 import {
 	PanelBody,
 	ToggleControl,
@@ -15,6 +15,32 @@ import {
 } from '@wordpress/components';
 import { applyThumbnails } from '../pb-helpers/applyThumbnails';
 import { CompactTwoColorControl } from '../pb-helpers/CompactColorControl';
+
+const shuffleBlocks = ( blocks ) => {
+	const shuffled = [ ...blocks ];
+
+	if ( shuffled.length < 2 ) {
+		return shuffled;
+	}
+
+	for ( let i = shuffled.length - 1; i > 0; i-- ) {
+		const j = Math.floor( Math.random() * ( i + 1 ) );
+		[ shuffled[ i ], shuffled[ j ] ] = [ shuffled[ j ], shuffled[ i ] ];
+	}
+
+	// Ensure the shuffled result is visually different from the original order.
+	const isSameOrder = shuffled.every(
+		( block, index ) => block.clientId === blocks[ index ]?.clientId
+	);
+	if ( isSameOrder ) {
+		const first = shuffled.shift();
+		if ( first ) {
+			shuffled.push( first );
+		}
+	}
+
+	return shuffled;
+};
 
 addFilter(
 	'folioBlocks.filmstripGallery.colorModeControl',
@@ -78,7 +104,19 @@ addFilter(
 addFilter(
 	'folioBlocks.filmstripGallery.editorEnhancements',
 	'folioblocks/filmstrip-gallery-premium-thumbnails',
-	( _, { clientId, innerBlocks, isBlockOrChildSelected } ) => {
+	(
+		_,
+		{
+			clientId,
+			innerBlocks,
+			isBlockOrChildSelected,
+			attributes,
+			replaceInnerBlocks,
+			setActiveIndex,
+		}
+	) => {
+		const wasRandomizeEnabledRef = useRef( false );
+
 		// Apply thumbnails when this block or a child image is selected.
 		useEffect( () => {
 			if ( isBlockOrChildSelected ) {
@@ -101,6 +139,43 @@ addFilter(
 				}, 300 );
 			}
 		}, [ clientId, innerBlocks ] );
+
+		// Shuffle actual inner block order once when randomization is enabled.
+		useEffect( () => {
+			const isRandomizeEnabled = !! attributes.randomizeOrder;
+			const wasRandomizeEnabled = wasRandomizeEnabledRef.current;
+			wasRandomizeEnabledRef.current = isRandomizeEnabled;
+
+			if (
+				! isRandomizeEnabled ||
+				wasRandomizeEnabled ||
+				innerBlocks.length < 2 ||
+				typeof replaceInnerBlocks !== 'function'
+			) {
+				return;
+			}
+
+			const shuffled = shuffleBlocks( innerBlocks );
+			const hasOrderChanged = shuffled.some(
+				( block, index ) =>
+					block.clientId !== innerBlocks[ index ]?.clientId
+			);
+
+			if ( ! hasOrderChanged ) {
+				return;
+			}
+
+			replaceInnerBlocks( clientId, shuffled );
+			if ( typeof setActiveIndex === 'function' ) {
+				setActiveIndex( 0 );
+			}
+		}, [
+			attributes.randomizeOrder,
+			clientId,
+			innerBlocks,
+			replaceInnerBlocks,
+			setActiveIndex,
+		] );
 
 		return null;
 	}
@@ -180,6 +255,29 @@ addFilter(
 				}
 				help={ __(
 					'Enable Full-Screen Mode for the gallery on the frontend.',
+					'folioblocks'
+				) }
+				__nextHasNoMarginBottom
+			/>
+		);
+	}
+);
+
+addFilter(
+	'folioBlocks.filmstripGallery.randomizeOrderToggle',
+	'folioblocks/filmstrip-gallery-premium-randomize-order',
+	( defaultContent, props ) => {
+		const { attributes, setAttributes } = props;
+
+		return (
+			<ToggleControl
+				label={ __( 'Randomize Image Order', 'folioblocks' ) }
+				checked={ !! attributes.randomizeOrder }
+				onChange={ ( value ) =>
+					setAttributes( { randomizeOrder: value } )
+				}
+				help={ __(
+					'Randomize order of images.',
 					'folioblocks'
 				) }
 				__nextHasNoMarginBottom

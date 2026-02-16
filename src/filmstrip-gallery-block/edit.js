@@ -151,6 +151,11 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	}, [ selectedBlockClientId, innerBlocks ] );
 
 	useEffect( () => {
+		// Avoid pulling the editor viewport back to this block while working elsewhere.
+		if ( ! isBlockOrChildSelected ) {
+			return;
+		}
+
 		const thumbnailsNode = thumbnailsRef.current;
 		if ( ! thumbnailsNode ) {
 			return;
@@ -165,7 +170,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				inline: 'nearest',
 			} );
 		}
-	}, [ activeIndex, filmstripPosition ] );
+	}, [ activeIndex, filmstripPosition, isBlockOrChildSelected ] );
 
 	const [ isPlaying, setIsPlaying ] = useState( false );
 	const [ isMainHovered, setIsMainHovered ] = useState( false );
@@ -413,6 +418,8 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		isBlockOrChildSelected,
 		attributes,
 		setAttributes,
+		replaceInnerBlocks,
+		setActiveIndex,
 	} );
 
 	// Block Preview Image
@@ -851,6 +858,32 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 								<strong>
 									{ __(
 										'Enable Full-Screen Mode',
+										'folioblocks'
+									) }
+								</strong>
+								<br />
+								{ __(
+									'This is a premium feature. Unlock all features: ',
+									'folioblocks'
+								) }
+								<a
+									href={ checkoutUrl }
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									{ __( 'Upgrade to Pro', 'folioblocks' ) }
+								</a>
+							</Notice>
+						</div>,
+						{ attributes, setAttributes }
+					) }
+					{ applyFilters(
+						'folioBlocks.filmstripGallery.randomizeOrderToggle',
+						<div style={ { marginBottom: '8px' } }>
+							<Notice status="info" isDismissible={ false }>
+								<strong>
+									{ __(
+										'Randomize Image Order',
 										'folioblocks'
 									) }
 								</strong>

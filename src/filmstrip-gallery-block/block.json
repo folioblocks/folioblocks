@@ -43,6 +43,7 @@
 			"default": "bottom"
 		},
 		"enableFullscreen": { "type": "boolean", "default": false },
+		"randomizeOrder": { "type": "boolean", "default": false },
 		"lightbox": { "type": "boolean", "default": false },
 		"lightboxCaption": { "type": "boolean", "default": false },
 		"onHoverTitle": { "type": "boolean", "default": false },
