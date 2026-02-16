@@ -25,21 +25,31 @@
 
 /* Tablet */
 @media (max-width: 1024px) {
-
 	.pb-bgvid.has-media {
 		height: var(--pb-bgvid-h-tablet);
-		--pb-bgvid-pos-x: var(--pb-bgvid-pos-x-tablet, var(--pb-bgvid-pos-x-desktop, 50%));
-		--pb-bgvid-pos-y: var(--pb-bgvid-pos-y-tablet, var(--pb-bgvid-pos-y-desktop, 50%));
+		--pb-bgvid-pos-x: var(
+			--pb-bgvid-pos-x-tablet,
+			var(--pb-bgvid-pos-x-desktop, 50%)
+		);
+		--pb-bgvid-pos-y: var(
+			--pb-bgvid-pos-y-tablet,
+			var(--pb-bgvid-pos-y-desktop, 50%)
+		);
 	}
 }
 
 /* Mobile */
 @media (max-width: 768px) {
-
 	.pb-bgvid.has-media {
 		height: var(--pb-bgvid-h-mobile);
-		--pb-bgvid-pos-x: var(--pb-bgvid-pos-x-mobile, var(--pb-bgvid-pos-x-desktop, 50%));
-		--pb-bgvid-pos-y: var(--pb-bgvid-pos-y-mobile, var(--pb-bgvid-pos-y-desktop, 50%));
+		--pb-bgvid-pos-x: var(
+			--pb-bgvid-pos-x-mobile,
+			var(--pb-bgvid-pos-x-desktop, 50%)
+		);
+		--pb-bgvid-pos-y: var(
+			--pb-bgvid-pos-y-mobile,
+			var(--pb-bgvid-pos-y-desktop, 50%)
+		);
 	}
 }
 
@@ -108,7 +118,123 @@
 .pb-bgvid__content {
 	position: relative;
 	z-index: 4;
-	min-height: inherit;
+	width: 100%;
+	height: 100%;
+	min-height: 100%;
+}
+
+.pb-bgvid__content-inner {
+	width: 100%;
+	height: 100%;
+	min-height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+.pb-bgvid__content-inner.is-h-left {
+	align-items: flex-start;
+}
+
+.pb-bgvid__content-inner.is-h-center {
+	align-items: center;
+}
+
+.pb-bgvid__content-inner.is-h-right {
+	align-items: flex-end;
+}
+
+.pb-bgvid__content-inner.is-h-stretch {
+	align-items: stretch;
+}
+
+.pb-bgvid__content-inner.is-v-top {
+	justify-content: flex-start;
+}
+
+.pb-bgvid__content-inner.is-v-center {
+	justify-content: center;
+}
+
+.pb-bgvid__content-inner.is-v-bottom {
+	justify-content: flex-end;
+}
+
+.pb-bgvid__content-inner.is-v-space-between {
+	justify-content: space-between;
+}
+
+.pb-bgvid__content-inner.is-v-stretch {
+	justify-content: flex-start;
+}
+
+.pb-bgvid__content-inner.is-h-stretch > * {
+	width: 100%;
+}
+
+.pb-bgvid__content-inner.is-v-stretch > * {
+	flex: 1 1 auto;
+}
+
+/*
+ * Group-like constrained content mode:
+ * - Normal inner blocks follow theme content width.
+ * - `alignwide` can expand to the theme wide width.
+ * - `alignfull` can span the full block width.
+ */
+.pb-bgvid__content-inner.is-content-width
+	> :where(
+		:not(.alignleft):not(.alignright):not(.alignwide):not(.alignfull)
+	) {
+	width: min(100%, var(--wp--style--global--content-size, 100%));
+	max-width: var(--wp--style--global--content-size, 100%);
+}
+
+.pb-bgvid__content-inner.is-content-width > .alignwide {
+	width: min(100%, var(--wp--style--global--wide-size, 100%));
+	max-width: var(--wp--style--global--wide-size, 100%);
+}
+
+.pb-bgvid__content-inner.is-content-width > .alignfull {
+	width: 100%;
+	max-width: none;
+}
+
+.pb-bgvid__content-inner.is-content-width.is-h-left
+	> :where(:not(.alignleft):not(.alignright):not(.alignfull)),
+.pb-bgvid__content-inner.is-content-width.is-h-left > .alignwide {
+	margin-left: 0;
+	margin-right: auto;
+}
+
+.pb-bgvid__content-inner.is-content-width.is-h-center
+	> :where(:not(.alignleft):not(.alignright):not(.alignfull)),
+.pb-bgvid__content-inner.is-content-width.is-h-center > .alignwide {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.pb-bgvid__content-inner.is-content-width.is-h-right
+	> :where(:not(.alignleft):not(.alignright):not(.alignfull)),
+.pb-bgvid__content-inner.is-content-width.is-h-right > .alignwide {
+	margin-left: auto;
+	margin-right: 0;
+}
+
+.pb-bgvid__content-inner.is-full-width > * {
+	width: 100%;
+	max-width: none;
+}
+
+/*
+ * Back-compat:
+ * Older saved content can include a nested wrapper from save.js where
+ * core layout classes are applied (is-layout-flex, is-content-justification-*).
+ * Keep that wrapper full-height to avoid top-aligned content regressions.
+ */
+.pb-bgvid__content > .wp-block-folioblocks-background-video-block {
+	width: 100%;
+	height: 100%;
+	min-height: 100%;
 }
 
 /*

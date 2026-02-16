@@ -6,6 +6,7 @@
 
 import { __ } from '@wordpress/i18n';
 import {
+	BlockControls,
 	InspectorControls,
 	MediaPlaceholder,
 	MediaUpload,
@@ -18,6 +19,8 @@ import {
 	PanelBody,
 	RangeControl,
 	TextControl,
+	ToolbarDropdownMenu,
+	ToolbarGroup,
 	ToggleControl,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
@@ -26,6 +29,13 @@ import {
 } from '@wordpress/components';
 import { useEffect, useMemo, useRef, useState } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
+import {
+	justifyTop,
+	justifyCenterVertical,
+	justifyBottom,
+	justifySpaceBetweenVertical,
+	justifyStretchVertical,
+} from '@wordpress/icons';
 import CompactColorControl from '../pb-helpers/CompactColorControl';
 import { IconBackgroundVideo } from '../pb-helpers/icons';
 import './editor.scss';
@@ -114,6 +124,39 @@ const buildPosterObject = ( media ) => {
 	};
 };
 
+const HORIZONTAL_ALIGNMENT_VALUES = [ 'left', 'center', 'right', 'stretch' ];
+
+const VERTICAL_ALIGNMENT_OPTIONS = [
+	{
+		value: 'top',
+		icon: justifyTop,
+		label: __( 'Align content top', 'folioblocks' ),
+	},
+	{
+		value: 'center',
+		icon: justifyCenterVertical,
+		label: __( 'Center content vertically', 'folioblocks' ),
+	},
+	{
+		value: 'bottom',
+		icon: justifyBottom,
+		label: __( 'Align content bottom', 'folioblocks' ),
+	},
+	{
+		value: 'space-between',
+		icon: justifySpaceBetweenVertical,
+		label: __( 'Distribute content vertically', 'folioblocks' ),
+	},
+	{
+		value: 'stretch',
+		icon: justifyStretchVertical,
+		label: __( 'Stretch content height', 'folioblocks' ),
+	},
+];
+
+const normalizeAlignment = ( value, allowed, fallback ) =>
+	allowed.includes( value ) ? value : fallback;
+
 export default function Edit( { attributes, setAttributes } ) {
 	const {
 		layout,
@@ -125,6 +168,9 @@ export default function Edit( { attributes, setAttributes } ) {
 		heightMobile,
 		overlayColor,
 		overlayOpacity,
+		itemsJustification,
+		itemJustification,
+		verticalAlignment,
 		loop,
 		disableMobile,
 		objectPositionXDesktop,
@@ -442,32 +488,101 @@ export default function Edit( { attributes, setAttributes } ) {
 		} );
 	};
 
-	/**
-	 * Stack-like toolbar mappings
-	 *
-	 * We intentionally store the same token values the core Row/Stack toolbars use
-	 * (left/center/right/space-between + top/center/bottom/space-between).
-	 * Then we map them into flexbox values applied to `.pb-bgvid__content`.
-	 */
+	const horizontalContentAlignment = normalizeAlignment(
+		layout && typeof layout === 'object'
+			? normalizeAlignment(
+					layout?.justifyContent,
+					HORIZONTAL_ALIGNMENT_VALUES,
+					'left'
+			  )
+			: itemsJustification || itemJustification,
+		HORIZONTAL_ALIGNMENT_VALUES,
+		'left'
+	);
+	const verticalContentAlignment = normalizeAlignment(
+		verticalAlignment,
+		VERTICAL_ALIGNMENT_OPTIONS.map( ( option ) => option.value ),
+		'top'
+	);
+	const layoutType = layout?.type;
+	const legacyUseContentWidth =
+		attributes.innerBlocksUseContentWidth !== false;
+	const useContentWidth =
+		layoutType === 'flow' || layoutType === 'default'
+			? false
+			: layoutType
+			? true
+			: legacyUseContentWidth;
+	const verticalAlignmentIcon =
+		VERTICAL_ALIGNMENT_OPTIONS.find(
+			( option ) => option.value === verticalContentAlignment
+		)?.icon || justifyTop;
+
 	const contentFlexStyles = {
-		// Fill the block height so inner blocks stretch to the container.
 		width: '100%',
 		height: '100%',
 		minHeight: '100%',
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: {
+			left: 'flex-start',
+			center: 'center',
+			right: 'flex-end',
+			stretch: 'stretch',
+		}[ horizontalContentAlignment ],
+		justifyContent: {
+			top: 'flex-start',
+			center: 'center',
+			bottom: 'flex-end',
+			'space-between': 'space-between',
+			stretch: 'flex-start',
+		}[ verticalContentAlignment ],
 	};
 
 	const innerBlocksProps = useInnerBlocksProps(
 		{
-			className: 'pb-bgvid__content',
+			className: `pb-bgvid__content-inner is-h-${ horizontalContentAlignment } is-v-${ verticalContentAlignment }${
+				useContentWidth ? ' is-content-width' : ' is-full-width'
+			}`,
 			style: contentFlexStyles,
 		},
 		{
 			__experimentalLayout: layout,
 		}
 	);
+	const rootLayerStyle = {
+		width: '100%',
+		maxWidth: 'none',
+		margin: 0,
+	};
 
 	return (
 		<>
+			<BlockControls>
+				<ToolbarGroup
+					label={ __( 'Vertical Content Alignment', 'folioblocks' ) }
+				>
+					<ToolbarDropdownMenu
+						icon={ verticalAlignmentIcon }
+						label={ __(
+							'Vertical Content Alignment',
+							'folioblocks'
+						) }
+						controls={ VERTICAL_ALIGNMENT_OPTIONS.map(
+							( option ) => ( {
+								title: option.label,
+								icon: option.icon,
+								isActive:
+									verticalContentAlignment === option.value,
+								onClick: () =>
+									setAttributes( {
+										verticalAlignment: option.value,
+									} ),
+							} )
+						) }
+					/>
+				</ToolbarGroup>
+			</BlockControls>
 			<InspectorControls>
 				<PanelBody
 					title={ __( 'Sizing & Focal Point', 'folioblocks' ) }
@@ -566,7 +681,6 @@ export default function Edit( { attributes, setAttributes } ) {
 						{ attributes, setAttributes }
 					) }
 				</PanelBody>
-
 				<PanelBody
 					title={ __( 'Video Settings', 'folioblocks' ) }
 					initialOpen={ true }
@@ -870,7 +984,11 @@ export default function Edit( { attributes, setAttributes } ) {
 			</InspectorControls>
 
 			<div { ...blockProps }>
-				<div className="pb-bgvid__media" aria-hidden="true">
+				<div
+					className="pb-bgvid__media alignfull"
+					style={ rootLayerStyle }
+					aria-hidden="true"
+				>
 					<div className="pb-bgvid__poster" style={ posterStyle } />
 
 					{ /* Editor preview */ }
@@ -919,28 +1037,33 @@ export default function Edit( { attributes, setAttributes } ) {
 					<div className="pb-bgvid__overlay" style={ overlayStyle } />
 				</div>
 
-				<div { ...innerBlocksProps }>
-					{ showInitialPlaceholder && (
-						<MediaPlaceholder
-							icon={ <IconBackgroundVideo /> }
-							labels={ {
-								title: __(
-									'Add Background Video',
-									'folioblocks'
-								),
-								instructions: __(
-									'Upload a video, select one from your media library, or insert a URL (including Vimeo).',
-									'folioblocks'
-								),
-							} }
-							allowedTypes={ [ 'video' ] }
-							accept="video/*"
-							multiple={ false }
-							onSelect={ onSelectDesktopVideo }
-							onSelectURL={ onSelectVideoUrl }
-						/>
-					) }
-					{ innerBlocksProps.children }
+				<div
+					className="pb-bgvid__content alignfull"
+					style={ rootLayerStyle }
+				>
+					<div { ...innerBlocksProps }>
+						{ showInitialPlaceholder && (
+							<MediaPlaceholder
+								icon={ <IconBackgroundVideo /> }
+								labels={ {
+									title: __(
+										'Add Background Video',
+										'folioblocks'
+									),
+									instructions: __(
+										'Upload a video, select one from your media library, or insert a URL (including Vimeo).',
+										'folioblocks'
+									),
+								} }
+								allowedTypes={ [ 'video' ] }
+								accept="video/*"
+								multiple={ false }
+								onSelect={ onSelectDesktopVideo }
+								onSelectURL={ onSelectVideoUrl }
+							/>
+						) }
+						{ innerBlocksProps.children }
+					</div>
 				</div>
 			</div>
 		</>

@@ -8,14 +8,13 @@
 	"icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1247.24 1247.24\"><path fill-rule=\"evenodd\" d=\"M150 180V1067C150 1100 177 1127 210 1127H1037C1070 1127 1097 1100 1097 1067V180C1097 147 1070 120 1037 120H210C177 120 150 147 150 180ZM210 180H1037V1067H210V180Z\"/><path d=\"m414 329.78717h420c21 0 38 17 38 38s-17 38-38 38H414c-21 0-38-17-38-38s17-38 38-38z\"/><path d=\"m517.44678 547v153c0 17 18 28 33 21l180-90c15-7 16-28 1-36l-180-90c-15-8-34 4-34 21v21z\"/><path d=\"m414 810.82983h420c21 0 38 17 38 38s-17 38-38 38H414c-21 0-38-17-38-38s17-38 38-38z\"/></svg>",
 	"description": "A container block capable of displaying a background video (Self-Hosted or Vimeo).",
 	"example": {
-        "attributes": {
-        "preview": true
-    }
-    },
+		"attributes": {
+			"preview": true
+		}
+	},
 	"attributes": {
 		"preview": { "type": "boolean", "default": false },
 		"disableRightClick": { "type": "boolean", "default": false },
-		"layout": { "type": "object" },
 		"sourceProvider": { "type": "string", "default": "self" },
 
 		"mediaDesktop": { "type": "object", "default": null },
@@ -32,6 +31,7 @@
 
 		"overlayColor": { "type": "string", "default": "#000000" },
 		"overlayOpacity": { "type": "number", "default": 0.35 },
+		"innerBlocksUseContentWidth": { "type": "boolean", "default": true },
 
 		"itemsJustification": { "type": "string", "default": "left" },
 		"itemJustification": { "type": "string", "default": "left" },
@@ -50,34 +50,28 @@
 		"loop": { "type": "boolean", "default": true },
 		"mute": { "type": "boolean", "default": true },
 		"disableMobile": { "type": "boolean", "default": false }
-
 	},
 	"supports": {
 		"html": false,
 		"anchor": false,
 		"customClassName": false,
-		"align": ["wide", "full"],
+		"align": [ "wide", "full" ],
 		"spacing": { "padding": true, "margin": true, "blockGap": true },
 		"color": { "background": true, "text": true, "gradients": true },
-		"border": { "radius": true, "color": true, "style": true, "width": true }
-		,
 		"layout": {
-			"allowSwitching": true,
-			"default": {
-				"type": "constrained"
-			}
+			"allowSizingOnChildren": true
+		},
+		"border": {
+			"radius": true,
+			"color": true,
+			"style": true,
+			"width": true
 		}
 	},
 	"textdomain": "folioblocks",
-	"editorScript": [
-    "file:./index.js",
-    "file:./premium.js"
-	],
+	"editorScript": [ "file:./index.js", "file:./premium.js" ],
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",
 	"render": "file:./render.php",
-	"viewScript": [
-    "file:./view.js",
-    "file:./premium-view.js"
-	]
+	"viewScript": [ "file:./view.js", "file:./premium-view.js" ]
 }

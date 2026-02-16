@@ -718,7 +718,10 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				</PanelBody>
 				{ applyFilters(
 					'folioBlocks.justifiedGallery.filterStyleSettings',
-					<div style={ { marginBottom: '8px' } }>
+					<PanelBody
+						title={__('Gallery Filtering Styles', 'folioblocks')}
+						initialOpen={true}
+					>
 						<Notice status="info" isDismissible={ false }>
 							<strong>
 								{ __( 'Filter Bar Styles', 'folioblocks' ) }
@@ -736,7 +739,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 								{ __( 'Upgrade to Pro', 'folioblocks' ) }
 							</a>
 						</Notice>
-					</div>,
+					</PanelBody>,
 					{ attributes, setAttributes }
 				) }
 				{ applyFilters(

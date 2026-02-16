@@ -802,7 +802,10 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 
 				{ applyFilters(
 					'folioBlocks.videoGallery.filterStylesControls',
-					<div style={ { marginBottom: '8px' } }>
+					<PanelBody
+						title={__('Gallery Filtering Styles', 'folioblocks')}
+						initialOpen={true}
+					>
 						<Notice status="info" isDismissible={ false }>
 							<strong>
 								{ __(
@@ -823,7 +826,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 								{ __( 'Upgrade to Pro', 'folioblocks' ) }
 							</a>
 						</Notice>
-					</div>,
+					</PanelBody>,
 					{ attributes, setAttributes }
 				) }
 

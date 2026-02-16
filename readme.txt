@@ -5,7 +5,7 @@ Tags: gallery, image gallery, photo gallery, video gallery, lightbox,
 Tested up to:      6.9
 Requires at least: 6.3
 Requires PHP: 7.4
-Stable tag:        1.1.5
+Stable tag:        1.1.6
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -105,6 +105,12 @@ No, the galleries will remain in place on your site. However, the advanced layou
 6. Video Gallery block populated with images
 
 == Changelog ==
+
+= 1.1.6 =
+* Layout related bugs on Background Video Block. 
+* Fixed a bug on Video Block and Video Gallery Block that threw up warning on the free verion of FolioBlocks. 
+* Fixed a bug on Video Block that displayed an empty PanelBody. 
+* Fixed bugs on Carousel, Grid, Justified, Masonry, and Video Gallery blocks that displayed a Notice out of alignment.   
 
 = 1.1.5 =
 * Added support for setting multiple categories per image when filtering in Grid, Justified, and Masonry Galleries. 

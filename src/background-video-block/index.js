@@ -4,10 +4,24 @@
  */
 
 import { registerBlockType } from '@wordpress/blocks';
+import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
 import './style.scss';
 import Edit from './edit';
 import Save from './save';
 import metadata from './block.json';
+
+const deprecated = [
+	{
+		save: () => {
+			const blockProps = useBlockProps.save();
+			return (
+				<div { ...blockProps }>
+					<InnerBlocks.Content />
+				</div>
+			);
+		},
+	},
+];
 
 registerBlockType(metadata.name, {
 	icon: {
@@ -29,4 +43,5 @@ registerBlockType(metadata.name, {
 	},
 	edit: Edit,
 	save: Save,
+	deprecated,
 });

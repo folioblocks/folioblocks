@@ -52,6 +52,12 @@ $fbks_woo_product_url         = '';
 $fbks_style = '';
 $fbks_drop_shadow = false;
 $fbks_cart_button_style_vars = '';
+$fbks_lazy_load = false;
+$fbks_border_color = '';
+$fbks_border_width = 0;
+$fbks_border_radius = 0;
+$fbks_woo_active = false;
+$fbks_enable_woo = false;
 
 if (fbks_fs()->can_use_premium_code__premium_only()) {
 	$fbks_border_color = esc_attr($attributes['borderColor'] ?? '');
@@ -144,7 +150,15 @@ if (fbks_fs()->can_use_premium_code__premium_only()) {
 }
 $fbks_lightbox_id = uniqid('pbv_', false);
 $fbks_lightbox_dom_id = 'pb-video-lightbox-' . $fbks_lightbox_id;
-$fbks_play_label = $fbks_title ? sprintf(__('Play video: %s', 'folioblocks'), $fbks_title) : __('Play video', 'folioblocks');
+if ($fbks_title) {
+	/* translators: %1$s: Video title. */
+	$fbks_play_label = sprintf(__('Play video: %1$s', 'folioblocks'), $fbks_title);
+	/* translators: %1$s: Video title. */
+	$fbks_lightbox_aria_label = sprintf(__('Video: %1$s', 'folioblocks'), $fbks_title);
+} else {
+	$fbks_play_label = __('Play video', 'folioblocks');
+	$fbks_lightbox_aria_label = __('Video lightbox', 'folioblocks');
+}
 ?>
 
 <div <?php echo wp_kses_post(get_block_wrapper_attributes()); ?>>
@@ -156,13 +170,14 @@ $fbks_play_label = $fbks_title ? sprintf(__('Play video: %s', 'folioblocks'), $f
 		$fbks_overlay_class = ' has-overlay-hover';
 	}
 	?>
-	<div class="pb-video-block aspect-<?php echo esc_attr(str_replace(':', '-', $fbks_aspect)); ?><?php echo esc_attr($fbks_overlay_class); ?><?php if ($fbks_has_color_overlay) {
-																													echo ' has-color-overlay';
-																												} ?><?php if ($fbks_has_blur_overlay) {
-																													echo ' has-blur-overlay';
-																												} ?><?php if (fbks_fs()->can_use_premium_code__premium_only()) {
-																																						echo $fbks_drop_shadow ? ' drop-shadow' : '';
-																																					} ?>"
+	<div class="pb-video-block aspect-<?php echo esc_attr(str_replace(':', '-', $fbks_aspect)); ?><?php echo esc_attr($fbks_overlay_class); ?>
+		<?php if ($fbks_has_color_overlay) {
+			echo ' has-color-overlay';
+		} ?><?php if ($fbks_has_blur_overlay) {
+				echo ' has-blur-overlay';
+			} ?><?php if (fbks_fs()->can_use_premium_code__premium_only()) {
+					echo $fbks_drop_shadow ? ' drop-shadow' : '';
+				} ?>"
 		role="button"
 		tabindex="0"
 		aria-label="<?php echo esc_attr($fbks_play_label); ?>"
@@ -225,7 +240,7 @@ $fbks_play_label = $fbks_title ? sprintf(__('Play video: %s', 'folioblocks'), $f
 		?>
 	</div>
 	<!-- Lightbox Markup -->
-	<div id="<?php echo esc_attr($fbks_lightbox_dom_id); ?>" class="pb-video-lightbox <?php echo esc_attr($fbks_layout_class); ?>" data-lbx="<?php echo esc_attr($fbks_lightbox_id); ?>" role="dialog" tabindex="-1" aria-modal="true" aria-hidden="true" aria-label="<?php echo $fbks_title ? esc_attr(sprintf(__('Video: %s', 'folioblocks'), $fbks_title)) : esc_attr__('Video lightbox', 'folioblocks'); ?>">
+	<div id="<?php echo esc_attr($fbks_lightbox_dom_id); ?>" class="pb-video-lightbox <?php echo esc_attr($fbks_layout_class); ?>" data-lbx="<?php echo esc_attr($fbks_lightbox_id); ?>" role="dialog" tabindex="-1" aria-modal="true" aria-hidden="true" aria-label="<?php echo esc_attr($fbks_lightbox_aria_label); ?>">
 		<div class="pb-video-lightbox-inner">
 			<button class="pb-video-lightbox-close" aria-label="<?php esc_attr_e('Close', 'folioblocks'); ?>">×</button>
 

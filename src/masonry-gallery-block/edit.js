@@ -725,7 +725,10 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 				</PanelBody>
 				{ applyFilters(
 					'folioBlocks.masonryGallery.filterStyleSettings',
-					<div style={ { marginBottom: '8px' } }>
+					<PanelBody
+						title={__('Gallery Filtering Styles', 'folioblocks')}
+						initialOpen={true}
+					>
 						<Notice status="info" isDismissible={ false }>
 							<strong>
 								{ __( 'Filter Bar Styles', 'folioblocks' ) }
@@ -743,7 +746,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 								{ __( 'Upgrade to Pro', 'folioblocks' ) }
 							</a>
 						</Notice>
-					</div>,
+					</PanelBody>,
 					{ attributes, setAttributes }
 				) }
 				{ applyFilters(
