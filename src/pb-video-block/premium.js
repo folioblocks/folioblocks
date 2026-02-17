@@ -322,7 +322,14 @@ addFilter(
 	'folioblocks/pb-video-woo-product-search',
 	(
 		output,
-		{ attributes, setAttributes, hasWooCommerce, enableWooCommerce }
+		{
+			attributes,
+			setAttributes,
+			hasWooCommerce,
+			enableWooCommerce,
+			isInsideGallery,
+			contextWooDefaultLinkAction,
+		}
 	) => {
 		const effectiveEnable =
 			typeof enableWooCommerce !== 'undefined'
@@ -331,6 +338,23 @@ addFilter(
 		if (!hasWooCommerce || !effectiveEnable) {
 			return output;
 		}
+
+		const hasGalleryDefault =
+			isInsideGallery &&
+			typeof contextWooDefaultLinkAction === 'string' &&
+			contextWooDefaultLinkAction.length > 0;
+		const effectiveDefault = hasGalleryDefault
+			? contextWooDefaultLinkAction
+			: 'add_to_cart';
+		const currentAction =
+			attributes.wooLinkAction && attributes.wooLinkAction !== 'inherit'
+				? attributes.wooLinkAction
+				: 'inherit';
+		const effectiveSelectedAction =
+			currentAction === 'inherit' ? effectiveDefault : currentAction;
+		const selectValue = hasGalleryDefault
+			? currentAction
+			: effectiveSelectedAction;
 
 		return (
 			<>
@@ -374,6 +398,73 @@ addFilter(
 						});
 					}}
 				/>
+				{Number(attributes.wooProductId) > 0 && (
+					<SelectControl
+						label={__(
+							'Default Add To Cart Icon Behavior',
+							'folioblocks'
+						)}
+						value={selectValue}
+						options={
+							hasGalleryDefault
+								? [
+									{
+										label: __(
+											'Inherit (Gallery Default)',
+											'folioblocks'
+										),
+										value: 'inherit',
+									},
+									{
+										label: __(
+											'Add to Cart',
+											'folioblocks'
+										),
+										value: 'add_to_cart',
+									},
+									{
+										label: __(
+											'Open Product Page',
+											'folioblocks'
+										),
+										value: 'product',
+									},
+								  ]
+								: [
+									{
+										label: __(
+											'Add to Cart',
+											'folioblocks'
+										),
+										value: 'add_to_cart',
+									},
+									{
+										label: __(
+											'Open Product Page',
+											'folioblocks'
+										),
+										value: 'product',
+									},
+								  ]
+						}
+						onChange={(value) =>
+							setAttributes({ wooLinkAction: value })
+						}
+						__nextHasNoMarginBottom
+						__next40pxDefaultSize
+						help={
+							hasGalleryDefault
+								? __(
+									'Choose what happens when visitors click the Add To Cart icon. Select Inherit to follow the gallery default.',
+									'folioblocks'
+								  )
+								: __(
+									'Choose what happens when visitors click the Add To Cart icon.',
+									'folioblocks'
+								  )
+						}
+					/>
+				)}
 			</>
 		);
 	}
@@ -516,6 +607,10 @@ addFilter(
 			typeof context?.['folioBlocks/wooCartIconDisplay'] !== 'undefined'
 				? context['folioBlocks/wooCartIconDisplay']
 				: undefined;
+		const contextDefaultAction =
+			typeof context?.['folioBlocks/wooDefaultLinkAction'] !== 'undefined'
+				? context['folioBlocks/wooDefaultLinkAction']
+				: undefined;
 
 		const enableWoo =
 			contextEnableWoo !== undefined
@@ -524,6 +619,11 @@ addFilter(
 
 		const wooCartIconDisplay =
 			contextCartDisplay || attributes.wooCartIconDisplay || 'hover';
+		const attrAction = attributes.wooLinkAction ?? 'inherit';
+		const linkAction =
+			attrAction && attrAction !== 'inherit'
+				? attrAction
+				: contextDefaultAction || 'add_to_cart';
 
 		// Need WooCommerce active, integration enabled, and a product selected
 		if (!hasWooCommerce || !enableWoo || !attributes.wooProductId) {
@@ -543,11 +643,22 @@ addFilter(
 		const right = 10 + Math.max(borderWidth, borderRadius * 0.3);
 
 		return (
-			<a
-				href={`?add-to-cart=${attributes.wooProductId}`}
+			<button
+				type="button"
 				className={`pb-video-add-to-cart ${wooCartIconDisplay === 'hover' ? 'hover-only' : 'always'
 					}`}
-				data-product_id={attributes.wooProductId}
+				data-woo-action={linkAction}
+				data-product-id={attributes.wooProductId}
+				data-product-url={attributes.wooProductURL || ''}
+				aria-label={
+					linkAction === 'add_to_cart'
+						? __('Add to Cart', 'folioblocks')
+						: __('View Product', 'folioblocks')
+				}
+				onClick={(e) => {
+					e.preventDefault();
+					e.stopPropagation();
+				}}
 				style={{
 					...(cartIconStyleVars || {}),
 					top: `${top}px`,
@@ -555,7 +666,7 @@ addFilter(
 				}}
 			>
 				{wooCartIcon}
-			</a>
+			</button>
 		);
 	}
 );

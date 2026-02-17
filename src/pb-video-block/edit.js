@@ -198,6 +198,8 @@ export default function Edit({ attributes, setAttributes, context }) {
 		typeof context?.['folioBlocks/enableWooCommerce'] !== 'undefined'
 			? !!context['folioBlocks/enableWooCommerce']
 			: !!attributes.enableWooCommerce;
+	const contextWooDefaultLinkAction =
+		context?.['folioBlocks/wooDefaultLinkAction'];
 	const hasWooCommerce = window.folioBlocksData?.hasWooCommerce || false;
 	const inheritedBorderColor = context?.['folioBlocks/borderColor'];
 	const inheritedBorderWidth = context?.['folioBlocks/borderWidth'];
@@ -830,14 +832,16 @@ export default function Edit({ attributes, setAttributes, context }) {
 						{applyFilters(
 							'folioBlocks.pbVideoBlock.WooProductSearch',
 							null,
-							{
-								attributes,
-								setAttributes,
-								hasWooCommerce,
-								enableWooCommerce,
-							}
-						)}
-					</PanelBody>
+								{
+									attributes,
+									setAttributes,
+									hasWooCommerce,
+									enableWooCommerce,
+									isInsideGallery,
+									contextWooDefaultLinkAction,
+								}
+							)}
+						</PanelBody>
 				)}
 			</InspectorControls>
 			{!isInsideGallery && (

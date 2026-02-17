@@ -10,9 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Prevent Filmstirp Gallery coming into focus when autoplay is enabled in the editor.
 
 ### Added 
+- Added support for setting Add To Cart icon behavior when using WooCommerce integration on Video Block & Video Gallery. 
 - Added Randomize Image Order feature to Filmstrip Gallery. 
 
 ### Fixed
+- Fixed a bug in Add To Cart icon on Video Block and Video Gallery that prevent Hover display. 
 - Fixed a bug in Image Block that prevent drop shadow from being applied when used individually. 
 
 ## [1.1.6] - 2026-02-16

@@ -108,7 +108,9 @@ No, the galleries will remain in place on your site. However, the advanced layou
 
 = 1.1.7 =
 * Prevent Filmstirp Gallery coming into focus when autoplay is enabled in the editor.
+* Added support for setting Add To Cart icon behavior when using WooCommerce integration on Video Block & Video Gallery.
 * Added Randomize Image Order feature to Filmstrip Gallery.
+* Fixed a bug in Add To Cart icon on Video Block and Video Gallery. 
 * Fixed a bug in Image Block that prevent drop shadow from being applied when used individually.
 
 = 1.1.6 =

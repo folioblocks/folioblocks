@@ -46,8 +46,9 @@
 	"lightboxLayout": { "type": "string", "default": "video-only" }, 
 	"enableWooCommerce": { "type": "boolean", "default": false },
 	"wooCartIconDisplay": { "type": "string", "enum": ["hover", "always"], "default": "hover"},
-	"cartIconColor": { "type": "string", "default": "" },
-	"cartIconBgColor": { "type": "string", "default": "" },
+	"wooLinkAction": { "type": "string", "enum": ["inherit", "product", "add_to_cart"], "default": "inherit" },
+	"cartIconColor": { "type": "string", "default": "#000000" },
+	"cartIconBgColor": { "type": "string", "default": "#ffffff" },
 	"wooProductId": { "type": "number", "default": 0 },
 	"wooProductName": { "type": "string", "default": ""},
 	"wooProductPrice": { "type": "string", "default": "" },
@@ -55,9 +56,10 @@
 	"wooProductDescription": { "type": "string", "default": "" },
 	"wooProductURL": { "type": "string", "default": ""}
 },
-"usesContext": [
+	"usesContext": [
 	"folioBlocks/enableWooCommerce",
     "folioBlocks/wooCartIconDisplay",
+	"folioBlocks/wooDefaultLinkAction",
 	"folioBlocks/cartIconColor",
   	"folioBlocks/cartIconBgColor",
     "folioBlocks/wooLightboxInfoType",

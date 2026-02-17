@@ -479,9 +479,12 @@ addFilter(
 				? attributes.wooLinkAction
 				: 'inherit';
 
+		const effectiveSelectedAction =
+			currentAction === 'inherit' ? effectiveDefault : currentAction;
+
 		const selectValue = hasGalleryDefault
 			? currentAction
-			: effectiveDefault;
+			: effectiveSelectedAction;
 
 		return (
 			<>

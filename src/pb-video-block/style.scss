@@ -220,10 +220,11 @@
 		&.hover-only {
 			opacity: 0;
 		}
+	}
 
-		.pb-video-block:hover &.hover-only {
-			opacity: 1;
-		}
+	&:hover .pb-video-add-to-cart.hover-only,
+	&:focus-within .pb-video-add-to-cart.hover-only {
+		opacity: 1;
 	}
 }
 

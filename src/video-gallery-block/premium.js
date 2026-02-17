@@ -65,8 +65,12 @@ addFilter(
 		}
 
 		const { attributes, setAttributes } = props;
-		const { enableWooCommerce, wooCartIconDisplay, enableDownload } =
-			attributes;
+		const {
+			enableWooCommerce,
+			wooCartIconDisplay,
+			wooDefaultLinkAction,
+			enableDownload,
+		} = attributes;
 
 		return (
 			<>
@@ -96,32 +100,63 @@ addFilter(
 				/>
 
 				{ enableWooCommerce && (
-					<SelectControl
-						label={ __(
-							'Display Add to Cart Icon',
-							'folioblocks'
-						) }
-						value={ wooCartIconDisplay }
-						options={ [
-							{
-								label: __( 'On Hover', 'folioblocks' ),
-								value: 'hover',
-							},
-							{
-								label: __( 'Always', 'folioblocks' ),
-								value: 'always',
-							},
-						] }
-						onChange={ ( value ) =>
-							setAttributes( { wooCartIconDisplay: value } )
-						}
-						__nextHasNoMarginBottom
-						__next40pxDefaultSize
-						help={ __(
-							'Choose when to display the Add to Cart icon.',
-							'folioblocks'
-						) }
-					/>
+					<>
+						<SelectControl
+							label={ __(
+								'Display Add to Cart Icon',
+								'folioblocks'
+							) }
+							value={ wooCartIconDisplay }
+							options={ [
+								{
+									label: __( 'On Hover', 'folioblocks' ),
+									value: 'hover',
+								},
+								{
+									label: __( 'Always', 'folioblocks' ),
+									value: 'always',
+								},
+							] }
+							onChange={ ( value ) =>
+								setAttributes( { wooCartIconDisplay: value } )
+							}
+							__nextHasNoMarginBottom
+							__next40pxDefaultSize
+							help={ __(
+								'Choose when to display the Add to Cart icon.',
+								'folioblocks'
+							) }
+						/>
+						<SelectControl
+							label={ __(
+								'Default Add To Cart Icon Behavior',
+								'folioblocks'
+							) }
+							value={ wooDefaultLinkAction || 'add_to_cart' }
+							options={ [
+								{
+									label: __( 'Add to Cart', 'folioblocks' ),
+									value: 'add_to_cart',
+								},
+								{
+									label: __(
+										'Open Product Page',
+										'folioblocks'
+									),
+									value: 'product',
+								},
+							] }
+							onChange={ ( value ) =>
+								setAttributes( { wooDefaultLinkAction: value } )
+							}
+							__nextHasNoMarginBottom
+							__next40pxDefaultSize
+							help={ __(
+								'Sets the default action for Add To Cart icons in this gallery. Individual videos can override this setting.',
+								'folioblocks'
+							) }
+						/>
+					</>
 				) }
 			</>
 		);

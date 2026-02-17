@@ -71,6 +71,14 @@ if (fbks_fs()->can_use_premium_code__premium_only()) {
 
 	$fbks_woo_active = is_plugin_active('woocommerce/woocommerce.php');
 	$fbks_enable_woo = ($fbks_context['folioBlocks/enableWooCommerce'] ?? ($attributes['enableWooCommerce'] ?? false)) && $fbks_woo_active;
+	$fbks_woo_cart_icon_display = $fbks_context['folioBlocks/wooCartIconDisplay'] ?? ($attributes['wooCartIconDisplay'] ?? 'hover');
+
+	// Woo link action: per-video attribute can override; otherwise inherit gallery default.
+	$fbks_woo_gallery_default = $fbks_context['folioBlocks/wooDefaultLinkAction'] ?? null;
+	$fbks_woo_attr_action = $attributes['wooLinkAction'] ?? 'inherit';
+	$fbks_woo_link_action = ($fbks_woo_attr_action && $fbks_woo_attr_action !== 'inherit')
+		? $fbks_woo_attr_action
+		: ($fbks_woo_gallery_default ?: 'add_to_cart');
 
 	// Cart icon styles (context wins when inside Video Gallery; fallback to block attributes when standalone)
 	$fbks_cart_icon_color = $fbks_context['folioBlocks/cartIconColor'] ?? ($attributes['cartIconColor'] ?? '');
@@ -217,13 +225,17 @@ if ($fbks_title) {
 		<?php
 		if (fbks_fs()->can_use_premium_code__premium_only()) :
 			if ($fbks_enable_woo && ! empty($attributes['wooProductId'])) :
-				$fbks_woo_cart_icon_display = $fbks_context['folioBlocks/wooCartIconDisplay'] ?? 'always';
 				$fbks_product_id = absint($attributes['wooProductId']);
 		?>
-				<a
-					href="<?php echo esc_url('?add-to-cart=' . $fbks_product_id); ?>"
+				<button
+					type="button"
 					class="pb-video-add-to-cart <?php echo $fbks_woo_cart_icon_display === 'hover' ? 'hover-only' : 'always'; ?>"
-					data-product_id="<?php echo esc_attr($fbks_product_id); ?>"
+					data-woo-action="<?php echo esc_attr($fbks_woo_link_action); ?>"
+					data-product-id="<?php echo esc_attr($fbks_product_id); ?>"
+					<?php if (! empty($attributes['wooProductURL'])) : ?>
+						data-product-url="<?php echo esc_url($attributes['wooProductURL']); ?>"
+					<?php endif; ?>
+					aria-label="<?php echo $fbks_woo_link_action === 'product' ? esc_attr__('View Product', 'folioblocks') : esc_attr__('Add to Cart', 'folioblocks'); ?>"
 					style="top: calc(10px + max(<?php echo esc_attr($fbks_border_width); ?>px, <?php echo esc_attr($fbks_border_radius); ?>px * 0.15)); right: calc(10px + max(<?php echo esc_attr($fbks_border_width); ?>px, <?php echo esc_attr($fbks_border_radius); ?>px * 0.30));<?php echo $fbks_cart_button_style_vars !== '' ? ' ' . esc_attr($fbks_cart_button_style_vars) : ''; ?>">
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="24" height="24">
 						<g transform="scale(0.75)">
@@ -233,7 +245,7 @@ if ($fbks_title) {
 							<path d="M5.66669 6.66667C5.66669 6.11438 6.1144 5.66667 6.66669 5.66667H9.33335C9.81664 5.66667 10.2308 6.01229 10.3172 6.48778L11.0445 10.4878C11.1433 11.0312 10.7829 11.5517 10.2395 11.6505C9.69614 11.7493 9.17555 11.3889 9.07676 10.8456L8.49878 7.66667H6.66669C6.1144 7.66667 5.66669 7.21895 5.66669 6.66667Z" fill="currentColor"></path>
 						</g>
 					</svg>
-				</a>
+				</button>
 		<?php
 			endif;
 		endif;

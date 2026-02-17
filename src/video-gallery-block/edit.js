@@ -81,6 +81,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		preview,
 		enableWooCommerce,
 		wooCartIconDisplay,
+		wooDefaultLinkAction,
 	} = attributes;
 	const combinedVisibility =
 		titleVisibility === 'hidden' && playButtonVisibility !== 'hidden'
@@ -199,6 +200,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			'folioBlocks/lazyLoad': lazyLoad,
 			'folioBlocks/enableWooCommerce': enableWooCommerce,
 			'folioBlocks/wooCartIconDisplay': wooCartIconDisplay,
+			'folioBlocks/wooDefaultLinkAction': wooDefaultLinkAction,
 		},
 		style: {
 			'--pb--filter-text-color': filterTextColor || '#000',
@@ -217,20 +219,23 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			allowedBlocks: [ 'folioblocks/pb-video-block' ],
 			orientation: 'horizontal',
 			templateLock: false,
-			context: {
-				'folioBlocks/aspectRatio': aspectRatio,
-				'folioBlocks/playButtonVisibility': playButtonVisibility,
-				'folioBlocks/titleVisibility': titleVisibility,
-				'folioBlocks/overlayStyle': overlayStyle,
-				'folioBlocks/overlayBgColor': overlayBgColor,
-				'folioBlocks/overlayTextColor': overlayTextColor,
-				'folioBlocks/activeFilter': activeFilter,
-				'folioBlocks/lightbox': lightbox,
-				'folioBlocks/lightboxLayout': lightboxLayout,
-				'folioBlocks/lazyLoad': lazyLoad,
-			},
-		}
-	);
+				context: {
+					'folioBlocks/aspectRatio': aspectRatio,
+					'folioBlocks/playButtonVisibility': playButtonVisibility,
+					'folioBlocks/titleVisibility': titleVisibility,
+					'folioBlocks/overlayStyle': overlayStyle,
+					'folioBlocks/overlayBgColor': overlayBgColor,
+					'folioBlocks/overlayTextColor': overlayTextColor,
+					'folioBlocks/activeFilter': activeFilter,
+					'folioBlocks/lightbox': lightbox,
+					'folioBlocks/lightboxLayout': lightboxLayout,
+					'folioBlocks/lazyLoad': lazyLoad,
+					'folioBlocks/enableWooCommerce': enableWooCommerce,
+					'folioBlocks/wooCartIconDisplay': wooCartIconDisplay,
+					'folioBlocks/wooDefaultLinkAction': wooDefaultLinkAction,
+				},
+			}
+		);
 
 	/**
 	 * Derived / Effective Values
