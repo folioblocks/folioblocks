@@ -59,6 +59,25 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		return isEditableElement( event.target );
 	};
 
+	const isElementInViewport = ( element ) => {
+		if ( ! element ) {
+			return false;
+		}
+
+		const rect = element.getBoundingClientRect();
+		const viewportHeight =
+			window.innerHeight || document.documentElement.clientHeight;
+		const viewportWidth =
+			window.innerWidth || document.documentElement.clientWidth;
+
+		return (
+			rect.bottom > 0 &&
+			rect.right > 0 &&
+			rect.top < viewportHeight &&
+			rect.left < viewportWidth
+		);
+	};
+
 	galleries.forEach( ( galleryRoot, galleryIndex ) => {
 		const api = galleryRoot.__pbFilmstrip;
 		if ( ! api ) {
@@ -74,7 +93,6 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		if ( ! main ) {
 			return;
 		}
-		const isPro = !! window.folioBlocksData?.isPro;
 		main.setAttribute( 'tabindex', '-1' );
 
 		const overlayContainer = galleryRoot.querySelector(
@@ -94,7 +112,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			'.pb-filmstrip-gallery-fullscreen-button'
 		);
 		const canUseFullscreen =
-			isPro && !! settings.enableFullscreen && !! fullscreenButton;
+			!! settings.enableFullscreen && !! fullscreenButton;
 		const playIcon = autoplayButton?.querySelector(
 			'.pb-filmstrip-icon-play'
 		);
@@ -131,10 +149,13 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		let isPlaying = !! settings.autoplay;
 		let isMainHovered = false;
 		let isGalleryHovered = false;
+		let isInViewport = isElementInViewport( galleryRoot );
 		let announceTimer = null;
 		let autoplayTimer = null;
 		let wasFullscreen = false;
 		let previouslyFocusedElement = null;
+		let viewportObserver = null;
+		let handleViewportFallback = null;
 
 		const isGalleryFullscreen = () => {
 			const fsElement = getFullscreenElement();
@@ -498,6 +519,14 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				return;
 			}
 
+			if ( ! isGalleryFullscreen() && ! isInViewport ) {
+				return;
+			}
+
+			if ( document.visibilityState === 'hidden' ) {
+				return;
+			}
+
 			const speedSeconds = Number( settings.autoplaySpeed ) || 3;
 			const intervalMs = Math.max( 0.25, speedSeconds ) * 1000;
 
@@ -505,6 +534,47 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				api.setActiveImage( api.getActiveIndex() + 1 );
 			}, intervalMs );
 		};
+
+		const handleViewportChange = ( nextState ) => {
+			const isVisible = !! nextState;
+			if ( isInViewport === isVisible ) {
+				return;
+			}
+
+			isInViewport = isVisible;
+			restartAutoplay();
+		};
+
+		if ( 'IntersectionObserver' in window ) {
+			viewportObserver = new window.IntersectionObserver(
+				( entries ) => {
+					entries.forEach( ( entry ) => {
+						if ( entry.target !== galleryRoot ) {
+							return;
+						}
+
+						handleViewportChange(
+							entry.isIntersecting && entry.intersectionRatio > 0
+						);
+					} );
+				},
+				{ threshold: [ 0, 0.01, 0.1 ] }
+			);
+			viewportObserver.observe( galleryRoot );
+			handleViewportChange( isElementInViewport( galleryRoot ) );
+		} else {
+			handleViewportFallback = () => {
+				handleViewportChange( isElementInViewport( galleryRoot ) );
+			};
+
+			window.addEventListener( 'scroll', handleViewportFallback, {
+				passive: true,
+			} );
+			window.addEventListener( 'resize', handleViewportFallback );
+			handleViewportFallback();
+		}
+
+		document.addEventListener( 'visibilitychange', restartAutoplay );
 
 		galleryRoot.addEventListener( 'pb:filmstrip:change', ( event ) => {
 			const image = event?.detail?.image;
@@ -686,6 +756,14 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			}
 			if ( instructionsNode ) {
 				instructionsNode.remove();
+			}
+			document.removeEventListener( 'visibilitychange', restartAutoplay );
+			if ( viewportObserver ) {
+				viewportObserver.disconnect();
+			}
+			if ( handleViewportFallback ) {
+				window.removeEventListener( 'scroll', handleViewportFallback );
+				window.removeEventListener( 'resize', handleViewportFallback );
 			}
 		} );
 	} );

@@ -55,6 +55,9 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		const thumbButtons = Array.from(
 			galleryRoot.querySelectorAll( '.pb-filmstrip-gallery-thumb' )
 		);
+		const thumbnailsTrack = galleryRoot.querySelector(
+			'.pb-filmstrip-gallery-thumbnails'
+		);
 		const prevButtons = Array.from(
 			galleryRoot.querySelectorAll(
 				'.pb-filmstrip-gallery-nav-prev, .pb-filmstrip-gallery-strip-nav[data-direction="prev"]'
@@ -74,6 +77,32 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				return 0;
 			}
 			return ( ( index % length ) + length ) % length;
+		};
+
+		const keepThumbVisibleInTrack = ( thumbButton ) => {
+			if ( ! thumbButton || ! thumbnailsTrack ) {
+				return;
+			}
+
+			const trackRect = thumbnailsTrack.getBoundingClientRect();
+			const thumbRect = thumbButton.getBoundingClientRect();
+			const edgePadding = 8;
+
+			if ( thumbRect.left < trackRect.left ) {
+				thumbnailsTrack.scrollLeft +=
+					thumbRect.left - trackRect.left - edgePadding;
+			} else if ( thumbRect.right > trackRect.right ) {
+				thumbnailsTrack.scrollLeft +=
+					thumbRect.right - trackRect.right + edgePadding;
+			}
+
+			if ( thumbRect.top < trackRect.top ) {
+				thumbnailsTrack.scrollTop +=
+					thumbRect.top - trackRect.top - edgePadding;
+			} else if ( thumbRect.bottom > trackRect.bottom ) {
+				thumbnailsTrack.scrollTop +=
+					thumbRect.bottom - trackRect.bottom + edgePadding;
+			}
 		};
 
 		const syncThumbState = () => {
@@ -100,10 +129,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 			const activeThumb = thumbButtons[ activeIndex ];
 			if ( activeThumb ) {
-				activeThumb.scrollIntoView( {
-					block: 'nearest',
-					inline: 'nearest',
-				} );
+				keepThumbVisibleInTrack( activeThumb );
 			}
 		};
 
