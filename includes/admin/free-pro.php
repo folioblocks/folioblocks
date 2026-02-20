@@ -69,6 +69,9 @@
                     <tbody>
                     <tr><td>Set Image Resolution on Slides</td><td>✅</td><td>✅</td></tr>
                     <tr><td>Responsive Design works on Desktop, Tablet, and Mobile</td><td>✅</td><td>✅</td></tr>
+                    <tr><td>Drag &amp; Drop Image Re-Ordering</td><td>✅</td><td>✅</td></tr>
+                    <tr><td>Block Transforms convert to Filmstrip gallery</td><td>✅</td><td>✅</td></tr>
+                    <tr><td>List View Thumbnails</td><td class="unavailable">❌</td><td>✅</td></tr>
                     <tr><td>Enable Image Downloads</td><td class="unavailable">❌</td><td>✅</td></tr>
                     <tr><td>Link to store products with WooCommerce Integration</td><td class="unavailable">❌</td><td>✅</td></tr>
                     <tr><td>Disable Right-Click</td><td class="unavailable">❌</td><td>✅</td></tr>
@@ -96,9 +99,13 @@
                     <tbody>
                     <tr><td>Set Image Resolution on Slides</td><td>✅</td><td>✅</td></tr>
                     <tr><td>Responsive Design works on Desktop, Tablet, and Mobile</td><td>✅</td><td>✅</td></tr>
+                    <tr><td>Drag &amp; Drop Image Re-Ordering</td><td>✅</td><td>✅</td></tr>
+                    <tr><td>Block Transforms convert to Carousel gallery</td><td>✅</td><td>✅</td></tr>
+                    <tr><td>List View Thumbnails</td><td class="unavailable">❌</td><td>✅</td></tr>
                     <tr><td>Multiple Layout Options</td><td class="unavailable">✅</td><td>✅</td></tr>
                     <tr><td>Light Mode & Dark Mode Styles</td><td class="unavailable">❌</td><td>✅</td></tr>
                     <tr><td>Enable Image Downloads</td><td class="unavailable">❌</td><td>✅</td></tr>
+                    <tr><td>Randomize Image Order</td><td class="unavailable">❌</td><td>✅</td></tr>
                     <tr><td>Link to store products with WooCommerce Integration</td><td class="unavailable">❌</td><td>✅</td></tr>
                     <tr><td>Disable Right-Click</td><td class="unavailable">❌</td><td>✅</td></tr>
                     <tr><td>Custom Lazy Load</td><td class="unavailable">❌</td><td>✅</td></tr>
@@ -121,6 +128,7 @@
                     <tr><td>Responsive Design works on Desktop, Tablet, and Mobile Ready</td><td>✅</td><td>✅</td></tr>
                     <tr><td>Set Column Amount (Desktop/Tablet/Mobile)</td><td>✅</td><td>✅</td></tr>
                     <tr><td>Drag &amp; Drop Image Re-Ordering</td><td>✅</td><td>✅</td></tr>
+                    <tr><td>Block Transforms convert to Justified or Masonry gallery</td><td>✅</td><td>✅</td></tr>
                     <tr><td>List View Thumbnails</td><td class="unavailable">❌</td><td>✅</td></tr>
                     <tr><td>Randomize Image Order</td><td class="unavailable">❌</td><td>✅</td></tr>
                     <tr><td>Enable Image Downloads</td><td class="unavailable">❌</td><td>✅</td></tr>
@@ -175,6 +183,7 @@
                     <tr><td>Responsive Design works on Desktop, Tablet, and Mobile Ready</td><td>✅</td><td>✅</td></tr>
                     <tr><td>Set Row Height</td><td>✅</td><td>✅</td></tr>
                     <tr><td>Drag &amp; Drop Image Re-Ordering</td><td>✅</td><td>✅</td></tr>
+                    <tr><td>Block Transforms convert to Grid or Masonry gallery</td><td>✅</td><td>✅</td></tr>
                     <tr><td>List View Thumbnails</td><td class="unavailable">❌</td><td>✅</td></tr>
                     <tr><td>Remove Image Gap</td><td>✅</td><td>✅</td></tr>
                     <tr><td>Randomize Image Order</td><td>❌</td><td>✅</td></tr>
@@ -226,6 +235,7 @@
                     <tr><td>Responsive Design works on Desktop, Tablet, and Mobile Ready</td><td>✅</td><td>✅</td></tr>
                     <tr><td>Set Column Amount (Desktop/Tablet/Mobile)</td><td>✅</td><td>✅</td></tr>
                     <tr><td>Drag &amp; Drop Image Re-Ordering</td><td>✅</td><td>✅</td></tr>
+                    <tr><td>Block Transforms convert to Justified or Grid gallery</td><td>✅</td><td>✅</td></tr>
                     <tr><td>List View Thumbnails</td><td class="unavailable">❌</td><td>✅</td></tr>
                     <tr><td>Remove Image Gap</td><td>✅</td><td>✅</td></tr>
                     <tr><td>Randomize Image Order</td><td class="unavailable">❌</td><td>✅</td></tr>
@@ -313,8 +323,9 @@
                     <tr><td>Link to store products with WooCommerce Integration</td><td class="unavailable">❌</td><td>✅</td></tr>
                     <tr><td>Disable Right-Click</td><td class="unavailable">❌</td><td>✅</td></tr>
                     <tr><td>Lazy Load Images</td><td class="unavailable">❌</td><td>✅</td></tr>
-                    <tr><td>Hide/Display Video Title Overlay</td><td>✅</td><td>✅</td></tr>
-                    <tr><td>Hide/Display Video Play Button Overlay</td><td>✅</td><td>✅</td></tr>
+                    <tr><td>Hide/Display Video Title & Play Button in Overlay</td><td>✅</td><td>✅</td></tr>
+                    <tr><td>Hide Play Button in Overlay</td><td>✅</td><td>✅</td></tr>
+                    <tr><td>Custom Overlay Styles</td><td>❌</td><td>✅</td></tr>
                     <tr><td>Disable Lightbox in Editor</td><td>✅</td><td>✅</td></tr>
                     <tr><td>Show video description in Lightbox</td><td class="unavailable">❌</td><td>✅</td></tr>
                     <tr><td>Video Gallery Filtering</td><td class="unavailable">❌</td><td>✅</td></tr>

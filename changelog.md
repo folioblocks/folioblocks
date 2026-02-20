@@ -4,6 +4,18 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-02-18
+
+### Released
+- Public release of Filmstrip Gallery & Background Video Block. 
+- Public release of Block Transforms. 
+- Public release of new Custom Color Overlay in all galeries. 
+- Public release of Overlay Styles on Video Block and Video Gallery. 
+- Public release of multi-category filtering in all galleries.
+
+### Changed 
+- Updated Free Vs Pro Page.
+
 ## [1.1.8] - 2026-02-18
 
 ### Fixed 
@@ -32,7 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.1.5] - 2026-02-14
 
-### 
+### Added
 - Added support for setting multiple categories per image when filtering in Grid, Justified, and Masonry Galleries. 
 - Added support for setting multiple categories per video when filtering in Video Gallery. 
 - MediaPlaceholder for initial state on Background Video Block. 
