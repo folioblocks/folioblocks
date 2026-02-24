@@ -129,6 +129,7 @@
 	min-height: 100%;
 	display: flex;
 	flex-direction: column;
+	gap: var(--wp--style--block-gap, 0);
 }
 
 .pb-bgvid__content-inner.is-h-left {
@@ -175,52 +176,17 @@
 	flex: 1 1 auto;
 }
 
-/*
- * Group-like constrained content mode:
- * - Normal inner blocks follow theme content width.
- * - `alignwide` can expand to the theme wide width.
- * - `alignfull` can span the full block width.
- */
-.pb-bgvid__content-inner.is-content-width
-	> :where(
-		:not(.alignleft):not(.alignright):not(.alignwide):not(.alignfull)
-	) {
-	width: min(100%, var(--wp--style--global--content-size, 100%));
-	max-width: var(--wp--style--global--content-size, 100%);
-}
-
-.pb-bgvid__content-inner.is-content-width > .alignwide {
-	width: min(100%, var(--wp--style--global--wide-size, 100%));
-	max-width: var(--wp--style--global--wide-size, 100%);
-}
-
-.pb-bgvid__content-inner.is-content-width > .alignfull {
-	width: 100%;
+/* Content area is always full width. Use an inner Group block for constraints. */
+.pb-bgvid__content-inner.is-full-width > * {
 	max-width: none;
 }
 
-.pb-bgvid__content-inner.is-content-width.is-h-left
-	> :where(:not(.alignleft):not(.alignright):not(.alignfull)),
-.pb-bgvid__content-inner.is-content-width.is-h-left > .alignwide {
-	margin-left: 0;
-	margin-right: auto;
-}
-
-.pb-bgvid__content-inner.is-content-width.is-h-center
-	> :where(:not(.alignleft):not(.alignright):not(.alignfull)),
-.pb-bgvid__content-inner.is-content-width.is-h-center > .alignwide {
-	margin-left: auto;
-	margin-right: auto;
-}
-
-.pb-bgvid__content-inner.is-content-width.is-h-right
-	> :where(:not(.alignleft):not(.alignright):not(.alignfull)),
-.pb-bgvid__content-inner.is-content-width.is-h-right > .alignwide {
-	margin-left: auto;
-	margin-right: 0;
-}
-
-.pb-bgvid__content-inner.is-full-width > * {
+/*
+ * Keep root content Group full-width even when horizontal alignment classes
+ * set `align-items` to left/center/right on the flex container.
+ */
+.pb-bgvid__content-inner > .wp-block-group {
+	align-self: stretch;
 	width: 100%;
 	max-width: none;
 }

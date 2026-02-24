@@ -29,6 +29,11 @@ import { useSelect } from '@wordpress/data';
 import { applyFilters } from '@wordpress/hooks';
 import { IconVideoBlock, IconPlayButton } from '../pb-helpers/icons';
 import CompactColorControl from '../pb-helpers/CompactColorControl.js';
+import {
+	getVideoIframeSrc,
+	getVideoProviderData,
+	getVideoProviderLabel,
+} from '../pb-helpers/videoProviders';
 import './editor.scss';
 
 const ASPECT_RATIOS = {
@@ -63,58 +68,40 @@ const getAssignedFilterCategories = (attributes = {}) => {
 	return legacyCategory ? [legacyCategory] : [];
 };
 
-// Function to support YouTube & Vimeo Videos
-function getVideoEmbedMarkup(videoUrl) {
-	const origin = window.location.origin;
-	if (!videoUrl) {
+// Function to support YouTube, Vimeo, Bunny Stream, and self-hosted videos.
+function getVideoEmbedMarkup( videoUrl ) {
+	if ( ! videoUrl ) {
 		return null;
 	}
 
-	// Handle YouTube URLs
-	if (
-		videoUrl.includes('youtube.com') ||
-		videoUrl.includes('youtu.be')
-	) {
-		let videoId = '';
-		try {
-			const url = new URL(videoUrl);
-			if (url.hostname.includes('youtu.be')) {
-				videoId = url.pathname.replace('/', '');
-			} else if (url.searchParams.has('v')) {
-				videoId = url.searchParams.get('v');
-			}
-		} catch (e) {
-			console.warn('Invalid YouTube URL:', videoUrl);
-		}
-		if (videoId) {
-			return (
-				<iframe
-					src={`https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1`}
-					style={{ border: 'none' }}
-					allow="autoplay; fullscreen"
-					allowFullScreen
-					title="YouTube Video"
-					sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-					referrerPolicy="strict-origin-when-cross-origin"
-				></iframe>
-			);
-		}
-	}
-	// Handle Vimeo URLs
-	if (videoUrl.includes('vimeo.com')) {
-		const videoId = videoUrl.split('/').pop().split('?')[0];
+	const providerData = getVideoProviderData( videoUrl );
+	const iframeSrc = getVideoIframeSrc( videoUrl, { preferNoCookie: true } );
+
+	if ( iframeSrc ) {
+		const isYouTube = providerData.provider === 'youtube';
+		const providerLabel = getVideoProviderLabel( videoUrl );
+
 		return (
 			<iframe
-				src={`https://player.vimeo.com/video/${videoId}`}
-				style={{ border: 'none' }}
-				allow="autoplay; fullscreen"
+				src={ iframeSrc }
+				style={ { border: 'none' } }
+				allow="autoplay; fullscreen; picture-in-picture"
 				allowFullScreen
-				title="Vimeo Video"
+				title={ `${ providerLabel } Video` }
+				sandbox={
+					isYouTube
+						? 'allow-same-origin allow-scripts allow-popups allow-forms'
+						: undefined
+				}
+				referrerPolicy={
+					isYouTube ? 'strict-origin-when-cross-origin' : undefined
+				}
 			/>
 		);
 	}
+
 	// Fallback for self-hosted videos
-	return <video src={videoUrl} controls autoPlay />;
+	return <video src={ videoUrl } controls autoPlay />;
 }
 
 export default function Edit({ attributes, setAttributes, context }) {
@@ -542,29 +529,32 @@ export default function Edit({ attributes, setAttributes, context }) {
 							</MediaUploadCheck>
 						</div>
 					)}
-					<TextControl
-						label={__('Video URL', 'folioblocks')}
-						value={videoUrl}
-						onChange={(val) =>
-							setAttributes({ videoUrl: val })
-						}
-						help={
-							<>
-								{__('Supports YouTube, Vimeo, or')}
-								<a
-									href="#"
-									onClick={(e) => {
-										e.preventDefault();
-										openMediaLibrary();
-									}}
-								>
-									{__('self-hosted videos')}
-								</a>
-								{
-									'. Note: Some YouTube & Vimeo videos may not work due to privacy settings.'
-								}
-							</>
-						}
+						<TextControl
+							label={__('Video URL', 'folioblocks')}
+							value={videoUrl}
+							onChange={(val) =>
+								setAttributes({ videoUrl: val })
+							}
+							help={
+								<>
+									{__(
+										'Supports YouTube, Vimeo, Bunny Stream, or ',
+										'folioblocks'
+									)}
+									<a
+										href="#"
+										onClick={(e) => {
+											e.preventDefault();
+											openMediaLibrary();
+										}}
+									>
+										{__('self-hosted videos')}
+									</a>
+									{
+										'. Note: Some provider videos may not work due to privacy settings.'
+									}
+								</>
+							}
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
@@ -1129,27 +1119,21 @@ export default function Edit({ attributes, setAttributes, context }) {
 								</div>
 							)}
 
-							{effectiveLightboxLayout === 'split' && (
-								<>
-									<div
-										className="pb-video-lightbox-video"
-										style={{ flex: '0 0 70%' }}
-									>
-										{getVideoEmbedMarkup(
-											videoUrl,
-											isInVideoGallery
-												? { controls: false }
-												: undefined
-										)}
-									</div>
-									<div
-										className="pb-video-lightbox-info"
-										style={{ flex: '0 0 30%' }}
-									>
-										{title && (
-											<h2 className="lightbox-title">
-												{title}
-											</h2>
+								{effectiveLightboxLayout === 'split' && (
+									<>
+										<div className="pb-video-lightbox-video">
+											{getVideoEmbedMarkup(
+												videoUrl,
+												isInVideoGallery
+													? { controls: false }
+													: undefined
+											)}
+										</div>
+										<div className="pb-video-lightbox-info">
+											{title && (
+												<h2 className="lightbox-title">
+													{title}
+												</h2>
 										)}
 										{description && (
 											<p className="lightbox-description">

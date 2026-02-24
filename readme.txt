@@ -5,7 +5,7 @@ Tags: gallery, image gallery, photo gallery, video gallery, lightbox,
 Tested up to:      6.9
 Requires at least: 6.3
 Requires PHP: 7.4
-Stable tag:        1.2.0
+Stable tag:        1.2.1
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -107,13 +107,18 @@ No, the galleries will remain in place on your site. However, the advanced layou
 
 == Changelog ==
 
+= 1.2.1 =
+* Added support for videos from Bunny Stream to the Video Block and Video Gallery.  
+* Moved video parsing logic from block into seperate helper file. 
+
 = 1.2.0 =
 * Public release of Filmstrip Gallery & Background Video Block. 
 * Public release of Block Transforms. 
 * Public release of new Custom Color Overlay in all galeries. 
 * Public release of Overlay Styles on Video Block and Video Gallery. 
 * Public release of multi-category filtering in all galleries.
-* Updated Free Vs Pro Page
+* Updated Free Vs Pro Page with new blocks and block features. 
+* Fixed layout bugs in the Background Video Block. 
 
 = 1.1.8 =
 * Fixed a bug that prevented Play/Pause and Full Screen from being accessed when overlay was enabled on Filmstrip Gallery.

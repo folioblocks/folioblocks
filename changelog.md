@@ -4,6 +4,14 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.1] - 2026-02-24
+
+### Added
+- Added support for videos from Bunny Stream to the Video Block and Video Gallery. 
+
+### Changed 
+- Moved video parsing logic from block into seperate helper file. 
+
 ## [1.2.0] - 2026-02-18
 
 ### Released
@@ -12,6 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Public release of new Custom Color Overlay in all galeries. 
 - Public release of Overlay Styles on Video Block and Video Gallery. 
 - Public release of multi-category filtering in all galleries.
+
+### Fixed
+- Layout bugs in Background Video Block. 
 
 ### Changed 
 - Updated Free Vs Pro Page.

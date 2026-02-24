@@ -18,12 +18,8 @@
 		"sourceProvider": { "type": "string", "default": "self" },
 
 		"mediaDesktop": { "type": "object", "default": null },
-		"mediaTablet": { "type": "object", "default": null },
-		"mediaMobile": { "type": "object", "default": null },
 
 		"posterDesktop": { "type": "object", "default": null },
-		"posterTablet": { "type": "object", "default": null },
-		"posterMobile": { "type": "object", "default": null },
 
 		"heightDesktop": { "type": "number", "default": 70 },
 		"heightTablet": { "type": "number", "default": 60 },
@@ -31,7 +27,6 @@
 
 		"overlayColor": { "type": "string", "default": "#000000" },
 		"overlayOpacity": { "type": "number", "default": 0.35 },
-		"innerBlocksUseContentWidth": { "type": "boolean", "default": true },
 
 		"itemsJustification": { "type": "string", "default": "left" },
 		"itemJustification": { "type": "string", "default": "left" },
@@ -46,9 +41,7 @@
 
 		"vimeoAspectRatio": { "type": "number", "default": null },
 
-		"autoplay": { "type": "boolean", "default": true },
 		"loop": { "type": "boolean", "default": true },
-		"mute": { "type": "boolean", "default": true },
 		"disableMobile": { "type": "boolean", "default": false }
 	},
 	"supports": {
@@ -58,9 +51,6 @@
 		"align": [ "wide", "full" ],
 		"spacing": { "padding": true, "margin": true, "blockGap": true },
 		"color": { "background": true, "text": true, "gradients": true },
-		"layout": {
-			"allowSizingOnChildren": true
-		},
 		"border": {
 			"radius": true,
 			"color": true,

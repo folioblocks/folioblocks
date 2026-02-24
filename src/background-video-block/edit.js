@@ -14,6 +14,7 @@ import {
 	useBlockProps,
 	useInnerBlocksProps,
 } from '@wordpress/block-editor';
+import { createBlock } from '@wordpress/blocks';
 import {
 	Button,
 	PanelBody,
@@ -27,6 +28,7 @@ import {
 	__experimentalDivider as Divider,
 	Notice,
 } from '@wordpress/components';
+import { useDispatch, useSelect } from '@wordpress/data';
 import { useEffect, useMemo, useRef, useState } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
 import {
@@ -157,7 +159,24 @@ const VERTICAL_ALIGNMENT_OPTIONS = [
 const normalizeAlignment = ( value, allowed, fallback ) =>
 	allowed.includes( value ) ? value : fallback;
 
-export default function Edit( { attributes, setAttributes } ) {
+const DEFAULT_CONTENT_GROUP_TEMPLATE = [
+	[
+		'core/group',
+		{
+			layout: { type: 'default' },
+		},
+		[
+			[
+				'core/paragraph',
+				{
+					placeholder: __( 'Add content…', 'folioblocks' ),
+				},
+			],
+		],
+	],
+];
+
+export default function Edit( { attributes, setAttributes, clientId } ) {
 	const {
 		layout,
 		mediaDesktop,
@@ -235,6 +254,7 @@ export default function Edit( { attributes, setAttributes } ) {
 	// To make it behave like CSS background-size: cover, we oversize the iframe based on the
 	// container's aspect ratio vs the video's aspect ratio.
 	const vimeoWrapRef = useRef( null );
+	const autoInsertGroupRef = useRef( false );
 	const [ vimeoIframeStyle, setVimeoIframeStyle ] = useState( null );
 
 	// Safe fallback to 16:9 if we don't know the actual ratio yet.
@@ -365,6 +385,57 @@ export default function Edit( { attributes, setAttributes } ) {
 
 	const hasAnyBackground = isSelfHosted || isVimeo;
 	const showInitialPlaceholder = ! hasAnyBackground;
+	const { replaceInnerBlocks } = useDispatch( 'core/block-editor' );
+	const innerBlocks = useSelect(
+		( select ) => select( 'core/block-editor' ).getBlocks( clientId ),
+		[ clientId ]
+	);
+	const hasInnerBlocks =
+		Array.isArray( innerBlocks ) && innerBlocks.length > 0;
+
+	useEffect( () => {
+		if ( ! hasAnyBackground ) {
+			autoInsertGroupRef.current = false;
+			return;
+		}
+
+		if ( autoInsertGroupRef.current ) {
+			return;
+		}
+
+		if ( hasInnerBlocks ) {
+			autoInsertGroupRef.current = true;
+			return;
+		}
+
+		replaceInnerBlocks(
+			clientId,
+			[
+				createBlock(
+					'core/group',
+					{
+						layout: { type: 'default' },
+					},
+					[
+						createBlock( 'core/paragraph', {
+							placeholder: __(
+								'Add content…',
+								'folioblocks'
+							),
+						} ),
+					]
+				),
+			],
+			false
+		);
+		autoInsertGroupRef.current = true;
+	}, [
+		hasAnyBackground,
+		hasInnerBlocks,
+		replaceInnerBlocks,
+		clientId,
+	] );
+
 	const blockStyle = hasAnyBackground
 		? {
 				// Mirror the front-end variables we will output in render.php.
@@ -380,13 +451,11 @@ export default function Edit( { attributes, setAttributes } ) {
 				'--pb-bgvid-pos-y-tablet': `${ objectPositionYTablet }%`,
 				'--pb-bgvid-pos-y-mobile': `${ objectPositionYMobile }%`,
 
-				// Editor preview uses the active viewport breakpoint.
-				'--pb-bgvid-pos-x': `${ previewPosX }%`,
-				'--pb-bgvid-pos-y': `${ previewPosY }%`,
-
-				'--pb-bgvid-overlay': `rgba(0,0,0,0)`,
-		  }
-		: {};
+					// Editor preview uses the active viewport breakpoint.
+					'--pb-bgvid-pos-x': `${ previewPosX }%`,
+					'--pb-bgvid-pos-y': `${ previewPosY }%`,
+			  }
+			: {};
 
 	const blockProps = useBlockProps( {
 		className: `pb-bgvid${ hasAnyBackground ? ' has-media' : '' }${
@@ -504,50 +573,22 @@ export default function Edit( { attributes, setAttributes } ) {
 		VERTICAL_ALIGNMENT_OPTIONS.map( ( option ) => option.value ),
 		'top'
 	);
-	const layoutType = layout?.type;
-	const legacyUseContentWidth =
-		attributes.innerBlocksUseContentWidth !== false;
-	const useContentWidth =
-		layoutType === 'flow' || layoutType === 'default'
-			? false
-			: layoutType
-			? true
-			: legacyUseContentWidth;
 	const verticalAlignmentIcon =
 		VERTICAL_ALIGNMENT_OPTIONS.find(
 			( option ) => option.value === verticalContentAlignment
 		)?.icon || justifyTop;
 
-	const contentFlexStyles = {
-		width: '100%',
-		height: '100%',
-		minHeight: '100%',
-		display: 'flex',
-		flexDirection: 'column',
-		alignItems: {
-			left: 'flex-start',
-			center: 'center',
-			right: 'flex-end',
-			stretch: 'stretch',
-		}[ horizontalContentAlignment ],
-		justifyContent: {
-			top: 'flex-start',
-			center: 'center',
-			bottom: 'flex-end',
-			'space-between': 'space-between',
-			stretch: 'flex-start',
-		}[ verticalContentAlignment ],
-	};
-
 	const innerBlocksProps = useInnerBlocksProps(
 		{
-			className: `pb-bgvid__content-inner is-h-${ horizontalContentAlignment } is-v-${ verticalContentAlignment }${
-				useContentWidth ? ' is-content-width' : ' is-full-width'
-			}`,
-			style: contentFlexStyles,
+			className: `pb-bgvid__content-inner is-h-${ horizontalContentAlignment } is-v-${ verticalContentAlignment } is-full-width`,
 		},
 		{
-			__experimentalLayout: layout,
+			allowedBlocks: [ 'core/group' ],
+			template: hasAnyBackground
+				? DEFAULT_CONTENT_GROUP_TEMPLATE
+				: undefined,
+			templateLock: false,
+			orientation: 'vertical',
 		}
 	);
 	const rootLayerStyle = {

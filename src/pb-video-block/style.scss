@@ -301,13 +301,21 @@
 .pb-video-lightbox.video-product-layout {
 
 	.pb-video-lightbox-inner {
+		--pb-lightbox-gap: clamp(1rem, 2vw, 2rem);
 		display: flex;
 		align-items: stretch;
 		justify-content: center;
-		gap: 2rem;
+		gap: var(--pb-lightbox-gap);
+	}
+
+	.pb-video-lightbox-video {
+		flex: 0 1 calc(70% - (var(--pb-lightbox-gap) / 2));
+		min-width: 0;
 	}
 
 	.pb-video-lightbox-info {
+		flex: 0 1 calc(30% - (var(--pb-lightbox-gap) / 2));
+		min-width: 0;
 		color: #fff;
 		overflow-y: auto;
 		max-height: 80vh;
@@ -337,13 +345,7 @@
 
 // Video + Product Layout (unique differences)
 .pb-video-lightbox.video-product-layout {
-
-	.pb-video-lightbox-video {
-		flex: 0 0 70%;
-	}
-
 	.pb-video-lightbox-info {
-		flex: 0 0 30%;
 		padding: 2rem;
 		text-align: left;
 

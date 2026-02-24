@@ -3,11 +3,11 @@
  * Premium View JS
  */
 document.addEventListener( 'DOMContentLoaded', () => {
-	const blocks = document.querySelectorAll(
-		'.wp-block-folioblocks-background-video-block'
+	// Disable right-click on entire page if any block has it enabled.
+	const disableRightClick = document.querySelector(
+		'[data-disable-right-click="true"]'
 	);
-	// ---- Premium: Disable right-click (if enabled) ----
-	if ( block.dataset.disableRightClick === 'true' ) {
+	if ( disableRightClick ) {
 		document.addEventListener( 'contextmenu', ( e ) => e.preventDefault(), {
 			passive: false,
 		} );

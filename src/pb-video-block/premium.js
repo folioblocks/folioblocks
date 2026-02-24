@@ -704,25 +704,19 @@ addFilter(
 		const safeWooProductURL = sanitizeExternalUrl(wooProductURL);
 
 		// If a product is linked
-		if (wooProductId > 0) {
-			return (
-				<>
-					<div
-						className="pb-video-lightbox-video"
-						style={{ flex: '0 0 70%' }}
-					>
-						{getVideoEmbedMarkup(
-							videoUrl,
-							isInVideoGallery ? { controls: false } : undefined
-						)}
-					</div>
-					<div
-						className="pb-video-lightbox-info"
-						style={{ flex: '0 0 30%' }}
-					>
-						{wooProductName && (
-							<h2 className="pb-video-lightbox-product-title">
-								{wooProductName}
+			if (wooProductId > 0) {
+				return (
+					<>
+						<div className="pb-video-lightbox-video">
+							{getVideoEmbedMarkup(
+								videoUrl,
+								isInVideoGallery ? { controls: false } : undefined
+							)}
+						</div>
+						<div className="pb-video-lightbox-info">
+							{wooProductName && (
+								<h2 className="pb-video-lightbox-product-title">
+									{wooProductName}
 							</h2>
 						)}
 						{wooProductPrice && (
@@ -757,24 +751,18 @@ addFilter(
 		}
 
 		// Fallback: split layout if no product linked
-		return (
-			<>
-				<div
-					className="pb-video-lightbox-video"
-					style={{ flex: '0 0 70%' }}
-				>
-					{getVideoEmbedMarkup(
-						videoUrl,
-						isInVideoGallery ? { controls: false } : undefined
-					)}
-				</div>
-				<div
-					className="pb-video-lightbox-info"
-					style={{ flex: '0 0 30%' }}
-				>
-					{title && <h2 className="lightbox-title">{title}</h2>}
-					{description && (
-						<p className="lightbox-description">{description}</p>
+			return (
+				<>
+					<div className="pb-video-lightbox-video">
+						{getVideoEmbedMarkup(
+							videoUrl,
+							isInVideoGallery ? { controls: false } : undefined
+						)}
+					</div>
+					<div className="pb-video-lightbox-info">
+						{title && <h2 className="lightbox-title">{title}</h2>}
+						{description && (
+							<p className="lightbox-description">{description}</p>
 					)}
 				</div>
 			</>

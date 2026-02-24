@@ -1,7 +1,9 @@
 /**
  * PB Video Block
- * View JS – Optimized Lightbox (fast YouTube/Vimeo playback)
+ * View JS – Optimized Lightbox (fast provider playback)
  */
+
+import { getVideoIframeSrc } from '../pb-helpers/videoProviders';
 
 let userUsedKeyboard = false;
 window.addEventListener( 'keydown', ( e ) => {
@@ -45,74 +47,57 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		if ( ! lightbox || ! videoContainer ) {
 			return;
 		}
-		const closeButton = lightbox.querySelector(
-			'.pb-video-lightbox-close'
-		);
-		let lastFocusedElement = null;
+			const closeButton = lightbox.querySelector(
+				'.pb-video-lightbox-close'
+			);
+			let lastFocusedElement = null;
 
-		/**
-		 * ----------------------------------------------------------------
-		 *  Create one reusable iframe for YouTube/Vimeo playback
-		 *  ----------------------------------------------------------------
-		 */
-		const iframe = document.createElement( 'iframe' );
-		iframe.setAttribute( 'frameborder', '0' );
-		iframe.setAttribute(
-			'allow',
-			'autoplay; encrypted-media; fullscreen; picture-in-picture'
-		);
-		iframe.setAttribute( 'allowfullscreen', '' );
-		iframe.style.display = 'none';
-		iframe.style.opacity = '0';
-		iframe.style.transition = 'opacity 0.3s ease';
-		videoContainer.appendChild( iframe );
+			/**
+			 * ----------------------------------------------------------------
+			 *  Create one reusable iframe for provider playback
+			 *  ----------------------------------------------------------------
+			 */
+			const iframe = document.createElement( 'iframe' );
+			iframe.setAttribute( 'frameborder', '0' );
+			iframe.setAttribute(
+				'allow',
+				'autoplay; encrypted-media; fullscreen; picture-in-picture'
+			);
+			iframe.setAttribute( 'allowfullscreen', '' );
+			iframe.style.display = 'none';
+			iframe.style.opacity = '0';
+			iframe.style.transition = 'opacity 0.3s ease';
+			videoContainer.appendChild( iframe );
 
-		iframe.addEventListener( 'load', () => {
-			iframe.classList.add( 'loaded' );
-			iframe.style.opacity = '1';
-		} );
+			iframe.addEventListener( 'load', () => {
+				iframe.classList.add( 'loaded' );
+				iframe.style.opacity = '1';
+			} );
 
-		/**
-		 * ----------------------------------------------------------------
-		 *  Helper: Build correct embed markup or local video
-		 *  ----------------------------------------------------------------
-		 * @param videoUrl
-		 */
-		function setVideoSource( videoUrl ) {
-			videoContainer.classList.remove( 'has-local-video' );
-			if ( /youtube\.com|youtu\.be/.test( videoUrl ) ) {
-				let videoId = null;
-				try {
-					if ( videoUrl.includes( 'watch?v=' ) ) {
-						videoId = new URL( videoUrl ).searchParams.get( 'v' );
-					} else if ( videoUrl.includes( 'youtu.be/' ) ) {
-						videoId = videoUrl
-							.split( 'youtu.be/' )[ 1 ]
-							.split( /[?&]/ )[ 0 ];
-					}
-				} catch ( e ) {
-					console.error( 'Error parsing YouTube URL:', e );
-				}
-				if ( videoId ) {
-					iframe.src = `https://www.youtube.com/embed/${ videoId }?autoplay=1&rel=0&modestbranding=1&enablejsapi=1`;
+			/**
+			 * ----------------------------------------------------------------
+			 *  Helper: Build correct embed markup or local video
+			 *  ----------------------------------------------------------------
+			 * @param videoUrl
+			 */
+			function setVideoSource( videoUrl ) {
+				videoContainer.classList.remove( 'has-local-video' );
+				const iframeSrc = getVideoIframeSrc( videoUrl, {
+					autoplay: true,
+				} );
+
+				if ( iframeSrc ) {
+					iframe.src = iframeSrc;
 					iframe.style.display = 'block';
 					return;
 				}
-			}
 
-			if ( /vimeo\.com/.test( videoUrl ) ) {
-				const videoId = videoUrl.split( '/' ).pop();
-				iframe.src = `https://player.vimeo.com/video/${ videoId }?autoplay=1`;
-				iframe.style.display = 'block';
-				return;
+				// Self-hosted video
+				iframe.style.display = 'none';
+				iframe.src = '';
+				videoContainer.classList.add( 'has-local-video' );
+				videoContainer.innerHTML = `<video src="${ videoUrl }" controls autoplay></video>`;
 			}
-
-			// Self-hosted video
-			iframe.style.display = 'none';
-			iframe.src = '';
-			videoContainer.classList.add( 'has-local-video' );
-			videoContainer.innerHTML = `<video src="${ videoUrl }" controls autoplay></video>`;
-		}
 
 		function getFocusableElements( container ) {
 			const selectors = [

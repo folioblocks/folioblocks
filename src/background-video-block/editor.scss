@@ -42,3 +42,30 @@
 		display: none;
 	}
 }
+
+/*
+ * In editor, InnerBlocks are wrapped in `.block-editor-inner-blocks`.
+ * Because the content layer is a flex container, that wrapper can shrink
+ * to content width unless we force it to stretch.
+ */
+.pb-bgvid__content-inner > .block-editor-inner-blocks,
+.pb-bgvid__content-inner > .block-editor-inner-blocks > .block-editor-block-list__layout {
+	align-self: stretch !important;
+	width: 100% !important;
+	max-width: none !important;
+}
+
+/* Constrained sizing is delegated to an inner Group block. */
+
+/*
+ * In editor, ensure the root Group added inside Background Video stays full width
+ * even when the parent uses flex alignment classes.
+ */
+.pb-bgvid__content-inner
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout
+	> .wp-block-group {
+	align-self: stretch !important;
+	width: 100% !important;
+	max-width: none !important;
+}

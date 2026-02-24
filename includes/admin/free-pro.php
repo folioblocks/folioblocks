@@ -291,7 +291,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <tr><td>Support for Self-Hosted, YouTube, &amp; Vimeo Videos</td><td>✅</td><td>✅</td></tr>
+                    <tr><td>Support for Self-Hosted, YouTube, &amp; Vimeo, and Bunny Stream Videos</td><td>✅</td><td>✅</td></tr>
                     <tr><td>Set Thumbnail Resolution &amp; Aspect Ratio</td><td>✅</td><td>✅</td></tr>
                     <tr><td>Responsive Design works on Desktop, Tablet, and Mobile Ready</td><td>✅</td><td>✅</td></tr>
                     <tr><td>Link to store products with WooCommerce Integration</td><td class="unavailable">❌</td><td>✅</td></tr>
@@ -315,7 +315,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <tr><td>Support for Self-Hosted, YouTube, &amp; Vimeo Videos</td><td>✅</td><td>✅</td></tr>
+                    <tr><td>Support for Self-Hosted, YouTube, &amp; Vimeo, andBunny Stream Videos</td><td>✅</td><td>✅</td></tr>
                     <tr><td>Set Thumbnail Resolution &amp; Aspect Ratio</td><td>✅</td><td>✅</td></tr>
                     <tr><td>Responsive Design works on Desktop, Tablet, and Mobile Ready</td><td>✅</td><td>✅</td></tr>
                     <tr><td>Drag &amp; Drop Video Re-Ordering</td><td>✅</td><td>✅</td></tr>

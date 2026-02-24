@@ -253,15 +253,15 @@ if ($fbks_title) {
 	</div>
 	<!-- Lightbox Markup -->
 	<div id="<?php echo esc_attr($fbks_lightbox_dom_id); ?>" class="pb-video-lightbox <?php echo esc_attr($fbks_layout_class); ?>" data-lbx="<?php echo esc_attr($fbks_lightbox_id); ?>" role="dialog" tabindex="-1" aria-modal="true" aria-hidden="true" aria-label="<?php echo esc_attr($fbks_lightbox_aria_label); ?>">
-		<div class="pb-video-lightbox-inner">
-			<button class="pb-video-lightbox-close" aria-label="<?php esc_attr_e('Close', 'folioblocks'); ?>">×</button>
+			<div class="pb-video-lightbox-inner">
+				<button class="pb-video-lightbox-close" aria-label="<?php esc_attr_e('Close', 'folioblocks'); ?>">×</button>
 
-			<?php if ($fbks_layout === 'split' || $fbks_layout === 'video-product') : ?>
-				<div class="pb-video-lightbox-video" style="flex: 0 0 70%"></div>
-				<div class="pb-video-lightbox-info" style="flex: 0 0 30%">
-					<?php if (fbks_fs()->can_use_premium_code__premium_only()) : ?>
-						<?php if ($fbks_enable_woo && $fbks_layout === 'video-product' && ($fbks_woo_product_name || $fbks_woo_product_price || $fbks_woo_product_description || $fbks_woo_product_url)) : ?>
-							<div class="pb-lightbox-product-info">
+				<?php if ($fbks_layout === 'split' || $fbks_layout === 'video-product') : ?>
+					<div class="pb-video-lightbox-video"></div>
+					<div class="pb-video-lightbox-info">
+						<?php if (fbks_fs()->can_use_premium_code__premium_only()) : ?>
+							<?php if ($fbks_enable_woo && $fbks_layout === 'video-product' && ($fbks_woo_product_name || $fbks_woo_product_price || $fbks_woo_product_description || $fbks_woo_product_url)) : ?>
+								<div class="pb-lightbox-product-info">
 								<?php if ($fbks_woo_product_name) : ?>
 									<h2 class="pb-product-name"><?php echo esc_html($fbks_woo_product_name); ?></h2>
 								<?php endif; ?>
