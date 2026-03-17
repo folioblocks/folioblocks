@@ -15,7 +15,6 @@ import {
 	PanelBody,
 	Notice,
 	ToggleControl,
-	RangeControl,
 	SelectControl,
 	ToolbarGroup,
 	ToolbarButton,
@@ -25,13 +24,29 @@ import { plus } from '@wordpress/icons';
 import { useCallback, useEffect, useRef, useState } from '@wordpress/element';
 import { decodeEntities } from '@wordpress/html-entities';
 import { applyFilters } from '@wordpress/hooks';
+import ResponsiveRangeControl from '../pb-helpers/ResponsiveRangeControl';
 import { IconJustifiedGallery, IconPBSpinner } from '../pb-helpers/icons';
 import './editor.scss';
 
 const ALLOWED_BLOCKS = [ 'folioblocks/pb-image-block' ];
+const getRowHeightForWidth = (
+	width,
+	{ desktop = 250, tablet = 250, mobile = 250 }
+) => {
+	if ( width <= 600 ) {
+		return mobile;
+	}
+	if ( width <= 1024 ) {
+		return tablet;
+	}
+	return desktop;
+};
 
 export default function Edit( { attributes, setAttributes, clientId } ) {
-	const { rowHeight = 250, noGap = false, preview, lightbox } = attributes;
+	const { noGap = false, preview, lightbox } = attributes;
+	const rowHeight = attributes.rowHeight ?? 250;
+	const tabletRowHeight = attributes.tabletRowHeight ?? rowHeight;
+	const mobileRowHeight = attributes.mobileRowHeight ?? rowHeight;
 
 	// Block Preview Image
 	if ( preview ) {
@@ -192,13 +207,17 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				return { wrapper, width, height };
 			} );
 
-			const targetRowHeight = attributes.rowHeight || 250;
+			const targetRowHeight = getRowHeightForWidth( node.clientWidth, {
+				desktop: rowHeight,
+				tablet: tabletRowHeight,
+				mobile: mobileRowHeight,
+			} );
 			const gap = attributes.noGap ? 0 : 10;
 			const rows = [];
 			let currentRow = [];
 			let currentRowWidth = 0;
 
-			images.forEach( ( img, i ) => {
+			images.forEach( ( img ) => {
 				const aspectRatio = img.width / img.height;
 				const scaledWidth = aspectRatio * targetRowHeight;
 				currentRow.push( { ...img, scaledWidth, aspectRatio } );
@@ -249,9 +268,21 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						'--pb-height',
 						`${ finalHeight }px`
 					);
+					const isLastInRow = index === row.length - 1;
+					const inlineMarginValue =
+						! isLastInRow && ! attributes.noGap
+							? `${ gap }px`
+							: '0px';
+					const blockMarginValue = ! attributes.noGap
+						? `${ gap }px`
+						: '0px';
 					img.wrapper.style.setProperty(
-						'--pb-margin',
-						index !== row.length - 1 ? `${ gap }px` : `0px`
+						'--pb-margin-inline',
+						inlineMarginValue
+					);
+					img.wrapper.style.setProperty(
+						'--pb-margin-block',
+						blockMarginValue
 					);
 				} );
 			} );
@@ -271,7 +302,9 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		};
 	}, [
 		innerBlocks,
-		attributes.rowHeight,
+		rowHeight,
+		tabletRowHeight,
+		mobileRowHeight,
 		attributes.noGap,
 		attributes.activeFilter,
 		attributes.filterCategories,
@@ -430,19 +463,21 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						__next40pxDefaultSize
 						help={ __( 'Select the size of the source image.' ) }
 					/>
-					<RangeControl
+					<ResponsiveRangeControl
 						label={ __( 'Row Height', 'folioblocks' ) }
-						value={ rowHeight }
-						onChange={ ( value ) =>
-							setAttributes( { rowHeight: value } )
-						}
+						columns={ rowHeight }
+						tabletColumns={ tabletRowHeight }
+						mobileColumns={ mobileRowHeight }
+						desktopKey="rowHeight"
+						tabletKey="tabletRowHeight"
+						mobileKey="mobileRowHeight"
 						min={ 100 }
-						max={ 500 }
+						max={ 1500 }
+						lockTabletMobileToDesktop={ false }
+						onChange={ ( newValues ) => setAttributes( newValues ) }
 						help={ __(
 							'Approximate target Row Height for Justified layout.'
 						) }
-						__nextHasNoMarginBottom
-						__next40pxDefaultSize
 					/>
 					<ToggleControl
 						label={ __( 'Remove Image Gap', 'folioblocks' ) }

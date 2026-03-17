@@ -2,10 +2,10 @@
 Contributors: portfolioblocks , campanellafoto
 Plugin link: https://folioblocks.com/
 Tags: gallery, image gallery, photo gallery, video gallery, lightbox, 
-Tested up to:      6.9
+Tested up to:      6.9.4
 Requires at least: 6.3
 Requires PHP: 7.4
-Stable tag:        1.2.1
+Stable tag:        1.2.3
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -106,6 +106,14 @@ No, the galleries will remain in place on your site. However, the advanced layou
 6. Video Gallery block populated with images
 
 == Changelog ==
+
+= 1.2.3 =
+* Fixed a bug that caused undefined variable warning in Grid Gallery
+
+= 1.2.2 =
+* Added responsive settings to Row Height slider in Justified Gallery Block.
+* Updated Lightbox on Image Block to fill more of the viewport when exapnded. 
+* Increased maximum row height value on Justifed gallery block. 
 
 = 1.2.1 =
 * Added support for videos from Bunny Stream to the Video Block and Video Gallery.  

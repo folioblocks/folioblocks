@@ -13,6 +13,13 @@ const ResponsiveRangeControl = ( {
 	columns,
 	tabletColumns,
 	mobileColumns,
+	desktopKey = 'columns',
+	tabletKey = 'tabletColumns',
+	mobileKey = 'mobileColumns',
+	min = 1,
+	max = 8,
+	lockTabletMobileToDesktop = true,
+	help,
 	onChange,
 } ) => {
 	const [ device, setDevice ] = useState( 'desktop' );
@@ -20,10 +27,10 @@ const ResponsiveRangeControl = ( {
 
 	const getValue = () => {
 		if ( device === 'tablet' ) {
-			return tabletColumns;
+			return tabletColumns ?? columns;
 		}
 		if ( device === 'mobile' ) {
-			return mobileColumns;
+			return mobileColumns ?? columns;
 		}
 		return columns;
 	};
@@ -31,18 +38,31 @@ const ResponsiveRangeControl = ( {
 	const setValue = ( value ) => {
 		if ( device === 'tablet' ) {
 			onChange( {
-				tabletColumns: value,
+				[ tabletKey ]: value,
 			} );
 		} else if ( device === 'mobile' ) {
 			onChange( {
-				mobileColumns: value,
+				[ mobileKey ]: value,
 			} );
 		} else {
-			onChange( {
-				columns: value,
-				tabletColumns: Math.min( value, tabletColumns ),
-				mobileColumns: Math.min( value, mobileColumns ),
-			} );
+			const nextValues = {
+				[ desktopKey ]: value,
+			};
+
+			if ( lockTabletMobileToDesktop ) {
+				const safeTabletValue =
+					typeof tabletColumns === 'number'
+						? tabletColumns
+						: value;
+				const safeMobileValue =
+					typeof mobileColumns === 'number'
+						? mobileColumns
+						: value;
+				nextValues[ tabletKey ] = Math.min( value, safeTabletValue );
+				nextValues[ mobileKey ] = Math.min( value, safeMobileValue );
+			}
+
+			onChange( nextValues );
 		}
 	};
 
@@ -51,6 +71,15 @@ const ResponsiveRangeControl = ( {
 		tablet,
 		mobile,
 	};
+	let dynamicMax = max;
+	if ( device !== 'desktop' && lockTabletMobileToDesktop ) {
+		dynamicMax = columns || max;
+	}
+	const controlHelp =
+		help ||
+		`Adjust the default amount of columns on ${
+			device.charAt( 0 ).toUpperCase() + device.slice( 1 )
+		}.`;
 
 	return (
 		<div
@@ -128,13 +157,11 @@ const ResponsiveRangeControl = ( {
 			</div>
 
 			<RangeControl
-				min={ 1 }
-				max={ device === 'desktop' ? 8 : columns }
+				min={ min }
+				max={ dynamicMax }
 				value={ getValue() }
 				onChange={ setValue }
-				help={ `Adjust the default amount of columns on ${
-					device.charAt( 0 ).toUpperCase() + device.slice( 1 )
-				}.` }
+				help={ controlHelp }
 				__nextHasNoMarginBottom
 				__next40pxDefaultSize
 			/>
@@ -145,8 +172,15 @@ const ResponsiveRangeControl = ( {
 ResponsiveRangeControl.propTypes = {
 	label: PropTypes.string.isRequired,
 	columns: PropTypes.number.isRequired,
-	tabletColumns: PropTypes.number.isRequired,
-	mobileColumns: PropTypes.number.isRequired,
+	tabletColumns: PropTypes.number,
+	mobileColumns: PropTypes.number,
+	desktopKey: PropTypes.string,
+	tabletKey: PropTypes.string,
+	mobileKey: PropTypes.string,
+	min: PropTypes.number,
+	max: PropTypes.number,
+	lockTabletMobileToDesktop: PropTypes.bool,
+	help: PropTypes.string,
 	onChange: PropTypes.func.isRequired,
 };
 

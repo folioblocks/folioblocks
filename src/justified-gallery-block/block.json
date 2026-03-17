@@ -35,6 +35,8 @@
     "attributes": {
         "preview": { "type": "boolean", "default": false },       
         "rowHeight": { "type": "number", "default": 250 },
+        "tabletRowHeight": { "type": "number" },
+        "mobileRowHeight": { "type": "number" },
         "rowWidth": { "type": "number", "default": 0},
         "gap": { "type": "number", "default": 10 },
         "noGap": { "type": "boolean", "default": false},

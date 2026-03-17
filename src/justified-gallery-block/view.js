@@ -12,9 +12,32 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		wrapper.classList.add( 'is-loading' );
 	}
 
-	const rowHeight = parseInt( container.dataset.rowHeight ) || 250;
+	const desktopRowHeight = parseInt( container.dataset.rowHeight, 10 ) || 250;
+	const parsedTabletRowHeight = parseInt(
+		container.dataset.tabletRowHeight,
+		10
+	);
+	const parsedMobileRowHeight = parseInt(
+		container.dataset.mobileRowHeight,
+		10
+	);
+	const tabletRowHeight = Number.isFinite( parsedTabletRowHeight )
+		? parsedTabletRowHeight
+		: desktopRowHeight;
+	const mobileRowHeight = Number.isFinite( parsedMobileRowHeight )
+		? parsedMobileRowHeight
+		: desktopRowHeight;
 	const noGap = container.dataset.noGap === 'true';
 	const gap = noGap ? 0 : 10;
+	const getRowHeightForWidth = ( width ) => {
+		if ( width <= 600 ) {
+			return mobileRowHeight;
+		}
+		if ( width <= 1024 ) {
+			return tabletRowHeight;
+		}
+		return desktopRowHeight;
+	};
 
 	let resizeTimeout;
 	let hasAnimated = false;
@@ -27,6 +50,9 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		if ( ! containerWidth ) {
 			return;
 		}
+		const targetRowHeight = getRowHeightForWidth(
+			targetContainer.clientWidth
+		);
 
 		const wrappers = targetContainer.querySelectorAll(
 			'.wp-block-folioblocks-pb-image-block:not(.is-hidden)'
@@ -44,7 +70,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 		images.forEach( ( img ) => {
 			const aspectRatio = img.width / img.height;
-			const scaledWidth = aspectRatio * rowHeight;
+			const scaledWidth = aspectRatio * targetRowHeight;
 			currentRow.push( { ...img, scaledWidth, aspectRatio } );
 			currentRowWidth += scaledWidth + gap;
 
@@ -80,7 +106,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				const isLast = index === row.length - 1;
 				const finalWidth =
 					Math.round( img.scaledWidth * scale ) - ( isLast ? 1 : 0 );
-				const finalHeight = Math.round( rowHeight * scale );
+				const finalHeight = Math.round( targetRowHeight * scale );
 				img.wrapper.style.setProperty(
 					'--pb-width',
 					`${ finalWidth }px`
@@ -90,9 +116,17 @@ document.addEventListener( 'DOMContentLoaded', () => {
 					`${ finalHeight }px`
 				);
 				const isLastInRow = index === row.length - 1;
-				const marginValue =
+				const inlineMarginValue =
 					! isLastInRow && ! noGap ? `${ gap }px` : '0px';
-				img.wrapper.style.setProperty( '--pb-margin', marginValue );
+				const blockMarginValue = ! noGap ? `${ gap }px` : '0px';
+				img.wrapper.style.setProperty(
+					'--pb-margin-inline',
+					inlineMarginValue
+				);
+				img.wrapper.style.setProperty(
+					'--pb-margin-block',
+					blockMarginValue
+				);
 			} );
 		} );
 

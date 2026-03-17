@@ -16,13 +16,13 @@
 .pb-justified-gallery {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 0; // gap is now handled via --pb-margin
+	gap: 0; // gap is now handled via layout CSS vars
 
 	.wp-block-folioblocks-pb-image-block {
 		width: var(--pb-width);
 		height: var(--pb-height);
-		margin-right: var(--pb-margin, 10px);
-		margin-bottom: var(--pb-margin, 10px);
+		margin-right: var(--pb-margin-inline, 10px);
+		margin-bottom: var(--pb-margin-block, 10px);
 		flex: 0 0 auto;
 		display: flex;
 		opacity: 0;

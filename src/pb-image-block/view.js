@@ -84,20 +84,48 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			}
 		} );
 
+		function syncLightboxImageHeight() {
+			const activeImageWrapper = wrapper.querySelector( '.lightbox-image' );
+			if ( ! activeImageWrapper ) {
+				return;
+			}
+			const captionEl =
+				activeImageWrapper.querySelector( '.lightbox-caption' );
+			const captionHeight = captionEl
+				? Math.ceil( captionEl.getBoundingClientRect().height )
+				: 0;
+
+			activeImageWrapper.style.setProperty(
+				'--pb-lightbox-caption-space',
+				`${ captionHeight }px`
+			);
+		}
+
+		function handleViewportResize() {
+			requestAnimationFrame( syncLightboxImageHeight );
+		}
+
+		function closeLightbox() {
+			wrapper.remove();
+			document.body.classList.remove( 'pb-lightbox-open' );
+			focusStart.remove();
+			focusEnd.remove();
+			document.removeEventListener( 'keydown', keyHandler );
+			window.removeEventListener( 'resize', handleViewportResize );
+			if (
+				previouslyFocused &&
+				typeof previouslyFocused.focus === 'function'
+			) {
+				previouslyFocused.focus();
+			}
+		}
+
+		window.addEventListener( 'resize', handleViewportResize );
+
 		// Close lightbox when clicking outside the image and controls (on the backdrop)
 		wrapper.addEventListener( 'click', ( e ) => {
 			if ( e.target === wrapper ) {
-				wrapper.remove();
-				document.body.classList.remove( 'pb-lightbox-open' );
-				focusStart.remove();
-				focusEnd.remove();
-				document.removeEventListener( 'keydown', keyHandler );
-				if (
-					previouslyFocused &&
-					typeof previouslyFocused.focus === 'function'
-				) {
-					previouslyFocused.focus();
-				}
+				closeLightbox();
 			}
 		} );
 
@@ -116,26 +144,17 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			close.className = 'lightbox-close';
 			close.innerHTML = '&times;';
 			close.setAttribute( 'aria-label', 'Close lightbox' );
-			close.addEventListener( 'click', () => {
-				wrapper.remove();
-				document.body.classList.remove( 'pb-lightbox-open' );
-				focusStart.remove();
-				focusEnd.remove();
-				document.removeEventListener( 'keydown', keyHandler );
-				if (
-					previouslyFocused &&
-					typeof previouslyFocused.focus === 'function'
-				) {
-					previouslyFocused.focus();
-				}
-			} );
+			close.addEventListener( 'click', closeLightbox );
 
 			const imageWrapper = document.createElement( 'div' );
 			imageWrapper.className = 'lightbox-image';
 
 			const img = document.createElement( 'img' );
-			img.src = src;
 			img.alt = '';
+			img.addEventListener( 'load', syncLightboxImageHeight, {
+				once: true,
+			} );
+			img.src = src;
 
 			imageWrapper.appendChild( img );
 
@@ -148,6 +167,11 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 			inner.appendChild( close );
 			inner.appendChild( imageWrapper );
+			requestAnimationFrame( syncLightboxImageHeight );
+			if ( img.complete ) {
+				syncLightboxImageHeight();
+			}
+
 			if ( allImages.length > 1 ) {
 				const prev = document.createElement( 'button' );
 				prev.className = 'lightbox-prev';
@@ -181,17 +205,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 		function keyHandler( e ) {
 			if ( e.key === 'Escape' ) {
-				wrapper.remove();
-				document.body.classList.remove( 'pb-lightbox-open' );
-				focusStart.remove();
-				focusEnd.remove();
-				document.removeEventListener( 'keydown', keyHandler );
-				if (
-					previouslyFocused &&
-					typeof previouslyFocused.focus === 'function'
-				) {
-					previouslyFocused.focus();
-				}
+				closeLightbox();
 			} else if ( e.key === 'ArrowRight' ) {
 				currentIndex = ( currentIndex + 1 ) % allImages.length;
 				renderLightbox( currentIndex );

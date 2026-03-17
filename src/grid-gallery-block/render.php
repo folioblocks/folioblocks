@@ -30,6 +30,8 @@ $fbks_filter_categories  = $fbks_attributes['filterCategories'] ?? [];
 // Mirrors the CSS vars produced in editor via getFilterTypographyCSS().
 $fbks_filter_typo_styles      = '';
 $fbks_filter_decoration_class = '';
+$fbks_active_styles           = '';
+$fbks_inactive_styles         = '';
 
 //  Premium-only logic
 if ( fbks_fs()->can_use_premium_code__premium_only() ) {
