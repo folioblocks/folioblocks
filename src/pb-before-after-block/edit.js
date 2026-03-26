@@ -65,7 +65,7 @@ function CustomPlaceholder( {
 								</div>
 							) : (
 								<Button variant="primary" onClick={ open }>
-									{ __( 'Select Before Image' ) }
+									{ __( 'Select Before Image', 'folioblocks' ) }
 								</Button>
 							)
 						}
@@ -93,7 +93,7 @@ function CustomPlaceholder( {
 								</div>
 							) : (
 								<Button variant="secondary" onClick={ open }>
-									{ __( 'Select After Image' ) }
+									{ __( 'Select After Image', 'folioblocks' ) }
 								</Button>
 							)
 						}
@@ -305,16 +305,29 @@ export default function Edit( { attributes, setAttributes } ) {
 								label={ __( 'Resolution', 'folioblocks' ) }
 								value={ attributes.resolution }
 								options={ [
-									{ label: 'Thumbnail', value: 'thumbnail' },
-									{ label: 'Medium', value: 'medium' },
-									{ label: 'Large', value: 'large' },
-									{ label: 'Full', value: 'full' },
+									{
+										label: __( 'Thumbnail', 'folioblocks' ),
+										value: 'thumbnail',
+									},
+									{
+										label: __( 'Medium', 'folioblocks' ),
+										value: 'medium',
+									},
+									{
+										label: __( 'Large', 'folioblocks' ),
+										value: 'large',
+									},
+									{
+										label: __( 'Full', 'folioblocks' ),
+										value: 'full',
+									},
 								] }
 								onChange={ ( value ) =>
 									setAttributes( { resolution: value } )
 								}
 								help={ __(
-									'Select the size of the source image.'
+									'Select the size of the source image.',
+									'folioblocks'
 								) }
 								__nextHasNoMarginBottom
 								__next40pxDefaultSize

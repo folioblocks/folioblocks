@@ -32,6 +32,11 @@ import { applyFilters } from '@wordpress/hooks';
 import { plus } from '@wordpress/icons';
 import ResponsiveRangeControl from '../pb-helpers/ResponsiveRangeControl';
 import { IconVideoGallery } from '../pb-helpers/icons';
+import {
+	FBKS_ALL_FILTER_TOKEN,
+	fbksIsAllFilterValue,
+	fbksNormalizeActiveFilterValue,
+} from '../pb-helpers/filterConstants';
 import './editor.scss';
 
 const getVideoBlockFilterCategories = ( blockAttributes = {} ) => {
@@ -73,7 +78,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		overlayStyle,
 		overlayBgColor,
 		overlayTextColor,
-		activeFilter = 'All',
+		activeFilter = FBKS_ALL_FILTER_TOKEN,
 		filterTextColor,
 		filterBgColor,
 		activeFilterTextColor,
@@ -135,17 +140,20 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			const normalizedActiveFilter = activeFilter.toLowerCase();
 
 			const isFilteredOut =
-				activeFilter !== 'All' &&
+				! fbksIsAllFilterValue( activeFilter ) &&
 				! selectedCategories.some(
 					( category ) =>
 						category.toLowerCase() === normalizedActiveFilter
 				);
 
 			if ( isFilteredOut ) {
-				setAttributes( { activeFilter: 'All' } );
+				setAttributes( { activeFilter: FBKS_ALL_FILTER_TOKEN } );
 			}
 		}
 	}, [ selectedBlock, activeFilter, setAttributes ] );
+
+	const normalizedActiveFilter =
+		fbksNormalizeActiveFilterValue( activeFilter );
 
 	// Force layout update in editor after filtering to fix rendering issues
 	useEffect( () => {
@@ -194,7 +202,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			'folioBlocks/overlayStyle': overlayStyle,
 			'folioBlocks/overlayBgColor': overlayBgColor,
 			'folioBlocks/overlayTextColor': overlayTextColor,
-			'folioBlocks/activeFilter': activeFilter,
+			'folioBlocks/activeFilter': normalizedActiveFilter,
 			'folioBlocks/lightbox': lightbox,
 			'folioBlocks/lightboxLayout': lightboxLayout,
 			'folioBlocks/lazyLoad': lazyLoad,
@@ -226,7 +234,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					'folioBlocks/overlayStyle': overlayStyle,
 					'folioBlocks/overlayBgColor': overlayBgColor,
 					'folioBlocks/overlayTextColor': overlayTextColor,
-					'folioBlocks/activeFilter': activeFilter,
+					'folioBlocks/activeFilter': normalizedActiveFilter,
 					'folioBlocks/lightbox': lightbox,
 					'folioBlocks/lightboxLayout': lightboxLayout,
 					'folioBlocks/lazyLoad': lazyLoad,
@@ -415,7 +423,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						step={ 1 }
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
-						help={ __( 'Set gap size between Thumbnails.' ) }
+						help={ __( 'Set gap size between Thumbnails.', 'folioblocks' ) }
 					/>
 					<SelectControl
 						label={ __( 'Thumbnail Resolution', 'folioblocks' ) }
@@ -424,7 +432,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 							setAttributes( { thumbnailSize: val } )
 						}
 						options={ imageSizeOptions }
-						help={ __( 'Set thumbnail resolution.' ) }
+						help={ __( 'Set thumbnail resolution.', 'folioblocks' ) }
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
@@ -442,7 +450,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 							{ label: '3:2', value: '3:2' },
 							{ label: '1:1', value: '1:1' },
 						] }
-						help={ __( 'Set thumbnail aspect ratio.' ) }
+						help={ __( 'Set thumbnail aspect ratio.', 'folioblocks' ) }
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
@@ -541,7 +549,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 										: combinedVisibility,
 								} )
 							}
-							help={ __( 'Hide only the play button overlay.' ) }
+							help={ __( 'Hide only the play button overlay.', 'folioblocks' ) }
 							__nextHasNoMarginBottom
 						/>
 					) }

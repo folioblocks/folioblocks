@@ -4,6 +4,17 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.4] - 2026-03-25
+
+### Added
+- Added initial translation support for the admin screens and block settings. 
+- Added Swedish, Italian, Spanish, and French langauge traslations. 
+- Added support for block transform on Image Block to allow conversion into core/image block when used outside of galleries. 
+- Added support to core/image blocks to allow them to transform into FolioBlocks Image Blocks. 
+
+### Fixed
+- Fixed a bug on the settings page that prevent fetching images from FolioBlocks website. 
+
 ## [1.2.3] - 2026-03-17
 
 ### Fixed

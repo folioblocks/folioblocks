@@ -34,6 +34,10 @@ import {
 	getVideoProviderData,
 	getVideoProviderLabel,
 } from '../pb-helpers/videoProviders';
+import {
+	FBKS_ALL_FILTER_TOKEN,
+	fbksNormalizeActiveFilterValue,
+} from '../pb-helpers/filterConstants';
 import './editor.scss';
 
 const ASPECT_RATIOS = {
@@ -178,7 +182,8 @@ export default function Edit({ attributes, setAttributes, context }) {
 		typeof context?.['folioBlocks/aspectRatio'] !== 'undefined' ||
 		typeof context?.['folioBlocks/enableWooCommerce'] !== 'undefined';
 	const isInsideGallery = isInVideoGallery;
-	const activeFilter = context?.['folioBlocks/activeFilter'] || 'All';
+	const activeFilter =
+		context?.['folioBlocks/activeFilter'] || FBKS_ALL_FILTER_TOKEN;
 
 	const lazyLoad = context?.['folioBlocks/lazyLoad'];
 	const enableWooCommerce =
@@ -283,9 +288,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 		filterCategories,
 	});
 	const normalizedActiveFilter =
-		typeof activeFilter === 'string'
-			? activeFilter.trim().toLowerCase()
-			: 'all';
+		fbksNormalizeActiveFilterValue( activeFilter ).toLowerCase();
 	const isHidden =
 		normalizedActiveFilter !== 'all' &&
 		!assignedCategories.some(
@@ -535,26 +538,27 @@ export default function Edit({ attributes, setAttributes, context }) {
 							onChange={(val) =>
 								setAttributes({ videoUrl: val })
 							}
-							help={
-								<>
-									{__(
-										'Supports YouTube, Vimeo, Bunny Stream, or ',
-										'folioblocks'
-									)}
+								help={
+									<>
+										{__(
+											'Supports YouTube, Vimeo, Bunny Stream, or ',
+											'folioblocks'
+										)}
 									<a
 										href="#"
 										onClick={(e) => {
 											e.preventDefault();
 											openMediaLibrary();
 										}}
-									>
-										{__('self-hosted videos')}
-									</a>
-									{
-										'. Note: Some provider videos may not work due to privacy settings.'
-									}
-								</>
-							}
+										>
+											{__('self-hosted videos', 'folioblocks')}
+										</a>
+										{__(
+											'. Note: Some provider videos may not work due to privacy settings.',
+											'folioblocks'
+										)}
+									</>
+								}
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
@@ -597,10 +601,11 @@ export default function Edit({ attributes, setAttributes, context }) {
 										label: ratio,
 										value: ratio,
 									})
-								)}
-								help={__(
-									'Set video Thumbnail aspect ratio.'
-								)}
+									)}
+									help={__(
+										'Set video Thumbnail aspect ratio.',
+										'folioblocks'
+									)}
 								__nextHasNoMarginBottom
 								__next40pxDefaultSize
 							/>
@@ -615,9 +620,10 @@ export default function Edit({ attributes, setAttributes, context }) {
 								alt: val, // keep alt synced with title edits
 							});
 						}}
-						help={__(
-							'Set Video Title used in the Hover Overlay, Lightbox, and for Alt-text.'
-						)}
+							help={__(
+								'Set Video Title used in the Hover Overlay, Lightbox, and for Alt-text.',
+								'folioblocks'
+							)}
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
@@ -707,9 +713,10 @@ export default function Edit({ attributes, setAttributes, context }) {
 										value: 'hidden',
 									},
 								]}
-								help={__(
-									'Set visibility for title and play button overlays.'
-								)}
+									help={__(
+										'Set visibility for title and play button overlays.',
+										'folioblocks'
+									)}
 								__nextHasNoMarginBottom
 								__next40pxDefaultSize
 							/>
@@ -727,9 +734,10 @@ export default function Edit({ attributes, setAttributes, context }) {
 												: combinedVisibility,
 										})
 									}
-									help={__(
-										'Hide only the play button overlay.'
-									)}
+										help={__(
+											'Hide only the play button overlay.',
+											'folioblocks'
+										)}
 									__nextHasNoMarginBottom
 								/>
 							)}
@@ -894,11 +902,11 @@ export default function Edit({ attributes, setAttributes, context }) {
 				typeof inheritedBorderWidth === 'undefined' &&
 				typeof inheritedBorderRadius === 'undefined' && (
 					<InspectorControls group="styles">
-						<PanelBody
-							title={__(
-								'Video Block Styles',
-								'pb-video-block'
-							)}
+							<PanelBody
+								title={__(
+									'Video Block Styles',
+									'folioblocks'
+								)}
 							initialOpen={true}
 						>
 							<CompactColorControl
@@ -907,7 +915,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 								onChange={(borderColor) =>
 									setAttributes({ borderColor })
 								}
-								help={__('Set Video border color.')}
+								help={__('Set Video border color.', 'folioblocks')}
 							/>
 							<RangeControl
 								label={__('Border Width', 'folioblocks')}
@@ -919,7 +927,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 								max={20}
 								__next40pxDefaultSize
 								__nextHasNoMarginBottom
-								help={__('Set Video border width.')}
+								help={__('Set Video border width.', 'folioblocks')}
 							/>
 							<RangeControl
 								label={__('Border Radius', 'folioblocks')}
@@ -931,7 +939,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 								max={100}
 								__next40pxDefaultSize
 								__nextHasNoMarginBottom
-								help={__('Set Video border radius.')}
+								help={__('Set Video border radius.', 'folioblocks')}
 							/>
 							<ToggleControl
 								label={__(
@@ -942,7 +950,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 								onChange={(value) =>
 									setAttributes({ dropShadow: value })
 								}
-								help={__('Enable drop shadow effect.')}
+								help={__('Enable drop shadow effect.', 'folioblocks')}
 							/>
 						</PanelBody>
 						{applyFilters(

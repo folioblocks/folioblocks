@@ -5,6 +5,7 @@
 import { createBlock, registerBlockType } from '@wordpress/blocks';
 import { useEffect } from '@wordpress/element';
 import { useDispatch } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Old attributes, matching the legacy block exactly
@@ -31,7 +32,7 @@ const legacyAttributes = {
  */
 registerBlockType( 'portfolio-blocks/before-after-block', {
 	apiVersion: 3,
-	title: 'Before & After (Legacy)',
+	title: __( 'Before & After (Legacy)', 'folioblocks' ),
 	category: 'widgets',
 	attributes: legacyAttributes,
 

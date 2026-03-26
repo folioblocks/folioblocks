@@ -25,6 +25,7 @@ import { plus } from '@wordpress/icons';
 import { applyFilters } from '@wordpress/hooks';
 import { decodeEntities } from '@wordpress/html-entities';
 import { IconMasonryGallery, IconPBSpinner } from '../pb-helpers/icons';
+import { fbksNormalizeActiveFilterValue } from '../pb-helpers/filterConstants';
 import './editor.scss';
 
 const ALLOWED_BLOCKS = [ 'folioblocks/pb-image-block' ];
@@ -59,11 +60,13 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 		);
 	}
 
-	const activeFilter = attributes.activeFilter || 'All';
+	const activeFilter = fbksNormalizeActiveFilterValue(
+		attributes.activeFilter
+	);
 
 	const blockProps = useBlockProps( {
 		context: {
-			'folioBlocks/activeFilter': attributes.activeFilter,
+			'folioBlocks/activeFilter': activeFilter,
 			'folioBlocks/filterCategories': attributes.filterCategories,
 			'folioBlocks/enableWooCommerce': effectiveEnableWoo,
 			'folioBlocks/hasWooCommerce': hasWooCommerce,
@@ -445,7 +448,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 						} }
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
-						help={ __( 'Select the size of the source image.' ) }
+						help={ __( 'Select the size of the source image.', 'folioblocks' ) }
 					/>
 					<ResponsiveRangeControl
 						label={ __( 'Columns', 'folioblocks' ) }
@@ -458,7 +461,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 						label={ __( 'Remove Image Gap', 'folioblocks' ) }
 						checked={ attributes.noGap || false }
 						onChange={ ( noGap ) => setAttributes( { noGap } ) }
-						help={ __( 'Remove gap between images.' ) }
+						help={ __( 'Remove gap between images.', 'folioblocks' ) }
 						__nextHasNoMarginBottom
 					/>
 					{ applyFilters(

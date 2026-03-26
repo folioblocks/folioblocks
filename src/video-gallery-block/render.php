@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $fbks_enable_filter    = false;
 $fbks_filter_align     = 'center';
-$fbks_active_filter    = 'All';
+$fbks_active_filter    = FBKS_ALL_FILTER_TOKEN;
 $fbks_filter_categories = [];
 $fbks_active_styles    = '';
 $fbks_inactive_styles  = '';
@@ -25,7 +25,7 @@ $fbks_gap             = intval( $attributes['gap'] ?? 10 );
 if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 	$fbks_enable_filter    = ! empty( $attributes['enableFilter'] );
 	$fbks_filter_align     = $attributes['filterAlign'] ?? 'center';
-	$fbks_active_filter    = $attributes['activeFilter'] ?? 'All';
+	$fbks_active_filter    = fbks_normalize_active_filter_value( $attributes['activeFilter'] ?? FBKS_ALL_FILTER_TOKEN );
 	$fbks_filter_categories = $attributes['filterCategories'] ?? [];
 
 	if ( $fbks_enable_filter ) {
@@ -110,7 +110,7 @@ echo '<div ' . wp_kses_post( $fbks_wrapper_attributes ) . '>';
 if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 	if ( ! empty( $fbks_enable_filter ) && ! empty( $fbks_filter_categories ) ) {
 		echo '<div class="pb-video-gallery-filters align-' . esc_attr( $fbks_filter_align ) . esc_attr( $fbks_filter_decoration_class ) . '" style="' . esc_attr( $fbks_filter_typo_styles ) . '">';
-		echo '<button class="filter-button is-active" data-filter="All">All</button>';
+		echo '<button class="filter-button is-active" data-filter="' . esc_attr( FBKS_ALL_FILTER_TOKEN ) . '">' . esc_html( fbks_get_all_filter_label() ) . '</button>';
 		foreach ( $fbks_filter_categories as $fbks_category ) {
 			echo '<button class="filter-button" data-filter="' . esc_attr( $fbks_category ) . '">' . esc_html( $fbks_category ) . '</button>';
 		}

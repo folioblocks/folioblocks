@@ -85,7 +85,7 @@
 		},
 		"activeFilterTextColor": { "type": "string", "default": "#ffffff" },
 		"activeFilterBgColor": { "type": "string", "default": "#000000" },
-		"activeFilter": { "type": "string", "default": "All" },
+		"activeFilter": { "type": "string", "default": "all" },
 		"enableDownload": { "type": "boolean", "default": false },
 		"downloadOnHover": { "type": "boolean", "default": true },
 		"downloadIconColor": { "type": "string", "default": "#000000" },

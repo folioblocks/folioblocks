@@ -768,7 +768,7 @@ addFilter(
 
 		return (
 			<PanelBody
-				title={ __( 'Image Styles', 'pb-image-block' ) }
+				title={ __( 'Image Styles', 'folioblocks' ) }
 				initialOpen={ true }
 			>
 				<CompactColorControl
@@ -777,7 +777,7 @@ addFilter(
 					onChange={ ( borderColor ) =>
 						setAttributes( { borderColor } )
 					}
-					help={ __( 'Set Image border color.' ) }
+					help={ __( 'Set Image border color.', 'folioblocks' ) }
 				/>
 				<RangeControl
 					label={ __( 'Border Width', 'folioblocks' ) }
@@ -789,7 +789,7 @@ addFilter(
 					max={ 20 }
 					__next40pxDefaultSize
 					__nextHasNoMarginBottom
-					help={ __( 'Set Image border width.' ) }
+					help={ __( 'Set Image border width.', 'folioblocks' ) }
 				/>
 				<RangeControl
 					label={ __( 'Border Radius', 'folioblocks' ) }
@@ -801,7 +801,7 @@ addFilter(
 					max={ 50 }
 					__next40pxDefaultSize
 					__nextHasNoMarginBottom
-					help={ __( 'Set Image border radius.' ) }
+					help={ __( 'Set Image border radius.', 'folioblocks' ) }
 				/>
 				<ToggleControl
 					label={ __( 'Enable Drop Shadow', 'folioblocks' ) }

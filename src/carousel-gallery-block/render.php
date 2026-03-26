@@ -53,14 +53,20 @@ $fbks_wrapper_attr_string = get_block_wrapper_attributes( $fbks_wrapper_attribut
 					--pb-controls-icon: <?php echo esc_attr( $attributes['controlsIconColor'] ?? '#ffffff' ); ?>;
 				"
 			>
-				<button class="pb-carousel-chevron prev" aria-label="Previous slide">
+					<button
+						class="pb-carousel-chevron prev"
+						aria-label="<?php esc_attr_e( 'Previous slide', 'folioblocks' ); ?>"
+					>
 					<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true">
 						<path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
 					</svg>
 				</button>
 
 				<?php if ( ! empty( $attributes['autoplay'] ) ) : ?>
-					<button class="pb-carousel-play-button" aria-label="Play/Pause carousel">
+						<button
+							class="pb-carousel-play-button"
+							aria-label="<?php esc_attr_e( 'Play/Pause carousel', 'folioblocks' ); ?>"
+						>
 						<svg class="play-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
 							<path d="M8 5v14l11-7z"/>
 						</svg>
@@ -70,7 +76,10 @@ $fbks_wrapper_attr_string = get_block_wrapper_attributes( $fbks_wrapper_attribut
 					</button>
 				<?php endif; ?>
 
-				<button class="pb-carousel-chevron next" aria-label="Next slide">
+					<button
+						class="pb-carousel-chevron next"
+						aria-label="<?php esc_attr_e( 'Next slide', 'folioblocks' ); ?>"
+					>
 					<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true">
 						<path d="M8.59 16.59 10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
 					</svg>

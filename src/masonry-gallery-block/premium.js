@@ -37,6 +37,11 @@ import {
 	getFontSizeOptions,
 	getFilterTypographyCSS,
 } from '../pb-helpers/GetThemeSettings';
+import {
+	FBKS_ALL_FILTER_TOKEN,
+	fbksIsAllFilterValue,
+	fbksNormalizeActiveFilterValue,
+} from '../pb-helpers/filterConstants';
 
 const getImageBlockFilterCategories = ( blockAttributes = {} ) => {
 	const assignedCategories = Array.isArray( blockAttributes.filterCategories )
@@ -621,7 +626,7 @@ addFilter(
 			enableFilter = false,
 			filterAlign = 'center',
 			filtersInput = '',
-			activeFilter = 'All',
+			activeFilter = FBKS_ALL_FILTER_TOKEN,
 		} = attributes;
 
 		// --- 1. Derive categories from filtersInput ---
@@ -686,16 +691,17 @@ addFilter(
 				const selectedCategories = getImageBlockFilterCategories(
 					selectedBlock.attributes || {}
 				);
-				const normalizedActiveFilter = activeFilter.toLowerCase();
+				const normalizedActiveFilter =
+					fbksNormalizeActiveFilterValue( activeFilter ).toLowerCase();
 				const isFilteredOut =
-					activeFilter !== 'All' &&
+					! fbksIsAllFilterValue( activeFilter ) &&
 					! selectedCategories.some(
 						( category ) =>
 							category.toLowerCase() === normalizedActiveFilter
 					);
 
 				if ( isFilteredOut ) {
-					setAttributes( { activeFilter: 'All' } );
+					setAttributes( { activeFilter: FBKS_ALL_FILTER_TOKEN } );
 				}
 			}
 		}, [ selectedBlock, activeFilter ] );
@@ -783,7 +789,7 @@ addFilter(
 							value={ filtersInput }
 							onChange={ handleFilterInputChange }
 							onBlur={ handleFilterInputBlur }
-							help={ __( 'Separate categories with commas' ) }
+							help={ __( 'Separate categories with commas', 'folioblocks' ) }
 							__nextHasNoMarginBottom
 							__next40pxDefaultSize
 						/>
@@ -1291,7 +1297,7 @@ addFilter(
 	( defaultContent, { attributes, setAttributes } ) => {
 		const {
 			enableFilter = false,
-			activeFilter = 'All',
+			activeFilter = FBKS_ALL_FILTER_TOKEN,
 			filterCategories = [],
 			filterAlign = 'center',
 		} = attributes;
@@ -1302,24 +1308,38 @@ addFilter(
 
 		const { decorationClass, cssVars } =
 			getFilterTypographyCSS( attributes );
+		const normalizedActiveFilter =
+			fbksNormalizeActiveFilterValue( activeFilter );
+		const filterItems = [
+			{
+				label: __( 'All', 'folioblocks' ),
+				value: FBKS_ALL_FILTER_TOKEN,
+			},
+			...filterCategories.map( ( term ) => ( {
+				label: term,
+				value: term,
+			} ) ),
+		];
 
 		return (
 			<div
 				className={ `pb-image-gallery-filters align-${ filterAlign } ${ decorationClass }` }
 				style={ cssVars }
 			>
-				{ [ 'All', ...filterCategories ].map( ( term ) => (
+				{ filterItems.map( ( term ) => (
 					<button
-						key={ term }
+						key={ term.value }
 						className={ `filter-button${
-							activeFilter === term ? ' is-active' : ''
+							normalizedActiveFilter === term.value
+								? ' is-active'
+								: ''
 						}` }
 						onClick={ () =>
-							setAttributes( { activeFilter: term } )
+							setAttributes( { activeFilter: term.value } )
 						}
 						type="button"
 					>
-						{ term }
+						{ term.label }
 					</button>
 				) ) }
 			</div>

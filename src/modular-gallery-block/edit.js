@@ -611,7 +611,7 @@ export default function Edit( props ) {
 						label={ __( 'Remove Image Gap', 'folioblocks' ) }
 						checked={ attributes.noGap || false }
 						onChange={ ( noGap ) => setAttributes( { noGap } ) }
-						help={ __( 'Remove gap between images.' ) }
+						help={ __( 'Remove gap between images.', 'folioblocks' ) }
 						__nextHasNoMarginBottom
 					/>
 				</PanelBody>

@@ -26,6 +26,7 @@ import { decodeEntities } from '@wordpress/html-entities';
 import { applyFilters } from '@wordpress/hooks';
 import ResponsiveRangeControl from '../pb-helpers/ResponsiveRangeControl';
 import { IconJustifiedGallery, IconPBSpinner } from '../pb-helpers/icons';
+import { fbksNormalizeActiveFilterValue } from '../pb-helpers/filterConstants';
 import './editor.scss';
 
 const ALLOWED_BLOCKS = [ 'folioblocks/pb-image-block' ];
@@ -312,7 +313,9 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 
 	const blockProps = useBlockProps( {
 		context: {
-			'folioBlocks/activeFilter': attributes.activeFilter,
+			'folioBlocks/activeFilter': fbksNormalizeActiveFilterValue(
+				attributes.activeFilter
+			),
 			'folioBlocks/filterCategories': attributes.filterCategories,
 			'folioBlocks/enableWooCommerce': effectiveEnableWoo,
 			'folioBlocks/hasWooCommerce': hasWooCommerce,
@@ -461,7 +464,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						} }
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
-						help={ __( 'Select the size of the source image.' ) }
+						help={ __( 'Select the size of the source image.', 'folioblocks' ) }
 					/>
 					<ResponsiveRangeControl
 						label={ __( 'Row Height', 'folioblocks' ) }
@@ -485,7 +488,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						onChange={ ( value ) =>
 							setAttributes( { noGap: value } )
 						}
-						help={ __( 'Remove image gap from gallery.' ) }
+						help={ __( 'Remove image gap from gallery.', 'folioblocks' ) }
 						__nextHasNoMarginBottom
 					/>
 

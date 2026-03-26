@@ -5,6 +5,7 @@
 import { createBlock, registerBlockType } from '@wordpress/blocks';
 import { useEffect } from '@wordpress/element';
 import { useDispatch } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Old attributes, matching the legacy modular-gallery-block exactly
@@ -45,7 +46,7 @@ const legacyAttributes = {
  */
 registerBlockType( 'portfolio-blocks/modular-gallery-block', {
 	apiVersion: 3,
-	title: 'Modular Gallery (Legacy)',
+	title: __( 'Modular Gallery (Legacy)', 'folioblocks' ),
 	category: 'widgets',
 	attributes: legacyAttributes,
 

@@ -555,7 +555,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 						}}
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
-						help={__('Select the size of the source image.')}
+						help={__('Select the size of the source image.', 'folioblocks')}
 					/>
 					<SelectControl
 						label={__(

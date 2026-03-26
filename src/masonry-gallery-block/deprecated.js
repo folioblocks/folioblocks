@@ -5,6 +5,7 @@
 import { createBlock, registerBlockType } from '@wordpress/blocks';
 import { useEffect } from '@wordpress/element';
 import { useDispatch } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Old attributes, matching the legacy masonry-gallery-block exactly
@@ -49,7 +50,7 @@ const legacyAttributes = {
 	filterBgColor: { type: 'string', default: 'transparent' },
 	activeFilterTextColor: { type: 'string', default: '#ffffff' },
 	activeFilterBgColor: { type: 'string', default: '#000000' },
-	activeFilter: { type: 'string', default: 'All' },
+	activeFilter: { type: 'string', default: 'all' },
 	images: {
 		type: 'array',
 		default: [],
@@ -75,7 +76,7 @@ const legacyAttributes = {
  */
 registerBlockType( 'portfolio-blocks/masonry-gallery-block', {
 	apiVersion: 3,
-	title: 'Masonry Gallery (Legacy)',
+	title: __( 'Masonry Gallery (Legacy)', 'folioblocks' ),
 	category: 'widgets',
 	attributes: legacyAttributes,
 

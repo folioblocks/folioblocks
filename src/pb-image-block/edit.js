@@ -26,6 +26,10 @@ import { useRef, useEffect } from '@wordpress/element';
 import { stack } from '@wordpress/icons';
 import { applyFilters } from '@wordpress/hooks';
 import { IconImageBlock } from '../pb-helpers/icons';
+import {
+	FBKS_ALL_FILTER_TOKEN,
+	fbksNormalizeActiveFilterValue,
+} from '../pb-helpers/filterConstants';
 import './editor.scss';
 
 const getAssignedFilterCategories = ( attributes = {} ) => {
@@ -284,12 +288,11 @@ export default function Edit( {
 	}, [ showCaptionInLightbox ] );
 
 	const filterCategories = context[ 'folioBlocks/filterCategories' ] || [];
-	const activeFilter = context?.[ 'folioBlocks/activeFilter' ] || 'All';
+	const activeFilter =
+		context?.[ 'folioBlocks/activeFilter' ] || FBKS_ALL_FILTER_TOKEN;
 	const assignedCategories = getAssignedFilterCategories( attributes );
 	const normalizedActiveFilter =
-		typeof activeFilter === 'string'
-			? activeFilter.trim().toLowerCase()
-			: 'all';
+		fbksNormalizeActiveFilterValue( activeFilter ).toLowerCase();
 	const isHidden =
 		normalizedActiveFilter !== 'all' &&
 		! assignedCategories.some(
@@ -408,7 +411,7 @@ export default function Edit( {
 					title={ __( 'Image Block Settings', 'folioblocks' ) }
 					initialOpen={ true }
 				>
-					{ id && src && (
+					{ src && (
 						<div style={ { marginBottom: '15px' } }>
 							<div className="pb-imgage-block-thumbnail-preview">
 								<img src={ selectedSrc } alt={ title || '' } />
@@ -489,7 +492,7 @@ export default function Edit( {
 						onChange={ ( value ) =>
 							setAttributes( { caption: value } )
 						}
-						help={ __( 'Add image caption.' ) }
+						help={ __( 'Add image caption.', 'folioblocks' ) }
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>

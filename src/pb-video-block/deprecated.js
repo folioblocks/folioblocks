@@ -5,6 +5,7 @@
 import { createBlock, registerBlockType } from '@wordpress/blocks';
 import { useEffect } from '@wordpress/element';
 import { useDispatch } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Old attributes, matching the legacy pb-video-block exactly
@@ -40,7 +41,7 @@ const legacyAttributes = {
  */
 registerBlockType( 'portfolio-blocks/pb-video-block', {
 	apiVersion: 3,
-	title: 'PB Video Block (Legacy)',
+	title: __( 'PB Video Block (Legacy)', 'folioblocks' ),
 	category: 'widgets',
 	attributes: legacyAttributes,
 

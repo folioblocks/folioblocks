@@ -5,6 +5,7 @@
 import { createBlock, registerBlockType } from '@wordpress/blocks';
 import { useEffect } from '@wordpress/element';
 import { useDispatch } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Old attributes, matching the legacy carousel-gallery-block exactly
@@ -73,7 +74,7 @@ const legacyAttributes = {
  */
 registerBlockType( 'portfolio-blocks/carousel-gallery-block', {
 	apiVersion: 3,
-	title: 'Carousel Gallery (Legacy)',
+	title: __( 'Carousel Gallery (Legacy)', 'folioblocks' ),
 	category: 'widgets',
 	attributes: legacyAttributes,
 

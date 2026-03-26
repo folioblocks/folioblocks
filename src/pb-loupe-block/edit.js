@@ -68,7 +68,7 @@ export default function Edit( { attributes, setAttributes } ) {
 			alert(
 				__(
 					'SVG files are not supported for the Loupe effect. Please select a raster image (JPG/PNG).',
-					'pb-loupe-block'
+					'folioblocks'
 				)
 			);
 			return;
@@ -149,10 +149,10 @@ export default function Edit( { attributes, setAttributes } ) {
 				<MediaPlaceholder
 					icon={ <IconLoupe /> }
 					labels={ {
-						title: __( 'Loupe Block', 'pb-loupe-block' ),
+						title: __( 'Loupe Block', 'folioblocks' ),
 						instructions: __(
 							'Select or upload an image to use with the loupe effect.',
-							'pb-loupe-block'
+							'folioblocks'
 						),
 					} }
 					onSelect={ onSelectImage }
@@ -197,10 +197,10 @@ export default function Edit( { attributes, setAttributes } ) {
 			</BlockControls>
 			<InspectorControls>
 				<PanelBody
-					title={ __( 'Loupe Block Settings', 'pb-loupe-block' ) }
+					title={ __( 'Loupe Block Settings', 'folioblocks' ) }
 					initialOpen={ true }
 				>
-					{ id && resolution && (
+					{ url && resolution && (
 						<div style={ { marginBottom: '16px' } }>
 							<div className="pb-loupe-img-thumbnail-preview">
 								<img src={ url } alt={ alt || '' } />
@@ -243,13 +243,14 @@ export default function Edit( { attributes, setAttributes } ) {
 							setAttributes( { alt: value } )
 						}
 						help={ __(
-							'Describe the purpose of the image. Leave empty if decorative.'
+							'Describe the purpose of the image. Leave empty if decorative.',
+							'folioblocks'
 						) }
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
 					<SelectControl
-						label={ __( 'Resolution', 'pb-loupe-block' ) }
+						label={ __( 'Resolution', 'folioblocks' ) }
 						value={ resolution }
 						options={ availableSize.map( ( slug ) => ( {
 							label:
@@ -272,15 +273,18 @@ export default function Edit( { attributes, setAttributes } ) {
 						} }
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
-						help={ __( 'Select the size of the source image.' ) }
+						help={ __(
+							'Select the size of the source image.',
+							'folioblocks'
+						) }
 					/>
 				</PanelBody>
 				<PanelBody
-					title={ __( 'Loupe Settings', 'pb-loupe-block' ) }
+					title={ __( 'Loupe Settings', 'folioblocks' ) }
 					initialOpen={ true }
 				>
 					<RangeControl
-						label={ __( 'Magnification', 'pb-loupe-block' ) }
+						label={ __( 'Magnification', 'folioblocks' ) }
 						value={ magnification }
 						onChange={ ( value ) =>
 							setAttributes( { magnification: value } )
@@ -289,7 +293,8 @@ export default function Edit( { attributes, setAttributes } ) {
 						max={ 20 }
 						step={ 1 }
 						help={ __(
-							'Set the desired strength of the magnification effect.'
+							'Set the desired strength of the magnification effect.',
+							'folioblocks'
 						) }
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
@@ -342,10 +347,10 @@ export default function Edit( { attributes, setAttributes } ) {
 					) }
 				</PanelBody>
 			</InspectorControls>
-			<InspectorControls group="advanced">
-				{ applyFilters(
-					'folioBlocks.carouselGallery.disableRightClickToggle',
-					<div style={ { marginBottom: '8px' } }>
+				<InspectorControls group="advanced">
+					{ applyFilters(
+						'folioBlocks.loupeBlock.disableRightClickToggle',
+						<div style={ { marginBottom: '8px' } }>
 						<Notice status="info" isDismissible={ false }>
 							<strong>
 								{ __( 'Disable Right-Click', 'folioblocks' ) }

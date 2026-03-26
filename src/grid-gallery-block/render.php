@@ -23,7 +23,7 @@ $fbks_wrapper_attributes_args = [
 // Filtering feature
 $fbks_enable_filter      = $fbks_attributes['enableFilter'] ?? false;
 $fbks_filter_align       = $fbks_attributes['filterAlign'] ?? 'center';
-$fbks_active_filter      = 'All';
+$fbks_active_filter      = FBKS_ALL_FILTER_TOKEN;
 $fbks_filter_categories  = $fbks_attributes['filterCategories'] ?? [];
 
 // Filter bar typography (Premium only).
@@ -132,7 +132,7 @@ echo '<div ' . wp_kses_post( $fbks_wrapper_attributes ) . '>';
 if ( fbks_fs()->can_use_premium_code__premium_only() ) {
     if ( !empty($fbks_enable_filter) && !empty($fbks_filter_categories) ) {
         echo '<div class="pb-image-gallery-filters align-' . esc_attr( $fbks_filter_align ) . esc_attr( $fbks_filter_decoration_class ) . '" style="' . esc_attr( $fbks_filter_typo_styles ) . '">';
-        echo '<button class="filter-button is-active" data-filter="All">All</button>';
+        echo '<button class="filter-button is-active" data-filter="' . esc_attr( FBKS_ALL_FILTER_TOKEN ) . '">' . esc_html( fbks_get_all_filter_label() ) . '</button>';
         foreach ( $fbks_filter_categories as $category ) {
             echo '<button class="filter-button" data-filter="' . esc_attr( $category ) . '">' . esc_html( $category ) . '</button>';
         }

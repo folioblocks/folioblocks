@@ -3,7 +3,7 @@
 /**
  * Plugin Name:       FolioBlocks
  * Description:       Create fast, responsive photo and video gallery with grid, masonry, justified, modular, and carousel layouts—ideal for photographers and creatives.
- * Version:           1.2.3
+ * Version:           1.2.4
  * Requires at least: 6.3
  * Requires PHP:      7.4
  * Author:            FolioBlocks
@@ -11,6 +11,7 @@
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       folioblocks
+ * Domain Path:       /languages
  *
  * @package FolioBlocks
  * 
@@ -21,9 +22,149 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FBKS_VERSION', '1.2.1');
+define('FBKS_VERSION', '1.2.4');
 define('FBKS_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('FBKS_PLUGIN_URL', plugin_dir_url(__FILE__));
+define('FBKS_ALL_FILTER_TOKEN', 'all');
+define('FBKS_LEGACY_ALL_FILTER_TOKEN', 'All');
+
+function fbks_load_textdomain()
+{
+    load_plugin_textdomain(
+        'folioblocks',
+        false,
+        dirname(plugin_basename(__FILE__)) . '/languages'
+    );
+}
+add_action('init', 'fbks_load_textdomain', 0);
+
+function fbks_is_all_filter_value($value)
+{
+    if (! is_string($value)) {
+        return false;
+    }
+
+    return strtolower(trim($value)) === FBKS_ALL_FILTER_TOKEN;
+}
+
+function fbks_normalize_active_filter_value($value)
+{
+    if (fbks_is_all_filter_value($value)) {
+        return FBKS_ALL_FILTER_TOKEN;
+    }
+
+    if (! is_string($value)) {
+        return FBKS_ALL_FILTER_TOKEN;
+    }
+
+    $value = trim($value);
+
+    return $value === '' ? FBKS_ALL_FILTER_TOKEN : $value;
+}
+
+function fbks_get_all_filter_label()
+{
+    return __('All', 'folioblocks');
+}
+
+function fbks_generate_block_asset_handle($block_name, $field_name, $index = 0)
+{
+    $field_mappings = array(
+        'editorScript' => 'editor-script',
+        'script'       => 'script',
+        'viewScript'   => 'view-script',
+    );
+
+    if (! isset($field_mappings[$field_name])) {
+        return '';
+    }
+
+    $handle = str_replace('/', '-', $block_name) . '-' . $field_mappings[$field_name];
+
+    if ($index > 0) {
+        $handle .= '-' . ($index + 1);
+    }
+
+    return $handle;
+}
+
+function fbks_register_i18n_loader_script()
+{
+    $script_path = FBKS_PLUGIN_DIR . 'includes/js/i18n-loader.js';
+    $script_url  = FBKS_PLUGIN_URL . 'includes/js/i18n-loader.js';
+
+    wp_register_script(
+        'folioblocks-i18n-loader',
+        $script_url,
+        array('wp-i18n'),
+        file_exists($script_path) ? filemtime($script_path) : FBKS_VERSION,
+        true
+    );
+
+    if (function_exists('wp_set_script_translations')) {
+        wp_set_script_translations(
+            'folioblocks-i18n-loader',
+            'folioblocks',
+            FBKS_PLUGIN_DIR . 'languages'
+        );
+    }
+}
+
+function fbks_attach_i18n_loader_dependency($handle)
+{
+    global $wp_scripts;
+
+    if (
+        ! $wp_scripts ||
+        ! isset($wp_scripts->registered[$handle])
+    ) {
+        return;
+    }
+
+    $dependencies = $wp_scripts->registered[$handle]->deps;
+
+    if (! in_array('folioblocks-i18n-loader', $dependencies, true)) {
+        $dependencies[] = 'folioblocks-i18n-loader';
+        $wp_scripts->registered[$handle]->deps = $dependencies;
+    }
+}
+
+function fbks_register_block_script_translations($block_directory)
+{
+    $metadata_path = trailingslashit($block_directory) . 'block.json';
+
+    if (! file_exists($metadata_path)) {
+        return;
+    }
+
+    $metadata = json_decode(file_get_contents($metadata_path), true);
+
+    if (! is_array($metadata) || empty($metadata['name'])) {
+        return;
+    }
+
+    foreach (array('editorScript', 'script', 'viewScript') as $field_name) {
+        if (empty($metadata[$field_name])) {
+            continue;
+        }
+
+        $assets = is_array($metadata[$field_name])
+            ? array_values($metadata[$field_name])
+            : array($metadata[$field_name]);
+
+        foreach ($assets as $index => $asset) {
+            if (! is_string($asset) || strpos($asset, 'file:') !== 0) {
+                continue;
+            }
+
+            $handle = fbks_generate_block_asset_handle($metadata['name'], $field_name, $index);
+
+            if ($handle !== '') {
+                fbks_attach_i18n_loader_dependency($handle);
+            }
+        }
+    }
+}
 
 if (function_exists('fbks_fs')) {
     fbks_fs()->set_basename(true, __FILE__);
@@ -148,22 +289,32 @@ if (function_exists('fbks_fs')) {
     // Register all FolioBlocks blocks.
     function fbks_block_init()
     {
-        register_block_type(__DIR__ . '/build/background-video-block');
-        register_block_type(__DIR__ . '/build/pb-before-after-block');
-        register_block_type(__DIR__ . '/build/carousel-gallery-block');
-        register_block_type(__DIR__ . '/build/filmstrip-gallery-block');
-        register_block_type(__DIR__ . '/build/grid-gallery-block');
-        register_block_type(__DIR__ . '/build/pb-image-block');
-        register_block_type(__DIR__ . '/build/justified-gallery-block');
-        register_block_type(__DIR__ . '/build/pb-loupe-block');
-        register_block_type(__DIR__ . '/build/masonry-gallery-block');
+        fbks_register_i18n_loader_script();
+
+        $block_directories = array(
+            __DIR__ . '/build/background-video-block',
+            __DIR__ . '/build/pb-before-after-block',
+            __DIR__ . '/build/carousel-gallery-block',
+            __DIR__ . '/build/filmstrip-gallery-block',
+            __DIR__ . '/build/grid-gallery-block',
+            __DIR__ . '/build/pb-image-block',
+            __DIR__ . '/build/justified-gallery-block',
+            __DIR__ . '/build/pb-loupe-block',
+            __DIR__ . '/build/masonry-gallery-block',
+            __DIR__ . '/build/pb-video-block',
+            __DIR__ . '/build/video-gallery-block',
+        );
+
         if (fbks_fs()->can_use_premium_code()) {
-            register_block_type(__DIR__ . '/build/modular-gallery-block');
-            register_block_type(__DIR__ . '/build/pb-image-row');
-            register_block_type(__DIR__ . '/build/pb-image-stack');
+            $block_directories[] = __DIR__ . '/build/modular-gallery-block';
+            $block_directories[] = __DIR__ . '/build/pb-image-row';
+            $block_directories[] = __DIR__ . '/build/pb-image-stack';
         }
-        register_block_type(__DIR__ . '/build/pb-video-block');
-        register_block_type(__DIR__ . '/build/video-gallery-block');
+
+        foreach ($block_directories as $block_directory) {
+            register_block_type($block_directory);
+            fbks_register_block_script_translations($block_directory);
+        }
     }
     add_action('init', 'fbks_block_init');
 
@@ -176,8 +327,8 @@ if (function_exists('fbks_fs')) {
     {
         $icon_url = plugin_dir_url(__FILE__) . 'includes/icons/pb-brand-icon.svg';
         add_menu_page(
-            'FolioBlocks',        // Page title
-            'FolioBlocks',        // Menu title
+            __('FolioBlocks', 'folioblocks'),        // Page title
+            __('FolioBlocks', 'folioblocks'),        // Menu title
             'manage_options',          // Capability
             'folioblocks-settings', // Slug
             'fbks_render_settings_page', // Callback
@@ -186,8 +337,8 @@ if (function_exists('fbks_fs')) {
         );
         add_submenu_page(
             'folioblocks-settings',         // Parent slug
-            'Dashboard',                      // Page title
-            'Dashboard',                      // Menu title (what appears in sidebar)
+            __('Dashboard', 'folioblocks'),                      // Page title
+            __('Dashboard', 'folioblocks'),                      // Menu title (what appears in sidebar)
             'manage_options',
             'folioblocks-settings',         // SAME slug as main page
             'fbks_render_settings_page'
@@ -195,8 +346,8 @@ if (function_exists('fbks_fs')) {
         if (! fbks_fs()->can_use_premium_code__premium_only()) {
             add_submenu_page(
                 'folioblocks-settings',
-                'Free vs Pro',
-                'Free vs Pro',
+                __('Free vs Pro', 'folioblocks'),
+                __('Free vs Pro', 'folioblocks'),
                 'manage_options',
                 'folioblocks-free-vs-pro',
                 'fbks_render_free_pro_page'
@@ -208,14 +359,15 @@ if (function_exists('fbks_fs')) {
     add_action('admin_menu', function () {
         add_submenu_page(
             'folioblocks-settings',
-            'System Information',
-            'System Info',
+            __('System Information', 'folioblocks'),
+            __('System Info', 'folioblocks'),
             'manage_options',
             'folioblocks-system-info',
             'fbks_render_system_info_page'
         );
     }, 99);
     // Load settings + system info pages
+    require_once plugin_dir_path(__FILE__) . 'includes/admin/common.php';
     require_once plugin_dir_path(__FILE__) . 'includes/admin/settings-page.php';
     require_once plugin_dir_path(__FILE__) . 'includes/admin/system-info.php';
     require_once plugin_dir_path(__FILE__) . 'includes/admin/free-pro.php';

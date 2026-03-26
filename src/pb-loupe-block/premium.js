@@ -15,21 +15,21 @@ addFilter(
 
 		return (
 			<ToggleGroupControl
-				label={ __( 'Loupe Shape' ) }
+				label={ __( 'Loupe Shape', 'folioblocks' ) }
 				value={ attributes.loupeShape }
 				onChange={ ( value ) => setAttributes( { loupeShape: value } ) }
 				isBlock
-				help={ __( 'Change the shape of the Loupe.' ) }
+				help={ __( 'Change the shape of the Loupe.', 'folioblocks' ) }
 				__nextHasNoMarginBottom
 				__next40pxDefaultSize
 			>
 				<ToggleGroupControlOption
 					value="circle"
-					label={ __( 'Circle' ) }
+					label={ __( 'Circle', 'folioblocks' ) }
 				/>
 				<ToggleGroupControlOption
 					value="square"
-					label={ __( 'Square' ) }
+					label={ __( 'Square', 'folioblocks' ) }
 				/>
 			</ToggleGroupControl>
 		);
@@ -43,14 +43,23 @@ addFilter(
 
 		return (
 			<SelectControl
-				label={ __( 'Loupe Theme', 'pb-loupe-block' ) }
+				label={ __( 'Loupe Theme', 'folioblocks' ) }
 				value={ attributes.loupeTheme }
 				options={ [
-					{ label: 'Light', value: 'light' },
-					{ label: 'Dark', value: 'dark' },
+					{
+						label: __( 'Light', 'folioblocks' ),
+						value: 'light',
+					},
+					{
+						label: __( 'Dark', 'folioblocks' ),
+						value: 'dark',
+					},
 				] }
 				onChange={ ( value ) => setAttributes( { loupeTheme: value } ) }
-				help={ __( 'Change the color of the Loupe frame.' ) }
+				help={ __(
+					'Change the color of the Loupe frame.',
+					'folioblocks'
+				) }
 				__nextHasNoMarginBottom
 				__next40pxDefaultSize
 			/>

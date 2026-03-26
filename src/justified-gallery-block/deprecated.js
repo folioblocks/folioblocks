@@ -5,6 +5,7 @@
 import { createBlock, registerBlockType } from '@wordpress/blocks';
 import { useEffect } from '@wordpress/element';
 import { useDispatch } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Old attributes, matching the legacy justified-gallery-block exactly
@@ -34,7 +35,7 @@ const legacyAttributes = {
 	filterBgColor: { type: 'string', default: 'transparent' },
 	activeFilterTextColor: { type: 'string', default: '#ffffff' },
 	activeFilterBgColor: { type: 'string', default: '#000000' },
-	activeFilter: { type: 'string', default: 'All' },
+	activeFilter: { type: 'string', default: 'all' },
 	hasWooCommerce: { type: 'boolean', default: false },
 	enableDownload: { type: 'boolean', default: false },
 	downloadOnHover: { type: 'boolean', default: false },
@@ -74,7 +75,7 @@ const legacyAttributes = {
  */
 registerBlockType( 'portfolio-blocks/justified-gallery-block', {
 	apiVersion: 3,
-	title: 'Justified Gallery (Legacy)',
+	title: __( 'Justified Gallery (Legacy)', 'folioblocks' ),
 	category: 'widgets',
 	attributes: legacyAttributes,
 

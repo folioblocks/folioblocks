@@ -5,6 +5,7 @@
 import { createBlock, registerBlockType } from '@wordpress/blocks';
 import { useEffect } from '@wordpress/element';
 import { useDispatch } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Old attributes, matching the legacy grid-gallery-block exactly
@@ -34,7 +35,7 @@ const legacyAttributes = {
 	filterBgColor: { type: 'string', default: 'transparent' },
 	activeFilterTextColor: { type: 'string', default: '#ffffff' },
 	activeFilterBgColor: { type: 'string', default: '#000000' },
-	activeFilter: { type: 'string', default: 'All' },
+	activeFilter: { type: 'string', default: 'all' },
 	enableDownload: { type: 'boolean', default: false },
 	downloadOnHover: { type: 'boolean', default: false },
 	hasWooCommerce: { type: 'boolean', default: false },
@@ -75,7 +76,7 @@ const legacyAttributes = {
  */
 registerBlockType( 'portfolio-blocks/grid-gallery-block', {
 	apiVersion: 3,
-	title: 'Grid Gallery (Legacy)',
+	title: __( 'Grid Gallery (Legacy)', 'folioblocks' ),
 	category: 'widgets',
 	attributes: legacyAttributes,
 

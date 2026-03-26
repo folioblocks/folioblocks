@@ -67,7 +67,7 @@
         "filterTextTransform": { "type": "string", "enum": ["none", "uppercase", "lowercase", "capitalize"], "default": "none" },
 		"activeFilterTextColor": { "type": "string", "default": "#ffffff" },
 		"activeFilterBgColor": { "type": "string", "default": "#000000" },
-		"activeFilter": { "type": "string", "default": "All" },
+		"activeFilter": { "type": "string", "default": "all" },
 		"images": {
 			"type": "array",
 			"default": [],

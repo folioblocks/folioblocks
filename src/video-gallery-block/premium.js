@@ -34,6 +34,11 @@ import {
 	getFontSizeOptions,
 	getFilterTypographyCSS,
 } from '../pb-helpers/GetThemeSettings';
+import {
+	FBKS_ALL_FILTER_TOKEN,
+	fbksIsAllFilterValue,
+	fbksNormalizeActiveFilterValue,
+} from '../pb-helpers/filterConstants';
 
 const getVideoBlockFilterCategories = ( blockAttributes = {} ) => {
 	const assignedCategories = Array.isArray( blockAttributes.filterCategories )
@@ -310,7 +315,7 @@ addFilter(
 			enableFilter = false,
 			filterAlign = 'center',
 			filtersInput = '',
-			activeFilter = 'All',
+			activeFilter = FBKS_ALL_FILTER_TOKEN,
 		} = attributes;
 
 		// Derive categories from filtersInput
@@ -333,16 +338,17 @@ addFilter(
 				const selectedCategories = getVideoBlockFilterCategories(
 					selectedBlock.attributes || {}
 				);
-				const normalizedActiveFilter = activeFilter.toLowerCase();
+				const normalizedActiveFilter =
+					fbksNormalizeActiveFilterValue( activeFilter ).toLowerCase();
 				const isFilteredOut =
-					activeFilter !== 'All' &&
+					! fbksIsAllFilterValue( activeFilter ) &&
 					! selectedCategories.some(
 						( category ) =>
 							category.toLowerCase() === normalizedActiveFilter
 					);
 
 				if ( isFilteredOut ) {
-					setAttributes( { activeFilter: 'All' } );
+					setAttributes( { activeFilter: FBKS_ALL_FILTER_TOKEN } );
 				}
 			}
 		}, [ selectedBlock, activeFilter ] );
@@ -447,7 +453,7 @@ addFilter(
 								const clean = raw.filter( Boolean );
 								setAttributes( { filterCategories: clean } );
 							} }
-							help={ __( 'Separate categories with commas' ) }
+							help={ __( 'Separate categories with commas', 'folioblocks' ) }
 							__nextHasNoMarginBottom
 							__next40pxDefaultSize
 						/>
@@ -468,7 +474,7 @@ addFilter(
 				label={ __( 'Border Color', 'folioblocks' ) }
 				value={ attributes.borderColor }
 				onChange={ ( borderColor ) => setAttributes( { borderColor } ) }
-				help={ __( 'Set Video block border color.' ) }
+				help={ __( 'Set Video block border color.', 'folioblocks' ) }
 			/>
 		);
 	}
@@ -886,7 +892,7 @@ addFilter(
 	( defaultContent, { attributes, setAttributes } ) => {
 		const {
 			enableFilter = false,
-			activeFilter = 'All',
+			activeFilter = FBKS_ALL_FILTER_TOKEN,
 			filterCategories = [],
 			filterAlign = 'center',
 		} = attributes;
@@ -897,24 +903,38 @@ addFilter(
 
 		const { decorationClass, cssVars } =
 			getFilterTypographyCSS( attributes );
+		const normalizedActiveFilter =
+			fbksNormalizeActiveFilterValue( activeFilter );
+		const filterItems = [
+			{
+				label: __( 'All', 'folioblocks' ),
+				value: FBKS_ALL_FILTER_TOKEN,
+			},
+			...filterCategories.map( ( term ) => ( {
+				label: term,
+				value: term,
+			} ) ),
+		];
 
 		return (
 			<div
 				className={ `pb-video-gallery-filters align-${ filterAlign } ${ decorationClass }` }
 				style={ cssVars }
 			>
-				{ [ 'All', ...filterCategories ].map( ( term ) => (
+				{ filterItems.map( ( term ) => (
 					<button
-						key={ term }
+						key={ term.value }
 						className={ `filter-button${
-							activeFilter === term ? ' is-active' : ''
+							normalizedActiveFilter === term.value
+								? ' is-active'
+								: ''
 						}` }
 						onClick={ () =>
-							setAttributes( { activeFilter: term } )
+							setAttributes( { activeFilter: term.value } )
 						}
 						type="button"
 					>
-						{ term }
+						{ term.label }
 					</button>
 				) ) }
 			</div>

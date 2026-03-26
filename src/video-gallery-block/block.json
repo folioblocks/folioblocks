@@ -71,9 +71,10 @@
         "filterLineHeight": { "type": "number", "default": 1.2 },
         "filterLetterSpacing": { "type": "number", "default": 0 },
         "filterTextDecoration": { "type": "string", "enum": ["none", "underline", "line-through"], "default": "none" },
-        "filterTextTransform": { "type": "string", "enum": ["none", "uppercase", "lowercase", "capitalize"], "default": "none" },
+		"filterTextTransform": { "type": "string", "enum": ["none", "uppercase", "lowercase", "capitalize"], "default": "none" },
 		"activeFilterTextColor": { "type": "string", "default": "#ffffff" },
 		"activeFilterBgColor": { "type": "string", "default": "#000000" },
+		"activeFilter": { "type": "string", "default": "all" },
 		"videos": {
     		"type": "array",
     		"default": [],

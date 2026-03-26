@@ -1,0 +1,1070 @@
+{
+  "translation-revision-date": "2026-03-25T15:53:44.200Z",
+  "generator": "FolioBlocks custom i18n tooling",
+  "domain": "messages",
+  "locale_data": {
+    "messages": {
+      "": {
+        "domain": "messages",
+        "lang": "it_IT",
+        "plural-forms": "nplurals=2; plural=(n != 1);"
+      },
+      ". Note: Some provider videos may not work due to privacy settings.": [
+        ". Nota: alcuni video di alcuni provider potrebbero non funzionare a causa delle impostazioni sulla privacy."
+      ],
+      "Active Item Colors": [
+        "Colori elemento attivo"
+      ],
+      "Add Background Video": [
+        "Aggiungi video di sfondo"
+      ],
+      "Add Image Row": [
+        "Aggiungi riga immagini"
+      ],
+      "Add Images": [
+        "Aggiungi immagini"
+      ],
+      "Add Video": [
+        "Aggiungi video"
+      ],
+      "Add Videos": [
+        "Aggiungi video"
+      ],
+      "Add content…": [
+        "Aggiungi contenuto…"
+      ],
+      "Add first video. Upload, select from media library, or insert from URL.": [
+        "Aggiungi il primo video. Caricalo, selezionalo dalla libreria media o inseriscilo da URL."
+      ],
+      "Add image caption.": [
+        "Aggiungi una didascalia all'immagine."
+      ],
+      "Add to Cart": [
+        "Aggiungi al carrello"
+      ],
+      "Add to Cart Icon": [
+        "Icona Aggiungi al carrello"
+      ],
+      "Add to Cart Icon Colors": [
+        "Colori dell'icona Aggiungi al carrello"
+      ],
+      "Add to Gallery": [
+        "Aggiungi alla galleria"
+      ],
+      "Add to Image Stack": [
+        "Aggiungi a Image Stack"
+      ],
+      "Adjust the horizontal focal point per device.": [
+        "Regola il punto focale orizzontale per dispositivo."
+      ],
+      "Adjust the vertical focal point per device.": [
+        "Regola il punto focale verticale per dispositivo."
+      ],
+      "Affects layout on mobile only. Switch ONLY when all images are vertical in orientation.": [
+        "Influisce solo sul layout mobile. Attivalo SOLO quando tutte le immagini hanno orientamento verticale."
+      ],
+      "After": [
+        "Dopo"
+      ],
+      "After Image": [
+        "Immagine dopo"
+      ],
+      "Align content bottom": [
+        "Allinea contenuto in basso"
+      ],
+      "Align content top": [
+        "Allinea contenuto in alto"
+      ],
+      "All": [
+        "Tutti"
+      ],
+      "Allows video to open in a Lightbox while editing.": [
+        "Consente di aprire il video in una Lightbox durante la modifica."
+      ],
+      "Allows videos to open in a Lightbox while editing.": [
+        "Consente di aprire i video in una Lightbox durante la modifica."
+      ],
+      "Alternative Text": [
+        "Testo alternativo"
+      ],
+      "Always": [
+        "Sempre"
+      ],
+      "Always Show": [
+        "Mostra sempre"
+      ],
+      "Appearance": [
+        "Aspetto"
+      ],
+      "Applies a subtle drop shadow to images.": [
+        "Applica una leggera ombra alle immagini."
+      ],
+      "Applies a subtle drop shadow.": [
+        "Applica una leggera ombra."
+      ],
+      "Automatically advance to the next image in the carousel.": [
+        "Avanza automaticamente all'immagine successiva nel carosello."
+      ],
+      "Automatically advance to the next image in the gallery.": [
+        "Avanza automaticamente all'immagine successiva nella galleria."
+      ],
+      "Automatically loop the video for continous play.": [
+        "Ripeti automaticamente il video per una riproduzione continua."
+      ],
+      "Autoplay Speed (seconds)": [
+        "Velocità autoplay (secondi)"
+      ],
+      "Background": [
+        "Sfondo"
+      ],
+      "Background Video Overlay Styles": [
+        "Stili overlay del video di sfondo"
+      ],
+      "Before": [
+        "Prima"
+      ],
+      "Before & After Block Settings": [
+        "Impostazioni di Before & After Block"
+      ],
+      "Before Image": [
+        "Immagine prima"
+      ],
+      "Blur Overlay": [
+        "Overlay sfocato"
+      ],
+      "Blur Overlay - Centered": [
+        "Overlay sfocato - centrato"
+      ],
+      "Border Color": [
+        "Colore del bordo"
+      ],
+      "Border Radius": [
+        "Raggio del bordo"
+      ],
+      "Border Width": [
+        "Spessore del bordo"
+      ],
+      "Bottom": [
+        "In basso"
+      ],
+      "Carousel Control Styles": [
+        "Stili controlli Carousel"
+      ],
+      "Carousel Gallery Settings": [
+        "Impostazioni di Carousel Gallery"
+      ],
+      "Carousel Styles": [
+        "Stili Carousel"
+      ],
+      "Center": [
+        "Centro"
+      ],
+      "Center content vertically": [
+        "Centra contenuto verticalmente"
+      ],
+      "Change Image": [
+        "Cambia immagine"
+      ],
+      "Change Thumbnail": [
+        "Cambia miniatura"
+      ],
+      "Change Video": [
+        "Cambia video"
+      ],
+      "Change the color of the Loupe frame.": [
+        "Cambia il colore della cornice della Loupe."
+      ],
+      "Change the shape of the Loupe.": [
+        "Cambia la forma della Loupe."
+      ],
+      "Chip Overlay - Top-Left Label": [
+        "Overlay chip - etichetta in alto a sinistra"
+      ],
+      "Choose the hover overlay style.": [
+        "Scegli lo stile dell'overlay al passaggio del mouse."
+      ],
+      "Choose what appears below images in the lightbox.": [
+        "Scegli cosa appare sotto le immagini nella Lightbox."
+      ],
+      "Choose what appears when hovering over images.": [
+        "Scegli cosa appare al passaggio del mouse sulle immagini."
+      ],
+      "Choose what happens when visitors click the Add To Cart icon.": [
+        "Scegli cosa succede quando i visitatori fanno clic sull'icona Aggiungi al carrello."
+      ],
+      "Choose what happens when visitors click the Add To Cart icon. Select Inherit to follow the gallery default.": [
+        "Scegli cosa succede quando i visitatori fanno clic sull'icona Aggiungi al carrello. Seleziona Eredita per seguire l'impostazione predefinita della galleria."
+      ],
+      "Choose when to display the Add to Cart icon.": [
+        "Scegli quando mostrare l'icona Aggiungi al carrello."
+      ],
+      "Choose where the thumbnail strip appears.": [
+        "Scegli dove appare la striscia delle miniature."
+      ],
+      "Choose whether the slider moves left-to-right or top-to-bottom.": [
+        "Scegli se il cursore deve muoversi da sinistra a destra o dall'alto verso il basso."
+      ],
+      "Circle": [
+        "Cerchio"
+      ],
+      "Close lightbox": [
+        "Chiudi Lightbox"
+      ],
+      "Collapse layout on Mobile": [
+        "Comprimi layout su mobile"
+      ],
+      "Color Mode": [
+        "Modalità colore"
+      ],
+      "Color Overlay": [
+        "Overlay colore"
+      ],
+      "Color Overlay - Custom Colors": [
+        "Overlay colore - colori personalizzati"
+      ],
+      "Columns": [
+        "Colonne"
+      ],
+      "Controls Alignment": [
+        "Allineamento controlli"
+      ],
+      "Custom Overlay": [
+        "Overlay personalizzato"
+      ],
+      "Dark": [
+        "Scuro"
+      ],
+      "Default Add To Cart Icon Behavior": [
+        "Comportamento predefinito dell'icona Aggiungi al carrello"
+      ],
+      "Default Overlay": [
+        "Overlay predefinito"
+      ],
+      "Describe the purpose of the image. Leave empty if decorative.": [
+        "Descrivi lo scopo dell'immagine. Lascia vuoto se è decorativa."
+      ],
+      "Description": [
+        "Descrizione"
+      ],
+      "Disable Right-Click": [
+        "Disabilita clic destro"
+      ],
+      "Disable Right-Click on Page": [
+        "Disabilita clic destro sulla pagina"
+      ],
+      "Disable background video is on mobile and display poster image.": [
+        "Disabilita il video di sfondo su mobile e mostra l'immagine poster."
+      ],
+      "Disable on Mobile": [
+        "Disabilita su mobile"
+      ],
+      "Display Add to Cart Icon": [
+        "Mostra icona Aggiungi al carrello"
+      ],
+      "Display Before & After labels.": [
+        "Mostra le etichette Prima e Dopo."
+      ],
+      "Display Image Caption inside the lightbox.": [
+        "Mostra la didascalia dell'immagine nella Lightbox."
+      ],
+      "Display Image Caption or Product Info inside the Lightbox.": [
+        "Mostra la didascalia dell'immagine o le informazioni del prodotto nella Lightbox."
+      ],
+      "Display Image Caption or product name & price inside the Lightbox.": [
+        "Mostra la didascalia dell'immagine o il nome e il prezzo del prodotto nella Lightbox."
+      ],
+      "Display Image Download Icon": [
+        "Mostra icona di download dell'immagine"
+      ],
+      "Display Image title or Product Info when hovering over images.": [
+        "Mostra il titolo dell'immagine o le informazioni del prodotto al passaggio del mouse sulle immagini."
+      ],
+      "Display Image title when hovering over image.": [
+        "Mostra il titolo dell'immagine al passaggio del mouse sull'immagine."
+      ],
+      "Display image captions inside the lightbox.": [
+        "Mostra le didascalie delle immagini nella Lightbox."
+      ],
+      "Display image title or Product Info when hovering over images.": [
+        "Mostra il titolo dell'immagine o le informazioni del prodotto al passaggio del mouse sulle immagini."
+      ],
+      "Display image title when hovering over image.": [
+        "Mostra il titolo dell'immagine al passaggio del mouse sull'immagine."
+      ],
+      "Display the image title when hovering over images.": [
+        "Mostra il titolo dell'immagine al passaggio del mouse sulle immagini."
+      ],
+      "Distribute content vertically": [
+        "Distribuisci contenuto verticalmente"
+      ],
+      "Download Icon": [
+        "Icona di download"
+      ],
+      "Download Icon Colors": [
+        "Colori dell'icona di download"
+      ],
+      "Download Image": [
+        "Scarica immagine"
+      ],
+      "Drag Handle Starting Position (%)": [
+        "Posizione iniziale del cursore (%)"
+      ],
+      "Drag Handle Starting Postion": [
+        "Posizione iniziale del cursore"
+      ],
+      "E-Commerce Settings": [
+        "Impostazioni e-commerce"
+      ],
+      "E-Commerce Styles": [
+        "Stili e-commerce"
+      ],
+      "Enable Autoplay": [
+        "Abilita autoplay"
+      ],
+      "Enable Carousel Controls": [
+        "Abilita controlli Carousel"
+      ],
+      "Enable Drop Shadow": [
+        "Abilita ombra"
+      ],
+      "Enable Full-Screen Mode": [
+        "Abilita modalità schermo intero"
+      ],
+      "Enable Full-Screen Mode for the gallery on the frontend.": [
+        "Abilita la modalità schermo intero per la galleria nel frontend."
+      ],
+      "Enable Image Border Color": [
+        "Abilita colore bordo immagine"
+      ],
+      "Enable Image Border Radius": [
+        "Abilita raggio bordo immagine"
+      ],
+      "Enable Image Border Width": [
+        "Abilita spessore bordo immagine"
+      ],
+      "Enable Image Downloads": [
+        "Abilita download immagini"
+      ],
+      "Enable Image Drop Shadow": [
+        "Abilita ombra immagine"
+      ],
+      "Enable Image Filtering": [
+        "Abilita filtro immagini"
+      ],
+      "Enable Image Lightbox on click.": [
+        "Abilita la Lightbox dell'immagine al clic."
+      ],
+      "Enable Image Styles": [
+        "Abilita stili immagine"
+      ],
+      "Enable Lazy Load of Images": [
+        "Abilita lazy load delle immagini"
+      ],
+      "Enable Lightbox": [
+        "Abilita Lightbox"
+      ],
+      "Enable Lightbox in Editor": [
+        "Abilita Lightbox nell'editor"
+      ],
+      "Enable Slider & Label Style Controls": [
+        "Abilita controlli stile per cursore ed etichette"
+      ],
+      "Enable Video Filtering": [
+        "Abilita filtro video"
+      ],
+      "Enable Woo Commerce": [
+        "Abilita WooCommerce"
+      ],
+      "Enable WooCommerce Integration": [
+        "Abilita integrazione WooCommerce"
+      ],
+      "Enable drop shadow effect.": [
+        "Abilita l'effetto ombra."
+      ],
+      "Enable image Lightbox on click.": [
+        "Abilita la Lightbox dell'immagine al clic."
+      ],
+      "Enable image filtering with categories.": [
+        "Abilita il filtro immagini con categorie."
+      ],
+      "Enable the carousel to loop infinitely.": [
+        "Abilita il loop infinito del carosello."
+      ],
+      "Enable video filtering with categories.": [
+        "Abilita il filtro video con categorie."
+      ],
+      "Enable visitors to download images from the gallery.": [
+        "Consenti ai visitatori di scaricare le immagini dalla galleria."
+      ],
+      "Enable visitors to download this image.": [
+        "Consenti ai visitatori di scaricare questa immagine."
+      ],
+      "Enables lazy loading of Video Gallery thumbnails.": [
+        "Abilita il lazy loading delle miniature di Video Gallery."
+      ],
+      "Enables lazy loading of gallery images.": [
+        "Abilita il lazy loading delle immagini della galleria."
+      ],
+      "Enables lazy loading of image.": [
+        "Abilita il lazy loading dell'immagine."
+      ],
+      "Fade Overlay - Centered": [
+        "Overlay dissolvenza - centrato"
+      ],
+      "Filmstrip Gallery Settings": [
+        "Impostazioni di Filmstrip Gallery"
+      ],
+      "Filmstrip thumbnails": [
+        "Miniature Filmstrip"
+      ],
+      "Filter Bar Alignment": [
+        "Allineamento barra filtro"
+      ],
+      "Filter Bar Colors": [
+        "Colori barra filtro"
+      ],
+      "Filter Bar Styles": [
+        "Stili barra filtro"
+      ],
+      "Filter Categories": [
+        "Categorie filtro"
+      ],
+      "Filter Styles Controls": [
+        "Controlli stile filtro"
+      ],
+      "Focal Point X (Left - Right)": [
+        "Punto focale X (sinistra - destra)"
+      ],
+      "Focal Point Y (Up - Down)": [
+        "Punto focale Y (alto - basso)"
+      ],
+      "Font Family": [
+        "Famiglia di caratteri"
+      ],
+      "Font Size": [
+        "Dimensione carattere"
+      ],
+      "Full": [
+        "Dimensione completa"
+      ],
+      "Gallery Filtering Settings": [
+        "Impostazioni del filtro galleria"
+      ],
+      "Gallery Filtering Styles": [
+        "Stili filtro galleria"
+      ],
+      "Gallery Image Styles": [
+        "Stili immagini galleria"
+      ],
+      "Gallery Styles": [
+        "Stili galleria"
+      ],
+      "Gallery thumbnail": [
+        "Miniatura galleria"
+      ],
+      "Gap Between Items (px)": [
+        "Spazio tra elementi (px)"
+      ],
+      "General Gallery Settings": [
+        "Impostazioni generali galleria"
+      ],
+      "Gradient Overlay - Slide-up Bottom": [
+        "Overlay gradiente - scorrimento dal basso"
+      ],
+      "Grid Gallery Settings": [
+        "Impostazioni di Grid Gallery"
+      ],
+      "Height": [
+        "Altezza"
+      ],
+      "Hidden": [
+        "Nascosto"
+      ],
+      "Hide Play Button": [
+        "Nascondi pulsante di riproduzione"
+      ],
+      "Hide only the play button overlay.": [
+        "Nascondi solo l'overlay del pulsante di riproduzione."
+      ],
+      "Horizontal": [
+        "Orizzontale"
+      ],
+      "Horizontal Images": [
+        "Immagini orizzontali"
+      ],
+      "Hover Overlay Settings": [
+        "Impostazioni overlay hover"
+      ],
+      "Hover Style": [
+        "Stile hover"
+      ],
+      "Icon": [
+        "Icona"
+      ],
+      "Image Block Settings": [
+        "Impostazioni di Image Block"
+      ],
+      "Image Caption": [
+        "Didascalia immagine"
+      ],
+      "Image Orientation (Mobile)": [
+        "Orientamento immagine (mobile)"
+      ],
+      "Image Resolution": [
+        "Risoluzione immagine"
+      ],
+      "Image Styles": [
+        "Stili immagine"
+      ],
+      "Image Title": [
+        "Titolo immagine"
+      ],
+      "Inactive Item Colors": [
+        "Colori elemento inattivo"
+      ],
+      "Inherit (Gallery Default)": [
+        "Eredita (predefinito galleria)"
+      ],
+      "Justified Gallery Settings": [
+        "Impostazioni di Justified Gallery"
+      ],
+      "Label Background Color": [
+        "Colore di sfondo etichetta"
+      ],
+      "Label Position": [
+        "Posizione etichetta"
+      ],
+      "Label Text Color": [
+        "Colore del testo etichetta"
+      ],
+      "Large": [
+        "Grande"
+      ],
+      "Left": [
+        "Sinistra"
+      ],
+      "Letter case": [
+        "Maiuscole/minuscole"
+      ],
+      "Letter spacing": [
+        "Spaziatura lettere"
+      ],
+      "Light": [
+        "Chiaro"
+      ],
+      "Lightbox & Hover Overlay Settings": [
+        "Impostazioni Lightbox e overlay hover"
+      ],
+      "Lightbox Info": [
+        "Informazioni Lightbox"
+      ],
+      "Lightbox Layout": [
+        "Layout Lightbox"
+      ],
+      "Line Height": [
+        "Altezza riga"
+      ],
+      "Link gallery images to WooCommerce products.": [
+        "Collega le immagini della galleria ai prodotti WooCommerce."
+      ],
+      "Link gallery videos to WooCommerce products.": [
+        "Collega i video della galleria ai prodotti WooCommerce."
+      ],
+      "Link this image to WooCommerce products.": [
+        "Collega questa immagine ai prodotti WooCommerce."
+      ],
+      "Link this video to a WooCommerce product.": [
+        "Collega questo video a un prodotto WooCommerce."
+      ],
+      "Loop": [
+        "Loop"
+      ],
+      "Loop Carousel Slides": [
+        "Loop delle slide del Carousel"
+      ],
+      "Loupe Block Settings": [
+        "Impostazioni di Loupe Block"
+      ],
+      "Loupe Settings": [
+        "Impostazioni di Loupe"
+      ],
+      "Loupe Shape": [
+        "Forma della Loupe"
+      ],
+      "Loupe Theme": [
+        "Tema Loupe"
+      ],
+      "Magnification": [
+        "Ingrandimento"
+      ],
+      "Main Image Resolution": [
+        "Risoluzione immagine principale"
+      ],
+      "Masonry Gallery Settings": [
+        "Impostazioni di Masonry Gallery"
+      ],
+      "Medium": [
+        "Medio"
+      ],
+      "Next image": [
+        "Immagine successiva"
+      ],
+      "Next thumbnail": [
+        "Miniatura successiva"
+      ],
+      "No Thumbnail Selected": [
+        "Nessuna miniatura selezionata"
+      ],
+      "No theme fonts found. Add font families in theme.json or Global Styles.": [
+        "Nessun font del tema trovato. Aggiungi famiglie di caratteri in theme.json o in Stili globali."
+      ],
+      "None": [
+        "Nessuno"
+      ],
+      "On Hover": [
+        "Al passaggio del mouse"
+      ],
+      "Open Fullscreen": [
+        "Apri schermo intero"
+      ],
+      "Open Product Page": [
+        "Apri pagina prodotto"
+      ],
+      "Open images in a lightbox when clicked.": [
+        "Apri le immagini in una Lightbox al clic."
+      ],
+      "Overlay Colors": [
+        "Colori overlay"
+      ],
+      "Overlay Content": [
+        "Contenuto overlay"
+      ],
+      "Overlay Style": [
+        "Stile overlay"
+      ],
+      "Overlay color": [
+        "Colore overlay"
+      ],
+      "Overlay opacity": [
+        "Opacità overlay"
+      ],
+      "Paste a Vimeo URL. The block will extract the Vimeo video ID when possible.": [
+        "Incolla un URL Vimeo. Il blocco estrarrà l'ID del video Vimeo quando possibile."
+      ],
+      "Pause autoplay": [
+        "Metti in pausa autoplay"
+      ],
+      "Pause autoplay while hovering over the main image.": [
+        "Metti in pausa l'autoplay al passaggio del mouse sull'immagine principale."
+      ],
+      "Pause on Hover": [
+        "Pausa al passaggio del mouse"
+      ],
+      "Pick custom background and text colors for the overlay.": [
+        "Scegli colori personalizzati di sfondo e testo per l'overlay."
+      ],
+      "Play autoplay": [
+        "Riprendi autoplay"
+      ],
+      "Playback": [
+        "Riproduzione"
+      ],
+      "Playback Control Colors": [
+        "Colori controlli riproduzione"
+      ],
+      "Poster Image": [
+        "Immagine poster"
+      ],
+      "Prevents visitors from right-clicking.": [
+        "Impedisce ai visitatori di fare clic destro."
+      ],
+      "Previous image": [
+        "Immagine precedente"
+      ],
+      "Previous thumbnail": [
+        "Miniatura precedente"
+      ],
+      "Randomize Image Order": [
+        "Ordine immagini casuale"
+      ],
+      "Randomize order of images.": [
+        "Casualizza l'ordine delle immagini."
+      ],
+      "Remove": [
+        "Rimuovi"
+      ],
+      "Remove Image Gap": [
+        "Rimuovi spazio tra immagini"
+      ],
+      "Remove gap between images.": [
+        "Rimuovi lo spazio tra le immagini."
+      ],
+      "Remove image gap from gallery.": [
+        "Rimuovi lo spazio tra le immagini dalla galleria."
+      ],
+      "Replace After Image": [
+        "Sostituisci immagine dopo"
+      ],
+      "Replace Before Image": [
+        "Sostituisci immagine prima"
+      ],
+      "Replace Image": [
+        "Sostituisci immagine"
+      ],
+      "Replace Video": [
+        "Sostituisci video"
+      ],
+      "Resolution": [
+        "Risoluzione"
+      ],
+      "Responsive Controls": [
+        "Controlli responsive"
+      ],
+      "Right": [
+        "Destra"
+      ],
+      "Row Height": [
+        "Altezza riga"
+      ],
+      "SVG files are not supported for the Loupe effect. Please select a raster image (JPG/PNG).": [
+        "I file SVG non sono supportati per l'effetto Loupe. Seleziona un'immagine raster (JPG/PNG)."
+      ],
+      "Select After Image": [
+        "Seleziona immagine dopo"
+      ],
+      "Select Before Image": [
+        "Seleziona immagine prima"
+      ],
+      "Select Image": [
+        "Seleziona immagine"
+      ],
+      "Select Images": [
+        "Seleziona immagini"
+      ],
+      "Select Thumbnail": [
+        "Seleziona miniatura"
+      ],
+      "Select Video": [
+        "Seleziona video"
+      ],
+      "Select a video": [
+        "Seleziona un video"
+      ],
+      "Select an image to preview it.": [
+        "Seleziona un'immagine per visualizzarne l'anteprima."
+      ],
+      "Select one or more categories for this image.": [
+        "Seleziona una o più categorie per questa immagine."
+      ],
+      "Select one or more categories for this video.": [
+        "Seleziona una o più categorie per questo video."
+      ],
+      "Select or Insert Video": [
+        "Seleziona o inserisci video"
+      ],
+      "Select or upload an image to use with the loupe effect.": [
+        "Seleziona o carica un'immagine da usare con l'effetto loupe."
+      ],
+      "Select the font’s weight and style (matches WordPress Typography → Appearance).": [
+        "Seleziona il peso e lo stile del carattere (corrisponde a WordPress Tipografia → Aspetto)."
+      ],
+      "Select the size of the main gallery image.": [
+        "Seleziona la dimensione dell'immagine principale della galleria."
+      ],
+      "Select the size of the source image.": [
+        "Seleziona la dimensione dell'immagine sorgente."
+      ],
+      "Select two images for Before & After Block. For best results, use images with the same dimensions (width and height).": [
+        "Seleziona due immagini per Before & After Block. Per risultati migliori, usa immagini con le stesse dimensioni (larghezza e altezza)."
+      ],
+      "Selected gallery image": [
+        "Immagine galleria selezionata"
+      ],
+      "Self-Hosted": [
+        "Self-hosted"
+      ],
+      "Separate categories with commas": [
+        "Separa le categorie con virgole"
+      ],
+      "Set Before & After label position.": [
+        "Imposta la posizione delle etichette Prima e Dopo."
+      ],
+      "Set Image border color.": [
+        "Imposta il colore del bordo dell'immagine."
+      ],
+      "Set Image border radius.": [
+        "Imposta il raggio del bordo dell'immagine."
+      ],
+      "Set Image border width.": [
+        "Imposta lo spessore del bordo dell'immagine."
+      ],
+      "Set Video Title used in the Hover Overlay, Lightbox, and for Alt-text.": [
+        "Imposta il titolo del video usato nell'overlay hover, nella Lightbox e per il testo alternativo."
+      ],
+      "Set Video block border color.": [
+        "Imposta il colore del bordo del blocco video."
+      ],
+      "Set Video block border radius.": [
+        "Imposta il raggio del bordo del blocco video."
+      ],
+      "Set Video block border width.": [
+        "Imposta lo spessore del bordo del blocco video."
+      ],
+      "Set Video border color.": [
+        "Imposta il colore del bordo del video."
+      ],
+      "Set Video border radius.": [
+        "Imposta il raggio del bordo del video."
+      ],
+      "Set Video border width.": [
+        "Imposta lo spessore del bordo del video."
+      ],
+      "Set alignment of the filter bar.": [
+        "Imposta l'allineamento della barra filtro."
+      ],
+      "Set background and icon colors for the carousel controls.": [
+        "Imposta i colori di sfondo e delle icone per i controlli del Carousel."
+      ],
+      "Set display preference for Image Download icon.": [
+        "Imposta la preferenza di visualizzazione per l'icona di download dell'immagine."
+      ],
+      "Set display preference for the download icon.": [
+        "Imposta la preferenza di visualizzazione dell'icona di download."
+      ],
+      "Set gap size between Thumbnails.": [
+        "Imposta la distanza tra le miniature."
+      ],
+      "Set starting position for slider drag handle.": [
+        "Imposta la posizione iniziale del cursore."
+      ],
+      "Set the color for the Overlay.": [
+        "Imposta il colore dell'overlay."
+      ],
+      "Set the desired strength of the magnification effect.": [
+        "Imposta l'intensità desiderata dell'effetto di ingrandimento."
+      ],
+      "Set the horizontal alignment of carousel controls.": [
+        "Imposta l'allineamento orizzontale dei controlli del Carousel."
+      ],
+      "Set the level of opacity for the Overlay.": [
+        "Imposta il livello di opacità dell'overlay."
+      ],
+      "Set thumbnail aspect ratio.": [
+        "Imposta le proporzioni della miniatura."
+      ],
+      "Set thumbnail resolution.": [
+        "Imposta la risoluzione della miniatura."
+      ],
+      "Set video Thumbnail aspect ratio.": [
+        "Imposta le proporzioni della miniatura del video."
+      ],
+      "Set visibility for title and play button overlays.": [
+        "Imposta la visibilità degli overlay del titolo e del pulsante di riproduzione."
+      ],
+      "Sets the default action for Add To Cart icons in this gallery. Individual images can override this setting.": [
+        "Imposta l'azione predefinita per le icone Aggiungi al carrello in questa galleria. Le singole immagini possono sovrascrivere questa impostazione."
+      ],
+      "Sets the default action for Add To Cart icons in this gallery. Individual videos can override this setting.": [
+        "Imposta l'azione predefinita per le icone Aggiungi al carrello in questa galleria. I singoli video possono sovrascrivere questa impostazione."
+      ],
+      "Show Before & After Labels": [
+        "Mostra etichette Prima e Dopo"
+      ],
+      "Show Image Caption": [
+        "Mostra didascalia immagine"
+      ],
+      "Show Image Caption in Lightbox": [
+        "Mostra didascalia immagine nella Lightbox"
+      ],
+      "Show Image Caption or Product Info in Lightbox": [
+        "Mostra didascalia immagine o info prodotto nella Lightbox"
+      ],
+      "Show Image Title": [
+        "Mostra titolo immagine"
+      ],
+      "Show Image Title on Hover": [
+        "Mostra titolo immagine al passaggio del mouse"
+      ],
+      "Show Overlay on Hover": [
+        "Mostra overlay al passaggio del mouse"
+      ],
+      "Show Product Info": [
+        "Mostra info prodotto"
+      ],
+      "Shown in the lightbox when enabled in Gallery Lightbox Settings.": [
+        "Mostrato nella Lightbox quando abilitato nelle impostazioni Lightbox della galleria."
+      ],
+      "Sizing & Focal Point": [
+        "Dimensioni e punto focale"
+      ],
+      "Slider & Label Styles": [
+        "Stili cursore ed etichette"
+      ],
+      "Slider Handle & Line Color": [
+        "Colore del cursore e della linea"
+      ],
+      "Slider Orientation": [
+        "Orientamento cursore"
+      ],
+      "Square": [
+        "Quadrato"
+      ],
+      "Stack all images vertically on mobile devices.": [
+        "Impila tutte le immagini verticalmente sui dispositivi mobili."
+      ],
+      "Stretch content height": [
+        "Allunga l'altezza del contenuto"
+      ],
+      "Supports YouTube, Vimeo, Bunny Stream, or ": [
+        "Supporta YouTube, Vimeo, Bunny Stream o "
+      ],
+      "Swap Position": [
+        "Scambia posizione"
+      ],
+      "Switch between light and dark editor themes.": [
+        "Passa tra i temi chiaro e scuro dell'editor."
+      ],
+      "Tablet and mobile inherit this value.": [
+        "Tablet e mobile ereditano questo valore."
+      ],
+      "Text": [
+        "Testo"
+      ],
+      "This is a premium feature. Unlock all features: ": [
+        "Questa è una funzionalità premium. Sblocca tutte le funzionalità: "
+      ],
+      "Thumbnail": [
+        "Miniatura"
+      ],
+      "Thumbnail Aspect Ratio": [
+        "Proporzioni miniatura"
+      ],
+      "Thumbnail Position": [
+        "Posizione miniatura"
+      ],
+      "Thumbnail Resolution": [
+        "Risoluzione miniatura"
+      ],
+      "Time between automatic image transitions.": [
+        "Tempo tra le transizioni automatiche delle immagini."
+      ],
+      "Time between automatic slide transitions.": [
+        "Tempo tra le transizioni automatiche delle slide."
+      ],
+      "Title & Play Button Visibility": [
+        "Visibilità del titolo e del pulsante di riproduzione"
+      ],
+      "Toggle visibility of navigation arrows.": [
+        "Attiva o disattiva la visibilità delle frecce di navigazione."
+      ],
+      "Top": [
+        "In alto"
+      ],
+      "Typography": [
+        "Tipografia"
+      ],
+      "Upgrade to Pro": [
+        "Passa a Pro"
+      ],
+      "Upload a video, select one from your media library, or insert a URL (including Vimeo).": [
+        "Carica un video, selezionane uno dalla tua libreria media oppure inserisci un URL (incluso Vimeo)."
+      ],
+      "Upload or select images to create a Filmstrip Gallery.": [
+        "Carica o seleziona immagini per creare una Filmstrip Gallery."
+      ],
+      "Upload or select images to create a Grid Gallery.": [
+        "Carica o seleziona immagini per creare una Grid Gallery."
+      ],
+      "Upload or select images to create a Justified Gallery.": [
+        "Carica o seleziona immagini per creare una Justified Gallery."
+      ],
+      "Upload or select images to create a Masonry Gallery.": [
+        "Carica o seleziona immagini per creare una Masonry Gallery."
+      ],
+      "Upload or select images to create a carousel.": [
+        "Carica o seleziona immagini per creare un Carousel."
+      ],
+      "Upload, select from media library or insert from URL.": [
+        "Carica, seleziona dalla libreria media o inserisci da URL."
+      ],
+      "Upload, select from media library, or insert from URL.": [
+        "Carica, seleziona dalla libreria media o inserisci da URL."
+      ],
+      "Use this video": [
+        "Usa questo video"
+      ],
+      "Uses fonts from your theme’s Global Styles.": [
+        "Usa i font degli Stili globali del tuo tema."
+      ],
+      "Vertical": [
+        "Verticale"
+      ],
+      "Vertical Content Alignment": [
+        "Allineamento verticale del contenuto"
+      ],
+      "Vertical Images": [
+        "Immagini verticali"
+      ],
+      "Video": [
+        "Video"
+      ],
+      "Video + Info": [
+        "Video + info"
+      ],
+      "Video + Product Info": [
+        "Video + info prodotto"
+      ],
+      "Video Block Settings": [
+        "Impostazioni di Video Block"
+      ],
+      "Video Block Styles": [
+        "Stili di Video Block"
+      ],
+      "Video Gallery Settings": [
+        "Impostazioni di Video Gallery"
+      ],
+      "Video Only": [
+        "Solo video"
+      ],
+      "Video Settings": [
+        "Impostazioni video"
+      ],
+      "Video Source": [
+        "Sorgente video"
+      ],
+      "Video Thumbnail Styles": [
+        "Stili miniature video"
+      ],
+      "Video Title": [
+        "Titolo video"
+      ],
+      "Video URL": [
+        "URL video"
+      ],
+      "View Product": [
+        "Vedi prodotto"
+      ],
+      "Vimeo": [
+        "Vimeo"
+      ],
+      "Vimeo URL": [
+        "URL Vimeo"
+      ],
+      "Vimeo background video": [
+        "Video di sfondo Vimeo"
+      ],
+      "We could not detect a Vimeo video ID from this URL yet. The front end may fall back to the poster until a valid Vimeo URL is provided.": [
+        "Non è stato ancora possibile rilevare un ID video Vimeo da questo URL. Il frontend potrebbe ripiegare sull'immagine poster finché non viene fornito un URL Vimeo valido."
+      ],
+      "WooCommerce Integration": [
+        "Integrazione WooCommerce"
+      ],
+      "https://vimeo.com/12345678": [
+        "https://vimeo.com/12345678"
+      ],
+      "self-hosted videos": [
+        "video self-hosted"
+      ]
+    }
+  }
+}

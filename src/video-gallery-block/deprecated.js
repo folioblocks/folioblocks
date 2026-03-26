@@ -5,6 +5,7 @@
 import { createBlock, registerBlockType } from '@wordpress/blocks';
 import { useEffect } from '@wordpress/element';
 import { useDispatch } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Old attributes, matching the legacy video-gallery-block exactly
@@ -45,6 +46,7 @@ const legacyAttributes = {
 	filterBgColor: { type: 'string', default: 'transparent' },
 	activeFilterTextColor: { type: 'string', default: '#ffffff' },
 	activeFilterBgColor: { type: 'string', default: '#000000' },
+	activeFilter: { type: 'string', default: 'all' },
 	videos: {
 		type: 'array',
 		default: [],
@@ -69,7 +71,7 @@ const legacyAttributes = {
  */
 registerBlockType( 'portfolio-blocks/video-gallery-block', {
 	apiVersion: 3,
-	title: 'Video Gallery (Legacy)',
+	title: __( 'Video Gallery (Legacy)', 'folioblocks' ),
 	category: 'widgets',
 	attributes: legacyAttributes,
 
