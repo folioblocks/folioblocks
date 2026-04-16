@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 // Fail gracefully 
 if ( empty( $attributes['src'] ) ) {
-	echo '<div class="pb-image-block"><p>No image selected.</p></div>';
+	echo '<div class="pb-image-block"><p>' . esc_html__( 'No image selected.', 'folioblocks' ) . '</p></div>';
 	return;
 }
 // Runtime check — ensure WooCommerce output only if plugin is active

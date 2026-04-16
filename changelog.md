@@ -4,7 +4,16 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.5] - 2026-04-16
+### Removed 
+- Removes support for coverting legacy (Portfolio Blocks) blocks into FolioBlocks blocks. 
+
+### Changed
+- Improves Swedish translations 
+
 ## [1.2.4] - 2026-03-25
+### Changed 
+- Server configuration information is no longer wrapped for translation. 
 
 ### Added
 - Added initial translation support for the admin screens and block settings. 

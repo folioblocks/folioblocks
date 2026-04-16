@@ -65,10 +65,7 @@ export const disableGalleryWrapperTransforms = () => {
 					const blocks = Array.isArray( block ) ? block : [ block ];
 					const hasFolioBlocks = blocks.some( ( item ) => {
 						const name = item?.name || '';
-						return (
-							name.startsWith( 'folioblocks/' ) ||
-							name.startsWith( 'portfolio-blocks/' )
-						);
+						return name.startsWith( 'folioblocks/' );
 					} );
 					if ( hasFolioBlocks ) {
 						return false;

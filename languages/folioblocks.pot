@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FolioBlocks 1.2.3\n"
 "Report-Msgid-Bugs-To: https://folioblocks.com\n"
-"POT-Creation-Date: 2026-03-25 15:53:40+0000\n"
+"POT-Creation-Date: 2026-04-16 09:26:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -14,63 +14,15 @@ msgstr ""
 "X-Generator: FolioBlocks custom i18n tooling\n"
 "X-Domain: folioblocks\n"
 
-#: src/pb-video-block/edit.js:556
-msgid ". Note: Some provider videos may not work due to privacy settings."
-msgstr ""
-
-#: includes/admin/system-info.php:243
-msgid "(No active plugins found)"
-msgstr ""
-
-#: includes/admin/system-info.php:196
-msgid "(No FolioBlocks blocks registered)"
-msgstr ""
-
-#: includes/admin/system-info.php:237
-msgid "=== Active Plugins ==="
-msgstr ""
-
-#: includes/admin/system-info.php:164
-msgid "=== Environment ==="
-msgstr ""
-
-#: includes/admin/system-info.php:185
-msgid "=== FolioBlocks ==="
-msgstr ""
-
-#: includes/admin/system-info.php:214
-msgid "=== Images & Thumbnails ==="
-msgstr ""
-
-#: includes/admin/system-info.php:200
-msgid "=== PHP & Server Extensions ==="
-msgstr ""
-
-#: includes/admin/system-info.php:174
-msgid "=== Theme ==="
-msgstr ""
-
-#: includes/admin/system-info.php:228
-msgid "=== WordPress Configuration ==="
-msgstr ""
-
 #: src/background-video-block/block.json:9
 msgid "A container block capable of displaying a background video (Self-Hosted or Vimeo)."
 msgstr ""
 
-#: includes/admin/system-info.php:47
-msgid "Active"
-msgstr ""
-
-#: src/grid-gallery-block/premium.js:1087 src/justified-gallery-block/premium.js:1090 src/masonry-gallery-block/premium.js:1149 src/video-gallery-block/premium.js:837
+#: src/grid-gallery-block/premium.js:975 src/justified-gallery-block/premium.js:982 src/masonry-gallery-block/premium.js:1033 src/video-gallery-block/premium.js:766
 msgid "Active Item Colors"
 msgstr ""
 
-#: includes/admin/system-info.php:175
-msgid "Active Theme: %s"
-msgstr ""
-
-#: src/background-video-block/edit.js:1090
+#: src/background-video-block/edit.js:983
 msgid "Add Background Video"
 msgstr ""
 
@@ -78,7 +30,7 @@ msgstr ""
 msgid "Add border width, border radius, and border color to images"
 msgstr ""
 
-#: src/background-video-block/edit.js:172 src/background-video-block/edit.js:421
+#: src/background-video-block/edit.js:172 src/background-video-block/edit.js:420
 msgid "Add content…"
 msgstr ""
 
@@ -86,19 +38,19 @@ msgstr ""
 msgid "Add drop shadow to images"
 msgstr ""
 
-#: src/video-gallery-block/edit.js:298
-msgid "Add first video. Upload, select from media library, or insert from URL."
+#: src/modular-gallery-block/edit.js:480
+msgid "Add First Image"
 msgstr ""
 
 #: src/pb-image-row/edit.js:52 src/pb-image-row/edit.js:135 src/pb-image-row/edit.js:139 src/pb-image-stack/edit.js:48 src/pb-image-stack/edit.js:97 src/pb-image-stack/edit.js:147 src/pb-image-stack/edit.js:151
 msgid "Add Image"
 msgstr ""
 
-#: src/pb-image-block/edit.js:495
+#: src/pb-image-block/edit.js:463
 msgid "Add image caption."
 msgstr ""
 
-#: src/modular-gallery-block/edit.js:534
+#: src/modular-gallery-block/edit.js:499
 msgid "Add Image Row"
 msgstr ""
 
@@ -106,36 +58,44 @@ msgstr ""
 msgid "Add Image Stack"
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:485 src/carousel-gallery-block/edit.js:505 src/filmstrip-gallery-block/edit.js:767 src/filmstrip-gallery-block/edit.js:770 src/grid-gallery-block/edit.js:522 src/grid-gallery-block/edit.js:542 src/justified-gallery-block/edit.js:391 src/justified-gallery-block/edit.js:411 src/masonry-gallery-block/edit.js:368 src/masonry-gallery-block/edit.js:389
+#: src/carousel-gallery-block/edit.js:464 src/carousel-gallery-block/edit.js:484 src/filmstrip-gallery-block/edit.js:678 src/filmstrip-gallery-block/edit.js:681 src/grid-gallery-block/edit.js:511 src/grid-gallery-block/edit.js:531 src/justified-gallery-block/edit.js:361 src/justified-gallery-block/edit.js:381 src/masonry-gallery-block/edit.js:352 src/masonry-gallery-block/edit.js:373
 msgid "Add Images"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:216 src/filmstrip-gallery-block/premium.js:496 src/filmstrip-gallery-block/render.php:401 src/grid-gallery-block/premium.js:297 src/justified-gallery-block/premium.js:299 src/masonry-gallery-block/premium.js:316 src/modular-gallery-block/premium.js:193 src/pb-image-block/premium.js:554 src/pb-image-block/premium.js:570 src/pb-image-block/premium.js:1060 src/pb-image-block/render.php:299 src/pb-video-block/premium.js:419 src/pb-video-block/premium.js:435 src/pb-video-block/premium.js:655 src/pb-video-block/render.php:238 src/video-gallery-block/premium.js:143
+#: src/carousel-gallery-block/premium.js:216 src/filmstrip-gallery-block/premium.js:496 src/filmstrip-gallery-block/render.php:401 src/grid-gallery-block/premium.js:276 src/justified-gallery-block/premium.js:280 src/masonry-gallery-block/premium.js:295 src/modular-gallery-block/premium.js:193 src/pb-image-block/premium.js:554 src/pb-image-block/premium.js:570 src/pb-image-block/premium.js:1060 src/pb-image-block/render.php:299 src/pb-video-block/premium.js:419 src/pb-video-block/premium.js:435 src/pb-video-block/premium.js:655 src/pb-video-block/render.php:239 src/video-gallery-block/premium.js:132
 msgid "Add to Cart"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:847 src/filmstrip-gallery-block/premium.js:562 src/grid-gallery-block/premium.js:1211 src/justified-gallery-block/premium.js:1214 src/masonry-gallery-block/premium.js:1273 src/modular-gallery-block/premium.js:644 src/pb-image-block/premium.js:900 src/pb-video-block/premium.js:569 src/video-gallery-block/premium.js:984
+#: src/carousel-gallery-block/premium.js:847 src/filmstrip-gallery-block/premium.js:562 src/grid-gallery-block/premium.js:1085 src/justified-gallery-block/premium.js:1092 src/masonry-gallery-block/premium.js:1143 src/modular-gallery-block/premium.js:644 src/pb-image-block/premium.js:900 src/pb-video-block/premium.js:569 src/video-gallery-block/premium.js:894
 msgid "Add to Cart Icon"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:833 src/grid-gallery-block/premium.js:1197 src/justified-gallery-block/premium.js:1200 src/masonry-gallery-block/premium.js:1259 src/modular-gallery-block/premium.js:630 src/pb-image-block/premium.js:886 src/pb-video-block/premium.js:555 src/video-gallery-block/premium.js:970
+#: src/carousel-gallery-block/premium.js:833 src/grid-gallery-block/premium.js:1072 src/justified-gallery-block/premium.js:1079 src/masonry-gallery-block/premium.js:1130 src/modular-gallery-block/premium.js:630 src/pb-image-block/premium.js:886 src/pb-video-block/premium.js:555 src/video-gallery-block/premium.js:881
 msgid "Add to Cart Icon Colors"
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:492 src/filmstrip-gallery-block/edit.js:309 src/grid-gallery-block/edit.js:529 src/justified-gallery-block/edit.js:398 src/masonry-gallery-block/edit.js:376
+#: src/carousel-gallery-block/edit.js:471 src/filmstrip-gallery-block/edit.js:296 src/grid-gallery-block/edit.js:518 src/justified-gallery-block/edit.js:368 src/masonry-gallery-block/edit.js:360
 msgid "Add to Gallery"
 msgstr ""
 
-#: src/pb-image-block/edit.js:402 src/pb-image-block/edit.js:404
+#: src/pb-image-block/edit.js:383 src/pb-image-block/edit.js:385
 msgid "Add to Image Stack"
 msgstr ""
 
-#: src/pb-video-block/edit.js:1004
+#: src/pb-video-block/edit.js:867
 msgid "Add Video"
 msgstr ""
 
-#: src/video-gallery-block/edit.js:343 src/video-gallery-block/edit.js:346
+#: src/video-gallery-block/edit.js:330 src/video-gallery-block/edit.js:333
 msgid "Add Videos"
+msgstr ""
+
+#: src/pb-helpers/ResponsiveRangeControl.js:84
+msgid "Adjust the default amount of columns on %s."
+msgstr ""
+
+#: src/pb-helpers/ResponsiveHeightRangeControl.js:129
+msgid "Adjust the height (%1$s) on %2$s."
 msgstr ""
 
 #: src/background-video-block/premium.js:43
@@ -154,15 +114,11 @@ msgstr ""
 msgid "Adjustable video position (X / Y) for Tablet & Mobile"
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:585
-msgid "Affects layout on mobile only. Switch ONLY when all images are vertical in orientation."
-msgstr ""
-
-#: src/pb-before-after-block/edit.js:276 src/pb-before-after-block/premium.js:176 src/pb-before-after-block/render.php:55
+#: src/pb-before-after-block/edit.js:257 src/pb-before-after-block/premium.js:176 src/pb-before-after-block/render.php:55
 msgid "After"
 msgstr ""
 
-#: src/pb-before-after-block/edit.js:75
+#: src/pb-before-after-block/edit.js:72
 msgid "After Image"
 msgstr ""
 
@@ -174,7 +130,7 @@ msgstr ""
 msgid "Align content top"
 msgstr ""
 
-#: folioblocks.php:67 src/grid-gallery-block/premium.js:1253 src/justified-gallery-block/premium.js:1256 src/masonry-gallery-block/premium.js:1315 src/video-gallery-block/premium.js:910
+#: folioblocks.php:83 src/grid-gallery-block/premium.js:1125 src/justified-gallery-block/premium.js:1132 src/masonry-gallery-block/premium.js:1183 src/video-gallery-block/premium.js:825
 msgid "All"
 msgstr ""
 
@@ -182,35 +138,27 @@ msgstr ""
 msgid "All of the blocks and galleries work entirely from the block editor. There are no external settings pages for any of the blocks, you work entirely from the block editor."
 msgstr ""
 
-#: src/pb-video-block/edit.js:664
-msgid "Allows video to open in a Lightbox while editing."
-msgstr ""
-
-#: src/video-gallery-block/edit.js:472
-msgid "Allows videos to open in a Lightbox while editing."
-msgstr ""
-
-#: src/pb-image-block/edit.js:512 src/pb-loupe-block/edit.js:240
+#: src/pb-image-block/edit.js:476 src/pb-loupe-block/edit.js:224
 msgid "Alternative Text"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:114 src/carousel-gallery-block/premium.js:194 src/filmstrip-gallery-block/premium.js:394 src/filmstrip-gallery-block/premium.js:474 src/grid-gallery-block/premium.js:195 src/grid-gallery-block/premium.js:275 src/justified-gallery-block/premium.js:197 src/justified-gallery-block/premium.js:277 src/masonry-gallery-block/premium.js:214 src/masonry-gallery-block/premium.js:294 src/modular-gallery-block/premium.js:91 src/modular-gallery-block/premium.js:171 src/pb-image-block/premium.js:86 src/pb-image-block/premium.js:431 src/pb-video-block/premium.js:300 src/video-gallery-block/premium.js:121
+#: src/carousel-gallery-block/premium.js:114 src/carousel-gallery-block/premium.js:194 src/filmstrip-gallery-block/premium.js:394 src/filmstrip-gallery-block/premium.js:474 src/grid-gallery-block/premium.js:185 src/grid-gallery-block/premium.js:259 src/justified-gallery-block/premium.js:189 src/justified-gallery-block/premium.js:263 src/masonry-gallery-block/premium.js:204 src/masonry-gallery-block/premium.js:278 src/modular-gallery-block/premium.js:91 src/modular-gallery-block/premium.js:171 src/pb-image-block/premium.js:86 src/pb-image-block/premium.js:431 src/pb-video-block/premium.js:300 src/video-gallery-block/premium.js:115
 msgid "Always"
 msgstr ""
 
-#: src/pb-video-block/edit.js:701 src/video-gallery-block/edit.js:523
+#: src/pb-video-block/edit.js:637 src/video-gallery-block/edit.js:487
 msgid "Always Show"
 msgstr ""
 
-#: src/grid-gallery-block/premium.js:913 src/grid-gallery-block/premium.js:938 src/justified-gallery-block/premium.js:916 src/justified-gallery-block/premium.js:941 src/masonry-gallery-block/premium.js:975 src/masonry-gallery-block/premium.js:1000 src/video-gallery-block/premium.js:663 src/video-gallery-block/premium.js:688
+#: src/grid-gallery-block/premium.js:817 src/grid-gallery-block/premium.js:842 src/justified-gallery-block/premium.js:824 src/justified-gallery-block/premium.js:849 src/masonry-gallery-block/premium.js:875 src/masonry-gallery-block/premium.js:900 src/video-gallery-block/premium.js:608 src/video-gallery-block/premium.js:633
 msgid "Appearance"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:765 src/grid-gallery-block/premium.js:805 src/justified-gallery-block/premium.js:808 src/masonry-gallery-block/premium.js:867 src/modular-gallery-block/premium.js:562 src/pb-image-block/premium.js:813
+#: src/carousel-gallery-block/premium.js:765 src/grid-gallery-block/premium.js:723 src/justified-gallery-block/premium.js:730 src/masonry-gallery-block/premium.js:781 src/modular-gallery-block/premium.js:562 src/pb-image-block/premium.js:813
 msgid "Applies a subtle drop shadow to images."
 msgstr ""
 
-#: src/video-gallery-block/premium.js:559
+#: src/video-gallery-block/premium.js:515
 msgid "Applies a subtle drop shadow."
 msgstr ""
 
@@ -220,10 +168,6 @@ msgstr ""
 
 #: src/filmstrip-gallery-block/premium.js:198
 msgid "Automatically advance to the next image in the gallery."
-msgstr ""
-
-#: src/background-video-block/edit.js:881
-msgid "Automatically loop the video for continous play."
 msgstr ""
 
 #: includes/admin/free-pro.php:51
@@ -238,15 +182,11 @@ msgstr ""
 msgid "Autoplay Speed (seconds)"
 msgstr ""
 
-#: includes/admin/settings-page.php:168 includes/admin/system-info.php:190
+#: includes/admin/settings-page.php:168
 msgid "Available Blocks:"
 msgstr ""
 
-#: includes/admin/system-info.php:216
-msgid "Available Image Editors: %s"
-msgstr ""
-
-#: src/carousel-gallery-block/premium.js:632 src/carousel-gallery-block/premium.js:688 src/carousel-gallery-block/premium.js:826 src/carousel-gallery-block/premium.js:859 src/filmstrip-gallery-block/premium.js:554 src/filmstrip-gallery-block/premium.js:574 src/grid-gallery-block/premium.js:591 src/grid-gallery-block/premium.js:1103 src/grid-gallery-block/premium.js:1126 src/grid-gallery-block/premium.js:1190 src/grid-gallery-block/premium.js:1223 src/justified-gallery-block/premium.js:591 src/justified-gallery-block/premium.js:1106 src/justified-gallery-block/premium.js:1129 src/justified-gallery-block/premium.js:1193 src/justified-gallery-block/premium.js:1226 src/masonry-gallery-block/premium.js:609 src/masonry-gallery-block/premium.js:1165 src/masonry-gallery-block/premium.js:1188 src/masonry-gallery-block/premium.js:1252 src/masonry-gallery-block/premium.js:1285 src/modular-gallery-block/premium.js:485 src/modular-gallery-block/premium.js:623 src/modular-gallery-block/premium.js:656 src/pb-image-block/premium.js:364 src/pb-image-block/premium.js:879 src/pb-image-block/premium.js:912 src/pb-video-block/premium.js:147 src/pb-video-block/premium.js:581 src/video-gallery-block/premium.js:302 src/video-gallery-block/premium.js:853 src/video-gallery-block/premium.js:876 src/video-gallery-block/premium.js:996
+#: src/carousel-gallery-block/premium.js:632 src/carousel-gallery-block/premium.js:688 src/carousel-gallery-block/premium.js:826 src/carousel-gallery-block/premium.js:859 src/filmstrip-gallery-block/premium.js:554 src/filmstrip-gallery-block/premium.js:574 src/grid-gallery-block/premium.js:525 src/grid-gallery-block/premium.js:988 src/grid-gallery-block/premium.js:1005 src/grid-gallery-block/premium.js:1065 src/grid-gallery-block/premium.js:1097 src/justified-gallery-block/premium.js:527 src/justified-gallery-block/premium.js:995 src/justified-gallery-block/premium.js:1012 src/justified-gallery-block/premium.js:1072 src/justified-gallery-block/premium.js:1104 src/masonry-gallery-block/premium.js:543 src/masonry-gallery-block/premium.js:1046 src/masonry-gallery-block/premium.js:1063 src/masonry-gallery-block/premium.js:1123 src/masonry-gallery-block/premium.js:1155 src/modular-gallery-block/premium.js:485 src/modular-gallery-block/premium.js:623 src/modular-gallery-block/premium.js:656 src/pb-image-block/premium.js:364 src/pb-image-block/premium.js:879 src/pb-image-block/premium.js:912 src/pb-video-block/premium.js:147 src/pb-video-block/premium.js:581 src/video-gallery-block/premium.js:276 src/video-gallery-block/premium.js:779 src/video-gallery-block/premium.js:796 src/video-gallery-block/premium.js:906
 msgid "Background"
 msgstr ""
 
@@ -254,23 +194,19 @@ msgstr ""
 msgid "Background Video Block"
 msgstr ""
 
-#: src/background-video-block/edit.js:993
+#: src/background-video-block/edit.js:902
 msgid "Background Video Overlay Styles"
 msgstr ""
 
-#: src/pb-before-after-block/edit.js:267 src/pb-before-after-block/premium.js:146 src/pb-before-after-block/render.php:80
+#: src/pb-before-after-block/edit.js:251 src/pb-before-after-block/premium.js:146 src/pb-before-after-block/render.php:80
 msgid "Before"
-msgstr ""
-
-#: src/pb-before-after-block/deprecated.js:35
-msgid "Before & After (Legacy)"
 msgstr ""
 
 #: includes/admin/free-pro.php:25 includes/admin/settings-page.php:197 src/pb-before-after-block/block.json:6 src/pb-before-after-block/edit.js:37
 msgid "Before & After Block"
 msgstr ""
 
-#: src/pb-before-after-block/edit.js:259
+#: src/pb-before-after-block/edit.js:246
 msgid "Before & After Block Settings"
 msgstr ""
 
@@ -282,12 +218,8 @@ msgstr ""
 msgid "Before/After Label Position"
 msgstr ""
 
-#: includes/admin/system-info.php:264
+#: includes/admin/system-info.php:254
 msgid "Below you can find information regarding your server configuration. This can be used to help debug any issues you have with FolioBlocks. Copy and paste the information when requesting support."
-msgstr ""
-
-#: includes/admin/system-info.php:182
-msgid "Block Theme: %s"
 msgstr ""
 
 #: includes/admin/free-pro.php:68
@@ -318,47 +250,43 @@ msgstr ""
 msgid "BlueSky"
 msgstr ""
 
-#: src/pb-video-block/premium.js:119 src/video-gallery-block/premium.js:274
+#: src/pb-video-block/premium.js:119 src/video-gallery-block/premium.js:251
 msgid "Blur Overlay"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:576 src/grid-gallery-block/premium.js:535 src/justified-gallery-block/premium.js:535 src/masonry-gallery-block/premium.js:553 src/modular-gallery-block/premium.js:429 src/pb-image-block/premium.js:307
+#: src/carousel-gallery-block/premium.js:576 src/grid-gallery-block/premium.js:487 src/justified-gallery-block/premium.js:489 src/masonry-gallery-block/premium.js:505 src/modular-gallery-block/premium.js:429 src/pb-image-block/premium.js:307
 msgid "Blur Overlay - Centered"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:721 src/grid-gallery-block/premium.js:761 src/justified-gallery-block/premium.js:764 src/masonry-gallery-block/premium.js:823 src/modular-gallery-block/premium.js:518 src/pb-image-block/premium.js:775 src/pb-video-block/edit.js:913 src/video-gallery-block/premium.js:474
+#: src/carousel-gallery-block/premium.js:721 src/grid-gallery-block/premium.js:679 src/justified-gallery-block/premium.js:686 src/masonry-gallery-block/premium.js:737 src/modular-gallery-block/premium.js:518 src/pb-image-block/premium.js:775 src/pb-video-block/edit.js:797 src/video-gallery-block/premium.js:430
 msgid "Border Color"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:745 src/grid-gallery-block/premium.js:785 src/justified-gallery-block/premium.js:788 src/masonry-gallery-block/premium.js:847 src/modular-gallery-block/premium.js:542 src/pb-image-block/premium.js:795 src/pb-video-block/edit.js:933 src/video-gallery-block/premium.js:523
+#: src/carousel-gallery-block/premium.js:745 src/grid-gallery-block/premium.js:703 src/justified-gallery-block/premium.js:710 src/masonry-gallery-block/premium.js:761 src/modular-gallery-block/premium.js:542 src/pb-image-block/premium.js:795 src/pb-video-block/edit.js:813 src/video-gallery-block/premium.js:479
 msgid "Border Radius"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:731 src/grid-gallery-block/premium.js:771 src/justified-gallery-block/premium.js:774 src/masonry-gallery-block/premium.js:833 src/modular-gallery-block/premium.js:528 src/pb-image-block/premium.js:783 src/pb-video-block/edit.js:921 src/video-gallery-block/premium.js:492
+#: src/carousel-gallery-block/premium.js:731 src/grid-gallery-block/premium.js:689 src/justified-gallery-block/premium.js:696 src/masonry-gallery-block/premium.js:747 src/modular-gallery-block/premium.js:528 src/pb-image-block/premium.js:783 src/pb-video-block/edit.js:803 src/video-gallery-block/premium.js:448
 msgid "Border Width"
 msgstr ""
 
-#: src/filmstrip-gallery-block/edit.js:832 src/pb-before-after-block/premium.js:99
+#: src/filmstrip-gallery-block/edit.js:734 src/pb-before-after-block/premium.js:99
 msgid "Bottom"
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:824
+#: src/carousel-gallery-block/edit.js:738
 msgid "Carousel Control Styles"
 msgstr ""
 
-#: includes/admin/settings-page.php:214 src/carousel-gallery-block/block.json:6 src/carousel-gallery-block/edit.js:897
+#: includes/admin/settings-page.php:214 src/carousel-gallery-block/block.json:6 src/carousel-gallery-block/edit.js:790
 msgid "Carousel Gallery"
-msgstr ""
-
-#: src/carousel-gallery-block/deprecated.js:77
-msgid "Carousel Gallery (Legacy)"
 msgstr ""
 
 #: includes/admin/free-pro.php:40
 msgid "Carousel Gallery Block"
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:511
+#: src/carousel-gallery-block/edit.js:490
 msgid "Carousel Gallery Settings"
 msgstr ""
 
@@ -370,11 +298,11 @@ msgstr ""
 msgid "Carousel Playback Controls"
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:818 src/carousel-gallery-block/premium.js:654
+#: src/carousel-gallery-block/edit.js:733 src/carousel-gallery-block/premium.js:654
 msgid "Carousel Styles"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:396 src/pb-before-after-block/premium.js:75 src/pb-before-after-block/premium.js:92
+#: src/carousel-gallery-block/premium.js:396 src/grid-gallery-block/premium.js:635 src/justified-gallery-block/premium.js:641 src/masonry-gallery-block/premium.js:692 src/pb-before-after-block/premium.js:75 src/pb-before-after-block/premium.js:92 src/video-gallery-block/premium.js:383
 msgid "Center"
 msgstr ""
 
@@ -382,7 +310,11 @@ msgstr ""
 msgid "Center content vertically"
 msgstr ""
 
-#: src/pb-image-block/edit.js:382 src/pb-image-block/edit.js:435 src/pb-loupe-block/edit.js:191 src/pb-loupe-block/edit.js:229
+#: src/pb-helpers/ResponsiveHeightRangeControl.js:161 src/pb-helpers/ResponsiveRangeControl.js:118
+msgid "Change device"
+msgstr ""
+
+#: src/pb-image-block/edit.js:366 src/pb-image-block/edit.js:413 src/pb-loupe-block/edit.js:181 src/pb-loupe-block/edit.js:216
 msgid "Change Image"
 msgstr ""
 
@@ -394,11 +326,11 @@ msgstr ""
 msgid "Change the shape of the Loupe."
 msgstr ""
 
-#: src/pb-video-block/edit.js:441 src/pb-video-block/edit.js:448 src/pb-video-block/edit.js:524
+#: src/pb-video-block/edit.js:434 src/pb-video-block/edit.js:438 src/pb-video-block/edit.js:500
 msgid "Change Thumbnail"
 msgstr ""
 
-#: src/pb-video-block/edit.js:421 src/pb-video-block/edit.js:425
+#: src/pb-video-block/edit.js:414 src/pb-video-block/edit.js:418
 msgid "Change Video"
 msgstr ""
 
@@ -406,19 +338,19 @@ msgstr ""
 msgid "Changelog:"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:597 src/grid-gallery-block/premium.js:556 src/justified-gallery-block/premium.js:556 src/masonry-gallery-block/premium.js:574 src/modular-gallery-block/premium.js:450 src/pb-image-block/premium.js:328
+#: src/carousel-gallery-block/premium.js:597 src/grid-gallery-block/premium.js:499 src/justified-gallery-block/premium.js:501 src/masonry-gallery-block/premium.js:517 src/modular-gallery-block/premium.js:450 src/pb-image-block/premium.js:328
 msgid "Chip Overlay - Top-Left Label"
 msgstr ""
 
-#: src/pb-video-block/premium.js:127 src/video-gallery-block/premium.js:282
+#: src/pb-video-block/premium.js:127 src/video-gallery-block/premium.js:259
 msgid "Choose the hover overlay style."
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:498 src/grid-gallery-block/premium.js:457 src/justified-gallery-block/premium.js:457 src/masonry-gallery-block/premium.js:475 src/modular-gallery-block/premium.js:351 src/pb-image-block/premium.js:201
+#: src/carousel-gallery-block/premium.js:498 src/modular-gallery-block/premium.js:351 src/pb-image-block/premium.js:201
 msgid "Choose what appears below images in the lightbox."
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:564 src/filmstrip-gallery-block/premium.js:342 src/grid-gallery-block/premium.js:523 src/justified-gallery-block/premium.js:523 src/masonry-gallery-block/premium.js:541 src/modular-gallery-block/premium.js:417 src/pb-image-block/premium.js:295
+#: src/carousel-gallery-block/premium.js:564 src/filmstrip-gallery-block/premium.js:342 src/modular-gallery-block/premium.js:417 src/pb-image-block/premium.js:295
 msgid "Choose what appears when hovering over images."
 msgstr ""
 
@@ -430,47 +362,39 @@ msgstr ""
 msgid "Choose what happens when visitors click the Add To Cart icon. Select Inherit to follow the gallery default."
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:203 src/filmstrip-gallery-block/premium.js:483 src/grid-gallery-block/premium.js:284 src/justified-gallery-block/premium.js:286 src/masonry-gallery-block/premium.js:303 src/modular-gallery-block/premium.js:180 src/pb-image-block/premium.js:440 src/pb-video-block/premium.js:309 src/video-gallery-block/premium.js:130
+#: src/carousel-gallery-block/premium.js:203 src/filmstrip-gallery-block/premium.js:483 src/modular-gallery-block/premium.js:180 src/pb-image-block/premium.js:440 src/pb-video-block/premium.js:309
 msgid "Choose when to display the Add to Cart icon."
-msgstr ""
-
-#: src/filmstrip-gallery-block/edit.js:847
-msgid "Choose where the thumbnail strip appears."
-msgstr ""
-
-#: src/pb-before-after-block/edit.js:359
-msgid "Choose whether the slider moves left-to-right or top-to-bottom."
 msgstr ""
 
 #: src/pb-loupe-block/premium.js:28
 msgid "Circle"
 msgstr ""
 
-#: src/pb-video-block/render.php:257
+#: src/pb-video-block/render.php:258
 msgid "Close"
 msgstr ""
 
-#: src/pb-video-block/edit.js:1111
+#: src/pb-video-block/edit.js:959
 msgid "Close lightbox"
 msgstr ""
 
-#: src/modular-gallery-block/edit.js:596
+#: src/modular-gallery-block/edit.js:553
 msgid "Collapse layout on Mobile"
 msgstr ""
 
-#: src/filmstrip-gallery-block/edit.js:1071 src/filmstrip-gallery-block/premium.js:56 src/filmstrip-gallery-block/premium.js:77
+#: src/filmstrip-gallery-block/edit.js:913 src/filmstrip-gallery-block/premium.js:56 src/filmstrip-gallery-block/premium.js:77
 msgid "Color Mode"
 msgstr ""
 
-#: src/pb-video-block/premium.js:123 src/video-gallery-block/premium.js:278
+#: src/pb-video-block/premium.js:123 src/video-gallery-block/premium.js:255
 msgid "Color Overlay"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:604 src/grid-gallery-block/premium.js:563 src/justified-gallery-block/premium.js:563 src/masonry-gallery-block/premium.js:581 src/modular-gallery-block/premium.js:457 src/pb-image-block/premium.js:335
+#: src/carousel-gallery-block/premium.js:604 src/grid-gallery-block/premium.js:503 src/justified-gallery-block/premium.js:505 src/masonry-gallery-block/premium.js:521 src/modular-gallery-block/premium.js:457 src/pb-image-block/premium.js:335
 msgid "Color Overlay - Custom Colors"
 msgstr ""
 
-#: src/grid-gallery-block/edit.js:601 src/masonry-gallery-block/edit.js:454 src/video-gallery-block/edit.js:411
+#: src/grid-gallery-block/edit.js:587 src/masonry-gallery-block/edit.js:435 src/video-gallery-block/edit.js:395
 msgid "Columns"
 msgstr ""
 
@@ -486,7 +410,7 @@ msgstr ""
 msgid "Controls Alignment"
 msgstr ""
 
-#: includes/admin/system-info.php:278
+#: includes/admin/system-info.php:268
 msgid "Copy to clipboard"
 msgstr ""
 
@@ -518,7 +442,7 @@ msgstr ""
 msgid "Custom Lazy Load"
 msgstr ""
 
-#: src/pb-video-block/edit.js:753 src/video-gallery-block/edit.js:562
+#: src/pb-video-block/edit.js:674 src/video-gallery-block/edit.js:521
 msgid "Custom Overlay"
 msgstr ""
 
@@ -542,7 +466,7 @@ msgstr ""
 msgid "Dark"
 msgstr ""
 
-#: folioblocks.php:340 folioblocks.php:341 includes/admin/settings-page.php:145
+#: folioblocks.php:371 folioblocks.php:372 includes/admin/settings-page.php:145
 msgid "Dashboard"
 msgstr ""
 
@@ -550,15 +474,11 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:209 src/filmstrip-gallery-block/premium.js:489 src/grid-gallery-block/premium.js:290 src/justified-gallery-block/premium.js:292 src/masonry-gallery-block/premium.js:309 src/modular-gallery-block/premium.js:186 src/pb-image-block/premium.js:538 src/pb-video-block/premium.js:403 src/video-gallery-block/premium.js:136
+#: src/carousel-gallery-block/premium.js:209 src/filmstrip-gallery-block/premium.js:489 src/grid-gallery-block/premium.js:272 src/justified-gallery-block/premium.js:276 src/masonry-gallery-block/premium.js:291 src/modular-gallery-block/premium.js:186 src/pb-image-block/premium.js:538 src/pb-video-block/premium.js:403 src/video-gallery-block/premium.js:128
 msgid "Default Add To Cart Icon Behavior"
 msgstr ""
 
-#: includes/admin/system-info.php:220
-msgid "Default Image Editor: %s"
-msgstr ""
-
-#: src/pb-video-block/premium.js:115 src/video-gallery-block/premium.js:270
+#: src/pb-video-block/premium.js:115 src/video-gallery-block/premium.js:247
 msgid "Default Overlay"
 msgstr ""
 
@@ -566,31 +486,27 @@ msgstr ""
 msgid "Demo"
 msgstr ""
 
-#: src/pb-loupe-block/edit.js:245
-msgid "Describe the purpose of the image. Leave empty if decorative."
-msgstr ""
-
-#: src/pb-video-block/edit.js:631
+#: src/pb-video-block/edit.js:587
 msgid "Description"
 msgstr ""
 
-#: src/background-video-block/edit.js:893
-msgid "Disable background video is on mobile and display poster image."
+#: src/pb-helpers/ResponsiveHeightRangeControl.js:37 src/pb-helpers/ResponsiveRangeControl.js:30
+msgid "Desktop"
 msgstr ""
 
 #: includes/admin/free-pro.php:218 includes/admin/free-pro.php:238
 msgid "Disable Lightbox in Editor"
 msgstr ""
 
-#: src/background-video-block/edit.js:888
+#: src/background-video-block/edit.js:814
 msgid "Disable on Mobile"
 msgstr ""
 
-#: includes/admin/free-pro.php:19 includes/admin/free-pro.php:33 includes/admin/free-pro.php:49 includes/admin/free-pro.php:75 includes/admin/free-pro.php:94 includes/admin/free-pro.php:113 includes/admin/free-pro.php:136 includes/admin/free-pro.php:156 includes/admin/free-pro.php:174 includes/admin/free-pro.php:197 includes/admin/free-pro.php:214 includes/admin/free-pro.php:233 src/background-video-block/edit.js:972 src/carousel-gallery-block/edit.js:769 src/filmstrip-gallery-block/edit.js:1016 src/grid-gallery-block/edit.js:792 src/justified-gallery-block/edit.js:680 src/masonry-gallery-block/edit.js:652 src/modular-gallery-block/edit.js:760 src/pb-before-after-block/edit.js:439 src/pb-image-block/edit.js:711 src/pb-image-block/premium.js:716 src/pb-loupe-block/edit.js:356 src/pb-video-block/edit.js:852 src/pb-video-block/premium.js:482 src/video-gallery-block/edit.js:660
+#: includes/admin/free-pro.php:19 includes/admin/free-pro.php:33 includes/admin/free-pro.php:49 includes/admin/free-pro.php:75 includes/admin/free-pro.php:94 includes/admin/free-pro.php:113 includes/admin/free-pro.php:136 includes/admin/free-pro.php:156 includes/admin/free-pro.php:174 includes/admin/free-pro.php:197 includes/admin/free-pro.php:214 includes/admin/free-pro.php:233 src/background-video-block/edit.js:886 src/carousel-gallery-block/edit.js:698 src/filmstrip-gallery-block/edit.js:873 src/grid-gallery-block/edit.js:735 src/justified-gallery-block/edit.js:600 src/masonry-gallery-block/edit.js:590 src/modular-gallery-block/edit.js:686 src/pb-before-after-block/edit.js:387 src/pb-image-block/edit.js:635 src/pb-image-block/premium.js:716 src/pb-loupe-block/edit.js:316 src/pb-video-block/edit.js:754 src/pb-video-block/premium.js:482 src/video-gallery-block/edit.js:594
 msgid "Disable Right-Click"
 msgstr ""
 
-#: src/background-video-block/premium.js:82 src/carousel-gallery-block/premium.js:252 src/filmstrip-gallery-block/premium.js:591 src/grid-gallery-block/premium.js:333 src/justified-gallery-block/premium.js:335 src/masonry-gallery-block/premium.js:352 src/modular-gallery-block/premium.js:229 src/pb-before-after-block/premium.js:190 src/pb-loupe-block/premium.js:77 src/video-gallery-block/premium.js:179
+#: src/background-video-block/premium.js:82 src/carousel-gallery-block/premium.js:252 src/filmstrip-gallery-block/premium.js:591 src/grid-gallery-block/premium.js:309 src/justified-gallery-block/premium.js:313 src/masonry-gallery-block/premium.js:328 src/modular-gallery-block/premium.js:229 src/pb-before-after-block/premium.js:190 src/pb-loupe-block/premium.js:77 src/video-gallery-block/premium.js:165
 msgid "Disable Right-Click on Page"
 msgstr ""
 
@@ -598,15 +514,7 @@ msgstr ""
 msgid "Disable Video on Mobile"
 msgstr ""
 
-#: includes/admin/system-info.php:232
-msgid "DISABLE_WP_CRON: %s"
-msgstr ""
-
-#: includes/admin/system-info.php:115 includes/admin/system-info.php:116 includes/admin/system-info.php:117 includes/admin/system-info.php:118 includes/admin/system-info.php:119
-msgid "Disabled"
-msgstr ""
-
-#: src/carousel-gallery-block/premium.js:183 src/filmstrip-gallery-block/premium.js:463 src/grid-gallery-block/premium.js:264 src/justified-gallery-block/premium.js:266 src/masonry-gallery-block/premium.js:283 src/modular-gallery-block/premium.js:160 src/pb-image-block/premium.js:420 src/pb-video-block/premium.js:289 src/video-gallery-block/premium.js:110
+#: src/carousel-gallery-block/premium.js:183 src/filmstrip-gallery-block/premium.js:463 src/grid-gallery-block/premium.js:251 src/justified-gallery-block/premium.js:255 src/masonry-gallery-block/premium.js:270 src/modular-gallery-block/premium.js:160 src/pb-image-block/premium.js:420 src/pb-video-block/premium.js:289 src/video-gallery-block/premium.js:107
 msgid "Display Add to Cart Icon"
 msgstr ""
 
@@ -614,11 +522,11 @@ msgstr ""
 msgid "Display Before & After labels."
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:457 src/grid-gallery-block/premium.js:416 src/justified-gallery-block/premium.js:416 src/masonry-gallery-block/premium.js:434 src/modular-gallery-block/premium.js:310 src/pb-image-block/premium.js:159
+#: src/carousel-gallery-block/premium.js:457 src/modular-gallery-block/premium.js:310 src/pb-image-block/premium.js:159
 msgid "Display Image Caption inside the lightbox."
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:453 src/grid-gallery-block/premium.js:412 src/justified-gallery-block/premium.js:412 src/masonry-gallery-block/premium.js:430 src/modular-gallery-block/premium.js:306
+#: src/carousel-gallery-block/premium.js:453 src/modular-gallery-block/premium.js:306
 msgid "Display Image Caption or Product Info inside the Lightbox."
 msgstr ""
 
@@ -626,11 +534,7 @@ msgstr ""
 msgid "Display Image Caption or product name & price inside the Lightbox."
 msgstr ""
 
-#: src/modular-gallery-block/edit.js:651
-msgid "Display image captions inside the lightbox."
-msgstr ""
-
-#: src/carousel-gallery-block/premium.js:103 src/filmstrip-gallery-block/premium.js:383 src/grid-gallery-block/premium.js:184 src/justified-gallery-block/premium.js:186 src/masonry-gallery-block/premium.js:203 src/modular-gallery-block/premium.js:80 src/pb-image-block/premium.js:75
+#: src/carousel-gallery-block/premium.js:103 src/filmstrip-gallery-block/premium.js:383 src/grid-gallery-block/premium.js:177 src/justified-gallery-block/premium.js:181 src/masonry-gallery-block/premium.js:196 src/modular-gallery-block/premium.js:80 src/pb-image-block/premium.js:75
 msgid "Display Image Download Icon"
 msgstr ""
 
@@ -638,7 +542,7 @@ msgstr ""
 msgid "Display image title or Product Info when hovering over images."
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:525 src/filmstrip-gallery-block/premium.js:303 src/grid-gallery-block/premium.js:484 src/justified-gallery-block/premium.js:484 src/masonry-gallery-block/premium.js:502 src/modular-gallery-block/premium.js:378
+#: src/carousel-gallery-block/premium.js:525 src/filmstrip-gallery-block/premium.js:303 src/modular-gallery-block/premium.js:378
 msgid "Display Image title or Product Info when hovering over images."
 msgstr ""
 
@@ -646,16 +550,12 @@ msgstr ""
 msgid "Display image title when hovering over image."
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:529 src/filmstrip-gallery-block/premium.js:307 src/grid-gallery-block/premium.js:488 src/justified-gallery-block/premium.js:488 src/masonry-gallery-block/premium.js:506 src/modular-gallery-block/premium.js:382
+#: src/carousel-gallery-block/premium.js:529 src/filmstrip-gallery-block/premium.js:307 src/modular-gallery-block/premium.js:382
 msgid "Display Image title when hovering over image."
 msgstr ""
 
 #: src/filmstrip-gallery-block/block.json:10
 msgid "Display images in a filmstrip gallery."
-msgstr ""
-
-#: src/modular-gallery-block/edit.js:668
-msgid "Display the image title when hovering over images."
 msgstr ""
 
 #: src/carousel-gallery-block/block.json:10
@@ -670,11 +570,11 @@ msgstr ""
 msgid "Distribute content vertically"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:814 src/filmstrip-gallery-block/premium.js:542 src/grid-gallery-block/premium.js:1178 src/justified-gallery-block/premium.js:1181 src/masonry-gallery-block/premium.js:1240 src/modular-gallery-block/premium.js:611 src/pb-image-block/premium.js:867
+#: src/carousel-gallery-block/premium.js:814 src/filmstrip-gallery-block/premium.js:542 src/grid-gallery-block/premium.js:1053 src/justified-gallery-block/premium.js:1060 src/masonry-gallery-block/premium.js:1111 src/modular-gallery-block/premium.js:611 src/pb-image-block/premium.js:867
 msgid "Download Icon"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:800 src/grid-gallery-block/premium.js:1164 src/justified-gallery-block/premium.js:1167 src/masonry-gallery-block/premium.js:1226 src/modular-gallery-block/premium.js:597 src/pb-image-block/premium.js:853
+#: src/carousel-gallery-block/premium.js:800 src/grid-gallery-block/premium.js:1040 src/justified-gallery-block/premium.js:1047 src/masonry-gallery-block/premium.js:1098 src/modular-gallery-block/premium.js:597 src/pb-image-block/premium.js:853
 msgid "Download Icon Colors"
 msgstr ""
 
@@ -694,7 +594,7 @@ msgstr ""
 msgid "Drag Handle Starting Position (%)"
 msgstr ""
 
-#: src/pb-before-after-block/edit.js:374
+#: src/pb-before-after-block/edit.js:338
 msgid "Drag Handle Starting Postion"
 msgstr ""
 
@@ -710,31 +610,31 @@ msgstr ""
 msgid "Drop Shadow Effect on Video Thumbnails"
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:692 src/filmstrip-gallery-block/edit.js:939 src/grid-gallery-block/edit.js:715 src/justified-gallery-block/edit.js:603 src/masonry-gallery-block/edit.js:575 src/modular-gallery-block/edit.js:683 src/pb-image-block/edit.js:606 src/pb-video-block/edit.js:796 src/video-gallery-block/edit.js:619
+#: src/carousel-gallery-block/edit.js:639 src/filmstrip-gallery-block/edit.js:814 src/grid-gallery-block/edit.js:676 src/justified-gallery-block/edit.js:541 src/masonry-gallery-block/edit.js:531 src/modular-gallery-block/edit.js:627 src/pb-image-block/edit.js:549 src/pb-video-block/edit.js:706 src/video-gallery-block/edit.js:562
 msgid "E-Commerce Settings"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:788 src/filmstrip-gallery-block/premium.js:536 src/grid-gallery-block/premium.js:1152 src/justified-gallery-block/premium.js:1155 src/masonry-gallery-block/premium.js:1214 src/modular-gallery-block/premium.js:585 src/pb-image-block/premium.js:841 src/pb-video-block/premium.js:545 src/video-gallery-block/premium.js:961
+#: src/carousel-gallery-block/premium.js:788 src/filmstrip-gallery-block/premium.js:536 src/grid-gallery-block/premium.js:1028 src/justified-gallery-block/premium.js:1035 src/masonry-gallery-block/premium.js:1086 src/modular-gallery-block/premium.js:585 src/pb-image-block/premium.js:841 src/pb-video-block/premium.js:545 src/video-gallery-block/premium.js:872
 msgid "E-Commerce Styles"
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:597 src/carousel-gallery-block/premium.js:295 src/filmstrip-gallery-block/edit.js:809 src/filmstrip-gallery-block/premium.js:192
+#: src/carousel-gallery-block/edit.js:565 src/carousel-gallery-block/premium.js:295 src/filmstrip-gallery-block/edit.js:716 src/filmstrip-gallery-block/premium.js:192
 msgid "Enable Autoplay"
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:620 src/carousel-gallery-block/premium.js:361
+#: src/carousel-gallery-block/edit.js:582 src/carousel-gallery-block/premium.js:361
 msgid "Enable Carousel Controls"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:759 src/grid-gallery-block/premium.js:799 src/justified-gallery-block/premium.js:802 src/masonry-gallery-block/premium.js:861 src/modular-gallery-block/premium.js:556 src/pb-image-block/premium.js:807 src/pb-video-block/edit.js:945 src/video-gallery-block/premium.js:553
+#: src/carousel-gallery-block/premium.js:759 src/grid-gallery-block/premium.js:717 src/justified-gallery-block/premium.js:724 src/masonry-gallery-block/premium.js:775 src/modular-gallery-block/premium.js:556 src/pb-image-block/premium.js:807 src/pb-video-block/edit.js:823 src/video-gallery-block/premium.js:509
 msgid "Enable Drop Shadow"
 msgstr ""
 
-#: src/pb-video-block/edit.js:953
+#: src/pb-video-block/edit.js:826
 msgid "Enable drop shadow effect."
 msgstr ""
 
-#: src/filmstrip-gallery-block/edit.js:859 src/filmstrip-gallery-block/premium.js:251
+#: src/filmstrip-gallery-block/edit.js:758 src/filmstrip-gallery-block/premium.js:251
 msgid "Enable Full-Screen Mode"
 msgstr ""
 
@@ -742,35 +642,35 @@ msgstr ""
 msgid "Enable Full-Screen Mode for the gallery on the frontend."
 msgstr ""
 
-#: src/video-gallery-block/edit.js:715
+#: src/video-gallery-block/edit.js:635
 msgid "Enable Image Border Color"
 msgstr ""
 
-#: src/video-gallery-block/edit.js:767
+#: src/video-gallery-block/edit.js:673
 msgid "Enable Image Border Radius"
 msgstr ""
 
-#: src/video-gallery-block/edit.js:741
+#: src/video-gallery-block/edit.js:654
 msgid "Enable Image Border Width"
 msgstr ""
 
-#: includes/admin/free-pro.php:47 includes/admin/free-pro.php:72 includes/admin/free-pro.php:92 includes/admin/free-pro.php:111 includes/admin/free-pro.php:134 includes/admin/free-pro.php:172 includes/admin/free-pro.php:195 src/carousel-gallery-block/edit.js:700 src/carousel-gallery-block/premium.js:88 src/filmstrip-gallery-block/edit.js:947 src/filmstrip-gallery-block/premium.js:368 src/grid-gallery-block/edit.js:723 src/grid-gallery-block/premium.js:169 src/justified-gallery-block/edit.js:611 src/justified-gallery-block/premium.js:171 src/masonry-gallery-block/edit.js:583 src/masonry-gallery-block/premium.js:188 src/modular-gallery-block/edit.js:691 src/modular-gallery-block/premium.js:65 src/pb-image-block/edit.js:619 src/pb-image-block/premium.js:60
+#: includes/admin/free-pro.php:47 includes/admin/free-pro.php:72 includes/admin/free-pro.php:92 includes/admin/free-pro.php:111 includes/admin/free-pro.php:134 includes/admin/free-pro.php:172 includes/admin/free-pro.php:195 src/carousel-gallery-block/edit.js:646 src/carousel-gallery-block/premium.js:88 src/filmstrip-gallery-block/edit.js:821 src/filmstrip-gallery-block/premium.js:368 src/grid-gallery-block/edit.js:683 src/grid-gallery-block/premium.js:164 src/justified-gallery-block/edit.js:548 src/justified-gallery-block/premium.js:168 src/masonry-gallery-block/edit.js:538 src/masonry-gallery-block/premium.js:183 src/modular-gallery-block/edit.js:634 src/modular-gallery-block/premium.js:65 src/pb-image-block/edit.js:559 src/pb-image-block/premium.js:60
 msgid "Enable Image Downloads"
 msgstr ""
 
-#: src/video-gallery-block/edit.js:793
+#: src/video-gallery-block/edit.js:691
 msgid "Enable Image Drop Shadow"
 msgstr ""
 
-#: src/grid-gallery-block/edit.js:692 src/grid-gallery-block/premium.js:682 src/justified-gallery-block/edit.js:580 src/justified-gallery-block/premium.js:684 src/masonry-gallery-block/edit.js:552 src/masonry-gallery-block/premium.js:743
+#: src/grid-gallery-block/edit.js:661 src/grid-gallery-block/premium.js:613 src/justified-gallery-block/edit.js:526 src/justified-gallery-block/premium.js:619 src/masonry-gallery-block/edit.js:516 src/masonry-gallery-block/premium.js:670
 msgid "Enable Image Filtering"
 msgstr ""
 
-#: src/grid-gallery-block/premium.js:688 src/justified-gallery-block/premium.js:690 src/masonry-gallery-block/premium.js:749
+#: src/grid-gallery-block/premium.js:617 src/justified-gallery-block/premium.js:623 src/masonry-gallery-block/premium.js:674
 msgid "Enable image filtering with categories."
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:431 src/grid-gallery-block/premium.js:390 src/justified-gallery-block/premium.js:390 src/masonry-gallery-block/premium.js:408 src/modular-gallery-block/premium.js:284
+#: src/carousel-gallery-block/premium.js:431 src/grid-gallery-block/premium.js:356 src/justified-gallery-block/premium.js:358 src/masonry-gallery-block/premium.js:374 src/modular-gallery-block/premium.js:284
 msgid "Enable image Lightbox on click."
 msgstr ""
 
@@ -778,39 +678,35 @@ msgstr ""
 msgid "Enable Image Lightbox on click."
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:855 src/grid-gallery-block/edit.js:847 src/justified-gallery-block/edit.js:735 src/masonry-gallery-block/edit.js:707 src/modular-gallery-block/edit.js:815
+#: src/carousel-gallery-block/edit.js:760 src/grid-gallery-block/edit.js:775 src/justified-gallery-block/edit.js:640 src/masonry-gallery-block/edit.js:630 src/modular-gallery-block/edit.js:726
 msgid "Enable Image Styles"
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:792 src/carousel-gallery-block/premium.js:274 src/filmstrip-gallery-block/edit.js:1039 src/filmstrip-gallery-block/premium.js:613 src/grid-gallery-block/edit.js:815 src/grid-gallery-block/premium.js:356 src/justified-gallery-block/edit.js:703 src/justified-gallery-block/premium.js:357 src/masonry-gallery-block/edit.js:675 src/masonry-gallery-block/premium.js:374 src/modular-gallery-block/edit.js:783 src/modular-gallery-block/premium.js:251 src/pb-before-after-block/edit.js:468 src/pb-before-after-block/premium.js:212 src/pb-image-block/edit.js:737 src/pb-image-block/premium.js:751 src/pb-video-block/edit.js:878 src/pb-video-block/premium.js:517 src/video-gallery-block/edit.js:683 src/video-gallery-block/premium.js:201
+#: src/carousel-gallery-block/edit.js:715 src/carousel-gallery-block/premium.js:274 src/filmstrip-gallery-block/edit.js:890 src/filmstrip-gallery-block/premium.js:613 src/grid-gallery-block/edit.js:752 src/grid-gallery-block/premium.js:327 src/justified-gallery-block/edit.js:617 src/justified-gallery-block/premium.js:330 src/masonry-gallery-block/edit.js:607 src/masonry-gallery-block/premium.js:345 src/modular-gallery-block/edit.js:703 src/modular-gallery-block/premium.js:251 src/pb-before-after-block/edit.js:409 src/pb-before-after-block/premium.js:212 src/pb-image-block/edit.js:653 src/pb-image-block/premium.js:751 src/pb-video-block/edit.js:772 src/pb-video-block/premium.js:517 src/video-gallery-block/edit.js:611 src/video-gallery-block/premium.js:182
 msgid "Enable Lazy Load of Images"
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:650 src/carousel-gallery-block/premium.js:425 src/grid-gallery-block/edit.js:642 src/grid-gallery-block/premium.js:384 src/justified-gallery-block/edit.js:530 src/justified-gallery-block/premium.js:384 src/masonry-gallery-block/edit.js:502 src/masonry-gallery-block/premium.js:402 src/modular-gallery-block/edit.js:626 src/modular-gallery-block/premium.js:278 src/pb-image-block/edit.js:537 src/pb-image-block/premium.js:124
+#: src/carousel-gallery-block/edit.js:604 src/carousel-gallery-block/premium.js:425 src/grid-gallery-block/edit.js:619 src/grid-gallery-block/premium.js:352 src/justified-gallery-block/edit.js:484 src/justified-gallery-block/premium.js:354 src/masonry-gallery-block/edit.js:474 src/masonry-gallery-block/premium.js:370 src/modular-gallery-block/edit.js:578 src/modular-gallery-block/premium.js:278 src/pb-image-block/edit.js:496 src/pb-image-block/premium.js:124
 msgid "Enable Lightbox"
 msgstr ""
 
-#: src/pb-video-block/edit.js:655 src/video-gallery-block/edit.js:463
+#: src/pb-video-block/edit.js:605 src/video-gallery-block/edit.js:443
 msgid "Enable Lightbox in Editor"
-msgstr ""
-
-#: src/pb-before-after-block/edit.js:509
-msgid "Enable Slider & Label Style Controls"
 msgstr ""
 
 #: src/carousel-gallery-block/premium.js:343
 msgid "Enable the carousel to loop infinitely."
 msgstr ""
 
-#: src/video-gallery-block/edit.js:596 src/video-gallery-block/premium.js:390
+#: src/video-gallery-block/edit.js:547 src/video-gallery-block/premium.js:361
 msgid "Enable Video Filtering"
 msgstr ""
 
-#: src/video-gallery-block/premium.js:396
+#: src/video-gallery-block/premium.js:365
 msgid "Enable video filtering with categories."
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:94 src/filmstrip-gallery-block/premium.js:374 src/grid-gallery-block/premium.js:175 src/justified-gallery-block/premium.js:177 src/masonry-gallery-block/premium.js:194 src/modular-gallery-block/premium.js:71
+#: src/carousel-gallery-block/premium.js:94 src/filmstrip-gallery-block/premium.js:374 src/modular-gallery-block/premium.js:71
 msgid "Enable visitors to download images from the gallery."
 msgstr ""
 
@@ -818,19 +714,15 @@ msgstr ""
 msgid "Enable visitors to download this image."
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:732 src/filmstrip-gallery-block/edit.js:979 src/grid-gallery-block/edit.js:755 src/justified-gallery-block/edit.js:643 src/masonry-gallery-block/edit.js:615 src/modular-gallery-block/edit.js:723 src/pb-image-block/edit.js:658 src/video-gallery-block/edit.js:628
+#: src/carousel-gallery-block/edit.js:669 src/filmstrip-gallery-block/edit.js:844 src/grid-gallery-block/edit.js:706 src/justified-gallery-block/edit.js:571 src/masonry-gallery-block/edit.js:561 src/modular-gallery-block/edit.js:657 src/pb-image-block/edit.js:589 src/video-gallery-block/edit.js:570
 msgid "Enable Woo Commerce"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:156 src/filmstrip-gallery-block/premium.js:436 src/grid-gallery-block/premium.js:237 src/justified-gallery-block/premium.js:239 src/masonry-gallery-block/premium.js:256 src/modular-gallery-block/premium.js:133 src/pb-image-block/premium.js:393 src/pb-video-block/premium.js:263 src/video-gallery-block/premium.js:83
+#: src/carousel-gallery-block/premium.js:156 src/filmstrip-gallery-block/premium.js:436 src/grid-gallery-block/premium.js:227 src/justified-gallery-block/premium.js:231 src/masonry-gallery-block/premium.js:246 src/modular-gallery-block/premium.js:133 src/pb-image-block/premium.js:393 src/pb-video-block/premium.js:263 src/video-gallery-block/premium.js:83
 msgid "Enable WooCommerce Integration"
 msgstr ""
 
-#: includes/admin/system-info.php:115 includes/admin/system-info.php:116 includes/admin/system-info.php:117 includes/admin/system-info.php:118 includes/admin/system-info.php:119
-msgid "Enabled"
-msgstr ""
-
-#: src/carousel-gallery-block/premium.js:275 src/filmstrip-gallery-block/premium.js:614 src/grid-gallery-block/premium.js:357 src/justified-gallery-block/premium.js:358 src/masonry-gallery-block/premium.js:375 src/modular-gallery-block/premium.js:252 src/pb-before-after-block/premium.js:213
+#: src/carousel-gallery-block/premium.js:275 src/filmstrip-gallery-block/premium.js:614 src/grid-gallery-block/premium.js:328 src/justified-gallery-block/premium.js:331 src/masonry-gallery-block/premium.js:346 src/modular-gallery-block/premium.js:252 src/pb-before-after-block/premium.js:213
 msgid "Enables lazy loading of gallery images."
 msgstr ""
 
@@ -838,31 +730,19 @@ msgstr ""
 msgid "Enables lazy loading of image."
 msgstr ""
 
-#: src/video-gallery-block/premium.js:202
-msgid "Enables lazy loading of Video Gallery thumbnails."
-msgstr ""
-
-#: includes/admin/system-info.php:103
-msgid "Error: %s"
-msgstr ""
-
 #: includes/admin/common.php:42
 msgid "Facebook"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:583 src/grid-gallery-block/premium.js:542 src/justified-gallery-block/premium.js:542 src/masonry-gallery-block/premium.js:560 src/modular-gallery-block/premium.js:436 src/pb-image-block/premium.js:314
+#: src/carousel-gallery-block/premium.js:583 src/grid-gallery-block/premium.js:491 src/justified-gallery-block/premium.js:493 src/masonry-gallery-block/premium.js:509 src/modular-gallery-block/premium.js:436 src/pb-image-block/premium.js:314
 msgid "Fade Overlay - Centered"
-msgstr ""
-
-#: includes/admin/system-info.php:84
-msgid "Failed: %s"
 msgstr ""
 
 #: includes/admin/common.php:12
 msgid "Feedback"
 msgstr ""
 
-#: includes/admin/settings-page.php:232 src/filmstrip-gallery-block/block.json:6 src/filmstrip-gallery-block/edit.js:446
+#: includes/admin/settings-page.php:232 src/filmstrip-gallery-block/block.json:6 src/filmstrip-gallery-block/edit.js:426
 msgid "Filmstrip Gallery"
 msgstr ""
 
@@ -870,11 +750,11 @@ msgstr ""
 msgid "Filmstrip Gallery Block"
 msgstr ""
 
-#: src/filmstrip-gallery-block/edit.js:777
+#: src/filmstrip-gallery-block/edit.js:688
 msgid "Filmstrip Gallery Settings"
 msgstr ""
 
-#: src/filmstrip-gallery-block/edit.js:679 src/filmstrip-gallery-block/render.php:486
+#: src/filmstrip-gallery-block/edit.js:608 src/filmstrip-gallery-block/render.php:486
 msgid "Filmstrip thumbnails"
 msgstr ""
 
@@ -882,23 +762,23 @@ msgstr ""
 msgid "filter"
 msgstr ""
 
-#: src/grid-gallery-block/premium.js:700 src/justified-gallery-block/premium.js:702 src/masonry-gallery-block/premium.js:761 src/video-gallery-block/premium.js:408
+#: src/grid-gallery-block/premium.js:626 src/justified-gallery-block/premium.js:632 src/masonry-gallery-block/premium.js:683 src/video-gallery-block/premium.js:374
 msgid "Filter Bar Alignment"
 msgstr ""
 
-#: src/grid-gallery-block/premium.js:1061 src/justified-gallery-block/premium.js:1064 src/masonry-gallery-block/premium.js:1123 src/video-gallery-block/premium.js:811
+#: src/grid-gallery-block/premium.js:949 src/justified-gallery-block/premium.js:956 src/masonry-gallery-block/premium.js:1007 src/video-gallery-block/premium.js:740
 msgid "Filter Bar Colors"
 msgstr ""
 
-#: src/grid-gallery-block/edit.js:877 src/grid-gallery-block/premium.js:838 src/justified-gallery-block/edit.js:765 src/justified-gallery-block/premium.js:841 src/masonry-gallery-block/edit.js:737 src/masonry-gallery-block/premium.js:900 src/video-gallery-block/premium.js:588
+#: src/grid-gallery-block/edit.js:796 src/grid-gallery-block/premium.js:753 src/justified-gallery-block/edit.js:661 src/justified-gallery-block/premium.js:760 src/masonry-gallery-block/edit.js:651 src/masonry-gallery-block/premium.js:811 src/video-gallery-block/premium.js:544
 msgid "Filter Bar Styles"
 msgstr ""
 
-#: src/grid-gallery-block/premium.js:726 src/justified-gallery-block/premium.js:729 src/masonry-gallery-block/premium.js:788 src/pb-image-block/premium.js:669 src/pb-video-block/premium.js:207 src/video-gallery-block/premium.js:435
+#: src/grid-gallery-block/premium.js:644 src/justified-gallery-block/premium.js:651 src/masonry-gallery-block/premium.js:702 src/pb-image-block/premium.js:669 src/pb-video-block/premium.js:207 src/video-gallery-block/premium.js:393
 msgid "Filter Categories"
 msgstr ""
 
-#: src/video-gallery-block/edit.js:824
+#: src/video-gallery-block/edit.js:713
 msgid "Filter Styles Controls"
 msgstr ""
 
@@ -906,15 +786,15 @@ msgstr ""
 msgid "Filterable image and video galleries"
 msgstr ""
 
-#: src/background-video-block/edit.js:654 src/background-video-block/premium.js:27
+#: src/background-video-block/edit.js:635 src/background-video-block/premium.js:27
 msgid "Focal Point X (Left - Right)"
 msgstr ""
 
-#: src/background-video-block/edit.js:676 src/background-video-block/premium.js:50
+#: src/background-video-block/edit.js:654 src/background-video-block/premium.js:50
 msgid "Focal Point Y (Up - Down)"
 msgstr ""
 
-#: folioblocks.php:273 folioblocks.php:330 folioblocks.php:331 includes/admin/free-pro.php:256 includes/admin/free-pro.php:257 includes/admin/settings-page.php:144 includes/admin/settings-page.php:145 includes/admin/system-info.php:251 includes/admin/system-info.php:253
+#: folioblocks.php:304 folioblocks.php:361 folioblocks.php:362 includes/admin/free-pro.php:256 includes/admin/free-pro.php:257 includes/admin/settings-page.php:144 includes/admin/settings-page.php:145 includes/admin/system-info.php:241 includes/admin/system-info.php:243
 msgid "FolioBlocks"
 msgstr ""
 
@@ -922,35 +802,27 @@ msgstr ""
 msgid "FolioBlocks is a paid premium plugin. This free version available in the WordPress plugin repository is only meant to give you a taste of what the full version can do."
 msgstr ""
 
-#: includes/admin/system-info.php:187
-msgid "FolioBlocks License: %s"
+#: src/pb-helpers/icons.js:240
+msgid "Folioblocks loading"
 msgstr ""
 
-#: includes/admin/system-info.php:186
-msgid "FolioBlocks Version: %s"
-msgstr ""
-
-#: src/grid-gallery-block/premium.js:853 src/grid-gallery-block/premium.js:861 src/justified-gallery-block/premium.js:856 src/justified-gallery-block/premium.js:864 src/masonry-gallery-block/premium.js:915 src/masonry-gallery-block/premium.js:923 src/video-gallery-block/premium.js:603 src/video-gallery-block/premium.js:611
+#: src/grid-gallery-block/premium.js:768 src/grid-gallery-block/premium.js:774 src/justified-gallery-block/premium.js:775 src/justified-gallery-block/premium.js:781 src/masonry-gallery-block/premium.js:826 src/masonry-gallery-block/premium.js:832 src/video-gallery-block/premium.js:559 src/video-gallery-block/premium.js:565
 msgid "Font Family"
 msgstr ""
 
-#: src/grid-gallery-block/premium.js:884 src/justified-gallery-block/premium.js:887 src/masonry-gallery-block/premium.js:946 src/video-gallery-block/premium.js:634
+#: src/grid-gallery-block/premium.js:795 src/justified-gallery-block/premium.js:802 src/masonry-gallery-block/premium.js:853 src/video-gallery-block/premium.js:586
 msgid "Font Size"
 msgstr ""
 
-#: includes/admin/system-info.php:54 includes/admin/system-info.php:55
-msgid "Found"
-msgstr ""
-
-#: includes/admin/free-pro.php:271 includes/admin/system-info.php:41
+#: includes/admin/free-pro.php:271
 msgid "Free"
 msgstr ""
 
-#: folioblocks.php:349 folioblocks.php:350 includes/admin/free-pro.php:257 includes/admin/settings-page.php:401
+#: folioblocks.php:380 folioblocks.php:381 includes/admin/free-pro.php:257 includes/admin/settings-page.php:401
 msgid "Free vs Pro"
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:531 src/filmstrip-gallery-block/edit.js:376 src/filmstrip-gallery-block/edit.js:404 src/grid-gallery-block/edit.js:571 src/justified-gallery-block/edit.js:438 src/masonry-gallery-block/edit.js:415 src/modular-gallery-block/edit.js:568 src/pb-before-after-block/edit.js:321 src/pb-image-block/edit.js:463
+#: src/carousel-gallery-block/edit.js:510 src/filmstrip-gallery-block/edit.js:356 src/filmstrip-gallery-block/edit.js:384 src/grid-gallery-block/edit.js:560 src/justified-gallery-block/edit.js:408 src/masonry-gallery-block/edit.js:399 src/modular-gallery-block/edit.js:531 src/pb-before-after-block/edit.js:299 src/pb-image-block/edit.js:438
 msgid "Full"
 msgstr ""
 
@@ -962,11 +834,11 @@ msgstr ""
 msgid "gallery"
 msgstr ""
 
-#: src/grid-gallery-block/edit.js:684 src/justified-gallery-block/edit.js:572 src/masonry-gallery-block/edit.js:544 src/pb-image-block/premium.js:658 src/pb-video-block/premium.js:196 src/video-gallery-block/edit.js:588
+#: src/grid-gallery-block/edit.js:654 src/justified-gallery-block/edit.js:519 src/masonry-gallery-block/edit.js:509 src/pb-image-block/premium.js:658 src/pb-video-block/premium.js:196 src/video-gallery-block/edit.js:540
 msgid "Gallery Filtering Settings"
 msgstr ""
 
-#: src/grid-gallery-block/edit.js:872 src/justified-gallery-block/edit.js:760 src/masonry-gallery-block/edit.js:732 src/video-gallery-block/edit.js:819
+#: src/grid-gallery-block/edit.js:792 src/justified-gallery-block/edit.js:657 src/masonry-gallery-block/edit.js:647 src/video-gallery-block/edit.js:709
 msgid "Gallery Filtering Styles"
 msgstr ""
 
@@ -974,27 +846,27 @@ msgstr ""
 msgid "Gallery Image Filtering"
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:847 src/grid-gallery-block/edit.js:839 src/justified-gallery-block/edit.js:727 src/masonry-gallery-block/edit.js:699 src/modular-gallery-block/edit.js:807
+#: src/carousel-gallery-block/edit.js:753 src/grid-gallery-block/edit.js:768 src/justified-gallery-block/edit.js:633 src/masonry-gallery-block/edit.js:623 src/modular-gallery-block/edit.js:719
 msgid "Gallery Image Styles"
 msgstr ""
 
-#: src/filmstrip-gallery-block/edit.js:1063
+#: src/filmstrip-gallery-block/edit.js:906
 msgid "Gallery Styles"
 msgstr ""
 
-#: src/filmstrip-gallery-block/edit.js:715 src/filmstrip-gallery-block/render.php:507
+#: src/filmstrip-gallery-block/edit.js:633 src/filmstrip-gallery-block/render.php:507
 msgid "Gallery thumbnail"
 msgstr ""
 
-#: src/video-gallery-block/edit.js:418
+#: src/video-gallery-block/edit.js:402
 msgid "Gap Between Items (px)"
 msgstr ""
 
-#: src/modular-gallery-block/edit.js:540
+#: src/modular-gallery-block/edit.js:505
 msgid "General Gallery Settings"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:590 src/grid-gallery-block/premium.js:549 src/justified-gallery-block/premium.js:549 src/masonry-gallery-block/premium.js:567 src/modular-gallery-block/premium.js:443 src/pb-image-block/premium.js:321
+#: src/carousel-gallery-block/premium.js:590 src/grid-gallery-block/premium.js:495 src/justified-gallery-block/premium.js:497 src/masonry-gallery-block/premium.js:513 src/modular-gallery-block/premium.js:443 src/pb-image-block/premium.js:321
 msgid "Gradient Overlay - Slide-up Bottom"
 msgstr ""
 
@@ -1002,19 +874,15 @@ msgstr ""
 msgid "grid"
 msgstr ""
 
-#: includes/admin/settings-page.php:252 src/grid-gallery-block/block.json:6 src/grid-gallery-block/edit.js:916
+#: includes/admin/settings-page.php:252 src/grid-gallery-block/block.json:6 src/grid-gallery-block/edit.js:826
 msgid "Grid Gallery"
-msgstr ""
-
-#: src/grid-gallery-block/deprecated.js:79
-msgid "Grid Gallery (Legacy)"
 msgstr ""
 
 #: includes/admin/free-pro.php:83
 msgid "Grid Gallery Block"
 msgstr ""
 
-#: src/grid-gallery-block/edit.js:551
+#: src/grid-gallery-block/edit.js:540
 msgid "Grid Gallery Settings"
 msgstr ""
 
@@ -1022,19 +890,19 @@ msgstr ""
 msgid "Groups images into a single row, scaling them to fill the full width without cropping."
 msgstr ""
 
-#: src/background-video-block/edit.js:636 src/background-video-block/premium.js:16
+#: src/background-video-block/edit.js:617 src/background-video-block/premium.js:16
 msgid "Height"
 msgstr ""
 
-#: src/pb-video-block/edit.js:712 src/video-gallery-block/edit.js:531
+#: src/pb-video-block/edit.js:645 src/video-gallery-block/edit.js:495
 msgid "Hidden"
 msgstr ""
 
-#: src/pb-video-block/edit.js:737 src/video-gallery-block/edit.js:552
+#: src/pb-video-block/edit.js:665 src/video-gallery-block/edit.js:512
 msgid "Hide only the play button overlay."
 msgstr ""
 
-#: src/pb-video-block/edit.js:725 src/video-gallery-block/edit.js:543
+#: src/pb-video-block/edit.js:658 src/video-gallery-block/edit.js:505
 msgid "Hide Play Button"
 msgstr ""
 
@@ -1054,15 +922,11 @@ msgstr ""
 msgid "Hide/Display Video Title Overlay"
 msgstr ""
 
-#: includes/admin/system-info.php:166
-msgid "Home URL: %s"
-msgstr ""
-
-#: src/pb-before-after-block/edit.js:343
+#: src/pb-before-after-block/edit.js:313
 msgid "Horizontal"
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:572
+#: src/carousel-gallery-block/edit.js:541
 msgid "Horizontal Images"
 msgstr ""
 
@@ -1070,27 +934,19 @@ msgstr ""
 msgid "Hover"
 msgstr ""
 
-#: src/filmstrip-gallery-block/edit.js:908
+#: src/filmstrip-gallery-block/edit.js:790
 msgid "Hover Overlay Settings"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:572 src/grid-gallery-block/premium.js:531 src/justified-gallery-block/premium.js:531 src/masonry-gallery-block/premium.js:549 src/modular-gallery-block/premium.js:425 src/pb-image-block/premium.js:303
+#: src/carousel-gallery-block/premium.js:572 src/grid-gallery-block/premium.js:483 src/justified-gallery-block/premium.js:485 src/masonry-gallery-block/premium.js:501 src/modular-gallery-block/premium.js:425 src/pb-image-block/premium.js:303
 msgid "Hover Style"
 msgstr ""
 
-#: includes/admin/system-info.php:109
-msgid "HTTP %d"
-msgstr ""
-
-#: includes/admin/system-info.php:225
-msgid "HTTPS Thumb Mismatch: %s"
-msgstr ""
-
-#: src/background-video-block/edit.js:845
+#: src/background-video-block/edit.js:779
 msgid "https://vimeo.com/12345678"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:689 src/carousel-gallery-block/premium.js:825 src/carousel-gallery-block/premium.js:858 src/filmstrip-gallery-block/premium.js:553 src/filmstrip-gallery-block/premium.js:573 src/grid-gallery-block/premium.js:1189 src/grid-gallery-block/premium.js:1222 src/justified-gallery-block/premium.js:1192 src/justified-gallery-block/premium.js:1225 src/masonry-gallery-block/premium.js:1251 src/masonry-gallery-block/premium.js:1284 src/modular-gallery-block/premium.js:622 src/modular-gallery-block/premium.js:655 src/pb-image-block/premium.js:878 src/pb-image-block/premium.js:911 src/pb-video-block/premium.js:580 src/video-gallery-block/premium.js:995
+#: src/carousel-gallery-block/premium.js:689 src/carousel-gallery-block/premium.js:825 src/carousel-gallery-block/premium.js:858 src/filmstrip-gallery-block/premium.js:553 src/filmstrip-gallery-block/premium.js:573 src/grid-gallery-block/premium.js:1064 src/grid-gallery-block/premium.js:1096 src/justified-gallery-block/premium.js:1071 src/justified-gallery-block/premium.js:1103 src/masonry-gallery-block/premium.js:1122 src/masonry-gallery-block/premium.js:1154 src/modular-gallery-block/premium.js:622 src/modular-gallery-block/premium.js:655 src/pb-image-block/premium.js:878 src/pb-image-block/premium.js:911 src/pb-video-block/premium.js:580 src/video-gallery-block/premium.js:905
 msgid "Icon"
 msgstr ""
 
@@ -1098,11 +954,11 @@ msgstr ""
 msgid "Image Block"
 msgstr ""
 
-#: src/pb-image-block/edit.js:411
+#: src/pb-image-block/edit.js:392
 msgid "Image Block Settings"
 msgstr ""
 
-#: src/pb-image-block/edit.js:490
+#: src/pb-image-block/edit.js:460
 msgid "Image Caption"
 msgstr ""
 
@@ -1114,11 +970,11 @@ msgstr ""
 msgid "Image Lightbox"
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:561
+#: src/carousel-gallery-block/edit.js:537
 msgid "Image Orientation (Mobile)"
 msgstr ""
 
-#: src/modular-gallery-block/edit.js:578
+#: src/modular-gallery-block/edit.js:540
 msgid "Image Resolution"
 msgstr ""
 
@@ -1134,7 +990,7 @@ msgstr ""
 msgid "Image Styles"
 msgstr ""
 
-#: src/pb-image-block/edit.js:500
+#: src/pb-image-block/edit.js:468
 msgid "Image Title"
 msgstr ""
 
@@ -1142,7 +998,7 @@ msgstr ""
 msgid "img"
 msgstr ""
 
-#: src/grid-gallery-block/premium.js:1110 src/justified-gallery-block/premium.js:1113 src/masonry-gallery-block/premium.js:1172 src/video-gallery-block/premium.js:860
+#: src/grid-gallery-block/premium.js:992 src/justified-gallery-block/premium.js:999 src/masonry-gallery-block/premium.js:1050 src/video-gallery-block/premium.js:783
 msgid "Inactive Item Colors"
 msgstr ""
 
@@ -1150,19 +1006,15 @@ msgstr ""
 msgid "Inherit (Gallery Default)"
 msgstr ""
 
-#: includes/admin/settings-page.php:281 src/justified-gallery-block/block.json:6 src/justified-gallery-block/edit.js:803
+#: includes/admin/settings-page.php:281 src/justified-gallery-block/block.json:6 src/justified-gallery-block/edit.js:690
 msgid "Justified Gallery"
-msgstr ""
-
-#: src/justified-gallery-block/deprecated.js:78
-msgid "Justified Gallery (Legacy)"
 msgstr ""
 
 #: includes/admin/free-pro.php:124
 msgid "Justified Gallery Block"
 msgstr ""
 
-#: src/justified-gallery-block/edit.js:418
+#: src/justified-gallery-block/edit.js:388
 msgid "Justified Gallery Settings"
 msgstr ""
 
@@ -1178,7 +1030,7 @@ msgstr ""
 msgid "Label Text Color"
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:527 src/filmstrip-gallery-block/edit.js:375 src/grid-gallery-block/edit.js:567 src/justified-gallery-block/edit.js:434 src/masonry-gallery-block/edit.js:411 src/modular-gallery-block/edit.js:564 src/pb-before-after-block/edit.js:317 src/pb-image-block/edit.js:459
+#: src/carousel-gallery-block/edit.js:506 src/filmstrip-gallery-block/edit.js:355 src/grid-gallery-block/edit.js:556 src/justified-gallery-block/edit.js:404 src/masonry-gallery-block/edit.js:395 src/modular-gallery-block/edit.js:527 src/pb-before-after-block/edit.js:295 src/pb-image-block/edit.js:434
 msgid "Large"
 msgstr ""
 
@@ -1194,15 +1046,15 @@ msgstr ""
 msgid "Lazy Load Images"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:391 src/filmstrip-gallery-block/edit.js:836 src/pb-before-after-block/premium.js:71
+#: src/carousel-gallery-block/premium.js:391 src/filmstrip-gallery-block/edit.js:738 src/grid-gallery-block/premium.js:631 src/justified-gallery-block/premium.js:637 src/masonry-gallery-block/premium.js:688 src/pb-before-after-block/premium.js:71 src/video-gallery-block/premium.js:379
 msgid "Left"
 msgstr ""
 
-#: src/grid-gallery-block/premium.js:1042 src/justified-gallery-block/premium.js:1045 src/masonry-gallery-block/premium.js:1104 src/video-gallery-block/premium.js:792
+#: src/grid-gallery-block/premium.js:933 src/justified-gallery-block/premium.js:940 src/masonry-gallery-block/premium.js:991 src/video-gallery-block/premium.js:724
 msgid "Letter case"
 msgstr ""
 
-#: src/grid-gallery-block/premium.js:1008 src/justified-gallery-block/premium.js:1011 src/masonry-gallery-block/premium.js:1070 src/video-gallery-block/premium.js:758
+#: src/grid-gallery-block/premium.js:905 src/justified-gallery-block/premium.js:912 src/masonry-gallery-block/premium.js:963 src/video-gallery-block/premium.js:696
 msgid "Letter spacing"
 msgstr ""
 
@@ -1218,28 +1070,24 @@ msgstr ""
 msgid "Lightbox"
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:643 src/grid-gallery-block/edit.js:635 src/justified-gallery-block/edit.js:523 src/masonry-gallery-block/edit.js:495 src/modular-gallery-block/edit.js:619 src/pb-image-block/edit.js:527 src/pb-video-block/edit.js:648 src/video-gallery-block/edit.js:459
+#: src/carousel-gallery-block/edit.js:597 src/grid-gallery-block/edit.js:612 src/justified-gallery-block/edit.js:477 src/masonry-gallery-block/edit.js:467 src/modular-gallery-block/edit.js:571 src/pb-image-block/edit.js:489 src/pb-video-block/edit.js:601 src/video-gallery-block/edit.js:439
 msgid "Lightbox & Hover Overlay Settings"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:473 src/grid-gallery-block/premium.js:432 src/justified-gallery-block/premium.js:432 src/masonry-gallery-block/premium.js:450 src/modular-gallery-block/premium.js:326 src/pb-image-block/premium.js:176
+#: src/carousel-gallery-block/premium.js:473 src/grid-gallery-block/premium.js:392 src/justified-gallery-block/premium.js:394 src/masonry-gallery-block/premium.js:410 src/modular-gallery-block/premium.js:326 src/pb-image-block/premium.js:176
 msgid "Lightbox Info"
 msgstr ""
 
-#: src/pb-video-block/premium.js:82 src/video-gallery-block/edit.js:482 src/video-gallery-block/premium.js:237
+#: src/pb-video-block/premium.js:82 src/video-gallery-block/edit.js:456 src/video-gallery-block/premium.js:218
 msgid "Lightbox Layout"
 msgstr ""
 
-#: src/grid-gallery-block/premium.js:965 src/justified-gallery-block/premium.js:968 src/masonry-gallery-block/premium.js:1027 src/video-gallery-block/premium.js:715
+#: src/grid-gallery-block/premium.js:863 src/justified-gallery-block/premium.js:870 src/masonry-gallery-block/premium.js:921 src/video-gallery-block/premium.js:654
 msgid "Line Height"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:173 src/filmstrip-gallery-block/premium.js:453 src/grid-gallery-block/premium.js:254 src/justified-gallery-block/premium.js:256 src/masonry-gallery-block/premium.js:273 src/modular-gallery-block/premium.js:150
+#: src/carousel-gallery-block/premium.js:173 src/filmstrip-gallery-block/premium.js:453 src/modular-gallery-block/premium.js:150
 msgid "Link gallery images to WooCommerce products."
-msgstr ""
-
-#: src/video-gallery-block/premium.js:100
-msgid "Link gallery videos to WooCommerce products."
 msgstr ""
 
 #: src/pb-image-block/premium.js:411
@@ -1262,11 +1110,7 @@ msgstr ""
 msgid "List View Thumbnails"
 msgstr ""
 
-#: includes/admin/system-info.php:50 includes/admin/system-info.php:51 includes/admin/system-info.php:52
-msgid "Loaded"
-msgstr ""
-
-#: src/background-video-block/edit.js:876
+#: src/background-video-block/edit.js:804
 msgid "Loop"
 msgstr ""
 
@@ -1278,27 +1122,27 @@ msgstr ""
 msgid "Loop Video"
 msgstr ""
 
-#: includes/admin/free-pro.php:149 includes/admin/settings-page.php:292 src/pb-loupe-block/block.json:6 src/pb-loupe-block/edit.js:152
+#: includes/admin/free-pro.php:149 includes/admin/settings-page.php:292 src/pb-loupe-block/block.json:6 src/pb-loupe-block/edit.js:150
 msgid "Loupe Block"
 msgstr ""
 
-#: src/pb-loupe-block/edit.js:200
+#: src/pb-loupe-block/edit.js:190
 msgid "Loupe Block Settings"
 msgstr ""
 
-#: src/pb-loupe-block/edit.js:283
+#: src/pb-loupe-block/edit.js:258
 msgid "Loupe Settings"
 msgstr ""
 
-#: src/pb-loupe-block/edit.js:307 src/pb-loupe-block/premium.js:18
+#: src/pb-loupe-block/edit.js:279 src/pb-loupe-block/premium.js:18
 msgid "Loupe Shape"
 msgstr ""
 
-#: src/pb-loupe-block/edit.js:330 src/pb-loupe-block/premium.js:46
+#: src/pb-loupe-block/edit.js:296 src/pb-loupe-block/premium.js:46
 msgid "Loupe Theme"
 msgstr ""
 
-#: src/pb-loupe-block/edit.js:287
+#: src/pb-loupe-block/edit.js:262
 msgid "Magnification"
 msgstr ""
 
@@ -1306,40 +1150,32 @@ msgstr ""
 msgid "Magnify part of an image with a circular loupe."
 msgstr ""
 
-#: src/filmstrip-gallery-block/edit.js:781
+#: src/filmstrip-gallery-block/edit.js:692
 msgid "Main Image Resolution"
 msgstr ""
 
-#: includes/admin/settings-page.php:311 src/masonry-gallery-block/block.json:6 src/masonry-gallery-block/edit.js:780
+#: includes/admin/settings-page.php:311 src/masonry-gallery-block/block.json:6 src/masonry-gallery-block/edit.js:685
 msgid "Masonry Gallery"
-msgstr ""
-
-#: src/masonry-gallery-block/deprecated.js:79
-msgid "Masonry Gallery (Legacy)"
 msgstr ""
 
 #: includes/admin/free-pro.php:162
 msgid "Masonry Gallery Block"
 msgstr ""
 
-#: src/masonry-gallery-block/edit.js:395
+#: src/masonry-gallery-block/edit.js:379
 msgid "Masonry Gallery Settings"
 msgstr ""
 
-#: includes/admin/system-info.php:211
-msgid "Max Upload Size: %s"
+#: src/carousel-gallery-block/edit.js:502 src/filmstrip-gallery-block/edit.js:354 src/grid-gallery-block/edit.js:552 src/justified-gallery-block/edit.js:400 src/masonry-gallery-block/edit.js:391 src/modular-gallery-block/edit.js:523 src/pb-before-after-block/edit.js:291 src/pb-image-block/edit.js:430
+msgid "Medium"
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:523 src/filmstrip-gallery-block/edit.js:374 src/grid-gallery-block/edit.js:563 src/justified-gallery-block/edit.js:430 src/masonry-gallery-block/edit.js:407 src/modular-gallery-block/edit.js:560 src/pb-before-after-block/edit.js:313 src/pb-image-block/edit.js:455
-msgid "Medium"
+#: src/pb-helpers/ResponsiveHeightRangeControl.js:39 src/pb-helpers/ResponsiveRangeControl.js:32
+msgid "Mobile"
 msgstr ""
 
 #: includes/admin/settings-page.php:328 src/modular-gallery-block/block.json:6
 msgid "Modular Gallery"
-msgstr ""
-
-#: src/modular-gallery-block/deprecated.js:49
-msgid "Modular Gallery (Legacy)"
 msgstr ""
 
 #: includes/admin/free-pro.php:187
@@ -1350,19 +1186,11 @@ msgstr ""
 msgid "Multiple Layout Options"
 msgstr ""
 
-#: includes/admin/system-info.php:167
-msgid "Multisite: %s"
-msgstr ""
-
-#: includes/admin/system-info.php:170
-msgid "MySQL Version: %s"
-msgstr ""
-
 #: includes/admin/settings-page.php:180 includes/admin/settings-page.php:233
 msgid "NEW"
 msgstr ""
 
-#: src/filmstrip-gallery-block/edit.js:490 src/filmstrip-gallery-block/render.php:327
+#: src/filmstrip-gallery-block/edit.js:461 src/filmstrip-gallery-block/render.php:327
 msgid "Next image"
 msgstr ""
 
@@ -1370,71 +1198,39 @@ msgstr ""
 msgid "Next slide"
 msgstr ""
 
-#: src/filmstrip-gallery-block/edit.js:735 src/filmstrip-gallery-block/edit.js:747 src/filmstrip-gallery-block/render.php:520 src/filmstrip-gallery-block/render.php:531
+#: src/filmstrip-gallery-block/edit.js:648 src/filmstrip-gallery-block/edit.js:658 src/filmstrip-gallery-block/render.php:520 src/filmstrip-gallery-block/render.php:531
 msgid "Next thumbnail"
-msgstr ""
-
-#: includes/admin/system-info.php:16
-msgid "No"
 msgstr ""
 
 #: includes/admin/settings-page.php:579
 msgid "No changelog found in readme.txt."
 msgstr ""
 
+#: src/pb-image-block/render.php:12
+msgid "No image selected."
+msgstr ""
+
 #: includes/admin/settings-page.php:525
 msgid "No news items found right now. Please check back later."
 msgstr ""
 
-#: src/grid-gallery-block/premium.js:875 src/justified-gallery-block/premium.js:878 src/masonry-gallery-block/premium.js:937 src/video-gallery-block/premium.js:625
-msgid "No theme fonts found. Add font families in theme.json or Global Styles."
-msgstr ""
-
-#: src/pb-video-block/edit.js:978
+#: src/pb-video-block/edit.js:847
 msgid "No Thumbnail Selected"
 msgstr ""
 
-#: includes/admin/system-info.php:92 src/pb-helpers/CompactColorControl.js:143
+#: src/pb-helpers/CompactColorControl.js:143
 msgid "None"
 msgstr ""
 
-#: includes/admin/system-info.php:51 includes/admin/system-info.php:54 includes/admin/system-info.php:55
-msgid "Not found"
-msgstr ""
-
-#: includes/admin/system-info.php:44
-msgid "Not installed"
-msgstr ""
-
-#: includes/admin/system-info.php:50 includes/admin/system-info.php:52
-msgid "Not loaded"
-msgstr ""
-
-#: includes/admin/system-info.php:76
-msgid "Not run (test image missing)"
-msgstr ""
-
-#: includes/admin/system-info.php:97
-msgid "Not tested"
-msgstr ""
-
-#: includes/admin/system-info.php:88
-msgid "OK"
-msgstr ""
-
-#: src/carousel-gallery-block/premium.js:110 src/carousel-gallery-block/premium.js:190 src/filmstrip-gallery-block/premium.js:390 src/filmstrip-gallery-block/premium.js:470 src/grid-gallery-block/premium.js:191 src/grid-gallery-block/premium.js:271 src/justified-gallery-block/premium.js:193 src/justified-gallery-block/premium.js:273 src/masonry-gallery-block/premium.js:210 src/masonry-gallery-block/premium.js:290 src/modular-gallery-block/premium.js:87 src/modular-gallery-block/premium.js:167 src/pb-image-block/premium.js:82 src/pb-image-block/premium.js:427 src/pb-video-block/edit.js:708 src/pb-video-block/premium.js:296 src/video-gallery-block/edit.js:527 src/video-gallery-block/premium.js:117
+#: src/carousel-gallery-block/premium.js:110 src/carousel-gallery-block/premium.js:190 src/filmstrip-gallery-block/premium.js:390 src/filmstrip-gallery-block/premium.js:470 src/grid-gallery-block/premium.js:181 src/grid-gallery-block/premium.js:255 src/justified-gallery-block/premium.js:185 src/justified-gallery-block/premium.js:259 src/masonry-gallery-block/premium.js:200 src/masonry-gallery-block/premium.js:274 src/modular-gallery-block/premium.js:87 src/modular-gallery-block/premium.js:167 src/pb-image-block/premium.js:82 src/pb-image-block/premium.js:427 src/pb-video-block/edit.js:641 src/pb-video-block/premium.js:296 src/video-gallery-block/edit.js:491 src/video-gallery-block/premium.js:111
 msgid "On Hover"
 msgstr ""
 
-#: src/filmstrip-gallery-block/edit.js:547 src/filmstrip-gallery-block/render.php:370
+#: src/filmstrip-gallery-block/edit.js:508 src/filmstrip-gallery-block/render.php:370
 msgid "Open Fullscreen"
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:656 src/grid-gallery-block/edit.js:648 src/justified-gallery-block/edit.js:536 src/masonry-gallery-block/edit.js:508 src/modular-gallery-block/edit.js:632 src/pb-image-block/edit.js:549
-msgid "Open images in a lightbox when clicked."
-msgstr ""
-
-#: src/carousel-gallery-block/premium.js:220 src/filmstrip-gallery-block/premium.js:500 src/grid-gallery-block/premium.js:301 src/justified-gallery-block/premium.js:303 src/masonry-gallery-block/premium.js:320 src/modular-gallery-block/premium.js:197 src/pb-image-block/premium.js:561 src/pb-image-block/premium.js:577 src/pb-video-block/premium.js:426 src/pb-video-block/premium.js:442 src/video-gallery-block/premium.js:147
+#: src/carousel-gallery-block/premium.js:220 src/filmstrip-gallery-block/premium.js:500 src/grid-gallery-block/premium.js:280 src/justified-gallery-block/premium.js:284 src/masonry-gallery-block/premium.js:299 src/modular-gallery-block/premium.js:197 src/pb-image-block/premium.js:561 src/pb-image-block/premium.js:577 src/pb-video-block/premium.js:426 src/pb-video-block/premium.js:442 src/video-gallery-block/premium.js:136
 msgid "Open Product Page"
 msgstr ""
 
@@ -1446,35 +1242,27 @@ msgstr ""
 msgid "Organizes images into custom rows for precise control over layout and spacing."
 msgstr ""
 
-#: src/background-video-block/edit.js:1000
+#: src/background-video-block/edit.js:906
 msgid "Overlay color"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:621 src/grid-gallery-block/premium.js:580 src/justified-gallery-block/premium.js:580 src/masonry-gallery-block/premium.js:598 src/modular-gallery-block/premium.js:474 src/pb-image-block/premium.js:353 src/pb-video-block/premium.js:136 src/video-gallery-block/premium.js:291
+#: src/carousel-gallery-block/premium.js:621 src/grid-gallery-block/premium.js:514 src/justified-gallery-block/premium.js:516 src/masonry-gallery-block/premium.js:532 src/modular-gallery-block/premium.js:474 src/pb-image-block/premium.js:353 src/pb-video-block/premium.js:136 src/video-gallery-block/premium.js:265
 msgid "Overlay Colors"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:543 src/filmstrip-gallery-block/premium.js:321 src/grid-gallery-block/premium.js:502 src/justified-gallery-block/premium.js:502 src/masonry-gallery-block/premium.js:520 src/modular-gallery-block/premium.js:396 src/pb-image-block/premium.js:265
+#: src/carousel-gallery-block/premium.js:543 src/filmstrip-gallery-block/premium.js:321 src/grid-gallery-block/premium.js:454 src/justified-gallery-block/premium.js:456 src/masonry-gallery-block/premium.js:472 src/modular-gallery-block/premium.js:396 src/pb-image-block/premium.js:265
 msgid "Overlay Content"
 msgstr ""
 
-#: src/background-video-block/edit.js:1011
+#: src/background-video-block/edit.js:912
 msgid "Overlay opacity"
 msgstr ""
 
-#: src/pb-video-block/premium.js:108 src/video-gallery-block/premium.js:263
+#: src/pb-video-block/premium.js:108 src/video-gallery-block/premium.js:242
 msgid "Overlay Style"
 msgstr ""
 
-#: includes/admin/system-info.php:178
-msgid "Parent Theme: %s"
-msgstr ""
-
-#: src/background-video-block/edit.js:850
-msgid "Paste a Vimeo URL. The block will extract the Vimeo video ID when possible."
-msgstr ""
-
-#: src/filmstrip-gallery-block/edit.js:507 src/filmstrip-gallery-block/render.php:340
+#: src/filmstrip-gallery-block/edit.js:476 src/filmstrip-gallery-block/render.php:340
 msgid "Pause autoplay"
 msgstr ""
 
@@ -1486,63 +1274,11 @@ msgstr ""
 msgid "Pause on Hover"
 msgstr ""
 
-#: src/pb-image-block/deprecated.js:49
-msgid "PB Image Block (Legacy)"
-msgstr ""
-
-#: src/pb-video-block/deprecated.js:44
-msgid "PB Video Block (Legacy)"
-msgstr ""
-
 #: src/pb-image-block/block.json:10
 msgid "photo"
 msgstr ""
 
-#: includes/admin/system-info.php:206
-msgid "PHP Config[allow_url_fopen]: %s"
-msgstr ""
-
-#: includes/admin/system-info.php:207
-msgid "PHP Config[allow_url_include]: %s"
-msgstr ""
-
-#: includes/admin/system-info.php:201
-msgid "PHP GD: %s"
-msgstr ""
-
-#: includes/admin/system-info.php:204
-msgid "PHP HTTP Wrapper: %s"
-msgstr ""
-
-#: includes/admin/system-info.php:205
-msgid "PHP HTTPS Wrapper: %s"
-msgstr ""
-
-#: includes/admin/system-info.php:202
-msgid "PHP Imagick: %s"
-msgstr ""
-
-#: includes/admin/system-info.php:209
-msgid "PHP Max Execution Time: %s"
-msgstr ""
-
-#: includes/admin/system-info.php:208
-msgid "PHP Memory Limit: %s"
-msgstr ""
-
-#: includes/admin/system-info.php:203
-msgid "PHP OpenSSL: %s"
-msgstr ""
-
-#: includes/admin/system-info.php:210
-msgid "PHP Post Max Size: %s"
-msgstr ""
-
-#: includes/admin/system-info.php:169
-msgid "PHP Version: %s"
-msgstr ""
-
-#: src/carousel-gallery-block/premium.js:634 src/grid-gallery-block/premium.js:593 src/justified-gallery-block/premium.js:593 src/masonry-gallery-block/premium.js:611 src/modular-gallery-block/premium.js:487 src/pb-image-block/premium.js:366
+#: src/carousel-gallery-block/premium.js:634 src/modular-gallery-block/premium.js:487 src/pb-image-block/premium.js:366
 msgid "Pick custom background and text colors for the overlay."
 msgstr ""
 
@@ -1554,15 +1290,15 @@ msgstr ""
 msgid "Place any blocks on top of the video (headings, text, buttons, galleries)"
 msgstr ""
 
-#: src/filmstrip-gallery-block/edit.js:511
+#: src/filmstrip-gallery-block/edit.js:477
 msgid "Play autoplay"
 msgstr ""
 
-#: src/pb-video-block/render.php:167
+#: src/pb-video-block/render.php:168
 msgid "Play video"
 msgstr ""
 
-#: src/pb-video-block/render.php:163
+#: src/pb-video-block/render.php:164
 msgid "Play video: %1$s"
 msgstr ""
 
@@ -1570,7 +1306,7 @@ msgstr ""
 msgid "Play/Pause carousel"
 msgstr ""
 
-#: src/background-video-block/edit.js:872
+#: src/background-video-block/edit.js:800
 msgid "Playback"
 msgstr ""
 
@@ -1578,19 +1314,15 @@ msgstr ""
 msgid "Playback Control Colors"
 msgstr ""
 
-#: includes/admin/system-info.php:94
-msgid "Possible mismatch (site is HTTPS, thumb URL is not)."
-msgstr ""
-
-#: src/background-video-block/edit.js:903
+#: src/background-video-block/edit.js:827
 msgid "Poster Image"
 msgstr ""
 
-#: src/background-video-block/premium.js:83 src/carousel-gallery-block/premium.js:253 src/filmstrip-gallery-block/premium.js:592 src/grid-gallery-block/premium.js:334 src/justified-gallery-block/premium.js:336 src/masonry-gallery-block/premium.js:353 src/modular-gallery-block/premium.js:230 src/pb-before-after-block/premium.js:191 src/pb-image-block/premium.js:722 src/pb-loupe-block/premium.js:78 src/pb-video-block/premium.js:488 src/video-gallery-block/premium.js:180
+#: src/background-video-block/premium.js:83 src/carousel-gallery-block/premium.js:253 src/filmstrip-gallery-block/premium.js:592 src/grid-gallery-block/premium.js:310 src/justified-gallery-block/premium.js:314 src/masonry-gallery-block/premium.js:329 src/modular-gallery-block/premium.js:230 src/pb-before-after-block/premium.js:191 src/pb-image-block/premium.js:722 src/pb-loupe-block/premium.js:78 src/pb-video-block/premium.js:488 src/video-gallery-block/premium.js:166
 msgid "Prevents visitors from right-clicking."
 msgstr ""
 
-#: src/filmstrip-gallery-block/edit.js:477 src/filmstrip-gallery-block/render.php:320
+#: src/filmstrip-gallery-block/edit.js:453 src/filmstrip-gallery-block/render.php:320
 msgid "Previous image"
 msgstr ""
 
@@ -1598,20 +1330,16 @@ msgstr ""
 msgid "Previous slide"
 msgstr ""
 
-#: src/filmstrip-gallery-block/edit.js:652 src/filmstrip-gallery-block/edit.js:667 src/filmstrip-gallery-block/render.php:466 src/filmstrip-gallery-block/render.php:477
+#: src/filmstrip-gallery-block/edit.js:589 src/filmstrip-gallery-block/edit.js:599 src/filmstrip-gallery-block/render.php:466 src/filmstrip-gallery-block/render.php:477
 msgid "Previous thumbnail"
 msgstr ""
 
-#: includes/admin/free-pro.php:272 includes/admin/settings-page.php:145 includes/admin/system-info.php:255
+#: includes/admin/free-pro.php:272 includes/admin/settings-page.php:145 includes/admin/system-info.php:245
 msgid "Pro"
 msgstr ""
 
 #: includes/admin/settings-page.php:330
 msgid "PRO"
-msgstr ""
-
-#: includes/admin/system-info.php:40
-msgid "Pro (active)"
 msgstr ""
 
 #: includes/admin/settings-page.php:376
@@ -1626,7 +1354,7 @@ msgstr ""
 msgid "Purchase a license for FolioBlocks today and enjoy the best gallery plugin for modern WordPress and the block editor."
 msgstr ""
 
-#: includes/admin/free-pro.php:301 includes/admin/settings-page.php:539 includes/admin/system-info.php:285
+#: includes/admin/free-pro.php:301 includes/admin/settings-page.php:539 includes/admin/system-info.php:275
 msgid "Quick Links:"
 msgstr ""
 
@@ -1634,11 +1362,11 @@ msgstr ""
 msgid "Randomize image order"
 msgstr ""
 
-#: includes/admin/free-pro.php:73 includes/admin/free-pro.php:91 includes/admin/free-pro.php:133 includes/admin/free-pro.php:171 includes/admin/free-pro.php:194 src/carousel-gallery-block/premium.js:61 src/filmstrip-gallery-block/edit.js:885 src/filmstrip-gallery-block/premium.js:274 src/grid-gallery-block/edit.js:612 src/grid-gallery-block/premium.js:142 src/justified-gallery-block/edit.js:500 src/justified-gallery-block/premium.js:137 src/masonry-gallery-block/edit.js:472 src/masonry-gallery-block/premium.js:161
+#: includes/admin/free-pro.php:73 includes/admin/free-pro.php:91 includes/admin/free-pro.php:133 includes/admin/free-pro.php:171 includes/admin/free-pro.php:194 src/carousel-gallery-block/premium.js:61 src/filmstrip-gallery-block/edit.js:775 src/filmstrip-gallery-block/premium.js:274 src/grid-gallery-block/edit.js:597 src/grid-gallery-block/premium.js:139 src/justified-gallery-block/edit.js:462 src/justified-gallery-block/premium.js:134 src/masonry-gallery-block/edit.js:452 src/masonry-gallery-block/premium.js:158
 msgid "Randomize Image Order"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:67 src/filmstrip-gallery-block/premium.js:279 src/grid-gallery-block/premium.js:148 src/justified-gallery-block/premium.js:150 src/masonry-gallery-block/premium.js:167
+#: src/carousel-gallery-block/premium.js:67 src/filmstrip-gallery-block/premium.js:279 src/grid-gallery-block/premium.js:143 src/justified-gallery-block/premium.js:147 src/masonry-gallery-block/premium.js:162
 msgid "Randomize order of images."
 msgstr ""
 
@@ -1650,7 +1378,7 @@ msgstr ""
 msgid "readme.txt file not found at %s"
 msgstr ""
 
-#: src/background-video-block/edit.js:827 src/background-video-block/edit.js:957
+#: src/background-video-block/edit.js:764 src/background-video-block/edit.js:872
 msgid "Remove"
 msgstr ""
 
@@ -1658,15 +1386,15 @@ msgstr ""
 msgid "Remove Gap"
 msgstr ""
 
-#: src/masonry-gallery-block/edit.js:464 src/modular-gallery-block/edit.js:614
+#: src/masonry-gallery-block/edit.js:445 src/modular-gallery-block/edit.js:566
 msgid "Remove gap between images."
 msgstr ""
 
-#: includes/admin/free-pro.php:132 includes/admin/free-pro.php:170 includes/admin/free-pro.php:193 src/justified-gallery-block/edit.js:486 src/masonry-gallery-block/edit.js:461 src/modular-gallery-block/edit.js:611
+#: includes/admin/free-pro.php:132 includes/admin/free-pro.php:170 includes/admin/free-pro.php:193 src/justified-gallery-block/edit.js:451 src/masonry-gallery-block/edit.js:442 src/modular-gallery-block/edit.js:563
 msgid "Remove Image Gap"
 msgstr ""
 
-#: src/justified-gallery-block/edit.js:491
+#: src/justified-gallery-block/edit.js:454
 msgid "Remove image gap from gallery."
 msgstr ""
 
@@ -1674,27 +1402,27 @@ msgstr ""
 msgid "Remove Product"
 msgstr ""
 
-#: src/pb-before-after-block/edit.js:238 src/pb-before-after-block/edit.js:242
+#: src/pb-before-after-block/edit.js:225 src/pb-before-after-block/edit.js:229
 msgid "Replace After Image"
 msgstr ""
 
-#: src/pb-before-after-block/edit.js:222 src/pb-before-after-block/edit.js:229
+#: src/pb-before-after-block/edit.js:212 src/pb-before-after-block/edit.js:216
 msgid "Replace Before Image"
 msgstr ""
 
-#: src/background-video-block/edit.js:943 src/pb-image-block/edit.js:376 src/pb-loupe-block/edit.js:185
+#: src/background-video-block/edit.js:867 src/pb-image-block/edit.js:363 src/pb-loupe-block/edit.js:178
 msgid "Replace Image"
 msgstr ""
 
-#: src/background-video-block/edit.js:811
+#: src/background-video-block/edit.js:756
 msgid "Replace Video"
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:515 src/grid-gallery-block/edit.js:555 src/justified-gallery-block/edit.js:422 src/masonry-gallery-block/edit.js:399 src/pb-before-after-block/edit.js:305 src/pb-image-block/edit.js:447 src/pb-loupe-block/edit.js:253
+#: src/carousel-gallery-block/edit.js:494 src/grid-gallery-block/edit.js:544 src/justified-gallery-block/edit.js:392 src/masonry-gallery-block/edit.js:383 src/pb-before-after-block/edit.js:283 src/pb-image-block/edit.js:422 src/pb-loupe-block/edit.js:235
 msgid "Resolution"
 msgstr ""
 
-#: src/background-video-block/edit.js:699
+#: src/background-video-block/edit.js:673
 msgid "Responsive Controls"
 msgstr ""
 
@@ -1706,11 +1434,7 @@ msgstr ""
 msgid "Responsive Design works on Desktop, Tablet, and Mobile Ready"
 msgstr ""
 
-#: includes/admin/system-info.php:234
-msgid "REST API Status: %s"
-msgstr ""
-
-#: src/carousel-gallery-block/premium.js:401 src/filmstrip-gallery-block/edit.js:840 src/pb-before-after-block/premium.js:82
+#: src/carousel-gallery-block/premium.js:401 src/filmstrip-gallery-block/edit.js:742 src/grid-gallery-block/premium.js:639 src/justified-gallery-block/premium.js:645 src/masonry-gallery-block/premium.js:696 src/pb-before-after-block/premium.js:82 src/video-gallery-block/premium.js:387
 msgid "Right"
 msgstr ""
 
@@ -1718,39 +1442,35 @@ msgstr ""
 msgid "Right-click prevention"
 msgstr ""
 
-#: src/justified-gallery-block/edit.js:470
+#: src/justified-gallery-block/edit.js:437
 msgid "Row Height"
-msgstr ""
-
-#: includes/admin/system-info.php:233
-msgid "SCRIPT_DEBUG: %s"
 msgstr ""
 
 #: src/pb-helpers/ProductSearchControl.js:81
 msgid "Search products…"
 msgstr ""
 
-#: src/pb-video-block/edit.js:399
+#: src/pb-video-block/edit.js:392
 msgid "Select a video"
 msgstr ""
 
-#: src/pb-before-after-block/edit.js:96
+#: src/pb-before-after-block/edit.js:90
 msgid "Select After Image"
 msgstr ""
 
-#: src/filmstrip-gallery-block/edit.js:608 src/filmstrip-gallery-block/render.php:455
+#: src/filmstrip-gallery-block/edit.js:550 src/filmstrip-gallery-block/render.php:455
 msgid "Select an image to preview it."
 msgstr ""
 
-#: src/pb-before-after-block/edit.js:68
+#: src/pb-before-after-block/edit.js:65
 msgid "Select Before Image"
 msgstr ""
 
-#: src/background-video-block/edit.js:947 src/pb-image-block/edit.js:795 src/pb-image-block/edit.js:894 src/pb-image-row/edit.js:49 src/pb-image-stack/edit.js:45 src/pb-image-stack/edit.js:94
+#: src/background-video-block/edit.js:868 src/pb-image-block/edit.js:700 src/pb-image-block/edit.js:786 src/pb-image-row/edit.js:49 src/pb-image-stack/edit.js:45 src/pb-image-stack/edit.js:94
 msgid "Select Image"
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:488 src/filmstrip-gallery-block/edit.js:306 src/grid-gallery-block/edit.js:525 src/justified-gallery-block/edit.js:394 src/masonry-gallery-block/edit.js:372
+#: src/carousel-gallery-block/edit.js:467 src/filmstrip-gallery-block/edit.js:293 src/grid-gallery-block/edit.js:514 src/justified-gallery-block/edit.js:364 src/masonry-gallery-block/edit.js:356
 msgid "Select Images"
 msgstr ""
 
@@ -1762,63 +1482,43 @@ msgstr ""
 msgid "Select one or more categories for this video."
 msgstr ""
 
-#: src/pb-video-block/edit.js:455 src/pb-video-block/edit.js:465 src/video-gallery-block/edit.js:351 src/video-gallery-block/edit.js:356
+#: src/pb-video-block/edit.js:445 src/pb-video-block/edit.js:450 src/video-gallery-block/edit.js:338 src/video-gallery-block/edit.js:343
 msgid "Select or Insert Video"
 msgstr ""
 
-#: src/pb-loupe-block/edit.js:153
-msgid "Select or upload an image to use with the loupe effect."
-msgstr ""
-
-#: src/grid-gallery-block/premium.js:956 src/justified-gallery-block/premium.js:959 src/masonry-gallery-block/premium.js:1018 src/video-gallery-block/premium.js:706
-msgid "Select the font’s weight and style (matches WordPress Typography → Appearance)."
-msgstr ""
-
-#: src/filmstrip-gallery-block/edit.js:796
-msgid "Select the size of the main gallery image."
-msgstr ""
-
-#: src/carousel-gallery-block/edit.js:558 src/grid-gallery-block/edit.js:598 src/justified-gallery-block/edit.js:467 src/masonry-gallery-block/edit.js:451 src/pb-before-after-block/edit.js:328 src/pb-loupe-block/edit.js:276
+#: src/carousel-gallery-block/edit.js:534 src/grid-gallery-block/edit.js:584 src/justified-gallery-block/edit.js:434 src/masonry-gallery-block/edit.js:432 src/pb-before-after-block/edit.js:304 src/pb-loupe-block/edit.js:254
 msgid "Select the size of the source image."
 msgstr ""
 
-#: src/pb-video-block/edit.js:991
+#: src/pb-video-block/edit.js:857
 msgid "Select Thumbnail"
 msgstr ""
 
-#: src/pb-before-after-block/edit.js:40
-msgid "Select two images for Before & After Block. For best results, use images with the same dimensions (width and height)."
-msgstr ""
-
-#: src/background-video-block/edit.js:815
+#: src/background-video-block/edit.js:757
 msgid "Select Video"
 msgstr ""
 
-#: src/filmstrip-gallery-block/edit.js:328 src/filmstrip-gallery-block/render.php:439
+#: src/filmstrip-gallery-block/edit.js:312 src/filmstrip-gallery-block/render.php:439
 msgid "Selected gallery image"
 msgstr ""
 
-#: src/background-video-block/edit.js:739
+#: src/background-video-block/edit.js:706
 msgid "Self-Hosted"
 msgstr ""
 
-#: src/pb-video-block/edit.js:554
+#: src/pb-video-block/edit.js:525
 msgid "self-hosted videos"
 msgstr ""
 
-#: src/grid-gallery-block/premium.js:730 src/justified-gallery-block/premium.js:733 src/masonry-gallery-block/premium.js:792 src/video-gallery-block/premium.js:456
+#: src/grid-gallery-block/premium.js:648 src/justified-gallery-block/premium.js:655 src/masonry-gallery-block/premium.js:706 src/video-gallery-block/premium.js:412
 msgid "Separate categories with commas"
 msgstr ""
 
-#: includes/admin/system-info.php:263
+#: includes/admin/system-info.php:253
 msgid "Server Configuration"
 msgstr ""
 
-#: includes/admin/system-info.php:171
-msgid "Server Software: %s"
-msgstr ""
-
-#: src/grid-gallery-block/premium.js:704 src/justified-gallery-block/premium.js:706 src/masonry-gallery-block/premium.js:765 src/video-gallery-block/premium.js:412
+#: src/grid-gallery-block/premium.js:627 src/justified-gallery-block/premium.js:633 src/masonry-gallery-block/premium.js:684 src/video-gallery-block/premium.js:375
 msgid "Set alignment of the filter bar."
 msgstr ""
 
@@ -1846,7 +1546,7 @@ msgstr ""
 msgid "Set Custom Block Height on Tablet & Mobile"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:125 src/filmstrip-gallery-block/premium.js:405 src/grid-gallery-block/premium.js:206 src/justified-gallery-block/premium.js:208 src/masonry-gallery-block/premium.js:225 src/modular-gallery-block/premium.js:102
+#: src/carousel-gallery-block/premium.js:125 src/filmstrip-gallery-block/premium.js:405 src/modular-gallery-block/premium.js:102
 msgid "Set display preference for Image Download icon."
 msgstr ""
 
@@ -1854,19 +1554,19 @@ msgstr ""
 msgid "Set display preference for the download icon."
 msgstr ""
 
-#: src/video-gallery-block/edit.js:426
+#: src/video-gallery-block/edit.js:410
 msgid "Set gap size between Thumbnails."
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:727 src/grid-gallery-block/premium.js:767 src/justified-gallery-block/premium.js:770 src/masonry-gallery-block/premium.js:829 src/modular-gallery-block/premium.js:524 src/pb-image-block/premium.js:780
+#: src/carousel-gallery-block/premium.js:727 src/grid-gallery-block/premium.js:685 src/justified-gallery-block/premium.js:692 src/masonry-gallery-block/premium.js:743 src/modular-gallery-block/premium.js:524 src/pb-image-block/premium.js:780
 msgid "Set Image border color."
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:755 src/grid-gallery-block/premium.js:795 src/justified-gallery-block/premium.js:798 src/masonry-gallery-block/premium.js:857 src/modular-gallery-block/premium.js:552 src/pb-image-block/premium.js:804
+#: src/carousel-gallery-block/premium.js:755 src/grid-gallery-block/premium.js:713 src/justified-gallery-block/premium.js:720 src/masonry-gallery-block/premium.js:771 src/modular-gallery-block/premium.js:552 src/pb-image-block/premium.js:804
 msgid "Set Image border radius."
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:741 src/grid-gallery-block/premium.js:781 src/justified-gallery-block/premium.js:784 src/masonry-gallery-block/premium.js:843 src/modular-gallery-block/premium.js:538 src/pb-image-block/premium.js:792
+#: src/carousel-gallery-block/premium.js:741 src/grid-gallery-block/premium.js:699 src/justified-gallery-block/premium.js:706 src/masonry-gallery-block/premium.js:757 src/modular-gallery-block/premium.js:538 src/pb-image-block/premium.js:792
 msgid "Set Image border width."
 msgstr ""
 
@@ -1898,23 +1598,15 @@ msgstr ""
 msgid "Set starting position for slider drag handle."
 msgstr ""
 
-#: src/background-video-block/edit.js:1005
+#: src/background-video-block/edit.js:909
 msgid "Set the color for the Overlay."
-msgstr ""
-
-#: src/pb-loupe-block/edit.js:295
-msgid "Set the desired strength of the magnification effect."
 msgstr ""
 
 #: src/carousel-gallery-block/premium.js:381
 msgid "Set the horizontal alignment of carousel controls."
 msgstr ""
 
-#: src/background-video-block/edit.js:1019
-msgid "Set the level of opacity for the Overlay."
-msgstr ""
-
-#: src/video-gallery-block/edit.js:453
+#: src/video-gallery-block/edit.js:433
 msgid "Set thumbnail aspect ratio."
 msgstr ""
 
@@ -1922,59 +1614,47 @@ msgstr ""
 msgid "Set Thumbnail Resolution & Aspect Ratio"
 msgstr ""
 
-#: src/video-gallery-block/edit.js:435
+#: src/video-gallery-block/edit.js:417
 msgid "Set thumbnail resolution."
 msgstr ""
 
-#: src/video-gallery-block/premium.js:477
+#: src/video-gallery-block/premium.js:433
 msgid "Set Video block border color."
 msgstr ""
 
-#: src/video-gallery-block/premium.js:539
+#: src/video-gallery-block/premium.js:495
 msgid "Set Video block border radius."
 msgstr ""
 
-#: src/video-gallery-block/premium.js:508
+#: src/video-gallery-block/premium.js:464
 msgid "Set Video block border width."
 msgstr ""
 
-#: src/pb-video-block/edit.js:918
+#: src/pb-video-block/edit.js:800
 msgid "Set Video border color."
 msgstr ""
 
-#: src/pb-video-block/edit.js:942
+#: src/pb-video-block/edit.js:820
 msgid "Set Video border radius."
 msgstr ""
 
-#: src/pb-video-block/edit.js:930
+#: src/pb-video-block/edit.js:810
 msgid "Set Video border width."
 msgstr ""
 
-#: src/pb-video-block/edit.js:605
+#: src/pb-video-block/edit.js:564
 msgid "Set video Thumbnail aspect ratio."
 msgstr ""
 
-#: src/pb-video-block/edit.js:623
-msgid "Set Video Title used in the Hover Overlay, Lightbox, and for Alt-text."
-msgstr ""
-
-#: src/pb-video-block/edit.js:716
-msgid "Set visibility for title and play button overlays."
-msgstr ""
-
-#: src/carousel-gallery-block/premium.js:232 src/filmstrip-gallery-block/premium.js:512 src/grid-gallery-block/premium.js:313 src/justified-gallery-block/premium.js:315 src/masonry-gallery-block/premium.js:332 src/modular-gallery-block/premium.js:209
+#: src/carousel-gallery-block/premium.js:232 src/filmstrip-gallery-block/premium.js:512 src/modular-gallery-block/premium.js:209
 msgid "Sets the default action for Add To Cart icons in this gallery. Individual images can override this setting."
 msgstr ""
 
-#: src/video-gallery-block/premium.js:159
-msgid "Sets the default action for Add To Cart icons in this gallery. Individual videos can override this setting."
-msgstr ""
-
-#: folioblocks.php:388
+#: folioblocks.php:419
 msgid "Settings"
 msgstr ""
 
-#: includes/admin/free-pro.php:31 src/pb-before-after-block/edit.js:407 src/pb-before-after-block/premium.js:52
+#: includes/admin/free-pro.php:31 src/pb-before-after-block/edit.js:362 src/pb-before-after-block/premium.js:52
 msgid "Show Before & After Labels"
 msgstr ""
 
@@ -1986,19 +1666,19 @@ msgstr ""
 msgid "Show captions in image lightbox"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:477 src/grid-gallery-block/premium.js:436 src/justified-gallery-block/premium.js:436 src/masonry-gallery-block/premium.js:454 src/modular-gallery-block/premium.js:330 src/pb-image-block/premium.js:180
+#: src/carousel-gallery-block/premium.js:477 src/grid-gallery-block/premium.js:396 src/justified-gallery-block/premium.js:398 src/masonry-gallery-block/premium.js:414 src/modular-gallery-block/premium.js:330 src/pb-image-block/premium.js:180
 msgid "Show Image Caption"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:446 src/grid-gallery-block/premium.js:405 src/justified-gallery-block/premium.js:405 src/masonry-gallery-block/premium.js:423 src/modular-gallery-block/edit.js:640 src/modular-gallery-block/premium.js:299 src/pb-image-block/premium.js:148
+#: src/carousel-gallery-block/premium.js:446 src/grid-gallery-block/premium.js:368 src/justified-gallery-block/premium.js:370 src/masonry-gallery-block/premium.js:386 src/modular-gallery-block/edit.js:592 src/modular-gallery-block/premium.js:299 src/pb-image-block/premium.js:148
 msgid "Show Image Caption in Lightbox"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:442 src/grid-gallery-block/premium.js:401 src/justified-gallery-block/premium.js:401 src/masonry-gallery-block/premium.js:419 src/modular-gallery-block/premium.js:295 src/pb-image-block/premium.js:144
+#: src/carousel-gallery-block/premium.js:442 src/modular-gallery-block/premium.js:295 src/pb-image-block/premium.js:144
 msgid "Show Image Caption or Product Info in Lightbox"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:547 src/filmstrip-gallery-block/premium.js:325 src/grid-gallery-block/premium.js:506 src/justified-gallery-block/premium.js:506 src/masonry-gallery-block/premium.js:524 src/modular-gallery-block/premium.js:400 src/pb-image-block/premium.js:271
+#: src/carousel-gallery-block/premium.js:547 src/filmstrip-gallery-block/premium.js:325 src/grid-gallery-block/premium.js:458 src/justified-gallery-block/premium.js:460 src/masonry-gallery-block/premium.js:476 src/modular-gallery-block/premium.js:400 src/pb-image-block/premium.js:271
 msgid "Show Image Title"
 msgstr ""
 
@@ -2006,15 +1686,15 @@ msgstr ""
 msgid "Show image title on hover"
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:669 src/filmstrip-gallery-block/edit.js:916 src/grid-gallery-block/edit.js:661 src/justified-gallery-block/edit.js:549 src/masonry-gallery-block/edit.js:521 src/modular-gallery-block/edit.js:664 src/pb-image-block/edit.js:565
+#: src/carousel-gallery-block/edit.js:623 src/filmstrip-gallery-block/edit.js:798 src/grid-gallery-block/edit.js:638 src/justified-gallery-block/edit.js:503 src/masonry-gallery-block/edit.js:493 src/modular-gallery-block/edit.js:613 src/pb-image-block/edit.js:518
 msgid "Show Image Title on Hover"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:522 src/filmstrip-gallery-block/premium.js:300 src/grid-gallery-block/premium.js:481 src/justified-gallery-block/premium.js:481 src/masonry-gallery-block/premium.js:499 src/modular-gallery-block/premium.js:375 src/pb-image-block/premium.js:231
+#: src/carousel-gallery-block/premium.js:522 src/filmstrip-gallery-block/premium.js:300 src/grid-gallery-block/premium.js:435 src/justified-gallery-block/premium.js:437 src/masonry-gallery-block/premium.js:453 src/modular-gallery-block/premium.js:375 src/pb-image-block/premium.js:231
 msgid "Show Overlay on Hover"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:484 src/carousel-gallery-block/premium.js:551 src/filmstrip-gallery-block/premium.js:329 src/grid-gallery-block/premium.js:443 src/grid-gallery-block/premium.js:510 src/justified-gallery-block/premium.js:443 src/justified-gallery-block/premium.js:510 src/masonry-gallery-block/premium.js:461 src/masonry-gallery-block/premium.js:528 src/modular-gallery-block/premium.js:337 src/modular-gallery-block/premium.js:404 src/pb-image-block/premium.js:187 src/pb-image-block/premium.js:278
+#: src/carousel-gallery-block/premium.js:484 src/carousel-gallery-block/premium.js:551 src/filmstrip-gallery-block/premium.js:329 src/grid-gallery-block/premium.js:400 src/grid-gallery-block/premium.js:462 src/justified-gallery-block/premium.js:402 src/justified-gallery-block/premium.js:464 src/masonry-gallery-block/premium.js:418 src/masonry-gallery-block/premium.js:480 src/modular-gallery-block/premium.js:337 src/modular-gallery-block/premium.js:404 src/pb-image-block/premium.js:187 src/pb-image-block/premium.js:278
 msgid "Show Product Info"
 msgstr ""
 
@@ -2026,23 +1706,15 @@ msgstr ""
 msgid "Show video description in Lightbox"
 msgstr ""
 
-#: src/pb-video-block/edit.js:636
-msgid "Shown in the lightbox when enabled in Gallery Lightbox Settings."
-msgstr ""
-
 #: src/grid-gallery-block/block.json:10
 msgid "Shows images in a clean, responsive grid while maintaining original proportions."
 msgstr ""
 
-#: includes/admin/system-info.php:165
-msgid "Site URL: %s"
-msgstr ""
-
-#: src/background-video-block/edit.js:629
+#: src/background-video-block/edit.js:610
 msgid "Sizing & Focal Point"
 msgstr ""
 
-#: src/pb-before-after-block/edit.js:497 src/pb-before-after-block/premium.js:234
+#: src/pb-before-after-block/edit.js:432 src/pb-before-after-block/premium.js:234
 msgid "Slider & Label Styles"
 msgstr ""
 
@@ -2050,16 +1722,12 @@ msgstr ""
 msgid "Slider Handle & Line Color"
 msgstr ""
 
-#: src/pb-before-after-block/edit.js:336
+#: src/pb-before-after-block/edit.js:309
 msgid "Slider Orientation"
 msgstr ""
 
 #: src/pb-loupe-block/premium.js:32
 msgid "Square"
-msgstr ""
-
-#: src/modular-gallery-block/edit.js:605
-msgid "Stack all images vertically on mobile devices."
 msgstr ""
 
 #: src/masonry-gallery-block/block.json:9
@@ -2086,15 +1754,7 @@ msgstr ""
 msgid "Support for Self-Hosted, YouTube, & Vimeo, and Bunny Stream Videos"
 msgstr ""
 
-#: src/pb-video-block/edit.js:543
-msgid "Supports YouTube, Vimeo, Bunny Stream, or "
-msgstr ""
-
-#: src/pb-loupe-block/edit.js:69
-msgid "SVG files are not supported for the Loupe effect. Please select a raster image (JPG/PNG)."
-msgstr ""
-
-#: src/pb-before-after-block/edit.js:295
+#: src/pb-before-after-block/edit.js:273
 msgid "Swap Position"
 msgstr ""
 
@@ -2102,19 +1762,19 @@ msgstr ""
 msgid "Switch between light and dark editor themes."
 msgstr ""
 
-#: folioblocks.php:363
+#: folioblocks.php:394
 msgid "System Info"
 msgstr ""
 
-#: folioblocks.php:362 includes/admin/system-info.php:257
+#: folioblocks.php:393 includes/admin/system-info.php:247
 msgid "System Information"
 msgstr ""
 
-#: src/background-video-block/edit.js:647 src/background-video-block/edit.js:669 src/background-video-block/edit.js:691
-msgid "Tablet and mobile inherit this value."
+#: src/pb-helpers/ResponsiveHeightRangeControl.js:38 src/pb-helpers/ResponsiveRangeControl.js:31
+msgid "Tablet"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:633 src/grid-gallery-block/premium.js:592 src/grid-gallery-block/premium.js:1102 src/grid-gallery-block/premium.js:1125 src/justified-gallery-block/premium.js:592 src/justified-gallery-block/premium.js:1105 src/justified-gallery-block/premium.js:1128 src/masonry-gallery-block/premium.js:610 src/masonry-gallery-block/premium.js:1164 src/masonry-gallery-block/premium.js:1187 src/modular-gallery-block/premium.js:486 src/pb-image-block/premium.js:365 src/pb-video-block/premium.js:148 src/video-gallery-block/premium.js:303 src/video-gallery-block/premium.js:852 src/video-gallery-block/premium.js:875
+#: src/carousel-gallery-block/premium.js:633 src/grid-gallery-block/premium.js:526 src/grid-gallery-block/premium.js:987 src/grid-gallery-block/premium.js:1004 src/justified-gallery-block/premium.js:528 src/justified-gallery-block/premium.js:994 src/justified-gallery-block/premium.js:1011 src/masonry-gallery-block/premium.js:544 src/masonry-gallery-block/premium.js:1045 src/masonry-gallery-block/premium.js:1062 src/modular-gallery-block/premium.js:486 src/pb-image-block/premium.js:365 src/pb-video-block/premium.js:148 src/video-gallery-block/premium.js:277 src/video-gallery-block/premium.js:778 src/video-gallery-block/premium.js:795
 msgid "Text"
 msgstr ""
 
@@ -2134,31 +1794,23 @@ msgstr ""
 msgid "Theme Default"
 msgstr ""
 
-#: src/background-video-block/edit.js:705 src/background-video-block/edit.js:975 src/carousel-gallery-block/edit.js:600 src/carousel-gallery-block/edit.js:626 src/carousel-gallery-block/edit.js:675 src/carousel-gallery-block/edit.js:706 src/carousel-gallery-block/edit.js:738 src/carousel-gallery-block/edit.js:772 src/carousel-gallery-block/edit.js:798 src/carousel-gallery-block/edit.js:830 src/carousel-gallery-block/edit.js:861 src/filmstrip-gallery-block/edit.js:812 src/filmstrip-gallery-block/edit.js:865 src/filmstrip-gallery-block/edit.js:891 src/filmstrip-gallery-block/edit.js:922 src/filmstrip-gallery-block/edit.js:953 src/filmstrip-gallery-block/edit.js:985 src/filmstrip-gallery-block/edit.js:1019 src/filmstrip-gallery-block/edit.js:1045 src/filmstrip-gallery-block/edit.js:1074 src/grid-gallery-block/edit.js:618 src/grid-gallery-block/edit.js:667 src/grid-gallery-block/edit.js:698 src/grid-gallery-block/edit.js:729 src/grid-gallery-block/edit.js:761 src/grid-gallery-block/edit.js:795 src/grid-gallery-block/edit.js:821 src/grid-gallery-block/edit.js:853 src/grid-gallery-block/edit.js:880 src/justified-gallery-block/edit.js:506 src/justified-gallery-block/edit.js:555 src/justified-gallery-block/edit.js:586 src/justified-gallery-block/edit.js:617 src/justified-gallery-block/edit.js:649 src/justified-gallery-block/edit.js:683 src/justified-gallery-block/edit.js:709 src/justified-gallery-block/edit.js:741 src/justified-gallery-block/edit.js:768 src/masonry-gallery-block/edit.js:478 src/masonry-gallery-block/edit.js:527 src/masonry-gallery-block/edit.js:558 src/masonry-gallery-block/edit.js:589 src/masonry-gallery-block/edit.js:621 src/masonry-gallery-block/edit.js:655 src/masonry-gallery-block/edit.js:681 src/masonry-gallery-block/edit.js:713 src/masonry-gallery-block/edit.js:740 src/modular-gallery-block/edit.js:697 src/modular-gallery-block/edit.js:729 src/modular-gallery-block/edit.js:763 src/modular-gallery-block/edit.js:789 src/modular-gallery-block/edit.js:821 src/pb-before-after-block/edit.js:380 src/pb-before-after-block/edit.js:413 src/pb-before-after-block/edit.js:445 src/pb-before-after-block/edit.js:474 src/pb-before-after-block/edit.js:515 src/pb-image-block/edit.js:571 src/pb-image-block/edit.js:625 src/pb-image-block/edit.js:664 src/pb-image-block/edit.js:717 src/pb-image-block/edit.js:743 src/pb-loupe-block/edit.js:310 src/pb-loupe-block/edit.js:333 src/pb-loupe-block/edit.js:359 src/pb-video-block/edit.js:759 src/pb-video-block/edit.js:811 src/pb-video-block/edit.js:858 src/pb-video-block/edit.js:884 src/video-gallery-block/edit.js:485 src/video-gallery-block/edit.js:568 src/video-gallery-block/edit.js:602 src/video-gallery-block/edit.js:634 src/video-gallery-block/edit.js:663 src/video-gallery-block/edit.js:689 src/video-gallery-block/edit.js:721 src/video-gallery-block/edit.js:747 src/video-gallery-block/edit.js:773 src/video-gallery-block/edit.js:799 src/video-gallery-block/edit.js:830
-msgid "This is a premium feature. Unlock all features: "
-msgstr ""
-
-#: src/carousel-gallery-block/edit.js:519 src/filmstrip-gallery-block/edit.js:373 src/grid-gallery-block/edit.js:559 src/justified-gallery-block/edit.js:426 src/masonry-gallery-block/edit.js:403 src/modular-gallery-block/edit.js:556 src/pb-before-after-block/edit.js:309 src/pb-image-block/edit.js:451
+#: src/carousel-gallery-block/edit.js:498 src/filmstrip-gallery-block/edit.js:353 src/grid-gallery-block/edit.js:548 src/justified-gallery-block/edit.js:396 src/masonry-gallery-block/edit.js:387 src/modular-gallery-block/edit.js:519 src/pb-before-after-block/edit.js:287 src/pb-image-block/edit.js:426
 msgid "Thumbnail"
 msgstr ""
 
-#: src/pb-video-block/edit.js:591 src/video-gallery-block/edit.js:440
+#: src/pb-video-block/edit.js:557 src/video-gallery-block/edit.js:422
 msgid "Thumbnail Aspect Ratio"
 msgstr ""
 
-#: includes/admin/system-info.php:224
-msgid "Thumbnail Generation Test Result: %s"
+#: src/pb-video-block/render.php:122
+msgid "Thumbnail Missing"
 msgstr ""
 
-#: includes/admin/system-info.php:223
-msgid "Thumbnail Generation Test URL: %s"
-msgstr ""
-
-#: src/filmstrip-gallery-block/edit.js:828
+#: src/filmstrip-gallery-block/edit.js:730
 msgid "Thumbnail Position"
 msgstr ""
 
-#: src/pb-video-block/edit.js:574 src/video-gallery-block/edit.js:429
+#: src/pb-video-block/edit.js:545 src/video-gallery-block/edit.js:413
 msgid "Thumbnail Resolution"
 msgstr ""
 
@@ -2170,7 +1822,7 @@ msgstr ""
 msgid "Time between automatic slide transitions."
 msgstr ""
 
-#: src/pb-video-block/edit.js:679 src/video-gallery-block/edit.js:501
+#: src/pb-video-block/edit.js:620 src/video-gallery-block/edit.js:470
 msgid "Title & Play Button Visibility"
 msgstr ""
 
@@ -2182,19 +1834,15 @@ msgstr ""
 msgid "Top"
 msgstr ""
 
-#: src/grid-gallery-block/premium.js:985 src/justified-gallery-block/premium.js:988 src/masonry-gallery-block/premium.js:1047 src/video-gallery-block/premium.js:735
+#: src/grid-gallery-block/premium.js:883 src/justified-gallery-block/premium.js:890 src/masonry-gallery-block/premium.js:941 src/video-gallery-block/premium.js:674
 msgid "Typography"
-msgstr ""
-
-#: includes/admin/system-info.php:21 includes/admin/system-info.php:37 includes/admin/system-info.php:186 includes/admin/system-info.php:217 includes/admin/system-info.php:221
-msgid "Unknown"
 msgstr ""
 
 #: includes/admin/free-pro.php:291
 msgid "Unlock Pro"
 msgstr ""
 
-#: src/background-video-block/edit.js:714 src/background-video-block/edit.js:984 src/carousel-gallery-block/edit.js:609 src/carousel-gallery-block/edit.js:635 src/carousel-gallery-block/edit.js:684 src/carousel-gallery-block/edit.js:715 src/carousel-gallery-block/edit.js:747 src/carousel-gallery-block/edit.js:781 src/carousel-gallery-block/edit.js:807 src/carousel-gallery-block/edit.js:839 src/carousel-gallery-block/edit.js:870 src/filmstrip-gallery-block/edit.js:821 src/filmstrip-gallery-block/edit.js:874 src/filmstrip-gallery-block/edit.js:900 src/filmstrip-gallery-block/edit.js:931 src/filmstrip-gallery-block/edit.js:962 src/filmstrip-gallery-block/edit.js:994 src/filmstrip-gallery-block/edit.js:1028 src/filmstrip-gallery-block/edit.js:1054 src/filmstrip-gallery-block/edit.js:1083 src/grid-gallery-block/edit.js:627 src/grid-gallery-block/edit.js:676 src/grid-gallery-block/edit.js:707 src/grid-gallery-block/edit.js:738 src/grid-gallery-block/edit.js:770 src/grid-gallery-block/edit.js:804 src/grid-gallery-block/edit.js:830 src/grid-gallery-block/edit.js:862 src/grid-gallery-block/edit.js:889 src/justified-gallery-block/edit.js:515 src/justified-gallery-block/edit.js:564 src/justified-gallery-block/edit.js:595 src/justified-gallery-block/edit.js:626 src/justified-gallery-block/edit.js:658 src/justified-gallery-block/edit.js:692 src/justified-gallery-block/edit.js:718 src/justified-gallery-block/edit.js:750 src/justified-gallery-block/edit.js:777 src/masonry-gallery-block/edit.js:487 src/masonry-gallery-block/edit.js:536 src/masonry-gallery-block/edit.js:567 src/masonry-gallery-block/edit.js:598 src/masonry-gallery-block/edit.js:630 src/masonry-gallery-block/edit.js:664 src/masonry-gallery-block/edit.js:690 src/masonry-gallery-block/edit.js:722 src/masonry-gallery-block/edit.js:749 src/modular-gallery-block/edit.js:706 src/modular-gallery-block/edit.js:738 src/modular-gallery-block/edit.js:772 src/modular-gallery-block/edit.js:798 src/modular-gallery-block/edit.js:830 src/pb-before-after-block/edit.js:389 src/pb-before-after-block/edit.js:422 src/pb-before-after-block/edit.js:454 src/pb-before-after-block/edit.js:483 src/pb-before-after-block/edit.js:524 src/pb-image-block/edit.js:580 src/pb-image-block/edit.js:634 src/pb-image-block/edit.js:673 src/pb-image-block/edit.js:726 src/pb-image-block/edit.js:752 src/pb-loupe-block/edit.js:319 src/pb-loupe-block/edit.js:342 src/pb-loupe-block/edit.js:368 src/pb-video-block/edit.js:768 src/pb-video-block/edit.js:820 src/pb-video-block/edit.js:867 src/pb-video-block/edit.js:893 src/video-gallery-block/edit.js:494 src/video-gallery-block/edit.js:577 src/video-gallery-block/edit.js:611 src/video-gallery-block/edit.js:643 src/video-gallery-block/edit.js:672 src/video-gallery-block/edit.js:698 src/video-gallery-block/edit.js:730 src/video-gallery-block/edit.js:756 src/video-gallery-block/edit.js:782 src/video-gallery-block/edit.js:808 src/video-gallery-block/edit.js:839
+#: src/background-video-block/edit.js:684 src/background-video-block/edit.js:893 src/carousel-gallery-block/edit.js:572 src/carousel-gallery-block/edit.js:589 src/carousel-gallery-block/edit.js:631 src/carousel-gallery-block/edit.js:653 src/carousel-gallery-block/edit.js:680 src/carousel-gallery-block/edit.js:705 src/carousel-gallery-block/edit.js:722 src/carousel-gallery-block/edit.js:745 src/carousel-gallery-block/edit.js:767 src/filmstrip-gallery-block/edit.js:723 src/filmstrip-gallery-block/edit.js:765 src/filmstrip-gallery-block/edit.js:782 src/filmstrip-gallery-block/edit.js:806 src/filmstrip-gallery-block/edit.js:828 src/filmstrip-gallery-block/edit.js:855 src/filmstrip-gallery-block/edit.js:880 src/filmstrip-gallery-block/edit.js:897 src/filmstrip-gallery-block/edit.js:920 src/grid-gallery-block/edit.js:604 src/grid-gallery-block/edit.js:646 src/grid-gallery-block/edit.js:668 src/grid-gallery-block/edit.js:690 src/grid-gallery-block/edit.js:717 src/grid-gallery-block/edit.js:742 src/grid-gallery-block/edit.js:759 src/grid-gallery-block/edit.js:782 src/grid-gallery-block/edit.js:803 src/justified-gallery-block/edit.js:469 src/justified-gallery-block/edit.js:511 src/justified-gallery-block/edit.js:533 src/justified-gallery-block/edit.js:555 src/justified-gallery-block/edit.js:582 src/justified-gallery-block/edit.js:607 src/justified-gallery-block/edit.js:624 src/justified-gallery-block/edit.js:647 src/justified-gallery-block/edit.js:668 src/masonry-gallery-block/edit.js:459 src/masonry-gallery-block/edit.js:501 src/masonry-gallery-block/edit.js:523 src/masonry-gallery-block/edit.js:545 src/masonry-gallery-block/edit.js:572 src/masonry-gallery-block/edit.js:597 src/masonry-gallery-block/edit.js:614 src/masonry-gallery-block/edit.js:637 src/masonry-gallery-block/edit.js:658 src/modular-gallery-block/edit.js:641 src/modular-gallery-block/edit.js:668 src/modular-gallery-block/edit.js:693 src/modular-gallery-block/edit.js:710 src/modular-gallery-block/edit.js:733 src/pb-before-after-block/edit.js:350 src/pb-before-after-block/edit.js:374 src/pb-before-after-block/edit.js:398 src/pb-before-after-block/edit.js:421 src/pb-before-after-block/edit.js:453 src/pb-image-block/edit.js:530 src/pb-image-block/edit.js:571 src/pb-image-block/edit.js:601 src/pb-image-block/edit.js:642 src/pb-image-block/edit.js:661 src/pb-loupe-block/edit.js:286 src/pb-loupe-block/edit.js:303 src/pb-loupe-block/edit.js:323 src/pb-video-block/edit.js:685 src/pb-video-block/edit.js:727 src/pb-video-block/edit.js:761 src/pb-video-block/edit.js:780 src/video-gallery-block/edit.js:463 src/video-gallery-block/edit.js:532 src/video-gallery-block/edit.js:554 src/video-gallery-block/edit.js:581 src/video-gallery-block/edit.js:601 src/video-gallery-block/edit.js:618 src/video-gallery-block/edit.js:643 src/video-gallery-block/edit.js:662 src/video-gallery-block/edit.js:681 src/video-gallery-block/edit.js:698 src/video-gallery-block/edit.js:720
 msgid "Upgrade to Pro"
 msgstr ""
 
@@ -2206,59 +1854,23 @@ msgstr ""
 msgid "Upgrade Today"
 msgstr ""
 
-#: src/background-video-block/edit.js:1094
-msgid "Upload a video, select one from your media library, or insert a URL (including Vimeo)."
-msgstr ""
-
-#: src/carousel-gallery-block/edit.js:898
-msgid "Upload or select images to create a carousel."
-msgstr ""
-
-#: src/filmstrip-gallery-block/edit.js:447
-msgid "Upload or select images to create a Filmstrip Gallery."
-msgstr ""
-
-#: src/grid-gallery-block/edit.js:917
-msgid "Upload or select images to create a Grid Gallery."
-msgstr ""
-
-#: src/justified-gallery-block/edit.js:804
-msgid "Upload or select images to create a Justified Gallery."
-msgstr ""
-
-#: src/masonry-gallery-block/edit.js:781
-msgid "Upload or select images to create a Masonry Gallery."
-msgstr ""
-
-#: src/pb-video-block/edit.js:469
-msgid "Upload, select from media library or insert from URL."
-msgstr ""
-
-#: src/video-gallery-block/edit.js:360
-msgid "Upload, select from media library, or insert from URL."
-msgstr ""
-
-#: src/pb-video-block/edit.js:402
+#: src/pb-video-block/edit.js:395
 msgid "Use this video"
-msgstr ""
-
-#: src/grid-gallery-block/premium.js:871 src/justified-gallery-block/premium.js:874 src/masonry-gallery-block/premium.js:933 src/video-gallery-block/premium.js:621
-msgid "Uses fonts from your theme’s Global Styles."
 msgstr ""
 
 #: includes/admin/settings-page.php:561
 msgid "Version"
 msgstr ""
 
-#: src/pb-before-after-block/edit.js:350
+#: src/pb-before-after-block/edit.js:317
 msgid "Vertical"
 msgstr ""
 
-#: src/background-video-block/edit.js:604 src/background-video-block/edit.js:608
+#: src/background-video-block/edit.js:592 src/background-video-block/edit.js:595
 msgid "Vertical Content Alignment"
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:576
+#: src/carousel-gallery-block/edit.js:545
 msgid "Vertical Images"
 msgstr ""
 
@@ -2266,15 +1878,15 @@ msgstr ""
 msgid "video"
 msgstr ""
 
-#: src/video-gallery-block/edit.js:185 src/video-gallery-block/edit.js:312 src/video-gallery-block/edit.js:372 src/video-gallery-block/edit.js:387
+#: src/video-gallery-block/edit.js:177 src/video-gallery-block/edit.js:303 src/video-gallery-block/edit.js:356 src/video-gallery-block/edit.js:371
 msgid "Video"
 msgstr ""
 
-#: src/pb-video-block/premium.js:69 src/video-gallery-block/premium.js:224
+#: src/pb-video-block/premium.js:69 src/video-gallery-block/premium.js:205
 msgid "Video + Info"
 msgstr ""
 
-#: src/pb-video-block/premium.js:75 src/video-gallery-block/premium.js:230
+#: src/pb-video-block/premium.js:75 src/video-gallery-block/premium.js:211
 msgid "Video + Product Info"
 msgstr ""
 
@@ -2282,20 +1894,16 @@ msgstr ""
 msgid "Video Block"
 msgstr ""
 
-#: src/pb-video-block/edit.js:495
+#: src/pb-video-block/edit.js:477
 msgid "Video Block Settings"
 msgstr ""
 
-#: src/pb-video-block/edit.js:906
+#: src/pb-video-block/edit.js:793
 msgid "Video Block Styles"
 msgstr ""
 
-#: includes/admin/settings-page.php:363 src/video-gallery-block/block.json:6 src/video-gallery-block/edit.js:297
+#: includes/admin/settings-page.php:363 src/video-gallery-block/block.json:6 src/video-gallery-block/edit.js:288
 msgid "Video Gallery"
-msgstr ""
-
-#: src/video-gallery-block/deprecated.js:74
-msgid "Video Gallery (Legacy)"
 msgstr ""
 
 #: includes/admin/free-pro.php:225
@@ -2306,39 +1914,39 @@ msgstr ""
 msgid "Video Gallery Filtering"
 msgstr ""
 
-#: src/video-gallery-block/edit.js:407
+#: src/video-gallery-block/edit.js:391
 msgid "Video Gallery Settings"
 msgstr ""
 
-#: src/pb-video-block/render.php:168
+#: src/pb-video-block/render.php:169
 msgid "Video lightbox"
 msgstr ""
 
-#: src/pb-video-block/premium.js:68 src/video-gallery-block/premium.js:223
+#: src/pb-video-block/premium.js:68 src/video-gallery-block/premium.js:204
 msgid "Video Only"
 msgstr ""
 
-#: src/background-video-block/edit.js:726
+#: src/background-video-block/edit.js:693
 msgid "Video Settings"
 msgstr ""
 
-#: src/background-video-block/edit.js:730
+#: src/background-video-block/edit.js:697
 msgid "Video Source"
 msgstr ""
 
-#: src/video-gallery-block/edit.js:707
+#: src/video-gallery-block/edit.js:627
 msgid "Video Thumbnail Styles"
 msgstr ""
 
-#: src/pb-video-block/edit.js:615
+#: src/pb-video-block/edit.js:571
 msgid "Video Title"
 msgstr ""
 
-#: src/pb-video-block/edit.js:536
+#: src/pb-video-block/edit.js:509
 msgid "Video URL"
 msgstr ""
 
-#: src/pb-video-block/render.php:165
+#: src/pb-video-block/render.php:166
 msgid "Video: %1$s"
 msgstr ""
 
@@ -2350,24 +1958,20 @@ msgstr ""
 msgid "View Full Changelog"
 msgstr ""
 
-#: src/filmstrip-gallery-block/render.php:401 src/pb-image-block/premium.js:1061 src/pb-image-block/render.php:299 src/pb-video-block/premium.js:656 src/pb-video-block/premium.js:745 src/pb-video-block/render.php:238 src/pb-video-block/render.php:276
+#: src/filmstrip-gallery-block/render.php:401 src/pb-image-block/premium.js:1061 src/pb-image-block/render.php:299 src/pb-video-block/premium.js:656 src/pb-video-block/premium.js:745 src/pb-video-block/render.php:239 src/pb-video-block/render.php:277
 msgid "View Product"
 msgstr ""
 
-#: src/background-video-block/edit.js:743
+#: src/background-video-block/edit.js:710
 msgid "Vimeo"
 msgstr ""
 
-#: src/background-video-block/edit.js:1058
+#: src/background-video-block/edit.js:957
 msgid "Vimeo background video"
 msgstr ""
 
-#: src/background-video-block/edit.js:843
+#: src/background-video-block/edit.js:777
 msgid "Vimeo URL"
-msgstr ""
-
-#: src/background-video-block/edit.js:861
-msgid "We could not detect a Vimeo video ID from this URL yet. The front end may fall back to the poster until a valid Vimeo URL is provided."
 msgstr ""
 
 #: includes/admin/common.php:27
@@ -2382,32 +1986,8 @@ msgstr ""
 msgid "WooCommerce integration"
 msgstr ""
 
-#: src/pb-video-block/edit.js:805
+#: src/pb-video-block/edit.js:715
 msgid "WooCommerce Integration"
-msgstr ""
-
-#: includes/admin/system-info.php:188
-msgid "WooCommerce: %s"
-msgstr ""
-
-#: includes/admin/system-info.php:168
-msgid "WordPress Version: %s"
-msgstr ""
-
-#: includes/admin/system-info.php:231
-msgid "WP_DEBUG_DISPLAY: %s"
-msgstr ""
-
-#: includes/admin/system-info.php:230
-msgid "WP_DEBUG_LOG: %s"
-msgstr ""
-
-#: includes/admin/system-info.php:229
-msgid "WP_DEBUG: %s"
-msgstr ""
-
-#: includes/admin/system-info.php:16
-msgid "Yes"
 msgstr ""
 
 #: includes/admin/common.php:37

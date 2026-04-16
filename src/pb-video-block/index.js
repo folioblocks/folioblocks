@@ -7,7 +7,6 @@ import './style.scss';
 import Edit from './edit';
 import Save from './save';
 import metadata from './block.json';
-import deprecated from './deprecated';
 
 registerBlockType( metadata.name, {
 	icon: {
@@ -23,5 +22,4 @@ registerBlockType( metadata.name, {
 	},
 	edit: Edit,
 	save: Save,
-	deprecated,
 } );

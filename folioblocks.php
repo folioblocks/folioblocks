@@ -3,7 +3,7 @@
 /**
  * Plugin Name:       FolioBlocks
  * Description:       Create fast, responsive photo and video gallery with grid, masonry, justified, modular, and carousel layouts—ideal for photographers and creatives.
- * Version:           1.2.4
+ * Version:           1.2.5
  * Requires at least: 6.3
  * Requires PHP:      7.4
  * Author:            FolioBlocks
@@ -15,21 +15,37 @@
  *
  * @package FolioBlocks
  * 
- * @fs_premium_only /build/modular-gallery-block/, /build/pb-image-row, /build/pb-image-stack/, /build/background-video-block/premium-view.asset.php, /build/background-video-block/premium-view.js, /build/background-video-block/premium.asset.php, /build/background-video-block/premium.js, /build/carousel-gallery-block/premium-view.asset.php, /build/carousel-gallery-block/premium-view.js, /build/carousel-gallery-block/premium.asset.php, /build/carousel-gallery-block/premium.js, /build/filmstrip-gallery-block/premium-view.asset.php, /build/filmstrip-gallery-block/premium-view.js, /build/filmstrip-gallery-block/premium.asset.php, /build/filmstrip-gallery-block/premium.js, /build/grid-gallery-block/premium-view.asset.php, /build/grid-gallery-block/premium-view.js, /build/grid-gallery-block/premium.asset.php, /build/grid-gallery-block/premium.js, /build/justified-gallery-block/premium-view.asset.php, /build/justified-gallery-block/premium-view.js, /build/justified-gallery-block/premium.asset.php, /build/justified-gallery-block/premium.js, /build/masonry-gallery-block/premium-view.asset.php, /build/masonry-gallery-block/premium-view.js, /build/masonry-gallery-block/premium.asset.php, /build/masonry-gallery-block/premium.js, /build/modular-gallery-block/premium-view.asset.php, /build/modular-gallery-block/premium-view.js, /build/modular-gallery-block/premium.asset.php, /build/modular-gallery-block/premium.js, /build/pb-before-after-block/premium-view.asset.php, /build/pb-before-after-block/premium-view.js, /build/pb-before-after-block/premium.asset.php, /build/pb-before-after-block/premium.js, /build/pb-image-block/premium-view.asset.php, /build/pb-image-block/premium-view.js, /build/pb-image-block/premium.asset.php, /build/pb-image-block/premium.js, /build/pb-image-block/premium-view.asset.php, /build/pb-loupe-block/premium-view.js, /build/pb-loupe-block/premium.asset.php, /build/pb-loupe-block/premium.js, /build/pb-video-block/premium-view.asset.php, /build/pb-video-block/premium-view.js, /build/pb-video-block/premium.asset.php, /build/pb-video-block/premium.js, /build/video-gallery-block/premium-view.asset.php, /build/video-gallery-block/premium-view.js, /build/video-gallery-block/premium.asset.php, /build/video-gallery-block/premium.js
+ * @fs_premium_only /languages/, /build/modular-gallery-block/, /build/pb-image-row, /build/pb-image-stack/, /build/background-video-block/premium-view.asset.php, /build/background-video-block/premium-view.js, /build/background-video-block/premium.asset.php, /build/background-video-block/premium.js, /build/carousel-gallery-block/premium-view.asset.php, /build/carousel-gallery-block/premium-view.js, /build/carousel-gallery-block/premium.asset.php, /build/carousel-gallery-block/premium.js, /build/filmstrip-gallery-block/premium-view.asset.php, /build/filmstrip-gallery-block/premium-view.js, /build/filmstrip-gallery-block/premium.asset.php, /build/filmstrip-gallery-block/premium.js, /build/grid-gallery-block/premium-view.asset.php, /build/grid-gallery-block/premium-view.js, /build/grid-gallery-block/premium.asset.php, /build/grid-gallery-block/premium.js, /build/justified-gallery-block/premium-view.asset.php, /build/justified-gallery-block/premium-view.js, /build/justified-gallery-block/premium.asset.php, /build/justified-gallery-block/premium.js, /build/masonry-gallery-block/premium-view.asset.php, /build/masonry-gallery-block/premium-view.js, /build/masonry-gallery-block/premium.asset.php, /build/masonry-gallery-block/premium.js, /build/modular-gallery-block/premium-view.asset.php, /build/modular-gallery-block/premium-view.js, /build/modular-gallery-block/premium.asset.php, /build/modular-gallery-block/premium.js, /build/pb-before-after-block/premium-view.asset.php, /build/pb-before-after-block/premium-view.js, /build/pb-before-after-block/premium.asset.php, /build/pb-before-after-block/premium.js, /build/pb-image-block/premium-view.asset.php, /build/pb-image-block/premium-view.js, /build/pb-image-block/premium.asset.php, /build/pb-image-block/premium.js, /build/pb-image-block/premium-view.asset.php, /build/pb-loupe-block/premium-view.js, /build/pb-loupe-block/premium.asset.php, /build/pb-loupe-block/premium.js, /build/pb-video-block/premium-view.asset.php, /build/pb-video-block/premium-view.js, /build/pb-video-block/premium.asset.php, /build/pb-video-block/premium.js, /build/video-gallery-block/premium-view.asset.php, /build/video-gallery-block/premium-view.js, /build/video-gallery-block/premium.asset.php, /build/video-gallery-block/premium.js
  */
 
 if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FBKS_VERSION', '1.2.4');
+define('FBKS_VERSION', '1.2.5');
 define('FBKS_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('FBKS_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('FBKS_ALL_FILTER_TOKEN', 'all');
 define('FBKS_LEGACY_ALL_FILTER_TOKEN', 'All');
 
+function fbks_get_local_languages_dir()
+{
+    static $languages_dir = null;
+
+    if (null === $languages_dir) {
+        $directory = FBKS_PLUGIN_DIR . 'languages';
+        $languages_dir = is_dir($directory) ? $directory : '';
+    }
+
+    return $languages_dir;
+}
+
 function fbks_load_textdomain()
 {
+    if ('' === fbks_get_local_languages_dir()) {
+        return;
+    }
+
     load_plugin_textdomain(
         'folioblocks',
         false,
@@ -92,6 +108,7 @@ function fbks_register_i18n_loader_script()
 {
     $script_path = FBKS_PLUGIN_DIR . 'includes/js/i18n-loader.js';
     $script_url  = FBKS_PLUGIN_URL . 'includes/js/i18n-loader.js';
+    $languages_dir = fbks_get_local_languages_dir();
 
     wp_register_script(
         'folioblocks-i18n-loader',
@@ -101,11 +118,11 @@ function fbks_register_i18n_loader_script()
         true
     );
 
-    if (function_exists('wp_set_script_translations')) {
+    if (function_exists('wp_set_script_translations') && '' !== $languages_dir) {
         wp_set_script_translations(
             'folioblocks-i18n-loader',
             'folioblocks',
-            FBKS_PLUGIN_DIR . 'languages'
+            $languages_dir
         );
     }
 }
@@ -127,6 +144,20 @@ function fbks_attach_i18n_loader_dependency($handle)
         $dependencies[] = 'folioblocks-i18n-loader';
         $wp_scripts->registered[$handle]->deps = $dependencies;
     }
+}
+
+function fbks_register_script_handle_translations($handle)
+{
+    if (! function_exists('wp_set_script_translations')) {
+        return;
+    }
+
+    if ('' !== fbks_get_local_languages_dir()) {
+        fbks_attach_i18n_loader_dependency($handle);
+        return;
+    }
+
+    wp_set_script_translations($handle, 'folioblocks');
 }
 
 function fbks_register_block_script_translations($block_directory)
@@ -160,7 +191,7 @@ function fbks_register_block_script_translations($block_directory)
             $handle = fbks_generate_block_asset_handle($metadata['name'], $field_name, $index);
 
             if ($handle !== '') {
-                fbks_attach_i18n_loader_dependency($handle);
+                fbks_register_script_handle_translations($handle);
             }
         }
     }

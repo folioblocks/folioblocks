@@ -3,66 +3,69 @@
  * Helper file for Galleries responsive component
  */
 
-import { useState } from '@wordpress/element';
-import PropTypes from 'prop-types';
-import { RangeControl, Popover, Button } from '@wordpress/components';
-import { desktop, tablet, mobile } from '@wordpress/icons';
+import { __, sprintf } from "@wordpress/i18n";
+import { useState } from "@wordpress/element";
+import PropTypes from "prop-types";
+import { RangeControl, Popover, Button } from "@wordpress/components";
+import { desktop, tablet, mobile } from "@wordpress/icons";
 
-const ResponsiveRangeControl = ( {
+const ResponsiveRangeControl = ({
 	label,
 	columns,
 	tabletColumns,
 	mobileColumns,
-	desktopKey = 'columns',
-	tabletKey = 'tabletColumns',
-	mobileKey = 'mobileColumns',
+	desktopKey = "columns",
+	tabletKey = "tabletColumns",
+	mobileKey = "mobileColumns",
 	min = 1,
 	max = 8,
 	lockTabletMobileToDesktop = true,
 	help,
 	onChange,
-} ) => {
-	const [ device, setDevice ] = useState( 'desktop' );
-	const [ showPopover, setShowPopover ] = useState( false );
+}) => {
+	const [device, setDevice] = useState("desktop");
+	const [showPopover, setShowPopover] = useState(false);
+
+	const deviceLabels = {
+		desktop: __("Desktop", "folioblocks"),
+		tablet: __("Tablet", "folioblocks"),
+		mobile: __("Mobile", "folioblocks"),
+	};
 
 	const getValue = () => {
-		if ( device === 'tablet' ) {
+		if (device === "tablet") {
 			return tabletColumns ?? columns;
 		}
-		if ( device === 'mobile' ) {
+		if (device === "mobile") {
 			return mobileColumns ?? columns;
 		}
 		return columns;
 	};
 
-	const setValue = ( value ) => {
-		if ( device === 'tablet' ) {
-			onChange( {
-				[ tabletKey ]: value,
-			} );
-		} else if ( device === 'mobile' ) {
-			onChange( {
-				[ mobileKey ]: value,
-			} );
+	const setValue = (value) => {
+		if (device === "tablet") {
+			onChange({
+				[tabletKey]: value,
+			});
+		} else if (device === "mobile") {
+			onChange({
+				[mobileKey]: value,
+			});
 		} else {
 			const nextValues = {
-				[ desktopKey ]: value,
+				[desktopKey]: value,
 			};
 
-			if ( lockTabletMobileToDesktop ) {
+			if (lockTabletMobileToDesktop) {
 				const safeTabletValue =
-					typeof tabletColumns === 'number'
-						? tabletColumns
-						: value;
+					typeof tabletColumns === "number" ? tabletColumns : value;
 				const safeMobileValue =
-					typeof mobileColumns === 'number'
-						? mobileColumns
-						: value;
-				nextValues[ tabletKey ] = Math.min( value, safeTabletValue );
-				nextValues[ mobileKey ] = Math.min( value, safeMobileValue );
+					typeof mobileColumns === "number" ? mobileColumns : value;
+				nextValues[tabletKey] = Math.min(value, safeTabletValue);
+				nextValues[mobileKey] = Math.min(value, safeMobileValue);
 			}
 
-			onChange( nextValues );
+			onChange(nextValues);
 		}
 	};
 
@@ -72,96 +75,97 @@ const ResponsiveRangeControl = ( {
 		mobile,
 	};
 	let dynamicMax = max;
-	if ( device !== 'desktop' && lockTabletMobileToDesktop ) {
+	if (device !== "desktop" && lockTabletMobileToDesktop) {
 		dynamicMax = columns || max;
 	}
 	const controlHelp =
 		help ||
-		`Adjust the default amount of columns on ${
-			device.charAt( 0 ).toUpperCase() + device.slice( 1 )
-		}.`;
+		sprintf(
+			__("Adjust the default amount of columns on %s.", "folioblocks"),
+			deviceLabels[device],
+		);
 
 	return (
 		<div
 			className="pb-responsive-range-control"
-			style={ { marginBottom: '16px' } }
+			style={{ marginBottom: "16px" }}
 		>
 			<div
-				style={ {
-					display: 'flex',
-					alignItems: 'center',
-					gap: '8px',
-					marginBottom: '8px',
-				} }
+				style={{
+					display: "flex",
+					alignItems: "center",
+					gap: "8px",
+					marginBottom: "8px",
+				}}
 			>
 				<span
-					style={ {
-						fontSize: '11px',
+					style={{
+						fontSize: "11px",
 						fontWeight: 500,
 						lineHeight: 1.4,
-						textTransform: 'uppercase',
-					} }
+						textTransform: "uppercase",
+					}}
 				>
-					{ label }
+					{label}
 				</span>
 
 				<Button
-					icon={ deviceIcons[ device ] }
+					icon={deviceIcons[device]}
 					variant="secondary"
 					size="small"
-					onClick={ () => setShowPopover( ! showPopover ) }
-					style={ { padding: '2px 4px' } }
-					aria-label="Change device"
+					onClick={() => setShowPopover(!showPopover)}
+					style={{ padding: "2px 4px" }}
+					aria-label={__("Change device", "folioblocks")}
 				/>
 
-				{ showPopover && (
+				{showPopover && (
 					<Popover
 						position="bottom center"
-						onClose={ () => setShowPopover( false ) }
-						focusOnMount={ false }
+						onClose={() => setShowPopover(false)}
+						focusOnMount={false}
 					>
 						<div
-							style={ {
-								padding: '8px',
-								display: 'flex',
-								gap: '8px',
-							} }
+							style={{
+								padding: "8px",
+								display: "flex",
+								gap: "8px",
+							}}
 						>
 							<Button
-								icon={ desktop }
-								label="Desktop"
-								onClick={ () => {
-									setDevice( 'desktop' );
-									setShowPopover( false );
-								} }
+								icon={desktop}
+								label={deviceLabels.desktop}
+								onClick={() => {
+									setDevice("desktop");
+									setShowPopover(false);
+								}}
 							/>
 							<Button
-								icon={ tablet }
-								label="Tablet"
-								onClick={ () => {
-									setDevice( 'tablet' );
-									setShowPopover( false );
-								} }
+								icon={tablet}
+								label={deviceLabels.tablet}
+								onClick={() => {
+									setDevice("tablet");
+									setShowPopover(false);
+								}}
 							/>
 							<Button
-								icon={ mobile }
-								label="Mobile"
-								onClick={ () => {
-									setDevice( 'mobile' );
-									setShowPopover( false );
-								} }
+								icon={mobile}
+								label={deviceLabels.mobile}
+								onClick={() => {
+									setDevice("mobile");
+									setShowPopover(false);
+								}}
 							/>
 						</div>
 					</Popover>
-				) }
+				)}
 			</div>
 
 			<RangeControl
-				min={ min }
-				max={ dynamicMax }
-				value={ getValue() }
-				onChange={ setValue }
-				help={ controlHelp }
+				min={min}
+				max={dynamicMax}
+				value={getValue()}
+				onChange={setValue}
+				help={controlHelp}
 				__nextHasNoMarginBottom
 				__next40pxDefaultSize
 			/>

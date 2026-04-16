@@ -1,5 +1,5 @@
 {
-  "translation-revision-date": "2026-03-25T15:53:44.083Z",
+  "translation-revision-date": "2026-04-16T09:26:59.575Z",
   "generator": "FolioBlocks custom i18n tooling",
   "domain": "messages",
   "locale_data": {
@@ -9,17 +9,23 @@
         "lang": "sv_SE",
         "plural-forms": "nplurals=2; plural=(n != 1);"
       },
-      ". Note: Some provider videos may not work due to privacy settings.": [
-        ". Obs: Vissa videor från vissa leverantörer kanske inte fungerar på grund av sekretessinställningar."
-      ],
       "Active Item Colors": [
         "Färger för aktivt objekt"
       ],
       "Add Background Video": [
         "Lägg till bakgrundsvideo"
       ],
+      "Add First Image": [
+        "Lagg till forsta bilden"
+      ],
+      "Add Image": [
+        "Lagg till bild"
+      ],
       "Add Image Row": [
         "Lägg till bildrad"
+      ],
+      "Add Image Stack": [
+        "Lagg till bildstapel"
       ],
       "Add Images": [
         "Lägg till bilder"
@@ -32,9 +38,6 @@
       ],
       "Add content…": [
         "Lägg till innehåll…"
-      ],
-      "Add first video. Upload, select from media library, or insert from URL.": [
-        "Lägg till den första videon. Ladda upp, välj från mediebiblioteket eller infoga från URL."
       ],
       "Add image caption.": [
         "Lägg till bildtext."
@@ -54,14 +57,17 @@
       "Add to Image Stack": [
         "Lägg till i bildstapel"
       ],
+      "Adjust the default amount of columns on %s.": [
+        "Justera standardantalet kolumner pa %s."
+      ],
+      "Adjust the height (%1$s) on %2$s.": [
+        "Justera hojden (%1$s) pa %2$s."
+      ],
       "Adjust the horizontal focal point per device.": [
         "Justera den horisontella fokuspunkten per enhet."
       ],
       "Adjust the vertical focal point per device.": [
         "Justera den vertikala fokuspunkten per enhet."
-      ],
-      "Affects layout on mobile only. Switch ONLY when all images are vertical in orientation.": [
-        "Påverkar endast layouten på mobil. Växla ENDAST när alla bilder har vertikal orientering."
       ],
       "After": [
         "Efter"
@@ -77,12 +83,6 @@
       ],
       "All": [
         "Alla"
-      ],
-      "Allows video to open in a Lightbox while editing.": [
-        "Tillåter att videon öppnas i en lightbox under redigering."
-      ],
-      "Allows videos to open in a Lightbox while editing.": [
-        "Tillåter att videor öppnas i en lightbox under redigering."
       ],
       "Alternative Text": [
         "Alternativ text"
@@ -108,9 +108,6 @@
       "Automatically advance to the next image in the gallery.": [
         "Växla automatiskt till nästa bild i galleriet."
       ],
-      "Automatically loop the video for continous play.": [
-        "Loopa videon automatiskt för kontinuerlig uppspelning."
-      ],
       "Autoplay Speed (seconds)": [
         "Hastighet för automatisk uppspelning (sekunder)"
       ],
@@ -122,6 +119,9 @@
       ],
       "Before": [
         "Före"
+      ],
+      "Before & After Block": [
+        "Fore- och efterblock"
       ],
       "Before & After Block Settings": [
         "Inställningar för Before & After Block"
@@ -150,6 +150,9 @@
       "Carousel Control Styles": [
         "Stilar för karusellkontroller"
       ],
+      "Carousel Gallery": [
+        "Karusellgalleri"
+      ],
       "Carousel Gallery Settings": [
         "Inställningar för Carousel Gallery"
       ],
@@ -170,6 +173,9 @@
       ],
       "Change Video": [
         "Byt video"
+      ],
+      "Change device": [
+        "Byt enhet"
       ],
       "Change the color of the Loupe frame.": [
         "Ändra färgen på Loupe-ramen."
@@ -197,12 +203,6 @@
       ],
       "Choose when to display the Add to Cart icon.": [
         "Välj när Lägg till i varukorg-ikonen ska visas."
-      ],
-      "Choose where the thumbnail strip appears.": [
-        "Välj var miniatyrremsan ska visas."
-      ],
-      "Choose whether the slider moves left-to-right or top-to-bottom.": [
-        "Välj om reglaget ska röra sig från vänster till höger eller uppifrån och ned."
       ],
       "Circle": [
         "Cirkel"
@@ -234,26 +234,26 @@
       "Dark": [
         "Mörk"
       ],
+      "Default": [
+        "Standard"
+      ],
       "Default Add To Cart Icon Behavior": [
         "Standardbeteende för Lägg till i varukorg-ikonen"
       ],
       "Default Overlay": [
         "Standardöverlägg"
       ],
-      "Describe the purpose of the image. Leave empty if decorative.": [
-        "Beskriv bildens syfte. Lämna tomt om den är dekorativ."
-      ],
       "Description": [
         "Beskrivning"
+      ],
+      "Desktop": [
+        "Skrivbord"
       ],
       "Disable Right-Click": [
         "Inaktivera högerklick"
       ],
       "Disable Right-Click on Page": [
         "Inaktivera högerklick på sidan"
-      ],
-      "Disable background video is on mobile and display poster image.": [
-        "Inaktivera bakgrundsvideon på mobil och visa posterbilden."
       ],
       "Disable on Mobile": [
         "Inaktivera på mobil"
@@ -282,17 +282,11 @@
       "Display Image title when hovering over image.": [
         "Visa bildtitel när du hovrar över bilden."
       ],
-      "Display image captions inside the lightbox.": [
-        "Visa bildtexter i lightboxen."
-      ],
       "Display image title or Product Info when hovering over images.": [
         "Visa bildtitel eller produktinfo när du hovrar över bilder."
       ],
       "Display image title when hovering over image.": [
         "Visa bildtitel när du hovrar över bilden."
-      ],
-      "Display the image title when hovering over images.": [
-        "Visa bildtiteln när du hovrar över bilder."
       ],
       "Distribute content vertically": [
         "Fördela innehållet vertikalt"
@@ -366,9 +360,6 @@
       "Enable Lightbox in Editor": [
         "Aktivera lightbox i redigeraren"
       ],
-      "Enable Slider & Label Style Controls": [
-        "Aktivera stilkontroller för reglage och etiketter"
-      ],
       "Enable Video Filtering": [
         "Aktivera videofiltrering"
       ],
@@ -399,9 +390,6 @@
       "Enable visitors to download this image.": [
         "Låt besökare ladda ner den här bilden."
       ],
-      "Enables lazy loading of Video Gallery thumbnails.": [
-        "Aktiverar lazy loading för Video Gallery-miniatyrer."
-      ],
       "Enables lazy loading of gallery images.": [
         "Aktiverar lazy loading av galleri-bilder."
       ],
@@ -410,6 +398,9 @@
       ],
       "Fade Overlay - Centered": [
         "Tonat överlägg - centrerat"
+      ],
+      "Filmstrip Gallery": [
+        "Filmremsgalleri"
       ],
       "Filmstrip Gallery Settings": [
         "Inställningar för Filmstrip Gallery"
@@ -437,6 +428,9 @@
       ],
       "Focal Point Y (Up - Down)": [
         "Fokuspunkt Y (upp - ned)"
+      ],
+      "Folioblocks loading": [
+        "Folioblocks laddar"
       ],
       "Font Family": [
         "Typsnittsfamilj"
@@ -471,6 +465,9 @@
       "Gradient Overlay - Slide-up Bottom": [
         "Gradientöverlägg - glid upp från botten"
       ],
+      "Grid Gallery": [
+        "Rutnatsgalleri"
+      ],
       "Grid Gallery Settings": [
         "Inställningar för Grid Gallery"
       ],
@@ -491,6 +488,9 @@
       ],
       "Horizontal Images": [
         "Horisontella bilder"
+      ],
+      "Hover": [
+        "Hovra"
       ],
       "Hover Overlay Settings": [
         "Inställningar för hovringsöverlägg"
@@ -524,6 +524,9 @@
       ],
       "Inherit (Gallery Default)": [
         "Ärv (galleriets standard)"
+      ],
+      "Justified Gallery": [
+        "Justerat galleri"
       ],
       "Justified Gallery Settings": [
         "Inställningar för Justified Gallery"
@@ -567,20 +570,23 @@
       "Link gallery images to WooCommerce products.": [
         "Koppla galleribilder till WooCommerce-produkter."
       ],
-      "Link gallery videos to WooCommerce products.": [
-        "Koppla gallerivideor till WooCommerce-produkter."
-      ],
       "Link this image to WooCommerce products.": [
         "Koppla den här bilden till WooCommerce-produkter."
       ],
       "Link this video to a WooCommerce product.": [
         "Koppla den här videon till en WooCommerce-produkt."
       ],
+      "Linked WooCommerce Product": [
+        "Lankad WooCommerce-produkt"
+      ],
       "Loop": [
         "Loopa"
       ],
       "Loop Carousel Slides": [
         "Loopa karusellens bilder"
+      ],
+      "Loupe Block": [
+        "Luppblock"
       ],
       "Loupe Block Settings": [
         "Inställningar för Loupe Block"
@@ -600,11 +606,17 @@
       "Main Image Resolution": [
         "Upplösning för huvudbild"
       ],
+      "Masonry Gallery": [
+        "Masonry-galleri"
+      ],
       "Masonry Gallery Settings": [
         "Inställningar för Masonry Gallery"
       ],
       "Medium": [
         "Medium"
+      ],
+      "Mobile": [
+        "Mobil"
       ],
       "Next image": [
         "Nästa bild"
@@ -614,9 +626,6 @@
       ],
       "No Thumbnail Selected": [
         "Ingen miniatyr vald"
-      ],
-      "No theme fonts found. Add font families in theme.json or Global Styles.": [
-        "Inga tematypsnitt hittades. Lägg till typsnittsfamiljer i theme.json eller Globala stilar."
       ],
       "None": [
         "Ingen"
@@ -629,9 +638,6 @@
       ],
       "Open Product Page": [
         "Öppna produktsida"
-      ],
-      "Open images in a lightbox when clicked.": [
-        "Öppna bilder i en lightbox vid klick."
       ],
       "Overlay Colors": [
         "Överläggsfärger"
@@ -647,9 +653,6 @@
       ],
       "Overlay opacity": [
         "Överläggsopacitet"
-      ],
-      "Paste a Vimeo URL. The block will extract the Vimeo video ID when possible.": [
-        "Klistra in en Vimeo-URL. Blocket extraherar Vimeo-video-ID när det är möjligt."
       ],
       "Pause autoplay": [
         "Pausa automatisk uppspelning"
@@ -696,6 +699,9 @@
       "Remove Image Gap": [
         "Ta bort bildmellanrum"
       ],
+      "Remove Product": [
+        "Ta bort produkt"
+      ],
       "Remove gap between images.": [
         "Ta bort mellanrummet mellan bilderna."
       ],
@@ -726,8 +732,8 @@
       "Row Height": [
         "Radhöjd"
       ],
-      "SVG files are not supported for the Loupe effect. Please select a raster image (JPG/PNG).": [
-        "SVG-filer stöds inte för Loupe-effekten. Välj en rasterbild (JPG/PNG)."
+      "Search products…": [
+        "Sok produkter…"
       ],
       "Select After Image": [
         "Välj efter-bild"
@@ -762,20 +768,8 @@
       "Select or Insert Video": [
         "Välj eller infoga video"
       ],
-      "Select or upload an image to use with the loupe effect.": [
-        "Välj eller ladda upp en bild att använda med luppeffekten."
-      ],
-      "Select the font’s weight and style (matches WordPress Typography → Appearance).": [
-        "Välj typsnittets vikt och stil (matchar WordPress Typografi → Utseende)."
-      ],
-      "Select the size of the main gallery image.": [
-        "Välj storleken på galleriets huvudbild."
-      ],
       "Select the size of the source image.": [
         "Välj storleken på källbilden."
-      ],
-      "Select two images for Before & After Block. For best results, use images with the same dimensions (width and height).": [
-        "Välj två bilder för Before & After Block. För bästa resultat, använd bilder med samma mått (bredd och höjd)."
       ],
       "Selected gallery image": [
         "Vald galleribild"
@@ -797,9 +791,6 @@
       ],
       "Set Image border width.": [
         "Ange bildens kantbredd."
-      ],
-      "Set Video Title used in the Hover Overlay, Lightbox, and for Alt-text.": [
-        "Ange videotiteln som används i hovringsöverlägget, lightboxen och för alt-text."
       ],
       "Set Video block border color.": [
         "Ange videoblockets kantfärg."
@@ -840,14 +831,8 @@
       "Set the color for the Overlay.": [
         "Ange färgen för överlägget."
       ],
-      "Set the desired strength of the magnification effect.": [
-        "Ange önskad styrka för förstoringen."
-      ],
       "Set the horizontal alignment of carousel controls.": [
         "Ange den horisontella justeringen för karusellkontrollerna."
-      ],
-      "Set the level of opacity for the Overlay.": [
-        "Ange opacitetsnivån för överlägget."
       ],
       "Set thumbnail aspect ratio.": [
         "Ange miniatyrens bildförhållande."
@@ -858,14 +843,8 @@
       "Set video Thumbnail aspect ratio.": [
         "Ange videominiatyrens bildförhållande."
       ],
-      "Set visibility for title and play button overlays.": [
-        "Ange synlighet för titel- och uppspelningsknappsöverlägg."
-      ],
       "Sets the default action for Add To Cart icons in this gallery. Individual images can override this setting.": [
         "Anger standardåtgärden för Lägg till i varukorg-ikoner i detta galleri. Enskilda bilder kan åsidosätta denna inställning."
-      ],
-      "Sets the default action for Add To Cart icons in this gallery. Individual videos can override this setting.": [
-        "Anger standardåtgärden för Lägg till i varukorg-ikoner i detta galleri. Enskilda videor kan åsidosätta denna inställning."
       ],
       "Show Before & After Labels": [
         "Visa etiketter för Före och Efter"
@@ -891,9 +870,6 @@
       "Show Product Info": [
         "Visa produktinfo"
       ],
-      "Shown in the lightbox when enabled in Gallery Lightbox Settings.": [
-        "Visas i lightboxen när det är aktiverat i galleriets lightbox-inställningar."
-      ],
       "Sizing & Focal Point": [
         "Storlek och fokuspunkt"
       ],
@@ -909,14 +885,8 @@
       "Square": [
         "Fyrkant"
       ],
-      "Stack all images vertically on mobile devices.": [
-        "Stapla alla bilder vertikalt på mobila enheter."
-      ],
       "Stretch content height": [
         "Sträck innehållets höjd"
-      ],
-      "Supports YouTube, Vimeo, Bunny Stream, or ": [
-        "Stöder YouTube, Vimeo, Bunny Stream eller "
       ],
       "Swap Position": [
         "Byt plats"
@@ -924,14 +894,11 @@
       "Switch between light and dark editor themes.": [
         "Växla mellan ljusa och mörka redigeringsteman."
       ],
-      "Tablet and mobile inherit this value.": [
-        "Surfplatta och mobil ärver detta värde."
+      "Tablet": [
+        "Surfplatta"
       ],
       "Text": [
         "Text"
-      ],
-      "This is a premium feature. Unlock all features: ": [
-        "Detta är en premiumfunktion. Lås upp alla funktioner: "
       ],
       "Thumbnail": [
         "Miniatyr"
@@ -966,35 +933,8 @@
       "Upgrade to Pro": [
         "Uppgradera till Pro"
       ],
-      "Upload a video, select one from your media library, or insert a URL (including Vimeo).": [
-        "Ladda upp en video, välj en från ditt mediebibliotek eller infoga en URL (inklusive Vimeo)."
-      ],
-      "Upload or select images to create a Filmstrip Gallery.": [
-        "Ladda upp eller välj bilder för att skapa ett Filmstrip Gallery."
-      ],
-      "Upload or select images to create a Grid Gallery.": [
-        "Ladda upp eller välj bilder för att skapa ett Grid Gallery."
-      ],
-      "Upload or select images to create a Justified Gallery.": [
-        "Ladda upp eller välj bilder för att skapa ett Justified Gallery."
-      ],
-      "Upload or select images to create a Masonry Gallery.": [
-        "Ladda upp eller välj bilder för att skapa ett Masonry Gallery."
-      ],
-      "Upload or select images to create a carousel.": [
-        "Ladda upp eller välj bilder för att skapa en karusell."
-      ],
-      "Upload, select from media library or insert from URL.": [
-        "Ladda upp, välj från mediebiblioteket eller infoga från URL."
-      ],
-      "Upload, select from media library, or insert from URL.": [
-        "Ladda upp, välj från mediebiblioteket eller infoga från URL."
-      ],
       "Use this video": [
         "Använd denna video"
-      ],
-      "Uses fonts from your theme’s Global Styles.": [
-        "Använder typsnitt från temats globala stilar."
       ],
       "Vertical": [
         "Vertikal"
@@ -1019,6 +959,9 @@
       ],
       "Video Block Styles": [
         "Stilar för Video Block"
+      ],
+      "Video Gallery": [
+        "Videogalleri"
       ],
       "Video Gallery Settings": [
         "Inställningar för Video Gallery"
@@ -1052,9 +995,6 @@
       ],
       "Vimeo background video": [
         "Vimeo-bakgrundsvideo"
-      ],
-      "We could not detect a Vimeo video ID from this URL yet. The front end may fall back to the poster until a valid Vimeo URL is provided.": [
-        "Vi kunde inte identifiera ett Vimeo-video-ID från den här URL:en ännu. Frontenden kan falla tillbaka till posterbilden tills en giltig Vimeo-URL anges."
       ],
       "WooCommerce Integration": [
         "WooCommerce-integration"

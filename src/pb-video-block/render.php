@@ -117,9 +117,10 @@ if (! $fbks_video_url) {
 
 // Render placeholder if thumbnail is missing
 if (! $fbks_thumbnail) {
-	$fbks_thumbnail_html = '<div class="pb-video-placeholder" aria-hidden="true">
-		<h3 class="pb-video-missing">Thumbnail Missing</h3>
-	</div>';
+	$fbks_thumbnail_html = sprintf(
+		'<div class="pb-video-placeholder" aria-hidden="true"><h3 class="pb-video-missing">%s</h3></div>',
+		esc_html__('Thumbnail Missing', 'folioblocks')
+	);
 } else {
 	$fbks_thumbnail_html = wp_get_attachment_image(
 		$attributes['thumbnailId'] ?? 0,

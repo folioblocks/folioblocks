@@ -7,7 +7,6 @@ import './style.scss';
 
 import Edit from './edit';
 import Save from './save';
-import deprecated from './deprecated';
 import metadata from './block.json';
 import {
 	buildGalleryTransforms,
@@ -40,6 +39,5 @@ registerBlockType( metadata, {
 	},
 	edit: Edit,
 	save: Save,
-	deprecated,
 	transforms: buildGalleryTransforms( metadata.name ),
 } );

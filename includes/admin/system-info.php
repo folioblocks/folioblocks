@@ -13,12 +13,12 @@ if ( ! function_exists( 'fbks_render_system_info_page' ) ) {
 		$theme_parent = $theme->parent();
 
 		$get_yes_no = static function ( $value ) {
-			return $value ? __( 'Yes', 'folioblocks' ) : __( 'No', 'folioblocks' );
+			return $value ? 'Yes' : 'No';
 		};
 
 		$is_block_theme = function_exists( 'wp_is_block_theme' )
 			? $get_yes_no( wp_is_block_theme() )
-			: __( 'Unknown', 'folioblocks' );
+			: 'Unknown';
 
 		$site_url = get_site_url();
 		$home_url = get_home_url();
@@ -34,25 +34,25 @@ if ( ! function_exists( 'fbks_render_system_info_page' ) ) {
 			}
 		}
 
-		$license_type = __( 'Unknown', 'folioblocks' );
+		$license_type = 'Unknown';
 		if ( function_exists( 'fbks_fs' ) ) {
 			$license_type = fbks_fs()->can_use_premium_code()
-				? __( 'Pro (active)', 'folioblocks' )
-				: __( 'Free', 'folioblocks' );
+				? 'Pro (active)'
+				: 'Free';
 		}
 
-		$woocommerce_status = __( 'Not installed', 'folioblocks' );
+		$woocommerce_status = 'Not installed';
 		$active_plugins     = (array) get_option( 'active_plugins', array() );
 		if ( in_array( 'woocommerce/woocommerce.php', $active_plugins, true ) || class_exists( 'WooCommerce' ) ) {
-			$woocommerce_status = __( 'Active', 'folioblocks' );
+			$woocommerce_status = 'Active';
 		}
 
-		$gd_loaded       = extension_loaded( 'gd' ) ? __( 'Loaded', 'folioblocks' ) : __( 'Not loaded', 'folioblocks' );
-		$imagick_loaded  = class_exists( 'Imagick' ) ? __( 'Loaded', 'folioblocks' ) : __( 'Not found', 'folioblocks' );
-		$openssl_loaded  = extension_loaded( 'openssl' ) ? __( 'Loaded', 'folioblocks' ) : __( 'Not loaded', 'folioblocks' );
+		$gd_loaded       = extension_loaded( 'gd' ) ? 'Loaded' : 'Not loaded';
+		$imagick_loaded  = class_exists( 'Imagick' ) ? 'Loaded' : 'Not found';
+		$openssl_loaded  = extension_loaded( 'openssl' ) ? 'Loaded' : 'Not loaded';
 		$stream_wrappers = function_exists( 'stream_get_wrappers' ) ? stream_get_wrappers() : array();
-		$http_wrapper    = in_array( 'http', $stream_wrappers, true ) ? __( 'Found', 'folioblocks' ) : __( 'Not found', 'folioblocks' );
-		$https_wrapper   = in_array( 'https', $stream_wrappers, true ) ? __( 'Found', 'folioblocks' ) : __( 'Not found', 'folioblocks' );
+		$http_wrapper    = in_array( 'http', $stream_wrappers, true ) ? 'Found' : 'Not found';
+		$https_wrapper   = in_array( 'https', $stream_wrappers, true ) ? 'Found' : 'Not found';
 		$allow_url_fopen = ini_get( 'allow_url_fopen' );
 		$allow_url_inc   = ini_get( 'allow_url_include' );
 
@@ -73,50 +73,38 @@ if ( ! function_exists( 'fbks_render_system_info_page' ) ) {
 		}
 
 		$thumb_test_url    = plugin_dir_url( __DIR__ ) . 'icons/pb-thumb-test.jpg';
-		$thumb_test_result = __( 'Not run (test image missing)', 'folioblocks' );
+		$thumb_test_result = 'Not run (test image missing)';
 		$test_image_path   = plugin_dir_path( __DIR__ ) . 'icons/pb-thumb-test.jpg';
 
 		if ( function_exists( 'wp_get_image_editor' ) && file_exists( $test_image_path ) ) {
 			$editor = wp_get_image_editor( $test_image_path );
 			if ( is_wp_error( $editor ) ) {
-				$thumb_test_result = sprintf(
-					/* translators: %s: WordPress error message. */
-					__( 'Failed: %s', 'folioblocks' ),
-					$editor->get_error_message()
-				);
+				$thumb_test_result = sprintf( 'Failed: %s', $editor->get_error_message() );
 			} else {
-				$thumb_test_result = __( 'OK', 'folioblocks' );
+				$thumb_test_result = 'OK';
 			}
 		}
 
-		$https_thumb_mismatch = __( 'None', 'folioblocks' );
+		$https_thumb_mismatch = 'None';
 		if ( strpos( $site_url, 'https://' ) === 0 && strpos( $thumb_test_url, 'https://' ) !== 0 ) {
-			$https_thumb_mismatch = __( 'Possible mismatch (site is HTTPS, thumb URL is not).', 'folioblocks' );
+			$https_thumb_mismatch = 'Possible mismatch (site is HTTPS, thumb URL is not).';
 		}
 
-		$rest_api_status = __( 'Not tested', 'folioblocks' );
+		$rest_api_status = 'Not tested';
 		if ( function_exists( 'rest_url' ) && function_exists( 'wp_remote_get' ) ) {
 			$response = wp_remote_get( rest_url( 'wp/v2/types' ), array( 'timeout' => 5 ) );
 			if ( is_wp_error( $response ) ) {
-				$rest_api_status = sprintf(
-					/* translators: %s: WordPress error message. */
-					__( 'Error: %s', 'folioblocks' ),
-					$response->get_error_message()
-				);
+				$rest_api_status = sprintf( 'Error: %s', $response->get_error_message() );
 			} else {
-				$rest_api_status = sprintf(
-					/* translators: %d: HTTP response code. */
-					__( 'HTTP %d', 'folioblocks' ),
-					wp_remote_retrieve_response_code( $response )
-				);
+				$rest_api_status = sprintf( 'HTTP %d', wp_remote_retrieve_response_code( $response ) );
 			}
 		}
 
-		$wp_debug         = defined( 'WP_DEBUG' ) && WP_DEBUG ? __( 'Enabled', 'folioblocks' ) : __( 'Disabled', 'folioblocks' );
-		$wp_debug_log     = defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ? __( 'Enabled', 'folioblocks' ) : __( 'Disabled', 'folioblocks' );
-		$wp_debug_display = defined( 'WP_DEBUG_DISPLAY' ) && WP_DEBUG_DISPLAY ? __( 'Enabled', 'folioblocks' ) : __( 'Disabled', 'folioblocks' );
-		$wp_cron          = defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ? __( 'Disabled', 'folioblocks' ) : __( 'Enabled', 'folioblocks' );
-		$script_debug     = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? __( 'Enabled', 'folioblocks' ) : __( 'Disabled', 'folioblocks' );
+		$wp_debug         = defined( 'WP_DEBUG' ) && WP_DEBUG ? 'Enabled' : 'Disabled';
+		$wp_debug_log     = defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ? 'Enabled' : 'Disabled';
+		$wp_debug_display = defined( 'WP_DEBUG_DISPLAY' ) && WP_DEBUG_DISPLAY ? 'Enabled' : 'Disabled';
+		$wp_cron          = defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ? 'Disabled' : 'Enabled';
+		$script_debug     = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? 'Enabled' : 'Disabled';
 
 		$plugins_list = array();
 		foreach ( $active_plugins as $plugin_file ) {
@@ -160,87 +148,89 @@ if ( ! function_exists( 'fbks_render_system_info_page' ) ) {
 			$server_software = sanitize_text_field( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) );
 		}
 
+		// Keep the support export in English so support requests stay consistent across sites.
+		// Only the admin UI rendered below should be localized.
 		$lines   = array();
-		$lines[] = __( '=== Environment ===', 'folioblocks' );
-		$lines[] = sprintf( __( 'Site URL: %s', 'folioblocks' ), $site_url );
-		$lines[] = sprintf( __( 'Home URL: %s', 'folioblocks' ), $home_url );
-		$lines[] = sprintf( __( 'Multisite: %s', 'folioblocks' ), $get_yes_no( is_multisite() ) );
-		$lines[] = sprintf( __( 'WordPress Version: %s', 'folioblocks' ), get_bloginfo( 'version' ) );
-		$lines[] = sprintf( __( 'PHP Version: %s', 'folioblocks' ), PHP_VERSION );
-		$lines[] = sprintf( __( 'MySQL Version: %s', 'folioblocks' ), $wpdb->db_version() );
-		$lines[] = sprintf( __( 'Server Software: %s', 'folioblocks' ), $server_software );
+		$lines[] = '=== Environment ===';
+		$lines[] = sprintf( 'Site URL: %s', $site_url );
+		$lines[] = sprintf( 'Home URL: %s', $home_url );
+		$lines[] = sprintf( 'Multisite: %s', $get_yes_no( is_multisite() ) );
+		$lines[] = sprintf( 'WordPress Version: %s', get_bloginfo( 'version' ) );
+		$lines[] = sprintf( 'PHP Version: %s', PHP_VERSION );
+		$lines[] = sprintf( 'MySQL Version: %s', $wpdb->db_version() );
+		$lines[] = sprintf( 'Server Software: %s', $server_software );
 		$lines[] = '';
 
-		$lines[] = __( '=== Theme ===', 'folioblocks' );
-		$lines[] = sprintf( __( 'Active Theme: %s', 'folioblocks' ), trim( $theme_name . ' ' . $theme_ver ) );
+		$lines[] = '=== Theme ===';
+		$lines[] = sprintf( 'Active Theme: %s', trim( $theme_name . ' ' . $theme_ver ) );
 		if ( $theme_parent ) {
 			$lines[] = sprintf(
-				__( 'Parent Theme: %s', 'folioblocks' ),
+				'Parent Theme: %s',
 				trim( $theme_parent->get( 'Name' ) . ' ' . $theme_parent->get( 'Version' ) )
 			);
 		}
-		$lines[] = sprintf( __( 'Block Theme: %s', 'folioblocks' ), $is_block_theme );
+		$lines[] = sprintf( 'Block Theme: %s', $is_block_theme );
 		$lines[] = '';
 
-		$lines[] = __( '=== FolioBlocks ===', 'folioblocks' );
-		$lines[] = sprintf( __( 'FolioBlocks Version: %s', 'folioblocks' ), $plugin_version ? $plugin_version : __( 'Unknown', 'folioblocks' ) );
-		$lines[] = sprintf( __( 'FolioBlocks License: %s', 'folioblocks' ), $license_type );
-		$lines[] = sprintf( __( 'WooCommerce: %s', 'folioblocks' ), $woocommerce_status );
+		$lines[] = '=== FolioBlocks ===';
+		$lines[] = sprintf( 'FolioBlocks Version: %s', $plugin_version ? $plugin_version : 'Unknown' );
+		$lines[] = sprintf( 'FolioBlocks License: %s', $license_type );
+		$lines[] = sprintf( 'WooCommerce: %s', $woocommerce_status );
 		$lines[] = '';
-		$lines[] = __( 'Available Blocks:', 'folioblocks' );
+		$lines[] = 'Available Blocks:';
 		if ( ! empty( $folioblocks_blocks ) ) {
 			foreach ( $folioblocks_blocks as $block_label ) {
 				$lines[] = '  - ' . $block_label;
 			}
 		} else {
-			$lines[] = '  ' . __( '(No FolioBlocks blocks registered)', 'folioblocks' );
+			$lines[] = '  (No FolioBlocks blocks registered)';
 		}
 		$lines[] = '';
 
-		$lines[] = __( '=== PHP & Server Extensions ===', 'folioblocks' );
-		$lines[] = sprintf( __( 'PHP GD: %s', 'folioblocks' ), $gd_loaded );
-		$lines[] = sprintf( __( 'PHP Imagick: %s', 'folioblocks' ), $imagick_loaded );
-		$lines[] = sprintf( __( 'PHP OpenSSL: %s', 'folioblocks' ), $openssl_loaded );
-		$lines[] = sprintf( __( 'PHP HTTP Wrapper: %s', 'folioblocks' ), $http_wrapper );
-		$lines[] = sprintf( __( 'PHP HTTPS Wrapper: %s', 'folioblocks' ), $https_wrapper );
-		$lines[] = sprintf( __( 'PHP Config[allow_url_fopen]: %s', 'folioblocks' ), $allow_url_fopen );
-		$lines[] = sprintf( __( 'PHP Config[allow_url_include]: %s', 'folioblocks' ), $allow_url_inc );
-		$lines[] = sprintf( __( 'PHP Memory Limit: %s', 'folioblocks' ), ini_get( 'memory_limit' ) );
-		$lines[] = sprintf( __( 'PHP Max Execution Time: %s', 'folioblocks' ), ini_get( 'max_execution_time' ) );
-		$lines[] = sprintf( __( 'PHP Post Max Size: %s', 'folioblocks' ), ini_get( 'post_max_size' ) );
-		$lines[] = sprintf( __( 'Max Upload Size: %s', 'folioblocks' ), size_format( wp_max_upload_size() ) );
+		$lines[] = '=== PHP & Server Extensions ===';
+		$lines[] = sprintf( 'PHP GD: %s', $gd_loaded );
+		$lines[] = sprintf( 'PHP Imagick: %s', $imagick_loaded );
+		$lines[] = sprintf( 'PHP OpenSSL: %s', $openssl_loaded );
+		$lines[] = sprintf( 'PHP HTTP Wrapper: %s', $http_wrapper );
+		$lines[] = sprintf( 'PHP HTTPS Wrapper: %s', $https_wrapper );
+		$lines[] = sprintf( 'PHP Config[allow_url_fopen]: %s', $allow_url_fopen );
+		$lines[] = sprintf( 'PHP Config[allow_url_include]: %s', $allow_url_inc );
+		$lines[] = sprintf( 'PHP Memory Limit: %s', ini_get( 'memory_limit' ) );
+		$lines[] = sprintf( 'PHP Max Execution Time: %s', ini_get( 'max_execution_time' ) );
+		$lines[] = sprintf( 'PHP Post Max Size: %s', ini_get( 'post_max_size' ) );
+		$lines[] = sprintf( 'Max Upload Size: %s', size_format( wp_max_upload_size() ) );
 		$lines[] = '';
 
-		$lines[] = __( '=== Images & Thumbnails ===', 'folioblocks' );
+		$lines[] = '=== Images & Thumbnails ===';
 		$lines[] = sprintf(
-			__( 'Available Image Editors: %s', 'folioblocks' ),
-			! empty( $available_image_editors ) ? implode( ', ', $available_image_editors ) : __( 'Unknown', 'folioblocks' )
+			'Available Image Editors: %s',
+			! empty( $available_image_editors ) ? implode( ', ', $available_image_editors ) : 'Unknown'
 		);
 		$lines[] = sprintf(
-			__( 'Default Image Editor: %s', 'folioblocks' ),
-			$default_image_editor ? $default_image_editor : __( 'Unknown', 'folioblocks' )
+			'Default Image Editor: %s',
+			$default_image_editor ? $default_image_editor : 'Unknown'
 		);
-		$lines[] = sprintf( __( 'Thumbnail Generation Test URL: %s', 'folioblocks' ), $thumb_test_url );
-		$lines[] = sprintf( __( 'Thumbnail Generation Test Result: %s', 'folioblocks' ), $thumb_test_result );
-		$lines[] = sprintf( __( 'HTTPS Thumb Mismatch: %s', 'folioblocks' ), $https_thumb_mismatch );
+		$lines[] = sprintf( 'Thumbnail Generation Test URL: %s', $thumb_test_url );
+		$lines[] = sprintf( 'Thumbnail Generation Test Result: %s', $thumb_test_result );
+		$lines[] = sprintf( 'HTTPS Thumb Mismatch: %s', $https_thumb_mismatch );
 		$lines[] = '';
 
-		$lines[] = __( '=== WordPress Configuration ===', 'folioblocks' );
-		$lines[] = sprintf( __( 'WP_DEBUG: %s', 'folioblocks' ), $wp_debug );
-		$lines[] = sprintf( __( 'WP_DEBUG_LOG: %s', 'folioblocks' ), $wp_debug_log );
-		$lines[] = sprintf( __( 'WP_DEBUG_DISPLAY: %s', 'folioblocks' ), $wp_debug_display );
-		$lines[] = sprintf( __( 'DISABLE_WP_CRON: %s', 'folioblocks' ), $wp_cron );
-		$lines[] = sprintf( __( 'SCRIPT_DEBUG: %s', 'folioblocks' ), $script_debug );
-		$lines[] = sprintf( __( 'REST API Status: %s', 'folioblocks' ), $rest_api_status );
+		$lines[] = '=== WordPress Configuration ===';
+		$lines[] = sprintf( 'WP_DEBUG: %s', $wp_debug );
+		$lines[] = sprintf( 'WP_DEBUG_LOG: %s', $wp_debug_log );
+		$lines[] = sprintf( 'WP_DEBUG_DISPLAY: %s', $wp_debug_display );
+		$lines[] = sprintf( 'DISABLE_WP_CRON: %s', $wp_cron );
+		$lines[] = sprintf( 'SCRIPT_DEBUG: %s', $script_debug );
+		$lines[] = sprintf( 'REST API Status: %s', $rest_api_status );
 		$lines[] = '';
 
-		$lines[] = __( '=== Active Plugins ===', 'folioblocks' );
+		$lines[] = '=== Active Plugins ===';
 		if ( ! empty( $plugins_list ) ) {
 			foreach ( $plugins_list as $plugin_line ) {
 				$lines[] = '  - ' . $plugin_line;
 			}
 		} else {
-			$lines[] = '  ' . __( '(No active plugins found)', 'folioblocks' );
+			$lines[] = '  (No active plugins found)';
 		}
 		$lines[] = '';
 

@@ -3,7 +3,6 @@ import {
 	buildPot,
 	collectMessages,
 	loadLocaleMap,
-	preservedSourceStrings,
 	projectRoot,
 	writeFile,
 } from './shared.mjs';
@@ -16,10 +15,6 @@ if (!locale) {
 
 const localeMap = loadLocaleMap(locale);
 const translations = { ...(localeMap.translations ?? {}) };
-
-for (const msgid of preservedSourceStrings) {
-	delete translations[msgid];
-}
 
 const outputPath = path.join(projectRoot, 'languages', `${'folioblocks'}-${locale}.po`);
 

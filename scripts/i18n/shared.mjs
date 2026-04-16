@@ -1,59 +1,46 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-export const projectRoot = path.resolve(__dirname, '..', '..');
-export const textDomain = 'folioblocks';
+export const projectRoot = path.resolve(__dirname, "..", "..");
+export const textDomain = "folioblocks";
 export const preservedSourceStrings = new Set([
-	'Background Video Block',
-	'Before & After (Legacy)',
-	'Before & After Block',
-	'Carousel Gallery',
-	'Carousel Gallery Block',
-	'Carousel Gallery (Legacy)',
-	'Filmstrip Gallery',
-	'Filmstrip Gallery Block',
-	'Grid Gallery (Legacy)',
-	'Grid Gallery',
-	'Grid Gallery Block',
-	'Image Block',
-	'Justified Gallery (Legacy)',
-	'Justified Gallery',
-	'Justified Gallery Block',
-	'Loupe Block',
-	'Masonry Gallery (Legacy)',
-	'Masonry Gallery',
-	'Masonry Gallery Block',
-	'Modular Gallery (Legacy)',
-	'Modular Gallery',
-	'Modular Gallery Block (Pro Only)',
-	'PB Image Block (Legacy)',
-	'PB Video Block (Legacy)',
-	'Video Block',
-	'Video Gallery (Legacy)',
-	'Video Gallery',
-	'Video Gallery Block',
-	'Latest News From FolioBlocks Website:',
-	'Changelog:',
-	'View Full Changelog',
+	"Background Video Block",
+	"Before & After Block",
+	"Carousel Gallery",
+	"Carousel Gallery Block",
+	"Filmstrip Gallery",
+	"Filmstrip Gallery Block",
+	"Grid Gallery",
+	"Grid Gallery Block",
+	"Image Block",
+	"Justified Gallery",
+	"Justified Gallery Block",
+	"Loupe Block",
+	"Masonry Gallery",
+	"Masonry Gallery Block",
+	"Modular Gallery",
+	"Modular Gallery Block (Pro Only)",
+	"Video Block",
+	"Video Gallery",
+	"Video Gallery Block",
+	"Latest News From FolioBlocks Website:",
+	"Changelog:",
+	"View Full Changelog",
 ]);
 
-const sourceDirectories = [
-	'folioblocks.php',
-	'includes',
-	'src',
-];
+const sourceDirectories = ["folioblocks.php", "includes", "src"];
 
 const ignoredDirectories = new Set([
-	'.git',
-	'build',
-	'languages',
-	'node_modules',
-	'scripts',
-	'vendor',
+	".git",
+	"build",
+	"languages",
+	"node_modules",
+	"scripts",
+	"vendor",
 ]);
 
 const translationCallPattern =
@@ -61,25 +48,25 @@ const translationCallPattern =
 
 function escapePoString(value) {
 	return value
-		.replace(/\\/g, '\\\\')
+		.replace(/\\/g, "\\\\")
 		.replace(/"/g, '\\"')
-		.replace(/\t/g, '\\t')
-		.replace(/\r/g, '\\r')
-		.replace(/\n/g, '\\n');
+		.replace(/\t/g, "\\t")
+		.replace(/\r/g, "\\r")
+		.replace(/\n/g, "\\n");
 }
 
 function unescapeQuotedString(value) {
 	return value
-		.replace(/\\\\/g, '\\')
+		.replace(/\\\\/g, "\\")
 		.replace(/\\'/g, "'")
 		.replace(/\\"/g, '"')
-		.replace(/\\n/g, '\n')
-		.replace(/\\r/g, '\r')
-		.replace(/\\t/g, '\t');
+		.replace(/\\n/g, "\n")
+		.replace(/\\r/g, "\r")
+		.replace(/\\t/g, "\t");
 }
 
 function getLineNumber(text, index) {
-	return text.slice(0, index).split('\n').length;
+	return text.slice(0, index).split("\n").length;
 }
 
 function addMessage(store, msgid, reference) {
@@ -95,7 +82,9 @@ function addMessage(store, msgid, reference) {
 }
 
 function walkDirectory(absoluteDirectory, collectedFiles) {
-	for (const entry of fs.readdirSync(absoluteDirectory, { withFileTypes: true })) {
+	for (const entry of fs.readdirSync(absoluteDirectory, {
+		withFileTypes: true,
+	})) {
 		if (entry.isDirectory()) {
 			if (!ignoredDirectories.has(entry.name)) {
 				walkDirectory(path.join(absoluteDirectory, entry.name), collectedFiles);
@@ -104,9 +93,9 @@ function walkDirectory(absoluteDirectory, collectedFiles) {
 		}
 
 		if (
-			entry.name.endsWith('.php') ||
-			entry.name.endsWith('.js') ||
-			entry.name === 'block.json'
+			entry.name.endsWith(".php") ||
+			entry.name.endsWith(".js") ||
+			entry.name === "block.json"
 		) {
 			collectedFiles.push(path.join(absoluteDirectory, entry.name));
 		}
@@ -167,20 +156,31 @@ function extractMessagesFromBlockJson(relativePath, content, messages) {
 			return;
 		}
 
-		if (!node || typeof node !== 'object') {
+		if (!node || typeof node !== "object") {
 			return;
 		}
 
 		for (const [key, value] of Object.entries(node)) {
-			if (typeof value === 'string' && new Set(['title', 'description', 'label', 'placeholder']).has(key)) {
-				addMessage(messages, value, `${relativePath}:${lineMap.get(value) ?? 1}`);
+			if (
+				typeof value === "string" &&
+				new Set(["title", "description", "label", "placeholder"]).has(key)
+			) {
+				addMessage(
+					messages,
+					value,
+					`${relativePath}:${lineMap.get(value) ?? 1}`,
+				);
 				continue;
 			}
 
-			if (key === 'keywords' && Array.isArray(value)) {
+			if (key === "keywords" && Array.isArray(value)) {
 				for (const keyword of value) {
-					if (typeof keyword === 'string') {
-						addMessage(messages, keyword, `${relativePath}:${lineMap.get(keyword) ?? 1}`);
+					if (typeof keyword === "string") {
+						addMessage(
+							messages,
+							keyword,
+							`${relativePath}:${lineMap.get(keyword) ?? 1}`,
+						);
 					}
 				}
 				continue;
@@ -197,10 +197,12 @@ export function collectMessages() {
 	const messages = new Map();
 
 	for (const absoluteFile of listSourceFiles()) {
-		const relativePath = path.relative(projectRoot, absoluteFile).replaceAll(path.sep, '/');
-		const content = fs.readFileSync(absoluteFile, 'utf8');
+		const relativePath = path
+			.relative(projectRoot, absoluteFile)
+			.replaceAll(path.sep, "/");
+		const content = fs.readFileSync(absoluteFile, "utf8");
 
-		if (path.basename(absoluteFile) === 'block.json') {
+		if (path.basename(absoluteFile) === "block.json") {
 			extractMessagesFromBlockJson(relativePath, content, messages);
 		} else {
 			extractMessagesFromCode(relativePath, content, messages);
@@ -209,70 +211,119 @@ export function collectMessages() {
 
 	return new Map(
 		Array.from(messages.entries()).sort(([left], [right]) =>
-			left.localeCompare(right)
-		)
+			left.localeCompare(right),
+		),
 	);
 }
 
 function formatPoString(keyword, value) {
-	if (!value.includes('\n')) {
+	if (!value.includes("\n")) {
 		return `${keyword} "${escapePoString(value)}"`;
 	}
 
-	const lines = value.split('\n');
+	const lines = value.split("\n");
 
 	return [
 		`${keyword} ""`,
 		...lines.map((line, index) => {
-			const suffix = index === lines.length - 1 ? '' : '\\n';
+			const suffix = index === lines.length - 1 ? "" : "\\n";
 			return `"${escapePoString(line + suffix)}"`;
 		}),
-	].join('\n');
+	].join("\n");
 }
 
-export function buildPot(messages, { language = '', locale = '', translations = {} } = {}) {
-	const now = new Date().toISOString().replace('T', ' ').replace(/\.\d+Z$/, '+0000');
+export function buildPot(
+	messages,
+	{ language = "", locale = "", translations = {} } = {},
+) {
+	const now = new Date()
+		.toISOString()
+		.replace("T", " ")
+		.replace(/\.\d+Z$/, "+0000");
 	const headerLines = [
-		'Project-Id-Version: FolioBlocks 1.2.3\\n',
-		'Report-Msgid-Bugs-To: https://folioblocks.com\\n',
+		"Project-Id-Version: FolioBlocks 1.2.3\\n",
+		"Report-Msgid-Bugs-To: https://folioblocks.com\\n",
 		`POT-Creation-Date: ${now}\\n`,
-		'PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\\n',
-		'Last-Translator: \\n',
-		'Language-Team: \\n',
+		"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\\n",
+		"Last-Translator: \\n",
+		"Language-Team: \\n",
 		`Language: ${language}\\n`,
-		'MIME-Version: 1.0\\n',
-		'Content-Type: text/plain; charset=UTF-8\\n',
-		'Content-Transfer-Encoding: 8bit\\n',
-		'Plural-Forms: nplurals=2; plural=(n != 1);\\n',
-		'X-Generator: FolioBlocks custom i18n tooling\\n',
-		'X-Domain: folioblocks\\n',
+		"MIME-Version: 1.0\\n",
+		"Content-Type: text/plain; charset=UTF-8\\n",
+		"Content-Transfer-Encoding: 8bit\\n",
+		"Plural-Forms: nplurals=2; plural=(n != 1);\\n",
+		"X-Generator: FolioBlocks custom i18n tooling\\n",
+		"X-Domain: folioblocks\\n",
 	];
 
 	const chunks = [
 		'msgid ""',
 		'msgstr ""',
 		...headerLines.map((line) => `"${line}"`),
-		'',
+		"",
 	];
 
 	for (const [msgid, references] of messages.entries()) {
-		chunks.push(`#: ${Array.from(references).join(' ')}`);
-		chunks.push(formatPoString('msgid', msgid));
-		chunks.push(formatPoString('msgstr', translations[msgid] ?? ''));
-		chunks.push('');
+		chunks.push(`#: ${Array.from(references).join(" ")}`);
+		chunks.push(formatPoString("msgid", msgid));
+		chunks.push(formatPoString("msgstr", translations[msgid] ?? ""));
+		chunks.push("");
 	}
 
-	return chunks.join('\n');
+	return chunks.join("\n");
 }
 
 export function loadLocaleMap(locale) {
-	const localePath = path.join(projectRoot, 'scripts', 'i18n', 'locales', `${locale}.json`);
+	const localePath = path.join(
+		projectRoot,
+		"scripts",
+		"i18n",
+		"locales",
+		`${locale}.json`,
+	);
 
 	if (!fs.existsSync(localePath)) {
 		throw new Error(`Locale map not found: ${localePath}`);
 	}
 
-	return JSON.parse(fs.readFileSync(localePath, 'utf8'));
+	return JSON.parse(fs.readFileSync(localePath, "utf8"));
+}
+
+export function pruneLocaleMap(locale) {
+	const localePath = path.join(
+		projectRoot,
+		"scripts",
+		"i18n",
+		"locales",
+		`${locale}.json`,
+	);
+	const localeMap = loadLocaleMap(locale);
+	const activeMessages = new Set(collectMessages().keys());
+	const translations = localeMap.translations ?? {};
+	const filteredTranslations = {};
+	let removedCount = 0;
+
+	for (const [msgid, translation] of Object.entries(translations)) {
+		if (!activeMessages.has(msgid)) {
+			removedCount += 1;
+			continue;
+		}
+
+		filteredTranslations[msgid] = translation;
+	}
+
+	if (removedCount > 0) {
+		writeFile(
+			localePath,
+			`${JSON.stringify(
+				{ ...localeMap, translations: filteredTranslations },
+				null,
+				2,
+			)}\n`,
+		);
+	}
+
+	return removedCount;
 }
 
 function parsePoMultilineBlock(lines, index, keyword) {
@@ -290,7 +341,7 @@ function parsePoMultilineBlock(lines, index, keyword) {
 		throw new Error(`Invalid PO ${keyword} declaration: ${firstLine}`);
 	}
 
-	let value = '';
+	let value = "";
 	let cursor = index + 1;
 
 	while (cursor < lines.length) {
@@ -311,7 +362,7 @@ function parsePoMultilineBlock(lines, index, keyword) {
 }
 
 export function parsePoFile(poPath) {
-	const content = fs.readFileSync(poPath, 'utf8');
+	const content = fs.readFileSync(poPath, "utf8");
 	const lines = content.split(/\r?\n/);
 	const translations = new Map();
 	const headers = {};
@@ -320,24 +371,24 @@ export function parsePoFile(poPath) {
 	while (cursor < lines.length) {
 		const line = lines[cursor].trim();
 
-		if (!line || line.startsWith('#')) {
+		if (!line || line.startsWith("#")) {
 			cursor += 1;
 			continue;
 		}
 
-		if (!line.startsWith('msgid')) {
+		if (!line.startsWith("msgid")) {
 			cursor += 1;
 			continue;
 		}
 
-		const msgidBlock = parsePoMultilineBlock(lines, cursor, 'msgid');
+		const msgidBlock = parsePoMultilineBlock(lines, cursor, "msgid");
 		cursor = msgidBlock.nextIndex;
-		const msgstrBlock = parsePoMultilineBlock(lines, cursor, 'msgstr');
+		const msgstrBlock = parsePoMultilineBlock(lines, cursor, "msgstr");
 		cursor = msgstrBlock.nextIndex;
 
-		if (msgidBlock.value === '') {
-			for (const headerLine of msgstrBlock.value.split('\n')) {
-				const separatorIndex = headerLine.indexOf(':');
+		if (msgidBlock.value === "") {
+			for (const headerLine of msgstrBlock.value.split("\n")) {
+				const separatorIndex = headerLine.indexOf(":");
 				if (separatorIndex === -1) {
 					continue;
 				}
@@ -360,12 +411,12 @@ export function ensureDirectory(directoryPath) {
 }
 
 export function listBlockScriptHandles() {
-	const buildRoot = path.join(projectRoot, 'build');
+	const buildRoot = path.join(projectRoot, "build");
 	const handles = [];
 	const fieldMappings = {
-		editorScript: 'editor-script',
-		script: 'script',
-		viewScript: 'view-script',
+		editorScript: "editor-script",
+		script: "script",
+		viewScript: "view-script",
 	};
 
 	if (!fs.existsSync(buildRoot)) {
@@ -377,12 +428,12 @@ export function listBlockScriptHandles() {
 			continue;
 		}
 
-		const blockJsonPath = path.join(buildRoot, entry.name, 'block.json');
+		const blockJsonPath = path.join(buildRoot, entry.name, "block.json");
 		if (!fs.existsSync(blockJsonPath)) {
 			continue;
 		}
 
-		const metadata = JSON.parse(fs.readFileSync(blockJsonPath, 'utf8'));
+		const metadata = JSON.parse(fs.readFileSync(blockJsonPath, "utf8"));
 		const blockName = metadata.name;
 
 		if (!blockName) {
@@ -399,11 +450,11 @@ export function listBlockScriptHandles() {
 				: [metadata[fieldName]];
 
 			assets.forEach((asset, index) => {
-				if (typeof asset !== 'string' || !asset.startsWith('file:')) {
+				if (typeof asset !== "string" || !asset.startsWith("file:")) {
 					return;
 				}
 
-				let handle = `${blockName.replace('/', '-')}-${suffix}`;
+				let handle = `${blockName.replace("/", "-")}-${suffix}`;
 				if (index > 0) {
 					handle += `-${index + 1}`;
 				}
@@ -417,12 +468,12 @@ export function listBlockScriptHandles() {
 }
 
 export function listBlockScriptAssets() {
-	const buildRoot = path.join(projectRoot, 'build');
+	const buildRoot = path.join(projectRoot, "build");
 	const assets = [];
 	const fieldMappings = {
-		editorScript: 'editor-script',
-		script: 'script',
-		viewScript: 'view-script',
+		editorScript: "editor-script",
+		script: "script",
+		viewScript: "view-script",
 	};
 
 	if (!fs.existsSync(buildRoot)) {
@@ -435,13 +486,13 @@ export function listBlockScriptAssets() {
 		}
 
 		const blockDirectory = path.join(buildRoot, entry.name);
-		const blockJsonPath = path.join(blockDirectory, 'block.json');
+		const blockJsonPath = path.join(blockDirectory, "block.json");
 
 		if (!fs.existsSync(blockJsonPath)) {
 			continue;
 		}
 
-		const metadata = JSON.parse(fs.readFileSync(blockJsonPath, 'utf8'));
+		const metadata = JSON.parse(fs.readFileSync(blockJsonPath, "utf8"));
 		const blockName = metadata.name;
 
 		if (!blockName) {
@@ -458,18 +509,18 @@ export function listBlockScriptAssets() {
 				: [metadata[fieldName]];
 
 			entriesForField.forEach((asset, index) => {
-				if (typeof asset !== 'string' || !asset.startsWith('file:')) {
+				if (typeof asset !== "string" || !asset.startsWith("file:")) {
 					return;
 				}
 
-				let handle = `${blockName.replace('/', '-')}-${suffix}`;
+				let handle = `${blockName.replace("/", "-")}-${suffix}`;
 				if (index > 0) {
 					handle += `-${index + 1}`;
 				}
 
 				assets.push({
 					handle,
-					filePath: path.join(blockDirectory, asset.replace(/^file:\.\//, '')),
+					filePath: path.join(blockDirectory, asset.replace(/^file:\.\//, "")),
 				});
 			});
 		}
@@ -483,7 +534,7 @@ export function extractMessagesFromBuiltScript(filePath) {
 		return new Set();
 	}
 
-	const content = fs.readFileSync(filePath, 'utf8');
+	const content = fs.readFileSync(filePath, "utf8");
 	const messages = new Set();
 	const patterns = [
 		/\b(?:__|_x|_n|_nx)\s*\)?\s*\(\s*(['"])((?:\\.|(?!\1)[\s\S])*?)\1\s*,\s*(['"])folioblocks\3/g,
@@ -501,5 +552,5 @@ export function extractMessagesFromBuiltScript(filePath) {
 
 export function writeFile(filePath, content) {
 	ensureDirectory(path.dirname(filePath));
-	fs.writeFileSync(filePath, content, 'utf8');
+	fs.writeFileSync(filePath, content, "utf8");
 }

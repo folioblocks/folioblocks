@@ -1,5 +1,5 @@
 {
-  "translation-revision-date": "2026-03-25T15:53:44.318Z",
+  "translation-revision-date": "2026-04-16T09:26:59.879Z",
   "generator": "FolioBlocks custom i18n tooling",
   "domain": "messages",
   "locale_data": {
@@ -9,17 +9,23 @@
         "lang": "es_ES",
         "plural-forms": "nplurals=2; plural=(n != 1);"
       },
-      ". Note: Some provider videos may not work due to privacy settings.": [
-        ". Nota: puede que algunos vídeos de determinados proveedores no funcionen debido a ajustes de privacidad."
-      ],
       "Active Item Colors": [
         "Colores del elemento activo"
       ],
       "Add Background Video": [
         "Añadir vídeo de fondo"
       ],
+      "Add First Image": [
+        "Anadir primera imagen"
+      ],
+      "Add Image": [
+        "Anadir imagen"
+      ],
       "Add Image Row": [
         "Añadir fila de imágenes"
+      ],
+      "Add Image Stack": [
+        "Anadir pila de imagenes"
       ],
       "Add Images": [
         "Añadir imágenes"
@@ -32,9 +38,6 @@
       ],
       "Add content…": [
         "Añadir contenido…"
-      ],
-      "Add first video. Upload, select from media library, or insert from URL.": [
-        "Añade el primer vídeo. Súbelo, selecciónalo de la biblioteca multimedia o insértalo desde una URL."
       ],
       "Add image caption.": [
         "Añade un pie de foto a la imagen."
@@ -54,14 +57,17 @@
       "Add to Image Stack": [
         "Añadir a Image Stack"
       ],
+      "Adjust the default amount of columns on %s.": [
+        "Ajusta la cantidad predeterminada de columnas en %s."
+      ],
+      "Adjust the height (%1$s) on %2$s.": [
+        "Ajusta la altura (%1$s) en %2$s."
+      ],
       "Adjust the horizontal focal point per device.": [
         "Ajusta el punto focal horizontal por dispositivo."
       ],
       "Adjust the vertical focal point per device.": [
         "Ajusta el punto focal vertical por dispositivo."
-      ],
-      "Affects layout on mobile only. Switch ONLY when all images are vertical in orientation.": [
-        "Afecta al diseño solo en móvil. Actívalo SOLO cuando todas las imágenes tengan orientación vertical."
       ],
       "After": [
         "Después"
@@ -77,12 +83,6 @@
       ],
       "All": [
         "Todos"
-      ],
-      "Allows video to open in a Lightbox while editing.": [
-        "Permite abrir el vídeo en una Lightbox mientras se edita."
-      ],
-      "Allows videos to open in a Lightbox while editing.": [
-        "Permite abrir los vídeos en una Lightbox mientras se editan."
       ],
       "Alternative Text": [
         "Texto alternativo"
@@ -108,9 +108,6 @@
       "Automatically advance to the next image in the gallery.": [
         "Avanza automáticamente a la siguiente imagen de la galería."
       ],
-      "Automatically loop the video for continous play.": [
-        "Repetir automáticamente el vídeo para una reproducción continua."
-      ],
       "Autoplay Speed (seconds)": [
         "Velocidad de reproducción automática (segundos)"
       ],
@@ -122,6 +119,9 @@
       ],
       "Before": [
         "Antes"
+      ],
+      "Before & After Block": [
+        "Bloque antes y despues"
       ],
       "Before & After Block Settings": [
         "Ajustes de Before & After Block"
@@ -150,6 +150,9 @@
       "Carousel Control Styles": [
         "Estilos de controles de Carousel"
       ],
+      "Carousel Gallery": [
+        "Galeria de carrusel"
+      ],
       "Carousel Gallery Settings": [
         "Ajustes de Carousel Gallery"
       ],
@@ -170,6 +173,9 @@
       ],
       "Change Video": [
         "Cambiar vídeo"
+      ],
+      "Change device": [
+        "Cambiar dispositivo"
       ],
       "Change the color of the Loupe frame.": [
         "Cambia el color del marco de la Loupe."
@@ -197,12 +203,6 @@
       ],
       "Choose when to display the Add to Cart icon.": [
         "Elige cuándo mostrar el icono de añadir al carrito."
-      ],
-      "Choose where the thumbnail strip appears.": [
-        "Elige dónde aparece la tira de miniaturas."
-      ],
-      "Choose whether the slider moves left-to-right or top-to-bottom.": [
-        "Elige si el deslizador se mueve de izquierda a derecha o de arriba abajo."
       ],
       "Circle": [
         "Círculo"
@@ -234,26 +234,26 @@
       "Dark": [
         "Oscuro"
       ],
+      "Default": [
+        "Predeterminado"
+      ],
       "Default Add To Cart Icon Behavior": [
         "Comportamiento predeterminado del icono de añadir al carrito"
       ],
       "Default Overlay": [
         "Superposición predeterminada"
       ],
-      "Describe the purpose of the image. Leave empty if decorative.": [
-        "Describe el propósito de la imagen. Déjalo vacío si es decorativa."
-      ],
       "Description": [
         "Descripción"
+      ],
+      "Desktop": [
+        "Escritorio"
       ],
       "Disable Right-Click": [
         "Desactivar clic derecho"
       ],
       "Disable Right-Click on Page": [
         "Desactivar clic derecho en la página"
-      ],
-      "Disable background video is on mobile and display poster image.": [
-        "Desactiva el vídeo de fondo en móvil y muestra la imagen de póster."
       ],
       "Disable on Mobile": [
         "Desactivar en móvil"
@@ -282,17 +282,11 @@
       "Display Image title when hovering over image.": [
         "Mostrar el título de la imagen al pasar el cursor sobre la imagen."
       ],
-      "Display image captions inside the lightbox.": [
-        "Mostrar los pies de foto dentro de la Lightbox."
-      ],
       "Display image title or Product Info when hovering over images.": [
         "Mostrar el título de la imagen o la información del producto al pasar el cursor sobre las imágenes."
       ],
       "Display image title when hovering over image.": [
         "Mostrar el título de la imagen al pasar el cursor sobre la imagen."
-      ],
-      "Display the image title when hovering over images.": [
-        "Mostrar el título de la imagen al pasar el cursor sobre las imágenes."
       ],
       "Distribute content vertically": [
         "Distribuir contenido verticalmente"
@@ -366,9 +360,6 @@
       "Enable Lightbox in Editor": [
         "Activar Lightbox en el editor"
       ],
-      "Enable Slider & Label Style Controls": [
-        "Activar controles de estilo del deslizador y etiquetas"
-      ],
       "Enable Video Filtering": [
         "Activar filtrado de vídeos"
       ],
@@ -399,9 +390,6 @@
       "Enable visitors to download this image.": [
         "Permitir que los visitantes descarguen esta imagen."
       ],
-      "Enables lazy loading of Video Gallery thumbnails.": [
-        "Activa la carga diferida de las miniaturas de Video Gallery."
-      ],
       "Enables lazy loading of gallery images.": [
         "Activa la carga diferida de las imágenes de la galería."
       ],
@@ -410,6 +398,9 @@
       ],
       "Fade Overlay - Centered": [
         "Superposición desvanecida - centrada"
+      ],
+      "Filmstrip Gallery": [
+        "Galeria de tira de pelicula"
       ],
       "Filmstrip Gallery Settings": [
         "Ajustes de Filmstrip Gallery"
@@ -437,6 +428,9 @@
       ],
       "Focal Point Y (Up - Down)": [
         "Punto focal Y (arriba - abajo)"
+      ],
+      "Folioblocks loading": [
+        "Cargando Folioblocks"
       ],
       "Font Family": [
         "Familia tipográfica"
@@ -471,6 +465,9 @@
       "Gradient Overlay - Slide-up Bottom": [
         "Superposición de degradado - deslizar hacia arriba desde abajo"
       ],
+      "Grid Gallery": [
+        "Galeria de cuadricula"
+      ],
       "Grid Gallery Settings": [
         "Ajustes de Grid Gallery"
       ],
@@ -491,6 +488,9 @@
       ],
       "Horizontal Images": [
         "Imágenes horizontales"
+      ],
+      "Hover": [
+        "Al pasar el cursor"
       ],
       "Hover Overlay Settings": [
         "Ajustes de la superposición hover"
@@ -524,6 +524,9 @@
       ],
       "Inherit (Gallery Default)": [
         "Heredar (predeterminado de la galería)"
+      ],
+      "Justified Gallery": [
+        "Galeria justificada"
       ],
       "Justified Gallery Settings": [
         "Ajustes de Justified Gallery"
@@ -567,20 +570,23 @@
       "Link gallery images to WooCommerce products.": [
         "Vincular las imágenes de la galería a productos de WooCommerce."
       ],
-      "Link gallery videos to WooCommerce products.": [
-        "Vincular los vídeos de la galería a productos de WooCommerce."
-      ],
       "Link this image to WooCommerce products.": [
         "Vincular esta imagen a productos de WooCommerce."
       ],
       "Link this video to a WooCommerce product.": [
         "Vincular este vídeo a un producto de WooCommerce."
       ],
+      "Linked WooCommerce Product": [
+        "Producto de WooCommerce vinculado"
+      ],
       "Loop": [
         "Bucle"
       ],
       "Loop Carousel Slides": [
         "Repetir diapositivas de Carousel"
+      ],
+      "Loupe Block": [
+        "Bloque lupa"
       ],
       "Loupe Block Settings": [
         "Ajustes de Loupe Block"
@@ -600,11 +606,17 @@
       "Main Image Resolution": [
         "Resolución de la imagen principal"
       ],
+      "Masonry Gallery": [
+        "Galeria masonry"
+      ],
       "Masonry Gallery Settings": [
         "Ajustes de Masonry Gallery"
       ],
       "Medium": [
         "Mediano"
+      ],
+      "Mobile": [
+        "Movil"
       ],
       "Next image": [
         "Siguiente imagen"
@@ -614,9 +626,6 @@
       ],
       "No Thumbnail Selected": [
         "Ninguna miniatura seleccionada"
-      ],
-      "No theme fonts found. Add font families in theme.json or Global Styles.": [
-        "No se han encontrado fuentes del tema. Añade familias tipográficas en theme.json o en Estilos globales."
       ],
       "None": [
         "Ninguno"
@@ -629,9 +638,6 @@
       ],
       "Open Product Page": [
         "Abrir página del producto"
-      ],
-      "Open images in a lightbox when clicked.": [
-        "Abrir las imágenes en una Lightbox al hacer clic."
       ],
       "Overlay Colors": [
         "Colores de la superposición"
@@ -647,9 +653,6 @@
       ],
       "Overlay opacity": [
         "Opacidad de la superposición"
-      ],
-      "Paste a Vimeo URL. The block will extract the Vimeo video ID when possible.": [
-        "Pega una URL de Vimeo. El bloque extraerá el ID del vídeo de Vimeo cuando sea posible."
       ],
       "Pause autoplay": [
         "Pausar reproducción automática"
@@ -696,6 +699,9 @@
       "Remove Image Gap": [
         "Eliminar espacio entre imágenes"
       ],
+      "Remove Product": [
+        "Eliminar producto"
+      ],
       "Remove gap between images.": [
         "Eliminar el espacio entre imágenes."
       ],
@@ -726,8 +732,8 @@
       "Row Height": [
         "Altura de fila"
       ],
-      "SVG files are not supported for the Loupe effect. Please select a raster image (JPG/PNG).": [
-        "Los archivos SVG no son compatibles con el efecto Loupe. Selecciona una imagen rasterizada (JPG/PNG)."
+      "Search products…": [
+        "Buscar productos…"
       ],
       "Select After Image": [
         "Seleccionar imagen después"
@@ -762,20 +768,8 @@
       "Select or Insert Video": [
         "Seleccionar o insertar vídeo"
       ],
-      "Select or upload an image to use with the loupe effect.": [
-        "Selecciona o sube una imagen para usar con el efecto loupe."
-      ],
-      "Select the font’s weight and style (matches WordPress Typography → Appearance).": [
-        "Selecciona el grosor y el estilo de la fuente (coincide con WordPress Tipografía → Apariencia)."
-      ],
-      "Select the size of the main gallery image.": [
-        "Selecciona el tamaño de la imagen principal de la galería."
-      ],
       "Select the size of the source image.": [
         "Selecciona el tamaño de la imagen de origen."
-      ],
-      "Select two images for Before & After Block. For best results, use images with the same dimensions (width and height).": [
-        "Selecciona dos imágenes para Before & After Block. Para obtener mejores resultados, utiliza imágenes con las mismas dimensiones (anchura y altura)."
       ],
       "Selected gallery image": [
         "Imagen de galería seleccionada"
@@ -797,9 +791,6 @@
       ],
       "Set Image border width.": [
         "Establece el ancho del borde de la imagen."
-      ],
-      "Set Video Title used in the Hover Overlay, Lightbox, and for Alt-text.": [
-        "Establece el título del vídeo usado en la superposición hover, la Lightbox y el texto alternativo."
       ],
       "Set Video block border color.": [
         "Establece el color del borde del bloque de vídeo."
@@ -840,14 +831,8 @@
       "Set the color for the Overlay.": [
         "Establece el color de la superposición."
       ],
-      "Set the desired strength of the magnification effect.": [
-        "Establece la intensidad deseada del efecto de ampliación."
-      ],
       "Set the horizontal alignment of carousel controls.": [
         "Establece la alineación horizontal de los controles del Carousel."
-      ],
-      "Set the level of opacity for the Overlay.": [
-        "Establece el nivel de opacidad de la superposición."
       ],
       "Set thumbnail aspect ratio.": [
         "Establece la relación de aspecto de la miniatura."
@@ -858,14 +843,8 @@
       "Set video Thumbnail aspect ratio.": [
         "Establece la relación de aspecto de la miniatura del vídeo."
       ],
-      "Set visibility for title and play button overlays.": [
-        "Establece la visibilidad de las superposiciones del título y del botón de reproducción."
-      ],
       "Sets the default action for Add To Cart icons in this gallery. Individual images can override this setting.": [
         "Establece la acción predeterminada para los iconos de añadir al carrito en esta galería. Las imágenes individuales pueden sobrescribir este ajuste."
-      ],
-      "Sets the default action for Add To Cart icons in this gallery. Individual videos can override this setting.": [
-        "Establece la acción predeterminada para los iconos de añadir al carrito en esta galería. Los vídeos individuales pueden sobrescribir este ajuste."
       ],
       "Show Before & After Labels": [
         "Mostrar etiquetas Antes y Después"
@@ -891,9 +870,6 @@
       "Show Product Info": [
         "Mostrar información del producto"
       ],
-      "Shown in the lightbox when enabled in Gallery Lightbox Settings.": [
-        "Se muestra en la Lightbox cuando está activado en los ajustes de Lightbox de la galería."
-      ],
       "Sizing & Focal Point": [
         "Tamaño y punto focal"
       ],
@@ -909,14 +885,8 @@
       "Square": [
         "Cuadrado"
       ],
-      "Stack all images vertically on mobile devices.": [
-        "Apilar todas las imágenes verticalmente en dispositivos móviles."
-      ],
       "Stretch content height": [
         "Estirar la altura del contenido"
-      ],
-      "Supports YouTube, Vimeo, Bunny Stream, or ": [
-        "Compatible con YouTube, Vimeo, Bunny Stream o "
       ],
       "Swap Position": [
         "Intercambiar posición"
@@ -924,14 +894,11 @@
       "Switch between light and dark editor themes.": [
         "Cambiar entre los temas claro y oscuro del editor."
       ],
-      "Tablet and mobile inherit this value.": [
-        "Tablet y móvil heredan este valor."
+      "Tablet": [
+        "Tableta"
       ],
       "Text": [
         "Texto"
-      ],
-      "This is a premium feature. Unlock all features: ": [
-        "Esta es una función premium. Desbloquea todas las funciones: "
       ],
       "Thumbnail": [
         "Miniatura"
@@ -966,35 +933,8 @@
       "Upgrade to Pro": [
         "Actualizar a Pro"
       ],
-      "Upload a video, select one from your media library, or insert a URL (including Vimeo).": [
-        "Sube un vídeo, selecciona uno de tu biblioteca multimedia o inserta una URL (incluido Vimeo)."
-      ],
-      "Upload or select images to create a Filmstrip Gallery.": [
-        "Sube o selecciona imágenes para crear una Filmstrip Gallery."
-      ],
-      "Upload or select images to create a Grid Gallery.": [
-        "Sube o selecciona imágenes para crear una Grid Gallery."
-      ],
-      "Upload or select images to create a Justified Gallery.": [
-        "Sube o selecciona imágenes para crear una Justified Gallery."
-      ],
-      "Upload or select images to create a Masonry Gallery.": [
-        "Sube o selecciona imágenes para crear una Masonry Gallery."
-      ],
-      "Upload or select images to create a carousel.": [
-        "Sube o selecciona imágenes para crear un Carousel."
-      ],
-      "Upload, select from media library or insert from URL.": [
-        "Sube, selecciona de la biblioteca multimedia o inserta desde una URL."
-      ],
-      "Upload, select from media library, or insert from URL.": [
-        "Sube, selecciona de la biblioteca multimedia o inserta desde una URL."
-      ],
       "Use this video": [
         "Usar este vídeo"
-      ],
-      "Uses fonts from your theme’s Global Styles.": [
-        "Usa las fuentes de los Estilos globales de tu tema."
       ],
       "Vertical": [
         "Vertical"
@@ -1019,6 +959,9 @@
       ],
       "Video Block Styles": [
         "Estilos de Video Block"
+      ],
+      "Video Gallery": [
+        "Galeria de video"
       ],
       "Video Gallery Settings": [
         "Ajustes de Video Gallery"
@@ -1052,9 +995,6 @@
       ],
       "Vimeo background video": [
         "Vídeo de fondo de Vimeo"
-      ],
-      "We could not detect a Vimeo video ID from this URL yet. The front end may fall back to the poster until a valid Vimeo URL is provided.": [
-        "Todavía no hemos podido detectar un ID de vídeo de Vimeo a partir de esta URL. El frontend puede recurrir a la imagen de póster hasta que se proporcione una URL válida de Vimeo."
       ],
       "WooCommerce Integration": [
         "Integración con WooCommerce"
