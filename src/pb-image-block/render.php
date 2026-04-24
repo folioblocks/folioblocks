@@ -23,11 +23,11 @@ $fbks_full_src = !empty( $attributes['sizes']['full']['url'] ) ? esc_url( $attri
 $fbks_alt     = isset( $attributes['alt'] ) ? esc_attr( $attributes['alt'] ) : '';
 $fbks_title   = isset( $attributes['title'] ) ? esc_attr( $attributes['title'] ) : '';
 $fbks_caption = isset( $attributes['caption'] ) ? $attributes['caption'] : '';
-$fbks_image_size = isset( $attributes['imageSize'] ) ? $attributes['imageSize'] : 'large';
 $fbks_id      = isset( $attributes['id'] ) ? (int) $attributes['id'] : 0;
 $fbks_loading_attr = 'eager';
 
 $fbks_context = $block->context ?? [];
+$fbks_image_size = $fbks_context['folioBlocks/resolution'] ?? ( isset( $attributes['imageSize'] ) ? $attributes['imageSize'] : 'large' );
 
 $fbks_lightbox         = $fbks_context['folioBlocks/lightbox'] ?? ( ! empty( $attributes['lightbox'] ) || ! empty( $attributes['enableLightbox'] ) );
 $fbks_caption_lightbox = $fbks_context['folioBlocks/lightboxCaption'] ?? ( ! empty( $attributes['lightboxCaption'] ) || ! empty( $attributes['showCaptionInLightbox'] ) );

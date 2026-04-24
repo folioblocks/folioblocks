@@ -5,7 +5,7 @@ Tags: gallery, image gallery, photo gallery, video gallery, lightbox,
 Tested up to:      7.0
 Requires at least: 6.3
 Requires PHP: 7.4
-Stable tag:        1.2.5
+Stable tag:        1.2.6
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -106,6 +106,9 @@ No, the galleries will remain in place on your site. However, the advanced layou
 6. Video Gallery block populated with images
 
 == Changelog ==
+
+= 1.2.6 =
+* Fixed a bug in Modular Gallery that prevented the correct image resolution from being used in the front-end. 
 
 = 1.2.5 =
 * Removes support for coverting legacy (Portfolio Blocks) blocks into FolioBlocks blocks. 
