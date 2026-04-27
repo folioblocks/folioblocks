@@ -151,6 +151,9 @@ export const getVideoIframeSrc = (
 		const params = new URLSearchParams();
 		params.set( 'rel', '0' );
 		params.set( 'modestbranding', '1' );
+		if ( typeof window !== 'undefined' && window.location?.origin ) {
+			params.set( 'origin', window.location.origin );
+		}
 		if ( autoplay ) {
 			params.set( 'autoplay', '1' );
 		}

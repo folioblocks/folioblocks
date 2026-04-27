@@ -749,6 +749,9 @@ addFilter(
 		const [fontFamilies] = useSettings("typography.fontFamilies");
 		const families = normalizeFontFamilies(fontFamilies);
 		const fontFamilyOptions = getFontFamilyOptions(families, __);
+		const forceRefresh = () => {
+			setAttributes({ _forceRefresh: Date.now() });
+		};
 
 		if (!attributes.enableFilter) {
 			return null;

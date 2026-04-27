@@ -3,7 +3,7 @@
 /**
  * Plugin Name:       FolioBlocks
  * Description:       Create fast, responsive photo and video gallery with grid, masonry, justified, modular, and carousel layouts—ideal for photographers and creatives.
- * Version:           1.2.6
+ * Version:           1.2.7
  * Requires at least: 6.3
  * Requires PHP:      7.4
  * Author:            FolioBlocks
@@ -22,7 +22,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FBKS_VERSION', '1.2.6');
+define('FBKS_VERSION', '1.2.7');
 define('FBKS_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('FBKS_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('FBKS_ALL_FILTER_TOKEN', 'all');
@@ -356,7 +356,7 @@ if (function_exists('fbks_fs')) {
     add_action('admin_menu', 'fbks_register_settings_page');
     function fbks_register_settings_page()
     {
-        $icon_url = plugin_dir_url(__FILE__) . 'includes/icons/pb-brand-icon.svg';
+        $icon_url = plugin_dir_url(__FILE__) . 'includes/icons/pb-brand-icon-bw.svg';
         add_menu_page(
             __('FolioBlocks', 'folioblocks'),        // Page title
             __('FolioBlocks', 'folioblocks'),        // Menu title

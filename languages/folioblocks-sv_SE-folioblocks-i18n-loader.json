@@ -1,5 +1,5 @@
 {
-  "translation-revision-date": "2026-04-16T09:26:59.575Z",
+  "translation-revision-date": "2026-04-27T07:37:03.409Z",
   "generator": "FolioBlocks custom i18n tooling",
   "domain": "messages",
   "locale_data": {
@@ -43,19 +43,19 @@
         "Lägg till bildtext."
       ],
       "Add to Cart": [
-        "Lägg till i varukorg"
+        "Lägg till i Varukorgen"
       ],
       "Add to Cart Icon": [
-        "Ikon för Lägg till i varukorg"
+        "Ikon för Lägg till i Varukorgen"
       ],
       "Add to Cart Icon Colors": [
-        "Färger för Lägg till i varukorg-ikon"
+        "Färger för Lägg till i Varukorgen-ikon"
       ],
       "Add to Gallery": [
         "Lägg till i galleri"
       ],
       "Add to Image Stack": [
-        "Lägg till i bildstapel"
+        "Lägg till Image Stack"
       ],
       "Adjust the default amount of columns on %s.": [
         "Justera standardantalet kolumner pa %s."
@@ -130,10 +130,10 @@
         "Före-bild"
       ],
       "Blur Overlay": [
-        "Oskärpeöverlägg"
+        "Blur-överlägg"
       ],
       "Blur Overlay - Centered": [
-        "Oskärpeöverlägg - centrerat"
+        "Blur-överlägg - centrerat"
       ],
       "Border Color": [
         "Kantfärg"
@@ -169,7 +169,7 @@
         "Byt bild"
       ],
       "Change Thumbnail": [
-        "Byt miniatyr"
+        "Byt miniatyrbild"
       ],
       "Change Video": [
         "Byt video"
@@ -190,7 +190,7 @@
         "Välj stil för hovringsöverlägget."
       ],
       "Choose what appears below images in the lightbox.": [
-        "Välj vad som visas under bilderna i lightboxen."
+        "Välj vad som visas under bilderna i Lightbox."
       ],
       "Choose what appears when hovering over images.": [
         "Välj vad som visas när du hovrar över bilder."
@@ -208,7 +208,7 @@
         "Cirkel"
       ],
       "Close lightbox": [
-        "Stäng lightbox"
+        "Stäng Lightbox"
       ],
       "Collapse layout on Mobile": [
         "Fäll ihop layouten på mobil"
@@ -217,10 +217,10 @@
         "Färgläge"
       ],
       "Color Overlay": [
-        "Färgöverlägg"
+        "Färg-överlägg"
       ],
       "Color Overlay - Custom Colors": [
-        "Färgöverlägg - anpassade färger"
+        "Färg-överlägg - anpassade färger"
       ],
       "Columns": [
         "Kolumner"
@@ -229,7 +229,7 @@
         "Justering av kontroller"
       ],
       "Custom Overlay": [
-        "Anpassat överlägg"
+        "Anpassat Överlägg"
       ],
       "Dark": [
         "Mörk"
@@ -238,10 +238,10 @@
         "Standard"
       ],
       "Default Add To Cart Icon Behavior": [
-        "Standardbeteende för Lägg till i varukorg-ikonen"
+        "Standardbeteende för Lägg till i Varukorgen-ikonen"
       ],
       "Default Overlay": [
-        "Standardöverlägg"
+        "Standard-överlägg"
       ],
       "Description": [
         "Beskrivning"
@@ -259,22 +259,22 @@
         "Inaktivera på mobil"
       ],
       "Display Add to Cart Icon": [
-        "Visa Lägg till i varukorg-ikon"
+        "Visa Lägg till i Varukorgen-ikon"
       ],
       "Display Before & After labels.": [
         "Visa etiketterna Före och Efter."
       ],
       "Display Image Caption inside the lightbox.": [
-        "Visa bildtext i lightboxen."
+        "Visa bildtext i Lightbox."
       ],
       "Display Image Caption or Product Info inside the Lightbox.": [
         "Visa bildtext eller produktinfo i lightboxen."
       ],
       "Display Image Caption or product name & price inside the Lightbox.": [
-        "Visa bildtext eller produktnamn och pris i lightboxen."
+        "Visa bildtext eller produktnamn och pris i Lightbox."
       ],
       "Display Image Download Icon": [
-        "Visa nedladdningsikon för bild"
+        "Visa Nedladdnings-ikon för bild"
       ],
       "Display Image title or Product Info when hovering over images.": [
         "Visa bildtitel eller produktinfo när du hovrar över bilder."
@@ -292,10 +292,10 @@
         "Fördela innehållet vertikalt"
       ],
       "Download Icon": [
-        "Nedladdningsikon"
+        "Nedladdnings-ikon"
       ],
       "Download Icon Colors": [
-        "Färger för nedladdningsikon"
+        "Färger för Nedladdnings-ikon"
       ],
       "Download Image": [
         "Ladda ner bild"
@@ -355,10 +355,10 @@
         "Aktivera lazy load för bilder"
       ],
       "Enable Lightbox": [
-        "Aktivera lightbox"
+        "Aktivera Lightbox"
       ],
       "Enable Lightbox in Editor": [
-        "Aktivera lightbox i redigeraren"
+        "Aktivera Lightbox i blockredigeraren"
       ],
       "Enable Video Filtering": [
         "Aktivera videofiltrering"
@@ -397,7 +397,7 @@
         "Aktiverar lazy loading av bild."
       ],
       "Fade Overlay - Centered": [
-        "Tonat överlägg - centrerat"
+        "Fade-överlägg - centrerat"
       ],
       "Filmstrip Gallery": [
         "Filmremsgalleri"
@@ -463,7 +463,7 @@
         "Allmänna galleriinställningar"
       ],
       "Gradient Overlay - Slide-up Bottom": [
-        "Gradientöverlägg - glid upp från botten"
+        "Gradient-överlägg - glid upp från botten"
       ],
       "Grid Gallery": [
         "Rutnatsgalleri"
@@ -481,7 +481,7 @@
         "Dölj uppspelningsknapp"
       ],
       "Hide only the play button overlay.": [
-        "Dölj endast överlägget för uppspelningsknappen."
+        "Dölj endast uppspelningsknappen överlägget."
       ],
       "Horizontal": [
         "Horisontell"
@@ -556,7 +556,7 @@
         "Ljus"
       ],
       "Lightbox & Hover Overlay Settings": [
-        "Inställningar för lightbox och hovringsöverlägg"
+        "Inställningar för Lightbox och Hovrings-överlägg"
       ],
       "Lightbox Info": [
         "Lightbox-information"
@@ -640,19 +640,19 @@
         "Öppna produktsida"
       ],
       "Overlay Colors": [
-        "Överläggsfärger"
+        "Överläggs-färger"
       ],
       "Overlay Content": [
-        "Överläggsinnehåll"
+        "Överläggs-innehåll"
       ],
       "Overlay Style": [
-        "Överläggsstil"
+        "Överläggs-stil"
       ],
       "Overlay color": [
-        "Överläggsfärg"
+        "Överläggs-färg"
       ],
       "Overlay opacity": [
-        "Överläggsopacitet"
+        "Överläggs-opacitet"
       ],
       "Pause autoplay": [
         "Pausa automatisk uppspelning"

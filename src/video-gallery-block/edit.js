@@ -268,6 +268,27 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		setIsVideoModalOpen(true);
 	};
 
+	const filterStylesControls = applyFilters(
+		"folioBlocks.videoGallery.filterStylesControls",
+		<PanelBody
+			title={__("Gallery Filtering Styles", "folioblocks")}
+			initialOpen={true}
+		>
+			<Notice status="info" isDismissible={false}>
+				<strong>{__("Filter Styles Controls", "folioblocks")}</strong>
+				<br />
+				{__(
+					"This is a premium feature. Unlock all features:",
+					"folioblocks",
+				)}{" "}
+				<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+					{__("Upgrade to Pro", "folioblocks")}
+				</a>
+			</Notice>
+		</PanelBody>,
+		{ attributes, setAttributes },
+	);
+
 	/**
 	 * Render
 	 */
@@ -703,26 +724,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					)}
 				</PanelBody>
 
-				{applyFilters(
-					"folioBlocks.videoGallery.filterStylesControls",
-					<PanelBody
-						title={__("Gallery Filtering Styles", "folioblocks")}
-						initialOpen={true}
-					>
-						<Notice status="info" isDismissible={false}>
-							<strong>{__("Filter Styles Controls", "folioblocks")}</strong>
-							<br />
-							{__(
-								"This is a premium feature. Unlock all features:",
-								"folioblocks",
-							)}{" "}
-							<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-								{__("Upgrade to Pro", "folioblocks")}
-							</a>
-						</Notice>
-					</PanelBody>,
-					{ attributes, setAttributes },
-				)}
+				{filterStylesControls}
 
 				{applyFilters("folioBlocks.videoGallery.iconStyleControls", null, {
 					attributes,

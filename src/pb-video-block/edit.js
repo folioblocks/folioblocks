@@ -89,14 +89,9 @@ function getVideoEmbedMarkup(videoUrl) {
 			<iframe
 				src={iframeSrc}
 				style={{ border: "none" }}
-				allow="autoplay; fullscreen; picture-in-picture"
+				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
 				allowFullScreen
 				title={`${providerLabel} Video`}
-				sandbox={
-					isYouTube
-						? "allow-same-origin allow-scripts allow-popups allow-forms"
-						: undefined
-				}
 				referrerPolicy={
 					isYouTube ? "strict-origin-when-cross-origin" : undefined
 				}
@@ -357,9 +352,13 @@ export default function Edit({ attributes, setAttributes, context }) {
 
 	// Effective border values (context > attribute)
 	const effectiveBorderColor = inheritedBorderColor ?? attributes.borderColor;
-	const effectiveBorderWidth = inheritedBorderWidth ?? attributes.borderWidth;
+	const rawEffectiveBorderWidth =
+		inheritedBorderWidth ?? attributes.borderWidth ?? 0;
+	const effectiveBorderWidth = Number.isFinite(Number(rawEffectiveBorderWidth))
+		? Number(rawEffectiveBorderWidth)
+		: 0;
 	const effectiveBorderRadius =
-		inheritedBorderRadius ?? attributes.borderRadius;
+		inheritedBorderRadius ?? attributes.borderRadius ?? 0;
 
 	// Set Block Thumbnail
 	const setThumbnail = (media) => {
@@ -882,11 +881,10 @@ export default function Edit({ attributes, setAttributes, context }) {
 							attributes.dropShadow ? " drop-shadow" : ""
 						}`}
 						style={{
-							borderWidth: effectiveBorderWidth
-								? `${effectiveBorderWidth}px`
-								: undefined,
-							borderStyle: effectiveBorderWidth ? "solid" : undefined,
-							borderColor: effectiveBorderColor || undefined,
+							"--pb-border-width": `${effectiveBorderWidth}px`,
+							borderWidth: `${effectiveBorderWidth}px`,
+							borderStyle: "solid",
+							borderColor: effectiveBorderColor || "transparent",
 							borderRadius: effectiveBorderRadius
 								? `${effectiveBorderRadius}px`
 								: undefined,

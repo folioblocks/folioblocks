@@ -63,6 +63,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				'allow',
 				'autoplay; encrypted-media; fullscreen; picture-in-picture'
 			);
+			iframe.setAttribute( 'referrerpolicy', 'strict-origin-when-cross-origin' );
 			iframe.setAttribute( 'allowfullscreen', '' );
 			iframe.style.display = 'none';
 			iframe.style.opacity = '0';

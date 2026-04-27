@@ -60,10 +60,10 @@ $fbks_woo_active = false;
 $fbks_enable_woo = false;
 
 if (fbks_fs()->can_use_premium_code__premium_only()) {
-	$fbks_border_color = esc_attr($attributes['borderColor'] ?? '');
-	$fbks_border_width = absint($attributes['borderWidth'] ?? 0);
-	$fbks_border_radius = absint($attributes['borderRadius'] ?? 0);
-	$fbks_drop_shadow = ! empty($attributes['dropShadow']);
+	$fbks_border_color = esc_attr($fbks_context['folioBlocks/borderColor'] ?? ($attributes['borderColor'] ?? ''));
+	$fbks_border_width = absint($fbks_context['folioBlocks/borderWidth'] ?? ($attributes['borderWidth'] ?? 0));
+	$fbks_border_radius = absint($fbks_context['folioBlocks/borderRadius'] ?? ($attributes['borderRadius'] ?? 0));
+	$fbks_drop_shadow = ! empty($fbks_context['folioBlocks/dropShadow'] ?? ($attributes['dropShadow'] ?? false));
 	$fbks_lazy_load = ! empty($attributes['lazyLoad']);
 	$fbks_overlay_style = $fbks_context['folioBlocks/overlayStyle'] ?? ($attributes['overlayStyle'] ?? 'default');
 	$fbks_overlay_bg_color = $fbks_context['folioBlocks/overlayBgColor'] ?? ($attributes['overlayBgColor'] ?? '');
@@ -100,11 +100,12 @@ if (fbks_fs()->can_use_premium_code__premium_only()) {
 
 	// Build style string for border and radius
 	$fbks_style = '';
-	if ($fbks_border_width > 0) {
-		$fbks_style .= "border-width: {$fbks_border_width}px; border-style: solid;";
-		if ($fbks_border_color) {
-			$fbks_style .= "border-color: {$fbks_border_color};";
-		}
+	$fbks_style .= "--pb-border-width: {$fbks_border_width}px;";
+	$fbks_style .= "border-width: {$fbks_border_width}px; border-style: solid;";
+	if ($fbks_border_color) {
+		$fbks_style .= "border-color: {$fbks_border_color};";
+	} else {
+		$fbks_style .= "border-color: transparent;";
 	}
 	if ($fbks_border_radius > 0) {
 		$fbks_style .= "border-radius: {$fbks_border_radius}px;";

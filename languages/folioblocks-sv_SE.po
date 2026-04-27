@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FolioBlocks 1.2.3\n"
 "Report-Msgid-Bugs-To: https://folioblocks.com\n"
-"POT-Creation-Date: 2026-04-16 09:26:59+0000\n"
+"POT-Creation-Date: 2026-04-27 07:37:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -64,15 +64,15 @@ msgstr "Lägg till bilder"
 
 #: src/carousel-gallery-block/premium.js:216 src/filmstrip-gallery-block/premium.js:496 src/filmstrip-gallery-block/render.php:401 src/grid-gallery-block/premium.js:276 src/justified-gallery-block/premium.js:280 src/masonry-gallery-block/premium.js:295 src/modular-gallery-block/premium.js:193 src/pb-image-block/premium.js:554 src/pb-image-block/premium.js:570 src/pb-image-block/premium.js:1060 src/pb-image-block/render.php:299 src/pb-video-block/premium.js:419 src/pb-video-block/premium.js:435 src/pb-video-block/premium.js:655 src/pb-video-block/render.php:239 src/video-gallery-block/premium.js:132
 msgid "Add to Cart"
-msgstr "Lägg till i varukorg"
+msgstr "Lägg till i Varukorgen"
 
 #: src/carousel-gallery-block/premium.js:847 src/filmstrip-gallery-block/premium.js:562 src/grid-gallery-block/premium.js:1085 src/justified-gallery-block/premium.js:1092 src/masonry-gallery-block/premium.js:1143 src/modular-gallery-block/premium.js:644 src/pb-image-block/premium.js:900 src/pb-video-block/premium.js:569 src/video-gallery-block/premium.js:894
 msgid "Add to Cart Icon"
-msgstr "Ikon för Lägg till i varukorg"
+msgstr "Ikon för Lägg till i Varukorgen"
 
 #: src/carousel-gallery-block/premium.js:833 src/grid-gallery-block/premium.js:1072 src/justified-gallery-block/premium.js:1079 src/masonry-gallery-block/premium.js:1130 src/modular-gallery-block/premium.js:630 src/pb-image-block/premium.js:886 src/pb-video-block/premium.js:555 src/video-gallery-block/premium.js:881
 msgid "Add to Cart Icon Colors"
-msgstr "Färger för Lägg till i varukorg-ikon"
+msgstr "Färger för Lägg till i Varukorgen-ikon"
 
 #: src/carousel-gallery-block/edit.js:471 src/filmstrip-gallery-block/edit.js:296 src/grid-gallery-block/edit.js:518 src/justified-gallery-block/edit.js:368 src/masonry-gallery-block/edit.js:360
 msgid "Add to Gallery"
@@ -80,7 +80,7 @@ msgstr "Lägg till i galleri"
 
 #: src/pb-image-block/edit.js:383 src/pb-image-block/edit.js:385
 msgid "Add to Image Stack"
-msgstr "Lägg till i bildstapel"
+msgstr "Lägg till Image Stack"
 
 #: src/pb-video-block/edit.js:867
 msgid "Add Video"
@@ -136,7 +136,7 @@ msgstr "Alla"
 
 #: includes/admin/settings-page.php:157
 msgid "All of the blocks and galleries work entirely from the block editor. There are no external settings pages for any of the blocks, you work entirely from the block editor."
-msgstr "Alla block och gallerier fungerar helt i blockredigeraren. Det finns inga externa inställningssidor för blocken, du arbetar helt i blockredigeraren."
+msgstr "Alla block och gallerier fungerar helt från blockredigeraren. Det finns inga externa inställningssidor för något av blocken, du arbetar helt från blockredigeraren."
 
 #: src/pb-image-block/edit.js:476 src/pb-loupe-block/edit.js:224
 msgid "Alternative Text"
@@ -252,11 +252,11 @@ msgstr "BlueSky"
 
 #: src/pb-video-block/premium.js:119 src/video-gallery-block/premium.js:251
 msgid "Blur Overlay"
-msgstr "Oskärpeöverlägg"
+msgstr "Blur-överlägg"
 
 #: src/carousel-gallery-block/premium.js:576 src/grid-gallery-block/premium.js:487 src/justified-gallery-block/premium.js:489 src/masonry-gallery-block/premium.js:505 src/modular-gallery-block/premium.js:429 src/pb-image-block/premium.js:307
 msgid "Blur Overlay - Centered"
-msgstr "Oskärpeöverlägg - centrerat"
+msgstr "Blur-överlägg - centrerat"
 
 #: src/carousel-gallery-block/premium.js:721 src/grid-gallery-block/premium.js:679 src/justified-gallery-block/premium.js:686 src/masonry-gallery-block/premium.js:737 src/modular-gallery-block/premium.js:518 src/pb-image-block/premium.js:775 src/pb-video-block/edit.js:797 src/video-gallery-block/premium.js:430
 msgid "Border Color"
@@ -328,7 +328,7 @@ msgstr "Ändra formen på Loupe."
 
 #: src/pb-video-block/edit.js:434 src/pb-video-block/edit.js:438 src/pb-video-block/edit.js:500
 msgid "Change Thumbnail"
-msgstr "Byt miniatyr"
+msgstr "Byt miniatyrbild"
 
 #: src/pb-video-block/edit.js:414 src/pb-video-block/edit.js:418
 msgid "Change Video"
@@ -348,7 +348,7 @@ msgstr "Välj stil för hovringsöverlägget."
 
 #: src/carousel-gallery-block/premium.js:498 src/modular-gallery-block/premium.js:351 src/pb-image-block/premium.js:201
 msgid "Choose what appears below images in the lightbox."
-msgstr "Välj vad som visas under bilderna i lightboxen."
+msgstr "Välj vad som visas under bilderna i Lightbox."
 
 #: src/carousel-gallery-block/premium.js:564 src/filmstrip-gallery-block/premium.js:342 src/modular-gallery-block/premium.js:417 src/pb-image-block/premium.js:295
 msgid "Choose what appears when hovering over images."
@@ -376,7 +376,7 @@ msgstr "Stäng"
 
 #: src/pb-video-block/edit.js:959
 msgid "Close lightbox"
-msgstr "Stäng lightbox"
+msgstr "Stäng Lightbox"
 
 #: src/modular-gallery-block/edit.js:553
 msgid "Collapse layout on Mobile"
@@ -388,11 +388,11 @@ msgstr "Färgläge"
 
 #: src/pb-video-block/premium.js:123 src/video-gallery-block/premium.js:255
 msgid "Color Overlay"
-msgstr "Färgöverlägg"
+msgstr "Färg-överlägg"
 
 #: src/carousel-gallery-block/premium.js:604 src/grid-gallery-block/premium.js:503 src/justified-gallery-block/premium.js:505 src/masonry-gallery-block/premium.js:521 src/modular-gallery-block/premium.js:457 src/pb-image-block/premium.js:335
 msgid "Color Overlay - Custom Colors"
-msgstr "Färgöverlägg - anpassade färger"
+msgstr "Färg-överlägg - anpassade färger"
 
 #: src/grid-gallery-block/edit.js:587 src/masonry-gallery-block/edit.js:435 src/video-gallery-block/edit.js:395
 msgid "Columns"
@@ -444,7 +444,7 @@ msgstr "Anpassad lazy load"
 
 #: src/pb-video-block/edit.js:674 src/video-gallery-block/edit.js:521
 msgid "Custom Overlay"
-msgstr "Anpassat överlägg"
+msgstr "Anpassat Överlägg"
 
 #: includes/admin/free-pro.php:237
 msgid "Custom Overlay Styles"
@@ -476,11 +476,11 @@ msgstr "Standard"
 
 #: src/carousel-gallery-block/premium.js:209 src/filmstrip-gallery-block/premium.js:489 src/grid-gallery-block/premium.js:272 src/justified-gallery-block/premium.js:276 src/masonry-gallery-block/premium.js:291 src/modular-gallery-block/premium.js:186 src/pb-image-block/premium.js:538 src/pb-video-block/premium.js:403 src/video-gallery-block/premium.js:128
 msgid "Default Add To Cart Icon Behavior"
-msgstr "Standardbeteende för Lägg till i varukorg-ikonen"
+msgstr "Standardbeteende för Lägg till i Varukorgen-ikonen"
 
 #: src/pb-video-block/premium.js:115 src/video-gallery-block/premium.js:247
 msgid "Default Overlay"
-msgstr "Standardöverlägg"
+msgstr "Standard-överlägg"
 
 #: includes/admin/settings-page.php:181 includes/admin/settings-page.php:198 includes/admin/settings-page.php:215 includes/admin/settings-page.php:234 includes/admin/settings-page.php:253 includes/admin/settings-page.php:264 includes/admin/settings-page.php:282 includes/admin/settings-page.php:293 includes/admin/settings-page.php:312 includes/admin/settings-page.php:332 includes/admin/settings-page.php:342 includes/admin/settings-page.php:364
 msgid "Demo"
@@ -516,7 +516,7 @@ msgstr "Inaktivera video pa mobil"
 
 #: src/carousel-gallery-block/premium.js:183 src/filmstrip-gallery-block/premium.js:463 src/grid-gallery-block/premium.js:251 src/justified-gallery-block/premium.js:255 src/masonry-gallery-block/premium.js:270 src/modular-gallery-block/premium.js:160 src/pb-image-block/premium.js:420 src/pb-video-block/premium.js:289 src/video-gallery-block/premium.js:107
 msgid "Display Add to Cart Icon"
-msgstr "Visa Lägg till i varukorg-ikon"
+msgstr "Visa Lägg till i Varukorgen-ikon"
 
 #: src/pb-before-after-block/premium.js:57
 msgid "Display Before & After labels."
@@ -524,7 +524,7 @@ msgstr "Visa etiketterna Före och Efter."
 
 #: src/carousel-gallery-block/premium.js:457 src/modular-gallery-block/premium.js:310 src/pb-image-block/premium.js:159
 msgid "Display Image Caption inside the lightbox."
-msgstr "Visa bildtext i lightboxen."
+msgstr "Visa bildtext i Lightbox."
 
 #: src/carousel-gallery-block/premium.js:453 src/modular-gallery-block/premium.js:306
 msgid "Display Image Caption or Product Info inside the Lightbox."
@@ -532,11 +532,11 @@ msgstr "Visa bildtext eller produktinfo i lightboxen."
 
 #: src/pb-image-block/premium.js:155
 msgid "Display Image Caption or product name & price inside the Lightbox."
-msgstr "Visa bildtext eller produktnamn och pris i lightboxen."
+msgstr "Visa bildtext eller produktnamn och pris i Lightbox."
 
 #: src/carousel-gallery-block/premium.js:103 src/filmstrip-gallery-block/premium.js:383 src/grid-gallery-block/premium.js:177 src/justified-gallery-block/premium.js:181 src/masonry-gallery-block/premium.js:196 src/modular-gallery-block/premium.js:80 src/pb-image-block/premium.js:75
 msgid "Display Image Download Icon"
-msgstr "Visa nedladdningsikon för bild"
+msgstr "Visa Nedladdnings-ikon för bild"
 
 #: src/pb-image-block/premium.js:234
 msgid "Display image title or Product Info when hovering over images."
@@ -572,11 +572,11 @@ msgstr "Fördela innehållet vertikalt"
 
 #: src/carousel-gallery-block/premium.js:814 src/filmstrip-gallery-block/premium.js:542 src/grid-gallery-block/premium.js:1053 src/justified-gallery-block/premium.js:1060 src/masonry-gallery-block/premium.js:1111 src/modular-gallery-block/premium.js:611 src/pb-image-block/premium.js:867
 msgid "Download Icon"
-msgstr "Nedladdningsikon"
+msgstr "Nedladdnings-ikon"
 
 #: src/carousel-gallery-block/premium.js:800 src/grid-gallery-block/premium.js:1040 src/justified-gallery-block/premium.js:1047 src/masonry-gallery-block/premium.js:1098 src/modular-gallery-block/premium.js:597 src/pb-image-block/premium.js:853
 msgid "Download Icon Colors"
-msgstr "Färger för nedladdningsikon"
+msgstr "Färger för Nedladdnings-ikon"
 
 #: src/filmstrip-gallery-block/render.php:418 src/pb-image-block/premium.js:967 src/pb-image-block/render.php:319
 msgid "Download Image"
@@ -688,11 +688,11 @@ msgstr "Aktivera lazy load för bilder"
 
 #: src/carousel-gallery-block/edit.js:604 src/carousel-gallery-block/premium.js:425 src/grid-gallery-block/edit.js:619 src/grid-gallery-block/premium.js:352 src/justified-gallery-block/edit.js:484 src/justified-gallery-block/premium.js:354 src/masonry-gallery-block/edit.js:474 src/masonry-gallery-block/premium.js:370 src/modular-gallery-block/edit.js:578 src/modular-gallery-block/premium.js:278 src/pb-image-block/edit.js:496 src/pb-image-block/premium.js:124
 msgid "Enable Lightbox"
-msgstr "Aktivera lightbox"
+msgstr "Aktivera Lightbox"
 
 #: src/pb-video-block/edit.js:605 src/video-gallery-block/edit.js:443
 msgid "Enable Lightbox in Editor"
-msgstr "Aktivera lightbox i redigeraren"
+msgstr "Aktivera Lightbox i blockredigeraren"
 
 #: src/carousel-gallery-block/premium.js:343
 msgid "Enable the carousel to loop infinitely."
@@ -736,7 +736,7 @@ msgstr "Facebook"
 
 #: src/carousel-gallery-block/premium.js:583 src/grid-gallery-block/premium.js:491 src/justified-gallery-block/premium.js:493 src/masonry-gallery-block/premium.js:509 src/modular-gallery-block/premium.js:436 src/pb-image-block/premium.js:314
 msgid "Fade Overlay - Centered"
-msgstr "Tonat överlägg - centrerat"
+msgstr "Fade-överlägg - centrerat"
 
 #: includes/admin/common.php:12
 msgid "Feedback"
@@ -868,7 +868,7 @@ msgstr "Allmänna galleriinställningar"
 
 #: src/carousel-gallery-block/premium.js:590 src/grid-gallery-block/premium.js:495 src/justified-gallery-block/premium.js:497 src/masonry-gallery-block/premium.js:513 src/modular-gallery-block/premium.js:443 src/pb-image-block/premium.js:321
 msgid "Gradient Overlay - Slide-up Bottom"
-msgstr "Gradientöverlägg - glid upp från botten"
+msgstr "Gradient-överlägg - glid upp från botten"
 
 #: src/video-gallery-block/block.json:15
 msgid "grid"
@@ -900,7 +900,7 @@ msgstr "Dold"
 
 #: src/pb-video-block/edit.js:665 src/video-gallery-block/edit.js:512
 msgid "Hide only the play button overlay."
-msgstr "Dölj endast överlägget för uppspelningsknappen."
+msgstr "Dölj endast uppspelningsknappen överlägget."
 
 #: src/pb-video-block/edit.js:658 src/video-gallery-block/edit.js:505
 msgid "Hide Play Button"
@@ -1072,7 +1072,7 @@ msgstr "Lightbox"
 
 #: src/carousel-gallery-block/edit.js:597 src/grid-gallery-block/edit.js:612 src/justified-gallery-block/edit.js:477 src/masonry-gallery-block/edit.js:467 src/modular-gallery-block/edit.js:571 src/pb-image-block/edit.js:489 src/pb-video-block/edit.js:601 src/video-gallery-block/edit.js:439
 msgid "Lightbox & Hover Overlay Settings"
-msgstr "Inställningar för lightbox och hovringsöverlägg"
+msgstr "Inställningar för Lightbox och Hovrings-överlägg"
 
 #: src/carousel-gallery-block/premium.js:473 src/grid-gallery-block/premium.js:392 src/justified-gallery-block/premium.js:394 src/masonry-gallery-block/premium.js:410 src/modular-gallery-block/premium.js:326 src/pb-image-block/premium.js:176
 msgid "Lightbox Info"
@@ -1244,23 +1244,23 @@ msgstr "Organiserar bilder i anpassade rader för exakt kontroll över layout oc
 
 #: src/background-video-block/edit.js:906
 msgid "Overlay color"
-msgstr "Överläggsfärg"
+msgstr "Överläggs-färg"
 
 #: src/carousel-gallery-block/premium.js:621 src/grid-gallery-block/premium.js:514 src/justified-gallery-block/premium.js:516 src/masonry-gallery-block/premium.js:532 src/modular-gallery-block/premium.js:474 src/pb-image-block/premium.js:353 src/pb-video-block/premium.js:136 src/video-gallery-block/premium.js:265
 msgid "Overlay Colors"
-msgstr "Överläggsfärger"
+msgstr "Överläggs-färger"
 
 #: src/carousel-gallery-block/premium.js:543 src/filmstrip-gallery-block/premium.js:321 src/grid-gallery-block/premium.js:454 src/justified-gallery-block/premium.js:456 src/masonry-gallery-block/premium.js:472 src/modular-gallery-block/premium.js:396 src/pb-image-block/premium.js:265
 msgid "Overlay Content"
-msgstr "Överläggsinnehåll"
+msgstr "Överläggs-innehåll"
 
 #: src/background-video-block/edit.js:912
 msgid "Overlay opacity"
-msgstr "Överläggsopacitet"
+msgstr "Överläggs-opacitet"
 
 #: src/pb-video-block/premium.js:108 src/video-gallery-block/premium.js:242
 msgid "Overlay Style"
-msgstr "Överläggsstil"
+msgstr "Överläggs-stil"
 
 #: src/filmstrip-gallery-block/edit.js:476 src/filmstrip-gallery-block/render.php:340
 msgid "Pause autoplay"

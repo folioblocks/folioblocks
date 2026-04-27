@@ -7,17 +7,25 @@ import {
 } from '@wordpress/components';
 import { useState, useRef } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
-import { useSetting } from '@wordpress/block-editor';
+import { useSettings } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
 
 function useThemePalette() {
 	// WordPress can expose palettes as a combined list OR split into theme/default/custom.
 	// In some contexts `color.palette` may only contain custom colors, so we read all.
-	const paletteCombinedSetting = useSetting( 'color.palette' );
-	const paletteThemeSetting = useSetting( 'color.palette.theme' );
-	const paletteDefaultSetting = useSetting( 'color.palette.default' );
-	const paletteCustomSetting = useSetting( 'color.palette.custom' );
-	const customColorsSetting = useSetting( 'color.custom' );
+	const [
+		paletteCombinedSetting,
+		paletteThemeSetting,
+		paletteDefaultSetting,
+		paletteCustomSetting,
+		customColorsSetting,
+	] = useSettings(
+		'color.palette',
+		'color.palette.theme',
+		'color.palette.default',
+		'color.palette.custom',
+		'color.custom',
+	);
 
 	const legacy = useSelect( ( select ) => {
 		const settings = select( 'core/block-editor' )?.getSettings?.();
