@@ -26,6 +26,7 @@ import { applyFilters } from "@wordpress/hooks";
 import { decodeEntities } from "@wordpress/html-entities";
 import { IconMasonryGallery, IconPBSpinner } from "../pb-helpers/icons";
 import { fbksNormalizeActiveFilterValue } from "../pb-helpers/filterConstants";
+import { getImageSizeOptions } from "../pb-helpers/imageSizeOptions";
 import "./editor.scss";
 
 const ALLOWED_BLOCKS = ["folioblocks/pb-image-block"];
@@ -87,6 +88,11 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 		(select) => select("core/block-editor").getBlocks(clientId),
 		[clientId],
 	);
+	const availableImageSizes = useSelect(
+		(select) => select("core/block-editor").getSettings()?.imageSizes || [],
+		[],
+	);
+	const imageSizeOptions = getImageSizeOptions(availableImageSizes, __);
 
 	const { children, ...innerBlocksProps } = useInnerBlocksProps(
 		{ ref: galleryRef, className: "pb-masonry-gallery" },
@@ -382,30 +388,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 					<SelectControl
 						label={__("Resolution", "folioblocks")}
 						value={attributes.resolution || "large"}
-						options={[
-							{
-								label: __("Thumbnail", "folioblocks"),
-								value: "thumbnail",
-							},
-							{
-								label: __("Medium", "folioblocks"),
-								value: "medium",
-							},
-							{
-								label: __("Large", "folioblocks"),
-								value: "large",
-							},
-							{
-								label: __("Full", "folioblocks"),
-								value: "full",
-							},
-						].filter((option) => {
-							// Check all images for available sizes
-							const allSizes = innerBlocks.flatMap((block) =>
-								Object.keys(block.attributes.sizes || {}),
-							);
-							return allSizes.includes(option.value) || option.value === "full";
-						})}
+						options={imageSizeOptions}
 						onChange={(newResolution) => {
 							setAttributes({ resolution: newResolution });
 

@@ -1,9 +1,13 @@
 import { createBlock, getBlockType } from '@wordpress/blocks';
+import { select } from '@wordpress/data';
+import { decodeEntities } from '@wordpress/html-entities';
 
 const DEFAULT_GALLERY_BLOCKS = [
 	'folioblocks/grid-gallery-block',
 	'folioblocks/justified-gallery-block',
 	'folioblocks/masonry-gallery-block',
+	'folioblocks/carousel-gallery-block',
+	'folioblocks/filmstrip-gallery-block',
 ];
 
 const EXCLUDED_ATTRS = new Set( [
@@ -16,6 +20,16 @@ const EXCLUDED_ATTRS = new Set( [
 	'noGap',
 	'preview',
 	'isGridGallery',
+] );
+
+const CORE_GALLERY_ATTRS = new Set( [
+	'align',
+	'anchor',
+	'backgroundColor',
+	'className',
+	'gradient',
+	'style',
+	'textColor',
 ] );
 
 const DISABLED_TARGET_BLOCKS = [ 'core/group', 'core/columns', 'core/details' ];
@@ -36,6 +50,224 @@ const getTransformAttributes = ( attributes = {} ) => {
 	} );
 	return next;
 };
+
+const normalizeImageSizes = ( sizes = {} ) =>
+	Object.fromEntries(
+		Object.entries( sizes )
+			.filter( ( [ , size ] ) => size?.url || size?.source_url )
+			.map( ( [ slug, size ] ) => [
+				slug,
+				{
+					...size,
+					url: size.url || size.source_url,
+				},
+			] )
+	);
+
+const getSelectedImageSize = ( attributes = {}, sizes = {} ) =>
+	sizes[ attributes.sizeSlug ] ||
+	sizes[ attributes.imageSize ] ||
+	sizes.large ||
+	sizes.full ||
+	null;
+
+export const transformCoreImageToPbImage = ( attributes = {} ) => {
+	const imageId = Number( attributes.id ) || 0;
+	const mediaRecord =
+		imageId > 0 ? select( 'core' )?.getMedia( imageId ) : null;
+	const mediaDetails = mediaRecord?.media_details || {};
+	const normalizedSizes = normalizeImageSizes( mediaDetails.sizes || {} );
+	const selectedSize = getSelectedImageSize( attributes, normalizedSizes );
+	const fullSize = normalizedSizes.full || {};
+	const src =
+		selectedSize?.url ||
+		attributes.url ||
+		fullSize.url ||
+		mediaRecord?.source_url ||
+		'';
+
+	if (
+		! normalizedSizes.full &&
+		( mediaRecord?.source_url || attributes.url )
+	) {
+		normalizedSizes.full = {
+			url: mediaRecord?.source_url || attributes.url,
+			width: mediaDetails.width || attributes.width || 0,
+			height: mediaDetails.height || attributes.height || 0,
+		};
+	}
+
+	return createBlock( 'folioblocks/pb-image-block', {
+		id: imageId,
+		src,
+		imageSize: attributes.sizeSlug || attributes.imageSize || 'large',
+		sizes: normalizedSizes,
+		width: mediaDetails.width || attributes.width || 0,
+		height: mediaDetails.height || attributes.height || 0,
+		alt: mediaRecord?.alt_text || attributes.alt || '',
+		caption: mediaRecord?.caption?.raw || attributes.caption || '',
+		title: decodeEntities(
+			mediaRecord?.title?.rendered || attributes.title || ''
+		),
+		class: attributes.className || '',
+	} );
+};
+
+const transformCoreGalleryImage = ( block ) => {
+	if ( block?.name === 'folioblocks/pb-image-block' ) {
+		return block;
+	}
+
+	if ( block?.name !== 'core/image' ) {
+		return null;
+	}
+
+	return transformCoreImageToPbImage( block.attributes );
+};
+
+const getCoreGalleryInnerBlocks = ( attributes = {}, innerBlocks = [] ) => {
+	const transformedInnerBlocks = innerBlocks
+		.map( transformCoreGalleryImage )
+		.filter( Boolean );
+
+	if ( transformedInnerBlocks.length ) {
+		return transformedInnerBlocks;
+	}
+
+	return ( attributes.images || [] )
+		.map( ( image ) =>
+			transformCoreImageToPbImage( {
+				id: image.id,
+				url: image.url || image.src,
+				alt: image.alt,
+				caption: image.caption,
+				title: image.title,
+				width: image.width,
+				height: image.height,
+				sizeSlug: attributes.sizeSlug || image.sizeSlug,
+				className: image.className,
+			} )
+		)
+		.filter( ( block ) => Boolean( block.attributes.src ) );
+};
+
+const getCoreGalleryAttributes = ( currentBlockName, attributes = {} ) => {
+	const next = {};
+
+	Object.entries( attributes ).forEach( ( [ key, value ] ) => {
+		if ( CORE_GALLERY_ATTRS.has( key ) && typeof value !== 'undefined' ) {
+			next[ key ] = value;
+		}
+	} );
+
+	if ( attributes.sizeSlug ) {
+		next.resolution = attributes.sizeSlug;
+	}
+
+	if (
+		currentBlockName === 'folioblocks/grid-gallery-block' &&
+		Number( attributes.columns ) > 0
+	) {
+		next.columns = Number( attributes.columns );
+	}
+
+	return next;
+};
+
+const transformPbImageToCoreImage = ( block ) => {
+	if ( block?.name !== 'folioblocks/pb-image-block' ) {
+		return null;
+	}
+
+	const attributes = block.attributes || {};
+	const normalizedSizes = normalizeImageSizes( attributes.sizes || {} );
+	const selectedSize = getSelectedImageSize( attributes, normalizedSizes );
+	const src = selectedSize?.url || attributes.src || '';
+
+	if ( ! src ) {
+		return null;
+	}
+
+	return createBlock( 'core/image', {
+		id: attributes.id || undefined,
+		url: src,
+		alt: attributes.alt || '',
+		caption: attributes.caption || '',
+		sizeSlug: attributes.imageSize || 'large',
+		className: attributes.class || undefined,
+	} );
+};
+
+const getFolioGalleryCoreInnerBlocks = (
+	attributes = {},
+	innerBlocks = []
+) => {
+	const transformedInnerBlocks = innerBlocks
+		.map( transformPbImageToCoreImage )
+		.filter( Boolean );
+
+	if ( transformedInnerBlocks.length ) {
+		return transformedInnerBlocks;
+	}
+
+	return ( attributes.images || [] )
+		.map( ( image ) =>
+			transformPbImageToCoreImage( {
+				name: 'folioblocks/pb-image-block',
+				attributes: {
+					id: image.id,
+					src: image.src || image.url,
+					alt: image.alt,
+					caption: image.caption,
+					title: image.title,
+					sizes: image.sizes,
+					width: image.width,
+					height: image.height,
+					imageSize: attributes.resolution || image.imageSize,
+					class: image.class,
+				},
+			} )
+		)
+		.filter( Boolean );
+};
+
+const getFolioGalleryCoreAttributes = ( attributes = {} ) => {
+	const next = {};
+
+	CORE_GALLERY_ATTRS.forEach( ( key ) => {
+		if ( typeof attributes[ key ] !== 'undefined' ) {
+			next[ key ] = attributes[ key ];
+		}
+	} );
+
+	if ( Number( attributes.columns ) > 0 ) {
+		next.columns = Number( attributes.columns );
+	}
+
+	if ( attributes.resolution ) {
+		next.sizeSlug = attributes.resolution;
+	}
+
+	return next;
+};
+
+const transformCoreGalleryToFolioGallery = (
+	currentBlockName,
+	attributes,
+	innerBlocks
+) =>
+	createBlock(
+		currentBlockName,
+		getCoreGalleryAttributes( currentBlockName, attributes ),
+		getCoreGalleryInnerBlocks( attributes, innerBlocks )
+	);
+
+const transformFolioGalleryToCoreGallery = ( attributes, innerBlocks ) =>
+	createBlock(
+		'core/gallery',
+		getFolioGalleryCoreAttributes( attributes ),
+		getFolioGalleryCoreInnerBlocks( attributes, innerBlocks )
+	);
 
 export const disableGalleryWrapperTransforms = () => {
 	if ( hasPatchedWrapperTransforms ) {
@@ -102,15 +334,44 @@ export const buildGalleryTransforms = (
 	);
 
 	return {
-		from: sourceBlocks.map( ( sourceName ) => ( {
-			type: 'block',
-			blocks: [ sourceName ],
-			transform: ( attributes, innerBlocks ) =>
-				createBlock(
-					currentBlockName,
-					getTransformAttributes( attributes ),
-					innerBlocks
-				),
-		} ) ),
+		from: [
+			...sourceBlocks.map( ( sourceName ) => ( {
+				type: 'block',
+				blocks: [ sourceName ],
+				transform: ( attributes, innerBlocks ) =>
+					createBlock(
+						currentBlockName,
+						getTransformAttributes( attributes ),
+						innerBlocks
+					),
+			} ) ),
+			{
+				type: 'block',
+				blocks: [ 'core/gallery' ],
+				isMatch: ( attributes, block ) =>
+					getCoreGalleryInnerBlocks(
+						attributes,
+						block?.innerBlocks || []
+					).length > 0,
+				transform: ( attributes, innerBlocks ) =>
+					transformCoreGalleryToFolioGallery(
+						currentBlockName,
+						attributes,
+						innerBlocks
+					),
+			},
+		],
+		to: [
+			{
+				type: 'block',
+				blocks: [ 'core/gallery' ],
+				isMatch: ( attributes, block ) =>
+					getFolioGalleryCoreInnerBlocks(
+						attributes,
+						block?.innerBlocks || []
+					).length > 0,
+				transform: transformFolioGalleryToCoreGallery,
+			},
+		],
 	};
 };

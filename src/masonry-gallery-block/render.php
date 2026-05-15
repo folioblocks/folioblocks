@@ -51,7 +51,7 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 
         // Font weight: clamp numeric weights to 100–900 (widely supported). Allow keywords if provided.
         $fbks_filter_font_weight = isset( $fbks_attributes['filterFontWeight'] ) ? (string) $fbks_attributes['filterFontWeight'] : '';
-        if ( $fbks_filter_font_weight !== '' && preg_match( '/^\d{3}$/' , $fbks_filter_font_weight ) ) {
+        if ( $fbks_filter_font_weight !== '' && preg_match( '/^(1000|[1-9]\d{0,2})$/' , $fbks_filter_font_weight ) ) {
             $w = intval( $fbks_filter_font_weight );
             $w = max( 100, min( 900, $w ) );
             $fbks_filter_font_weight = (string) $w;
@@ -136,6 +136,6 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
     }
 }
 
-echo wp_kses_post( $content );
+echo fbks_kses_post_with_svg( $content );
 
 echo '</div>';

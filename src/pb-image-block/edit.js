@@ -30,6 +30,7 @@ import {
 	FBKS_ALL_FILTER_TOKEN,
 	fbksNormalizeActiveFilterValue,
 } from "../pb-helpers/filterConstants";
+import { getImageSizeOptions } from "../pb-helpers/imageSizeOptions";
 import "./editor.scss";
 
 const getAssignedFilterCategories = (attributes = {}) => {
@@ -73,6 +74,11 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		cartIconColor,
 		cartIconBgColor,
 	} = attributes;
+	const availableImageSizes = useSelect(
+		(select) => select("core/block-editor").getSettings()?.imageSizes || [],
+		[],
+	);
+	const imageSizeOptions = getImageSizeOptions(availableImageSizes, __);
 
 	// Block Preview Image
 	if (preview) {
@@ -421,29 +427,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 						<SelectControl
 							label={__("Resolution", "folioblocks")}
 							value={attributes.imageSize || "large"}
-							options={[
-								{
-									label: __("Thumbnail", "folioblocks"),
-									value: "thumbnail",
-								},
-								{
-									label: __("Medium", "folioblocks"),
-									value: "medium",
-								},
-								{
-									label: __("Large", "folioblocks"),
-									value: "large",
-								},
-								{
-									label: __("Full", "folioblocks"),
-									value: "full",
-								},
-							].filter((option) => {
-								const available = sizes ? Object.keys(sizes) : [];
-								return (
-									available.includes(option.value) || option.value === "full"
-								);
-							})}
+							options={imageSizeOptions}
 							onChange={(newSize) => {
 								setAttributes({ imageSize: newSize });
 								const nextUrl = sizes?.[newSize]?.url;

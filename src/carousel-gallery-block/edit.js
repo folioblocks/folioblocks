@@ -25,6 +25,7 @@ import { useSelect, useDispatch } from "@wordpress/data";
 import { useEffect, useCallback, useRef, useState } from "@wordpress/element";
 import { applyFilters } from "@wordpress/hooks";
 import { IconCarouselGallery, IconPBSpinner } from "../pb-helpers/icons";
+import { getImageSizeOptions } from "../pb-helpers/imageSizeOptions";
 import "./editor.scss";
 
 export default function Edit({ clientId, attributes, setAttributes }) {
@@ -70,6 +71,11 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 		(select) => select(blockEditorStore).getBlocks(clientId),
 		[clientId],
 	);
+	const availableImageSizes = useSelect(
+		(select) => select(blockEditorStore).getSettings()?.imageSizes || [],
+		[],
+	);
+	const imageSizeOptions = getImageSizeOptions(availableImageSizes, __);
 
 	const calculateCarouselHeight = () => {
 		const container = galleryRef.current;
@@ -493,30 +499,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 					<SelectControl
 						label={__("Resolution", "folioblocks")}
 						value={attributes.resolution || "large"}
-						options={[
-							{
-								label: __("Thumbnail", "folioblocks"),
-								value: "thumbnail",
-							},
-							{
-								label: __("Medium", "folioblocks"),
-								value: "medium",
-							},
-							{
-								label: __("Large", "folioblocks"),
-								value: "large",
-							},
-							{
-								label: __("Full", "folioblocks"),
-								value: "full",
-							},
-						].filter((option) => {
-							// Check all images for available sizes
-							const allSizes = innerBlocks.flatMap((block) =>
-								Object.keys(block.attributes.sizes || {}),
-							);
-							return allSizes.includes(option.value) || option.value === "full";
-						})}
+						options={imageSizeOptions}
 						onChange={(newResolution) => {
 							setAttributes({ resolution: newResolution });
 							innerBlocks.forEach((block) => {

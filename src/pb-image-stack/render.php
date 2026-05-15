@@ -10,4 +10,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 ?>
-<?php echo wp_kses_post( $content ); ?>
+<?php echo fbks_kses_post_with_svg( $content ); ?>

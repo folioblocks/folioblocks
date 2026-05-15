@@ -23,6 +23,7 @@ import { applyFilters } from "@wordpress/hooks";
 import { Icon, plus, fullscreen } from "@wordpress/icons";
 import { decodeEntities } from "@wordpress/html-entities";
 import { IconFilmstripGallery, IconPBSpinner } from "../pb-helpers/icons";
+import { getImageSizeOptions } from "../pb-helpers/imageSizeOptions";
 import "./editor.scss";
 
 const ALLOWED_BLOCKS = ["folioblocks/pb-image-block"];
@@ -349,41 +350,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			? { "--pb-cart-icon-bg": attributes.cartIconBgColor }
 			: {}),
 	};
-	const fallbackImageSizes = [
-		{ name: __("Thumbnail", "folioblocks"), slug: "thumbnail" },
-		{ name: __("Medium", "folioblocks"), slug: "medium" },
-		{ name: __("Large", "folioblocks"), slug: "large" },
-		{ name: __("Full", "folioblocks"), slug: "full" },
-	];
-	let imageSizeOptions = (
-		availableImageSizes.length ? availableImageSizes : fallbackImageSizes
-	)
-		.map((size) => ({
-			label: size?.name || size?.slug || "",
-			value: size?.slug || "",
-		}))
-		.filter((option) => option.value)
-		.sort((a, b) => {
-			const order = ["thumbnail", "medium", "large", "full"];
-			const indexA = order.indexOf(a.value);
-			const indexB = order.indexOf(b.value);
-			if (indexA === -1 && indexB === -1) {
-				return a.label.localeCompare(b.label);
-			}
-			if (indexA === -1) {
-				return 1;
-			}
-			if (indexB === -1) {
-				return -1;
-			}
-			return indexA - indexB;
-		});
-	if (!imageSizeOptions.some((option) => option.value === "full")) {
-		imageSizeOptions = [
-			...imageSizeOptions,
-			{ label: __("Full", "folioblocks"), value: "full" },
-		];
-	}
+	const imageSizeOptions = getImageSizeOptions(availableImageSizes, __);
 
 	const hasGalleryContent = innerBlocks.length > 0;
 	const blockProps = useBlockProps({

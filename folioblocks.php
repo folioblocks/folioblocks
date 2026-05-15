@@ -206,7 +206,7 @@ if (function_exists('fbks_fs')) {
      * `function_exists` CALL ABOVE TO PROPERLY WORK.
      */
 
-    if (! function_exists('fbks_fs')) {
+    
         if (! function_exists('fbks_fs')) {
             // Create a helper function for easy SDK access.
             function fbks_fs()
@@ -294,7 +294,6 @@ if (function_exists('fbks_fs')) {
                 wp_enqueue_script('folioblocks-shared-data');
             });
         }
-    }
 
     // Add custom category for blocks.
     function fbks_add_category($categories)
@@ -421,48 +420,63 @@ if (function_exists('fbks_fs')) {
         return $links;
     }
 
-// Allow SVG tags in post content.
-function fbks_allow_svg_tags( $tags, $context ) {
-	if ( $context === 'post' ) {
-
-		$tags['svg'] = [
-			'class'         => true,
-			'xmlns'         => true,
-			'width'         => true,
-			'height'        => true,
-			'viewbox'       => true,
-			'viewBox'       => true,
-			'aria-hidden'   => true,
-			'focusable'     => true,
-			'role'          => true,
-			'fill'          => true,
-			'stroke'        => true,
-			'stroke-width'  => true,
-			'stroke-linecap'=> true,
-			'stroke-linejoin'=> true,
-		];
-		$tags['path'] = [
-			'd'             => true,
-			'fill'          => true,
-			'stroke'        => true,
-			'stroke-width'  => true,
-			'stroke-linecap'=> true,
-			'stroke-linejoin'=> true,
-		];
-		$tags['g'] = [
+function fbks_get_svg_allowed_html() {
+	return array(
+		'svg'    => array(
+			'class'           => true,
+			'xmlns'           => true,
+			'width'           => true,
+			'height'          => true,
+			'viewbox'         => true,
+			'viewBox'         => true,
+			'aria-hidden'     => true,
+			'focusable'       => true,
+			'role'            => true,
+			'fill'            => true,
+			'stroke'          => true,
+			'stroke-width'    => true,
+			'stroke-linecap'  => true,
+			'stroke-linejoin' => true,
+		),
+		'path'   => array(
+			'd'               => true,
+			'fill'            => true,
+			'stroke'          => true,
+			'stroke-width'    => true,
+			'stroke-linecap'  => true,
+			'stroke-linejoin' => true,
+		),
+		'g'      => array(
 			'transform' => true,
-		];
-		$tags['circle'] = [
+		),
+		'circle' => array(
 			'cx'   => true,
 			'cy'   => true,
 			'r'    => true,
 			'fill' => true,
-		];
+		),
+	);
+}
+
+function fbks_get_allowed_post_html_with_svg() {
+	static $allowed_html = null;
+
+	if ( null === $allowed_html ) {
+		$allowed_html = wp_kses_allowed_html( 'post' );
+
+		foreach ( fbks_get_svg_allowed_html() as $tag => $attributes ) {
+			$allowed_html[ $tag ] = isset( $allowed_html[ $tag ] )
+				? array_merge( $allowed_html[ $tag ], $attributes )
+				: $attributes;
+		}
 	}
 
-	return $tags;
+	return $allowed_html;
 }
-add_filter( 'wp_kses_allowed_html', 'fbks_allow_svg_tags', 10, 2 );
+
+function fbks_kses_post_with_svg( $html ) {
+	return wp_kses( $html, fbks_get_allowed_post_html_with_svg() );
+}
 }
 
 if (fbks_fs()->can_use_premium_code__premium_only()) {

@@ -22,9 +22,11 @@ import {
 	Panel,
 } from "@wordpress/components";
 import { useState, useRef } from "@wordpress/element";
+import { useSelect } from "@wordpress/data";
 import { applyFilters } from "@wordpress/hooks";
 import { media } from "@wordpress/icons";
 import { IconLoupe } from "../pb-helpers/icons";
+import { getImageSizeOptions } from "../pb-helpers/imageSizeOptions";
 import "./editor.scss";
 
 export default function Edit({ attributes, setAttributes }) {
@@ -33,7 +35,6 @@ export default function Edit({ attributes, setAttributes }) {
 		url,
 		alt,
 		resolution,
-		availableSize,
 		magnification,
 		loupeShape,
 		loupeTheme,
@@ -43,6 +44,11 @@ export default function Edit({ attributes, setAttributes }) {
 		window.folioBlocksData?.checkoutUrl ||
 		"https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks&utm_medium=loupe-block&utm_campaign=upgrade";
 	const wrapperRef = useRef(null);
+	const availableImageSizes = useSelect(
+		(select) => select("core/block-editor").getSettings()?.imageSizes || [],
+		[],
+	);
+	const imageSizeOptions = getImageSizeOptions(availableImageSizes, __);
 
 	const blockProps = useBlockProps({
 		className: "pb-loupe-block",
@@ -234,10 +240,7 @@ export default function Edit({ attributes, setAttributes }) {
 					<SelectControl
 						label={__("Resolution", "folioblocks")}
 						value={resolution}
-						options={availableSize.map((slug) => ({
-							label: slug.charAt(0).toUpperCase() + slug.slice(1),
-							value: slug,
-						}))}
+						options={imageSizeOptions}
 						onChange={(newSize) => {
 							const attachment = wp.media.attachment(attributes.id);
 							attachment.fetch().then(() => {

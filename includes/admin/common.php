@@ -3,6 +3,71 @@ if (! defined('ABSPATH')) {
 	exit;
 }
 
+if (! function_exists('fbks_get_admin_nonce_action')) {
+	function fbks_get_admin_nonce_action($page = 'settings')
+	{
+		return 'folioblocks_' . sanitize_key($page) . '_action';
+	}
+}
+
+if (! function_exists('fbks_get_admin_nonce_name')) {
+	function fbks_get_admin_nonce_name($page = 'settings')
+	{
+		return 'folioblocks_' . sanitize_key($page) . '_nonce';
+	}
+}
+
+if (! function_exists('fbks_render_admin_nonce_field')) {
+	function fbks_render_admin_nonce_field($page = 'settings')
+	{
+		wp_nonce_field(fbks_get_admin_nonce_action($page), fbks_get_admin_nonce_name($page));
+	}
+}
+
+if (! function_exists('fbks_verify_admin_nonce')) {
+	function fbks_verify_admin_nonce($page = 'settings')
+	{
+		$nonce_name = fbks_get_admin_nonce_name($page);
+
+		if (! isset($_POST[$nonce_name])) {
+			return false;
+		}
+
+		return (bool) wp_verify_nonce(
+			sanitize_text_field(wp_unslash($_POST[$nonce_name])),
+			fbks_get_admin_nonce_action($page)
+		);
+	}
+}
+
+if (! function_exists('fbks_require_admin_nonce_for_post')) {
+	function fbks_require_admin_nonce_for_post($page = 'settings')
+	{
+		if (
+			! isset($_SERVER['REQUEST_METHOD']) ||
+			'POST' !== strtoupper(sanitize_text_field(wp_unslash($_SERVER['REQUEST_METHOD'])))
+		) {
+			return;
+		}
+
+		if (! current_user_can('manage_options')) {
+			wp_die(
+				esc_html__('Sorry, you are not allowed to access this page.', 'folioblocks'),
+				esc_html__('Permission denied', 'folioblocks'),
+				array('response' => 403)
+			);
+		}
+
+		if (! fbks_verify_admin_nonce($page)) {
+			wp_die(
+				esc_html__('Security check failed. Please refresh the page and try again.', 'folioblocks'),
+				esc_html__('Security check failed', 'folioblocks'),
+				array('response' => 403)
+			);
+		}
+	}
+}
+
 if (! function_exists('fbks_get_quick_links')) {
 	function fbks_get_quick_links()
 	{

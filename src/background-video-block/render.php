@@ -133,7 +133,7 @@ $fbks_content_inner_classes = sprintf(
 		<div class="<?php echo esc_attr( $fbks_content_inner_classes ); ?>">
 			<?php
 			// Inner blocks.
-			echo wp_kses_post( $content );
+			echo fbks_kses_post_with_svg( $content );
 			?>
 		</div>
 	</div>

@@ -15,11 +15,6 @@ import {
 
 disableGalleryWrapperTransforms();
 
-const CAROUSEL_FILMSTRIP_TRANSFORM_BLOCKS = [
-	'folioblocks/carousel-gallery-block',
-	'folioblocks/filmstrip-gallery-block',
-];
-
 registerBlockType( metadata.name, {
 	icon: {
 		src: (
@@ -69,8 +64,5 @@ registerBlockType( metadata.name, {
 	},
 	edit: Edit,
 	save: Save,
-	transforms: buildGalleryTransforms(
-		metadata.name,
-		CAROUSEL_FILMSTRIP_TRANSFORM_BLOCKS
-	),
+	transforms: buildGalleryTransforms( metadata.name ),
 } );

@@ -4,12 +4,14 @@
  */
 import { createBlock, registerBlockType } from '@wordpress/blocks';
 import { select } from '@wordpress/data';
-import { decodeEntities } from '@wordpress/html-entities';
 import './style.scss';
 import Edit from './edit';
 import Save from './save';
 import metadata from './block.json';
-import { disableGalleryWrapperTransforms } from '../pb-helpers/galleryTransforms';
+import {
+	disableGalleryWrapperTransforms,
+	transformCoreImageToPbImage,
+} from '../pb-helpers/galleryTransforms';
 
 disableGalleryWrapperTransforms();
 
@@ -59,42 +61,6 @@ const hasGalleryParent = ( block ) => {
 	return parentIds.some( ( parentId ) =>
 		GALLERY_BLOCK_NAMES.has( blockEditor.getBlockName( parentId ) )
 	);
-};
-
-const transformCoreImageToPbImage = ( attributes = {} ) => {
-	const imageId = Number( attributes.id ) || 0;
-	const mediaRecord = imageId > 0 ? select( 'core' )?.getMedia( imageId ) : null;
-	const mediaDetails = mediaRecord?.media_details || {};
-	const normalizedSizes = normalizeImageSizes( mediaDetails.sizes || {} );
-	const selectedSize = getSelectedImageSize( attributes, normalizedSizes );
-	const fullSize = normalizedSizes.full || {};
-	const src =
-		selectedSize?.url ||
-		attributes.url ||
-		fullSize.url ||
-		mediaRecord?.source_url ||
-		'';
-
-	if ( ! normalizedSizes.full && ( mediaRecord?.source_url || attributes.url ) ) {
-		normalizedSizes.full = {
-			url: mediaRecord?.source_url || attributes.url,
-			width: mediaDetails.width || attributes.width || 0,
-			height: mediaDetails.height || attributes.height || 0,
-		};
-	}
-
-	return createBlock( metadata.name, {
-		id: imageId,
-		src,
-		imageSize: attributes.sizeSlug || 'large',
-		sizes: normalizedSizes,
-		width: mediaDetails.width || attributes.width || 0,
-		height: mediaDetails.height || attributes.height || 0,
-		alt: mediaRecord?.alt_text || attributes.alt || '',
-		caption: mediaRecord?.caption?.raw || attributes.caption || '',
-		title: decodeEntities( mediaRecord?.title?.rendered || '' ),
-		class: attributes.className || '',
-	} );
 };
 
 const transformPbImageToCoreImage = ( attributes = {} ) => {

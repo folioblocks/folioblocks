@@ -19,9 +19,11 @@ import {
 	SelectControl,
 } from "@wordpress/components";
 import { useState, useRef, useEffect } from "@wordpress/element";
+import { useSelect } from "@wordpress/data";
 import { applyFilters } from "@wordpress/hooks";
 import { media } from "@wordpress/icons";
 import { IconBeforeAfter } from "../pb-helpers/icons";
+import { getImageSizeOptions } from "../pb-helpers/imageSizeOptions";
 import "./editor.scss";
 
 function CustomPlaceholder({
@@ -109,6 +111,11 @@ export default function Edit({ attributes, setAttributes }) {
 	const [sliderValue, setSliderValue] = useState(50);
 	const containerRef = useRef(null);
 	const afterImageRef = useRef(null);
+	const availableImageSizes = useSelect(
+		(select) => select("core/block-editor").getSettings()?.imageSizes || [],
+		[],
+	);
+	const imageSizeOptions = getImageSizeOptions(availableImageSizes, __);
 
 	const checkoutUrl =
 		window.folioBlocksData?.checkoutUrl ||
@@ -282,24 +289,7 @@ export default function Edit({ attributes, setAttributes }) {
 							<SelectControl
 								label={__("Resolution", "folioblocks")}
 								value={attributes.resolution}
-								options={[
-									{
-										label: __("Thumbnail", "folioblocks"),
-										value: "thumbnail",
-									},
-									{
-										label: __("Medium", "folioblocks"),
-										value: "medium",
-									},
-									{
-										label: __("Large", "folioblocks"),
-										value: "large",
-									},
-									{
-										label: __("Full", "folioblocks"),
-										value: "full",
-									},
-								]}
+								options={imageSizeOptions}
 								onChange={(value) => setAttributes({ resolution: value })}
 								help={__("Select the size of the source image.", "folioblocks")}
 								__nextHasNoMarginBottom

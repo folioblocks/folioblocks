@@ -3,6 +3,27 @@
  * View JS
  */
 document.addEventListener( 'DOMContentLoaded', () => {
+	const MAX_LAYOUT_ATTEMPTS = 20;
+
+	function getImageAspectRatio( img ) {
+		if ( ! img ) {
+			return 0;
+		}
+
+		const width =
+			img.naturalWidth ||
+			parseFloat( img.getAttribute( 'width' ) ) ||
+			img.width ||
+			0;
+		const height =
+			img.naturalHeight ||
+			parseFloat( img.getAttribute( 'height' ) ) ||
+			img.height ||
+			0;
+
+		return width > 0 && height > 0 ? width / height : 0;
+	}
+
 	// Helper function to wait for all images to load
 	function waitForImages( container, callback ) {
 		const images = container.querySelectorAll( 'img.pb-image-block-img' );
@@ -38,6 +59,10 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 	// Function to recalculate layout
 	function recalculateLayout( container ) {
+		if ( ! container ) {
+			return false;
+		}
+
 		// Skip layout on mobile if collapse-on-mobile is active
 		const gallery = container.closest( '.pb-modular-gallery' );
 		if (
@@ -59,10 +84,16 @@ document.addEventListener( 'DOMContentLoaded', () => {
 					figure.style.marginBottom = '';
 				} );
 			} );
-			return;
+			return true;
 		}
 		const gap = container.closest( '.no-gap' ) ? 0 : 10;
 		const children = Array.from( container.children );
+		const containerWidth = container.clientWidth;
+
+		if ( ! children.length || ! containerWidth ) {
+			return false;
+		}
+
 		const totalAspectRatio = children.reduce( ( sum, child ) => {
 			if (
 				child.classList.contains(
@@ -71,42 +102,40 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			) {
 				const img = child.querySelector( 'img.pb-image-block-img' );
 				if ( img ) {
-					const width = img.naturalWidth || img.width;
-					const height = img.naturalHeight || img.height;
-					if ( width && height ) {
-						return sum + width / height;
+					const aspectRatio = getImageAspectRatio( img );
+					if ( aspectRatio ) {
+						return sum + aspectRatio;
 					}
 				}
 			} else if ( child.classList.contains( 'pb-image-stack' ) ) {
 				const imgs = child.querySelectorAll( 'img.pb-image-block-img' );
 				if ( imgs.length > 0 ) {
-					let totalHeight = 0;
-					let maxWidth = 0;
+					let totalInverseRatio = 0;
 					imgs.forEach( ( img ) => {
-						const width = img.naturalWidth || img.width;
-						const height = img.naturalHeight || img.height;
-						if ( width && height ) {
-							totalHeight += height;
-							if ( width > maxWidth ) {
-								maxWidth = width;
-							}
+						const aspectRatio = getImageAspectRatio( img );
+						if ( aspectRatio ) {
+							totalInverseRatio += 1 / aspectRatio;
 						}
 					} );
-					// Add gap space between stacked images
-					const gapCount = imgs.length - 1;
-					const effectiveTotalHeight = totalHeight + gap * gapCount;
-					if ( maxWidth > 0 && effectiveTotalHeight > 0 ) {
-						return sum + maxWidth / effectiveTotalHeight;
+					if ( totalInverseRatio > 0 ) {
+						return sum + 1 / totalInverseRatio;
 					}
 				}
 			}
 			return sum;
 		}, 0 );
 
-		const containerWidth = container.clientWidth;
+		if ( ! totalAspectRatio || ! Number.isFinite( totalAspectRatio ) ) {
+			return false;
+		}
+
 		const targetHeight =
 			( containerWidth - gap * ( children.length - 1 ) ) /
 			totalAspectRatio;
+
+		if ( ! targetHeight || ! Number.isFinite( targetHeight ) ) {
+			return false;
+		}
 
 		children.forEach( ( child ) => {
 			if (
@@ -118,24 +147,39 @@ document.addEventListener( 'DOMContentLoaded', () => {
 					'figure img.pb-image-block-img'
 				);
 				if ( img ) {
-					const aspectRatio = img.naturalWidth / img.naturalHeight;
+					const aspectRatio = getImageAspectRatio( img );
+					if ( ! aspectRatio ) {
+						return;
+					}
 					const width = targetHeight * aspectRatio;
 					const figure = child.querySelector( '.pb-image-block' );
+					child.style.width = `${ width }px`;
+					child.style.height = `${ targetHeight }px`;
+					child.style.marginRight = `${ gap }px`;
+					child.style.marginBottom = `${ gap }px`;
 					if ( figure ) {
-						figure.style.width = `${ width }px`;
-						figure.style.height = `${ targetHeight }px`;
-						figure.style.marginRight = `${ gap }px`;
-						figure.style.marginBottom = `${ gap }px`;
+						figure.style.width = '100%';
+						figure.style.height = '100%';
+						figure.style.marginRight = '0';
+						figure.style.marginBottom = '0';
 					}
 				}
 			} else if ( child.classList.contains( 'pb-image-stack' ) ) {
 				const imgs = child.querySelectorAll( 'img.pb-image-block-img' );
-				const stackAspectRatios = Array.from( imgs ).map( ( img ) => {
-					const width = img.naturalWidth || img.width;
-					const height = img.naturalHeight || img.height;
-					return width / height;
-				} );
-				const stackAspectRatio = Math.max( ...stackAspectRatios, 1 );
+				const stackAspectRatios = Array.from( imgs )
+					.map( ( img ) => {
+						return getImageAspectRatio( img );
+					} )
+					.filter( Boolean );
+				if ( stackAspectRatios.length !== imgs.length ) {
+					return;
+				}
+				const totalInverseRatio = stackAspectRatios.reduce(
+					( sum, aspectRatio ) => sum + 1 / aspectRatio,
+					0
+				);
+				const stackAspectRatio =
+					totalInverseRatio > 0 ? 1 / totalInverseRatio : 1;
 				const width = targetHeight * stackAspectRatio;
 				child.style.width = `${ width }px`;
 				child.style.height = `${ targetHeight }px`;
@@ -143,11 +187,11 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				child.style.marginBottom = `${ gap }px`;
 
 				const figures = child.querySelectorAll( '.pb-image-block' );
-				let totalOriginalHeight = 0;
+				let totalFigureInverseRatio = 0;
 				imgs.forEach( ( img ) => {
-					const h = img.naturalHeight;
-					if ( h ) {
-						totalOriginalHeight += h;
+					const aspectRatio = getImageAspectRatio( img );
+					if ( aspectRatio ) {
+						totalFigureInverseRatio += 1 / aspectRatio;
 					}
 				} );
 
@@ -155,16 +199,16 @@ document.addEventListener( 'DOMContentLoaded', () => {
 					const img = figure.querySelector(
 						'img.pb-image-block-img'
 					);
-					const imgOriginalHeight = img?.naturalHeight || 0;
+					const aspectRatio = getImageAspectRatio( img );
 					const effectiveStackHeight =
-						totalOriginalHeight > 0
+						totalFigureInverseRatio > 0
 							? targetHeight - gap * ( figures.length - 1 )
 							: targetHeight;
 
 					const figureHeight =
-						totalOriginalHeight > 0
-							? ( effectiveStackHeight * imgOriginalHeight ) /
-							  totalOriginalHeight
+						totalFigureInverseRatio > 0 && aspectRatio
+							? ( effectiveStackHeight * ( 1 / aspectRatio ) ) /
+							  totalFigureInverseRatio
 							: effectiveStackHeight / figures.length;
 
 					figure.style.width = '100%';
@@ -186,12 +230,24 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			) {
 				const figure = lastChild.querySelector( '.pb-image-block' );
 				if ( figure ) {
-					figure.style.marginRight = '0';
+					lastChild.style.marginRight = '0';
 				}
 			} else {
 				lastChild.style.marginRight = '0';
 			}
 		}
+
+		return true;
+	}
+
+	function scheduleLayout( row, attempt = 0 ) {
+		window.requestAnimationFrame( () => {
+			const didLayout = recalculateLayout( row );
+			if ( didLayout || attempt >= MAX_LAYOUT_ATTEMPTS ) {
+				return;
+			}
+			setTimeout( () => scheduleLayout( row, attempt + 1 ), 50 );
+		} );
 	}
 
 	// Initialize layout on DOMContentLoaded and resize
@@ -200,20 +256,21 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		waitForImages( row, () => {
 			const stacks = row.querySelectorAll( '.pb-image-stack' );
 			if ( stacks.length === 0 ) {
-				recalculateLayout( row );
+				scheduleLayout( row );
 			} else {
 				let stacksLoaded = 0;
 				stacks.forEach( ( stack ) => {
 					waitForImages( stack, () => {
 						stacksLoaded++;
 						if ( stacksLoaded === stacks.length ) {
-							recalculateLayout( row );
+							scheduleLayout( row );
 						}
 					} );
 				} );
 			}
 		} );
-		window.addEventListener( 'resize', () => recalculateLayout( row ) );
+		window.addEventListener( 'load', () => scheduleLayout( row ) );
+		window.addEventListener( 'resize', () => scheduleLayout( row ) );
 	} );
 
 	// Sequential fade-in for Modular gallery images

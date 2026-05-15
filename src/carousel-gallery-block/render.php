@@ -41,7 +41,7 @@ $fbks_wrapper_attr_string = get_block_wrapper_attributes( $fbks_wrapper_attribut
 ?>
 <div <?php echo wp_kses( $fbks_wrapper_attr_string, [ 'div' => [] ] ); ?>>
 	<div class="pb-carousel-gallery" data-loop="<?php echo $fbks_loop ? 'true' : 'false'; ?>">
-		<?php echo wp_kses_post( $content ); ?>
+		<?php echo fbks_kses_post_with_svg( $content ); ?>
 	</div>
 
 	<?php if ( fbks_fs()->can_use_premium_code__premium_only() ) : ?>

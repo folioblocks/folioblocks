@@ -25,6 +25,7 @@ import { createBlock } from "@wordpress/blocks";
 import { row } from "@wordpress/icons";
 import { applyFilters } from "@wordpress/hooks";
 import { IconModularGallery } from "../pb-helpers/icons";
+import { getImageSizeOptions } from "../pb-helpers/imageSizeOptions";
 
 import "./editor.scss";
 
@@ -77,6 +78,11 @@ export default function Edit(props) {
 		},
 		[clientId],
 	);
+	const availableImageSizes = useSelect(
+		(select) => select("core/block-editor").getSettings()?.imageSizes || [],
+		[],
+	);
+	const imageSizeOptions = getImageSizeOptions(availableImageSizes, __);
 
 	const handleImageSelect = async (media) => {
 		try {
@@ -505,50 +511,17 @@ export default function Edit(props) {
 					title={__("General Gallery Settings", "folioblocks")}
 					initialOpen={true}
 				>
-					{(() => {
-						const allSizes = innerBlocks.flatMap((rowBlock) => {
-							const rowInnerBlocks = select("core/block-editor").getBlocks(
-								rowBlock.clientId,
-							);
-							return rowInnerBlocks.flatMap((imageBlock) =>
-								Object.keys(imageBlock.attributes?.sizes || {}),
-							);
-						});
-						const resolutionOptions = [
-							{
-								label: __("Thumbnail", "folioblocks"),
-								value: "thumbnail",
-							},
-							{
-								label: __("Medium", "folioblocks"),
-								value: "medium",
-							},
-							{
-								label: __("Large", "folioblocks"),
-								value: "large",
-							},
-							{
-								label: __("Full", "folioblocks"),
-								value: "full",
-							},
-						].filter(
-							(option) =>
-								allSizes.includes(option.value) || option.value === "full",
-						);
-						return (
-							<SelectControl
-								label={__("Image Resolution", "folioblocks")}
-								value={attributes.resolution}
-								options={resolutionOptions}
-								onChange={(value) => {
-									setAttributes({ resolution: value });
-								}}
-								__nextHasNoMarginBottom
-								__next40pxDefaultSize
-								help={__("Select the size of the source image.")}
-							/>
-						);
-					})()}
+					<SelectControl
+						label={__("Image Resolution", "folioblocks")}
+						value={attributes.resolution}
+						options={imageSizeOptions}
+						onChange={(value) => {
+							setAttributes({ resolution: value });
+						}}
+						__nextHasNoMarginBottom
+						__next40pxDefaultSize
+						help={__("Select the size of the source image.")}
+					/>
 					<ToggleControl
 						label={__("Collapse layout on Mobile", "folioblocks")}
 						checked={attributes.collapseOnMobile}

@@ -150,15 +150,9 @@ export const getVideoIframeSrc = (
 			: `https://www.youtube.com/embed/${ data.videoId }`;
 		const params = new URLSearchParams();
 		params.set( 'rel', '0' );
-		params.set( 'modestbranding', '1' );
-		if ( typeof window !== 'undefined' && window.location?.origin ) {
-			params.set( 'origin', window.location.origin );
-		}
+		params.set( 'playsinline', '1' );
 		if ( autoplay ) {
 			params.set( 'autoplay', '1' );
-		}
-		if ( ! preferNoCookie ) {
-			params.set( 'enablejsapi', '1' );
 		}
 		return `${ base }?${ params.toString() }`;
 	}

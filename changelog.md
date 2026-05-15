@@ -4,6 +4,18 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.8] - 2026-05-14
+### Added
+- Support to transform a WordPress gallery into a FolioBlocks gallery. 
+- Support to transform a FolioBlocks gallery into a standard WordPress gallery block. 
+
+### Changed
+- Updated existing block transforms so all galleries, except Modular, can transform into one another. 
+
+### Fixed
+- General secuirty improvements based on code audit. 
+- Fixed a bug that prevented custom image sizes from registered by galleries. 
+
 ## [1.2.7] - 2026-04-27
 ### Fixed
 - Fixed a bug in Video Gallery that cause the block to crash in WordPress 7.0 

@@ -3,8 +3,29 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+if ( ! function_exists( 'fbks_enqueue_system_info_scripts' ) ) {
+	function fbks_enqueue_system_info_scripts( $hook ) {
+		if ( 'folioblocks_page_folioblocks-system-info' !== $hook ) {
+			return;
+		}
+
+		$script_path = plugin_dir_path( __DIR__ ) . 'js/system-info.js';
+
+		wp_enqueue_script(
+			'folioblocks-system-info',
+			plugin_dir_url( __DIR__ ) . 'js/system-info.js',
+			array(),
+			file_exists( $script_path ) ? filemtime( $script_path ) : FBKS_VERSION,
+			true
+		);
+	}
+}
+add_action( 'admin_enqueue_scripts', 'fbks_enqueue_system_info_scripts' );
+
 if ( ! function_exists( 'fbks_render_system_info_page' ) ) {
 	function fbks_render_system_info_page() {
+		fbks_require_admin_nonce_for_post( 'system_info' );
+
 		global $wpdb;
 
 		$theme        = wp_get_theme();
@@ -255,6 +276,7 @@ if ( ! function_exists( 'fbks_render_system_info_page' ) ) {
 						<textarea
 							readonly
 							class="large-text code"
+							data-fbks-system-info
 							rows="25"
 							style="white-space: pre; overflow: auto;"
 						><?php echo esc_textarea( $export ); ?></textarea>
@@ -263,7 +285,7 @@ if ( ! function_exists( 'fbks_render_system_info_page' ) ) {
 							<button
 								type="button"
 								class="button button-secondary"
-								onclick="(function(){const ta=document.querySelector('.wrap textarea');if(ta){ta.focus();ta.select();document.execCommand('copy');}})();"
+								data-fbks-copy-system-info
 							>
 								<?php esc_html_e( 'Copy to clipboard', 'folioblocks' ); ?>
 							</button>

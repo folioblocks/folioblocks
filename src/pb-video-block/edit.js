@@ -24,7 +24,7 @@ import {
 	ToggleControl,
 	Notice,
 } from "@wordpress/components";
-import { useState, useEffect } from "@wordpress/element";
+import { useState, useEffect, useRef } from "@wordpress/element";
 import { useSelect } from "@wordpress/data";
 import { applyFilters } from "@wordpress/hooks";
 import { IconVideoBlock, IconPlayButton } from "../pb-helpers/icons";
@@ -51,6 +51,43 @@ const ASPECT_RATIOS = {
 const checkoutUrl =
 	window.folioBlocksData?.checkoutUrl ||
 	"https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks&utm_medium=video-block&utm_campaign=upgrade";
+const YOUTUBE_REFERRER_META_SELECTOR =
+	'meta[name="referrer"][data-folioblocks-youtube-editor="true"]';
+const youtubeReferrerMetaCounts = new WeakMap();
+
+const addYouTubeEditorReferrerMeta = (targetDocument) => {
+	if (!targetDocument?.head) {
+		return () => {};
+	}
+
+	let meta = targetDocument.head.querySelector(YOUTUBE_REFERRER_META_SELECTOR);
+	if (!meta) {
+		meta = targetDocument.createElement("meta");
+		meta.setAttribute("name", "referrer");
+		meta.setAttribute("content", "strict-origin-when-cross-origin");
+		meta.setAttribute("data-folioblocks-youtube-editor", "true");
+		targetDocument.head.appendChild(meta);
+	}
+
+	const nextCount = (youtubeReferrerMetaCounts.get(targetDocument) || 0) + 1;
+	youtubeReferrerMetaCounts.set(targetDocument, nextCount);
+
+	return () => {
+		const currentCount = youtubeReferrerMetaCounts.get(targetDocument) || 0;
+		if (currentCount > 1) {
+			youtubeReferrerMetaCounts.set(targetDocument, currentCount - 1);
+			return;
+		}
+
+		youtubeReferrerMetaCounts.delete(targetDocument);
+		meta.remove();
+	};
+};
+
+const getEditorYouTubeIframeSrc = (providerData) =>
+	providerData?.provider === "youtube" && providerData.videoId
+		? `https://www.youtube.com/embed/${providerData.videoId}?feature=oembed`
+		: null;
 
 const getAssignedFilterCategories = (attributes = {}) => {
 	const categories = Array.isArray(attributes.filterCategories)
@@ -79,7 +116,8 @@ function getVideoEmbedMarkup(videoUrl) {
 	}
 
 	const providerData = getVideoProviderData(videoUrl);
-	const iframeSrc = getVideoIframeSrc(videoUrl, { preferNoCookie: true });
+	const iframeSrc =
+		getEditorYouTubeIframeSrc(providerData) || getVideoIframeSrc(videoUrl);
 
 	if (iframeSrc) {
 		const isYouTube = providerData.provider === "youtube";
@@ -104,6 +142,7 @@ function getVideoEmbedMarkup(videoUrl) {
 }
 
 export default function Edit({ attributes, setAttributes, context }) {
+	const blockRef = useRef(null);
 	const {
 		videoUrl,
 		thumbnail,
@@ -137,6 +176,17 @@ export default function Edit({ attributes, setAttributes, context }) {
 
 	const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 	const [isLightboxOpen, setLightboxOpen] = useState(false);
+	const isYouTubeVideo =
+		getVideoProviderData(videoUrl).provider === "youtube";
+
+	useEffect(() => {
+		if (!isYouTubeVideo) {
+			return undefined;
+		}
+
+		const targetDocument = blockRef.current?.ownerDocument || document;
+		return addYouTubeEditorReferrerMeta(targetDocument);
+	}, [isYouTubeVideo]);
 
 	// Effect: Listen for Escape key to close lightbox
 	useEffect(() => {
@@ -403,6 +453,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 	};
 	const blockProps = useBlockProps({
 		className: isHidden ? "is-hidden" : undefined,
+		ref: blockRef,
 	});
 
 	return (

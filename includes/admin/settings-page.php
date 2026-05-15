@@ -137,6 +137,7 @@ if (! function_exists('fbks_extract_news_item_image')) {
 
 function fbks_render_settings_page()
 {
+	fbks_require_admin_nonce_for_post('settings');
 
 ?>
 	<div class="pb-wrap">

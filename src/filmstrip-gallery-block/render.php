@@ -536,7 +536,7 @@ if ( false === $fbks_data_json ) {
 		</div>
 
 		<div class="pb-filmstrip-gallery-inner-blocks" aria-hidden="true">
-			<?php echo wp_kses_post( $content ); ?>
+			<?php echo fbks_kses_post_with_svg( $content ); ?>
 		</div>
 	</div>
 </div>
