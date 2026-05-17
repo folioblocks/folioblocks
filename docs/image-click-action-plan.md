@@ -30,7 +30,12 @@ This means phase one should preserve the existing attribute model wherever possi
 - Existing download controls move into Image Click Settings.
 - Existing hover overlay controls move into Image Hover Settings.
 
-The genuinely new frontend behavior is the new image-linking actions: open media file, open attachment page, open custom URL, and none.
+The genuinely new frontend behavior is the new image-linking actions: link image to media file, link image to image attachment page, link image to page/post, link image to custom URL, and none.
+
+Implementation should be split into two passes:
+
+1. Set up the new Image Click Settings and Image Hover Settings panels using the existing controls and existing behavior.
+2. Add the new premium linking features: media file, attachment page, page/post, and custom URL.
 
 ## Premium Scope
 
@@ -39,6 +44,13 @@ These new Image Click Action features are premium features.
 Exception: the existing lightbox behavior and the existing ability to show captions in the lightbox are currently free features and should remain free. We should not move existing free lightbox functionality behind the premium gate, because that would be a breaking product expectation for free users.
 
 Editor controls must be gated through each block's `premium.js` file so free users do not see unavailable premium controls in the block inspector.
+
+For free users, the Activate Image Linking `SelectControl` should only show free options:
+
+- None
+- Lightbox
+
+When the free version is active, show a Notice below the SelectControl mentioning the Pro-only image linking features and linking to the upgrade flow. This should follow the same upgrade-notice pattern already used in the current block controls.
 
 Frontend rendering must also be gated in each affected `render.php` file with the Freemius premium check:
 
@@ -50,17 +62,20 @@ The render layer should never output premium-only link, download, WooCommerce, o
 
 ## Core Product Model
 
-Each block should expose an Image Click Action `SelectControl` as the first control in Image Click Settings. Selecting a value reveals only the additional controls relevant to that action.
+Each block should expose an Activate Image Linking `SelectControl` as the first control in Image Click Settings. This control should be available in both free and Pro, but Pro-only options and their dependent controls must remain premium-gated.
 
-Image Click Action values:
+Activate Image Linking values:
 
-- Open in lightbox
-- Open media file
-- Open attachment page
-- Open custom URL
-- Download image
-- WooCommerce product
-- None (default)
+- None
+- Lightbox
+- WooCommerce Integration
+- Enable Image Downloads
+- Link Image to Media File
+- Link Image to Image Attachment Page
+- Link Image to Page/Post
+- Link Image to Custom URL
+
+Selecting a value should update the existing attributes wherever possible instead of forcing a broad migration. For example, selecting Lightbox should set `lightbox` to true, while selecting None should set `lightbox` to false and disable other click/linking features.
 
 Some actions use the whole image as the trigger. Download and WooCommerce continue to use icons for the first implementation.
 
@@ -68,24 +83,24 @@ There will not be any clicking actions on the overlay in this phase.
 
 ## Recommended Trigger Behavior
 
-| Click Action | Whole Image Trigger | Icon Trigger | Notes |
+| Activate Image Linking value | Whole Image Trigger | Icon Trigger | Notes |
 | --- | --- | --- | --- |
-| Open in lightbox | Yes | No | Default gallery behavior where appropriate. |
-| Open media file | Yes | No | Opens the direct image file. |
-| Open attachment page | Yes | No | Uses the WordPress attachment page URL. |
-| Open custom URL | Yes | No | Requires per-image URL and target controls. |
-| Download image | No | Yes | Preserve current icon-based implementation. Icon display supports on-hover or always. |
-| WooCommerce product page | No | Yes | Preserve current icon-based implementation. Icon can open product page. |
-| WooCommerce add to cart | No | Yes | Should remain icon based to prevent accidental cart additions. |
-| WooCommerce lightbox with product info | Yes | No | Preserve existing lightbox/product-info behavior and present it clearly in the new controls. |
-| None | No | No | Disables image click behavior. |
+| None | No | No | Default behavior. Sets `lightbox` off and disables click/linking features. |
+| Lightbox | Yes | No | Sets `lightbox` on. Shows the lightbox caption option. |
+| WooCommerce Integration | Mixed | Yes | Pro only. Shows WooCommerce controls when WooCommerce is installed. |
+| Enable Image Downloads | No | Yes | Pro only. Preserve current icon-based implementation. |
+| Link Image to Media File | Yes | No | Pro only. Opens the direct image file. |
+| Link Image to Image Attachment Page | Yes | No | Pro only. Uses the WordPress attachment page URL. |
+| Link Image to Page/Post | Yes | No | Pro only. Requires per-image page/post selection. |
+| Link Image to Custom URL | Yes | No | Pro only. Requires per-image custom URL. |
 
 ## Lightbox Options
 
-When Image Click Action is "Open in lightbox", show lightbox-specific options:
+When Activate Image Linking is "Lightbox", set `lightbox` to true and show lightbox-specific options:
 
 - Display caption in lightbox
-- If WooCommerce is enabled and caption/info is enabled, choose Lightbox Info: image caption or product info
+
+When Activate Image Linking is "None", set `lightbox` to false.
 
 Current implementation note:
 
@@ -101,16 +116,15 @@ Do not change the lightbox caption source in the first version. Keep the existin
 
 Move the current e-commerce settings into Image Click Settings.
 
-When Image Click Action is "WooCommerce product", show a secondary behavior control:
+When Activate Image Linking is "WooCommerce Integration", set `enableWooCommerce` to true and show the existing WooCommerce controls:
 
-- Open product page
-- Add to cart
-- Open in lightbox with product info, using the existing lightbox/product-info behavior
+- Display Add to Cart Icon
+- Default Add To Cart Icon
 
-Then show display controls as appropriate:
+Also show a new WooCommerce-specific Enable Lightbox control. When active, show an additional Lightbox Content control:
 
-- Icon display: on hover or always
-- Product info display options for lightbox mode
+- Caption
+- Product Info
 
 If WooCommerce is not active, the WooCommerce action should be unavailable or shown with a clear disabled notice.
 
@@ -120,13 +134,13 @@ Current implementation note:
 - `wooDefaultLinkAction` controls the gallery default icon behavior.
 - `wooLinkAction` allows individual images to inherit or override the gallery default.
 - The current values are `add_to_cart` and `product`.
-- The current product-lightbox behavior is tied to the lightbox and `wooLightboxInfoType`, not a separate Woo action.
+- The current product-lightbox behavior is tied to the lightbox and `wooLightboxInfoType`.
 - In the first implementation, avoid changing the working WooCommerce frontend behavior unless required by the new panel structure.
 - Preserve the current WooCommerce attributes, but rework the controls so they make sense inside Image Click Settings.
 
 ## Download Behavior
 
-Download becomes an Image Click Action instead of a separate feature group.
+Download becomes an Activate Image Linking option instead of a separate feature group.
 
 Recommended first version:
 
@@ -137,6 +151,8 @@ Recommended first version:
 Current implementation note:
 
 - Download behavior already exists through `enableDownload` and `downloadOnHover`.
+- When Activate Image Linking is "Enable Image Downloads", set `enableDownload` to true.
+- Show the existing Display Image Download Icon control.
 - The first implementation should move these controls into Image Click Settings and preserve the current render behavior.
 - The current implementation disables downloads when WooCommerce is enabled to avoid icon/action conflicts. If this rule changes later, plan it as a separate compatibility decision.
 
@@ -157,9 +173,28 @@ This section should not decide what clicking does. It only decides what appears 
 
 The first implementation should be a panel reorganization only. Hover behavior should remain exactly as it works today unless a later phase explicitly expands it.
 
-## Custom URL Requirements
+## New Link Action Requirements
 
-When Image Click Action is "Open custom URL", each image needs link data.
+The new Pro link actions are:
+
+- Link Image to Media File
+- Link Image to Image Attachment Page
+- Link Image to Page/Post
+- Link Image to Custom URL
+
+When Activate Image Linking is "Link Image to Page/Post", each image needs page/post link data.
+
+Potential per-image fields:
+
+- Linked post/page ID
+- Linked post/page URL
+- Linked post/page title
+- Open in new tab
+- Link rel/noopener behavior
+
+The selector should search posts and pages, and should exclude media attachments.
+
+When Activate Image Linking is "Link Image to Custom URL", each image needs custom link data.
 
 Potential per-image fields:
 
@@ -168,28 +203,30 @@ Potential per-image fields:
 - Link rel/noopener behavior
 - Optional aria label or link label
 
-Custom URLs should be available on all affected gallery blocks in the first version.
+Custom URL and page/post linking should be available on all affected gallery blocks in the first version.
 
-Custom URLs should also be available on the individual Image Block. For the individual Image Block, custom URL controls should display only when the block is used outside a gallery.
+Custom URL and page/post linking should also be available on the individual Image Block. For the individual Image Block, these controls should display only when the block is used outside a gallery.
 
 New per-image link fields should likely be added to `pb-image-block`, because all affected gallery blocks use `pb-image-block` as their inner image block.
+
+Important rendering rule: images in a gallery that do not have a selected page/post or custom URL must not output empty anchor tags.
 
 ## Compatibility Rules
 
 Only one whole-image click behavior should be active at a time.
 
-Lightbox and direct image/page/custom URL click actions are mutually exclusive.
+Lightbox and direct image/page/post/custom URL click actions are mutually exclusive.
 
 WooCommerce add-to-cart should not use whole-image click in the first version.
 
 Downloads and WooCommerce integration remain mutually exclusive. A block should not allow both image downloads and WooCommerce integration to be enabled at the same time.
 
-Downloads use the current icon-based implementation. If the selected Image Click Action is "Download image", download should be the main icon action.
+Downloads use the current icon-based implementation. If the selected Activate Image Linking value is "Enable Image Downloads", download should be the main icon action.
 
 Existing galleries should preserve their current behavior during migration:
 
-- Galleries with lightbox enabled should map to Image Click Action: Open in lightbox.
-- Galleries with WooCommerce enabled should map to WooCommerce product behavior according to their current settings.
+- Galleries with lightbox enabled should map to Activate Image Linking: Lightbox.
+- Galleries with WooCommerce enabled should map to Activate Image Linking: WooCommerce Integration.
 - Galleries with downloads enabled should map to the new download icon behavior.
 
 Implementation caution:
@@ -229,15 +266,16 @@ Target panel structure:
 - `Image Click Settings`
 - `Image Hover Settings`
 
-Image Click Settings should begin with a `SelectControl` using the Image Click Action values. Additional controls should be conditional:
+Image Click Settings should begin with a `SelectControl` using the Activate Image Linking values. Additional controls should be conditional:
 
-- Open in lightbox: show existing lightbox caption controls.
-- Open media file: no extra controls in the initial version.
-- Open attachment page: no extra controls in the initial version.
-- Open custom URL: show custom URL fields and target controls.
-- Download image: show existing icon display controls.
-- WooCommerce product: show existing WooCommerce controls, adjusted to fit the new section.
 - None: no extra controls.
+- Lightbox: set `lightbox` on and show existing lightbox caption controls.
+- WooCommerce Integration: set `enableWooCommerce` on and show existing WooCommerce controls, plus WooCommerce lightbox controls.
+- Enable Image Downloads: set `enableDownload` on and show existing icon display controls.
+- Link Image to Media File: no extra gallery-level controls in the initial version.
+- Link Image to Image Attachment Page: no extra gallery-level controls in the initial version.
+- Link Image to Page/Post: show page/post search controls on each Image Block.
+- Link Image to Custom URL: show custom URL controls on each Image Block.
 
 Existing filter hooks that will likely be moved or reused:
 
@@ -296,7 +334,15 @@ Existing attributes may need to remain for backward compatibility:
 
 The block edit code can derive new defaults from old attributes and save new attributes when the user changes settings.
 
-However, because much of the current behavior already works, the first implementation should not require a full migration to new attributes. Keep the existing attributes active and add new attributes only where needed for media file, attachment page, custom URL, and none.
+However, because much of the current behavior already works, the first implementation should not require a full migration to new attributes. Keep the existing attributes active and add new attributes only where needed for media file, attachment page, page/post linking, custom URL, and none.
+
+Compatibility-first mapping:
+
+- Selecting None should set `lightbox`, `enableWooCommerce`, and `enableDownload` to false.
+- Selecting Lightbox should set `lightbox` to true and keep the current `lightboxCaption` behavior.
+- Selecting WooCommerce Integration should set `enableWooCommerce` to true and keep `wooCartIconDisplay`, `wooDefaultLinkAction`, `wooLinkAction`, and `wooLightboxInfoType`.
+- Selecting Enable Image Downloads should set `enableDownload` to true and keep `downloadOnHover`.
+- Selecting new link actions should disable conflicting legacy click actions.
 
 ## Open Questions
 
@@ -304,7 +350,8 @@ Resolved decisions:
 
 - Download Image uses the existing icon-based implementation.
 - Custom URLs are available on all affected gallery blocks in the first version.
-- Custom URLs are also available on the individual Image Block, but only show controls when the Image Block is used outside a gallery.
+- Page/post links are available on all affected gallery blocks in the first version.
+- Custom URLs and page/post links are also available on the individual Image Block, but only show controls when the Image Block is used outside a gallery.
 - Modular Gallery supports the full Image Click Action feature set.
 - Overlay click actions are out of scope for this phase.
 - Lightbox caption source stays as-is for simplicity.
@@ -313,8 +360,8 @@ Resolved decisions:
 
 Remaining questions:
 
-- What exact attributes should store media file, attachment page, custom URL, and none?
-- Should custom URL target/new-tab be configured per image only, or can a gallery-level default be added later?
+- What exact attributes should store media file, attachment page, page/post, custom URL, and none?
+- Should page/post and custom URL target/new-tab be configured per image only, or can a gallery-level default be added later?
 - How should old blocks with `lightbox: false`, `enableDownload: false`, and `enableWooCommerce: false` map to the new default `None` without changing frontend expectations?
 
 ## Proposed First Version
@@ -327,14 +374,15 @@ Remaining questions:
    - Hover overlay controls into Image Hover Settings.
 3. Preserve existing free lightbox and free lightbox caption behavior.
 4. Preserve existing premium WooCommerce, download, and hover overlay behavior.
-5. Add Image Click Action `SelectControl`:
-   - Open in lightbox
-   - Open media file
-   - Open attachment page
-   - Open custom URL
-   - Download image
-   - WooCommerce product
-   - None (default)
+5. Add Activate Image Linking `SelectControl`:
+   - None
+   - Lightbox
+   - WooCommerce Integration
+   - Enable Image Downloads
+   - Link Image to Media File
+   - Link Image to Image Attachment Page
+   - Link Image to Page/Post
+   - Link Image to Custom URL
 6. Show lightbox caption/product-info settings only when the selected action uses the lightbox.
 7. Add frontend render support only for the new link actions after the panel split is stable.
 8. Preserve existing frontend behavior through migration defaults.
