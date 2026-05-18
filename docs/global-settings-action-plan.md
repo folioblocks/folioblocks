@@ -55,12 +55,13 @@ Recommended MVP settings:
 - Drop shadow.
 - Download icon defaults for Pro users.
 - WooCommerce icon behavior defaults for Pro users when WooCommerce is active.
+- Export current Global Settings as a JSON file.
+- Import Global Settings from a previously exported JSON file.
 
 Out of scope for MVP:
 
 - Migrating all existing blocks to inherited values.
 - Per-block global presets.
-- Import/export settings.
 - Role-specific settings.
 - Per-post or per-template settings.
 - Any destructive rewrite of saved post content.
@@ -179,6 +180,7 @@ Suggested sections:
 - Image Style Defaults
 - Download Defaults
 - WooCommerce Defaults
+- Import / Export
 - Reset Defaults
 
 The UI should be quiet and utilitarian. These are operational controls, not a marketing page.
@@ -190,6 +192,63 @@ Important admin behavior:
 - Pro-only settings are visible only when `fbks_fs()->can_use_premium_code()` is true, or shown as disabled upgrade prompts if that matches the existing product pattern.
 - WooCommerce defaults are shown only when WooCommerce is active, or shown with a disabled notice.
 - Saving should redirect back with a success query arg to prevent duplicate form submission.
+
+## Import And Export
+
+Import/export should be included in the first version because it is useful without increasing the complexity of block rendering.
+
+Export behavior:
+
+- Add an "Export Settings" button on the Global Settings page.
+- Export the sanitized `folioblocks_global_settings` option as a JSON file.
+- Include a small metadata wrapper so future versions can validate the file:
+
+```json
+{
+  "plugin": "folioblocks",
+  "type": "global-settings",
+  "version": 1,
+  "exportedAt": "2026-05-17T00:00:00+00:00",
+  "settings": {}
+}
+```
+
+Import behavior:
+
+- Add a file input that accepts `.json`.
+- Require `manage_options` and a valid admin nonce.
+- Decode the uploaded JSON server-side.
+- Validate `plugin`, `type`, and `settings`.
+- Sanitize imported settings using the same `fbks_sanitize_global_settings()` function used for normal saves.
+- Merge imported settings with defaults so missing future keys do not break the page.
+- Save the result to `folioblocks_global_settings`.
+- Redirect back with a success or error message.
+
+Important import rules:
+
+- Importing settings must not update existing saved blocks.
+- Importing settings only changes the global defaults used by newly inserted blocks.
+- Unknown keys should be ignored.
+- Invalid values should fall back to safe defaults.
+- Pro-only imported settings should be ignored or neutralized when the current installation cannot use Pro code.
+- WooCommerce settings should be saved safely even when WooCommerce is inactive, but the UI should still communicate that they only matter when WooCommerce is active.
+
+Recommended implementation:
+
+```php
+fbks_export_global_settings()
+fbks_import_global_settings()
+fbks_validate_global_settings_export($payload)
+```
+
+Use `admin_post_` actions rather than processing file downloads/uploads inside the page render function:
+
+```php
+add_action('admin_post_folioblocks_export_global_settings', 'fbks_export_global_settings');
+add_action('admin_post_folioblocks_import_global_settings', 'fbks_import_global_settings');
+```
+
+This keeps form rendering separate from request handling and makes nonce/capability checks easier to audit.
 
 ## Editor Integration
 
@@ -343,11 +402,13 @@ This avoids surprising site owners by changing existing galleries after plugin u
 
 - Add `includes/settings/global-settings.php`.
 - Define defaults, sanitization, and getters.
+- Add export/import validation and request handlers.
 - Load the settings module from `folioblocks.php`.
 - Add `includes/admin/global-settings-page.php`.
 - Register `FolioBlocks > Global Settings` submenu.
 - Update Dashboard copy so it no longer says there are no external settings pages.
 - Add success/error notices for saving.
+- Add import/export notices for successful and failed transfers.
 
 ### Phase 2: Editor Defaults
 
@@ -379,7 +440,6 @@ This avoids surprising site owners by changing existing galleries after plugin u
 ### Phase 5: Presets And Bulk Tools
 
 - Add named presets only if users need more than one global style.
-- Add import/export only after the base settings shape stabilizes.
 - Consider a bulk "Apply global defaults to existing blocks" tool with a dry-run preview.
 
 ## Testing Plan
@@ -393,6 +453,11 @@ Manual test cases:
 - Confirm existing saved blocks do not change after updating global settings.
 - Confirm Pro-only settings do not appear or render in free mode.
 - Confirm WooCommerce defaults behave correctly when WooCommerce is inactive.
+- Export settings and confirm the JSON contains the metadata wrapper and sanitized settings.
+- Import a valid export and confirm values are saved.
+- Import malformed JSON and confirm a safe error notice appears.
+- Import JSON with unknown keys and confirm they are ignored.
+- Import JSON with invalid values and confirm sanitization/fallback works.
 - Confirm translated strings are picked up by the i18n workflow.
 
 Build checks:
@@ -412,12 +477,14 @@ npm run i18n:pot
 - Should free users see disabled Pro settings as upgrade prompts, or should Pro-only settings be hidden entirely?
 - Which defaults should apply to the individual Image Block when it is used outside a gallery?
 - Should video block defaults be included in version one, or handled after image/gallery defaults are stable?
+- Should imports replace the full settings object, or merge only the keys present in the imported file?
 
 ## Recommended First Build
 
 Start with a conservative first build:
 
 - Add the Global Settings submenu and option storage.
+- Include JSON export/import for moving settings between sites.
 - Support image/gallery defaults only.
 - Apply defaults once to newly inserted blocks.
 - Do not alter existing saved blocks.
