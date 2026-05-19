@@ -108,7 +108,14 @@ No, the galleries will remain in place on your site. However, the advanced layou
 == Changelog ==
 
 = 1.2.9 =
-* Added attribute parity in Block Transforms feature
+* Added Block Transforms support to convert WordPress Video, YouTube Embed, and Vimeo Embed blocks into a FolioBlocks Video Block.  
+* Added attribute parity in Block Transforms feature. 
+
+= 1.2.8 =
+* Support to transform a WordPress gallery into a FolioBlocks gallery. 
+* Updated existing block transforms so all galleries, except Modular, can transform into one another. 
+* General secuirty improvements based on code audit. 
+* Fixed a bug that prevented custom image sizes from registered by galleries. 
 
 = 1.2.7 =
 * Fixed a bug in Video Gallery that cause the block to crash in WordPress 7.0 
@@ -262,189 +269,6 @@ No, the galleries will remain in place on your site. However, the advanced layou
 = 1.0.0 =
 * Public Release
 * Rebuilt the Admin Dashboard
-
-= 0.9.9 =
-* Modular Gallery Block is now available on Pro only
-* Lightbox Caption and Show Title on Hover now Pro only features
-
-= 0.9.8 =
-* Fixes for WordPress.org compliance
-
-= 0.9.7 =
-* Updated slugs on all blocks to new name, Portfolio Blocks becomes FolioBlocks
-
-= 0.9.6 =
-* Updated all blocks to remove premium code from free version
-* Updated PB Image Block and PB Video Block to remove premium code
-* Rebuilt PB Video Block Lightbox to match PB Image Block
-
-= 0.9.5 =
-* Changed plugin slug for WordPress.org compliance
-* Added deprecated.js to all blocks to help transition beta testers into new slug
-
-= 0.9.4 =
-* Improved icon adjustment with border & border radius
-* Fixed TypeError on all blocks
-* Removed title tag from PB Image Block
-* Fixed Safari hover blur bug in Carousel Gallery
-* Fixed Grid Gallery filtering bug
-* Fixed additional WordPress.org compliance issues
-
-= 0.9.3 =
-* WooCommerce toggle now only appears when WooCommerce is active
-* Fixed Carousel icon sizing bug
-* Fixed Modular Gallery Add To Cart icon sizing bug
-* Fixed PB Image Block Add To Cart icon border bug
-
-= 0.9.2 =
-* Added WooCommerce integration to PB Video Block
-* Added WooCommerce integration to Video Gallery Block
-
-= 0.9.1 =
-* Replaced front-end icons with PNG files for consistent sizing
-* Fixed Grid Gallery layout issue when icons were present
-
-= 0.9.0 =
-* Added WooCommerce integration to Carousel, Justified, Masonry, and Modular Galleries
-
-= 0.8.9 =
-* Added WooCommerce integration to Grid Gallery
-* Added WooCommerce integration to PB Image Block
-
-= 0.8.8 =
-* Rebuilt premium filters for consistent method across all blocks
-
-= 0.8.7 =
-* Fixed bugs introduced in 0.8.6
-* Fixed Image Overlay coverage issue
-
-= 0.8.6 =
-* Improved entrance animations for all galleries
-* Fixed Video Block rendering bug when thumbnail missing
-
-= 0.8.5 =
-* Fixed script loading bug
-
-= 0.8.4 =
-* Fixed focus state bug in Carousel Gallery
-* Added Lazy Load & Disable Right Click to Video Gallery
-* Added Lazy Load & Disable Right Click to Before & After Block
-
-= 0.8.3 =
-* Added Title & Description in Lightbox to Video Gallery
-* Fixed Carousel navigation sync bug
-* Disabled Image Gallery Lightbox inside editor
-* Improved accessibility of Lightboxes using keyboard navigation
-
-= 0.8.2 =
-* Added FAQ section to readme.txt
-* Updated Carousel Gallery icon
-* Added 15 image/video limit to free version galleries
-* Updated admin page to show alternate text for premium users
-* Fixed Carousel centering issue
-* Fixed Carousel vertical orientation bug
-
-= 0.8.1 =
-* Additional fixes for WordPress Plugin Check
-* Fixed premium script loading
-
-= 0.8.0 =
-* Added required assets for WordPress.org plugin repository
-* Additional fixes for WordPress Plugin Check
-
-= 0.7.9 =
-* Added Lazy Load to all galleries
-* Improved Modular Gallery layout logic performance
-
-= 0.7.8 =
-* All locked free-version features now link to Upgrade page
-* Changelog on admin page now auto-pulled from readme.txt
-
-= 0.7.7 =
-* Added Lazy Load hooks to all galleries
-* Freemius bug fixes
-
-= 0.7.6 =
-* Freemius bug fixes
-
-= 0.7.5 =
-* Freemius bug fixes
-
-= 0.7.4 =
-* Added Freemius premium feature logic to Video Gallery Block
-
-= 0.7.3 =
-* Added Freemius premium feature logic to Carousel & Before & After blocks
-
-= 0.7.2 =
-* Added Freemius premium feature logic to Masonry & Modular galleries
-
-= 0.7.1 =
-* Added Freemius SDK
-* Added Freemius premium feature logic to Grid & Justified Galleries
-
-= 0.7.0 =
-* Moved Modular Gallery layout logic to parent block for improved performance
-* Improved preliminary screens for Modular & Video Gallery Blocks
-
-= 0.6.9 =
-* Added Before & After comparison block
-* Fixed block previews
-* Fixed Carousel resizing bug before saving
-
-= 0.6.8 =
-* Improved stability when injecting thumbnails into List View
-
-= 0.6.7 =
-* Completed Carousel render.php
-* Fixed container-type bug in PB Image Block
-
-= 0.6.6 =
-* Began building Carousel Gallery Block
-
-= 0.6.5 =
-* Added custom icons to all blocks
-
-= 0.6.4 =
-* Fixed download icon in Lightbox across galleries
-* Fixed mobile arrow placement in Lightbox
-* Adjusted download icon styles
-
-= 0.6.3 =
-* Organized gallery settings
-
-= 0.6.2 =
-* Added Right-Click Prevention to Grid, Justified, Masonry, Modular Galleries
-
-= 0.6.1 =
-* Fixed Masonry border-related layout bug
-* Fixed Justified gallery mobile margin bug
-
-= 0.6.0 =
-* Added Image Download support to all image galleries
-* Updated hover behavior: titles shown instead of captions
-
-= 0.5.5 =
-* Added border & border-radius support to PB Image Block and all galleries
-* Moved Grid Gallery layout logic out of PB Image Block
-
-= 0.5.4 =
-* Tested compatible with WordPress 6.8
-* Moved Filter Bar color settings into Styles panel
-* Continued scaffolding Modular Gallery and Image Row blocks
-
-= 0.5.3 =
-* Added responsive column control component
-* Fixed Masonry column count bug
-
-= 0.5.2 =
-* Began license management UI
-
-= 0.5.1 =
-* Created admin settings page
-
-= 0.5.0 =
-* Grid, Masonry, Justified, and Video Gallery blocks feature complete
 
 == Source Code ==
 

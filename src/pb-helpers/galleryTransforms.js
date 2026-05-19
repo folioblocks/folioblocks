@@ -174,83 +174,6 @@ const getCoreGalleryAttributes = ( currentBlockName, attributes = {} ) => {
 	return next;
 };
 
-const transformPbImageToCoreImage = ( block ) => {
-	if ( block?.name !== 'folioblocks/pb-image-block' ) {
-		return null;
-	}
-
-	const attributes = block.attributes || {};
-	const normalizedSizes = normalizeImageSizes( attributes.sizes || {} );
-	const selectedSize = getSelectedImageSize( attributes, normalizedSizes );
-	const src = selectedSize?.url || attributes.src || '';
-
-	if ( ! src ) {
-		return null;
-	}
-
-	return createBlock( 'core/image', {
-		id: attributes.id || undefined,
-		url: src,
-		alt: attributes.alt || '',
-		caption: attributes.caption || '',
-		sizeSlug: attributes.imageSize || 'large',
-		className: attributes.class || undefined,
-	} );
-};
-
-const getFolioGalleryCoreInnerBlocks = (
-	attributes = {},
-	innerBlocks = []
-) => {
-	const transformedInnerBlocks = innerBlocks
-		.map( transformPbImageToCoreImage )
-		.filter( Boolean );
-
-	if ( transformedInnerBlocks.length ) {
-		return transformedInnerBlocks;
-	}
-
-	return ( attributes.images || [] )
-		.map( ( image ) =>
-			transformPbImageToCoreImage( {
-				name: 'folioblocks/pb-image-block',
-				attributes: {
-					id: image.id,
-					src: image.src || image.url,
-					alt: image.alt,
-					caption: image.caption,
-					title: image.title,
-					sizes: image.sizes,
-					width: image.width,
-					height: image.height,
-					imageSize: attributes.resolution || image.imageSize,
-					class: image.class,
-				},
-			} )
-		)
-		.filter( Boolean );
-};
-
-const getFolioGalleryCoreAttributes = ( attributes = {} ) => {
-	const next = {};
-
-	CORE_GALLERY_ATTRS.forEach( ( key ) => {
-		if ( typeof attributes[ key ] !== 'undefined' ) {
-			next[ key ] = attributes[ key ];
-		}
-	} );
-
-	if ( Number( attributes.columns ) > 0 ) {
-		next.columns = Number( attributes.columns );
-	}
-
-	if ( attributes.resolution ) {
-		next.sizeSlug = attributes.resolution;
-	}
-
-	return next;
-};
-
 const transformCoreGalleryToFolioGallery = (
 	currentBlockName,
 	attributes,
@@ -260,13 +183,6 @@ const transformCoreGalleryToFolioGallery = (
 		currentBlockName,
 		getCoreGalleryAttributes( currentBlockName, attributes ),
 		getCoreGalleryInnerBlocks( attributes, innerBlocks )
-	);
-
-const transformFolioGalleryToCoreGallery = ( attributes, innerBlocks ) =>
-	createBlock(
-		'core/gallery',
-		getFolioGalleryCoreAttributes( attributes ),
-		getFolioGalleryCoreInnerBlocks( attributes, innerBlocks )
 	);
 
 export const disableGalleryWrapperTransforms = () => {
@@ -361,17 +277,6 @@ export const buildGalleryTransforms = (
 					),
 			},
 		],
-		to: [
-			{
-				type: 'block',
-				blocks: [ 'core/gallery' ],
-				isMatch: ( attributes, block ) =>
-					getFolioGalleryCoreInnerBlocks(
-						attributes,
-						block?.innerBlocks || []
-					).length > 0,
-				transform: transformFolioGalleryToCoreGallery,
-			},
-		],
+		to: [],
 	};
 };

@@ -5,13 +5,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.2.9] - 2026-05-18
+### Added 
+- Added Block Transforms support to convert WordPress Video, YouTube Embed, and Vimeo Embed blocks into a FolioBlocks Video Block.  
+
 ### Fixed
 - Added attribute parity in Block Transforms feature
 
 ## [1.2.8] - 2026-05-14
 ### Added
 - Support to transform a WordPress gallery into a FolioBlocks gallery. 
-- Support to transform a FolioBlocks gallery into a standard WordPress gallery block. 
 
 ### Changed
 - Updated existing block transforms so all galleries, except Modular, can transform into one another. 
