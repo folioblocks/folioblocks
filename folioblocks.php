@@ -3,7 +3,7 @@
 /**
  * Plugin Name:       FolioBlocks
  * Description:       Create fast, responsive photo and video gallery with grid, masonry, justified, modular, and carousel layouts—ideal for photographers and creatives.
- * Version:           1.2.9
+ * Version:           1.3.0.beta
  * Requires at least: 6.3
  * Requires PHP:      7.4
  * Author:            FolioBlocks
@@ -22,7 +22,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FBKS_VERSION', '1.2.9');
+define('FBKS_VERSION', '1.3.0.beta');
 define('FBKS_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('FBKS_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('FBKS_ALL_FILTER_TOKEN', 'all');
@@ -207,46 +207,46 @@ if (function_exists('fbks_fs')) {
      */
 
     
-        if (! function_exists('fbks_fs')) {
-            // Create a helper function for easy SDK access.
-            function fbks_fs()
-            {
-                global $fbks_fs;
+        if ( ! function_exists( 'fbks_fs' ) ) {
+    // Create a helper function for easy SDK access.
+    function fbks_fs() {
+        global $fbks_fs;
 
-                if (! isset($fbks_fs)) {
-                    // Include Freemius SDK.
-                    require_once dirname(__FILE__) . '/vendor/freemius/start.php';
-                    $fbks_fs = fs_dynamic_init(array(
-                        'id'                  => '19558',
-                        'slug'                => 'folioblocks',
-                        'premium_slug'        => 'folioblocks-pro',
-                        'type'                => 'plugin',
-                        'public_key'          => 'pk_9719a603d337d33af1a1193508cdf',
-                        'is_premium'          =>  true,
-                        'premium_suffix'      => 'Pro',
-                        // If your plugin is a serviceware, set this option to false.
-                        'has_premium_version' => true,
-                        'has_addons'          => false,
-                        'has_paid_plans'      => true,
-                        'is_org_compliant' => true,
-                        // Automatically removed in the free version. If you're not using the
-                        // auto-generated free version, delete this line before uploading to wp.org.
-                        'wp_org_gatekeeper'   => 'OA7#BoRiBNqdf52FvzEf!!074aRLPs8fspif$7K1#4u4Csys1fQlCecVcUTOs2mcpeVHi#C2j9d09fOTvbC0HloPT7fFee5WdS3G',
-                        'menu'                => array(
-                            'slug'           => 'folioblocks-settings',
-                            'contact'        => false,
-                            'support'        => false,
-                        ),
-                    ));
-                }
+        if ( ! isset( $fbks_fs ) ) {
+            // Include Freemius SDK.
+            require_once dirname( __FILE__ ) . '/vendor/freemius/start.php';
 
-                return $fbks_fs;
-            }
+            $fbks_fs = fs_dynamic_init( array(
+                'id'                  => '19558',
+                'slug'                => 'folioblocks',
+                'premium_slug'        => 'folioblocks-pro',
+                'type'                => 'plugin',
+                'public_key'          => 'pk_9719a603d337d33af1a1193508cdf',
+                'is_premium'          => true,
+                // If your plugin is a serviceware, set this option to false.
+                'has_premium_version' => true,
+                'has_addons'          => false,
+                'has_paid_plans'      => true,
+                'is_org_compliant'    => true,
+                // Automatically removed in the free version. If you're not using the
+                // auto-generated free version, delete this line before uploading to wp.org.
+                'wp_org_gatekeeper'   => 'OA7#BoRiBNqdf52FvzEf!!074aRLPs8fspif$7K1#4u4Csys1fQlCecVcUTOs2mcpeVHi#C2j9d09fOTvbC0HloPT7fFee5WdS3G',
+                'menu'                => array(
+                    'slug'           => 'folioblocks-settings',
+                    'contact'        => false,
+                    'support'        => false,
+                ),
+            ) );
+        }
 
-            // Init Freemius.
-            fbks_fs();
-            // Signal that SDK was initiated.
-            do_action('fbks_fs_loaded');
+        return $fbks_fs;
+    }
+
+    // Init Freemius.
+    fbks_fs();
+    // Signal that SDK was initiated.
+    do_action( 'fbks_fs_loaded' );
+
 
             // Disable annual pricing in monthly view
             fbks_fs()->add_filter('pricing/show_annual_in_monthly', '__return_false');
@@ -273,6 +273,7 @@ if (function_exists('fbks_fs')) {
                 $data = [
                     'checkoutUrl'    => fbks_fs()->pricing_url(),
                     'siteUrl'        => site_url(),
+                    'wpVersion'      => get_bloginfo('version'),
                     'isPro'          => (function_exists('fbks_fs') && fbks_fs()->can_use_premium_code()),
                     'hasWooCommerce' => $woo_active,
                 ];

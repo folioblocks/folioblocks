@@ -82,6 +82,7 @@ export default function ProductSearchControl( { value, onSelect } ) {
 						onChange={ ( val ) => setSearchTerm( val ) }
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
+						help={ __( 'Start typing to search for products in your WooCommerce store. Click a result to link it.', 'folioblocks' ) }
 					/>
 					{ isSearching && <Spinner /> }
 					{ searchResults.length > 0 && (

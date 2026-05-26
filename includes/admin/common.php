@@ -114,13 +114,23 @@ if (! function_exists('fbks_get_quick_links')) {
 if (! function_exists('fbks_render_quick_links')) {
 	function fbks_render_quick_links()
 	{
+		$allowed_icon_html = array(
+			'svg'  => array(
+				'xmlns'   => true,
+				'viewbox' => true,
+				'viewBox' => true,
+			),
+			'path' => array(
+				'd' => true,
+			),
+		);
 		?>
 		<ul class="pb-quick-links">
 			<?php foreach (fbks_get_quick_links() as $link) : ?>
 				<li>
 					<a href="<?php echo esc_url($link['href']); ?>" target="_blank" rel="noopener noreferrer">
-						<?php echo wp_kses_post($link['icon']); ?>
-						<?php echo esc_html($link['label']); ?>
+						<?php echo wp_kses($link['icon'], $allowed_icon_html); ?>
+						<span><?php echo esc_html($link['label']); ?></span>
 					</a>
 				</li>
 			<?php endforeach; ?>

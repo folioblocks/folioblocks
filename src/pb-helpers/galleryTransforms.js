@@ -1,6 +1,7 @@
 import { createBlock, getBlockType } from '@wordpress/blocks';
 import { select } from '@wordpress/data';
 import { decodeEntities } from '@wordpress/html-entities';
+import { getExifAttributesFromMedia } from './exifMetadata';
 
 const DEFAULT_GALLERY_BLOCKS = [
 	'folioblocks/grid-gallery-block',
@@ -110,6 +111,7 @@ export const transformCoreImageToPbImage = ( attributes = {} ) => {
 			mediaRecord?.title?.rendered || attributes.title || ''
 		),
 		class: attributes.className || '',
+		...( getExifAttributesFromMedia( mediaRecord ) || {} ),
 	} );
 };
 

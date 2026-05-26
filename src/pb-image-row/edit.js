@@ -15,6 +15,7 @@ import { ToolbarGroup, ToolbarButton } from '@wordpress/components';
 import { stack } from '@wordpress/icons';
 import { decodeEntities } from '@wordpress/html-entities';
 import { IconImageBlock } from '../pb-helpers/icons';
+import { getExifAttributesFromMedia } from '../pb-helpers/exifMetadata';
 
 const ALLOWED_BLOCKS = [
 	'folioblocks/pb-image-block',
@@ -72,11 +73,14 @@ export default function Edit( { clientId, context } ) {
 					src: image.url,
 					alt: image.alt || '',
 					title,
-					caption: image.caption || '',
-					sizes: image.sizes || {},
-					width: image.width || 0,
-					height: image.height || 0,
-				} );
+						caption: image.caption || '',
+						sizes: image.sizes || {},
+						width: image.width || 0,
+						height: image.height || 0,
+						...( getExifAttributesFromMedia( response ) ||
+							getExifAttributesFromMedia( image ) ||
+							{} ),
+					} );
 
 				replaceInnerBlocks(
 					clientId,

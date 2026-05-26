@@ -16,6 +16,8 @@ import { applyThumbnails } from '../pb-helpers/applyThumbnails';
 import CompactColorControl, {
 	CompactTwoColorControl,
 } from '../pb-helpers/CompactColorControl';
+import { registerImageClickActionPremiumControls } from '../pb-helpers/imageClickActionPremiumControls';
+import { registerImageHoverActionPremiumControls } from '../pb-helpers/imageHoverActionPremiumControls';
 
 addFilter(
 	'folioBlocks.modularGallery.editorEnhancements',
@@ -47,176 +49,7 @@ addFilter(
 	}
 );
 
-addFilter(
-	'folioBlocks.modularGallery.downloadControls',
-	'folioblocks/modular-gallery-premium-downloads',
-	( defaultContent, props ) => {
-		const { attributes, setAttributes, effectiveEnableWoo } = props;
 
-		if ( effectiveEnableWoo && attributes.enableDownload ) {
-			setAttributes( { enableDownload: false } );
-		}
-
-		const { enableDownload, downloadOnHover } = attributes;
-
-		return (
-			<>
-				<ToggleControl
-					label={ __( 'Enable Image Downloads', 'folioblocks' ) }
-					checked={ !! enableDownload }
-					onChange={ ( value ) =>
-						setAttributes( { enableDownload: value } )
-					}
-					__nextHasNoMarginBottom
-					help={ __(
-						'Enable visitors to download images from the gallery.',
-						'folioblocks'
-					) }
-					disabled={ effectiveEnableWoo }
-				/>
-
-				{ enableDownload && (
-					<SelectControl
-						label={ __(
-							'Display Image Download Icon',
-							'folioblocks'
-						) }
-						value={ downloadOnHover ?? true ? 'hover' : 'always' }
-						options={ [
-							{
-								label: __( 'On Hover', 'folioblocks' ),
-								value: 'hover',
-							},
-							{
-								label: __( 'Always', 'folioblocks' ),
-								value: 'always',
-							},
-						] }
-						onChange={ ( value ) =>
-							setAttributes( {
-								downloadOnHover: value === 'hover',
-							} )
-						}
-						__nextHasNoMarginBottom
-						__next40pxDefaultSize
-						help={ __(
-							'Set display preference for Image Download icon.',
-							'folioblocks'
-						) }
-					/>
-				) }
-			</>
-		);
-	}
-);
-
-addFilter(
-	'folioBlocks.modularGallery.wooCommerceControls',
-	'folioblocks/modular-gallery-premium-woocommerce',
-	( defaultContent, props ) => {
-		const wooActive = window.folioBlocksData?.hasWooCommerce ?? false;
-		if ( ! wooActive ) {
-			return null;
-		}
-
-		const { attributes, setAttributes } = props;
-		const {
-			enableWooCommerce,
-			wooCartIconDisplay,
-			wooDefaultLinkAction,
-			enableDownload,
-		} = attributes;
-
-		return (
-			<>
-				<ToggleControl
-					label={ __(
-						'Enable WooCommerce Integration',
-						'folioblocks'
-					) }
-					checked={ !! enableWooCommerce }
-					onChange={ ( value ) => {
-						setAttributes( { enableWooCommerce: value } );
-
-						if ( ! value ) {
-							setAttributes( {
-								wooLightboxInfoType: 'caption',
-								wooProductPriceOnHover: false,
-								wooCartIconDisplay: 'hover',
-							} );
-						}
-					} }
-					__nextHasNoMarginBottom
-					help={ __(
-						'Link gallery images to WooCommerce products.',
-						'folioblocks'
-					) }
-					disabled={ enableDownload }
-				/>
-
-				{ enableWooCommerce && (
-					<>
-						<SelectControl
-							label={ __(
-								'Display Add to Cart Icon',
-								'folioblocks'
-							) }
-							value={ wooCartIconDisplay }
-							options={ [
-								{
-									label: __( 'On Hover', 'folioblocks' ),
-									value: 'hover',
-								},
-								{
-									label: __( 'Always', 'folioblocks' ),
-									value: 'always',
-								},
-							] }
-							onChange={ ( value ) =>
-								setAttributes( { wooCartIconDisplay: value } )
-							}
-							__nextHasNoMarginBottom
-							__next40pxDefaultSize
-							help={ __(
-								'Choose when to display the Add to Cart icon.',
-								'folioblocks'
-							) }
-						/>
-						<SelectControl
-							label={ __(
-								'Default Add To Cart Icon Behavior',
-								'folioblocks'
-							) }
-							value={ wooDefaultLinkAction }
-							options={ [
-								{
-									label: __( 'Add to Cart', 'folioblocks' ),
-									value: 'add_to_cart',
-								},
-								{
-									label: __(
-										'Open Product Page',
-										'folioblocks'
-									),
-									value: 'product',
-								},
-							] }
-							onChange={ ( value ) =>
-								setAttributes( { wooDefaultLinkAction: value } )
-							}
-							__nextHasNoMarginBottom
-							__next40pxDefaultSize
-							help={ __(
-								'Sets the default action for Add To Cart icons in this gallery. Individual images can override this setting.',
-								'folioblocks'
-							) }
-						/>
-					</>
-				) }
-			</>
-		);
-	}
-);
 
 addFilter(
 	'folioBlocks.modularGallery.disableRightClickToggle',
@@ -361,139 +194,16 @@ addFilter(
 	}
 );
 
-addFilter(
-	'folioBlocks.modularGallery.onHoverTitleToggle',
-	'folioblocks/modular-gallery-premium-title-toggle',
-	( defaultContent, props ) => {
-		const { attributes, setAttributes } = props;
-		const { onHoverTitle, enableWooCommerce, wooProductPriceOnHover } =
-			attributes;
+registerImageClickActionPremiumControls( {
+	hookPrefix: 'folioBlocks.modularGallery',
+	namespace: 'folioblocks/modular-gallery',
+} );
 
-		return (
-			<>
-				<ToggleControl
-					label={ __( 'Show Overlay on Hover', 'folioblocks' ) }
-					help={
-						enableWooCommerce
-							? __(
-									'Display Image title or Product Info when hovering over images.',
-									'folioblocks'
-							  )
-							: __(
-									'Display Image title when hovering over image.',
-									'folioblocks'
-							  )
-					}
-					__nextHasNoMarginBottom
-					checked={ !! attributes.onHoverTitle }
-					onChange={ ( value ) =>
-						setAttributes( { onHoverTitle: value } )
-					}
-				/>
+registerImageHoverActionPremiumControls( {
+	hookPrefix: 'folioBlocks.modularGallery',
+	namespace: 'folioblocks/modular-gallery',
+} );
 
-				{ enableWooCommerce && onHoverTitle && (
-					<SelectControl
-						label={ __( 'Overlay Content', 'folioblocks' ) }
-						value={ wooProductPriceOnHover ? 'product' : 'title' }
-						options={ [
-							{
-								label: __( 'Show Image Title', 'folioblocks' ),
-								value: 'title',
-							},
-							{
-								label: __( 'Show Product Info', 'folioblocks' ),
-								value: 'product',
-							},
-						] }
-						onChange={ ( val ) => {
-							// Ensure hover info is enabled, then switch mode
-							setAttributes( {
-								onHoverTitle: true,
-								wooProductPriceOnHover: val === 'product',
-							} );
-						} }
-						__nextHasNoMarginBottom
-						__next40pxDefaultSize
-						help={ __(
-							'Choose what appears when hovering over images.',
-							'folioblocks'
-						) }
-					/>
-				) }
-				{ onHoverTitle && (
-					<SelectControl
-						label={ __( 'Hover Style', 'folioblocks' ) }
-						value={ attributes.onHoverStyle || 'blur-overlay' }
-						options={ [
-							{
-								label: __(
-									'Blur Overlay - Centered',
-									'folioblocks'
-								),
-								value: 'blur-overlay',
-							},
-							{
-								label: __(
-									'Fade Overlay - Centered',
-									'folioblocks'
-								),
-								value: 'fade-overlay',
-							},
-							{
-								label: __(
-									'Gradient Overlay - Slide-up Bottom',
-									'folioblocks'
-								),
-								value: 'gradient-bottom',
-							},
-							{
-								label: __(
-									'Chip Overlay - Top-Left Label',
-									'folioblocks'
-								),
-								value: 'chip',
-							},
-							{
-								label: __(
-									'Color Overlay - Custom Colors',
-									'folioblocks'
-								),
-								value: 'color-overlay',
-							},
-						] }
-						onChange={ ( v ) =>
-							setAttributes( { onHoverStyle: v } )
-						}
-						__nextHasNoMarginBottom
-						__next40pxDefaultSize
-					/>
-				) }
-				{ onHoverTitle &&
-					attributes.onHoverStyle === 'color-overlay' && (
-						<CompactTwoColorControl
-							label={ __( 'Overlay Colors', 'folioblocks' ) }
-							value={ {
-								first: attributes.overlayBgColor,
-								second: attributes.overlayTextColor,
-							} }
-							onChange={ ( { first, second } ) =>
-								setAttributes( {
-									overlayBgColor: first || '',
-									overlayTextColor: second || '',
-								} )
-							}
-							firstLabel={ __( 'Background', 'folioblocks' ) }
-							secondLabel={ __( 'Text', 'folioblocks' ) }
-							help={ __(
-								'Pick custom background and text colors for the overlay.',
-								'folioblocks'
-							) }
-						/>
-					) }
-			</>
-		);
-	}
-);
 
 addFilter(
 	'folioBlocks.modularGallery.imageStyles',
@@ -575,20 +285,26 @@ addFilter(
 	( Original, { attributes, setAttributes } ) => {
 		const enableDownload = !! attributes.enableDownload;
 		const enableWooCommerce = !! attributes.enableWooCommerce;
+		const enableLinkIcon =
+			( attributes.imageClickAction === 'custom_url' ||
+				attributes.imageClickAction === 'page_post' ) &&
+			( attributes.imageClickTarget || 'icon' ) === 'icon';
 
-		if ( ! enableDownload && ! enableWooCommerce ) {
+		if ( ! enableDownload && ! enableWooCommerce && ! enableLinkIcon ) {
 			return null;
 		}
 
 		return (
 			<ToolsPanel
-				label={ __( 'E-Commerce Styles', 'folioblocks' ) }
+				label={ __( 'Image Click Styles', 'folioblocks' ) }
 				resetAll={ () =>
 					setAttributes( {
 						downloadIconColor: '',
 						downloadIconBgColor: '',
 						cartIconColor: '',
 						cartIconBgColor: '',
+						linkIconColor: '',
+						linkIconBgColor: '',
 					} )
 				}
 			>
@@ -650,6 +366,39 @@ addFilter(
 								setAttributes( {
 									cartIconColor: next?.first || '',
 									cartIconBgColor: next?.second || '',
+								} )
+							}
+							firstLabel={ __( 'Icon', 'folioblocks' ) }
+							secondLabel={ __( 'Background', 'folioblocks' ) }
+						/>
+					</ToolsPanelItem>
+				) }
+
+				{ enableLinkIcon && (
+					<ToolsPanelItem
+						label={ __( 'Link Target Icon Colors', 'folioblocks' ) }
+						hasValue={ () =>
+							!! attributes.linkIconColor ||
+							!! attributes.linkIconBgColor
+						}
+						onDeselect={ () =>
+							setAttributes( {
+								linkIconColor: '',
+								linkIconBgColor: '',
+							} )
+						}
+						isShownByDefault
+					>
+						<CompactTwoColorControl
+							label={ __( 'Link Target Icon', 'folioblocks' ) }
+							value={ {
+								first: attributes.linkIconColor,
+								second: attributes.linkIconBgColor,
+							} }
+							onChange={ ( next ) =>
+								setAttributes( {
+									linkIconColor: next?.first || '',
+									linkIconBgColor: next?.second || '',
 								} )
 							}
 							firstLabel={ __( 'Icon', 'folioblocks' ) }

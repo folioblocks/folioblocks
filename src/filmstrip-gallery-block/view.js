@@ -45,6 +45,9 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		const mainPanel = galleryRoot.querySelector(
 			'.pb-filmstrip-gallery-main'
 		);
+		const mainImageLink = galleryRoot.querySelector(
+			'.pb-filmstrip-gallery-main-link'
+		);
 		if ( mainPanel ) {
 			mainPanel.setAttribute( 'role', 'tabpanel' );
 			if ( ! mainPanel.id ) {
@@ -177,6 +180,84 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			mainImage.alt =
 				image.alt || image.title || 'Selected gallery image';
 			mainImage.loading = settings.lazyLoad ? 'lazy' : 'eager';
+			if ( mainImageLink ) {
+				const imageClickAction = settings.imageClickAction || '';
+				const imageClickTarget = settings.imageClickTarget || 'icon';
+				let linkUrl = image.linkUrl || '';
+				let linkTarget = image.linkTarget || '';
+				let linkClass = 'pb-filmstrip-gallery-main-link';
+				let linkDownload = false;
+
+				if (
+					imageClickAction === 'download' &&
+					imageClickTarget === 'thumbnail'
+				) {
+					linkUrl = image.fullSrc || image.src || '';
+					linkDownload = true;
+				} else if (
+					imageClickAction === 'woocommerce' &&
+					imageClickTarget === 'thumbnail' &&
+					settings.enableWooCommerce &&
+					Number( image.wooProductId || 0 ) > 0
+				) {
+					const action =
+						image.wooLinkAction === 'product'
+							? 'product'
+							: 'add_to_cart';
+					if ( action === 'product' && image.wooProductUrl ) {
+						linkUrl = image.wooProductUrl;
+					} else {
+						linkUrl = image.wooProductUrl || '#';
+						linkClass += ' pb-add-to-cart-thumbnail';
+						mainImageLink.dataset.wooAction = 'add_to_cart';
+						mainImageLink.dataset.productId = String(
+							image.wooProductId
+						);
+						if ( image.wooProductUrl ) {
+							mainImageLink.dataset.productUrl = String(
+								image.wooProductUrl
+							);
+						} else {
+							delete mainImageLink.dataset.productUrl;
+						}
+					}
+				}
+
+				mainImageLink.className = linkClass;
+
+				if ( linkUrl ) {
+					mainImageLink.href = linkUrl;
+				} else {
+					mainImageLink.removeAttribute( 'href' );
+				}
+
+				if ( linkTarget === '_blank' ) {
+					mainImageLink.target = '_blank';
+					mainImageLink.rel = 'noopener noreferrer';
+				} else {
+					mainImageLink.removeAttribute( 'target' );
+					mainImageLink.removeAttribute( 'rel' );
+				}
+
+				if ( linkDownload ) {
+					mainImageLink.setAttribute( 'download', '' );
+				} else {
+					mainImageLink.removeAttribute( 'download' );
+				}
+
+				if (
+					!(
+						imageClickAction === 'woocommerce' &&
+						imageClickTarget === 'thumbnail' &&
+						settings.enableWooCommerce &&
+						Number( image.wooProductId || 0 ) > 0
+					)
+				) {
+					delete mainImageLink.dataset.wooAction;
+					delete mainImageLink.dataset.productId;
+					delete mainImageLink.dataset.productUrl;
+				}
+			}
 
 			syncThumbState();
 			emitImageChange( image );

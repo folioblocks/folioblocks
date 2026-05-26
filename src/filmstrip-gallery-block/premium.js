@@ -15,6 +15,7 @@ import {
 } from '@wordpress/components';
 import { applyThumbnails } from '../pb-helpers/applyThumbnails';
 import { CompactTwoColorControl } from '../pb-helpers/CompactColorControl';
+import { registerImageClickActionPremiumControls } from '../pb-helpers/imageClickActionPremiumControls';
 
 const shuffleBlocks = ( blocks ) => {
 	const shuffled = [ ...blocks ];
@@ -276,10 +277,7 @@ addFilter(
 				onChange={ ( value ) =>
 					setAttributes( { randomizeOrder: value } )
 				}
-				help={ __(
-					'Randomize order of images.',
-					'folioblocks'
-				) }
+				help={ __( 'Randomize order of images.', 'folioblocks' ) }
 				__nextHasNoMarginBottom
 			/>
 		);
@@ -291,8 +289,31 @@ addFilter(
 	'folioblocks/filmstrip-gallery-premium-title-toggle',
 	( defaultContent, props ) => {
 		const { attributes, setAttributes } = props;
-		const { onHoverTitle, enableWooCommerce, wooProductPriceOnHover } =
-			attributes;
+		const { onHoverTitle, enableWooCommerce, wooProductPriceOnHover } = attributes;
+		const overlayContent =
+			attributes.overlayContent ||
+			( wooProductPriceOnHover ? 'product' : 'title' );
+			const overlayContentOptions = [
+				{
+					label: __( 'Show Image Title', 'folioblocks' ),
+					value: 'title',
+				},
+				{
+					label: __( 'Show Image Caption', 'folioblocks' ),
+					value: 'caption',
+				},
+				{
+					label: __( 'Show EXIF Data', 'folioblocks' ),
+					value: 'exif',
+				},
+			];
+
+		if ( enableWooCommerce ) {
+			overlayContentOptions.push( {
+				label: __( 'Show Product Info', 'folioblocks' ),
+				value: 'product',
+			} );
+		}
 
 		return (
 			<>
@@ -301,13 +322,13 @@ addFilter(
 					help={
 						enableWooCommerce
 							? __(
-									'Display Image title or Product Info when hovering over images.',
+									'Display image title, image caption, or product info when hovering over images.',
 									'folioblocks'
 							  )
-							: __(
-									'Display Image title when hovering over image.',
-									'folioblocks'
-							  )
+								: __(
+										'Display image title, image caption, or EXIF data when hovering over images.',
+										'folioblocks'
+								  )
 					}
 					__nextHasNoMarginBottom
 					checked={ !! attributes.onHoverTitle }
@@ -316,24 +337,20 @@ addFilter(
 					}
 				/>
 
-				{ enableWooCommerce && onHoverTitle && (
+				{ onHoverTitle && (
 					<SelectControl
 						label={ __( 'Overlay Content', 'folioblocks' ) }
-						value={ wooProductPriceOnHover ? 'product' : 'title' }
-						options={ [
-							{
-								label: __( 'Show Image Title', 'folioblocks' ),
-								value: 'title',
-							},
-							{
-								label: __( 'Show Product Info', 'folioblocks' ),
-								value: 'product',
-							},
-						] }
+						value={
+							enableWooCommerce || overlayContent !== 'product'
+								? overlayContent
+								: 'title'
+						}
+						options={ overlayContentOptions }
 						onChange={ ( val ) => {
 							// Ensure hover info is enabled, then switch mode
 							setAttributes( {
 								onHoverTitle: true,
+								overlayContent: val,
 								wooProductPriceOnHover: val === 'product',
 							} );
 						} }
@@ -350,190 +367,34 @@ addFilter(
 	}
 );
 
-addFilter(
-	'folioBlocks.filmstripGallery.downloadControls',
-	'folioblocks/filmstrip-gallery-premium-downloads',
-	( defaultContent, props ) => {
-		const { attributes, setAttributes, effectiveEnableWoo } = props;
+registerImageClickActionPremiumControls( {
+	hookPrefix: 'folioBlocks.filmstripGallery',
+	namespace: 'folioblocks/filmstrip-gallery',
+	supportsLightbox: false,
+} );
 
-		if ( effectiveEnableWoo && attributes.enableDownload ) {
-			setAttributes( { enableDownload: false } );
-		}
 
-		const { enableDownload, downloadOnHover } = attributes;
 
-		return (
-			<>
-				<ToggleControl
-					label={ __( 'Enable Image Downloads', 'folioblocks' ) }
-					checked={ !! enableDownload }
-					onChange={ ( value ) =>
-						setAttributes( { enableDownload: value } )
-					}
-					__nextHasNoMarginBottom
-					help={ __(
-						'Enable visitors to download images from the gallery.',
-						'folioblocks'
-					) }
-					disabled={ effectiveEnableWoo }
-				/>
 
-				{ enableDownload && (
-					<SelectControl
-						label={ __(
-							'Display Image Download Icon',
-							'folioblocks'
-						) }
-						value={ downloadOnHover ?? true ? 'hover' : 'always' }
-						options={ [
-							{
-								label: __( 'On Hover', 'folioblocks' ),
-								value: 'hover',
-							},
-							{
-								label: __( 'Always', 'folioblocks' ),
-								value: 'always',
-							},
-						] }
-						onChange={ ( value ) =>
-							setAttributes( {
-								downloadOnHover: value === 'hover',
-							} )
-						}
-						__nextHasNoMarginBottom
-						__next40pxDefaultSize
-						help={ __(
-							'Set display preference for Image Download icon.',
-							'folioblocks'
-						) }
-					/>
-				) }
-			</>
-		);
-	}
-);
-
-addFilter(
-	'folioBlocks.filmstripGallery.wooCommerceControls',
-	'folioblocks/filmstrip-gallery-premium-woocommerce',
-	( defaultContent, props ) => {
-		const wooActive = window.folioBlocksData?.hasWooCommerce ?? false;
-		if ( ! wooActive ) {
-			return null;
-		}
-
-		const { attributes, setAttributes } = props;
-		const {
-			enableWooCommerce,
-			wooCartIconDisplay,
-			wooDefaultLinkAction,
-			enableDownload,
-		} = attributes;
-
-		return (
-			<>
-				<ToggleControl
-					label={ __(
-						'Enable WooCommerce Integration',
-						'folioblocks'
-					) }
-					checked={ !! enableWooCommerce }
-					onChange={ ( value ) => {
-						setAttributes( { enableWooCommerce: value } );
-
-						if ( ! value ) {
-							setAttributes( {
-								wooLightboxInfoType: 'caption',
-								wooProductPriceOnHover: false,
-								wooCartIconDisplay: 'hover',
-							} );
-						}
-					} }
-					__nextHasNoMarginBottom
-					help={ __(
-						'Link gallery images to WooCommerce products.',
-						'folioblocks'
-					) }
-					disabled={ enableDownload }
-				/>
-
-				{ enableWooCommerce && (
-					<>
-						<SelectControl
-							label={ __(
-								'Display Add to Cart Icon',
-								'folioblocks'
-							) }
-							value={ wooCartIconDisplay }
-							options={ [
-								{
-									label: __( 'On Hover', 'folioblocks' ),
-									value: 'hover',
-								},
-								{
-									label: __( 'Always', 'folioblocks' ),
-									value: 'always',
-								},
-							] }
-							onChange={ ( value ) =>
-								setAttributes( { wooCartIconDisplay: value } )
-							}
-							__nextHasNoMarginBottom
-							__next40pxDefaultSize
-							help={ __(
-								'Choose when to display the Add to Cart icon.',
-								'folioblocks'
-							) }
-						/>
-						<SelectControl
-							label={ __(
-								'Default Add To Cart Icon Behavior',
-								'folioblocks'
-							) }
-							value={ wooDefaultLinkAction }
-							options={ [
-								{
-									label: __( 'Add to Cart', 'folioblocks' ),
-									value: 'add_to_cart',
-								},
-								{
-									label: __(
-										'Open Product Page',
-										'folioblocks'
-									),
-									value: 'product',
-								},
-							] }
-							onChange={ ( value ) =>
-								setAttributes( { wooDefaultLinkAction: value } )
-							}
-							__nextHasNoMarginBottom
-							__next40pxDefaultSize
-							help={ __(
-								'Sets the default action for Add To Cart icons in this gallery. Individual images can override this setting.',
-								'folioblocks'
-							) }
-						/>
-					</>
-				) }
-			</>
-		);
-	}
-);
 addFilter(
 	'folioBlocks.filmstripGallery.iconStyleControls',
 	'folioblocks/filmstrip-gallery-icon-style-controls',
 	( Original, { attributes, setAttributes } ) => {
-		const enableDownload = !! attributes.enableDownload;
-		const enableWooCommerce = !! attributes.enableWooCommerce;
+		const isIconTarget = ( attributes.imageClickTarget || 'icon' ) === 'icon';
+		const enableDownload = !! attributes.enableDownload && isIconTarget;
+		const enableWooCommerce = !! attributes.enableWooCommerce && isIconTarget;
+		const enableLinkIcon =
+			( attributes.imageClickAction === 'custom_url' ||
+				attributes.imageClickAction === 'page_post' ) &&
+			isIconTarget;
 
-		if ( ! enableDownload && ! enableWooCommerce ) {
+		if ( ! enableDownload && ! enableWooCommerce && ! enableLinkIcon ) {
 			return null;
 		}
 
 		return (
 			<PanelBody
-				title={ __( 'E-Commerce Styles', 'folioblocks' ) }
+				title={ __( 'Image Click Styles', 'folioblocks' ) }
 				initialOpen={ true }
 			>
 				{ enableDownload && (
@@ -568,6 +429,26 @@ addFilter(
 								setAttributes( {
 									cartIconColor: next?.first || '',
 									cartIconBgColor: next?.second || '',
+								} )
+							}
+							firstLabel={ __( 'Icon', 'folioblocks' ) }
+							secondLabel={ __( 'Background', 'folioblocks' ) }
+						/>
+					</>
+				) }
+
+				{ enableLinkIcon && (
+					<>
+						<CompactTwoColorControl
+							label={ __( 'Link Target Icon', 'folioblocks' ) }
+							value={ {
+								first: attributes.linkIconColor,
+								second: attributes.linkIconBgColor,
+							} }
+							onChange={ ( next ) =>
+								setAttributes( {
+									linkIconColor: next?.first || '',
+									linkIconBgColor: next?.second || '',
 								} )
 							}
 							firstLabel={ __( 'Icon', 'folioblocks' ) }

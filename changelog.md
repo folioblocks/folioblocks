@@ -4,12 +4,62 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-05-25
+### Added
+- Added a new Image Click Behavior control model for Image Block and all photo galleries.
+- Added premium image linking support for Image Block and all photo galleries, including Media File, Custom URL, and Page/Post link actions.
+- Added per-image Custom URL and Page/Post link controls for Image Blocks used inside galleries.
+- Added toolbar shortcuts for editing Custom URL and Page/Post links on Image Blocks when those click behaviors are active.
+- Added a shared premium helper for repeated Image Click Behavior controls used by multiple gallery blocks.
+- Added a shared premium helper for repeated Image Hover Style controls.
+- Added WordPress 7.0 Content inspector support for Image Block metadata controls.
+- Added EXIF metadata capture for Image Blocks, including camera model, focal length, shutter speed, aperture, and ISO.
+- Added Show EXIF Data as a premium Lightbox Content option for Image Block and photo galleries.
+- Added Show EXIF Data as a premium Overlay Content option for Image Block and photo galleries, including Filmstrip Gallery.
+- Added compact EXIF icon/value displays for lightbox captions and hover overlays.
+- Added separate Chip Overlay color controls in the Image Hover Style tools panel.
+- Added documentation for future premium control refactor candidates.
+
+### Changed
+- Replaced separate Lightbox, Image Download, and WooCommerce toggles with a single Image Click Behavior select control.
+- Replaced the Image Hover Settings toggle flow with a single Hover Style select control for Image Block and Grid Gallery.
+- Added Image Title, Image Caption, and conditional WooCommerce Product Info choices to Image Hover Settings overlay content.
+- Moved custom Color Overlay colors into an Image Overlay Styles tools panel for Image Block and Grid Gallery.
+- Renamed E-Commerce style panels to Image Click Styles.
+- Updated Filmstrip Gallery to use Image Click Behavior without a Lightbox option, preserving its fullscreen-focused behavior.
+- Updated Filmstrip Gallery front-end rendering to support Media File, Custom URL, and Page/Post links while avoiding empty image links.
+- Updated Filmstrip Gallery hover overlays to support Image Title, Image Caption, Product Info, and EXIF Data from the same Overlay Content model.
+- Reordered Image Download and WooCommerce secondary controls so the selected click behavior settings appear before optional Lightbox settings.
+- Repositioned standalone Image Block WooCommerce product linking controls and added contextual Image Click Behavior help text.
+- Improved Page/Post link control styling with a compact selected-link preview, inline remove control, and better spacing around new-tab toggles.
+- Moved Image Block caption, title, and alternative text controls into the WordPress 7.0 Content inspector while preserving the existing layout for older WordPress versions.
+- Updated Carousel Gallery to use the same Image Click Settings and Image Hover Settings panel structure as the other photo galleries.
+- Updated Grid Gallery to use the shared premium Image Click controls used by the other photo galleries.
+- Replaced the Lightbox caption toggle with a premium Lightbox Content select control for title, caption, product info, and EXIF display options.
+- Kept the base Lightbox action available to free users while moving Lightbox Content display options into premium controls.
+- Refined the FolioBlocks admin Dashboard with a more premium branded header, constrained layout, and softer panel treatment.
+- Updated Available Blocks cards with dark premium styling, FolioBlocks blue icon buttons, and improved icon alignment.
+- Improved Dashboard Quick Links with SVG icon panels, unified button styling, and branded Feedback coloring.
+- Limited the Dashboard changelog panel height with an internal scroll area for a cleaner right column.
+
+### Fixed
+- Fixed a typo in the Filmstrip Gallery Image Hover Settings panel title.
+- Fixed Image Block inspector panel regressions where Image Hover Settings disappeared and Lazy Load appeared inside Image Click Settings.
+- Fixed gallery Image Click Settings so WooCommerce, Download, Custom URL, and Page/Post secondary controls display when selected.
+- Fixed WordPress 7.0 Image Block Content inspector layout by wrapping metadata controls in an Image Content panel.
+- Fixed Fade Overlay inheriting custom Color Overlay background colors when switching hover styles.
+- Fixed Gradient Overlay EXIF text and icons to render in white for better contrast.
+- Fixed EXIF Lightbox output so missing metadata displays Unknown values instead of hiding the EXIF panel.
+
 ## [1.2.9] - 2026-05-18
 ### Added 
 - Added Block Transforms support to convert WordPress Video, YouTube Embed, and Vimeo Embed blocks into a FolioBlocks Video Block.  
 
 ### Fixed
 - Added attribute parity in Block Transforms feature
+- Fixed Vimeo private link support in Video Block and Video Gallery lightboxes by preserving Vimeo privacy hashes in embed URLs.
+- Fixed Video Block and Video Gallery lightbox sizing so 16:9 videos are not clipped in Chromium-based browsers.
+- Improved Video Block and Video Gallery split lightbox sizing so videos with descriptions use more of the available viewport.
 
 ## [1.2.8] - 2026-05-14
 ### Added

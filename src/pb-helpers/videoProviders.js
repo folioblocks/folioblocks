@@ -71,6 +71,19 @@ const getVimeoId = ( parsedUrl ) => {
 	return cleanId( numericPart );
 };
 
+const getVimeoHash = ( parsedUrl, videoId ) => {
+	const byQuery = cleanId( parsedUrl.searchParams.get( 'h' ) );
+	if ( byQuery ) {
+		return byQuery;
+	}
+
+	const parts = getPathParts( parsedUrl );
+	const videoIndex = parts.findIndex( ( part ) => cleanId( part ) === videoId );
+	const pathHash = cleanId( parts[ videoIndex + 1 ] );
+
+	return pathHash && ! VIMEO_ID_FALLBACK.test( pathHash ) ? pathHash : '';
+};
+
 const getBunnyStreamIds = ( parsedUrl ) => {
 	const parts = getPathParts( parsedUrl );
 	const markerIndex = parts.findIndex( ( part ) =>
@@ -105,7 +118,12 @@ export const getVideoProviderData = ( videoUrl ) => {
 	if ( host.includes( 'vimeo.com' ) ) {
 		const videoId = getVimeoId( parsedUrl );
 		if ( videoId ) {
-			return { provider: 'vimeo', videoId, parsedUrl };
+			return {
+				provider: 'vimeo',
+				videoId,
+				vimeoHash: getVimeoHash( parsedUrl, videoId ),
+				parsedUrl,
+			};
 		}
 	}
 
@@ -159,6 +177,14 @@ export const getVideoIframeSrc = (
 
 	if ( data.provider === 'vimeo' ) {
 		const params = new URLSearchParams();
+		if ( data.parsedUrl ) {
+			data.parsedUrl.searchParams.forEach( ( value, key ) => {
+				params.set( key, value );
+			} );
+		}
+		if ( data.vimeoHash ) {
+			params.set( 'h', data.vimeoHash );
+		}
 		if ( autoplay ) {
 			params.set( 'autoplay', '1' );
 		}

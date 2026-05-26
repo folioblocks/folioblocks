@@ -63,7 +63,9 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	document.addEventListener(
 		'click',
 		( e ) => {
-			const cartBtn = e.target.closest( '.pb-add-to-cart-icon' );
+			const cartBtn = e.target.closest(
+				'.pb-add-to-cart-icon, .pb-add-to-cart-thumbnail'
+			);
 			if ( ! cartBtn ) {
 				return;
 			}
@@ -124,9 +126,69 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 			const ajaxUrl = getAjaxUrl();
 
+			const removeInjectedViewCartLinks = () => {
+				const wrapper = cartBtn.closest(
+					'.pb-image-block, .pb-image-block-wrapper'
+				);
+				if ( ! wrapper ) {
+					return;
+				}
+				wrapper
+					.querySelectorAll( '.added_to_cart, .wc-forward' )
+					.forEach( ( link ) => link.remove() );
+			};
+
+			const refreshCartViews = ( data = {} ) => {
+				if ( window.jQuery ) {
+					const $body = window.jQuery( document.body );
+
+					// Do not pass the FolioBlocks icon/thumbnail as the button arg:
+					// Woo adds a View Cart link after any button it receives.
+					$body.trigger( 'added_to_cart', [
+						data?.fragments || {},
+						data?.cart_hash || '',
+					] );
+					$body.trigger( 'wc_fragment_refresh' );
+				} else {
+					document.body.dispatchEvent(
+						new CustomEvent( 'added_to_cart', {
+							bubbles: true,
+							detail: {
+								fragments: data?.fragments || {},
+								cart_hash: data?.cart_hash || '',
+							},
+						} )
+					);
+				}
+
+				document.body.dispatchEvent(
+					new CustomEvent( 'wc-blocks_added_to_cart', {
+						bubbles: true,
+						detail: {
+							preserveCartData: false,
+						},
+					} )
+				);
+
+				setTimeout( removeInjectedViewCartLinks, 0 );
+				setTimeout( removeInjectedViewCartLinks, 250 );
+			};
+
 			const body = new URLSearchParams();
 			body.set( 'product_id', String( productId ) );
 			body.set( 'quantity', '1' );
+
+			cartBtn.classList.add( 'is-loading' );
+			cartBtn.setAttribute( 'aria-busy', 'true' );
+
+			if ( window.jQuery ) {
+				window
+					.jQuery( document.body )
+					.trigger( 'adding_to_cart', [
+						window.jQuery( cartBtn ),
+						{ product_id: productId, quantity: 1 },
+					] );
+			}
 
 			fetch( ajaxUrl, {
 				method: 'POST',
@@ -179,29 +241,15 @@ document.addEventListener( 'DOMContentLoaded', () => {
 						} );
 					}
 
-					// Fire Woo's standard event for themes/plugins that listen to it.
-					if ( window.jQuery ) {
-						window
-							.jQuery( document.body )
-							.trigger( 'added_to_cart', [
-								data?.fragments || {},
-								data?.cart_hash || '',
-								window.jQuery( cartBtn ),
-							] );
-					} else {
-						document.body.dispatchEvent(
-							new CustomEvent( 'added_to_cart', {
-								detail: {
-									fragments: data?.fragments || {},
-									cart_hash: data?.cart_hash || '',
-								},
-							} )
-						);
-					}
+					refreshCartViews( data );
 
-					// Optional: if the theme uses a cart counter, it may update via fragments.
+					cartBtn.classList.remove( 'is-loading' );
+					cartBtn.classList.add( 'is-added' );
+					cartBtn.removeAttribute( 'aria-busy' );
 				} )
 				.catch( () => {
+					cartBtn.classList.remove( 'is-loading' );
+					cartBtn.removeAttribute( 'aria-busy' );
 					// If AJAX doesn't work in this environment, fall back to the reliable redirect.
 					fallbackRedirect();
 				} );
