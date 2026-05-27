@@ -3,6 +3,10 @@
  * Helper file for galleries
  * @param clientId
  */
+const LIST_VIEW_CONTENT_SELECTOR = '.block-editor-list-view__content';
+const observedListViews = new WeakSet();
+let queuedThumbnailPass = null;
+
 const getAllBlocksRecursive = ( clientId ) => {
 	const blocks = wp.data.select( 'core/block-editor' ).getBlocks( clientId );
 	let all = [ ...blocks ];
@@ -12,116 +16,169 @@ const getAllBlocksRecursive = ( clientId ) => {
 	return all;
 };
 
-const observeListViewChanges = () => {
-	const listViewContainer = document.querySelector(
-		'.block-editor-list-view__content'
-	);
-	if ( ! listViewContainer ) {
-		return;
+const getBlocksForThumbnails = ( clientId ) => {
+	if ( clientId ) {
+		return getAllBlocksRecursive( clientId );
 	}
 
-	const observer = new MutationObserver( () => {
-		applyThumbnails( clientId );
+	const rootBlocks = wp.data.select( 'core/block-editor' ).getBlocks();
+	let allBlocks = [ ...rootBlocks ];
+	rootBlocks.forEach( ( block ) => {
+		allBlocks = allBlocks.concat( getAllBlocksRecursive( block.clientId ) );
 	} );
 
-	observer.observe( listViewContainer, {
-		childList: true,
-		subtree: true,
+	return allBlocks;
+};
+
+const observeListViewChanges = ( clientId = null ) => {
+	const listViewContainers = document.querySelectorAll(
+		LIST_VIEW_CONTENT_SELECTOR
+	);
+
+	listViewContainers.forEach( ( listViewContainer ) => {
+		if ( observedListViews.has( listViewContainer ) ) {
+			return;
+		}
+
+		observedListViews.add( listViewContainer );
+
+		const observer = new window.MutationObserver( () => {
+			queueThumbnailPass( clientId );
+		} );
+
+		observer.observe( listViewContainer, {
+			childList: true,
+			subtree: true,
+		} );
 	} );
+};
+
+const runThumbnailPass = ( clientId = null ) => {
+	observeListViewChanges();
+	applyThumbnails( clientId );
+};
+
+const queueThumbnailPass = ( clientId = null ) => {
+	if ( queuedThumbnailPass ) {
+		window.clearTimeout( queuedThumbnailPass );
+	}
+
+	queuedThumbnailPass = window.setTimeout( () => {
+		queuedThumbnailPass = null;
+		runThumbnailPass( clientId );
+	}, 50 );
+};
+
+const getListItemsForBlock = ( block ) => {
+	return document.querySelectorAll( `[data-block="${ block.clientId }"]` );
+};
+
+const getThumbnailSrc = ( block ) => {
+	if ( block.name === 'folioblocks/pb-image-block' ) {
+		return block.attributes?.src || '';
+	}
+
+	if ( block.name === 'folioblocks/pb-video-block' ) {
+		return block.attributes?.thumbnail || '';
+	}
+
+	return '';
 };
 
 // Wait for List View to appear, then initialize observer
 const waitForListView = () => {
-	const editorLayout = document.querySelector( '.edit-post-editor-layout' );
+	const editorLayout =
+		document.querySelector( '.edit-post-editor-layout' ) || document.body;
 
 	if ( ! editorLayout ) {
 		return;
 	}
 
-	const observer = new MutationObserver( () => {
-		const listView = document.querySelector(
-			'.block-editor-list-view__content'
-		);
-		if ( listView ) {
-			observer.disconnect();
-			observeListViewChanges(); // Begin watching for internal changes
-			applyThumbnails(); // Run initially
+	const observer = new window.MutationObserver( () => {
+		const listView = document.querySelector( LIST_VIEW_CONTENT_SELECTOR );
+		if ( ! listView ) {
+			return;
 		}
+
+		queueThumbnailPass();
 	} );
 
 	observer.observe( editorLayout, {
 		childList: true,
 		subtree: true,
 	} );
+
+	runThumbnailPass();
 };
 
-waitForListView();
+if ( ! window.folioBlocksThumbnailsInitialized ) {
+	window.folioBlocksThumbnailsInitialized = true;
+	waitForListView();
+	wp.data.subscribe( () => {
+		queueThumbnailPass();
+	} );
+}
 
 export const applyThumbnails = ( clientId = null, retries = 10 ) => {
 	const delay = 300;
 	let allApplied = true;
 
-	const blocks = clientId
-		? getAllBlocksRecursive( clientId )
-		: wp.data.select( 'core/block-editor' ).getBlocks();
+	const blocks = getBlocksForThumbnails( clientId );
 
 	blocks.forEach( ( block ) => {
-		// Only apply to 'folioblocks/pb-image-block' with a valid src
-		if (
-			block.name !== 'folioblocks/pb-image-block' ||
-			! block.attributes?.src
-		) {
+		const thumbnailSrc = getThumbnailSrc( block );
+
+		if ( ! thumbnailSrc ) {
 			return;
 		}
 
-		const listItem = document.querySelector(
-			`[data-block="${ block.clientId }"]`
-		);
-		if ( ! listItem ) {
+		const listItems = getListItemsForBlock( block );
+		if ( ! listItems.length ) {
 			allApplied = false;
 			return;
 		}
 
-		let thumbnailContainer = listItem.querySelector(
-			'.block-editor-list-view-block-select-button__image'
-		);
-		if ( ! thumbnailContainer ) {
-			const selectButton = listItem.querySelector(
-				'.block-editor-list-view-block-select-button'
+		listItems.forEach( ( listItem ) => {
+			let thumbnailContainer = listItem.querySelector(
+				'.block-editor-list-view-block-select-button__image'
 			);
-			if ( selectButton ) {
-				thumbnailContainer = document.createElement( 'span' );
-				thumbnailContainer.className =
-					'block-editor-list-view-block-select-button__image';
-				thumbnailContainer.dataset.pbThumbnail = 'true';
-				selectButton.appendChild( thumbnailContainer );
-			} else {
-				allApplied = false;
+			if ( ! thumbnailContainer ) {
+				const selectButton = listItem.querySelector(
+					'.block-editor-list-view-block-select-button'
+				);
+				if ( selectButton ) {
+					thumbnailContainer = document.createElement( 'span' );
+					thumbnailContainer.className =
+						'block-editor-list-view-block-select-button__image';
+					thumbnailContainer.dataset.pbThumbnail = 'true';
+					selectButton.appendChild( thumbnailContainer );
+				} else {
+					allApplied = false;
+					return;
+				}
+			}
+
+			if (
+				thumbnailContainer.dataset.pbThumbnailApplied === 'true' &&
+				thumbnailContainer.dataset.pbThumbnailSrc === thumbnailSrc
+			) {
 				return;
 			}
-		}
 
-		// Skip if already applied with correct background image
-		if (
-			thumbnailContainer.dataset.pbThumbnailApplied === 'true' &&
-			thumbnailContainer.style.backgroundImage ===
-				`url("${ block.attributes.src }")`
-		) {
-			return;
-		}
-
-		requestAnimationFrame( () => {
-			thumbnailContainer.style.backgroundImage = `url("${ block.attributes.src }")`;
-			thumbnailContainer.style.backgroundSize = 'cover';
-			thumbnailContainer.style.backgroundPosition = 'center';
-			thumbnailContainer.style.setProperty(
-				'width',
-				'30px',
-				'important'
-			);
-			thumbnailContainer.style.height = '20px';
-			thumbnailContainer.style.zIndex = '1';
-			thumbnailContainer.dataset.pbThumbnailApplied = 'true';
+			window.requestAnimationFrame( () => {
+				thumbnailContainer.style.backgroundImage = `url("${ thumbnailSrc }")`;
+				thumbnailContainer.style.backgroundSize = 'cover';
+				thumbnailContainer.style.backgroundPosition = 'center';
+				thumbnailContainer.style.setProperty(
+					'width',
+					'30px',
+					'important'
+				);
+				thumbnailContainer.style.height = '20px';
+				thumbnailContainer.style.zIndex = '1';
+				thumbnailContainer.dataset.pbThumbnailApplied = 'true';
+				thumbnailContainer.dataset.pbThumbnailSrc = thumbnailSrc;
+			} );
 		} );
 	} );
 

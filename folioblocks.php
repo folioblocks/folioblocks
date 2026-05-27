@@ -3,7 +3,7 @@
 /**
  * Plugin Name:       FolioBlocks
  * Description:       Create fast, responsive photo and video gallery with grid, masonry, justified, modular, and carousel layouts—ideal for photographers and creatives.
- * Version:           1.3.0.beta
+ * Version:           1.3.0-rc.1
  * Requires at least: 6.3
  * Requires PHP:      7.4
  * Author:            FolioBlocks
@@ -22,7 +22,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FBKS_VERSION', '1.3.0.beta');
+define('FBKS_VERSION', '1.3.0');
 define('FBKS_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('FBKS_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('FBKS_ALL_FILTER_TOKEN', 'all');
@@ -356,7 +356,12 @@ if (function_exists('fbks_fs')) {
     add_action('admin_menu', 'fbks_register_settings_page');
     function fbks_register_settings_page()
     {
-        $icon_url = plugin_dir_url(__FILE__) . 'includes/icons/pb-brand-icon-bw.svg';
+        $icon_path = plugin_dir_path(__FILE__) . 'includes/icons/pb-brand-icon-bw.svg';
+        $icon_url = add_query_arg(
+            'ver',
+            file_exists($icon_path) ? filemtime($icon_path) : FBKS_VERSION,
+            plugin_dir_url(__FILE__) . 'includes/icons/pb-brand-icon-bw.svg'
+        );
         add_menu_page(
             __('FolioBlocks', 'folioblocks'),        // Page title
             __('FolioBlocks', 'folioblocks'),        // Menu title
@@ -386,6 +391,12 @@ if (function_exists('fbks_fs')) {
         }
     }
 
+    add_action('admin_head', 'fbks_admin_menu_icon_styles');
+    function fbks_admin_menu_icon_styles()
+    {
+        echo '<style id="folioblocks-admin-menu-icon">#adminmenu #toplevel_page_folioblocks-settings .wp-menu-image img{width:18px;height:18px;max-width:18px;max-height:18px;object-fit:contain;padding-top:7px;opacity:.8;filter:brightness(0) invert(1);}#adminmenu #toplevel_page_folioblocks-settings.current .wp-menu-image img,#adminmenu #toplevel_page_folioblocks-settings.wp-has-current-submenu .wp-menu-image img{opacity:1;}</style>';
+    }
+
     // Register System Info submenu page
     add_action('admin_menu', function () {
         add_submenu_page(
@@ -404,13 +415,25 @@ if (function_exists('fbks_fs')) {
     require_once plugin_dir_path(__FILE__) . 'includes/admin/free-pro.php';
     // Load CSS for Admin pages
     add_action('admin_enqueue_scripts', 'fbks_enqueue_admin_styles');
-    function fbks_enqueue_admin_styles()
+    function fbks_enqueue_admin_styles($hook)
     {
+        $admin_pages = array(
+            'toplevel_page_folioblocks-settings',
+            'folioblocks_page_folioblocks-free-vs-pro',
+            'folioblocks_page_folioblocks-system-info',
+        );
+
+        if (! in_array($hook, $admin_pages, true)) {
+            return;
+        }
+
+        $style_path = plugin_dir_path(__FILE__) . 'includes/admin/settings-page.css';
+
         wp_enqueue_style(
             'folioblocks-settings-css',
             plugin_dir_url(__FILE__) . 'includes/admin/settings-page.css',
             array(),
-            '1.0'
+            file_exists($style_path) ? filemtime($style_path) : FBKS_VERSION
         );
     }
     add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'fbks_plugin_action_links');

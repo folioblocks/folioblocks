@@ -108,6 +108,10 @@ No, the galleries will remain in place on your site. However, the advanced layou
 == Changelog ==
 
 = 1.3.0 =
+* Added WordPress 7.0 List View inspector support for FolioBlocks galleries.
+* Improved List View thumbnails for Image Blocks, Video Blocks, and gallery children.
+* Fixed front-end rendering when multiple Masonry or Justified galleries appear on the same page.
+* Fixed the FolioBlocks admin menu icon size and color.
 * Added a new Image Click Behavior control model for Image Block and all photo galleries.
 * Added premium image linking support for Media File, Custom URL, and Page/Post click actions.
 * Added per-image Custom URL and Page/Post link controls for Image Blocks used inside galleries.
@@ -136,6 +140,7 @@ No, the galleries will remain in place on your site. However, the advanced layou
 * Updated Grid Gallery to use the shared premium Image Click controls used by the other photo galleries.
 * Replaced the Lightbox caption toggle with a premium Lightbox Content select control.
 * Kept the base Lightbox action available to free users while moving Lightbox Content display options into premium controls.
+* Moved Image Block EXIF data display behind premium controls so free users see a Pro notice instead of the metadata panel.
 * Fixed a typo in the Filmstrip Gallery Image Hover Settings panel title.
 * Fixed Image Block inspector panel regressions where Image Hover Settings disappeared and Lazy Load appeared inside Image Click Settings.
 * Fixed gallery Image Click Settings so WooCommerce, Download, Custom URL, and Page/Post secondary controls display when selected.
@@ -143,6 +148,7 @@ No, the galleries will remain in place on your site. However, the advanced layou
 * Fixed Fade Overlay inheriting custom Color Overlay background colors when switching hover styles.
 * Fixed Gradient Overlay EXIF text and icons to render in white for better contrast.
 * Fixed EXIF Lightbox output so missing metadata displays Unknown values instead of hiding the EXIF panel.
+* Fixed FolioBlocks admin Dashboard stylesheet cache busting so updated dashboard styling loads correctly after plugin updates.
 
 = 1.2.9 =
 * Added Block Transforms support to convert WordPress Video, YouTube Embed, and Vimeo Embed blocks into a FolioBlocks Video Block.  

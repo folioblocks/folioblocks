@@ -7,6 +7,7 @@ import './style.scss';
 import Edit from './edit';
 import Save from './save';
 import metadata from './block.json';
+import '../pb-helpers/applyThumbnails';
 
 const transformCoreVideoToPbVideo = ( attributes = {} ) => {
 	const videoUrl = attributes.src || '';

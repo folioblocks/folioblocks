@@ -1,154 +1,194 @@
 // Masonry Gallery Block - View JS
 document.addEventListener( 'DOMContentLoaded', () => {
-	const gallery = document.querySelector(
+	const galleries = document.querySelectorAll(
 		'.wp-block-folioblocks-masonry-gallery-block'
 	);
+	const layoutInstances = new WeakMap();
 
-	if ( ! gallery ) {
-		return;
-	}
-
-	gallery.classList.add( 'is-loading' );
-
-	const getColumnsForWidth = ( width ) => {
-		const innerGallery = gallery.querySelector( '.pb-masonry-gallery' );
-		if ( ! innerGallery ) {
-			return 4;
-		} // default fallback
-
-		const desktopCols = parseInt(
-			innerGallery.className.match( /cols-d-(\d+)/ )?.[ 1 ] || 6,
-			10
+	const parseColumnClass = ( innerGallery, breakpoint, fallback ) => {
+		return Math.max(
+			parseInt(
+				innerGallery.className.match(
+					new RegExp( `cols-${ breakpoint }-(\\d+)` )
+				)?.[ 1 ] || fallback,
+				10
+			),
+			1
 		);
-		const tabletCols = parseInt(
-			innerGallery.className.match( /cols-t-(\d+)/ )?.[ 1 ] || 4,
-			10
-		);
-		const mobileCols = parseInt(
-			innerGallery.className.match( /cols-m-(\d+)/ )?.[ 1 ] || 2,
-			10
-		);
-
-		if ( width <= 600 ) {
-			return mobileCols;
-		}
-		if ( width <= 1024 ) {
-			return tabletCols;
-		}
-		return desktopCols;
 	};
 
-	const applyCustomMasonryLayout = () => {
-		if ( ! gallery ) {
-			return;
+	const resolveGalleryWrapper = ( galleryEl ) => {
+		if ( ! galleryEl ) {
+			return null;
 		}
 
-		// Get the inner container for setting height
+		if (
+			galleryEl.classList.contains(
+				'wp-block-folioblocks-masonry-gallery-block'
+			)
+		) {
+			return galleryEl;
+		}
+
+		return galleryEl.closest(
+			'.wp-block-folioblocks-masonry-gallery-block'
+		);
+	};
+
+	const initGallery = ( gallery ) => {
 		const innerGallery = gallery.querySelector( '.pb-masonry-gallery' );
 		if ( ! innerGallery ) {
 			return;
 		}
 
-		const gap = gallery.closest( '.no-gap' ) ? 0 : 10;
-		const columns = getColumnsForWidth( innerGallery.offsetWidth );
-		const columnHeights = Array( columns ).fill( 0 );
-		const columnWidth = Math.round(
-			( innerGallery.offsetWidth - gap * ( columns - 1 ) ) / columns
-		);
+		gallery.classList.add( 'is-loading' );
 
-		// Reset layout styles
-		gallery
-			.querySelectorAll( '.wp-block-folioblocks-pb-image-block' )
-			.forEach( ( item ) => {
-				item.style.position = '';
-				item.style.top = '';
-				item.style.left = '';
-				item.style.width = '';
-			} );
+		const getColumnsForWidth = ( width ) => {
+			if ( width <= 600 ) {
+				return parseColumnClass( innerGallery, 'm', 2 );
+			}
+			if ( width <= 1024 ) {
+				return parseColumnClass( innerGallery, 't', 4 );
+			}
+			return parseColumnClass( innerGallery, 'd', 6 );
+		};
 
-		// Only visible items
-		const items = gallery.querySelectorAll(
-			'.wp-block-folioblocks-pb-image-block:not(.is-hidden)'
-		);
-
-		items.forEach( ( item ) => {
-			const minCol = columnHeights.indexOf(
-				Math.min( ...columnHeights )
+		const applyCustomMasonryLayout = () => {
+			const gap = gallery.closest( '.no-gap' ) ? 0 : 10;
+			const columns = getColumnsForWidth( innerGallery.offsetWidth );
+			const columnHeights = Array( columns ).fill( 0 );
+			const columnWidth = Math.round(
+				( innerGallery.offsetWidth - gap * ( columns - 1 ) ) / columns
 			);
 
-			item.style.position = 'absolute';
-			item.style.width = `${ columnWidth }px`;
-			item.style.top = `${ Math.round( columnHeights[ minCol ] ) }px`;
-			item.style.left = `${ Math.round(
-				( columnWidth + gap ) * minCol
-			) }px`;
+			innerGallery
+				.querySelectorAll( '.wp-block-folioblocks-pb-image-block' )
+				.forEach( ( item ) => {
+					item.style.position = '';
+					item.style.top = '';
+					item.style.left = '';
+					item.style.width = '';
+				} );
 
-			const style = window.getComputedStyle( item );
-			const marginBottom = parseFloat( style.marginBottom ) || 0;
-			columnHeights[ minCol ] += item.offsetHeight + gap + marginBottom;
-		} );
+			const items = innerGallery.querySelectorAll(
+				'.wp-block-folioblocks-pb-image-block:not(.is-hidden)'
+			);
 
-		innerGallery.style.height = `${ Math.max( ...columnHeights ) }px`;
-	};
+			items.forEach( ( item ) => {
+				const minCol = columnHeights.indexOf(
+					Math.min( ...columnHeights )
+				);
 
-	const images = gallery.querySelectorAll( 'img' );
+				item.style.position = 'absolute';
+				item.style.width = `${ columnWidth }px`;
+				item.style.top = `${ Math.round( columnHeights[ minCol ] ) }px`;
+				item.style.left = `${ Math.round(
+					( columnWidth + gap ) * minCol
+				) }px`;
 
-	const observer = new IntersectionObserver(
-		( entries ) => {
-			let shouldRecalculate = false;
-			entries.forEach( ( entry ) => {
-				if ( entry.isIntersecting ) {
-					shouldRecalculate = true;
-					observer.unobserve( entry.target );
-				}
+				const style = window.getComputedStyle( item );
+				const marginBottom = parseFloat( style.marginBottom ) || 0;
+				columnHeights[ minCol ] +=
+					item.offsetHeight + gap + marginBottom;
 			} );
-			if ( shouldRecalculate ) {
-				applyCustomMasonryLayout();
-				gallery.classList.remove( 'is-loading' );
-			}
-		},
-		{
-			rootMargin: '200px',
-			threshold: 0.1,
-		}
-	);
 
-	images.forEach( ( img ) => {
-		if ( img.complete && img.naturalHeight !== 0 ) {
+			innerGallery.style.height = `${
+				items.length ? Math.max( ...columnHeights ) : 0
+			}px`;
+		};
+
+		layoutInstances.set( gallery, applyCustomMasonryLayout );
+
+		const images = innerGallery.querySelectorAll( 'img' );
+		const fallbackTimeout = setTimeout( applyCustomMasonryLayout, 1000 );
+
+		if ( images.length === 0 ) {
 			applyCustomMasonryLayout();
 			gallery.classList.remove( 'is-loading' );
-		} else {
-			observer.observe( img );
 		}
-	} );
 
-	const fallbackTimeout = setTimeout( applyCustomMasonryLayout, 1000 );
+		const observer =
+			'IntersectionObserver' in window
+				? new window.IntersectionObserver(
+						( entries ) => {
+							let shouldRecalculate = false;
+							entries.forEach( ( entry ) => {
+								if ( entry.isIntersecting ) {
+									shouldRecalculate = true;
+									observer.unobserve( entry.target );
+								}
+							} );
+							if ( shouldRecalculate ) {
+								applyCustomMasonryLayout();
+								gallery.classList.remove( 'is-loading' );
+							}
+						},
+						{
+							rootMargin: '200px',
+							threshold: 0.1,
+						}
+				  )
+				: null;
 
-	const resizeObserver = new ResizeObserver( () => {
-		applyCustomMasonryLayout();
-	} );
+		images.forEach( ( img ) => {
+			if ( img.complete && img.naturalHeight !== 0 ) {
+				applyCustomMasonryLayout();
+				gallery.classList.remove( 'is-loading' );
+			} else if ( observer ) {
+				observer.observe( img );
+			} else {
+				img.addEventListener( 'load', applyCustomMasonryLayout, {
+					once: true,
+				} );
+				img.addEventListener( 'error', applyCustomMasonryLayout, {
+					once: true,
+				} );
+			}
+		} );
 
-	resizeObserver.observe( gallery );
+		const resizeObserver =
+			'ResizeObserver' in window
+				? new window.ResizeObserver( () => {
+						applyCustomMasonryLayout();
+				  } )
+				: null;
 
-	window.addEventListener( 'resize', applyCustomMasonryLayout );
+		if ( resizeObserver ) {
+			resizeObserver.observe( gallery );
+		}
 
-	window.addEventListener( 'pagehide', () => {
-		clearTimeout( fallbackTimeout );
-		window.removeEventListener( 'resize', applyCustomMasonryLayout );
-		resizeObserver.disconnect();
-	} );
+		window.addEventListener( 'resize', applyCustomMasonryLayout );
 
-	// Sequential fade-in for masonry gallery images
-	const gridBlocks = document.querySelectorAll(
-		'.wp-block-folioblocks-pb-image-block'
-	);
-	gridBlocks.forEach( ( block, index ) => {
-		block.style.opacity = 0;
-		block.style.transform = 'translateY(20px)';
-		block.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-		setTimeout( () => {
-			block.style.opacity = 1;
-			block.style.transform = 'translateY(0)';
-		}, index * 150 );
-	} );
+		window.addEventListener( 'pagehide', () => {
+			clearTimeout( fallbackTimeout );
+			window.removeEventListener( 'resize', applyCustomMasonryLayout );
+			resizeObserver?.disconnect();
+			observer?.disconnect();
+		} );
+
+		// Sequential fade-in for masonry gallery images, scoped per gallery.
+		innerGallery
+			.querySelectorAll( '.wp-block-folioblocks-pb-image-block' )
+			.forEach( ( block, index ) => {
+				block.style.opacity = 0;
+				block.style.transform = 'translateY(20px)';
+				block.style.transition =
+					'opacity 0.6s ease, transform 0.6s ease';
+				setTimeout( () => {
+					block.style.opacity = 1;
+					block.style.transform = 'translateY(0)';
+				}, index * 150 );
+			} );
+	};
+
+	galleries.forEach( initGallery );
+
+	window.pbApplyMasonryLayout = ( galleryEl ) => {
+		const gallery = resolveGalleryWrapper( galleryEl );
+		const applyLayout = layoutInstances.get( gallery );
+
+		if ( applyLayout ) {
+			applyLayout();
+		}
+	};
 } );
