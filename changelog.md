@@ -4,7 +4,21 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.3.0] - 2026-05-25
+## [1.3.0] - 2026-05-27
+### Added
+- Added WordPress 7.0 List View inspector support to all FolioBlocks gallery container blocks.
+- Added List View thumbnail previews for standalone FolioBlocks Image Blocks and Video Blocks.
+
+### Changed
+- Improved List View thumbnail previews so image and video gallery children display stable thumbnails in both the editor List View and the List View inspector tab.
+
+### Fixed
+- Fixed Masonry Gallery front-end layouts so multiple Masonry galleries on the same page initialize independently instead of only laying out the first gallery.
+- Fixed Justified Gallery front-end layouts so multiple Justified galleries on the same page initialize independently instead of leaving later galleries hidden or unloaded.
+- Fixed Justified Gallery front-end filtering so each gallery filter bar only updates its own gallery instance.
+- Fixed the FolioBlocks WordPress admin menu icon so it displays at the correct size and color when the FolioBlocks menu item is not selected.
+
+## [1.3.0] - 2026-05-26
 ### Added
 - Added a new Image Click Behavior control model for Image Block and all photo galleries.
 - Added premium image linking support for Image Block and all photo galleries, including Media File, Custom URL, and Page/Post link actions.
@@ -37,6 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated Grid Gallery to use the shared premium Image Click controls used by the other photo galleries.
 - Replaced the Lightbox caption toggle with a premium Lightbox Content select control for title, caption, product info, and EXIF display options.
 - Kept the base Lightbox action available to free users while moving Lightbox Content display options into premium controls.
+- Moved Image Block EXIF data display behind premium controls so free users see a Pro notice instead of the metadata panel.
 - Refined the FolioBlocks admin Dashboard with a more premium branded header, constrained layout, and softer panel treatment.
 - Updated Available Blocks cards with dark premium styling, FolioBlocks blue icon buttons, and improved icon alignment.
 - Improved Dashboard Quick Links with SVG icon panels, unified button styling, and branded Feedback coloring.
@@ -50,6 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed Fade Overlay inheriting custom Color Overlay background colors when switching hover styles.
 - Fixed Gradient Overlay EXIF text and icons to render in white for better contrast.
 - Fixed EXIF Lightbox output so missing metadata displays Unknown values instead of hiding the EXIF panel.
+- Fixed FolioBlocks admin Dashboard stylesheet cache busting so updated dashboard styling loads correctly after plugin updates.
 
 ## [1.2.9] - 2026-05-18
 ### Added 
