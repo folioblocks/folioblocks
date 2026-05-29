@@ -4,6 +4,20 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-05-29
+### Added
+- Added a WooCommerce product toolbar shortcut to Image Blocks when WooCommerce linking is active, including standalone Image Blocks and Image Blocks inside galleries.
+
+### Changed
+- Renamed gallery click and hover control panels to Gallery Click Settings and Gallery Hover Settings, with matching Gallery Click Styles and Gallery Hover Styles labels.
+- Renamed Image Block hover controls to Image Hover Settings and Image Hover Styles.
+- Moved per-image gallery filtering categories into the Image Block settings inspector below Image Click Settings, and renamed the panel to Image Filtering Settings.
+
+### Fixed
+- Fixed Masonry Gallery front-end column handling so desktop, tablet, and mobile column settings respect saved user values instead of falling back to defaults.
+- Fixed gradient hover overlays remaining visible when macOS Reduce Motion is enabled.
+- Fixed Image Block filtering category controls disappearing when gallery filtering is enabled.
+
 ## [1.3.0] - 2026-05-27
 ### Added
 - Added WordPress 7.0 List View inspector support to all FolioBlocks gallery container blocks.
@@ -13,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved List View thumbnail previews so image and video gallery children display stable thumbnails in both the editor List View and the List View inspector tab.
 
 ### Fixed
+- Fixed bug in Masonry Gallery that prevented correct column count from being used. 
 - Fixed Masonry Gallery front-end layouts so multiple Masonry galleries on the same page initialize independently instead of only laying out the first gallery.
 - Fixed Justified Gallery front-end layouts so multiple Justified galleries on the same page initialize independently instead of leaving later galleries hidden or unloaded.
 - Fixed Justified Gallery front-end filtering so each gallery filter bar only updates its own gallery instance.
