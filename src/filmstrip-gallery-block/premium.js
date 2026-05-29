@@ -394,7 +394,7 @@ addFilter(
 
 		return (
 			<PanelBody
-				title={ __( 'Image Click Styles', 'folioblocks' ) }
+				title={ __( 'Gallery Click Styles', 'folioblocks' ) }
 				initialOpen={ true }
 			>
 				{ enableDownload && (

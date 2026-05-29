@@ -641,7 +641,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					) }
 				</PanelBody>
 				<PanelBody
-					title={ __( 'Image Click Settings', 'folioblocks' ) }
+					title={ __( 'Gallery Click Settings', 'folioblocks' ) }
 					initialOpen={ true }
 				>
 					<SelectControl
@@ -714,7 +714,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 							) }
 					</PanelBody>
 					<PanelBody
-						title={ __( 'Custom Hover Overlays', 'folioblocks' ) }
+						title={ __( 'Gallery Hover Settings', 'folioblocks' ) }
 						initialOpen={ true }
 					>
 						{ applyFilters(
@@ -722,7 +722,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 							<div style={ { marginBottom: '8px' } }>
 								<Notice status="info" isDismissible={ false }>
 									<strong>
-										{ __( 'Custom Hover Overlays', 'folioblocks' ) }
+										{ __( 'Gallery Hover Settings', 'folioblocks' ) }
 									</strong>
 									<br />
 									{ __(

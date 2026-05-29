@@ -56,6 +56,64 @@ const getAssignedFilterCategories = ( attributes = {} ) => {
 	return legacyCategory ? [ legacyCategory ] : [];
 };
 
+const getWooProductValue = ( attributes = {} ) =>
+	attributes.wooProductId
+		? {
+				id: attributes.wooProductId,
+				name: attributes.wooProductName,
+				price_html: attributes.wooProductPrice,
+				permalink: attributes.wooProductURL,
+				image: attributes.wooProductImage || '',
+		  }
+		: null;
+
+const getWooLinkActionSelectState = (
+	attributes = {},
+	isInsideGallery = false,
+	contextWooDefaultLinkAction = ''
+) => {
+	const hasGalleryDefault =
+		isInsideGallery &&
+		typeof contextWooDefaultLinkAction === 'string' &&
+		contextWooDefaultLinkAction.length > 0;
+	const effectiveDefault = hasGalleryDefault
+		? contextWooDefaultLinkAction
+		: 'add_to_cart';
+	const currentAction =
+		attributes.wooLinkAction && attributes.wooLinkAction !== 'inherit'
+			? attributes.wooLinkAction
+			: 'inherit';
+	const effectiveSelectedAction =
+		currentAction === 'inherit' ? effectiveDefault : currentAction;
+
+	return {
+		hasGalleryDefault,
+		selectValue: hasGalleryDefault ? currentAction : effectiveSelectedAction,
+	};
+};
+
+const setWooProductAttributes = ( product, setAttributes ) => {
+	if ( ! product || ! product.id ) {
+		setAttributes( {
+			wooProductId: 0,
+			wooProductName: '',
+			wooProductPrice: '',
+			wooProductURL: '',
+			wooProductDescription: '',
+			wooProductImage: '',
+		} );
+		return;
+	}
+
+	setAttributes( {
+		wooProductId: product.id,
+		wooProductName: product.name,
+		wooProductPrice: product.price_html || product.price || '',
+		wooProductURL: product.permalink || '',
+		wooProductImage: product.image || product.images?.[ 0 ]?.src || '',
+	} );
+};
+
 const apertureIcon = (
 	<svg viewBox="-16 -16 495 495" aria-hidden="true" focusable="false">
 		<path
@@ -696,6 +754,119 @@ addFilter(
 	}
 );
 
+addFilter(
+	'folioBlocks.imageBlock.wooProductToolbarButton',
+	'folioblocks/pb-image-block-premium-woo-product-toolbar-button',
+	( defaultContent, props ) => {
+		const {
+			attributes,
+			setAttributes,
+			isInsideGallery,
+			contextWooDefaultLinkAction,
+		} = props;
+		const { hasGalleryDefault, selectValue } =
+			getWooLinkActionSelectState(
+				attributes,
+				isInsideGallery,
+				contextWooDefaultLinkAction
+			);
+
+		return (
+			<ToolbarGroup>
+				<Dropdown
+					popoverProps={ { placement: 'bottom-start' } }
+					renderToggle={ ( { isOpen, onToggle } ) => (
+						<ToolbarButton
+							icon={ wooCartIcon }
+							label={ __(
+								'Edit WooCommerce Product',
+								'folioblocks'
+							) }
+							onClick={ onToggle }
+							isPressed={ isOpen }
+						/>
+					) }
+					renderContent={ () => (
+						<div style={ { padding: '12px', width: '320px' } }>
+							<ProductSearchControl
+								value={ getWooProductValue( attributes ) }
+								onSelect={ ( product ) =>
+									setWooProductAttributes(
+										product,
+										setAttributes
+									)
+								}
+							/>
+							{ Number( attributes.wooProductId ) > 0 && (
+								<SelectControl
+									label={ __(
+										'Product Link Behavior',
+										'folioblocks'
+									) }
+									value={ selectValue }
+									options={
+										hasGalleryDefault
+											? [
+													{
+														label: __(
+															'Inherit (Gallery Default)',
+															'folioblocks'
+														),
+														value: 'inherit',
+													},
+													{
+														label: __(
+															'Add to Cart',
+															'folioblocks'
+														),
+														value: 'add_to_cart',
+													},
+													{
+														label: __(
+															'Open Product Page',
+															'folioblocks'
+														),
+														value: 'product',
+													},
+											  ]
+											: [
+													{
+														label: __(
+															'Add to Cart',
+															'folioblocks'
+														),
+														value: 'add_to_cart',
+													},
+													{
+														label: __(
+															'Open Product Page',
+															'folioblocks'
+														),
+														value: 'product',
+													},
+											  ]
+									}
+									onChange={ ( value ) =>
+										setAttributes( {
+											wooLinkAction: value,
+										} )
+									}
+									__nextHasNoMarginBottom
+									__next40pxDefaultSize
+									help={ __(
+										'Choose what happens when visitors use this image product link.',
+										'folioblocks'
+									) }
+								/>
+							) }
+						</div>
+					) }
+				/>
+			</ToolbarGroup>
+		);
+	}
+);
+
 // Premium: Standalone PB Image Block Download Controls
 addFilter(
 	'folioBlocks.imageBlock.downloadControls',
@@ -886,64 +1057,19 @@ addFilter(
 			return null;
 		}
 
-		const hasGalleryDefault =
-			isInsideGallery &&
-			typeof contextWooDefaultLinkAction === 'string' &&
-			contextWooDefaultLinkAction.length > 0;
-
-		const effectiveDefault = hasGalleryDefault
-			? contextWooDefaultLinkAction
-			: 'add_to_cart';
-
-		const currentAction =
-			attributes.wooLinkAction && attributes.wooLinkAction !== 'inherit'
-				? attributes.wooLinkAction
-				: 'inherit';
-
-		const effectiveSelectedAction =
-			currentAction === 'inherit' ? effectiveDefault : currentAction;
-
-		const selectValue = hasGalleryDefault
-			? currentAction
-			: effectiveSelectedAction;
+		const { hasGalleryDefault, selectValue } =
+			getWooLinkActionSelectState(
+				attributes,
+				isInsideGallery,
+				contextWooDefaultLinkAction
+			);
 
 		return (
 			<>
 				<ProductSearchControl
-					value={
-						attributes.wooProductId
-							? {
-									id: attributes.wooProductId,
-									name: attributes.wooProductName,
-									price_html: attributes.wooProductPrice,
-									permalink: attributes.wooProductURL,
-									image: attributes.wooProductImage || '',
-							  }
-							: null
-					}
+					value={ getWooProductValue( attributes ) }
 					onSelect={ ( product ) => {
-						if ( ! product || ! product.id ) {
-							setAttributes( {
-								wooProductId: 0,
-								wooProductName: '',
-								wooProductPrice: '',
-								wooProductURL: '',
-								wooProductDescription: '',
-								wooProductImage: '',
-							} );
-							return;
-						}
-						setAttributes( {
-							wooProductId: product.id,
-							wooProductName: product.name,
-							wooProductPrice:
-								product.price_html || product.price || '',
-							wooProductURL: product.permalink || '',
-							wooProductImage:
-								product.image ||
-								product.images?.[ 0 ]?.src ||
-								'',
-						} );
+						setWooProductAttributes( product, setAttributes );
 					} }
 				/>
 				{ Number( attributes.wooProductId ) > 0 && (
@@ -1073,7 +1199,7 @@ addFilter(
 		return (
 			<>
 				<PanelBody
-					title={ __( 'Gallery Filtering Settings', 'folioblocks' ) }
+					title={ __( 'Image Filtering Settings', 'folioblocks' ) }
 					initialOpen={ true }
 				>
 					<p

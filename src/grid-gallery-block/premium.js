@@ -66,6 +66,7 @@ const getImageBlockFilterCategories = ( blockAttributes = {} ) => {
 registerImageHoverActionPremiumControls( {
 	hookPrefix: 'folioBlocks.gridGallery',
 	namespace: 'folioblocks/grid-gallery',
+	stylePanelLabel: __( 'Gallery Hover Styles', 'folioblocks' ),
 } );
 
 registerImageClickActionPremiumControls( {
@@ -768,7 +769,7 @@ addFilter(
 
 		return (
 			<ToolsPanel
-				label={ __( 'Image Click Styles', 'folioblocks' ) }
+				label={ __( 'Gallery Click Styles', 'folioblocks' ) }
 				resetAll={ () =>
 					setAttributes( {
 						downloadIconColor: '',

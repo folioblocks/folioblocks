@@ -652,15 +652,19 @@
 	.pb-image-block.pb-hover-zoom img,
 	.pb-image-block.pb-hover-tilt img,
 	.pb-image-block.pb-hover-pan img,
-	.pb-image-block.pb-hover-fade-overlay .pb-image-block-title,
-	.pb-image-block.pb-hover-color-overlay .pb-image-block-title,
-	.pb-image-block.pb-hover-gradient-bottom .pb-image-block-title,
-	.pb-image-block.pb-hover-chip .pb-image-block-title,
 	.pb-image-block.pb-hover-glare::after,
 	.pb-image-block.pb-hover-lift img,
 	.pb-image-block.pb-hover-pop img {
 		transition: none !important;
 		transform: none !important;
+		animation: none !important;
+	}
+
+	.pb-image-block.pb-hover-fade-overlay .pb-image-block-title,
+	.pb-image-block.pb-hover-color-overlay .pb-image-block-title,
+	.pb-image-block.pb-hover-gradient-bottom .pb-image-block-title,
+	.pb-image-block.pb-hover-chip .pb-image-block-title {
+		transition: none !important;
 		animation: none !important;
 	}
 }

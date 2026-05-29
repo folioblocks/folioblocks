@@ -309,6 +309,7 @@ registerImageClickActionPremiumControls( {
 registerImageHoverActionPremiumControls( {
 	hookPrefix: 'folioBlocks.justifiedGallery',
 	namespace: 'folioblocks/justified-gallery',
+	stylePanelLabel: __( 'Gallery Hover Styles', 'folioblocks' ),
 } );
 
 addFilter(
@@ -875,7 +876,7 @@ addFilter(
 
 		return (
 			<ToolsPanel
-				label={ __( 'Image Click Styles', 'folioblocks' ) }
+				label={ __( 'Gallery Click Styles', 'folioblocks' ) }
 				resetAll={ () =>
 					setAttributes( {
 						downloadIconColor: '',

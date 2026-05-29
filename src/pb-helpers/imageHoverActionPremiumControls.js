@@ -72,6 +72,7 @@ const getOverlayHelp = ( value ) => {
 export const registerImageHoverActionPremiumControls = ( {
 	hookPrefix,
 	namespace,
+	stylePanelLabel = __( 'Image Hover Styles', 'folioblocks' ),
 } ) => {
 	addFilter(
 		`${ hookPrefix }.onHoverTitleToggle`,
@@ -200,7 +201,7 @@ export const registerImageHoverActionPremiumControls = ( {
 
 				return (
 					<ToolsPanel
-						label={ __( 'Image Hover Style', 'folioblocks' ) }
+						label={ stylePanelLabel }
 						resetAll={ () =>
 							setAttributes( {
 								[ bgAttribute ]: '',

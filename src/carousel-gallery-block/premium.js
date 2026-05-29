@@ -349,6 +349,7 @@ registerImageClickActionPremiumControls( {
 registerImageHoverActionPremiumControls( {
 	hookPrefix: 'folioBlocks.carouselGallery',
 	namespace: 'folioblocks/carousel-gallery',
+	stylePanelLabel: __( 'Gallery Hover Styles', 'folioblocks' ),
 } );
 
 addFilter(
@@ -499,7 +500,7 @@ addFilter(
 
 		return (
 			<ToolsPanel
-				label={ __( 'Image Click Styles', 'folioblocks' ) }
+				label={ __( 'Gallery Click Styles', 'folioblocks' ) }
 				resetAll={ () =>
 					setAttributes( {
 						downloadIconColor: '',

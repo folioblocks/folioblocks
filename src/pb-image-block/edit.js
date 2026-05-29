@@ -668,6 +668,10 @@ export default function Edit( {
 	const shouldShowPagePostControls =
 		activeImageClickAction === 'page_post' &&
 		( ! isInsideGallery || contextImageClickAction === 'page_post' );
+	const shouldShowWooProductToolbar =
+		src &&
+		activeImageClickAction === 'woocommerce' &&
+		!! effectiveWooActive;
 	const shouldShowLinkIcon =
 		( activeImageClickAction === 'custom_url' ||
 			activeImageClickAction === 'page_post' ) &&
@@ -723,6 +727,17 @@ export default function Edit( {
 							isInsideGallery,
 						}
 					) }
+				{ shouldShowWooProductToolbar &&
+					applyFilters(
+						'folioBlocks.imageBlock.wooProductToolbarButton',
+						null,
+						{
+							attributes,
+							setAttributes,
+							isInsideGallery,
+							contextWooDefaultLinkAction,
+						}
+					) }
 				{ isInImageRow && ! isInImageStack && (
 					<ToolbarGroup>
 						<ToolbarButton
@@ -745,11 +760,11 @@ export default function Edit( {
 				) }
 			</BlockControls>
 			<InspectorControls>
-				{ shouldShowImageBlockSettingsPanel && (
-					<PanelBody
-						title={ __( 'Image Block Settings', 'folioblocks' ) }
-						initialOpen={ true }
-					>
+					{ shouldShowImageBlockSettingsPanel && (
+						<PanelBody
+							title={ __( 'Image Block Settings', 'folioblocks' ) }
+							initialOpen={ true }
+						>
 						{ src && ! shouldUseContentInspector && (
 							<ImagePreviewControl
 								id={ id }
@@ -918,9 +933,20 @@ export default function Edit( {
 								) }
 							</PanelBody>
 						) }
+						{ applyFilters(
+							'folioBlocks.imageBlock.filterCategoryControl',
+							null,
+							{
+								attributes,
+								setAttributes,
+								filterCategories,
+								context,
+								isInsideGallery,
+							}
+						) }
 						{ ! isInsideGallery && (
 							<PanelBody
-								title={ __( 'Custom Hover Overlays', 'folioblocks' ) }
+								title={ __( 'Image Hover Settings', 'folioblocks' ) }
 								initialOpen={ true }
 							>
 								{ applyFilters(
@@ -928,7 +954,7 @@ export default function Edit( {
 									<div style={ { marginBottom: '8px' } }>
 										<Notice status="info" isDismissible={ false }>
 											<strong>
-												{ __( 'Custom Hover Overlays', 'folioblocks' ) }
+												{ __( 'Image Hover Settings', 'folioblocks' ) }
 											</strong>
 											<br />
 											{ __(

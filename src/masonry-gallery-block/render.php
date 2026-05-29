@@ -9,10 +9,79 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-$fbks_attributes = wp_parse_args($attributes, [
+$fbks_raw_attributes = is_array( $attributes ) ? $attributes : [];
+$fbks_saved_classes = '';
+
+if ( preg_match( '/class="([^"]*\bpb-masonry-gallery\b[^"]*)"/', $content, $fbks_class_matches ) ) {
+    $fbks_saved_classes = $fbks_class_matches[1];
+}
+
+$fbks_get_saved_columns = function ( $fbks_breakpoint ) use ( $fbks_saved_classes ) {
+    if ( preg_match( '/\bcols-' . preg_quote( $fbks_breakpoint, '/' ) . '-(\d+)\b/', $fbks_saved_classes, $fbks_column_matches ) ) {
+        return max( 1, absint( $fbks_column_matches[1] ) );
+    }
+
+    return null;
+};
+
+$fbks_get_columns = function ( $fbks_primary_key, $fbks_legacy_key, $fbks_breakpoint, $fbks_default ) use ( $fbks_raw_attributes, $fbks_get_saved_columns ) {
+    $fbks_saved_column = $fbks_get_saved_columns( $fbks_breakpoint );
+
+    if ( isset( $fbks_raw_attributes[ $fbks_primary_key ] ) && '' !== $fbks_raw_attributes[ $fbks_primary_key ] ) {
+        $fbks_attribute_column = max( 1, absint( $fbks_raw_attributes[ $fbks_primary_key ] ) );
+
+        if ( $fbks_attribute_column !== $fbks_default || null === $fbks_saved_column ) {
+            return $fbks_attribute_column;
+        }
+    }
+
+    if ( isset( $fbks_raw_attributes[ $fbks_legacy_key ] ) && '' !== $fbks_raw_attributes[ $fbks_legacy_key ] ) {
+        $fbks_attribute_column = max( 1, absint( $fbks_raw_attributes[ $fbks_legacy_key ] ) );
+
+        if ( $fbks_attribute_column !== $fbks_default || null === $fbks_saved_column ) {
+            return $fbks_attribute_column;
+        }
+    }
+
+    if ( null !== $fbks_saved_column ) {
+        return $fbks_saved_column;
+    }
+
+    return $fbks_default;
+};
+
+$fbks_columns        = $fbks_get_columns( 'columns', 'columns', 'd', 6 );
+$fbks_tablet_columns = $fbks_get_columns( 'tabletColumns', 'columnsTablet', 't', 4 );
+$fbks_mobile_columns = $fbks_get_columns( 'mobileColumns', 'columnsMobile', 'm', 2 );
+
+$fbks_attributes = wp_parse_args($fbks_raw_attributes, [
+    'columns' => 6,
+    'tabletColumns' => 4,
+    'mobileColumns' => 2,
     'randomizeOrder' => false,
     'noGap' => false,
 ]);
+
+$fbks_content = preg_replace_callback(
+    '/class="([^"]*\bpb-masonry-gallery\b[^"]*)"/',
+    function ( $fbks_matches ) use ( $fbks_columns, $fbks_tablet_columns, $fbks_mobile_columns ) {
+        $fbks_classes = preg_split( '/\s+/', $fbks_matches[1] );
+        $fbks_classes = array_filter(
+            $fbks_classes,
+            function ( $fbks_class ) {
+                return ! preg_match( '/^cols-[dtm]-\d+$/', $fbks_class );
+            }
+        );
+
+        $fbks_classes[] = 'cols-d-' . $fbks_columns;
+        $fbks_classes[] = 'cols-t-' . $fbks_tablet_columns;
+        $fbks_classes[] = 'cols-m-' . $fbks_mobile_columns;
+
+        return 'class="' . esc_attr( implode( ' ', array_unique( $fbks_classes ) ) ) . '"';
+    },
+    $content,
+    1
+);
 
 $fbks_extra_class = '';
 $fbks_data_attr = '';
@@ -136,6 +205,6 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
     }
 }
 
-echo fbks_kses_post_with_svg( $content );
+echo fbks_kses_post_with_svg( $fbks_content );
 
 echo '</div>';

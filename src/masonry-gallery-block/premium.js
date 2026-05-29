@@ -327,6 +327,7 @@ registerImageClickActionPremiumControls( {
 registerImageHoverActionPremiumControls( {
 	hookPrefix: 'folioBlocks.masonryGallery',
 	namespace: 'folioblocks/masonry-gallery',
+	stylePanelLabel: __( 'Gallery Hover Styles', 'folioblocks' ),
 } );
 
 addFilter(
@@ -934,7 +935,7 @@ addFilter(
 
 		return (
 			<ToolsPanel
-				label={ __( 'Image Click Styles', 'folioblocks' ) }
+				label={ __( 'Gallery Click Styles', 'folioblocks' ) }
 				resetAll={ () =>
 					setAttributes( {
 						downloadIconColor: '',
