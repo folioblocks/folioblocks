@@ -8,7 +8,6 @@ import './style.scss';
 import Edit from './edit';
 import Save from './save';
 import metadata from './block.json';
-import '../pb-helpers/applyThumbnails';
 import {
 	disableGalleryWrapperTransforms,
 	transformCoreImageToPbImage,

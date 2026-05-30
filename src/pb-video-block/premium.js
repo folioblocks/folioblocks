@@ -17,6 +17,7 @@ import ProductSearchControl from '../pb-helpers/ProductSearchControl.js';
 import CompactColorControl, {
 	CompactTwoColorControl,
 } from '../pb-helpers/CompactColorControl.js';
+import '../pb-helpers/applyThumbnails';
 
 const sanitizeExternalUrl = (url) => {
 	if (typeof url !== 'string' || url.trim() === '') {

@@ -25,6 +25,7 @@ import ProductSearchControl from '../pb-helpers/ProductSearchControl.js';
 import CompactColorControl, {
 	CompactTwoColorControl,
 } from '../pb-helpers/CompactColorControl.js';
+import '../pb-helpers/applyThumbnails';
 import { registerImageHoverActionPremiumControls } from '../pb-helpers/imageHoverActionPremiumControls.js';
 import {
 	Icon,
