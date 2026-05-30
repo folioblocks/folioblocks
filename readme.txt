@@ -13,9 +13,11 @@ Create fast, responsive photo and video galleries with grid, masonry, justified,
 
 == Description ==
 
-FolioBlocks is a modern gallery and portfolio plugin built specifically for the WordPress Block Editor (Gutenberg) and Full Site Editor. Designed for photographers, designers, artists, and creative professionals, FolioBlocks makes it easy to create beautiful, fully responsive image galleries, video galleries, and before-and-after comparison blocks—all without shortcodes or external gallery systems.
+FolioBlocks is a native WordPress gallery plugin for building responsive image galleries, video galleries, portfolio layouts, and comparison blocks directly in the Block Editor. It is designed for photographers, designers, artists, agencies, creative businesses, and WooCommerce stores that need flexible visual layouts without shortcodes or external gallery managers.
 
-Build professional galleries directly inside Gutenberg using flexible layouts including Grid, Justified, Masonry, Modular, Carousel, and Video Gallery blocks. Every block is performance-focused, mobile-friendly, and optimized for real portfolio use cases. FolioBlocks brings powerful visual tools into the native editor so you can work quickly and maintain full creative control.
+Create Grid, Masonry, Justified, Carousel, Filmstrip, Modular, and Video galleries using familiar Gutenberg controls. FolioBlocks keeps your workflow inside WordPress while giving you tools for lightboxes, hover overlays, gallery filtering, image downloads, WooCommerce product links, EXIF display, and content protection.
+
+The free version includes the core gallery and media blocks. FolioBlocks Pro unlocks advanced creative and commerce features, including Modular Gallery, gallery filtering, WooCommerce integration, image downloads, lazy loading, advanced styling controls, Pro List View thumbnails, and more.
 
 Included blocks: 
 * Background Video Block - Add an autoplaying, responsive background video with overlay content on top
@@ -31,28 +33,31 @@ Included blocks:
 * Video Block - Display a single video with custom thumbnail, lightbox playback, captions, and optional WooCommerce linking
 * Video Gallery Block – Showcase YouTube, Vimeo, or self-hosted videos
 
-Gallery Features - All gallery blocks include:
+Core gallery features include:
 * Fully responsive layouts for desktop, tablet, and mobile
-* Built-in Lightbox
+* Built-in lightbox support
 * Caption support and accessibility-friendly interactions
 * Drag-and-drop image ordering
 * 100% native Gutenberg block editing (no shortcodes, no separate gallery manager)
-* Block Transforms covert galleires in one click (Grid, Justified, or Masonry and Carousel or Filmstrip)
+* Block transforms to convert galleries in one click
+* WordPress 7.0 List View inspector support for gallery children
 
-Advanced Features (Pro) - Unlock advanced tools designed for photography websites, creative portfolios, and WooCommerce-powered shops:
-* Custom Image Click Actions
-* Gallery Image Filtering
-* WooCommerce Product Integration
-* Download Full-Resolution Images
-* Randomize Image Order
-* Disable Right-Click / Content Protection
-* Lazy Load Images for faster performance
-* Hover Effects and Image Overlays
-* Advanced Gallery Styling Controls (borders, shadows, radius, etc.)
+Pro features include:
+* Custom image click actions for media files, custom URLs, Page/Post links, downloads, lightbox, and WooCommerce products
+* Gallery image filtering with per-image category assignment
+* WooCommerce product integration for images and videos
+* Download full-resolution images
+* Randomize image order
+* Disable right-click / content protection
+* Lazy load images for faster performance
+* Hover effects, image overlays, and overlay content controls
+* EXIF metadata display in lightboxes and hover overlays
+* Pro List View thumbnails for easier gallery reordering
+* Advanced gallery styling controls for borders, shadows, radius, filter bars, icons, and overlays
 
 Why FolioBlocks?
 
-FolioBlocks is built for users who want fast, native, block-based galleries without the complexity of third-party gallery builders or shortcode-based plugins. If you want a clean, modern way to display photography, client work, products, portfolios, or case studies—FolioBlocks gives you those tools directly inside the editor.
+FolioBlocks is built for users who want fast, native, block-based galleries without the complexity of third-party gallery builders or shortcode-based plugins. If you want a clean way to display photography, client work, products, portfolios, or case studies, FolioBlocks gives you those tools directly inside the editor.
 
 == Installation ==
 
@@ -76,7 +81,7 @@ FolioBlocks is a collection of modern, responsive gallery and media blocks built
 Yes. FolioBlocks is designed to work with all modern WordPress themes. For best results, we recommend using a block theme that supports Full Site Editing.
 
 = What’s the difference between the free and Pro versions? =
-The free version includes all the core blocks with the exception of the Modular Gallery. The Pro version includes the Modular Gallery block and unlocks additional premium features accross all blocks such as Gallery Filtering, WooCommerce integration, Image Downloads, Randomize Image Order, Lightbox Captions, Right-Click Disable, Lazy Load, and more.
+The free version includes all the core blocks with the exception of the Modular Gallery. The Pro version includes the Modular Gallery block and unlocks additional premium features across all blocks such as Gallery Filtering, WooCommerce integration, Image Downloads, Randomize Image Order, Lightbox Captions, Right-Click Disable, Lazy Load, and more.
 
 = Can I use FolioBlocks with page builders like Elementor or Divi? =
 FolioBlocks is built specifically for the WordPress Block Editor (Gutenberg). It will not work inside Elementor, Divi, or other third-party page builders.
