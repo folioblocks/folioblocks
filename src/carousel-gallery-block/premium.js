@@ -23,6 +23,9 @@ import { applyThumbnails } from '../pb-helpers/applyThumbnails';
 import { registerImageClickActionPremiumControls } from '../pb-helpers/imageClickActionPremiumControls';
 import { registerImageHoverActionPremiumControls } from '../pb-helpers/imageHoverActionPremiumControls';
 
+const DEFAULT_CONTROLS_BACKGROUND_COLOR = 'rgba(0, 0, 0, 0.5)';
+const DEFAULT_CONTROLS_ICON_COLOR = '#ffffff';
+
 addFilter(
 	'folioBlocks.carouselGallery.editorEnhancements',
 	'folioblocks/carousel-gallery-premium-thumbnails',
@@ -365,21 +368,27 @@ addFilter(
 				label={ __( 'Carousel Styles', 'folioblocks' ) }
 				resetAll={ () =>
 					setAttributes( {
-						controlsBackgroundColor: '',
-						controlsIconColor: '',
+						controlsBackgroundColor:
+							DEFAULT_CONTROLS_BACKGROUND_COLOR,
+						controlsIconColor: DEFAULT_CONTROLS_ICON_COLOR,
 					} )
 				}
 			>
 				<ToolsPanelItem
 					label={ __( 'Playback Control Colors', 'folioblocks' ) }
 					hasValue={ () =>
-						!! attributes.controlsBackgroundColor ||
-						!! attributes.controlsIconColor
+						( attributes.controlsBackgroundColor ||
+							DEFAULT_CONTROLS_BACKGROUND_COLOR ) !==
+							DEFAULT_CONTROLS_BACKGROUND_COLOR ||
+						( attributes.controlsIconColor ||
+							DEFAULT_CONTROLS_ICON_COLOR ) !==
+							DEFAULT_CONTROLS_ICON_COLOR
 					}
 					onDeselect={ () =>
 						setAttributes( {
-							controlsBackgroundColor: '',
-							controlsIconColor: '',
+							controlsBackgroundColor:
+								DEFAULT_CONTROLS_BACKGROUND_COLOR,
+							controlsIconColor: DEFAULT_CONTROLS_ICON_COLOR,
 						} )
 					}
 					isShownByDefault
@@ -387,13 +396,20 @@ addFilter(
 					<CompactTwoColorControl
 						label={ __( 'Playback Control Colors', 'folioblocks' ) }
 						value={ {
-							first: attributes.controlsBackgroundColor,
-							second: attributes.controlsIconColor,
+							first:
+								attributes.controlsBackgroundColor ||
+								DEFAULT_CONTROLS_BACKGROUND_COLOR,
+							second:
+								attributes.controlsIconColor ||
+								DEFAULT_CONTROLS_ICON_COLOR,
 						} }
 						onChange={ ( next ) =>
 							setAttributes( {
-								controlsBackgroundColor: next?.first || '',
-								controlsIconColor: next?.second || '',
+								controlsBackgroundColor:
+									next?.first ||
+									DEFAULT_CONTROLS_BACKGROUND_COLOR,
+								controlsIconColor:
+									next?.second || DEFAULT_CONTROLS_ICON_COLOR,
 							} )
 						}
 						firstLabel={ __( 'Background', 'folioblocks' ) }
@@ -647,8 +663,10 @@ addFilter(
 						style={ {
 							backgroundColor:
 								attributes.controlsBackgroundColor ||
-								'rgba(0, 0, 0, 0.5)',
-							color: attributes.controlsIconColor || '#ffffff',
+								DEFAULT_CONTROLS_BACKGROUND_COLOR,
+							color:
+								attributes.controlsIconColor ||
+								DEFAULT_CONTROLS_ICON_COLOR,
 						} }
 					>
 						<svg
@@ -670,9 +688,10 @@ addFilter(
 							style={ {
 								backgroundColor:
 									attributes.controlsBackgroundColor ||
-									'rgba(0, 0, 0, 0.5)',
+									DEFAULT_CONTROLS_BACKGROUND_COLOR,
 								color:
-									attributes.controlsIconColor || '#ffffff',
+									attributes.controlsIconColor ||
+									DEFAULT_CONTROLS_ICON_COLOR,
 							} }
 						>
 							{ isPlaying ? (
@@ -705,8 +724,10 @@ addFilter(
 						style={ {
 							backgroundColor:
 								attributes.controlsBackgroundColor ||
-								'rgba(0, 0, 0, 0.5)',
-							color: attributes.controlsIconColor || '#ffffff',
+								DEFAULT_CONTROLS_BACKGROUND_COLOR,
+							color:
+								attributes.controlsIconColor ||
+								DEFAULT_CONTROLS_ICON_COLOR,
 						} }
 					>
 						<svg

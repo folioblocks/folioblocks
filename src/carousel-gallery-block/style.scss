@@ -70,8 +70,10 @@
 		color: var(--pb-controls-icon, #fff);
 		border: none;
 		border-radius: 50%;
+		box-sizing: border-box;
 		width: 36px;
 		height: 36px;
+		padding: 0;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -80,8 +82,9 @@
 		cursor: pointer;
 		transition: background 0.2s;
 
-		&:hover {
-			background: rgba(0, 0, 0, 0.7);
+		svg {
+			display: block;
+			flex: 0 0 auto;
 		}
 	}
 
@@ -91,5 +94,10 @@
 		padding-left: 1px; // subtle centering nudge
 		padding-right: 1px;
 
+	}
+
+	.pb-carousel-chevron:hover,
+	.pb-carousel-play-button:hover {
+		background: rgba(0, 0, 0, 0.7);
 	}
 }

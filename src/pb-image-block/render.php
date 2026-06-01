@@ -36,6 +36,7 @@ if ( ! in_array( $fbks_lightbox_content, [ 'none', 'title', 'caption', 'product'
 	$fbks_lightbox_content = $fbks_caption_lightbox ? 'caption' : 'none';
 }
 $fbks_caption_lightbox = 'none' !== $fbks_lightbox_content;
+$fbks_hide_unknown_exif_fields = (bool) ( $fbks_context['folioBlocks/hideUnknownExifFields'] ?? ( $attributes['hideUnknownExifFields'] ?? false ) );
 $fbks_title_hover = $fbks_context['folioBlocks/onHoverTitle'] ?? ( isset( $attributes['showTitleOnHover'] ) ? (bool) $attributes['showTitleOnHover'] : false );
 $fbks_image_click_action = sanitize_key( $fbks_context['folioBlocks/imageClickAction'] ?? ( $attributes['imageClickAction'] ?? '' ) );
 $fbks_image_click_target = sanitize_key( $fbks_context['folioBlocks/imageClickTarget'] ?? ( $attributes['imageClickTarget'] ?? 'icon' ) );
@@ -279,7 +280,15 @@ $fbks_get_exif_icon = static function ( $fbks_icon_name ) {
 	return $fbks_icons[ $fbks_icon_name ] ?? '';
 };
 
-$fbks_get_lightbox_exif = static function () use ( $attributes, $fbks_get_exif_icon ) {
+$fbks_is_unknown_exif_value = static function ( $fbks_value, $fbks_unknown ) {
+	if ( ! is_string( $fbks_value ) || '' === trim( $fbks_value ) ) {
+		return true;
+	}
+
+	return strtolower( trim( $fbks_value ) ) === strtolower( $fbks_unknown );
+};
+
+$fbks_get_lightbox_exif = static function () use ( $attributes, $fbks_get_exif_icon, $fbks_hide_unknown_exif_fields, $fbks_is_unknown_exif_value ) {
 	$fbks_unknown = __( 'Unknown', 'folioblocks' );
 	$fbks_fields = [
 		[
@@ -309,8 +318,12 @@ $fbks_get_lightbox_exif = static function () use ( $attributes, $fbks_get_exif_i
 		],
 	];
 
-	$fbks_output = '<div class="pb-lightbox-exif">';
+	$fbks_output = '';
 	foreach ( $fbks_fields as $fbks_field ) {
+		if ( $fbks_hide_unknown_exif_fields && $fbks_is_unknown_exif_value( $fbks_field['value'], $fbks_unknown ) ) {
+			continue;
+		}
+
 		$fbks_value = is_string( $fbks_field['value'] ) && '' !== trim( $fbks_field['value'] )
 			? trim( $fbks_field['value'] )
 			: $fbks_unknown;
@@ -321,12 +334,11 @@ $fbks_get_lightbox_exif = static function () use ( $attributes, $fbks_get_exif_i
 		$fbks_output .= '<span class="pb-lightbox-exif__value">' . esc_html( $fbks_value ) . '</span>';
 		$fbks_output .= '</span></div>';
 	}
-	$fbks_output .= '</div>';
 
-	return $fbks_output;
+	return '' === $fbks_output ? '' : '<div class="pb-lightbox-exif">' . $fbks_output . '</div>';
 };
 
-$fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_icon ) {
+$fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_icon, $fbks_hide_unknown_exif_fields, $fbks_is_unknown_exif_value ) {
 	$fbks_unknown = __( 'Unknown', 'folioblocks' );
 	$fbks_fields = [
 		[ 'icon' => 'camera', 'value' => $attributes['exifCamera'] ?? '' ],
@@ -336,8 +348,12 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 		[ 'icon' => 'iso', 'value' => $attributes['exifIso'] ?? '' ],
 	];
 
-	$fbks_output = '<div class="pb-hover-exif">';
+	$fbks_output = '';
 	foreach ( $fbks_fields as $fbks_field ) {
+		if ( $fbks_hide_unknown_exif_fields && $fbks_is_unknown_exif_value( $fbks_field['value'], $fbks_unknown ) ) {
+			continue;
+		}
+
 		$fbks_value = is_string( $fbks_field['value'] ) && '' !== trim( $fbks_field['value'] )
 			? trim( $fbks_field['value'] )
 			: $fbks_unknown;
@@ -346,9 +362,8 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 		$fbks_output .= '<span class="pb-hover-exif__value">' . esc_html( $fbks_value ) . '</span>';
 		$fbks_output .= '</span>';
 	}
-	$fbks_output .= '</div>';
 
-	return $fbks_output;
+	return '' === $fbks_output ? '' : '<div class="pb-hover-exif">' . $fbks_output . '</div>';
 };
 
 	?>
@@ -459,10 +474,13 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 							echo '</figcaption></div>';
 						}
 					} elseif ( 'exif' === $fbks_overlay_content ) {
-						echo '<div class="pb-image-block-title-container">';
-						echo '<figcaption class="pb-image-block-title">';
-						echo $fbks_get_overlay_exif(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Markup is assembled from hardcoded icons and escaped values.
-						echo '</figcaption></div>';
+						$fbks_overlay_exif = $fbks_get_overlay_exif();
+						if ( '' !== $fbks_overlay_exif ) {
+							echo '<div class="pb-image-block-title-container">';
+							echo '<figcaption class="pb-image-block-title">';
+							echo $fbks_overlay_exif; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Markup is assembled from hardcoded icons and escaped values.
+							echo '</figcaption></div>';
+						}
 					} elseif ( $fbks_enable_woo && 'product' === $fbks_overlay_content ) {
 					// WooCommerce product info on hover
 					$fbks_product_name  = $attributes['wooProductName'] ?? '';

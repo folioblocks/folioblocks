@@ -38,6 +38,12 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 $fbks_loop = isset( $attributes['loopSlides'] ) ? $attributes['loopSlides'] : false;
 
 $fbks_wrapper_attr_string = get_block_wrapper_attributes( $fbks_wrapper_attributes );
+$fbks_controls_background_color = ! empty( $attributes['controlsBackgroundColor'] )
+	? $attributes['controlsBackgroundColor']
+	: 'rgba(0, 0, 0, 0.5)';
+$fbks_controls_icon_color = ! empty( $attributes['controlsIconColor'] )
+	? $attributes['controlsIconColor']
+	: '#ffffff';
 ?>
 <div <?php echo wp_kses( $fbks_wrapper_attr_string, [ 'div' => [] ] ); ?>>
 	<div class="pb-carousel-gallery" data-loop="<?php echo $fbks_loop ? 'true' : 'false'; ?>">
@@ -49,8 +55,8 @@ $fbks_wrapper_attr_string = get_block_wrapper_attributes( $fbks_wrapper_attribut
 			<div
 				class="pb-carousel-controls align-<?php echo esc_attr( $attributes['controlsAlignment'] ?? 'center' ); ?>"
 				style="
-					--pb-controls-bg: <?php echo esc_attr( $attributes['controlsBackgroundColor'] ?? 'rgba(0,0,0,0.5)' ); ?>;
-					--pb-controls-icon: <?php echo esc_attr( $attributes['controlsIconColor'] ?? '#ffffff' ); ?>;
+					--pb-controls-bg: <?php echo esc_attr( $fbks_controls_background_color ); ?>;
+					--pb-controls-icon: <?php echo esc_attr( $fbks_controls_icon_color ); ?>;
 				"
 			>
 					<button

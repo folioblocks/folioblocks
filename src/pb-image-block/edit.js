@@ -270,7 +270,11 @@ export default function Edit( {
 		window.folioBlocksData?.wpVersion,
 		'7.0'
 	);
-	const hasStoredExif = hasStoredExifAttributes( attributes );
+	const unknownExifValue = __( 'Unknown', 'folioblocks' );
+	const hasStoredExif = hasStoredExifAttributes(
+		attributes,
+		unknownExifValue
+	);
 	const selectedMedia = useSelect(
 		( select ) =>
 			id && shouldUseContentInspector && ! hasStoredExif
@@ -600,7 +604,7 @@ export default function Edit( {
 
 		const exifAttributes = getExifAttributesFromMedia(
 			selectedMedia,
-			__( 'Unknown', 'folioblocks' )
+			unknownExifValue
 		);
 
 		if ( exifAttributes ) {
@@ -619,7 +623,7 @@ export default function Edit( {
 		const exifAttributes =
 			getExifAttributesFromMedia(
 				media,
-				__( 'Unknown', 'folioblocks' )
+				unknownExifValue
 			) || getEmptyExifAttributes();
 
 		setAttributes( {
@@ -1112,13 +1116,22 @@ export default function Edit( {
 																	effectiveOverlayContent,
 																}
 															);
-														return (
-															hoverContent ||
-															( effectiveOverlayContent ===
+														if (
+															hoverContent !== null &&
+															hoverContent !== undefined
+														) {
+															return hoverContent;
+														}
+														if (
+															effectiveOverlayContent ===
+															'exif'
+														) {
+															return null;
+														}
+														return effectiveOverlayContent ===
 															'caption'
-																? caption
-																: title )
-														);
+															? caption
+															: title;
 													} )() }
 												</figcaption>
 											</div>
@@ -1231,13 +1244,21 @@ export default function Edit( {
 																effectiveOverlayContent,
 															}
 														);
-													return (
-														hoverContent ||
-														( effectiveOverlayContent ===
+													if (
+														hoverContent !== null &&
+														hoverContent !== undefined
+													) {
+														return hoverContent;
+													}
+													if (
+														effectiveOverlayContent === 'exif'
+													) {
+														return null;
+													}
+													return effectiveOverlayContent ===
 														'caption'
-															? caption
-															: title )
-													);
+														? caption
+														: title;
 												} )() }
 											</figcaption>
 										</div>

@@ -380,8 +380,8 @@
 		--pb-overlay-color: #000;
 		--pb-chip-overlay-bg: #f9f9f9;
 		--pb-chip-overlay-color: #000;
-		--pb-overlay-pad: 12px 16px;
-	--pb-gradient-bottom-gap: 6px; /* raises gradient panel slightly */
+		--pb-overlay-pad: clamp(6px, 3cqi, 12px) clamp(8px, 4cqi, 16px);
+		--pb-gradient-bottom-gap: 6px; /* raises gradient panel slightly */
 	--pb-chip-offset: 15px;
 	--pb-chip-radius: 6px;
 }
@@ -574,8 +574,14 @@
 
 	.pb-image-block .pb-hover-exif {
 		display: flex;
-		gap: 8px;
+		gap: clamp(3px, 2cqi, 8px);
 		line-height: 1.2;
+		max-width: 100%;
+		max-height: 100%;
+		overflow: hidden;
+		--pb-hover-exif-icon-size: clamp(13px, 5cqi + 4px, 18px);
+		--pb-hover-exif-value-size: clamp(0.64rem, 2.5cqi + 0.34rem, 0.72rem);
+		--pb-hover-exif-iso-size: clamp(7px, 2cqi + 4px, 9px);
 	}
 
 	.pb-image-block .pb-hover-exif__item {
@@ -588,29 +594,29 @@
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		flex: 0 0 18px;
-		width: 18px;
-		height: 18px;
+		flex: 0 0 var(--pb-hover-exif-icon-size);
+		width: var(--pb-hover-exif-icon-size);
+		height: var(--pb-hover-exif-icon-size);
 		color: currentcolor;
 	}
 
 	.pb-image-block .pb-hover-exif__icon svg {
 		display: block;
-		width: 18px;
-		height: 18px;
+		width: var(--pb-hover-exif-icon-size);
+		height: var(--pb-hover-exif-icon-size);
 		fill: currentcolor;
 	}
 
 	.pb-image-block .pb-hover-exif-icon__iso,
 	.pb-image-block .pb-lightbox-exif-icon__iso {
-		font-size: 9px;
+		font-size: var(--pb-hover-exif-iso-size);
 		font-weight: 700;
 		line-height: 1;
 		letter-spacing: 0;
 	}
 
 	.pb-image-block .pb-hover-exif__value {
-		font-size: 0.72rem;
+		font-size: var(--pb-hover-exif-value-size);
 		font-weight: 600;
 		overflow-wrap: anywhere;
 	}
@@ -628,7 +634,7 @@
 	.pb-image-block.pb-hover-blur-overlay .pb-hover-exif__item,
 	.pb-image-block.pb-hover-color-overlay .pb-hover-exif__item {
 		flex-direction: row;
-		gap: 4px;
+		gap: clamp(2px, 1.5cqi, 4px);
 	}
 
 	.pb-image-block.pb-hover-gradient-bottom .pb-hover-exif,
@@ -643,7 +649,7 @@
 	.pb-image-block.pb-hover-gradient-bottom .pb-hover-exif__item,
 	.pb-image-block.pb-hover-chip .pb-hover-exif__item {
 		flex-direction: row;
-		gap: 4px;
+		gap: clamp(2px, 1.5cqi, 4px);
 	}
 
 	/* Reduced motion */

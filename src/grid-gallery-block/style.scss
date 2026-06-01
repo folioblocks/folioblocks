@@ -50,6 +50,12 @@
 	box-sizing: content-box !important;
 }
 
+.wp-block-folioblocks-grid-gallery-block .pb-image-block .pb-hover-exif {
+	--pb-hover-exif-icon-size: clamp(15px, 5cqi + 4px, 18px);
+	--pb-hover-exif-value-size: clamp(0.7rem, 2.5cqi + 0.34rem, 0.72rem);
+	--pb-hover-exif-iso-size: clamp(8px, 2cqi + 4px, 9px);
+}
+
 // Filter bar styles
 .wp-block-folioblocks-grid-gallery-block .pb-image-gallery-filters {
 	display: flex;

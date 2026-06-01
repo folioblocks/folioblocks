@@ -96,6 +96,10 @@
 			],
 			"default": ""
 		},
+		"hideUnknownExifFields": {
+			"type": "boolean",
+			"default": false
+		},
 		"onHoverTitle": {
 			"type": "boolean",
 			"default": false
@@ -385,6 +389,7 @@
 		"folioBlocks/lightbox": "lightbox",
 		"folioBlocks/lightboxCaption": "lightboxCaption",
 		"folioBlocks/lightboxContent": "lightboxContent",
+		"folioBlocks/hideUnknownExifFields": "hideUnknownExifFields",
 		"folioBlocks/onHoverTitle": "onHoverTitle",
 		"folioBlocks/onHoverStyle": "onHoverStyle",
 			"folioBlocks/overlayBgColor": "overlayBgColor",

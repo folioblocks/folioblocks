@@ -44,6 +44,7 @@
 		"lightbox": { "type": "boolean", "default": false },
         "lightboxCaption": { "type": "boolean", "default": false },
 			"lightboxContent": { "type": "string", "enum": ["none", "title", "caption", "product", "exif"], "default": "" },
+		"hideUnknownExifFields": { "type": "boolean", "default": false },
         "onHoverTitle": { "type": "boolean", "default": false },
         "onHoverStyle": {
             "type": "string",
@@ -138,6 +139,7 @@
 		"folioBlocks/lightbox": "lightbox",
 		"folioBlocks/lightboxCaption": "lightboxCaption",
 		"folioBlocks/lightboxContent": "lightboxContent",
+		"folioBlocks/hideUnknownExifFields": "hideUnknownExifFields",
 		"folioBlocks/onHoverTitle": "onHoverTitle",
 		"folioBlocks/onHoverStyle": "onHoverStyle",
 		"folioBlocks/overlayBgColor": "overlayBgColor",

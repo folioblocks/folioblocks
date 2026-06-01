@@ -31,15 +31,15 @@ const LightboxContentControl = ( {
 			label: __( 'Show Image Title', 'folioblocks' ),
 			value: 'title',
 		},
-			{
-				label: __( 'Show Image Caption', 'folioblocks' ),
-				value: 'caption',
-			},
-			{
-				label: __( 'Show EXIF Data', 'folioblocks' ),
-				value: 'exif',
-			},
-		];
+		{
+			label: __( 'Show Image Caption', 'folioblocks' ),
+			value: 'caption',
+		},
+		{
+			label: __( 'Show EXIF Data', 'folioblocks' ),
+			value: 'exif',
+		},
+	];
 
 	if ( showProductInfoOption ) {
 		options.push( {
@@ -49,26 +49,44 @@ const LightboxContentControl = ( {
 	}
 
 	return (
-		<SelectControl
-			label={ __( 'Lightbox Content', 'folioblocks' ) }
-			value={ showProductInfoOption || value !== 'product' ? value : 'none' }
-			options={ options }
-			onChange={ ( nextValue ) =>
-				setAttributes( {
-					lightboxContent: nextValue,
-					lightboxCaption: nextValue !== 'none',
-					showCaptionInLightbox: nextValue !== 'none',
-					wooLightboxInfoType:
-						nextValue === 'product' ? 'product' : 'caption',
-				} )
-			}
-			__nextHasNoMarginBottom
-			__next40pxDefaultSize
-			help={ __(
-				'Choose what appears below images in the lightbox.',
-				'folioblocks'
+		<>
+			<SelectControl
+				label={ __( 'Lightbox Content', 'folioblocks' ) }
+				value={
+					showProductInfoOption || value !== 'product' ? value : 'none'
+				}
+				options={ options }
+				onChange={ ( nextValue ) =>
+					setAttributes( {
+						lightboxContent: nextValue,
+						lightboxCaption: nextValue !== 'none',
+						showCaptionInLightbox: nextValue !== 'none',
+						wooLightboxInfoType:
+							nextValue === 'product' ? 'product' : 'caption',
+					} )
+				}
+				__nextHasNoMarginBottom
+				__next40pxDefaultSize
+				help={ __(
+					'Choose what appears below images in the lightbox.',
+					'folioblocks'
+				) }
+			/>
+			{ value === 'exif' && (
+				<ToggleControl
+					label={ __( 'Hide Unknown EXIF Fields', 'folioblocks' ) }
+					checked={ !! attributes.hideUnknownExifFields }
+					onChange={ ( hideUnknownExifFields ) =>
+						setAttributes( { hideUnknownExifFields } )
+					}
+					__nextHasNoMarginBottom
+					help={ __(
+						'Hide EXIF rows that do not have a value.',
+						'folioblocks'
+					) }
+				/>
 			) }
-		/>
+		</>
 	);
 };
 

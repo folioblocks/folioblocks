@@ -4,6 +4,28 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-06-01
+### Added
+- Added a Pro-only image metadata sync action plan for syncing Image Block and gallery image metadata back to the WordPress Media Library.
+- Added a Hide Unknown EXIF Fields toggle when Show EXIF Data is selected for Lightbox Content or Overlay Content in shared gallery controls.
+- Added gallery context support for hiding unknown EXIF fields in Grid, Carousel, Justified, Masonry, and Modular galleries.
+- Added a FolioBlocks REST metadata fallback for attachment shutter speed values so Image Blocks can read shutter speed data when WordPress core stores it as `0`.
+- Added dedicated PHP include files for EXIF metadata helpers and SVG allowed HTML helpers.
+
+### Changed
+- Updated Image Block front-end rendering so EXIF lightbox captions and hover overlays omit unknown fields when the new Hide Unknown EXIF Fields option is enabled.
+- Updated Image Block editor previews so EXIF hover overlays do not fall back to title text when all EXIF fields are hidden.
+- Improved EXIF hover overlay sizing with container-query based padding, icon, gap, ISO, and value sizing.
+- Added a Grid Gallery-specific EXIF overlay sizing floor so vertical images display metadata at a more readable size without changing Masonry or Justified gallery sizing.
+- Moved SVG sanitization helper functions out of `folioblocks.php` and into `includes/php/svg-allowed-html.php`.
+
+### Fixed
+- Fixed 30-second shutter speed values being displayed as Unknown by reading both `ExposureTime` and `ShutterSpeedValue` EXIF fields.
+- Fixed stored Unknown EXIF attributes preventing Image Blocks from refreshing metadata when the attachment has updated values available.
+- Fixed Carousel Gallery controls disappearing after resetting icon and background colors by normalizing empty saved color values to front-end defaults.
+- Fixed Carousel Gallery control button sizing so play and chevron icons remain visible and centered after style resets.
+- Fixed EXIF hover overlays rendering empty overlay containers when all fields are hidden.
+
 ## [1.3.0] - 2026-05-29
 ### Added
 - Added a WooCommerce product toolbar shortcut to Image Blocks when WooCommerce linking is active, including standalone Image Blocks and Image Blocks inside galleries.

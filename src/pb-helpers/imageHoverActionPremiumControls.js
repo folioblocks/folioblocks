@@ -2,6 +2,7 @@ import { __ } from '@wordpress/i18n';
 import { addFilter } from '@wordpress/hooks';
 import {
 	SelectControl,
+	ToggleControl,
 	__experimentalToolsPanel as ToolsPanel,
 	__experimentalToolsPanelItem as ToolsPanelItem,
 } from '@wordpress/components';
@@ -146,32 +147,51 @@ export const registerImageHoverActionPremiumControls = ( {
 					/>
 
 					{ overlayStyle !== 'none' && (
-						<SelectControl
-							label={ __( 'Overlay Content', 'folioblocks' ) }
-							value={
-								showProductInfoOption ||
-								overlayContent !== 'product'
-									? overlayContent
-									: 'title'
-							}
-							options={ overlayContentOptions }
-							onChange={ ( value ) =>
-								setAttributes( {
-									onHoverTitle: true,
-									showTitleOnHover: true,
-									hoverTitle: true,
-									overlayContent: value,
-									wooProductPriceOnHover:
-										value === 'product',
-								} )
-							}
-							__nextHasNoMarginBottom
-							__next40pxDefaultSize
-							help={ __(
-								'Choose what appears when hovering over images.',
-								'folioblocks'
+						<>
+							<SelectControl
+								label={ __( 'Overlay Content', 'folioblocks' ) }
+								value={
+									showProductInfoOption ||
+									overlayContent !== 'product'
+										? overlayContent
+										: 'title'
+								}
+								options={ overlayContentOptions }
+								onChange={ ( value ) =>
+									setAttributes( {
+										onHoverTitle: true,
+										showTitleOnHover: true,
+										hoverTitle: true,
+										overlayContent: value,
+										wooProductPriceOnHover:
+											value === 'product',
+									} )
+								}
+								__nextHasNoMarginBottom
+								__next40pxDefaultSize
+								help={ __(
+									'Choose what appears when hovering over images.',
+									'folioblocks'
+								) }
+							/>
+							{ overlayContent === 'exif' && (
+								<ToggleControl
+									label={ __(
+										'Hide Unknown EXIF Fields',
+										'folioblocks'
+									) }
+									checked={ !! attributes.hideUnknownExifFields }
+									onChange={ ( hideUnknownExifFields ) =>
+										setAttributes( { hideUnknownExifFields } )
+									}
+									__nextHasNoMarginBottom
+									help={ __(
+										'Hide EXIF fields that do not have a value.',
+										'folioblocks'
+									) }
+								/>
 							) }
-						/>
+						</>
 					) }
 				</>
 			);

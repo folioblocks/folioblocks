@@ -6,8 +6,29 @@ export const EXIF_ATTRIBUTE_KEYS = [
 	'exifIso',
 ];
 
-export const hasStoredExifAttributes = ( attributes = {} ) =>
-	EXIF_ATTRIBUTE_KEYS.every( ( key ) => !! attributes[ key ] );
+const isStoredExifValue = ( value, unknownValue ) => {
+	if ( ! value ) {
+		return false;
+	}
+
+	const normalizedValue = String( value ).trim().toLowerCase();
+	const normalizedUnknownValue = String( unknownValue || 'unknown' )
+		.trim()
+		.toLowerCase();
+
+	return (
+		normalizedValue !== 'unknown' &&
+		normalizedValue !== normalizedUnknownValue
+	);
+};
+
+export const hasStoredExifAttributes = (
+	attributes = {},
+	unknownValue = 'Unknown'
+) =>
+	EXIF_ATTRIBUTE_KEYS.every( ( key ) =>
+		isStoredExifValue( attributes[ key ], unknownValue )
+	);
 
 export const getEmptyExifAttributes = () => ( {
 	exifCamera: '',
@@ -38,6 +59,9 @@ export const getImageMetaFromMedia = ( media ) =>
 	media?.imageMeta ||
 	media?.meta?.image_meta ||
 	null;
+
+export const getFolioBlocksImageMetaFromMedia = ( media ) =>
+	media?.folioblocks_image_meta || media?.folioBlocksImageMeta || null;
 
 export const formatAperture = ( value ) => {
 	const aperture = getReadableExifValue( value );
@@ -105,12 +129,16 @@ export const getExifAttributesFromMedia = (
 		return null;
 	}
 
+	const folioBlocksImageMeta = getFolioBlocksImageMetaFromMedia( media );
+	const shutterSpeed =
+		getReadableExifValue( imageMeta.shutter_speed ) ||
+		getReadableExifValue( folioBlocksImageMeta?.shutter_speed );
+
 	return {
 		exifCamera: getReadableExifValue( imageMeta.camera ) || unknownValue,
 		exifFocalLength:
 			formatFocalLength( imageMeta.focal_length ) || unknownValue,
-		exifShutterSpeed:
-			formatShutterSpeed( imageMeta.shutter_speed ) || unknownValue,
+		exifShutterSpeed: formatShutterSpeed( shutterSpeed ) || unknownValue,
 		exifAperture: formatAperture( imageMeta.aperture ) || unknownValue,
 		exifIso: formatIso( imageMeta.iso ) || unknownValue,
 	};

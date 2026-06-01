@@ -124,7 +124,18 @@ const apertureIcon = (
 	</svg>
 );
 
-const OverlayExifContent = ( { attributes } ) => {
+const isUnknownExifValue = ( value, unknownValue ) => {
+	if ( ! value ) {
+		return true;
+	}
+
+	return (
+		String( value ).trim().toLowerCase() ===
+		String( unknownValue ).trim().toLowerCase()
+	);
+};
+
+const OverlayExifContent = ( { attributes, hideUnknownExifFields = false } ) => {
 	const unknownValue = __( 'Unknown', 'folioblocks' );
 	const fields = [
 		{ icon: capturePhoto, value: attributes.exifCamera || unknownValue },
@@ -132,7 +143,15 @@ const OverlayExifContent = ( { attributes } ) => {
 		{ icon: timeToRead, value: attributes.exifShutterSpeed || unknownValue },
 		{ icon: apertureIcon, value: attributes.exifAperture || unknownValue },
 		{ icon: 'iso', value: attributes.exifIso || unknownValue },
-	];
+	].filter(
+		( field ) =>
+			! hideUnknownExifFields ||
+			! isUnknownExifValue( field.value, unknownValue )
+	);
+
+	if ( fields.length === 0 ) {
+		return null;
+	}
 
 	return (
 		<div className="pb-hover-exif">
@@ -505,12 +524,12 @@ const LightboxContentControl = ( {
 	showProductInfoOption = false,
 } ) => {
 	const value = getLightboxContent( attributes );
-		const options = [
-			{ label: __( 'None', 'folioblocks' ), value: 'none' },
-			{ label: __( 'Show Image Title', 'folioblocks' ), value: 'title' },
-			{ label: __( 'Show Image Caption', 'folioblocks' ), value: 'caption' },
-			{ label: __( 'Show EXIF Data', 'folioblocks' ), value: 'exif' },
-		];
+	const options = [
+		{ label: __( 'None', 'folioblocks' ), value: 'none' },
+		{ label: __( 'Show Image Title', 'folioblocks' ), value: 'title' },
+		{ label: __( 'Show Image Caption', 'folioblocks' ), value: 'caption' },
+		{ label: __( 'Show EXIF Data', 'folioblocks' ), value: 'exif' },
+	];
 
 	if ( showProductInfoOption ) {
 		options.push( {
@@ -520,26 +539,44 @@ const LightboxContentControl = ( {
 	}
 
 	return (
-		<SelectControl
-			label={ __( 'Lightbox Content', 'folioblocks' ) }
-			value={ showProductInfoOption || value !== 'product' ? value : 'none' }
-			options={ options }
-			onChange={ ( nextValue ) =>
-				setAttributes( {
-					lightboxContent: nextValue,
-					lightboxCaption: nextValue !== 'none',
-					showCaptionInLightbox: nextValue !== 'none',
-					wooLightboxInfoType:
-						nextValue === 'product' ? 'product' : 'caption',
-				} )
-			}
-			__nextHasNoMarginBottom
-			__next40pxDefaultSize
-			help={ __(
-				'Choose what appears below images in the lightbox.',
-				'folioblocks'
+		<>
+			<SelectControl
+				label={ __( 'Lightbox Content', 'folioblocks' ) }
+				value={
+					showProductInfoOption || value !== 'product' ? value : 'none'
+				}
+				options={ options }
+				onChange={ ( nextValue ) =>
+					setAttributes( {
+						lightboxContent: nextValue,
+						lightboxCaption: nextValue !== 'none',
+						showCaptionInLightbox: nextValue !== 'none',
+						wooLightboxInfoType:
+							nextValue === 'product' ? 'product' : 'caption',
+					} )
+				}
+				__nextHasNoMarginBottom
+				__next40pxDefaultSize
+				help={ __(
+					'Choose what appears below images in the lightbox.',
+					'folioblocks'
+				) }
+			/>
+			{ value === 'exif' && (
+				<ToggleControl
+					label={ __( 'Hide Unknown EXIF Fields', 'folioblocks' ) }
+					checked={ !! attributes.hideUnknownExifFields }
+					onChange={ ( hideUnknownExifFields ) =>
+						setAttributes( { hideUnknownExifFields } )
+					}
+					__nextHasNoMarginBottom
+					help={ __(
+						'Hide EXIF rows that do not have a value.',
+						'folioblocks'
+					) }
+				/>
 			) }
-		/>
+		</>
 	);
 };
 
@@ -1634,7 +1671,14 @@ addFilter(
 
 			if ( overlayContent === 'exif' ) {
 				return showTitle ? (
-					<OverlayExifContent attributes={ attributes } />
+					<OverlayExifContent
+						attributes={ attributes }
+						hideUnknownExifFields={
+							context?.[ 'folioBlocks/hideUnknownExifFields' ] ??
+							attributes.hideUnknownExifFields ??
+							false
+						}
+					/>
 				) : null;
 			}
 
