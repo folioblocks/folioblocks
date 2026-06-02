@@ -82,9 +82,9 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
         // Font weight: clamp numeric weights to 100–900 (widely supported). Allow keywords if provided.
         $fbks_filter_font_weight = isset( $fbks_attributes['filterFontWeight'] ) ? (string) $fbks_attributes['filterFontWeight'] : '';
         if ( $fbks_filter_font_weight !== '' && preg_match( '/^(1000|[1-9]\d{0,2})$/' , $fbks_filter_font_weight ) ) {
-            $w = intval( $fbks_filter_font_weight );
-            $w = max( 100, min( 900, $w ) );
-            $fbks_filter_font_weight = (string) $w;
+            $fbks_filter_font_weight_value = intval( $fbks_filter_font_weight );
+            $fbks_filter_font_weight_value = max( 100, min( 900, $fbks_filter_font_weight_value ) );
+            $fbks_filter_font_weight = (string) $fbks_filter_font_weight_value;
         }
 
         // Text transform + decoration.
@@ -133,14 +133,14 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
     if ( !empty($fbks_enable_filter) && !empty($fbks_filter_categories) ) {
         echo '<div class="pb-image-gallery-filters align-' . esc_attr( $fbks_filter_align ) . esc_attr( $fbks_filter_decoration_class ) . '" style="' . esc_attr( $fbks_filter_typo_styles ) . '">';
         echo '<button class="filter-button is-active" data-filter="' . esc_attr( FBKS_ALL_FILTER_TOKEN ) . '">' . esc_html( fbks_get_all_filter_label() ) . '</button>';
-        foreach ( $fbks_filter_categories as $category ) {
-            echo '<button class="filter-button" data-filter="' . esc_attr( $category ) . '">' . esc_html( $category ) . '</button>';
+        foreach ( $fbks_filter_categories as $fbks_category ) {
+            echo '<button class="filter-button" data-filter="' . esc_attr( $fbks_category ) . '">' . esc_html( $fbks_category ) . '</button>';
         }
         echo '</div>';
     }
 }
 
-echo fbks_kses_post_with_svg( $content );
+echo wp_kses( $content, fbks_get_allowed_post_html_with_svg() );
 
 echo '</div>';
 ?>

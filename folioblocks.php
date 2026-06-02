@@ -40,20 +40,6 @@ function fbks_get_local_languages_dir()
     return $languages_dir;
 }
 
-function fbks_load_textdomain()
-{
-    if ('' === fbks_get_local_languages_dir()) {
-        return;
-    }
-
-    load_plugin_textdomain(
-        'folioblocks',
-        false,
-        dirname(plugin_basename(__FILE__)) . '/languages'
-    );
-}
-add_action('init', 'fbks_load_textdomain', 0);
-
 function fbks_is_all_filter_value($value)
 {
     if (! is_string($value)) {
@@ -451,6 +437,7 @@ if (function_exists('fbks_fs')) {
 if (fbks_fs()->can_use_premium_code__premium_only()) {
     // Removes the add-to-cart query arg from the URL after adding a product to the cart.
     add_action('template_redirect', function () {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- WooCommerce uses add-to-cart as a public GET action; this only removes the query arg after WooCommerce has handled it.
         if (isset($_GET['add-to-cart'])) {
             wp_safe_redirect(remove_query_arg('add-to-cart'));
             exit;

@@ -236,12 +236,14 @@ export function buildPot(
 	messages,
 	{ language = "", locale = "", translations = {} } = {},
 ) {
+	const packageJsonPath = path.join(projectRoot, "package.json");
+	const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
 	const now = new Date()
 		.toISOString()
 		.replace("T", " ")
 		.replace(/\.\d+Z$/, "+0000");
 	const headerLines = [
-		"Project-Id-Version: FolioBlocks 1.2.3\\n",
+		`Project-Id-Version: FolioBlocks ${packageJson.version}\\n`,
 		"Report-Msgid-Bugs-To: https://folioblocks.com\\n",
 		`POT-Creation-Date: ${now}\\n`,
 		"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\\n",

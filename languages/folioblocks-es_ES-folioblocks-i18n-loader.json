@@ -1,5 +1,5 @@
 {
-  "translation-revision-date": "2026-04-16T09:26:59.879Z",
+  "translation-revision-date": "2026-06-02T13:08:20.657Z",
   "generator": "FolioBlocks custom i18n tooling",
   "domain": "messages",
   "locale_data": {
@@ -9,6 +9,9 @@
         "lang": "es_ES",
         "plural-forms": "nplurals=2; plural=(n != 1);"
       },
+      "Activate and set your overlay style.": [
+        "Activa y define el estilo de superposición."
+      ],
       "Active Item Colors": [
         "Colores del elemento activo"
       ],
@@ -57,6 +60,9 @@
       "Add to Image Stack": [
         "Añadir a Image Stack"
       ],
+      "Adds a soft blur overlay behind the title or product info.": [
+        "Añade una superposición con desenfoque suave detrás del título o la información del producto."
+      ],
       "Adjust the default amount of columns on %s.": [
         "Ajusta la cantidad predeterminada de columnas en %s."
       ],
@@ -68,6 +74,9 @@
       ],
       "Adjust the vertical focal point per device.": [
         "Ajusta el punto focal vertical por dispositivo."
+      ],
+      "Affects layout on mobile only. Switch ONLY when all images are vertical in orientation.": [
+        "Solo afecta al diseño en móviles. Actívalo SOLO cuando todas las imágenes tengan orientación vertical."
       ],
       "After": [
         "Después"
@@ -92,6 +101,9 @@
       ],
       "Always Show": [
         "Mostrar siempre"
+      ],
+      "Aperture": [
+        "Apertura"
       ],
       "Appearance": [
         "Apariencia"
@@ -132,9 +144,6 @@
       "Blur Overlay": [
         "Superposición difuminada"
       ],
-      "Blur Overlay - Centered": [
-        "Superposición difuminada - centrada"
-      ],
       "Border Color": [
         "Color del borde"
       ],
@@ -146,6 +155,9 @@
       ],
       "Bottom": [
         "Abajo"
+      ],
+      "Camera Model": [
+        "Modelo de cámara"
       ],
       "Carousel Control Styles": [
         "Estilos de controles de Carousel"
@@ -183,8 +195,11 @@
       "Change the shape of the Loupe.": [
         "Cambia la forma de la Loupe."
       ],
-      "Chip Overlay - Top-Left Label": [
-        "Superposición chip - etiqueta superior izquierda"
+      "Chip": [
+        "Etiqueta"
+      ],
+      "Chip Overlay": [
+        "Superposición de etiqueta"
       ],
       "Choose the hover overlay style.": [
         "Elige el estilo de la superposición al pasar el cursor."
@@ -195,14 +210,41 @@
       "Choose what appears when hovering over images.": [
         "Elige qué aparece al pasar el cursor sobre las imágenes."
       ],
+      "Choose what happens when visitors click gallery images.": [
+        "Elige qué ocurre cuando los visitantes hacen clic en las imágenes de la galería."
+      ],
       "Choose what happens when visitors click the Add To Cart icon.": [
         "Elige qué ocurre cuando los visitantes hacen clic en el icono de añadir al carrito."
       ],
       "Choose what happens when visitors click the Add To Cart icon. Select Inherit to follow the gallery default.": [
         "Elige qué ocurre cuando los visitantes hacen clic en el icono de añadir al carrito. Selecciona Heredar para seguir el ajuste predeterminado de la galería."
       ],
+      "Choose what happens when visitors click this image.": [
+        "Elige qué ocurre cuando los visitantes hacen clic en esta imagen."
+      ],
+      "Choose what happens when visitors use the WooCommerce action.": [
+        "Elige qué ocurre cuando los visitantes usan la acción de WooCommerce."
+      ],
+      "Choose what happens when visitors use this image product link.": [
+        "Elige qué ocurre cuando los visitantes usan el enlace de producto de esta imagen."
+      ],
+      "Choose what happens when visitors use this image product link. Select Inherit to follow the gallery default.": [
+        "Elige qué ocurre cuando los visitantes usan el enlace de producto de esta imagen. Selecciona Heredar para seguir el valor predeterminado de la galería."
+      ],
       "Choose when to display the Add to Cart icon.": [
         "Elige cuándo mostrar el icono de añadir al carrito."
+      ],
+      "Choose when to display the link target icon.": [
+        "Elige cuándo mostrar el icono de destino del enlace."
+      ],
+      "Choose where the thumbnail strip appears.": [
+        "Elige dónde aparece la tira de miniaturas."
+      ],
+      "Choose whether the link is attached to each image or an icon.": [
+        "Elige si el enlace se adjunta a cada imagen o a un icono."
+      ],
+      "Choose whether the link is attached to the image or an icon.": [
+        "Elige si el enlace se adjunta a la imagen o a un icono."
       ],
       "Circle": [
         "Círculo"
@@ -219,17 +261,20 @@
       "Color Overlay": [
         "Superposición de color"
       ],
-      "Color Overlay - Custom Colors": [
-        "Superposición de color - colores personalizados"
-      ],
       "Columns": [
         "Columnas"
       ],
       "Controls Alignment": [
         "Alineación de controles"
       ],
+      "Custom Image Linking": [
+        "Enlaces personalizados de imagen"
+      ],
       "Custom Overlay": [
         "Superposición personalizada"
+      ],
+      "Custom URL": [
+        "URL personalizada"
       ],
       "Dark": [
         "Oscuro"
@@ -242,6 +287,12 @@
       ],
       "Default Overlay": [
         "Superposición predeterminada"
+      ],
+      "Default Product Click Behavior": [
+        "Comportamiento predeterminado del clic en producto"
+      ],
+      "Default Product Link Behavior": [
+        "Comportamiento predeterminado del enlace de producto"
       ],
       "Description": [
         "Descripción"
@@ -270,23 +321,26 @@
       "Display Image Caption or Product Info inside the Lightbox.": [
         "Mostrar el pie de foto o la información del producto dentro de la Lightbox."
       ],
-      "Display Image Caption or product name & price inside the Lightbox.": [
-        "Mostrar el pie de foto o el nombre y precio del producto dentro de la Lightbox."
-      ],
       "Display Image Download Icon": [
         "Mostrar icono de descarga de imagen"
       ],
-      "Display Image title or Product Info when hovering over images.": [
-        "Mostrar el título de la imagen o la información del producto al pasar el cursor sobre las imágenes."
+      "Display Link Target Icon": [
+        "Mostrar icono de destino del enlace"
       ],
-      "Display Image title when hovering over image.": [
-        "Mostrar el título de la imagen al pasar el cursor sobre la imagen."
+      "Display image title, image caption, or EXIF data when hovering over images.": [
+        "Muestra el título, la leyenda o los datos EXIF al pasar el cursor sobre las imágenes."
       ],
-      "Display image title or Product Info when hovering over images.": [
-        "Mostrar el título de la imagen o la información del producto al pasar el cursor sobre las imágenes."
+      "Display image title, image caption, or product info when hovering over images.": [
+        "Muestra el título, la leyenda o la información del producto al pasar el cursor sobre las imágenes."
       ],
-      "Display image title when hovering over image.": [
-        "Mostrar el título de la imagen al pasar el cursor sobre la imagen."
+      "Displays the overlay content in a compact chip above the image.": [
+        "Muestra el contenido de superposición en una etiqueta compacta sobre la imagen."
+      ],
+      "Displays the overlay content over a subtle gradient at the bottom of the image.": [
+        "Muestra el contenido de superposición sobre un degradado sutil en la parte inferior de la imagen."
+      ],
+      "Displays the overlay content over custom overlay colors set in Styles panel.": [
+        "Muestra el contenido de superposición sobre los colores personalizados definidos en el panel Estilos."
       ],
       "Distribute content vertically": [
         "Distribuir contenido verticalmente"
@@ -311,6 +365,21 @@
       ],
       "E-Commerce Styles": [
         "Estilos de comercio electrónico"
+      ],
+      "EXIF DATA": [
+        "DATOS EXIF"
+      ],
+      "EXIF Data": [
+        "Datos EXIF"
+      ],
+      "Edit Custom URL": [
+        "Editar URL personalizada"
+      ],
+      "Edit Page/Post Link": [
+        "Editar enlace de página/entrada"
+      ],
+      "Edit WooCommerce Product": [
+        "Editar producto de WooCommerce"
       ],
       "Enable Autoplay": [
         "Activar reproducción automática"
@@ -344,9 +413,6 @@
       ],
       "Enable Image Filtering": [
         "Activar filtrado de imágenes"
-      ],
-      "Enable Image Lightbox on click.": [
-        "Activar la Lightbox de imagen al hacer clic."
       ],
       "Enable Image Styles": [
         "Activar estilos de imagen"
@@ -384,20 +450,17 @@
       "Enable video filtering with categories.": [
         "Activar el filtrado de vídeos con categorías."
       ],
-      "Enable visitors to download images from the gallery.": [
-        "Permitir que los visitantes descarguen imágenes de la galería."
-      ],
-      "Enable visitors to download this image.": [
-        "Permitir que los visitantes descarguen esta imagen."
-      ],
       "Enables lazy loading of gallery images.": [
         "Activa la carga diferida de las imágenes de la galería."
       ],
       "Enables lazy loading of image.": [
         "Activa la carga diferida de la imagen."
       ],
-      "Fade Overlay - Centered": [
-        "Superposición desvanecida - centrada"
+      "Fade Overlay": [
+        "Superposición con fundido"
+      ],
+      "Fades in a clean title overlay when hovering over the image.": [
+        "Muestra con fundido una superposición limpia del título al pasar el cursor sobre la imagen."
       ],
       "Filmstrip Gallery": [
         "Galeria de tira de pelicula"
@@ -423,6 +486,9 @@
       "Filter Styles Controls": [
         "Controles de estilo del filtro"
       ],
+      "Focal Length": [
+        "Distancia focal"
+      ],
       "Focal Point X (Left - Right)": [
         "Punto focal X (izquierda - derecha)"
       ],
@@ -441,11 +507,23 @@
       "Full": [
         "Tamaño completo"
       ],
+      "Gallery Click Settings": [
+        "Ajustes de clic de la galería"
+      ],
+      "Gallery Click Styles": [
+        "Estilos de clic de la galería"
+      ],
       "Gallery Filtering Settings": [
         "Ajustes de filtrado de la galería"
       ],
       "Gallery Filtering Styles": [
         "Estilos de filtrado de la galería"
+      ],
+      "Gallery Hover Settings": [
+        "Ajustes de hover de la galería"
+      ],
+      "Gallery Hover Styles": [
+        "Estilos de hover de la galería"
       ],
       "Gallery Image Styles": [
         "Estilos de imagen de la galería"
@@ -462,8 +540,8 @@
       "General Gallery Settings": [
         "Ajustes generales de la galería"
       ],
-      "Gradient Overlay - Slide-up Bottom": [
-        "Superposición de degradado - deslizar hacia arriba desde abajo"
+      "Gradient Bottom": [
+        "Degradado inferior"
       ],
       "Grid Gallery": [
         "Galeria de cuadricula"
@@ -477,8 +555,17 @@
       "Hidden": [
         "Oculto"
       ],
+      "Hide EXIF fields that do not have a value.": [
+        "Oculta los campos EXIF que no tienen valor."
+      ],
+      "Hide EXIF rows that do not have a value.": [
+        "Oculta las filas EXIF que no tienen valor."
+      ],
       "Hide Play Button": [
         "Ocultar botón de reproducción"
+      ],
+      "Hide Unknown EXIF Fields": [
+        "Ocultar campos EXIF desconocidos"
       ],
       "Hide only the play button overlay.": [
         "Ocultar solo la superposición del botón de reproducción."
@@ -492,11 +579,11 @@
       "Hover": [
         "Al pasar el cursor"
       ],
-      "Hover Overlay Settings": [
-        "Ajustes de la superposición hover"
-      ],
       "Hover Style": [
         "Estilo hover"
+      ],
+      "ISO": [
+        "ISO"
       ],
       "Icon": [
         "Icono"
@@ -506,6 +593,27 @@
       ],
       "Image Caption": [
         "Pie de foto"
+      ],
+      "Image Click Behavior": [
+        "Comportamiento del clic en imagen"
+      ],
+      "Image Click Settings": [
+        "Ajustes de clic en imagen"
+      ],
+      "Image Click Styles": [
+        "Estilos de clic en imagen"
+      ],
+      "Image Content": [
+        "Contenido de imagen"
+      ],
+      "Image Filtering Settings": [
+        "Ajustes de filtrado de imagen"
+      ],
+      "Image Hover Settings": [
+        "Ajustes de hover de imagen"
+      ],
+      "Image Hover Styles": [
+        "Estilos de hover de imagen"
       ],
       "Image Orientation (Mobile)": [
         "Orientación de la imagen (móvil)"
@@ -518,6 +626,12 @@
       ],
       "Image Title": [
         "Título de la imagen"
+      ],
+      "Images without a URL will not be linked.": [
+        "Las imágenes sin URL no tendrán enlace."
+      ],
+      "Images without a selected page or post will not be linked.": [
+        "Las imágenes sin una página o entrada seleccionada no tendrán enlace."
       ],
       "Inactive Item Colors": [
         "Colores del elemento inactivo"
@@ -558,6 +672,9 @@
       "Lightbox & Hover Overlay Settings": [
         "Ajustes de Lightbox y superposición hover"
       ],
+      "Lightbox Content": [
+        "Contenido de Lightbox"
+      ],
       "Lightbox Info": [
         "Información de Lightbox"
       ],
@@ -567,14 +684,29 @@
       "Line Height": [
         "Altura de línea"
       ],
-      "Link gallery images to WooCommerce products.": [
-        "Vincular las imágenes de la galería a productos de WooCommerce."
+      "Link Image to Custom URL": [
+        "Enlazar imagen a URL personalizada"
       ],
-      "Link this image to WooCommerce products.": [
-        "Vincular esta imagen a productos de WooCommerce."
+      "Link Image to Media File": [
+        "Enlazar imagen al archivo multimedia"
+      ],
+      "Link Image to Page/Post": [
+        "Enlazar imagen a página/entrada"
+      ],
+      "Link Target": [
+        "Destino del enlace"
+      ],
+      "Link Target Icon": [
+        "Icono de destino del enlace"
+      ],
+      "Link Target Icon Colors": [
+        "Colores del icono de destino del enlace"
       ],
       "Link this video to a WooCommerce product.": [
         "Vincular este vídeo a un producto de WooCommerce."
+      ],
+      "Linked Page or Post": [
+        "Página o entrada enlazada"
       ],
       "Linked WooCommerce Product": [
         "Producto de WooCommerce vinculado"
@@ -627,6 +759,9 @@
       "No Thumbnail Selected": [
         "Ninguna miniatura seleccionada"
       ],
+      "No theme fonts found. Add font families in theme.json or Global Styles.": [
+        "No se encontraron fuentes del tema. Añade familias tipográficas en theme.json o en Estilos globales."
+      ],
       "None": [
         "Ninguno"
       ],
@@ -636,8 +771,32 @@
       "Open Fullscreen": [
         "Abrir pantalla completa"
       ],
+      "Open Link": [
+        "Abrir enlace"
+      ],
       "Open Product Page": [
         "Abrir página del producto"
+      ],
+      "Open images in a lightbox when clicked.": [
+        "Abre las imágenes en una Lightbox al hacer clic."
+      ],
+      "Open images in a lightbox when the thumbnail is clicked.": [
+        "Abre las imágenes en una Lightbox al hacer clic en la miniatura."
+      ],
+      "Open images in a lightbox when thumbnails are clicked.": [
+        "Abre las imágenes en una Lightbox al hacer clic en las miniaturas."
+      ],
+      "Open in Lightbox": [
+        "Abrir en Lightbox"
+      ],
+      "Open in new tab": [
+        "Abrir en una pestaña nueva"
+      ],
+      "Open the custom URL in a new browser tab.": [
+        "Abre la URL personalizada en una nueva pestaña del navegador."
+      ],
+      "Open the linked page or post in a new browser tab.": [
+        "Abre la página o entrada enlazada en una nueva pestaña del navegador."
       ],
       "Overlay Colors": [
         "Colores de la superposición"
@@ -663,9 +822,6 @@
       "Pause on Hover": [
         "Pausar al pasar el cursor"
       ],
-      "Pick custom background and text colors for the overlay.": [
-        "Elige colores personalizados de fondo y texto para la superposición."
-      ],
       "Play autoplay": [
         "Reanudar reproducción automática"
       ],
@@ -687,6 +843,9 @@
       "Previous thumbnail": [
         "Miniatura anterior"
       ],
+      "Product Link Behavior": [
+        "Comportamiento del enlace de producto"
+      ],
       "Randomize Image Order": [
         "Orden aleatorio de imágenes"
       ],
@@ -698,6 +857,9 @@
       ],
       "Remove Image Gap": [
         "Eliminar espacio entre imágenes"
+      ],
+      "Remove Link": [
+        "Eliminar enlace"
       ],
       "Remove Product": [
         "Eliminar producto"
@@ -731,6 +893,9 @@
       ],
       "Row Height": [
         "Altura de fila"
+      ],
+      "Search pages or posts...": [
+        "Buscar páginas o entradas..."
       ],
       "Search products…": [
         "Buscar productos…"
@@ -767,6 +932,12 @@
       ],
       "Select or Insert Video": [
         "Seleccionar o insertar vídeo"
+      ],
+      "Select the font’s weight and style (matches WordPress Typography → Appearance).": [
+        "Selecciona el grosor y el estilo de la fuente (coincide con Tipografía → Apariencia de WordPress)."
+      ],
+      "Select the size of the main gallery image.": [
+        "Selecciona el tamaño de la imagen principal de la galería."
       ],
       "Select the size of the source image.": [
         "Selecciona el tamaño de la imagen de origen."
@@ -822,6 +993,9 @@
       "Set display preference for the download icon.": [
         "Establece la preferencia de visualización del icono de descarga."
       ],
+      "Set each image destination from its individual Image Block settings.": [
+        "Define el destino de cada imagen desde sus ajustes individuales del bloque de imagen."
+      ],
       "Set gap size between Thumbnails.": [
         "Establece el espacio entre miniaturas."
       ],
@@ -830,6 +1004,9 @@
       ],
       "Set the color for the Overlay.": [
         "Establece el color de la superposición."
+      ],
+      "Set the destination on this Image Block.": [
+        "Define el destino en este bloque de imagen."
       ],
       "Set the horizontal alignment of carousel controls.": [
         "Establece la alineación horizontal de los controles del Carousel."
@@ -843,11 +1020,14 @@
       "Set video Thumbnail aspect ratio.": [
         "Establece la relación de aspecto de la miniatura del vídeo."
       ],
-      "Sets the default action for Add To Cart icons in this gallery. Individual images can override this setting.": [
-        "Establece la acción predeterminada para los iconos de añadir al carrito en esta galería. Las imágenes individuales pueden sobrescribir este ajuste."
+      "Sets the default WooCommerce product action for this gallery. Individual images can override this setting.": [
+        "Define la acción predeterminada de producto de WooCommerce para esta galería. Las imágenes individuales pueden sobrescribir este ajuste."
       ],
       "Show Before & After Labels": [
         "Mostrar etiquetas Antes y Después"
+      ],
+      "Show EXIF Data": [
+        "Mostrar datos EXIF"
       ],
       "Show Image Caption": [
         "Mostrar pie de foto"
@@ -861,14 +1041,14 @@
       "Show Image Title": [
         "Mostrar título de la imagen"
       ],
-      "Show Image Title on Hover": [
-        "Mostrar título de la imagen al pasar el cursor"
-      ],
       "Show Overlay on Hover": [
         "Mostrar superposición al pasar el cursor"
       ],
       "Show Product Info": [
         "Mostrar información del producto"
+      ],
+      "Shutter Speed": [
+        "Velocidad de obturación"
       ],
       "Sizing & Focal Point": [
         "Tamaño y punto focal"
@@ -885,6 +1065,12 @@
       "Square": [
         "Cuadrado"
       ],
+      "Stack all images vertically on mobile devices.": [
+        "Apila todas las imágenes verticalmente en dispositivos móviles."
+      ],
+      "Start typing to search for products in your WooCommerce store. Click a result to link it.": [
+        "Empieza a escribir para buscar productos en tu tienda WooCommerce. Haz clic en un resultado para enlazarlo."
+      ],
       "Stretch content height": [
         "Estirar la altura del contenido"
       ],
@@ -899,6 +1085,9 @@
       ],
       "Text": [
         "Texto"
+      ],
+      "This is a premium feature. Unlock all features:": [
+        "Esta es una función premium. Desbloquea todas las funciones:"
       ],
       "Thumbnail": [
         "Miniatura"
@@ -930,11 +1119,32 @@
       "Typography": [
         "Tipografía"
       ],
+      "Unknown": [
+        "Desconocido"
+      ],
       "Upgrade to Pro": [
         "Actualizar a Pro"
       ],
+      "Upload or select images to create a Filmstrip Gallery.": [
+        "Sube o selecciona imágenes para crear una galería Filmstrip."
+      ],
+      "Upload or select images to create a Grid Gallery.": [
+        "Sube o selecciona imágenes para crear una galería en cuadrícula."
+      ],
+      "Upload or select images to create a Justified Gallery.": [
+        "Sube o selecciona imágenes para crear una galería justificada."
+      ],
+      "Upload or select images to create a Masonry Gallery.": [
+        "Sube o selecciona imágenes para crear una galería Masonry."
+      ],
+      "Upload or select images to create a carousel.": [
+        "Sube o selecciona imágenes para crear un carrusel."
+      ],
       "Use this video": [
         "Usar este vídeo"
+      ],
+      "Uses fonts from your theme’s Global Styles.": [
+        "Usa fuentes de los Estilos globales de tu tema."
       ],
       "Vertical": [
         "Vertical"
@@ -998,6 +1208,9 @@
       ],
       "WooCommerce Integration": [
         "Integración con WooCommerce"
+      ],
+      "WooCommerce Product": [
+        "Producto de WooCommerce"
       ],
       "https://vimeo.com/12345678": [
         "https://vimeo.com/12345678"

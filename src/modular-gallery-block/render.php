@@ -27,5 +27,5 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 $fbks_wrapper_attributes = get_block_wrapper_attributes( $fbks_wrapper_args );
 echo '<div ' . wp_kses( $fbks_wrapper_attributes, [ 'div' => [] ] ) . '>';
 ?>
-	<?php echo fbks_kses_post_with_svg( $content ); ?>
+	<?php echo wp_kses( $content, fbks_get_allowed_post_html_with_svg() ); ?>
 </div>

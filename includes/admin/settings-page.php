@@ -135,9 +135,132 @@ if (! function_exists('fbks_extract_news_item_image')) {
 	}
 }
 
+if (! function_exists('fbks_get_dashboard_block_versions')) {
+	function fbks_get_dashboard_block_versions()
+	{
+		$block_directories = array(
+			'background-video-block',
+			'pb-before-after-block',
+			'carousel-gallery-block',
+			'filmstrip-gallery-block',
+			'grid-gallery-block',
+			'pb-image-block',
+			'justified-gallery-block',
+			'pb-loupe-block',
+			'masonry-gallery-block',
+			'modular-gallery-block',
+			'pb-video-block',
+			'video-gallery-block',
+		);
+
+		$versions = array();
+		$plugin_dir = defined('FBKS_PLUGIN_DIR') ? FBKS_PLUGIN_DIR : dirname(__DIR__, 2) . '/';
+
+		foreach ($block_directories as $block_directory) {
+			$metadata_path = trailingslashit($plugin_dir) . 'src/' . $block_directory . '/block.json';
+
+			if (! file_exists($metadata_path)) {
+				continue;
+			}
+
+			$metadata = json_decode(file_get_contents($metadata_path), true);
+
+			if (! is_array($metadata) || empty($metadata['version'])) {
+				continue;
+			}
+
+			$versions[$block_directory] = sanitize_text_field($metadata['version']);
+		}
+
+		return $versions;
+	}
+}
+
+if (! function_exists('fbks_render_dashboard_block_meta')) {
+	function fbks_render_dashboard_block_meta($block_directory, $block_versions, $seen_block_versions)
+	{
+		if (empty($block_versions[$block_directory])) {
+			return;
+		}
+
+		$current_version = $block_versions[$block_directory];
+
+		echo '<span class="pb-block-version">' . esc_html(sprintf(
+			/* translators: %s: block version number. */
+			__('v%s', 'folioblocks'),
+			$current_version
+		)) . '</span>';
+	}
+}
+
+if (! function_exists('fbks_is_dashboard_block_updated')) {
+	function fbks_is_dashboard_block_updated($block_directory, $block_versions, $seen_block_versions)
+	{
+		if (empty($block_versions[$block_directory])) {
+			return false;
+		}
+
+		$seen_version = isset($seen_block_versions[$block_directory]) ? $seen_block_versions[$block_directory] : '';
+
+		return '' !== $seen_version && version_compare($block_versions[$block_directory], $seen_version, '>');
+	}
+}
+
+if (! function_exists('fbks_is_dashboard_block_featured_update')) {
+	function fbks_is_dashboard_block_featured_update($block_directory)
+	{
+		if (! defined('FBKS_VERSION') || '1.3.0' !== FBKS_VERSION) {
+			return false;
+		}
+
+		$featured_updates = array(
+			'carousel-gallery-block',
+			'filmstrip-gallery-block',
+			'grid-gallery-block',
+			'justified-gallery-block',
+			'pb-image-block',
+			'masonry-gallery-block',
+			'modular-gallery-block',
+		);
+
+		return in_array($block_directory, $featured_updates, true);
+	}
+}
+
+if (! function_exists('fbks_render_dashboard_block_status_badge')) {
+	function fbks_render_dashboard_block_status_badge($block_directory, $block_versions, $seen_block_versions, $fallback_label = '')
+	{
+		if (
+			fbks_is_dashboard_block_updated($block_directory, $block_versions, $seen_block_versions) ||
+			fbks_is_dashboard_block_featured_update($block_directory)
+		) {
+			$updated_version = fbks_is_dashboard_block_featured_update($block_directory) && defined('FBKS_VERSION')
+				? FBKS_VERSION
+				: $block_versions[$block_directory];
+
+			echo '<span class="pb-pro-badge pb-updated-badge" title="' . esc_attr(sprintf(
+				/* translators: %s: block version number. */
+				__('Updated in v%s', 'folioblocks'),
+				$updated_version
+			)) . '">' . esc_html__('UPDATED', 'folioblocks') . '</span>';
+			return;
+		}
+
+		if ('' !== $fallback_label) {
+			echo '<span class="pb-pro-badge">' . esc_html($fallback_label) . '</span>';
+		}
+	}
+}
+
 function fbks_render_settings_page()
 {
 	fbks_require_admin_nonce_for_post('settings');
+	$fbks_block_versions      = fbks_get_dashboard_block_versions();
+	$fbks_seen_block_versions = get_user_meta(get_current_user_id(), 'fbks_seen_block_versions', true);
+
+	if (! is_array($fbks_seen_block_versions)) {
+		$fbks_seen_block_versions = array();
+	}
 
 ?>
 	<div class="pb-wrap">
@@ -178,7 +301,8 @@ function fbks_render_settings_page()
 									</svg>
 								</div>
 								<span><?php esc_html_e('Background Video Block', 'folioblocks'); ?></span>
-								<span class="pb-pro-badge"><?php esc_html_e('NEW', 'folioblocks'); ?></span>
+								<?php fbks_render_dashboard_block_meta('background-video-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
+								<?php fbks_render_dashboard_block_status_badge('background-video-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
 								<a href="https://folioblocks.com/blocks/background-video-block/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Demo', 'folioblocks'); ?></a>
 							</div>
 							<div class="pb-block-item">
@@ -196,6 +320,8 @@ function fbks_render_settings_page()
 									</svg>
 								</div>
 								<span><?php esc_html_e('Before & After Block', 'folioblocks'); ?></span>
+								<?php fbks_render_dashboard_block_meta('pb-before-after-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
+								<?php fbks_render_dashboard_block_status_badge('pb-before-after-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
 								<a href="https://folioblocks.com/blocks/before-after-block/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Demo', 'folioblocks'); ?></a>
 							</div>
 							<div class="pb-block-item">
@@ -213,6 +339,8 @@ function fbks_render_settings_page()
 									</svg>
 								</div>
 								<span><?php esc_html_e('Carousel Gallery', 'folioblocks'); ?></span>
+								<?php fbks_render_dashboard_block_meta('carousel-gallery-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
+								<?php fbks_render_dashboard_block_status_badge('carousel-gallery-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
 								<a href="https://folioblocks.com/blocks/carousel-gallery-block/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Demo', 'folioblocks'); ?></a>
 							</div>
 							<div class="pb-block-item">
@@ -231,7 +359,8 @@ function fbks_render_settings_page()
 									</svg>
 								</div>
 								<span><?php esc_html_e('Filmstrip Gallery', 'folioblocks'); ?></span>
-								<span class="pb-pro-badge"><?php esc_html_e('NEW', 'folioblocks'); ?></span>
+								<?php fbks_render_dashboard_block_meta('filmstrip-gallery-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
+								<?php fbks_render_dashboard_block_status_badge('filmstrip-gallery-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
 								<a href="https://folioblocks.com/blocks/filmstrip-gallery-block/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Demo', 'folioblocks'); ?></a>
 							</div>
 							<div class="pb-block-item">
@@ -251,6 +380,8 @@ function fbks_render_settings_page()
 									</svg>
 								</div>
 								<span><?php esc_html_e('Grid Gallery', 'folioblocks'); ?></span>
+								<?php fbks_render_dashboard_block_meta('grid-gallery-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
+								<?php fbks_render_dashboard_block_status_badge('grid-gallery-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
 								<a href="https://folioblocks.com/blocks/grid-gallery-block/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Demo', 'folioblocks'); ?></a>
 							</div>
 							<div class="pb-block-item">
@@ -262,6 +393,8 @@ function fbks_render_settings_page()
 									</svg>
 								</div>
 								<span><?php esc_html_e('Image Block', 'folioblocks'); ?></span>
+								<?php fbks_render_dashboard_block_meta('pb-image-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
+								<?php fbks_render_dashboard_block_status_badge('pb-image-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
 								<a href="https://folioblocks.com/blocks/image-block/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Demo', 'folioblocks'); ?></a>
 							</div>
 							<div class="pb-block-item">
@@ -280,6 +413,8 @@ function fbks_render_settings_page()
 									</svg>
 								</div>
 								<span><?php esc_html_e('Justified Gallery', 'folioblocks'); ?></span>
+								<?php fbks_render_dashboard_block_meta('justified-gallery-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
+								<?php fbks_render_dashboard_block_status_badge('justified-gallery-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
 								<a href="https://folioblocks.com/blocks/justified-gallery-block/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Demo', 'folioblocks'); ?></a>
 							</div>
 							<div class="pb-block-item">
@@ -291,6 +426,8 @@ function fbks_render_settings_page()
 									</svg>
 								</div>
 								<span><?php esc_html_e('Loupe Block', 'folioblocks'); ?></span>
+								<?php fbks_render_dashboard_block_meta('pb-loupe-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
+								<?php fbks_render_dashboard_block_status_badge('pb-loupe-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
 								<a href="https://folioblocks.com/blocks/loupe-block/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Demo', 'folioblocks'); ?></a>
 							</div>
 							<div class="pb-block-item">
@@ -310,6 +447,8 @@ function fbks_render_settings_page()
 									</svg>
 								</div>
 								<span><?php esc_html_e('Masonry Gallery', 'folioblocks'); ?></span>
+								<?php fbks_render_dashboard_block_meta('masonry-gallery-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
+								<?php fbks_render_dashboard_block_status_badge('masonry-gallery-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
 								<a href="https://folioblocks.com/blocks/masonry-gallery-block/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Demo', 'folioblocks'); ?></a>
 							</div>
 							<div class="pb-block-item <?php if (! fbks_fs()->can_use_premium_code()) : ?>pb-pro-block<?php endif; ?>">
@@ -327,9 +466,8 @@ function fbks_render_settings_page()
 									</svg>
 								</div>
 								<span><?php esc_html_e('Modular Gallery', 'folioblocks'); ?></span>
-								<?php if (! fbks_fs()->can_use_premium_code()) : ?>
-									<span class="pb-pro-badge"><?php esc_html_e('PRO', 'folioblocks'); ?></span>
-								<?php endif; ?>
+								<?php fbks_render_dashboard_block_meta('modular-gallery-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
+								<?php fbks_render_dashboard_block_status_badge('modular-gallery-block', $fbks_block_versions, $fbks_seen_block_versions, ! fbks_fs()->can_use_premium_code() ? __('PRO', 'folioblocks') : ''); ?>
 								<a href="https://folioblocks.com/blocks/modular-gallery-block/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Demo', 'folioblocks'); ?></a>
 							</div>
 							<div class="pb-block-item">
@@ -340,6 +478,8 @@ function fbks_render_settings_page()
 									</svg>
 								</div>
 								<span><?php esc_html_e('Video Block', 'folioblocks'); ?></span>
+								<?php fbks_render_dashboard_block_meta('pb-video-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
+								<?php fbks_render_dashboard_block_status_badge('pb-video-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
 								<a href="https://folioblocks.com/blocks/video-block/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Demo', 'folioblocks'); ?></a>
 							</div>
 							<div class="pb-block-item">
@@ -362,6 +502,8 @@ function fbks_render_settings_page()
 									</svg>
 								</div>
 								<span><?php esc_html_e('Video Gallery', 'folioblocks'); ?></span>
+								<?php fbks_render_dashboard_block_meta('video-gallery-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
+								<?php fbks_render_dashboard_block_status_badge('video-gallery-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
 								<a href="https://folioblocks.com/blocks/video-gallery-block/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Demo', 'folioblocks'); ?></a>
 							</div>
 						</div>
@@ -600,5 +742,8 @@ function fbks_render_settings_page()
 		</div>
 	</div>
 <?php
+	if (! empty($fbks_block_versions)) {
+		update_user_meta(get_current_user_id(), 'fbks_seen_block_versions', $fbks_block_versions);
+	}
 }
 ?>

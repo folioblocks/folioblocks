@@ -249,7 +249,7 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	min-height: 112px;
+	min-height: 124px;
 	background:
 		linear-gradient(180deg, rgba(39, 102, 236, 0.18), rgba(59, 130, 246, 0.05)),
 		linear-gradient(180deg, #172554, #0f172a);
@@ -314,6 +314,14 @@
 	line-height: 1.25;
 }
 
+.pb-block-item .pb-block-version {
+	margin-top: 4px;
+	color: #b8c7dd;
+	font-size: 11px;
+	font-weight: 600;
+	line-height: 1;
+}
+
 .pb-block-item a {
 	color: #bfdbfe;
 	text-decoration: none;
@@ -339,6 +347,11 @@
 	padding: 2px 6px;
 	border-radius: 3px;
 	font-weight: 600;
+}
+
+.pb-updated-badge {
+	background: #0f766e;
+	color: #fff !important;
 }
 
 .pb-changelog {

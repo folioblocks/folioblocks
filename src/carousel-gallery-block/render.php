@@ -47,7 +47,7 @@ $fbks_controls_icon_color = ! empty( $attributes['controlsIconColor'] )
 ?>
 <div <?php echo wp_kses( $fbks_wrapper_attr_string, [ 'div' => [] ] ); ?>>
 	<div class="pb-carousel-gallery" data-loop="<?php echo $fbks_loop ? 'true' : 'false'; ?>">
-		<?php echo fbks_kses_post_with_svg( $content ); ?>
+		<?php echo wp_kses( $content, fbks_get_allowed_post_html_with_svg() ); ?>
 	</div>
 
 	<?php if ( fbks_fs()->can_use_premium_code__premium_only() ) : ?>
