@@ -454,7 +454,7 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 			}
 			$fbks_image_html = wp_get_attachment_image( $fbks_id, $fbks_image_size, false, $fbks_img_attributes );
 			if ( '' !== $fbks_link_url && '' !== $fbks_image_html ) {
-				echo '<a href="' . esc_url( $fbks_link_url ) . '" class="' . esc_attr( $fbks_link_class ) . '"' . $fbks_link_attrs . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Attribute string is assembled from escaped values above.
+				echo '<a href="' . esc_url( $fbks_link_url ) . '" class="' . esc_attr( $fbks_link_class ) . '"' . wp_kses_data( $fbks_link_attrs ) . '>';
 				echo wp_kses_post( $fbks_image_html );
 				echo '</a>';
 			} else {
@@ -478,7 +478,7 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 						if ( '' !== $fbks_overlay_exif ) {
 							echo '<div class="pb-image-block-title-container">';
 							echo '<figcaption class="pb-image-block-title">';
-							echo $fbks_overlay_exif; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Markup is assembled from hardcoded icons and escaped values.
+							echo wp_kses( $fbks_overlay_exif, fbks_get_allowed_post_html_with_svg() );
 							echo '</figcaption></div>';
 						}
 					} elseif ( $fbks_enable_woo && 'product' === $fbks_overlay_content ) {
@@ -542,7 +542,7 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 				<a
 					class="pb-image-block-link-icon <?php echo $fbks_link_icon_display === 'hover' ? 'hover-only' : ''; ?>"
 					href="<?php echo esc_url( $fbks_icon_link_url ); ?>"
-					<?php echo $fbks_icon_link_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Attribute string is hardcoded above. ?>
+					<?php echo wp_kses_data( $fbks_icon_link_attrs ); ?>
 					<?php if ( $fbks_link_button_style !== '' ) : ?>
 						style="<?php echo esc_attr( $fbks_link_button_style ); ?>"
 					<?php endif; ?>

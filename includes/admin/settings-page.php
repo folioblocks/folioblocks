@@ -157,7 +157,7 @@ if (! function_exists('fbks_get_dashboard_block_versions')) {
 		$plugin_dir = defined('FBKS_PLUGIN_DIR') ? FBKS_PLUGIN_DIR : dirname(__DIR__, 2) . '/';
 
 		foreach ($block_directories as $block_directory) {
-			$metadata_path = trailingslashit($plugin_dir) . 'src/' . $block_directory . '/block.json';
+			$metadata_path = trailingslashit($plugin_dir) . 'build/' . $block_directory . '/block.json';
 
 			if (! file_exists($metadata_path)) {
 				continue;
@@ -230,6 +230,11 @@ if (! function_exists('fbks_is_dashboard_block_featured_update')) {
 if (! function_exists('fbks_render_dashboard_block_status_badge')) {
 	function fbks_render_dashboard_block_status_badge($block_directory, $block_versions, $seen_block_versions, $fallback_label = '')
 	{
+		if ('' !== $fallback_label) {
+			echo '<span class="pb-pro-badge">' . esc_html($fallback_label) . '</span>';
+			return;
+		}
+
 		if (
 			fbks_is_dashboard_block_updated($block_directory, $block_versions, $seen_block_versions) ||
 			fbks_is_dashboard_block_featured_update($block_directory)
@@ -244,10 +249,6 @@ if (! function_exists('fbks_render_dashboard_block_status_badge')) {
 				$updated_version
 			)) . '">' . esc_html__('UPDATED', 'folioblocks') . '</span>';
 			return;
-		}
-
-		if ('' !== $fallback_label) {
-			echo '<span class="pb-pro-badge">' . esc_html($fallback_label) . '</span>';
 		}
 	}
 }
