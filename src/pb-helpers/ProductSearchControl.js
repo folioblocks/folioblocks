@@ -56,7 +56,6 @@ export default function ProductSearchControl( { value, onSelect } ) {
 					image: p.images?.[ 0 ]?.src || '',
 					description: p.short_description || p.description || '',
 				} ) );
-				console.log( 'WooCommerce product data:', products );
 				setSearchResults( results );
 			} )
 			.catch( () => setSearchResults( [] ) )

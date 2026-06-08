@@ -34,30 +34,9 @@ import ResponsiveRangeControl from "../pb-helpers/ResponsiveRangeControl";
 import { IconVideoGallery } from "../pb-helpers/icons";
 import {
 	FBKS_ALL_FILTER_TOKEN,
-	fbksIsAllFilterValue,
 	fbksNormalizeActiveFilterValue,
 } from "../pb-helpers/filterConstants";
 import "./editor.scss";
-
-const getVideoBlockFilterCategories = (blockAttributes = {}) => {
-	const assignedCategories = Array.isArray(blockAttributes.filterCategories)
-		? blockAttributes.filterCategories
-				.map((category) =>
-					typeof category === "string" ? category.trim() : "",
-				)
-				.filter(Boolean)
-		: [];
-
-	if (assignedCategories.length > 0) {
-		return [...new Set(assignedCategories)];
-	}
-
-	const legacyCategory =
-		typeof blockAttributes.filterCategory === "string"
-			? blockAttributes.filterCategory.trim()
-			: "";
-	return legacyCategory ? [legacyCategory] : [];
-};
 
 export default function Edit({ attributes, setAttributes, clientId }) {
 	/**
@@ -127,26 +106,6 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		setAttributes,
 		selectedBlock,
 	});
-
-	// Reset activeFilter to 'All' if selected block's category doesn't match
-	useEffect(() => {
-		if (selectedBlock && selectedBlock.name === "folioblocks/pb-video-block") {
-			const selectedCategories = getVideoBlockFilterCategories(
-				selectedBlock.attributes || {},
-			);
-			const normalizedActiveFilter = activeFilter.toLowerCase();
-
-			const isFilteredOut =
-				!fbksIsAllFilterValue(activeFilter) &&
-				!selectedCategories.some(
-					(category) => category.toLowerCase() === normalizedActiveFilter,
-				);
-
-			if (isFilteredOut) {
-				setAttributes({ activeFilter: FBKS_ALL_FILTER_TOKEN });
-			}
-		}
-	}, [selectedBlock, activeFilter, setAttributes]);
 
 	const normalizedActiveFilter = fbksNormalizeActiveFilterValue(activeFilter);
 
@@ -269,7 +228,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 	};
 
 	const filterStylesControls = applyFilters(
-		"folioBlocks.videoGallery.filterStylesControls",
+		"folioBlocks.videoGallery.filterStyleSettings",
 		<PanelBody
 			title={__("Gallery Filtering Styles", "folioblocks")}
 			initialOpen={true}

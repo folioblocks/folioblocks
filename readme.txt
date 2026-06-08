@@ -5,7 +5,7 @@ Tags: gallery, image gallery, photo gallery, video gallery, lightbox,
 Tested up to:      7.0
 Requires at least: 6.3
 Requires PHP: 7.4
-Stable tag:        1.3.0
+Stable tag:        1.3.1
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -111,6 +111,13 @@ No, the galleries will remain in place on your site. However, the advanced layou
 6. Video Gallery block populated with images
 
 == Changelog ==
+
+= 1.3.1 =
+* Refactored repeated Pro controls for Image Click Styles, gallery toggles, List View thumbnails, and editor filtering into shared helpers.
+* Improved editor-side filtering consistency for Grid, Justified, Masonry, and Video Gallery blocks.
+* Fixed randomized gallery order on the front end so randomized galleries reshuffle on page refresh.
+* Fixed gallery block transform errors caused by randomize-order effects firing during transformed block setup.
+* Replaced deprecated WordPress media selector usage and cleaned up redundant legacy premium control registrations.
 
 = 1.3.0 =
 * Added WordPress 7.0 editor improvements, including gallery List View inspector support and Image Block content controls in the Content inspector.

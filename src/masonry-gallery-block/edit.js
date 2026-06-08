@@ -9,6 +9,7 @@ import {
 	InspectorControls,
 	MediaPlaceholder,
 	BlockControls,
+	store as blockEditorStore,
 } from '@wordpress/block-editor';
 import {
 	PanelBody,
@@ -247,6 +248,10 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 		},
 		[ clientId ]
 	);
+	const selectedBlock = useSelect( ( select ) => {
+		const { getSelectedBlock } = select( blockEditorStore );
+		return getSelectedBlock();
+	}, [] );
 
 	// Select Images Handler
 	const onSelectImages = async ( media ) => {
@@ -474,6 +479,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 		clientId,
 		attributes,
 		setAttributes,
+		selectedBlock,
 	} );
 	applyFilters( 'folioBlocks.masonryGallery.editorEnhancements', null, {
 		attributes,

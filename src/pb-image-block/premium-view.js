@@ -15,25 +15,74 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		{ capture: true }
 	);
 
-	// Add randomizer to galleries
-	const galleries = document.querySelectorAll( '.pb-randomized' );
-	galleries.forEach( ( wrapper ) => {
-		const gallery = wrapper.querySelector(
-			':scope > div:has(.pb-image-block-wrapper)'
+const gallerySelectors = [
+		'.pb-grid-gallery',
+		'.pb-justified-gallery',
+		'.pb-masonry-gallery',
+		'.pb-carousel-gallery',
+	];
+
+	const getRandomizedGallery = ( wrapper ) => {
+		if (
+			gallerySelectors.some( ( selector ) =>
+				wrapper.matches( selector )
+			)
+		) {
+			return wrapper;
+		}
+
+		return (
+			Array.from( wrapper.children ).find( ( child ) =>
+				gallerySelectors.some( ( selector ) => child.matches( selector ) )
+			) || wrapper.querySelector( gallerySelectors.join( ',' ) )
 		);
+	};
+
+	const getGalleryItems = ( gallery ) =>
+		Array.from( gallery.children ).filter(
+			( child ) =>
+				child.matches( '.pb-image-block-wrapper' ) ||
+				child.matches( '.wp-block-folioblocks-pb-image-block' ) ||
+				child.querySelector( '.pb-image-block-wrapper' )
+		);
+
+	const shuffleItems = ( items ) => {
+		const shuffled = [ ...items ];
+		for ( let i = shuffled.length - 1; i > 0; i-- ) {
+			const j = Math.floor( Math.random() * ( i + 1 ) );
+			[ shuffled[ i ], shuffled[ j ] ] = [ shuffled[ j ], shuffled[ i ] ];
+		}
+
+		const isSameOrder = shuffled.every(
+			( item, index ) => item === items[ index ]
+		);
+		if ( isSameOrder && shuffled.length > 1 ) {
+			shuffled.push( shuffled.shift() );
+		}
+
+		return shuffled;
+	};
+
+	// Add randomizer to galleries
+	const galleries = document.querySelectorAll(
+		'.pb-randomized, [data-randomize="true"]'
+	);
+	galleries.forEach( ( wrapper ) => {
+		const gallery = getRandomizedGallery( wrapper );
 		if ( ! gallery ) {
 			return;
 		}
 
-		const items = Array.from(
-			gallery.querySelectorAll( '.pb-image-block-wrapper' )
-		);
-
-		// Shuffle using Fisher-Yates
-		for ( let i = items.length - 1; i > 0; i-- ) {
-			const j = Math.floor( Math.random() * ( i + 1 ) );
-			gallery.appendChild( items[ j ] );
+		const items = getGalleryItems( gallery );
+		if ( items.length < 2 ) {
+			return;
 		}
+
+		const fragment = document.createDocumentFragment();
+		shuffleItems( items ).forEach( ( item ) =>
+			fragment.appendChild( item )
+		);
+		gallery.appendChild( fragment );
 
 		setTimeout( () => {
 			document.dispatchEvent( new Event( 'pbGalleryUpdated' ) );

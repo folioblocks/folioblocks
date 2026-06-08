@@ -15,18 +15,19 @@ import {
 	ToolbarButton,
 	ToolbarGroup,
 	ToggleControl,
-	__experimentalToolsPanel as ToolsPanel,
-	__experimentalToolsPanelItem as ToolsPanelItem,
 } from '@wordpress/components';
 import { useState, useEffect } from '@wordpress/element';
 import { useDebounce } from '@wordpress/compose';
 import apiFetch from '@wordpress/api-fetch';
 import ProductSearchControl from '../pb-helpers/ProductSearchControl.js';
-import CompactColorControl, {
-	CompactTwoColorControl,
-} from '../pb-helpers/CompactColorControl.js';
+import CompactColorControl from '../pb-helpers/CompactColorControl.js';
 import '../pb-helpers/applyThumbnails';
+import { registerImageClickStylePremiumControls } from '../pb-helpers/imageClickStylePremiumControls.js';
 import { registerImageHoverActionPremiumControls } from '../pb-helpers/imageHoverActionPremiumControls.js';
+import {
+	registerDisableRightClickPremiumControl,
+	registerLazyLoadPremiumControl,
+} from '../pb-helpers/simplePremiumControls.js';
 import {
 	Icon,
 	aspectRatio,
@@ -252,6 +253,28 @@ addFilter(
 registerImageHoverActionPremiumControls( {
 	hookPrefix: 'folioBlocks.imageBlock',
 	namespace: 'folioblocks/image-block',
+} );
+
+registerImageClickStylePremiumControls( {
+	hookPrefix: 'folioBlocks.imageBlock',
+	namespace: 'folioblocks/image-block',
+	panelLabel: __( 'Image Click Styles', 'folioblocks' ),
+	hideInsideGallery: true,
+} );
+
+registerDisableRightClickPremiumControl( {
+	hookPrefix: 'folioBlocks.imageBlock',
+	namespace: 'folioblocks/image-block',
+	label: __( 'Disable Right-Click', 'folioblocks' ),
+	hideInsideGallery: true,
+} );
+
+registerLazyLoadPremiumControl( {
+	hookPrefix: 'folioBlocks.imageBlock',
+	namespace: 'folioblocks/image-block',
+	help: __( 'Enables lazy loading of image.', 'folioblocks' ),
+	defaultValue: true,
+	hideInsideGallery: true,
 } );
 
 const PagePostSearchControl = ( { attributes, setAttributes } ) => {
@@ -1286,61 +1309,6 @@ addFilter(
 );
 
 addFilter(
-	'folioBlocks.imageBlock.disableRightClickToggle',
-	'folioblocks/pb-image-block-disable-rc',
-	( Original, { attributes, setAttributes, isInsideGallery } ) => {
-		if ( isInsideGallery ) {
-			return null;
-		}
-		const value = attributes.disableRightClick ?? false;
-		return (
-			<ToggleControl
-				label={ __( 'Disable Right-Click', 'folioblocks' ) }
-				checked={ !! value }
-				onChange={ ( v ) =>
-					setAttributes( { disableRightClick: !! v } )
-				}
-				__nextHasNoMarginBottom
-				help={ __(
-					'Prevents visitors from right-clicking.',
-					'folioblocks'
-				) }
-			/>
-		);
-	}
-);
-
-addFilter(
-	'folioBlocks.imageBlock.lazyLoadToggle',
-	'folioblocks/pb-image-block-lazyload',
-	( Original, { attributes, setAttributes, context, isInsideGallery } ) => {
-		// Parent galleries provide one of these keys; prefer explicit lazyLoad if present
-		const parentLazy =
-			context?.[ 'folioBlocks/lazyLoad' ] ??
-			context?.[ 'folioBlocks/enableLazyLoad' ] ??
-			null;
-
-		// Inside a gallery → no UI; the parent controls it
-		if ( isInsideGallery ) {
-			return null;
-		}
-
-		// Standalone → show a toggle that writes the block's own attribute
-		const value = attributes.lazyLoad ?? true;
-
-		return (
-			<ToggleControl
-				label={ __( 'Enable Lazy Load of Images', 'folioblocks' ) }
-				checked={ !! value }
-				onChange={ ( val ) => setAttributes( { lazyLoad: !! val } ) }
-				__nextHasNoMarginBottom
-				help={ __( 'Enables lazy loading of image.', 'folioblocks' ) }
-			/>
-		);
-	}
-);
-
-addFilter(
 	'folioBlocks.imageBlock.styleControls',
 	'folioblocks/pb-image-block-style-controls',
 	( Original, { attributes, setAttributes, isInsideGallery } ) => {
@@ -1398,143 +1366,6 @@ addFilter(
 					) }
 				/>
 			</PanelBody>
-		);
-	}
-);
-
-addFilter(
-	'folioBlocks.imageBlock.iconStyleControls',
-	'folioblocks/pb-image-block-icon-style-controls',
-	( Original, { attributes, setAttributes, isInsideGallery } ) => {
-		// Standalone only. In galleries, the parent controls icon styling via context.
-		if ( isInsideGallery ) {
-			return null;
-		}
-
-		const enableDownload = !! attributes.enableDownload;
-		const enableWooCommerce = !! attributes.enableWooCommerce;
-		const enableLinkIcon =
-			( attributes.imageClickAction === 'custom_url' ||
-				attributes.imageClickAction === 'page_post' ) &&
-			( attributes.imageClickTarget || 'icon' ) === 'icon';
-
-		if ( ! enableDownload && ! enableWooCommerce && ! enableLinkIcon ) {
-			return null;
-		}
-
-		return (
-			<ToolsPanel
-				label={ __( 'Image Click Styles', 'folioblocks' ) }
-				resetAll={ () =>
-					setAttributes( {
-						downloadIconColor: '',
-						downloadIconBgColor: '',
-						cartIconColor: '',
-						cartIconBgColor: '',
-						linkIconColor: '',
-						linkIconBgColor: '',
-					} )
-				}
-			>
-				{ enableDownload && (
-					<ToolsPanelItem
-						label={ __( 'Download Icon Colors', 'folioblocks' ) }
-						hasValue={ () =>
-							!! attributes.downloadIconColor ||
-							!! attributes.downloadIconBgColor
-						}
-						onDeselect={ () =>
-							setAttributes( {
-								downloadIconColor: '',
-								downloadIconBgColor: '',
-							} )
-						}
-						isShownByDefault
-					>
-						<CompactTwoColorControl
-							label={ __( 'Download Icon', 'folioblocks' ) }
-							value={ {
-								first: attributes.downloadIconColor,
-								second: attributes.downloadIconBgColor,
-							} }
-							onChange={ ( next ) =>
-								setAttributes( {
-									downloadIconColor: next?.first || '',
-									downloadIconBgColor: next?.second || '',
-								} )
-							}
-							firstLabel={ __( 'Icon', 'folioblocks' ) }
-							secondLabel={ __( 'Background', 'folioblocks' ) }
-						/>
-					</ToolsPanelItem>
-				) }
-
-				{ enableWooCommerce && (
-					<ToolsPanelItem
-						label={ __( 'Add to Cart Icon Colors', 'folioblocks' ) }
-						hasValue={ () =>
-							!! attributes.cartIconColor ||
-							!! attributes.cartIconBgColor
-						}
-						onDeselect={ () =>
-							setAttributes( {
-								cartIconColor: '',
-								cartIconBgColor: '',
-							} )
-						}
-						isShownByDefault
-					>
-						<CompactTwoColorControl
-							label={ __( 'Add to Cart Icon', 'folioblocks' ) }
-							value={ {
-								first: attributes.cartIconColor,
-								second: attributes.cartIconBgColor,
-							} }
-							onChange={ ( next ) =>
-								setAttributes( {
-									cartIconColor: next?.first || '',
-									cartIconBgColor: next?.second || '',
-								} )
-							}
-							firstLabel={ __( 'Icon', 'folioblocks' ) }
-							secondLabel={ __( 'Background', 'folioblocks' ) }
-						/>
-					</ToolsPanelItem>
-				) }
-
-				{ enableLinkIcon && (
-					<ToolsPanelItem
-						label={ __( 'Link Target Icon Colors', 'folioblocks' ) }
-						hasValue={ () =>
-							!! attributes.linkIconColor ||
-							!! attributes.linkIconBgColor
-						}
-						onDeselect={ () =>
-							setAttributes( {
-								linkIconColor: '',
-								linkIconBgColor: '',
-							} )
-						}
-						isShownByDefault
-					>
-						<CompactTwoColorControl
-							label={ __( 'Link Target Icon', 'folioblocks' ) }
-							value={ {
-								first: attributes.linkIconColor,
-								second: attributes.linkIconBgColor,
-							} }
-							onChange={ ( next ) =>
-								setAttributes( {
-									linkIconColor: next?.first || '',
-									linkIconBgColor: next?.second || '',
-								} )
-							}
-							firstLabel={ __( 'Icon', 'folioblocks' ) }
-							secondLabel={ __( 'Background', 'folioblocks' ) }
-						/>
-					</ToolsPanelItem>
-				) }
-			</ToolsPanel>
 		);
 	}
 );

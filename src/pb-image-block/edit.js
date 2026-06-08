@@ -278,7 +278,11 @@ export default function Edit( {
 	const selectedMedia = useSelect(
 		( select ) =>
 			id && shouldUseContentInspector && ! hasStoredExif
-				? select( 'core' )?.getMedia( id )
+				? select( 'core' )?.getEntityRecord(
+						'postType',
+						'attachment',
+						id
+				  )
 				: null,
 		[ id, shouldUseContentInspector, hasStoredExif ]
 	);

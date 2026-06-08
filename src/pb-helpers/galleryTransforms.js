@@ -1,4 +1,4 @@
-import { createBlock, getBlockType } from '@wordpress/blocks';
+import { cloneBlock, createBlock, getBlockType } from '@wordpress/blocks';
 import { select } from '@wordpress/data';
 import { decodeEntities } from '@wordpress/html-entities';
 import { getExifAttributesFromMedia } from './exifMetadata';
@@ -72,10 +72,26 @@ const getSelectedImageSize = ( attributes = {}, sizes = {} ) =>
 	sizes.full ||
 	null;
 
+const cloneInnerBlockTree = ( block ) =>
+	cloneBlock(
+		block,
+		{},
+		( block.innerBlocks || [] ).map( cloneInnerBlockTree )
+	);
+
+const cloneInnerBlocks = ( innerBlocks = [] ) =>
+	innerBlocks.map( cloneInnerBlockTree );
+
 export const transformCoreImageToPbImage = ( attributes = {} ) => {
 	const imageId = Number( attributes.id ) || 0;
 	const mediaRecord =
-		imageId > 0 ? select( 'core' )?.getMedia( imageId ) : null;
+		imageId > 0
+			? select( 'core' )?.getEntityRecord(
+					'postType',
+					'attachment',
+					imageId
+			  )
+			: null;
 	const mediaDetails = mediaRecord?.media_details || {};
 	const normalizedSizes = normalizeImageSizes( mediaDetails.sizes || {} );
 	const selectedSize = getSelectedImageSize( attributes, normalizedSizes );
@@ -117,7 +133,7 @@ export const transformCoreImageToPbImage = ( attributes = {} ) => {
 
 const transformCoreGalleryImage = ( block ) => {
 	if ( block?.name === 'folioblocks/pb-image-block' ) {
-		return block;
+		return cloneInnerBlockTree( block );
 	}
 
 	if ( block?.name !== 'core/image' ) {
@@ -260,7 +276,7 @@ export const buildGalleryTransforms = (
 					createBlock(
 						currentBlockName,
 						getTransformAttributes( attributes ),
-						innerBlocks
+						cloneInnerBlocks( innerBlocks )
 					),
 			} ) ),
 			{

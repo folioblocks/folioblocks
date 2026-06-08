@@ -33,6 +33,11 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 	if ( ! empty( $attributes['disableRightClick'] ) ) {
 		$fbks_wrapper_attributes['data-disable-right-click'] = 'true';
 	}
+
+	if ( ! empty( $attributes['randomizeOrder'] ) ) {
+		$fbks_wrapper_attributes['class']          = 'pb-randomized';
+		$fbks_wrapper_attributes['data-randomize'] = 'true';
+	}
 }
 
 $fbks_loop = isset( $attributes['loopSlides'] ) ? $attributes['loopSlides'] : false;

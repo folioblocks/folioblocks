@@ -617,12 +617,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		}, 300 );
 	};
 
-	applyFilters( 'folioBlocks.gridGallery.editorEnhancements', null, {
-		clientId,
-		innerBlocks,
-		isBlockOrChildSelected,
-	} );
-
 	// ---------------------------------------------
 	// Render
 	// ---------------------------------------------

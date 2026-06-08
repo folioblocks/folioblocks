@@ -13,9 +13,14 @@ import {
 	ToggleGroupControl,
 	ToggleGroupControlOption,
 } from '@wordpress/components';
-import { applyThumbnails } from '../pb-helpers/applyThumbnails';
 import { CompactTwoColorControl } from '../pb-helpers/CompactColorControl';
 import { registerImageClickActionPremiumControls } from '../pb-helpers/imageClickActionPremiumControls';
+import { registerListViewThumbnailEnhancements } from '../pb-helpers/listViewThumbnailEnhancements';
+import {
+	registerDisableRightClickPremiumControl,
+	registerLazyLoadPremiumControl,
+	registerRandomizeOrderPremiumControl,
+} from '../pb-helpers/simplePremiumControls';
 
 const shuffleBlocks = ( blocks ) => {
 	const shuffled = [ ...blocks ];
@@ -102,44 +107,27 @@ addFilter(
 	}
 );
 
+registerListViewThumbnailEnhancements( {
+	hookPrefix: 'folioBlocks.filmstripGallery',
+	namespace: 'folioblocks/filmstrip-gallery',
+} );
+
 addFilter(
 	'folioBlocks.filmstripGallery.editorEnhancements',
-	'folioblocks/filmstrip-gallery-premium-thumbnails',
+	'folioblocks/filmstrip-gallery-randomize',
 	(
 		_,
 		{
 			clientId,
 			innerBlocks,
-			isBlockOrChildSelected,
 			attributes,
 			replaceInnerBlocks,
 			setActiveIndex,
 		}
 	) => {
-		const wasRandomizeEnabledRef = useRef( false );
-
-		// Apply thumbnails when this block or a child image is selected.
-		useEffect( () => {
-			if ( isBlockOrChildSelected ) {
-				setTimeout( () => {
-					applyThumbnails( clientId );
-				}, 200 );
-			}
-		}, [ clientId, isBlockOrChildSelected ] );
-
-		// Fallback if list view thumbnails are missing after images change.
-		useEffect( () => {
-			const hasImages = innerBlocks.length > 0;
-			const listViewHasThumbnails = document.querySelector(
-				'[data-pb-thumbnail-applied="true"]'
-			);
-
-			if ( hasImages && ! listViewHasThumbnails ) {
-				setTimeout( () => {
-					applyThumbnails( clientId );
-				}, 300 );
-			}
-		}, [ clientId, innerBlocks ] );
+		const wasRandomizeEnabledRef = useRef(
+			!! attributes.randomizeOrder
+		);
 
 		// Shuffle actual inner block order once when randomization is enabled.
 		useEffect( () => {
@@ -265,26 +253,6 @@ addFilter(
 );
 
 addFilter(
-	'folioBlocks.filmstripGallery.randomizeOrderToggle',
-	'folioblocks/filmstrip-gallery-premium-randomize-order',
-	( defaultContent, props ) => {
-		const { attributes, setAttributes } = props;
-
-		return (
-			<ToggleControl
-				label={ __( 'Randomize Image Order', 'folioblocks' ) }
-				checked={ !! attributes.randomizeOrder }
-				onChange={ ( value ) =>
-					setAttributes( { randomizeOrder: value } )
-				}
-				help={ __( 'Randomize order of images.', 'folioblocks' ) }
-				__nextHasNoMarginBottom
-			/>
-		);
-	}
-);
-
-addFilter(
 	'folioBlocks.filmstripGallery.onHoverTitleToggle',
 	'folioblocks/filmstrip-gallery-premium-title-toggle',
 	( defaultContent, props ) => {
@@ -373,6 +341,22 @@ registerImageClickActionPremiumControls( {
 	supportsLightbox: false,
 } );
 
+registerRandomizeOrderPremiumControl( {
+	hookPrefix: 'folioBlocks.filmstripGallery',
+	namespace: 'folioblocks/filmstrip-gallery',
+	hookName: 'folioBlocks.filmstripGallery.randomizeOrderToggle',
+} );
+
+registerDisableRightClickPremiumControl( {
+	hookPrefix: 'folioBlocks.filmstripGallery',
+	namespace: 'folioblocks/filmstrip-gallery',
+} );
+
+registerLazyLoadPremiumControl( {
+	hookPrefix: 'folioBlocks.filmstripGallery',
+	namespace: 'folioblocks/filmstrip-gallery',
+} );
+
 
 
 
@@ -457,49 +441,6 @@ addFilter(
 					</>
 				) }
 			</PanelBody>
-		);
-	}
-);
-
-addFilter(
-	'folioBlocks.filmstripGallery.disableRightClickToggle',
-	'folioblocks/filmstrip-gallery-premium-disable-right-click',
-	( defaultContent, props ) => {
-		const { attributes, setAttributes } = props;
-
-		return (
-			<ToggleControl
-				label={ __( 'Disable Right-Click on Page', 'folioblocks' ) }
-				help={ __(
-					'Prevents visitors from right-clicking.',
-					'folioblocks'
-				) }
-				__nextHasNoMarginBottom
-				checked={ !! attributes.disableRightClick }
-				onChange={ ( value ) =>
-					setAttributes( { disableRightClick: value } )
-				}
-			/>
-		);
-	}
-);
-addFilter(
-	'folioBlocks.filmstripGallery.lazyLoadToggle',
-	'folioblocks/filmstrip-gallery-premium-lazy-load',
-	( defaultContent, props ) => {
-		const { attributes, setAttributes } = props;
-
-		return (
-			<ToggleControl
-				label={ __( 'Enable Lazy Load of Images', 'folioblocks' ) }
-				help={ __(
-					'Enables lazy loading of gallery images.',
-					'folioblocks'
-				) }
-				__nextHasNoMarginBottom
-				checked={ !! attributes.lazyLoad }
-				onChange={ ( value ) => setAttributes( { lazyLoad: value } ) }
-			/>
 		);
 	}
 );

@@ -6,7 +6,6 @@
 import { __ } from '@wordpress/i18n';
 import {
 	ToggleControl,
-	SelectControl,
 	RangeControl,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
@@ -18,107 +17,24 @@ import CompactColorControl, {
 	CompactTwoColorControl,
 } from '../pb-helpers/CompactColorControl';
 import { addFilter } from '@wordpress/hooks';
-import { useEffect } from '@wordpress/element';
-import { applyThumbnails } from '../pb-helpers/applyThumbnails';
 import { registerImageClickActionPremiumControls } from '../pb-helpers/imageClickActionPremiumControls';
+import { registerImageClickStylePremiumControls } from '../pb-helpers/imageClickStylePremiumControls';
 import { registerImageHoverActionPremiumControls } from '../pb-helpers/imageHoverActionPremiumControls';
+import { registerListViewThumbnailEnhancements } from '../pb-helpers/listViewThumbnailEnhancements';
+import {
+	registerDisableRightClickPremiumControl,
+	registerLazyLoadPremiumControl,
+	registerRandomizeOrderPremiumControl,
+} from '../pb-helpers/simplePremiumControls';
 
 const DEFAULT_CONTROLS_BACKGROUND_COLOR = 'rgba(0, 0, 0, 0.5)';
 const DEFAULT_CONTROLS_ICON_COLOR = '#ffffff';
 
-addFilter(
-	'folioBlocks.carouselGallery.editorEnhancements',
-	'folioblocks/carousel-gallery-premium-thumbnails',
-	( _, { clientId, innerBlocks, isBlockOrChildSelected } ) => {
-		// This filter injects editor-only enhancements like List View thumbnails
-		useEffect( () => {
-			if ( isBlockOrChildSelected ) {
-				setTimeout( () => {
-					applyThumbnails( clientId );
-				}, 200 );
-			}
-		}, [ isBlockOrChildSelected ] );
+registerListViewThumbnailEnhancements( {
+	hookPrefix: 'folioBlocks.carouselGallery',
+	namespace: 'folioblocks/carousel-gallery',
+} );
 
-		useEffect( () => {
-			const hasImages = innerBlocks.length > 0;
-			const listViewHasThumbnails = document.querySelector(
-				'[data-pb-thumbnail-applied="true"]'
-			);
-
-			if ( hasImages && ! listViewHasThumbnails ) {
-				setTimeout( () => {
-					applyThumbnails( clientId );
-				}, 300 );
-			}
-		}, [ innerBlocks ] );
-
-		return null;
-	}
-);
-
-addFilter(
-	'folioBlocks.carouselGallery.randomizeToggle',
-	'folioblocks/carousel-gallery-premium-toggle',
-	( defaultContent, props ) => {
-		const { attributes, setAttributes } = props;
-		return (
-			<ToggleControl
-				label={ __( 'Randomize Image Order', 'folioblocks' ) }
-				checked={ !! attributes.randomizeOrder }
-				onChange={ ( value ) =>
-					setAttributes( { randomizeOrder: value } )
-				}
-				__nextHasNoMarginBottom
-				help={ __( 'Randomize order of images.', 'folioblocks' ) }
-			/>
-		);
-	}
-);
-
-
-
-addFilter(
-	'folioBlocks.carouselGallery.disableRightClickToggle',
-	'folioblocks/carousel-gallery-premium-disable-right-click',
-	( defaultContent, props ) => {
-		const { attributes, setAttributes } = props;
-
-		return (
-			<ToggleControl
-				label={ __( 'Disable Right-Click on Page', 'folioblocks' ) }
-				help={ __(
-					'Prevents visitors from right-clicking.',
-					'folioblocks'
-				) }
-				__nextHasNoMarginBottom
-				checked={ !! attributes.disableRightClick }
-				onChange={ ( value ) =>
-					setAttributes( { disableRightClick: value } )
-				}
-			/>
-		);
-	}
-);
-addFilter(
-	'folioBlocks.carouselGallery.lazyLoadToggle',
-	'folioblocks/carousel-gallery-premium-lazy-load',
-	( defaultContent, props ) => {
-		const { attributes, setAttributes } = props;
-
-		return (
-			<ToggleControl
-				label={ __( 'Enable Lazy Load of Images', 'folioblocks' ) }
-				help={ __(
-					'Enables lazy loading of gallery images.',
-					'folioblocks'
-				) }
-				__nextHasNoMarginBottom
-				checked={ !! attributes.lazyLoad }
-				onChange={ ( value ) => setAttributes( { lazyLoad: value } ) }
-			/>
-		);
-	}
-);
 addFilter(
 	'folioBlocks.carouselGallery.enableAutoplayToggle',
 	'folioblocks/carousel-gallery-premium-controls',
@@ -243,108 +159,27 @@ addFilter(
 		);
 	}
 );
-addFilter(
-	'folioBlocks.carouselGallery.lightboxControls',
-	'folioblocks/carousel-gallery-premium-lightbox',
-	( defaultContent, props ) => {
-		const { attributes, setAttributes } = props;
-		const {
-			lightbox,
-			lightboxCaption,
-			enableWooCommerce,
-			wooLightboxInfoType,
-		} = attributes;
-
-		return (
-			<>
-				<ToggleControl
-					label={ __( 'Enable Lightbox', 'folioblocks' ) }
-					checked={ !! lightbox }
-					onChange={ ( newLightbox ) =>
-						setAttributes( { lightbox: newLightbox } )
-					}
-					__nextHasNoMarginBottom
-					help={ __(
-						'Enable image Lightbox on click.',
-						'folioblocks'
-					) }
-				/>
-
-				{ lightbox && (
-					<>
-						<ToggleControl
-							label={
-								enableWooCommerce
-									? __(
-											'Show Image Caption or Product Info in Lightbox',
-											'folioblocks'
-									  )
-									: __(
-											'Show Image Caption in Lightbox',
-											'folioblocks'
-									  )
-							}
-							help={
-								enableWooCommerce
-									? __(
-											'Display Image Caption or Product Info inside the Lightbox.',
-											'folioblocks'
-									  )
-									: __(
-											'Display Image Caption inside the lightbox.',
-											'folioblocks'
-									  )
-							}
-							checked={ !! lightboxCaption }
-							onChange={ ( newLightboxCaption ) =>
-								setAttributes( {
-									lightboxCaption: newLightboxCaption,
-								} )
-							}
-							__nextHasNoMarginBottom
-						/>
-
-						{ enableWooCommerce && lightboxCaption && (
-							<SelectControl
-								label={ __( 'Lightbox Info', 'folioblocks' ) }
-								value={ wooLightboxInfoType }
-								options={ [
-									{
-										label: __(
-											'Show Image Caption',
-											'folioblocks'
-										),
-										value: 'caption',
-									},
-									{
-										label: __(
-											'Show Product Info',
-											'folioblocks'
-										),
-										value: 'product',
-									},
-								] }
-								onChange={ ( value ) =>
-									setAttributes( {
-										wooLightboxInfoType: value,
-									} )
-								}
-								__nextHasNoMarginBottom
-								__next40pxDefaultSize
-								help={ __(
-									'Choose what appears below images in the lightbox.',
-									'folioblocks'
-								) }
-							/>
-						) }
-					</>
-				) }
-			</>
-		);
-	}
-);
-
 registerImageClickActionPremiumControls( {
+	hookPrefix: 'folioBlocks.carouselGallery',
+	namespace: 'folioblocks/carousel-gallery',
+} );
+
+registerImageClickStylePremiumControls( {
+	hookPrefix: 'folioBlocks.carouselGallery',
+	namespace: 'folioblocks/carousel-gallery',
+} );
+
+registerRandomizeOrderPremiumControl( {
+	hookPrefix: 'folioBlocks.carouselGallery',
+	namespace: 'folioblocks/carousel-gallery',
+} );
+
+registerDisableRightClickPremiumControl( {
+	hookPrefix: 'folioBlocks.carouselGallery',
+	namespace: 'folioblocks/carousel-gallery',
+} );
+
+registerLazyLoadPremiumControl( {
 	hookPrefix: 'folioBlocks.carouselGallery',
 	namespace: 'folioblocks/carousel-gallery',
 } );
@@ -495,138 +330,6 @@ addFilter(
 					) }
 				/>
 			</>
-		);
-	}
-);
-
-addFilter(
-	'folioBlocks.carouselGallery.iconStyleControls',
-	'folioblocks/carousel-gallery-icon-style-controls',
-	( Original, { attributes, setAttributes } ) => {
-		const enableDownload = !! attributes.enableDownload;
-		const enableWooCommerce = !! attributes.enableWooCommerce;
-		const enableLinkIcon =
-			( attributes.imageClickAction === 'custom_url' ||
-				attributes.imageClickAction === 'page_post' ) &&
-			( attributes.imageClickTarget || 'icon' ) === 'icon';
-
-		if ( ! enableDownload && ! enableWooCommerce && ! enableLinkIcon ) {
-			return null;
-		}
-
-		return (
-			<ToolsPanel
-				label={ __( 'Gallery Click Styles', 'folioblocks' ) }
-				resetAll={ () =>
-					setAttributes( {
-						downloadIconColor: '',
-						downloadIconBgColor: '',
-						cartIconColor: '',
-						cartIconBgColor: '',
-						linkIconColor: '',
-						linkIconBgColor: '',
-					} )
-				}
-			>
-				{ enableDownload && (
-					<ToolsPanelItem
-						label={ __( 'Download Icon Colors', 'folioblocks' ) }
-						hasValue={ () =>
-							!! attributes.downloadIconColor ||
-							!! attributes.downloadIconBgColor
-						}
-						onDeselect={ () =>
-							setAttributes( {
-								downloadIconColor: '',
-								downloadIconBgColor: '',
-							} )
-						}
-						isShownByDefault
-					>
-						<CompactTwoColorControl
-							label={ __( 'Download Icon', 'folioblocks' ) }
-							value={ {
-								first: attributes.downloadIconColor,
-								second: attributes.downloadIconBgColor,
-							} }
-							onChange={ ( next ) =>
-								setAttributes( {
-									downloadIconColor: next?.first || '',
-									downloadIconBgColor: next?.second || '',
-								} )
-							}
-							firstLabel={ __( 'Icon', 'folioblocks' ) }
-							secondLabel={ __( 'Background', 'folioblocks' ) }
-						/>
-					</ToolsPanelItem>
-				) }
-
-				{ enableWooCommerce && (
-					<ToolsPanelItem
-						label={ __( 'Add to Cart Icon Colors', 'folioblocks' ) }
-						hasValue={ () =>
-							!! attributes.cartIconColor ||
-							!! attributes.cartIconBgColor
-						}
-						onDeselect={ () =>
-							setAttributes( {
-								cartIconColor: '',
-								cartIconBgColor: '',
-							} )
-						}
-						isShownByDefault
-					>
-						<CompactTwoColorControl
-							label={ __( 'Add to Cart Icon', 'folioblocks' ) }
-							value={ {
-								first: attributes.cartIconColor,
-								second: attributes.cartIconBgColor,
-							} }
-							onChange={ ( next ) =>
-								setAttributes( {
-									cartIconColor: next?.first || '',
-									cartIconBgColor: next?.second || '',
-								} )
-							}
-							firstLabel={ __( 'Icon', 'folioblocks' ) }
-							secondLabel={ __( 'Background', 'folioblocks' ) }
-						/>
-					</ToolsPanelItem>
-				) }
-
-				{ enableLinkIcon && (
-					<ToolsPanelItem
-						label={ __( 'Link Target Icon Colors', 'folioblocks' ) }
-						hasValue={ () =>
-							!! attributes.linkIconColor ||
-							!! attributes.linkIconBgColor
-						}
-						onDeselect={ () =>
-							setAttributes( {
-								linkIconColor: '',
-								linkIconBgColor: '',
-							} )
-						}
-						isShownByDefault
-					>
-						<CompactTwoColorControl
-							label={ __( 'Link Target Icon', 'folioblocks' ) }
-							value={ {
-								first: attributes.linkIconColor,
-								second: attributes.linkIconBgColor,
-							} }
-							onChange={ ( next ) =>
-								setAttributes( {
-									linkIconColor: next?.first || '',
-									linkIconBgColor: next?.second || '',
-								} )
-							}
-							firstLabel={ __( 'Icon', 'folioblocks' ) }
-							secondLabel={ __( 'Background', 'folioblocks' ) }
-						/>
-					</ToolsPanelItem>
-				) }
-			</ToolsPanel>
 		);
 	}
 );

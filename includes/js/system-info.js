@@ -23,9 +23,9 @@
 			return;
 		}
 
-		if ( navigator.clipboard && window.isSecureContext ) {
+		if ( window.navigator.clipboard && window.isSecureContext ) {
 			try {
-				await navigator.clipboard.writeText( textarea.value );
+				await window.navigator.clipboard.writeText( textarea.value );
 				return;
 			} catch ( error ) {
 				copyWithSelection( textarea );
@@ -35,4 +35,4 @@
 
 		copyWithSelection( textarea );
 	} );
-}() );
+} )();
