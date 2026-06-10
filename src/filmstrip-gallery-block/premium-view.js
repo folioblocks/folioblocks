@@ -449,9 +449,15 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			const overlayContent =
 				settings.overlayContent ||
 				( settings.wooProductPriceOnHover ? 'product' : 'title' );
-				const showOverlay =
-					!! settings.onHoverTitle &&
-					( hasProduct || title || caption || overlayContent === 'exif' );
+			const showOverlay =
+				!! settings.onHoverTitle &&
+				( overlayContent === 'product'
+					? !! settings.enableWooCommerce && hasProduct
+					: overlayContent === 'caption'
+					? !! caption
+					: overlayContent === 'exif'
+					? true
+					: !! title );
 
 			overlayContainer.style.display = showOverlay ? '' : 'none';
 			if ( ! showOverlay ) {
@@ -488,9 +494,6 @@ document.addEventListener( 'DOMContentLoaded', () => {
 					overlayNode.appendChild( priceNode );
 				}
 
-				if ( ! overlayNode.childNodes.length ) {
-					overlayNode.textContent = title;
-				}
 				return;
 			}
 

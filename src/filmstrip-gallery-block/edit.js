@@ -490,12 +490,15 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	const overlayContent =
 		attributes.overlayContent ||
 		( attributes.wooProductPriceOnHover ? 'product' : 'title' );
-		const showOverlay =
-			!! attributes.onHoverTitle &&
-			( activeImageProductId > 0 ||
-				!! activeImageTitle ||
-				!! activeImageCaption ||
-				overlayContent === 'exif' );
+	const showOverlay =
+		!! attributes.onHoverTitle &&
+		( overlayContent === 'product'
+			? effectiveEnableWoo && activeImageProductId > 0
+			: overlayContent === 'caption'
+			? !! activeImageCaption
+			: overlayContent === 'exif'
+			? true
+			: !! activeImageTitle );
 	const showProductOverlay =
 		showOverlay &&
 		effectiveEnableWoo &&
@@ -767,9 +770,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 												} }
 											/>
 										) }
-										{ ! activeImageProductName &&
-											! activeImageProductPrice &&
-											activeImageTitle }
 									</>
 									) : showExifOverlay ? (
 										<FilmstripExifOverlay

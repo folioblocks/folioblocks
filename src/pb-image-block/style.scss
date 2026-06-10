@@ -317,8 +317,8 @@
 			}
 		}
 
-		.lightbox-close {
-			position: absolute;
+	.lightbox-close {
+		position: absolute;
 		top: -40px;
 		right: -10px;
 		background: transparent;
@@ -331,6 +331,28 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+	}
+
+	.lightbox-fullscreen {
+		position: absolute;
+		right: -10px;
+		bottom: -40px;
+		width: 32px;
+		height: 32px;
+		padding: 2px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: transparent;
+		border: none;
+		color: #fff;
+		cursor: pointer;
+
+		.lightbox-fullscreen-icon {
+			width: 28px;
+			height: 28px;
+			fill: currentcolor;
+		}
 	}
 }
 

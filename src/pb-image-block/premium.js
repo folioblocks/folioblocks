@@ -6,7 +6,9 @@ import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 import {
 	CheckboxControl,
+	Button,
 	Dropdown,
+	Notice,
 	SelectControl,
 	Spinner,
 	PanelBody,
@@ -17,6 +19,7 @@ import {
 	ToggleControl,
 } from '@wordpress/components';
 import { useState, useEffect } from '@wordpress/element';
+import { useSelect } from '@wordpress/data';
 import { useDebounce } from '@wordpress/compose';
 import apiFetch from '@wordpress/api-fetch';
 import ProductSearchControl from '../pb-helpers/ProductSearchControl.js';
@@ -37,6 +40,75 @@ import {
 	timeToRead,
 } from '@wordpress/icons';
 import { wooCartIcon } from '../pb-helpers/icons.js';
+import { syncImageMetadataToMedia } from '../pb-helpers/syncImageMetadata.js';
+
+const ImageMetadataSyncControl = ( { attributes = {} } ) => {
+	const [ status, setStatus ] = useState( '' );
+	const [ isSyncing, setIsSyncing ] = useState( false );
+	const attachmentId = Number( attributes.id || 0 );
+	const canSyncMedia = useSelect(
+		( select ) =>
+			attachmentId
+				? select( 'core' ).canUser( 'update', 'media', attachmentId )
+				: false,
+		[ attachmentId ]
+	);
+
+	if ( canSyncMedia !== true ) {
+		return null;
+	}
+
+	const syncMetadata = async () => {
+		setIsSyncing( true );
+		setStatus( '' );
+
+		try {
+			await syncImageMetadataToMedia( attachmentId, attributes );
+			setStatus( 'success' );
+		} catch ( error ) {
+			setStatus( 'error' );
+		} finally {
+			setIsSyncing( false );
+		}
+	};
+
+	return (
+		<div style={ { marginTop: '16px' } }>
+			<Button
+				variant="secondary"
+				onClick={ syncMetadata }
+				isBusy={ isSyncing }
+				disabled={ isSyncing }
+			>
+				{ isSyncing
+					? __( 'Syncing…', 'folioblocks' )
+					: __( 'Sync to Media Library', 'folioblocks' ) }
+			</Button>
+			{ status === 'success' && (
+				<Notice status="success" isDismissible={ false }>
+					{ __(
+						'Metadata synced to the Media Library.',
+						'folioblocks'
+					) }
+				</Notice>
+			) }
+			{ status === 'error' && (
+				<Notice status="error" isDismissible={ false }>
+					{ __(
+						'Metadata could not be synced to the Media Library.',
+						'folioblocks'
+					) }
+				</Notice>
+			) }
+		</div>
+	);
+};
+
+addFilter(
+	'folioBlocks.imageBlock.metadataSyncControl',
+	'folioblocks/pb-image-block-metadata-sync-control',
+	( Original, props ) => <ImageMetadataSyncControl { ...props } />
+);
 
 const getAssignedFilterCategories = ( attributes = {} ) => {
 	const assignedCategories = Array.isArray( attributes.filterCategories )
@@ -1260,7 +1332,7 @@ addFilter(
 		return (
 			<>
 				<PanelBody
-					title={ __( 'Image Filtering Settings', 'folioblocks' ) }
+					title={ __( 'Gallery Filtering Categories', 'folioblocks' ) }
 					initialOpen={ true }
 				>
 					<p
@@ -1513,11 +1585,14 @@ addFilter(
 				) : null;
 			}
 
-			if ( overlayContent !== 'product' || ! effectiveWooActive ) {
+			if ( overlayContent !== 'product' ) {
 			return showTitle && title ? <>{ title }</> : null;
 		}
 
-		if ( Number( attributes.wooProductId ) > 0 ) {
+		if (
+			effectiveWooActive &&
+			Number( attributes.wooProductId ) > 0
+		) {
 			return (
 				<>
 					{ attributes.wooProductName && (
@@ -1537,7 +1612,7 @@ addFilter(
 			);
 		}
 
-		return showTitle && title ? <>{ title }</> : null;
+		return null;
 	}
 );
 addFilter(

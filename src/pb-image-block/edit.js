@@ -404,7 +404,6 @@ export default function Edit( {
 		)
 			? 'product'
 			: 'title' );
-
 	// Compute overlay state and matching CSS class for the chosen variant
 	const overlayEnabled =
 		( context?.[ 'folioBlocks/onHoverTitle' ] ??
@@ -503,6 +502,14 @@ export default function Edit( {
 		context?.[ 'folioBlocks/enableWooCommerce' ] ??
 		!! attributes.enableWooCommerce;
 	const effectiveWooActive = hasWooCommerce && enableWooCommerce;
+	const hasHoverOverlayContent =
+		effectiveOverlayContent === 'product'
+			? effectiveWooActive && Number( attributes.wooProductId ) > 0
+			: effectiveOverlayContent === 'caption'
+			? !! caption?.trim()
+			: effectiveOverlayContent === 'exif'
+			? true
+			: !! title?.trim();
 	const contextImageClickAction =
 		context?.[ 'folioBlocks/imageClickAction' ] || '';
 	const effectiveImageClickTarget =
@@ -801,12 +808,19 @@ export default function Edit( {
 							/>
 						) }
 							{ ! shouldUseContentInspector && (
-								<ImageMetadataControls
-									alt={ alt }
-									title={ title }
-									caption={ caption }
-									setAttributes={ setAttributes }
-								/>
+								<>
+									<ImageMetadataControls
+										alt={ alt }
+										title={ title }
+										caption={ caption }
+										setAttributes={ setAttributes }
+									/>
+									{ applyFilters(
+										'folioBlocks.imageBlock.metadataSyncControl',
+										null,
+										{ attributes }
+									) }
+								</>
 							) }
 							{ ! isInsideGallery &&
 								applyFilters(
@@ -941,17 +955,18 @@ export default function Edit( {
 								) }
 							</PanelBody>
 						) }
-						{ applyFilters(
-							'folioBlocks.imageBlock.filterCategoryControl',
-							null,
-							{
-								attributes,
-								setAttributes,
-								filterCategories,
-								context,
-								isInsideGallery,
-							}
-						) }
+						{ ! shouldUseContentInspector &&
+							applyFilters(
+								'folioBlocks.imageBlock.filterCategoryControl',
+								null,
+								{
+									attributes,
+									setAttributes,
+									filterCategories,
+									context,
+									isInsideGallery,
+								}
+							) }
 						{ ! isInsideGallery && (
 							<PanelBody
 								title={ __( 'Image Hover Settings', 'folioblocks' ) }
@@ -1004,6 +1019,11 @@ export default function Edit( {
 									setAttributes={ setAttributes }
 								/>
 								{ applyFilters(
+									'folioBlocks.imageBlock.metadataSyncControl',
+									null,
+									{ attributes }
+								) }
+								{ applyFilters(
 									'folioBlocks.imageBlock.cameraMetadataControls',
 									<div style={ { marginBottom: '8px' } }>
 										<Notice status="info" isDismissible={ false }>
@@ -1027,6 +1047,17 @@ export default function Edit( {
 									{ attributes, setAttributes }
 								) }
 							</PanelBody>
+							{ applyFilters(
+								'folioBlocks.imageBlock.filterCategoryControl',
+								null,
+								{
+									attributes,
+									setAttributes,
+									filterCategories,
+									context,
+									isInsideGallery,
+								}
+							) }
 						</InspectorControls>
 					) }
 					<InspectorControls group="styles">
@@ -1093,16 +1124,7 @@ export default function Edit( {
 										className="pb-image-block-img"
 									/>
 										{ effectiveHoverTitle &&
-											( Number( attributes.wooProductId ) >
-												0 ||
-												( title &&
-													title.trim() !== '' ) ||
-												( effectiveOverlayContent ===
-													'caption' &&
-													caption &&
-													caption.trim() !== '' ) ||
-												effectiveOverlayContent ===
-													'exif' ) && (
+											hasHoverOverlayContent && (
 											<div className="pb-image-block-title-container">
 												<figcaption className="pb-image-block-title">
 													{ ( () => {
@@ -1223,14 +1245,7 @@ export default function Edit( {
 									className="pb-image-block-img"
 								/>
 									{ effectiveHoverTitle &&
-										( Number( attributes.wooProductId ) > 0 ||
-											( title && title.trim() !== '' ) ||
-											( effectiveOverlayContent ===
-												'caption' &&
-												caption &&
-												caption.trim() !== '' ) ||
-											effectiveOverlayContent ===
-												'exif' ) && (
+										hasHoverOverlayContent && (
 										<div className="pb-image-block-title-container">
 											<figcaption className="pb-image-block-title">
 												{ ( () => {

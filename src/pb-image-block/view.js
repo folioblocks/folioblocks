@@ -106,6 +106,11 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		}
 
 		function closeLightbox() {
+			document.dispatchEvent(
+				new CustomEvent( 'pbImageLightboxClosing', {
+					detail: { wrapper },
+				} )
+			);
 			wrapper.remove();
 			document.body.classList.remove( 'pb-lightbox-open' );
 			focusStart.remove();
@@ -201,6 +206,11 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			if ( closeBtn && userUsedKeyboard ) {
 				closeBtn.focus();
 			}
+			document.dispatchEvent(
+				new CustomEvent( 'pbImageLightboxRendered', {
+					detail: { wrapper, inner },
+				} )
+			);
 		}
 
 		function keyHandler( e ) {

@@ -409,9 +409,6 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 								$fbks_lightbox_caption .= '<p class="pb-product-price">' . wp_kses_post( $fbks_product_price ) . '</p>';
 							}
 							$fbks_lightbox_caption .= '</div>';
-						} elseif ( ! empty( $fbks_caption ) ) {
-							// Fallback to regular image caption
-							$fbks_lightbox_caption = wpautop( wp_kses_post( $fbks_caption ) );
 						}
 						} elseif ( 'caption' === $fbks_lightbox_content && ! empty( $fbks_caption ) ) {
 							$fbks_lightbox_caption = wpautop( wp_kses_post( $fbks_caption ) );
@@ -495,12 +492,6 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 					if ( ! empty( $fbks_product_price ) ) {
 						echo '<span class="pb-product-price">' . wp_kses_post( $fbks_product_price ) . '</span>';
 					}
-					echo '</figcaption></div>';
-				} elseif ( ! empty( $fbks_title ) ) {
-					// Fallback to image title if no product info
-					echo '<div class="pb-image-block-title-container">';
-					echo '<figcaption class="pb-image-block-title">';
-					echo wp_kses_post( $fbks_title );
 					echo '</figcaption></div>';
 				}
 				} elseif ( ! empty( $fbks_title ) ) {

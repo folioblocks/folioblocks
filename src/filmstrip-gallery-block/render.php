@@ -408,7 +408,7 @@ if ( $fbks_can_use_premium ) {
 				$fbks_overlay_html = $fbks_get_overlay_exif( $fbks_active_image );
 			}
 
-			if ( '' === $fbks_overlay_html && $fbks_has_hover_title ) {
+			if ( '' === $fbks_overlay_html && 'title' === $fbks_overlay_content && $fbks_has_hover_title ) {
 				$fbks_overlay_html = esc_html( (string) $fbks_active_image['title'] );
 			}
 	}

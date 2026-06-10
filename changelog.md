@@ -4,6 +4,21 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - Unreleased
+### Added
+- Added a Pro-only fullscreen button to Image Block lightboxes, positioned at the bottom right and available with the `F` keyboard shortcut.
+- Added a Pro-only, permission-aware per-image action for syncing Image Block titles, captions, and alternative text to the WordPress Media Library, with loading, success, and error feedback.
+
+### Changed
+- Moved per-image gallery filtering categories into the WordPress 7.0 Content inspector while preserving their Settings inspector location on older WordPress versions.
+- Renamed the per-image filtering panel to Gallery Filtering Categories.
+- Restyled Image Block EXIF metadata as a compact read-only card with clearer spacing and visual separation from editable image metadata.
+- Updated WooCommerce Product Info lightbox and hover-overlay content so images without linked products display no fallback caption or title.
+- Updated Filmstrip Gallery editor previews and front-end hover overlays to follow the same no-fallback Product Info behavior.
+
+### Fixed
+- Fixed an Image Block editor crash when changing gallery overlay content from EXIF Data to Product Info.
+
 ## [1.3.1] - 2026-06-03
 ### Added
 - Added shared premium control helpers for repeated Image Click Styles, simple gallery toggles, List View thumbnails, and gallery filtering editor controls.
