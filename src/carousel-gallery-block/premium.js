@@ -21,11 +21,14 @@ import { registerImageClickActionPremiumControls } from '../pb-helpers/imageClic
 import { registerImageClickStylePremiumControls } from '../pb-helpers/imageClickStylePremiumControls';
 import { registerImageHoverActionPremiumControls } from '../pb-helpers/imageHoverActionPremiumControls';
 import { registerListViewThumbnailEnhancements } from '../pb-helpers/listViewThumbnailEnhancements';
+import { enableGalleryTransforms } from '../pb-helpers/galleryTransforms';
 import {
 	registerDisableRightClickPremiumControl,
 	registerLazyLoadPremiumControl,
 	registerRandomizeOrderPremiumControl,
 } from '../pb-helpers/simplePremiumControls';
+
+enableGalleryTransforms( 'folioblocks/carousel-gallery-block' );
 
 const DEFAULT_CONTROLS_BACKGROUND_COLOR = 'rgba(0, 0, 0, 0.5)';
 const DEFAULT_CONTROLS_ICON_COLOR = '#ffffff';
@@ -76,27 +79,19 @@ addFilter(
 						) }
 					/>
 				) }
+				<ToggleControl
+					label={ __( 'Loop Carousel Slides', 'folioblocks' ) }
+					checked={ attributes.loopSlides || false }
+					onChange={ ( value ) =>
+						setAttributes( { loopSlides: value } )
+					}
+					__nextHasNoMarginBottom
+					help={ __(
+						'Return to the first slide after reaching the end.',
+						'folioblocks'
+					) }
+				/>
 			</>
-		);
-	}
-);
-addFilter(
-	'folioBlocks.carouselGallery.loopSlides',
-	'folioblocks/carousel-gallery-premium-controls',
-	( defaultContent, props ) => {
-		const { attributes, setAttributes } = props;
-
-		return (
-			<ToggleControl
-				label={ __( 'Loop Carousel Slides', 'folioblocks' ) }
-				checked={ attributes.loopSlides || false }
-				onChange={ ( value ) => setAttributes( { loopSlides: value } ) }
-				__nextHasNoMarginBottom
-				help={ __(
-					'Enable the carousel to loop infinitely.',
-					'folioblocks'
-				) }
-			/>
 		);
 	}
 );

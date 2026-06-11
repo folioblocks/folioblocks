@@ -185,8 +185,8 @@
 
 	.lightbox-inner {
 		position: relative;
-		width: 95%;
-		max-width: 95%;
+		width: calc(100% - clamp(140px, 16vw, 240px));
+		max-width: calc(100% - clamp(140px, 16vw, 240px));
 		max-height: 95%;
 	}
 
@@ -225,11 +225,11 @@
 	}
 
 	.lightbox-prev {
-		left: 1rem;
+		left: clamp(18px, 3vw, 48px);
 	}
 
 	.lightbox-next {
-		right: 1rem;
+		right: clamp(18px, 3vw, 48px);
 	}
 
 	.lightbox-caption {
@@ -241,6 +241,21 @@
 		padding: 0px;
 		box-sizing: border-box;
 		display: inline-block;
+	}
+
+	.lightbox-caption .pb-lightbox-title {
+		margin-top: 10px;
+		font-size: 0.95rem;
+		font-weight: 600;
+		line-height: 1.3;
+	}
+
+	.lightbox-caption .pb-lightbox-caption-text {
+		margin-top: 6px;
+	}
+
+	.lightbox-caption .pb-lightbox-caption-text p {
+		margin: 0;
 	}
 
 	.lightbox-caption .pb-lightbox-product-info .pb-product-name {
@@ -318,9 +333,9 @@
 		}
 
 	.lightbox-close {
-		position: absolute;
-		top: -40px;
-		right: -10px;
+		position: fixed;
+		top: clamp(18px, 3vw, 32px);
+		right: clamp(18px, 3vw, 32px);
 		background: transparent;
 		border: none;
 		color: white;
@@ -334,9 +349,9 @@
 	}
 
 	.lightbox-fullscreen {
-		position: absolute;
-		right: -10px;
-		bottom: -40px;
+		position: fixed;
+		right: clamp(18px, 3vw, 32px);
+		bottom: clamp(18px, 3vw, 32px);
 		width: 32px;
 		height: 32px;
 		padding: 2px;
@@ -356,6 +371,19 @@
 	}
 }
 
+.pb-image-lightbox.pb-image-lightbox--light {
+	background: rgba(255, 255, 255, 0.94);
+
+	.lightbox-prev,
+	.lightbox-next,
+	.lightbox-close,
+	.lightbox-fullscreen,
+	.lightbox-caption,
+	.lightbox-caption .pb-lightbox-exif__row {
+		color: #000;
+	}
+}
+
 .pb-image-lightbox button:focus {
 	outline: none; /* remove all focus outlines */
 }
@@ -365,9 +393,17 @@
 	outline-offset: 2px;
 }
 
+.pb-image-lightbox.pb-image-lightbox--light button:focus-visible {
+	outline-color: #000;
+}
+
 @media (max-width: 480px) {
 
 	.pb-image-lightbox {
+		.lightbox-inner {
+			width: calc(100% - 24px);
+			max-width: calc(100% - 24px);
+		}
 
 		.lightbox-prev,
 		.lightbox-next {

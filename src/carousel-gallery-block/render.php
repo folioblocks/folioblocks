@@ -23,6 +23,7 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 			? esc_attr( $attributes['autoplaySpeed'] )
 			: '3';
 	}
+	$fbks_wrapper_attributes['data-loop'] = ! empty( $attributes['loopSlides'] ) ? 'true' : 'false';
 
 	// Downloads
 	if ( ! empty( $attributes['enableDownload'] ) ) {
@@ -40,8 +41,6 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 	}
 }
 
-$fbks_loop = isset( $attributes['loopSlides'] ) ? $attributes['loopSlides'] : false;
-
 $fbks_wrapper_attr_string = get_block_wrapper_attributes( $fbks_wrapper_attributes );
 $fbks_controls_background_color = ! empty( $attributes['controlsBackgroundColor'] )
 	? $attributes['controlsBackgroundColor']
@@ -51,7 +50,7 @@ $fbks_controls_icon_color = ! empty( $attributes['controlsIconColor'] )
 	: '#ffffff';
 ?>
 <div <?php echo wp_kses( $fbks_wrapper_attr_string, [ 'div' => [] ] ); ?>>
-	<div class="pb-carousel-gallery" data-loop="<?php echo $fbks_loop ? 'true' : 'false'; ?>">
+	<div class="pb-carousel-gallery">
 		<?php echo wp_kses( $content, fbks_get_allowed_post_html_with_svg() ); ?>
 	</div>
 

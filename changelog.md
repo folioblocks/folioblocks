@@ -6,18 +6,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.4.0] - Unreleased
 ### Added
+- Added Dark and Light appearance options for image lightboxes, with per-image overrides able to inherit future gallery appearance changes.
+- Added combined Image Title, Image Caption, and EXIF Data display options for image lightboxes.
+- Added optional WooCommerce and Page/URL link icons when thumbnail linking is enabled.
 - Added a Pro-only fullscreen button to Image Block lightboxes, positioned at the bottom right and available with the `F` keyboard shortcut.
 - Added a Pro-only, permission-aware per-image action for syncing Image Block titles, captions, and alternative text to the WordPress Media Library, with loading, success, and error feedback.
+- Added Pro-only per-image click and hover overrides for Grid, Justified, Masonry, Carousel, and Modular gallery Image Blocks, including effective-action destination controls for WooCommerce products, custom URLs, and Page/Post links.
+- Added shared Gallery Click Settings, Gallery Click Styles, Gallery Hover Settings, and per-image click and hover overrides to Filmstrip Gallery.
+- Added Image Block lightbox support to Filmstrip Gallery, including scoped Filmstrip image navigation, inherited and per-image lightbox appearance/content settings, and EXIF display.
+- Added Filmstrip Lightbox-to-fullscreen handoff, with the Lightbox fullscreen control hidden when Filmstrip fullscreen is disabled.
+- Added optional seamless front-end looping to Carousel Gallery, with the first image centered beside the preceding last image and continuous arrow, keyboard, swipe, and autoplay navigation.
 
 ### Changed
+- Moved Pro Lazy Load and Disable Right-Click controls from individual block settings into a conditional FolioBlocks panel in the editor Page & Post settings.
+- Moved gallery, Image Block, and Video Block transforms into FolioBlocks Pro.
 - Moved per-image gallery filtering categories into the WordPress 7.0 Content inspector while preserving their Settings inspector location on older WordPress versions.
 - Renamed the per-image filtering panel to Gallery Filtering Categories.
 - Restyled Image Block EXIF metadata as a compact read-only card with clearer spacing and visual separation from editable image metadata.
 - Updated WooCommerce Product Info lightbox and hover-overlay content so images without linked products display no fallback caption or title.
 - Updated Filmstrip Gallery editor previews and front-end hover overlays to follow the same no-fallback Product Info behavior.
+- Reworked Filmstrip Gallery editor and front-end main-image markup to use the shared Image Block media and overlay structure, keeping overlays and action controls aligned to the displayed image.
+- Updated Filmstrip Gallery front-end image switching to resolve effective gallery or per-image click actions, destinations, icon styles, hover overlays, and Lightbox settings.
+- Updated Filmstrip fullscreen mode to quietly inherit the active image's effective Lightbox Dark or Light appearance when Lightbox is enabled.
 
 ### Fixed
 - Fixed an Image Block editor crash when changing gallery overlay content from EXIF Data to Product Info.
+- Fixed the Filmstrip Gallery `useSelect` capabilities warning caused by unstable selector return values.
+- Fixed Filmstrip Gallery horizontal-image overlays extending beyond the displayed image in the editor and front end.
+- Fixed Filmstrip Gallery per-image hover overrides not rendering on the front end.
+- Fixed Filmstrip Gallery WooCommerce-linked images rendering at a different size than their overlay wrapper.
+- Fixed Filmstrip Gallery action controls and links retaining stale WooCommerce, download, Custom URL, or Page/Post behavior when switching images.
 
 ## [1.3.1] - 2026-06-03
 ### Added

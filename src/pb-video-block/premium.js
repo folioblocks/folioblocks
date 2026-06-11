@@ -18,6 +18,9 @@ import CompactColorControl, {
 	CompactTwoColorControl,
 } from '../pb-helpers/CompactColorControl.js';
 import '../pb-helpers/applyThumbnails';
+import { enableVideoTransforms } from '../pb-helpers/galleryTransforms';
+
+enableVideoTransforms( 'folioblocks/pb-video-block' );
 
 const sanitizeExternalUrl = (url) => {
 	if (typeof url !== 'string' || url.trim() === '') {

@@ -128,6 +128,18 @@ if (function_exists('fbks_fs')) {
                 );
 
                 wp_enqueue_script('folioblocks-shared-data');
+
+                if (fbks_fs()->can_use_premium_code__premium_only()) {
+                    $page_settings_path = FBKS_PLUGIN_DIR . 'includes/js/page-media-settings.js';
+                    wp_enqueue_script(
+                        'folioblocks-page-media-settings',
+                        FBKS_PLUGIN_URL . 'includes/js/page-media-settings.js',
+                        array('wp-components', 'wp-core-data', 'wp-data', 'wp-editor', 'wp-element', 'wp-hooks', 'wp-i18n', 'wp-plugins'),
+                        file_exists($page_settings_path) ? filemtime($page_settings_path) : FBKS_VERSION,
+                        true
+                    );
+                    wp_set_script_translations('folioblocks-page-media-settings', 'folioblocks');
+                }
             });
         }
 
@@ -183,6 +195,162 @@ if (function_exists('fbks_fs')) {
         }
     }
     add_action('init', 'fbks_block_init');
+
+    function fbks_register_page_media_settings_meta()
+    {
+        $post_types = get_post_types(array('show_in_rest' => true), 'names');
+        $meta_args = array(
+            'type'              => 'boolean',
+            'single'            => true,
+            'default'           => false,
+            'show_in_rest'      => true,
+            'sanitize_callback' => 'rest_sanitize_boolean',
+            'auth_callback'     => function () {
+                return current_user_can('edit_posts');
+            },
+        );
+
+        foreach ($post_types as $post_type) {
+            register_post_meta($post_type, 'fbksLazyLoad', $meta_args);
+            register_post_meta($post_type, 'fbksDisableRightClick', $meta_args);
+        }
+    }
+    add_action('init', 'fbks_register_page_media_settings_meta');
+
+    function fbks_apply_page_media_settings_to_blocks($parsed_block)
+    {
+        if (! fbks_fs()->can_use_premium_code__premium_only()) {
+            return $parsed_block;
+        }
+
+        $post_id = get_the_ID();
+        if (! $post_id || empty($parsed_block['blockName'])) {
+            return $parsed_block;
+        }
+
+        $lazy_load_blocks = array(
+            'folioblocks/before-after-block',
+            'folioblocks/carousel-gallery-block',
+            'folioblocks/filmstrip-gallery-block',
+            'folioblocks/grid-gallery-block',
+            'folioblocks/justified-gallery-block',
+            'folioblocks/masonry-gallery-block',
+            'folioblocks/modular-gallery-block',
+            'folioblocks/pb-image-block',
+            'folioblocks/pb-video-block',
+            'folioblocks/video-gallery-block',
+        );
+        $right_click_blocks = array(
+            'folioblocks/background-video-block',
+            'folioblocks/before-after-block',
+            'folioblocks/carousel-gallery-block',
+            'folioblocks/filmstrip-gallery-block',
+            'folioblocks/grid-gallery-block',
+            'folioblocks/justified-gallery-block',
+            'folioblocks/masonry-gallery-block',
+            'folioblocks/modular-gallery-block',
+            'folioblocks/pb-image-block',
+            'folioblocks/pb-loupe-block',
+            'folioblocks/pb-video-block',
+            'folioblocks/video-gallery-block',
+        );
+
+        if (
+            in_array($parsed_block['blockName'], $lazy_load_blocks, true) &&
+            metadata_exists('post', $post_id, 'fbksLazyLoad')
+        ) {
+            $parsed_block['attrs']['lazyLoad'] = (bool) get_post_meta($post_id, 'fbksLazyLoad', true);
+        }
+
+        if (
+            in_array($parsed_block['blockName'], $right_click_blocks, true) &&
+            metadata_exists('post', $post_id, 'fbksDisableRightClick')
+        ) {
+            $parsed_block['attrs']['disableRightClick'] = (bool) get_post_meta($post_id, 'fbksDisableRightClick', true);
+        }
+
+        return $parsed_block;
+    }
+    add_filter('render_block_data', 'fbks_apply_page_media_settings_to_blocks');
+
+    function fbks_enforce_page_media_settings_on_rendered_blocks($block_content, $block)
+    {
+        if (
+            ! fbks_fs()->can_use_premium_code__premium_only() ||
+            empty($block['blockName']) ||
+            '' === $block_content
+        ) {
+            return $block_content;
+        }
+
+        $post_id = get_the_ID();
+        if (! $post_id) {
+            return $block_content;
+        }
+
+        $lazy_load_blocks = array(
+            'folioblocks/before-after-block',
+            'folioblocks/carousel-gallery-block',
+            'folioblocks/filmstrip-gallery-block',
+            'folioblocks/grid-gallery-block',
+            'folioblocks/justified-gallery-block',
+            'folioblocks/masonry-gallery-block',
+            'folioblocks/modular-gallery-block',
+            'folioblocks/pb-image-block',
+            'folioblocks/pb-video-block',
+            'folioblocks/video-gallery-block',
+        );
+        $right_click_blocks = array(
+            'folioblocks/background-video-block',
+            'folioblocks/before-after-block',
+            'folioblocks/carousel-gallery-block',
+            'folioblocks/filmstrip-gallery-block',
+            'folioblocks/grid-gallery-block',
+            'folioblocks/justified-gallery-block',
+            'folioblocks/masonry-gallery-block',
+            'folioblocks/modular-gallery-block',
+            'folioblocks/pb-image-block',
+            'folioblocks/pb-loupe-block',
+            'folioblocks/pb-video-block',
+            'folioblocks/video-gallery-block',
+        );
+
+        if (
+            in_array($block['blockName'], $lazy_load_blocks, true) &&
+            metadata_exists('post', $post_id, 'fbksLazyLoad')
+        ) {
+            $lazy_load = (bool) get_post_meta($post_id, 'fbksLazyLoad', true);
+            $block_content = str_replace(
+                $lazy_load ? 'loading="eager"' : 'loading="lazy"',
+                $lazy_load ? 'loading="lazy"' : 'loading="eager"',
+                $block_content
+            );
+            $block_content = str_replace(
+                $lazy_load ? '"lazyLoad":false' : '"lazyLoad":true',
+                $lazy_load ? '"lazyLoad":true' : '"lazyLoad":false',
+                $block_content
+            );
+        }
+
+        if (
+            in_array($block['blockName'], $right_click_blocks, true) &&
+            metadata_exists('post', $post_id, 'fbksDisableRightClick') &&
+            class_exists('WP_HTML_Tag_Processor')
+        ) {
+            $processor = new WP_HTML_Tag_Processor($block_content);
+            if ($processor->next_tag()) {
+                if ((bool) get_post_meta($post_id, 'fbksDisableRightClick', true)) {
+                    $processor->set_attribute('data-disable-right-click', 'true');
+                } else {
+                    $processor->remove_attribute('data-disable-right-click');
+                }
+                $block_content = $processor->get_updated_html();
+            }
+        }
+
+        return $block_content;
+    }
+    add_filter('render_block', 'fbks_enforce_page_media_settings_on_rendered_blocks', 10, 2);
 
     // Filter to load block assets on demand.
     add_filter('should_load_block_assets_on_demand', '__return_true');

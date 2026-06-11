@@ -1,6 +1,11 @@
 import { __ } from '@wordpress/i18n';
 import { addFilter, applyFilters } from '@wordpress/hooks';
-import { SelectControl, ToggleControl } from '@wordpress/components';
+import {
+	SelectControl,
+	ToggleControl,
+	ToggleGroupControl,
+	ToggleGroupControlOption,
+} from '@wordpress/components';
 
 const getLightboxContent = ( attributes ) => {
 	if ( attributes.lightboxContent ) {
@@ -20,8 +25,12 @@ const LightboxContentControl = ( {
 	attributes,
 	setAttributes,
 	showProductInfoOption = false,
+	showAppearanceControl = true,
 } ) => {
 	const value = getLightboxContent( attributes );
+	const canUseToggleGroup =
+		typeof ToggleGroupControl === 'function' &&
+		typeof ToggleGroupControlOption === 'function';
 	const options = [
 		{
 			label: __( 'None', 'folioblocks' ),
@@ -39,6 +48,25 @@ const LightboxContentControl = ( {
 			label: __( 'Show EXIF Data', 'folioblocks' ),
 			value: 'exif',
 		},
+		{
+			label: __( 'Show Image Title & EXIF Data', 'folioblocks' ),
+			value: 'title_exif',
+		},
+		{
+			label: __( 'Show Image Caption & EXIF Data', 'folioblocks' ),
+			value: 'caption_exif',
+		},
+		{
+			label: __( 'Show Image Title & Caption', 'folioblocks' ),
+			value: 'title_caption',
+		},
+		{
+			label: __(
+				'Show Image Title, Caption, & EXIF Data',
+				'folioblocks'
+			),
+			value: 'title_caption_exif',
+		},
 	];
 
 	if ( showProductInfoOption ) {
@@ -50,6 +78,53 @@ const LightboxContentControl = ( {
 
 	return (
 		<>
+			{ showAppearanceControl && (
+				canUseToggleGroup ? (
+					<ToggleGroupControl
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+						value={ attributes.lightboxTheme || 'dark' }
+						isBlock
+						label={ __( 'Lightbox Appearance', 'folioblocks' ) }
+						help={ __(
+							'Choose a dark or light lightbox background.',
+							'folioblocks'
+						) }
+						onChange={ ( lightboxTheme ) => {
+							if ( lightboxTheme ) {
+								setAttributes( { lightboxTheme } );
+							}
+						} }
+					>
+						<ToggleGroupControlOption
+							label={ __( 'Dark', 'folioblocks' ) }
+							value="dark"
+						/>
+						<ToggleGroupControlOption
+							label={ __( 'Light', 'folioblocks' ) }
+							value="light"
+						/>
+					</ToggleGroupControl>
+				) : (
+					<SelectControl
+						label={ __( 'Lightbox Appearance', 'folioblocks' ) }
+						value={ attributes.lightboxTheme || 'dark' }
+						options={ [
+							{ label: __( 'Dark', 'folioblocks' ), value: 'dark' },
+							{ label: __( 'Light', 'folioblocks' ), value: 'light' },
+						] }
+						onChange={ ( lightboxTheme ) =>
+							setAttributes( { lightboxTheme } )
+						}
+						__nextHasNoMarginBottom
+						__next40pxDefaultSize
+						help={ __(
+							'Choose a dark or light lightbox background.',
+							'folioblocks'
+						) }
+					/>
+				)
+			) }
 			<SelectControl
 				label={ __( 'Lightbox Content', 'folioblocks' ) }
 				value={
@@ -72,7 +147,12 @@ const LightboxContentControl = ( {
 					'folioblocks'
 				) }
 			/>
-			{ value === 'exif' && (
+			{ [
+				'exif',
+				'title_exif',
+				'caption_exif',
+				'title_caption_exif',
+			].includes( value ) && (
 				<ToggleControl
 					label={ __( 'Hide Unknown EXIF Fields', 'folioblocks' ) }
 					checked={ !! attributes.hideUnknownExifFields }
@@ -123,6 +203,22 @@ const LinkTargetControls = ( {
 					const nextAttributes = { imageClickTarget: value };
 					if ( value === 'thumbnail' ) {
 						nextAttributes.lightbox = false;
+						if ( isCustomOrPage ) {
+							nextAttributes.linkIconDisplay = 'none';
+						}
+						if ( imageClickAction === 'woocommerce' ) {
+							nextAttributes.wooCartIconDisplay = 'none';
+						}
+					} else {
+						if ( isCustomOrPage && linkIconDisplay === 'none' ) {
+							nextAttributes.linkIconDisplay = 'hover';
+						}
+						if (
+							imageClickAction === 'woocommerce' &&
+							attributes.wooCartIconDisplay === 'none'
+						) {
+							nextAttributes.wooCartIconDisplay = 'hover';
+						}
 					}
 					setAttributes( nextAttributes );
 				} }
@@ -140,14 +236,17 @@ const LinkTargetControls = ( {
 						  )
 				}
 			/>
-			{ imageClickTarget === 'icon' &&
-				( showIconDisplayControls || showLightboxControls ) && (
+			{ ( showIconDisplayControls || showLightboxControls ) && (
 				<>
 					{ showIconDisplayControls && (
 						<SelectControl
 							label={ __( 'Display Link Target Icon', 'folioblocks' ) }
 							value={ linkIconDisplay }
 							options={ [
+								{
+									label: __( 'None', 'folioblocks' ),
+									value: 'none',
+								},
 								{
 									label: __( 'On Hover', 'folioblocks' ),
 									value: 'hover',
@@ -168,7 +267,7 @@ const LinkTargetControls = ( {
 							) }
 						/>
 					) }
-					{ showLightboxControls && (
+					{ showLightboxControls && imageClickTarget === 'icon' && (
 						<ToggleControl
 							label={ __( 'Enable Lightbox', 'folioblocks' ) }
 							checked={ lightbox }
@@ -182,7 +281,9 @@ const LinkTargetControls = ( {
 							) }
 						/>
 					) }
-					{ showLightboxControls && lightbox && (
+					{ showLightboxControls &&
+						imageClickTarget === 'icon' &&
+						lightbox && (
 						<LightboxContentControl
 							attributes={ attributes }
 							setAttributes={ setAttributes }
@@ -205,6 +306,15 @@ export const registerImageClickActionPremiumControls = ( {
 		( options ) => {
 			const premiumOptions = [
 				...options,
+				...( supportsLightbox &&
+				! options.some( ( option ) => option.value === 'lightbox' )
+					? [
+							{
+								label: __( 'Open in Lightbox', 'folioblocks' ),
+								value: 'lightbox',
+							},
+					  ]
+					: [] ),
 				{
 					label: __( 'Enable Image Downloads', 'folioblocks' ),
 					value: 'download',
@@ -269,7 +379,6 @@ export const registerImageClickActionPremiumControls = ( {
 							showIconDisplayControls: false,
 						}
 					) }
-					{ imageClickTarget === 'icon' && (
 					<SelectControl
 						label={ __(
 							'Display Image Download Icon',
@@ -380,7 +489,6 @@ export const registerImageClickActionPremiumControls = ( {
 							showIconDisplayControls: false,
 						}
 					) }
-					{ imageClickTarget === 'icon' && (
 					<SelectControl
 						label={ __(
 							'Display Add to Cart Icon',
@@ -388,6 +496,10 @@ export const registerImageClickActionPremiumControls = ( {
 						) }
 						value={ wooCartIconDisplay }
 						options={ [
+							{
+								label: __( 'None', 'folioblocks' ),
+								value: 'none',
+							},
 							{
 								label: __( 'On Hover', 'folioblocks' ),
 								value: 'hover',
@@ -407,7 +519,6 @@ export const registerImageClickActionPremiumControls = ( {
 							'folioblocks'
 						) }
 					/>
-					) }
 					{ supportsLightbox && imageClickTarget === 'icon' && (
 					<ToggleControl
 						label={ __( 'Enable Lightbox', 'folioblocks' ) }
@@ -446,6 +557,7 @@ export const registerImageClickActionPremiumControls = ( {
 					attributes={ attributes }
 					setAttributes={ setAttributes }
 					showProductInfoOption={ !! enableWooCommerce }
+					showAppearanceControl={ supportsLightbox }
 				/>
 			);
 		}

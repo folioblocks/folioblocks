@@ -45,6 +45,22 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		const mainPanel = galleryRoot.querySelector(
 			'.pb-filmstrip-gallery-main'
 		);
+		const mainMedia = galleryRoot.querySelector(
+			'.pb-filmstrip-gallery-main-media'
+		);
+		const syncMainMediaRatio = () => {
+			if (
+				mainMedia &&
+				mainImage.naturalWidth > 0 &&
+				mainImage.naturalHeight > 0
+			) {
+				mainMedia.style.setProperty(
+					'--pb-filmstrip-image-ratio',
+					String( mainImage.naturalWidth / mainImage.naturalHeight )
+				);
+			}
+		};
+		mainImage.addEventListener( 'load', syncMainMediaRatio );
 		const mainImageLink = galleryRoot.querySelector(
 			'.pb-filmstrip-gallery-main-link'
 		);
@@ -169,24 +185,76 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			} else {
 				mainImage.removeAttribute( 'sizes' );
 			}
-			mainImage.className = `pb-filmstrip-gallery-main-image${
+			mainImage.className = `pb-filmstrip-gallery-main-image pb-image-block-img${
 				image.imgClass ? ` ${ image.imgClass }` : ''
 			}`;
 			mainImage.setAttribute(
 				'data-image-id',
 				String( Number( image.id || 0 ) )
 			);
+			if ( mainMedia ) {
+				const width = Number( image.width || 0 );
+				const height = Number( image.height || 0 );
+				mainMedia.style.setProperty(
+					'--pb-filmstrip-image-ratio',
+					String( width > 0 && height > 0 ? width / height : 1 )
+				);
+			}
 
 			mainImage.alt =
 				image.alt || image.title || 'Selected gallery image';
 			mainImage.loading = settings.lazyLoad ? 'lazy' : 'eager';
 			if ( mainImageLink ) {
-				const imageClickAction = settings.imageClickAction || '';
-				const imageClickTarget = settings.imageClickTarget || 'icon';
-				let linkUrl = image.linkUrl || '';
-				let linkTarget = image.linkTarget || '';
+				const clickSettings = image.overrideGalleryClickSettings
+					? image
+					: settings;
+				let imageClickAction = clickSettings.imageClickAction || '';
+				if ( ! imageClickAction && clickSettings.enableDownload ) {
+					imageClickAction = 'download';
+				} else if (
+					! imageClickAction &&
+					clickSettings.enableWooCommerce
+				) {
+					imageClickAction = 'woocommerce';
+				}
+				const imageClickTarget =
+					clickSettings.imageClickTarget || 'icon';
+				let linkUrl = image.overrideGalleryClickSettings
+					? ''
+					: image.linkUrl || '';
+				let linkTarget = image.overrideGalleryClickSettings
+					? ''
+					: image.linkTarget || '';
 				let linkClass = 'pb-filmstrip-gallery-main-link';
 				let linkDownload = false;
+
+				if ( image.overrideGalleryClickSettings ) {
+					if ( imageClickAction === 'media_file' ) {
+						linkUrl = image.fullSrc || image.src || '';
+					} else if ( imageClickAction === 'custom_url' ) {
+						linkUrl = image.customUrl || '';
+						linkTarget = image.customUrlOpenInNewTab
+							? '_blank'
+							: '';
+					} else if ( imageClickAction === 'page_post' ) {
+						linkUrl = image.linkedPostUrl || '';
+						linkTarget = image.linkedPostOpenInNewTab
+							? '_blank'
+							: '';
+					}
+				}
+				if (
+					! (
+						imageClickAction === 'media_file' ||
+						( imageClickTarget === 'thumbnail' &&
+							[ 'custom_url', 'page_post' ].includes(
+								imageClickAction
+							) )
+					)
+				) {
+					linkUrl = '';
+					linkTarget = '';
+				}
 
 				if (
 					imageClickAction === 'download' &&
@@ -197,11 +265,16 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				} else if (
 					imageClickAction === 'woocommerce' &&
 					imageClickTarget === 'thumbnail' &&
-					settings.enableWooCommerce &&
+					clickSettings.enableWooCommerce &&
 					Number( image.wooProductId || 0 ) > 0
 				) {
+					const configuredAction =
+						image.wooLinkActionRaw &&
+						image.wooLinkActionRaw !== 'inherit'
+							? image.wooLinkActionRaw
+							: clickSettings.wooDefaultLinkAction;
 					const action =
-						image.wooLinkAction === 'product'
+						configuredAction === 'product'
 							? 'product'
 							: 'add_to_cart';
 					if ( action === 'product' && image.wooProductUrl ) {
@@ -245,11 +318,11 @@ document.addEventListener( 'DOMContentLoaded', () => {
 					mainImageLink.removeAttribute( 'download' );
 				}
 
-				if (
-					!(
+					if (
+						! (
 						imageClickAction === 'woocommerce' &&
 						imageClickTarget === 'thumbnail' &&
-						settings.enableWooCommerce &&
+						clickSettings.enableWooCommerce &&
 						Number( image.wooProductId || 0 ) > 0
 					)
 				) {

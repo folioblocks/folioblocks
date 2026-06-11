@@ -6,21 +6,30 @@ import { __ } from '@wordpress/i18n';
 import { addFilter } from '@wordpress/hooks';
 import { useEffect, useRef } from '@wordpress/element';
 import {
-	PanelBody,
 	ToggleControl,
 	SelectControl,
 	RangeControl,
 	ToggleGroupControl,
 	ToggleGroupControlOption,
 } from '@wordpress/components';
-import { CompactTwoColorControl } from '../pb-helpers/CompactColorControl';
 import { registerImageClickActionPremiumControls } from '../pb-helpers/imageClickActionPremiumControls';
+import { registerImageClickStylePremiumControls } from '../pb-helpers/imageClickStylePremiumControls';
+import { registerImageHoverActionPremiumControls } from '../pb-helpers/imageHoverActionPremiumControls';
 import { registerListViewThumbnailEnhancements } from '../pb-helpers/listViewThumbnailEnhancements';
+import { enableGalleryTransforms } from '../pb-helpers/galleryTransforms';
 import {
 	registerDisableRightClickPremiumControl,
 	registerLazyLoadPremiumControl,
 	registerRandomizeOrderPremiumControl,
 } from '../pb-helpers/simplePremiumControls';
+
+enableGalleryTransforms( 'folioblocks/filmstrip-gallery-block' );
+
+registerImageHoverActionPremiumControls( {
+	hookPrefix: 'folioBlocks.filmstripGallery',
+	namespace: 'folioblocks/filmstrip-gallery',
+	stylePanelLabel: __( 'Gallery Hover Styles', 'folioblocks' ),
+} );
 
 const shuffleBlocks = ( blocks ) => {
 	const shuffled = [ ...blocks ];
@@ -252,93 +261,15 @@ addFilter(
 	}
 );
 
-addFilter(
-	'folioBlocks.filmstripGallery.onHoverTitleToggle',
-	'folioblocks/filmstrip-gallery-premium-title-toggle',
-	( defaultContent, props ) => {
-		const { attributes, setAttributes } = props;
-		const { onHoverTitle, enableWooCommerce, wooProductPriceOnHover } = attributes;
-		const overlayContent =
-			attributes.overlayContent ||
-			( wooProductPriceOnHover ? 'product' : 'title' );
-			const overlayContentOptions = [
-				{
-					label: __( 'Show Image Title', 'folioblocks' ),
-					value: 'title',
-				},
-				{
-					label: __( 'Show Image Caption', 'folioblocks' ),
-					value: 'caption',
-				},
-				{
-					label: __( 'Show EXIF Data', 'folioblocks' ),
-					value: 'exif',
-				},
-			];
-
-		if ( enableWooCommerce ) {
-			overlayContentOptions.push( {
-				label: __( 'Show Product Info', 'folioblocks' ),
-				value: 'product',
-			} );
-		}
-
-		return (
-			<>
-				<ToggleControl
-					label={ __( 'Show Overlay on Hover', 'folioblocks' ) }
-					help={
-						enableWooCommerce
-							? __(
-									'Display image title, image caption, or product info when hovering over images.',
-									'folioblocks'
-							  )
-								: __(
-										'Display image title, image caption, or EXIF data when hovering over images.',
-										'folioblocks'
-								  )
-					}
-					__nextHasNoMarginBottom
-					checked={ !! attributes.onHoverTitle }
-					onChange={ ( value ) =>
-						setAttributes( { onHoverTitle: value } )
-					}
-				/>
-
-				{ onHoverTitle && (
-					<SelectControl
-						label={ __( 'Overlay Content', 'folioblocks' ) }
-						value={
-							enableWooCommerce || overlayContent !== 'product'
-								? overlayContent
-								: 'title'
-						}
-						options={ overlayContentOptions }
-						onChange={ ( val ) => {
-							// Ensure hover info is enabled, then switch mode
-							setAttributes( {
-								onHoverTitle: true,
-								overlayContent: val,
-								wooProductPriceOnHover: val === 'product',
-							} );
-						} }
-						__nextHasNoMarginBottom
-						__next40pxDefaultSize
-						help={ __(
-							'Choose what appears when hovering over images.',
-							'folioblocks'
-						) }
-					/>
-				) }
-			</>
-		);
-	}
-);
-
 registerImageClickActionPremiumControls( {
 	hookPrefix: 'folioBlocks.filmstripGallery',
 	namespace: 'folioblocks/filmstrip-gallery',
-	supportsLightbox: false,
+	supportsLightbox: true,
+} );
+
+registerImageClickStylePremiumControls( {
+	hookPrefix: 'folioBlocks.filmstripGallery',
+	namespace: 'folioblocks/filmstrip-gallery',
 } );
 
 registerRandomizeOrderPremiumControl( {
@@ -356,91 +287,3 @@ registerLazyLoadPremiumControl( {
 	hookPrefix: 'folioBlocks.filmstripGallery',
 	namespace: 'folioblocks/filmstrip-gallery',
 } );
-
-
-
-
-addFilter(
-	'folioBlocks.filmstripGallery.iconStyleControls',
-	'folioblocks/filmstrip-gallery-icon-style-controls',
-	( Original, { attributes, setAttributes } ) => {
-		const isIconTarget = ( attributes.imageClickTarget || 'icon' ) === 'icon';
-		const enableDownload = !! attributes.enableDownload && isIconTarget;
-		const enableWooCommerce = !! attributes.enableWooCommerce && isIconTarget;
-		const enableLinkIcon =
-			( attributes.imageClickAction === 'custom_url' ||
-				attributes.imageClickAction === 'page_post' ) &&
-			isIconTarget;
-
-		if ( ! enableDownload && ! enableWooCommerce && ! enableLinkIcon ) {
-			return null;
-		}
-
-		return (
-			<PanelBody
-				title={ __( 'Gallery Click Styles', 'folioblocks' ) }
-				initialOpen={ true }
-			>
-				{ enableDownload && (
-					<>
-						<CompactTwoColorControl
-							label={ __( 'Download Icon', 'folioblocks' ) }
-							value={ {
-								first: attributes.downloadIconColor,
-								second: attributes.downloadIconBgColor,
-							} }
-							onChange={ ( next ) =>
-								setAttributes( {
-									downloadIconColor: next?.first || '',
-									downloadIconBgColor: next?.second || '',
-								} )
-							}
-							firstLabel={ __( 'Icon', 'folioblocks' ) }
-							secondLabel={ __( 'Background', 'folioblocks' ) }
-						/>
-					</>
-				) }
-
-				{ enableWooCommerce && (
-					<>
-						<CompactTwoColorControl
-							label={ __( 'Add to Cart Icon', 'folioblocks' ) }
-							value={ {
-								first: attributes.cartIconColor,
-								second: attributes.cartIconBgColor,
-							} }
-							onChange={ ( next ) =>
-								setAttributes( {
-									cartIconColor: next?.first || '',
-									cartIconBgColor: next?.second || '',
-								} )
-							}
-							firstLabel={ __( 'Icon', 'folioblocks' ) }
-							secondLabel={ __( 'Background', 'folioblocks' ) }
-						/>
-					</>
-				) }
-
-				{ enableLinkIcon && (
-					<>
-						<CompactTwoColorControl
-							label={ __( 'Link Target Icon', 'folioblocks' ) }
-							value={ {
-								first: attributes.linkIconColor,
-								second: attributes.linkIconBgColor,
-							} }
-							onChange={ ( next ) =>
-								setAttributes( {
-									linkIconColor: next?.first || '',
-									linkIconBgColor: next?.second || '',
-								} )
-							}
-							firstLabel={ __( 'Icon', 'folioblocks' ) }
-							secondLabel={ __( 'Background', 'folioblocks' ) }
-						/>
-					</>
-				) }
-			</PanelBody>
-		);
-	}
-);

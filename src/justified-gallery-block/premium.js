@@ -15,11 +15,15 @@ import { registerImageClickStylePremiumControls } from '../pb-helpers/imageClick
 import { registerImageHoverActionPremiumControls } from '../pb-helpers/imageHoverActionPremiumControls';
 import { registerFilteringPremiumControls } from '../pb-helpers/filteringPremiumControls';
 import { registerListViewThumbnailEnhancements } from '../pb-helpers/listViewThumbnailEnhancements';
+import { enableGalleryTransforms } from '../pb-helpers/galleryTransforms';
 import {
 	registerDisableRightClickPremiumControl,
 	registerLazyLoadPremiumControl,
 	registerRandomizeOrderPremiumControl,
 } from '../pb-helpers/simplePremiumControls';
+
+enableGalleryTransforms( 'folioblocks/justified-gallery-block' );
+
 registerListViewThumbnailEnhancements( {
 	hookPrefix: 'folioBlocks.justifiedGallery',
 	namespace: 'folioblocks/justified-gallery',

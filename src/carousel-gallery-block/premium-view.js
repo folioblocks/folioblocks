@@ -36,6 +36,10 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		} // Nothing else to do if autoplay is off
 
 		const autoplaySpeed = Number( block.dataset.autoplaySpeed ) || 3;
+		const carousel = gallery.__pbCarousel;
+		if ( ! carousel ) {
+			return;
+		}
 		// NOTE: dataset can be missing/incorrect depending on how the controls are rendered.
 		// Treat "controls visible" as the source of truth.
 		const showControlsFromDataset = block.dataset.showControls === 'true';
@@ -44,55 +48,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			!! block.querySelector( '.pb-carousel-play-button' );
 		const showControls = showControlsFromDataset || hasControlsMarkup;
 
-		// Slides + index helpers (independent of base view.js scope)
-		let slides = gallery.querySelectorAll( '.pb-carousel-gallery > *' );
-		let currentSlide = 0;
 		let intervalId = null;
-
-		// Compute nearest centered slide (sync after user scroll or autoplay)
-		const syncCurrentIndex = () => {
-			slides = gallery.querySelectorAll( '.pb-carousel-gallery > *' );
-			if ( ! slides.length ) {
-				return;
-			}
-			const scrollCenter = gallery.scrollLeft + gallery.clientWidth / 2;
-			let nearestIndex = 0;
-			let nearestDistance = Infinity;
-			slides.forEach( ( slide, index ) => {
-				const slideCenter = slide.offsetLeft + slide.clientWidth / 2;
-				const distance = Math.abs( scrollCenter - slideCenter );
-				if ( distance < nearestDistance ) {
-					nearestDistance = distance;
-					nearestIndex = index;
-				}
-			} );
-			currentSlide = nearestIndex;
-		};
-
-		// Center on a given index
-		const scrollToSlide = ( index, opts = { smooth: true } ) => {
-			slides = gallery.querySelectorAll( '.pb-carousel-gallery > *' );
-			const target = slides && slides[ index ];
-			if ( ! target ) {
-				return;
-			}
-
-			// Center target within the gallery viewport
-			const desiredCenterLeft =
-				target.offsetLeft -
-				( gallery.clientWidth - target.clientWidth ) / 2;
-			const left = Math.max(
-				0,
-				Math.floor(
-					Number.isFinite( desiredCenterLeft ) ? desiredCenterLeft : 0
-				)
-			);
-			gallery.scrollTo( {
-				left,
-				behavior: opts.smooth ? 'smooth' : 'auto',
-			} );
-			currentSlide = index;
-		};
 
 		// Icons and play/pause button(s) (controls markup can vary)
 		// We support either:
@@ -137,8 +93,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				const readyObserver = new MutationObserver( () => {
 					if ( gallery.classList.contains( 'pb-carousel-ready' ) ) {
 						readyObserver.disconnect();
-						// sync index once before starting
-						syncCurrentIndex();
+						carousel.syncCurrentIndex();
 						startAutoplay();
 					}
 				} );
@@ -151,19 +106,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 			updateIcons( true );
 			intervalId = setInterval( () => {
-				// Advance to next or stop at end
-				slides = gallery.querySelectorAll( '.pb-carousel-gallery > *' );
-				if ( ! slides.length ) {
-					return;
-				}
-
-				if ( currentSlide < slides.length - 1 ) {
-					scrollToSlide( currentSlide + 1 );
-					// ensure index stays accurate after smooth scroll completes
-					setTimeout( () => {
-						syncCurrentIndex();
-					}, 150 );
-				} else {
+				if ( ! carousel.next() ) {
 					clearInterval( intervalId );
 					intervalId = null;
 					updateIcons( false );
@@ -230,8 +173,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			// No controls visible: auto-start once the base script marks the gallery ready
 			const maybeStart = () => {
 				if ( gallery.classList.contains( 'pb-carousel-ready' ) ) {
-					// sync index once before starting
-					syncCurrentIndex();
+					carousel.syncCurrentIndex();
 					startAutoplay();
 					observer.disconnect();
 				}
@@ -249,13 +191,9 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		let t;
 		gallery.addEventListener( 'scroll', () => {
 			clearTimeout( t );
-			t = setTimeout( syncCurrentIndex, 100 );
+			t = setTimeout( carousel.syncCurrentIndex, 100 );
 		} );
 
-		// Defensive: refresh slides on resize (DOM widths change)
-		window.addEventListener( 'resize', () => {
-			slides = gallery.querySelectorAll( '.pb-carousel-gallery > *' );
-			syncCurrentIndex();
-		} );
+		window.addEventListener( 'resize', carousel.syncCurrentIndex );
 	} );
 } );

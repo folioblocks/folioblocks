@@ -36,6 +36,10 @@ $fbks_download_icon_style = '';
 $fbks_cart_icon_style = '';
 $fbks_link_icon_style = '';
 $fbks_overlay_content = 'title';
+$fbks_hover_variant_class = '';
+$fbks_hover_style = '';
+$fbks_hide_unknown_exif = ! empty( $attributes['hideUnknownExifFields'] );
+$fbks_woo_active = false;
 $fbks_is_custom_icon_color = static function ( $fbks_value, $fbks_default ) {
 	if ( ! is_string( $fbks_value ) || '' === trim( $fbks_value ) ) {
 		return false;
@@ -54,7 +58,7 @@ if ( $fbks_can_use_premium ) {
 	$fbks_image_click_target = isset( $attributes['imageClickTarget'] ) && in_array( $attributes['imageClickTarget'], [ 'icon', 'thumbnail' ], true )
 		? $attributes['imageClickTarget']
 		: 'icon';
-	$fbks_link_icon_display = isset( $attributes['linkIconDisplay'] ) && in_array( $attributes['linkIconDisplay'], [ 'hover', 'always' ], true )
+	$fbks_link_icon_display = isset( $attributes['linkIconDisplay'] ) && in_array( $attributes['linkIconDisplay'], [ 'none', 'hover', 'always' ], true )
 		? $attributes['linkIconDisplay']
 		: 'hover';
 	$fbks_autoplay = ! empty( $attributes['autoplay'] );
@@ -75,7 +79,7 @@ if ( $fbks_can_use_premium ) {
 	$fbks_enable_download = ! empty( $attributes['enableDownload'] ) && ! $fbks_enable_woo;
 	$fbks_download_on_hover = isset( $attributes['downloadOnHover'] ) ? (bool) $attributes['downloadOnHover'] : true;
 
-	$fbks_woo_cart_icon_display = isset( $attributes['wooCartIconDisplay'] ) && in_array( $attributes['wooCartIconDisplay'], [ 'hover', 'always' ], true )
+	$fbks_woo_cart_icon_display = isset( $attributes['wooCartIconDisplay'] ) && in_array( $attributes['wooCartIconDisplay'], [ 'none', 'hover', 'always' ], true )
 		? $attributes['wooCartIconDisplay']
 		: 'hover';
 	$fbks_woo_default_link_action = isset( $attributes['wooDefaultLinkAction'] ) && in_array( $attributes['wooDefaultLinkAction'], [ 'add_to_cart', 'product' ], true )
@@ -87,6 +91,24 @@ if ( $fbks_can_use_premium ) {
 		? $attributes['overlayContent']
 		: ( $fbks_woo_hover_info ? 'product' : 'title' );
 	$fbks_on_hover_title = ! empty( $attributes['onHoverTitle'] );
+	$fbks_hover_class_map = [
+		'blur-overlay'   => 'pb-hover-blur-overlay',
+		'fade-overlay'   => 'pb-hover-fade-overlay',
+		'gradient-bottom' => 'pb-hover-gradient-bottom',
+		'chip'            => 'pb-hover-chip',
+		'color-overlay'   => 'pb-hover-color-overlay',
+	];
+	$fbks_on_hover_style = isset( $attributes['onHoverStyle'] ) && isset( $fbks_hover_class_map[ $attributes['onHoverStyle'] ] )
+		? $attributes['onHoverStyle']
+		: 'blur-overlay';
+	$fbks_hover_variant_class = $fbks_hover_class_map[ $fbks_on_hover_style ];
+	if ( 'color-overlay' === $fbks_on_hover_style ) {
+		$fbks_hover_style .= '--pb-overlay-bg:' . (string) ( $attributes['overlayBgColor'] ?? '#f9f9f9' ) . ';';
+		$fbks_hover_style .= '--pb-overlay-color:' . (string) ( $attributes['overlayTextColor'] ?? '#000000' ) . ';';
+	} elseif ( 'chip' === $fbks_on_hover_style ) {
+		$fbks_hover_style .= '--pb-chip-overlay-bg:' . (string) ( $attributes['chipOverlayBgColor'] ?? '#f9f9f9' ) . ';';
+		$fbks_hover_style .= '--pb-chip-overlay-color:' . (string) ( $attributes['chipOverlayTextColor'] ?? '#000000' ) . ';';
+	}
 	$fbks_lazy_load = ! empty( $attributes['lazyLoad'] );
 	$fbks_disable_right_click = ! empty( $attributes['disableRightClick'] );
 
@@ -150,13 +172,13 @@ $fbks_get_srcset = static function ( $fbks_image_id, $fbks_size_slug ) {
 			'aspect-ratio' => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.5 5.5h-13c-1.1 0-2 .9-2 2v9c0 1.1.9 2 2 2h13c1.1 0 2-.9 2-2v-9c0-1.1-.9-2-2-2zm.5 11c0 .3-.2.5-.5.5h-13c-.3 0-.5-.2-.5-.5v-9c0-.3.2-.5.5-.5h13c.3 0 .5.2.5.5v9zM6.5 12H8v-2h2V8.5H6.5V12zm9.5 2h-2v1.5h3.5V12H16v2z"/></svg>',
 			'time'         => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3c-5 0-9 4-9 9s4 9 9 9 9-4 9-9-4-9-9-9zm0 16.5c-4.1 0-7.5-3.4-7.5-7.5S7.9 4.5 12 4.5s7.5 3.4 7.5 7.5-3.4 7.5-7.5 7.5zM12 7l-1 5c0 .3.2.6.4.8l4.2 2.8-2.7-4.1L12 7z"/></svg>',
 			'aperture'     => '<svg viewBox="-16 -16 495 495" aria-hidden="true" focusable="false"><path fill="currentColor" d="M395.195,67.805C351.47,24.08,293.335,0,231.5,0S111.529,24.08,67.805,67.805S0,169.664,0,231.5S24.08,351.47,67.805,395.195S169.664,463,231.5,463s119.971-24.08,163.695-67.805S463,293.335,463,231.5S438.919,111.529,395.195,67.805z M443.392,186.803c-0.321,0.232-0.631,0.484-0.92,0.772l-79.886,79.886V59.168c7.689,5.873,15.045,12.285,22.002,19.243C414.732,108.555,434.877,146.025,443.392,186.803z M188.262,347.586l-72.848-72.848v-94.2l65.124-65.124h94.2l72.848,72.848v94.201l-65.124,65.124H188.262z M347.586,48.671v118.378L198.094,17.557C209.049,15.871,220.207,15,231.5,15C273.258,15,313.208,26.748,347.586,48.671z M78.411,78.411c28.553-28.552,63.68-48.134,101.964-57.36l79.362,79.362H59.168C65.042,92.725,71.454,85.369,78.411,78.411z M48.67,115.414h110.654L16.613,258.126C15.544,249.358,15,240.471,15,231.5C15,189.741,26.748,149.791,48.67,115.414z M19.607,276.196c0.321-0.232,0.631-0.484,0.92-0.772l79.886-79.886v208.294c-7.688-5.873-15.045-12.285-22.002-19.243C48.268,354.445,28.123,316.974,19.607,276.196z M115.414,414.329V295.951l149.491,149.491C253.951,447.129,242.792,448,231.5,448C189.741,448,149.791,436.252,115.414,414.329z M384.588,384.588c-28.553,28.552-63.68,48.134-101.965,57.36l-79.362-79.362h200.569C397.958,370.275,391.546,377.631,384.588,384.588z M414.329,347.586H303.675l142.712-142.712c1.068,8.767,1.613,17.655,1.613,26.626C448,273.258,436.252,313.208,414.329,347.586z"/></svg>',
-			'iso'          => '<span class="pb-filmstrip-gallery-exif-icon__iso">ISO</span>',
+			'iso'          => '<span class="pb-hover-exif-icon__iso">ISO</span>',
 		];
 
 		return $fbks_icons[ $fbks_icon_name ] ?? '';
 	};
 
-	$fbks_get_overlay_exif = static function ( $fbks_image ) use ( $fbks_get_exif_icon ) {
+	$fbks_get_overlay_exif = static function ( $fbks_image, $fbks_hide_unknown = false ) use ( $fbks_get_exif_icon ) {
 		$fbks_unknown = __( 'Unknown', 'folioblocks' );
 		$fbks_fields = [
 			[ 'icon' => 'camera', 'value' => $fbks_image['exifCamera'] ?? '' ],
@@ -166,14 +188,17 @@ $fbks_get_srcset = static function ( $fbks_image_id, $fbks_size_slug ) {
 			[ 'icon' => 'iso', 'value' => $fbks_image['exifIso'] ?? '' ],
 		];
 
-		$fbks_output = '<div class="pb-filmstrip-gallery-exif">';
+		$fbks_output = '<div class="pb-hover-exif">';
 		foreach ( $fbks_fields as $fbks_field ) {
+			if ( $fbks_hide_unknown && ( ! is_string( $fbks_field['value'] ) || '' === trim( $fbks_field['value'] ) ) ) {
+				continue;
+			}
 			$fbks_value = is_string( $fbks_field['value'] ) && '' !== trim( $fbks_field['value'] )
 				? trim( $fbks_field['value'] )
 				: $fbks_unknown;
-			$fbks_output .= '<span class="pb-filmstrip-gallery-exif__item">';
-			$fbks_output .= '<span class="pb-filmstrip-gallery-exif__icon">' . $fbks_get_exif_icon( $fbks_field['icon'] ) . '</span>';
-			$fbks_output .= '<span class="pb-filmstrip-gallery-exif__value">' . esc_html( $fbks_value ) . '</span>';
+			$fbks_output .= '<span class="pb-hover-exif__item">';
+			$fbks_output .= '<span class="pb-hover-exif__icon">' . $fbks_get_exif_icon( $fbks_field['icon'] ) . '</span>';
+			$fbks_output .= '<span class="pb-hover-exif__value">' . esc_html( $fbks_value ) . '</span>';
 			$fbks_output .= '</span>';
 		}
 		$fbks_output .= '</div>';
@@ -287,6 +312,8 @@ if ( is_array( $fbks_inner_blocks ) && ! empty( $fbks_inner_blocks ) ) {
 
 		$fbks_images[] = [
 			'id'              => $fbks_image_id,
+			'width'           => isset( $fbks_image_attrs['width'] ) ? (int) $fbks_image_attrs['width'] : 0,
+			'height'          => isset( $fbks_image_attrs['height'] ) ? (int) $fbks_image_attrs['height'] : 0,
 			'src'             => esc_url( $fbks_main_src ),
 			'srcSet'          => $fbks_main_srcset,
 			'sizes'           => $fbks_main_sizes_attr,
@@ -303,8 +330,40 @@ if ( is_array( $fbks_inner_blocks ) && ! empty( $fbks_inner_blocks ) ) {
 			'wooProductId'    => $fbks_woo_product_id,
 			'wooProductName'  => $fbks_woo_product_name,
 				'wooProductPrice' => $fbks_woo_product_price,
-				'wooProductUrl'   => esc_url( $fbks_woo_product_url ),
-				'wooLinkAction'   => $fbks_woo_link_action,
+			'wooProductUrl'   => esc_url( $fbks_woo_product_url ),
+			'wooLinkAction'   => $fbks_woo_link_action,
+			'wooLinkActionRaw' => $fbks_woo_link_attr ?? 'inherit',
+			'overrideGalleryHoverSettings' => ! empty( $fbks_image_attrs['overrideGalleryHoverSettings'] ),
+			'onHoverTitle'     => ! empty( $fbks_image_attrs['showTitleOnHover'] ) || ! empty( $fbks_image_attrs['hoverTitle'] ) || ! empty( $fbks_image_attrs['onHoverTitle'] ),
+			'onHoverStyle'     => isset( $fbks_image_attrs['onHoverStyle'] ) ? (string) $fbks_image_attrs['onHoverStyle'] : 'blur-overlay',
+			'overlayContent'   => isset( $fbks_image_attrs['overlayContent'] ) ? (string) $fbks_image_attrs['overlayContent'] : 'title',
+			'overlayBgColor'   => isset( $fbks_image_attrs['overlayBgColor'] ) ? (string) $fbks_image_attrs['overlayBgColor'] : '#f9f9f9',
+			'overlayTextColor' => isset( $fbks_image_attrs['overlayTextColor'] ) ? (string) $fbks_image_attrs['overlayTextColor'] : '#000000',
+			'chipOverlayBgColor' => isset( $fbks_image_attrs['chipOverlayBgColor'] ) ? (string) $fbks_image_attrs['chipOverlayBgColor'] : '#f9f9f9',
+			'chipOverlayTextColor' => isset( $fbks_image_attrs['chipOverlayTextColor'] ) ? (string) $fbks_image_attrs['chipOverlayTextColor'] : '#000000',
+			'hideUnknownExifFields' => ! empty( $fbks_image_attrs['hideUnknownExifFields'] ),
+			'enableWooCommerce' => ! empty( $fbks_image_attrs['enableWooCommerce'] ),
+			'imageClickAction' => isset( $fbks_image_attrs['imageClickAction'] ) ? (string) $fbks_image_attrs['imageClickAction'] : '',
+			'overrideGalleryClickSettings' => ! empty( $fbks_image_attrs['overrideGalleryClickSettings'] ),
+			'imageClickTarget' => isset( $fbks_image_attrs['imageClickTarget'] ) ? (string) $fbks_image_attrs['imageClickTarget'] : 'icon',
+			'enableDownload'   => ! empty( $fbks_image_attrs['enableDownload'] ),
+			'downloadOnHover'  => isset( $fbks_image_attrs['downloadOnHover'] ) ? (bool) $fbks_image_attrs['downloadOnHover'] : true,
+			'downloadIconColor' => isset( $fbks_image_attrs['downloadIconColor'] ) ? (string) $fbks_image_attrs['downloadIconColor'] : '',
+			'downloadIconBgColor' => isset( $fbks_image_attrs['downloadIconBgColor'] ) ? (string) $fbks_image_attrs['downloadIconBgColor'] : '',
+			'wooCartIconDisplay' => isset( $fbks_image_attrs['wooCartIconDisplay'] ) ? (string) $fbks_image_attrs['wooCartIconDisplay'] : 'hover',
+			'cartIconColor'    => isset( $fbks_image_attrs['cartIconColor'] ) ? (string) $fbks_image_attrs['cartIconColor'] : '',
+			'cartIconBgColor'  => isset( $fbks_image_attrs['cartIconBgColor'] ) ? (string) $fbks_image_attrs['cartIconBgColor'] : '',
+			'wooDefaultLinkAction' => isset( $fbks_image_attrs['wooDefaultLinkAction'] ) ? (string) $fbks_image_attrs['wooDefaultLinkAction'] : 'add_to_cart',
+			'linkIconDisplay'  => isset( $fbks_image_attrs['linkIconDisplay'] ) ? (string) $fbks_image_attrs['linkIconDisplay'] : 'hover',
+			'linkIconColor'    => isset( $fbks_image_attrs['linkIconColor'] ) ? (string) $fbks_image_attrs['linkIconColor'] : '',
+			'linkIconBgColor'  => isset( $fbks_image_attrs['linkIconBgColor'] ) ? (string) $fbks_image_attrs['linkIconBgColor'] : '',
+			'customUrl'        => isset( $fbks_image_attrs['customUrl'] ) ? (string) $fbks_image_attrs['customUrl'] : '',
+			'customUrlOpenInNewTab' => ! empty( $fbks_image_attrs['customUrlOpenInNewTab'] ),
+			'linkedPostUrl'    => isset( $fbks_image_attrs['linkedPostUrl'] ) ? (string) $fbks_image_attrs['linkedPostUrl'] : '',
+			'linkedPostOpenInNewTab' => ! empty( $fbks_image_attrs['linkedPostOpenInNewTab'] ),
+			'lightbox'         => ! empty( $fbks_image_attrs['lightbox'] ) || ! empty( $fbks_image_attrs['enableLightbox'] ),
+			'lightboxTheme'    => isset( $fbks_image_attrs['lightboxTheme'] ) ? (string) $fbks_image_attrs['lightboxTheme'] : 'inherit',
+			'lightboxContent'  => isset( $fbks_image_attrs['lightboxContent'] ) ? (string) $fbks_image_attrs['lightboxContent'] : '',
 				'exifCamera'      => isset( $fbks_image_attrs['exifCamera'] ) ? (string) $fbks_image_attrs['exifCamera'] : '',
 				'exifFocalLength' => isset( $fbks_image_attrs['exifFocalLength'] ) ? (string) $fbks_image_attrs['exifFocalLength'] : '',
 				'exifShutterSpeed' => isset( $fbks_image_attrs['exifShutterSpeed'] ) ? (string) $fbks_image_attrs['exifShutterSpeed'] : '',
@@ -347,6 +406,8 @@ if ( empty( $fbks_images ) && ! empty( $attributes['images'] ) && is_array( $att
 		}
 		$fbks_images[] = [
 			'id'              => isset( $fbks_image['id'] ) ? (int) $fbks_image['id'] : 0,
+			'width'           => isset( $fbks_image['width'] ) ? (int) $fbks_image['width'] : 0,
+			'height'          => isset( $fbks_image['height'] ) ? (int) $fbks_image['height'] : 0,
 			'src'             => esc_url( $fbks_src ),
 			'srcSet'          => '',
 			'sizes'           => '',
@@ -364,7 +425,39 @@ if ( empty( $fbks_images ) && ! empty( $attributes['images'] ) && is_array( $att
 			'wooProductName'  => '',
 				'wooProductPrice' => '',
 				'wooProductUrl'   => '',
-				'wooLinkAction'   => $fbks_woo_default_link_action,
+			'wooLinkAction'   => $fbks_woo_default_link_action,
+			'wooLinkActionRaw' => isset( $fbks_image['wooLinkAction'] ) ? (string) $fbks_image['wooLinkAction'] : 'inherit',
+			'overrideGalleryHoverSettings' => ! empty( $fbks_image['overrideGalleryHoverSettings'] ),
+			'onHoverTitle'     => ! empty( $fbks_image['showTitleOnHover'] ) || ! empty( $fbks_image['hoverTitle'] ) || ! empty( $fbks_image['onHoverTitle'] ),
+			'onHoverStyle'     => isset( $fbks_image['onHoverStyle'] ) ? (string) $fbks_image['onHoverStyle'] : 'blur-overlay',
+			'overlayContent'   => isset( $fbks_image['overlayContent'] ) ? (string) $fbks_image['overlayContent'] : 'title',
+			'overlayBgColor'   => isset( $fbks_image['overlayBgColor'] ) ? (string) $fbks_image['overlayBgColor'] : '#f9f9f9',
+			'overlayTextColor' => isset( $fbks_image['overlayTextColor'] ) ? (string) $fbks_image['overlayTextColor'] : '#000000',
+			'chipOverlayBgColor' => isset( $fbks_image['chipOverlayBgColor'] ) ? (string) $fbks_image['chipOverlayBgColor'] : '#f9f9f9',
+			'chipOverlayTextColor' => isset( $fbks_image['chipOverlayTextColor'] ) ? (string) $fbks_image['chipOverlayTextColor'] : '#000000',
+			'hideUnknownExifFields' => ! empty( $fbks_image['hideUnknownExifFields'] ),
+			'enableWooCommerce' => ! empty( $fbks_image['enableWooCommerce'] ),
+			'imageClickAction' => isset( $fbks_image['imageClickAction'] ) ? (string) $fbks_image['imageClickAction'] : '',
+			'overrideGalleryClickSettings' => ! empty( $fbks_image['overrideGalleryClickSettings'] ),
+			'imageClickTarget' => isset( $fbks_image['imageClickTarget'] ) ? (string) $fbks_image['imageClickTarget'] : 'icon',
+			'enableDownload'   => ! empty( $fbks_image['enableDownload'] ),
+			'downloadOnHover'  => isset( $fbks_image['downloadOnHover'] ) ? (bool) $fbks_image['downloadOnHover'] : true,
+			'downloadIconColor' => isset( $fbks_image['downloadIconColor'] ) ? (string) $fbks_image['downloadIconColor'] : '',
+			'downloadIconBgColor' => isset( $fbks_image['downloadIconBgColor'] ) ? (string) $fbks_image['downloadIconBgColor'] : '',
+			'wooCartIconDisplay' => isset( $fbks_image['wooCartIconDisplay'] ) ? (string) $fbks_image['wooCartIconDisplay'] : 'hover',
+			'cartIconColor'    => isset( $fbks_image['cartIconColor'] ) ? (string) $fbks_image['cartIconColor'] : '',
+			'cartIconBgColor'  => isset( $fbks_image['cartIconBgColor'] ) ? (string) $fbks_image['cartIconBgColor'] : '',
+			'wooDefaultLinkAction' => isset( $fbks_image['wooDefaultLinkAction'] ) ? (string) $fbks_image['wooDefaultLinkAction'] : 'add_to_cart',
+			'linkIconDisplay'  => isset( $fbks_image['linkIconDisplay'] ) ? (string) $fbks_image['linkIconDisplay'] : 'hover',
+			'linkIconColor'    => isset( $fbks_image['linkIconColor'] ) ? (string) $fbks_image['linkIconColor'] : '',
+			'linkIconBgColor'  => isset( $fbks_image['linkIconBgColor'] ) ? (string) $fbks_image['linkIconBgColor'] : '',
+			'customUrl'        => isset( $fbks_image['customUrl'] ) ? (string) $fbks_image['customUrl'] : '',
+			'customUrlOpenInNewTab' => ! empty( $fbks_image['customUrlOpenInNewTab'] ),
+			'linkedPostUrl'    => isset( $fbks_image['linkedPostUrl'] ) ? (string) $fbks_image['linkedPostUrl'] : '',
+			'linkedPostOpenInNewTab' => ! empty( $fbks_image['linkedPostOpenInNewTab'] ),
+			'lightbox'         => ! empty( $fbks_image['lightbox'] ) || ! empty( $fbks_image['enableLightbox'] ),
+			'lightboxTheme'    => isset( $fbks_image['lightboxTheme'] ) ? (string) $fbks_image['lightboxTheme'] : 'inherit',
+			'lightboxContent'  => isset( $fbks_image['lightboxContent'] ) ? (string) $fbks_image['lightboxContent'] : '',
 				'exifCamera'      => isset( $fbks_image['exifCamera'] ) ? (string) $fbks_image['exifCamera'] : '',
 				'exifFocalLength' => isset( $fbks_image['exifFocalLength'] ) ? (string) $fbks_image['exifFocalLength'] : '',
 				'exifShutterSpeed' => isset( $fbks_image['exifShutterSpeed'] ) ? (string) $fbks_image['exifShutterSpeed'] : '',
@@ -380,15 +473,89 @@ if ( $fbks_can_use_premium && $fbks_randomize_order && count( $fbks_images ) > 1
 
 $fbks_active_image = ! empty( $fbks_images ) ? $fbks_images[0] : null;
 $fbks_has_multiple_images = count( $fbks_images ) > 1;
+$fbks_effective_click_action = $fbks_image_click_action;
+$fbks_effective_click_target = $fbks_image_click_target;
+$fbks_effective_enable_download = $fbks_enable_download;
+$fbks_effective_download_on_hover = $fbks_download_on_hover;
+$fbks_effective_enable_woo = $fbks_enable_woo;
+$fbks_effective_woo_cart_icon_display = $fbks_woo_cart_icon_display;
+$fbks_effective_woo_default_link_action = $fbks_woo_default_link_action;
+$fbks_effective_link_icon_display = $fbks_link_icon_display;
+$fbks_effective_download_icon_style = $fbks_download_icon_style;
+$fbks_effective_cart_icon_style = $fbks_cart_icon_style;
+$fbks_effective_link_icon_style = $fbks_link_icon_style;
+if ( $fbks_can_use_premium && ! empty( $fbks_active_image['overrideGalleryClickSettings'] ) ) {
+	$fbks_effective_click_action = sanitize_key( $fbks_active_image['imageClickAction'] ?? '' );
+	$fbks_effective_click_target = in_array( $fbks_active_image['imageClickTarget'] ?? '', [ 'icon', 'thumbnail' ], true )
+		? $fbks_active_image['imageClickTarget']
+		: 'icon';
+	$fbks_effective_enable_woo = $fbks_woo_active && ! empty( $fbks_active_image['enableWooCommerce'] ) && 'woocommerce' === $fbks_effective_click_action;
+	$fbks_effective_enable_download = ! empty( $fbks_active_image['enableDownload'] ) && 'download' === $fbks_effective_click_action && ! $fbks_effective_enable_woo;
+	$fbks_effective_download_on_hover = isset( $fbks_active_image['downloadOnHover'] ) ? (bool) $fbks_active_image['downloadOnHover'] : true;
+	$fbks_effective_woo_cart_icon_display = in_array( $fbks_active_image['wooCartIconDisplay'] ?? '', [ 'none', 'hover', 'always' ], true ) ? $fbks_active_image['wooCartIconDisplay'] : 'hover';
+	$fbks_effective_woo_default_link_action = in_array( $fbks_active_image['wooDefaultLinkAction'] ?? '', [ 'add_to_cart', 'product' ], true ) ? $fbks_active_image['wooDefaultLinkAction'] : 'add_to_cart';
+	$fbks_effective_link_icon_display = in_array( $fbks_active_image['linkIconDisplay'] ?? '', [ 'none', 'hover', 'always' ], true ) ? $fbks_active_image['linkIconDisplay'] : 'hover';
+	$fbks_effective_download_icon_style = '';
+	$fbks_effective_cart_icon_style = '';
+	$fbks_effective_link_icon_style = '';
+	foreach (
+		[
+			[ 'downloadIconColor', '#000000', '--pb-download-icon-color:', 'download' ],
+			[ 'downloadIconBgColor', '#ffffff', '--pb-download-icon-bg:', 'download' ],
+			[ 'cartIconColor', '#000000', '--pb-cart-icon-color:', 'cart' ],
+			[ 'cartIconBgColor', '#ffffff', '--pb-cart-icon-bg:', 'cart' ],
+			[ 'linkIconColor', '#000000', '--pb-link-icon-color:', 'link' ],
+			[ 'linkIconBgColor', '#ffffff', '--pb-link-icon-bg:', 'link' ],
+		] as $fbks_icon_setting
+	) {
+		if ( $fbks_is_custom_icon_color( $fbks_active_image[ $fbks_icon_setting[0] ] ?? '', $fbks_icon_setting[1] ) ) {
+			$fbks_style_value = $fbks_icon_setting[2] . $fbks_active_image[ $fbks_icon_setting[0] ] . ';';
+			if ( 'download' === $fbks_icon_setting[3] ) {
+				$fbks_effective_download_icon_style .= $fbks_style_value;
+			} elseif ( 'cart' === $fbks_icon_setting[3] ) {
+				$fbks_effective_cart_icon_style .= $fbks_style_value;
+			} else {
+				$fbks_effective_link_icon_style .= $fbks_style_value;
+			}
+		}
+	}
+}
+$fbks_effective_on_hover_title = $fbks_on_hover_title;
+$fbks_effective_overlay_content = $fbks_overlay_content;
+$fbks_effective_hover_variant_class = $fbks_hover_variant_class;
+$fbks_effective_hover_style = $fbks_hover_style;
+$fbks_effective_hide_unknown_exif = $fbks_hide_unknown_exif;
+$fbks_effective_hover_woo = $fbks_enable_woo;
+if ( $fbks_can_use_premium && ! empty( $fbks_active_image['overrideGalleryHoverSettings'] ) ) {
+	$fbks_effective_on_hover_title = ! empty( $fbks_active_image['onHoverTitle'] );
+	$fbks_effective_overlay_content = isset( $fbks_active_image['overlayContent'] ) ? (string) $fbks_active_image['overlayContent'] : 'title';
+	$fbks_effective_hover_style_key = isset( $fbks_active_image['onHoverStyle'] ) ? (string) $fbks_active_image['onHoverStyle'] : 'blur-overlay';
+	$fbks_effective_hover_variant_class = $fbks_hover_class_map[ $fbks_effective_hover_style_key ] ?? 'pb-hover-blur-overlay';
+	$fbks_effective_hide_unknown_exif = ! empty( $fbks_active_image['hideUnknownExifFields'] );
+	$fbks_effective_hover_woo = $fbks_woo_active &&
+		! empty( $fbks_active_image['enableWooCommerce'] ) &&
+		( '' === (string) ( $fbks_active_image['imageClickAction'] ?? '' ) || 'woocommerce' === (string) $fbks_active_image['imageClickAction'] );
+	$fbks_effective_hover_style = '';
+	if ( 'color-overlay' === $fbks_effective_hover_style_key ) {
+		$fbks_effective_hover_style .= '--pb-overlay-bg:' . (string) ( $fbks_active_image['overlayBgColor'] ?? '#f9f9f9' ) . ';';
+		$fbks_effective_hover_style .= '--pb-overlay-color:' . (string) ( $fbks_active_image['overlayTextColor'] ?? '#000000' ) . ';';
+	} elseif ( 'chip' === $fbks_effective_hover_style_key ) {
+		$fbks_effective_hover_style .= '--pb-chip-overlay-bg:' . (string) ( $fbks_active_image['chipOverlayBgColor'] ?? '#f9f9f9' ) . ';';
+		$fbks_effective_hover_style .= '--pb-chip-overlay-color:' . (string) ( $fbks_active_image['chipOverlayTextColor'] ?? '#000000' ) . ';';
+	}
+}
+if ( 'product' === $fbks_effective_overlay_content && ! $fbks_effective_hover_woo ) {
+	$fbks_effective_overlay_content = 'title';
+}
 
 $fbks_overlay_html = '';
 if ( $fbks_can_use_premium ) {
-	if ( $fbks_on_hover_title && is_array( $fbks_active_image ) ) {
+	if ( $fbks_effective_on_hover_title && is_array( $fbks_active_image ) ) {
 		$fbks_has_hover_title = '' !== trim( (string) ( $fbks_active_image['title'] ?? '' ) );
 		$fbks_has_hover_caption = '' !== trim( wp_strip_all_tags( (string) ( $fbks_active_image['caption'] ?? '' ) ) );
 		$fbks_has_product = (int) ( $fbks_active_image['wooProductId'] ?? 0 ) > 0;
 
-		if ( $fbks_enable_woo && 'product' === $fbks_overlay_content && $fbks_has_product ) {
+		if ( $fbks_effective_hover_woo && 'product' === $fbks_effective_overlay_content && $fbks_has_product ) {
 			$fbks_product_name = (string) ( $fbks_active_image['wooProductName'] ?? '' );
 			$fbks_product_price = (string) ( $fbks_active_image['wooProductPrice'] ?? '' );
 
@@ -400,15 +567,15 @@ if ( $fbks_can_use_premium ) {
 			}
 		}
 
-			if ( '' === $fbks_overlay_html && 'caption' === $fbks_overlay_content && $fbks_has_hover_caption ) {
+			if ( '' === $fbks_overlay_html && 'caption' === $fbks_effective_overlay_content && $fbks_has_hover_caption ) {
 				$fbks_overlay_html = wp_kses_post( (string) $fbks_active_image['caption'] );
 			}
 
-			if ( '' === $fbks_overlay_html && 'exif' === $fbks_overlay_content ) {
-				$fbks_overlay_html = $fbks_get_overlay_exif( $fbks_active_image );
+			if ( '' === $fbks_overlay_html && 'exif' === $fbks_effective_overlay_content ) {
+				$fbks_overlay_html = $fbks_get_overlay_exif( $fbks_active_image, $fbks_effective_hide_unknown_exif );
 			}
 
-			if ( '' === $fbks_overlay_html && 'title' === $fbks_overlay_content && $fbks_has_hover_title ) {
+			if ( '' === $fbks_overlay_html && 'title' === $fbks_effective_overlay_content && $fbks_has_hover_title ) {
 				$fbks_overlay_html = esc_html( (string) $fbks_active_image['title'] );
 			}
 	}
@@ -436,10 +603,25 @@ $fbks_data_payload = [
 		'wooDefaultLinkAction'   => $fbks_woo_default_link_action,
 		'wooProductPriceOnHover' => $fbks_woo_hover_info,
 		'overlayContent'         => $fbks_overlay_content,
+		'hideUnknownExifFields' => $fbks_hide_unknown_exif,
+		'onHoverStyle'           => $attributes['onHoverStyle'] ?? 'blur-overlay',
+		'overlayBgColor'         => $attributes['overlayBgColor'] ?? '#f9f9f9',
+		'overlayTextColor'       => $attributes['overlayTextColor'] ?? '#000000',
+		'chipOverlayBgColor'     => $attributes['chipOverlayBgColor'] ?? '#f9f9f9',
+		'chipOverlayTextColor'   => $attributes['chipOverlayTextColor'] ?? '#000000',
 		'enableDownload'         => $fbks_enable_download,
 		'downloadOnHover'        => $fbks_download_on_hover,
+		'downloadIconColor'      => $attributes['downloadIconColor'] ?? '',
+		'downloadIconBgColor'    => $attributes['downloadIconBgColor'] ?? '',
+		'cartIconColor'          => $attributes['cartIconColor'] ?? '',
+		'cartIconBgColor'        => $attributes['cartIconBgColor'] ?? '',
+		'linkIconColor'          => $attributes['linkIconColor'] ?? '',
+		'linkIconBgColor'        => $attributes['linkIconBgColor'] ?? '',
 		'imageClickAction'       => $fbks_image_click_action,
 		'imageClickTarget'       => $fbks_image_click_target,
+		'lightbox'               => ! empty( $attributes['lightbox'] ),
+		'lightboxTheme'          => $attributes['lightboxTheme'] ?? 'dark',
+		'lightboxContent'        => $attributes['lightboxContent'] ?? '',
 		'linkIconDisplay'        => $fbks_link_icon_display,
 		'onHoverTitle'           => $fbks_on_hover_title,
 		'lazyLoad'               => $fbks_lazy_load,
@@ -521,25 +703,40 @@ if ( false === $fbks_data_json ) {
 							</button>
 						<?php endif; ?>
 					</div>
+					<?php endif; ?>
 				<?php endif; ?>
 
-				<?php if ( 'icon' === $fbks_image_click_target && $fbks_enable_woo && ! empty( $fbks_active_image ) ) : ?>
+				<?php $fbks_active_image_ratio = ! empty( $fbks_active_image['width'] ) && ! empty( $fbks_active_image['height'] ) ? (float) $fbks_active_image['width'] / (float) $fbks_active_image['height'] : 1; ?>
+				<div class="pb-filmstrip-gallery-main-media pb-image-block <?php echo esc_attr( $fbks_effective_on_hover_title ? $fbks_effective_hover_variant_class : '' ); ?>" style="--pb-filmstrip-image-ratio: <?php echo esc_attr( $fbks_active_image_ratio ); ?>;<?php echo esc_attr( $fbks_effective_hover_style ); ?>">
+				<?php if ( $fbks_can_use_premium ) : ?>
 					<?php
 					$fbks_active_product_id = (int) ( $fbks_active_image['wooProductId'] ?? 0 );
-					$fbks_active_woo_action = (string) ( $fbks_active_image['wooLinkAction'] ?? $fbks_woo_default_link_action );
+					$fbks_active_woo_action_raw = (string) ( $fbks_active_image['wooLinkActionRaw'] ?? 'inherit' );
+					$fbks_active_woo_action = in_array( $fbks_active_woo_action_raw, [ 'add_to_cart', 'product' ], true ) ? $fbks_active_woo_action_raw : $fbks_effective_woo_default_link_action;
 					$fbks_active_product_url = (string) ( $fbks_active_image['wooProductUrl'] ?? '' );
-					$fbks_show_cart_icon = $fbks_active_product_id > 0;
+					$fbks_show_cart_icon = 'woocommerce' === $fbks_effective_click_action && $fbks_effective_enable_woo && 'none' !== $fbks_effective_woo_cart_icon_display && $fbks_active_product_id > 0;
+					$fbks_show_download_icon = 'download' === $fbks_effective_click_action && 'icon' === $fbks_effective_click_target && $fbks_effective_enable_download;
+					$fbks_show_link_icon = in_array( $fbks_effective_click_action, [ 'custom_url', 'page_post' ], true ) && 'none' !== $fbks_effective_link_icon_display;
+					$fbks_active_icon_link_url = '';
+					$fbks_active_icon_link_target = '';
+					if ( 'custom_url' === $fbks_effective_click_action ) {
+						$fbks_active_icon_link_url = ! empty( $fbks_active_image['overrideGalleryClickSettings'] ) ? (string) ( $fbks_active_image['customUrl'] ?? '' ) : (string) ( $fbks_active_image['linkUrl'] ?? '' );
+						$fbks_active_icon_link_target = ! empty( $fbks_active_image['overrideGalleryClickSettings'] ) && ! empty( $fbks_active_image['customUrlOpenInNewTab'] ) ? '_blank' : (string) ( $fbks_active_image['linkTarget'] ?? '' );
+					} elseif ( 'page_post' === $fbks_effective_click_action ) {
+						$fbks_active_icon_link_url = ! empty( $fbks_active_image['overrideGalleryClickSettings'] ) ? (string) ( $fbks_active_image['linkedPostUrl'] ?? '' ) : (string) ( $fbks_active_image['linkUrl'] ?? '' );
+						$fbks_active_icon_link_target = ! empty( $fbks_active_image['overrideGalleryClickSettings'] ) && ! empty( $fbks_active_image['linkedPostOpenInNewTab'] ) ? '_blank' : (string) ( $fbks_active_image['linkTarget'] ?? '' );
+					}
 					?>
 					<button
 						type="button"
-						class="pb-add-to-cart-icon <?php echo 'hover' === $fbks_woo_cart_icon_display ? 'hover-only' : ''; ?>"
+						class="pb-add-to-cart-icon <?php echo 'hover' === $fbks_effective_woo_cart_icon_display ? 'hover-only' : ''; ?>"
 						data-woo-action="<?php echo esc_attr( $fbks_active_woo_action ); ?>"
 						data-product-id="<?php echo esc_attr( $fbks_active_product_id ); ?>"
 						<?php if ( '' !== $fbks_active_product_url ) : ?>
 							data-product-url="<?php echo esc_url( $fbks_active_product_url ); ?>"
 						<?php endif; ?>
-						<?php if ( '' !== $fbks_cart_icon_style ) : ?>
-							style="<?php echo esc_attr( $fbks_cart_icon_style ); ?>"
+						<?php if ( '' !== $fbks_effective_cart_icon_style ) : ?>
+							style="<?php echo esc_attr( $fbks_effective_cart_icon_style ); ?>"
 						<?php endif; ?>
 						<?php if ( ! $fbks_show_cart_icon ) : ?>
 							hidden
@@ -555,12 +752,12 @@ if ( false === $fbks_data_json ) {
 							</g>
 						</svg>
 					</button>
-				<?php elseif ( 'icon' === $fbks_image_click_target && $fbks_enable_download && ! empty( $fbks_active_image ) ) : ?>
 					<button
-						class="pb-image-block-download <?php echo $fbks_download_on_hover ? 'hover-only' : ''; ?>"
-						<?php if ( '' !== $fbks_download_icon_style ) : ?>
-							style="<?php echo esc_attr( $fbks_download_icon_style ); ?>"
+						class="pb-image-block-download <?php echo $fbks_effective_download_on_hover ? 'hover-only' : ''; ?>"
+						<?php if ( '' !== $fbks_effective_download_icon_style ) : ?>
+							style="<?php echo esc_attr( $fbks_effective_download_icon_style ); ?>"
 						<?php endif; ?>
+						<?php if ( ! $fbks_show_download_icon ) : ?>hidden<?php endif; ?>
 						aria-label="<?php esc_attr_e( 'Download Image', 'folioblocks' ); ?>"
 						data-full-src="<?php echo esc_url( (string) ( $fbks_active_image['fullSrc'] ?? '' ) ); ?>"
 					>
@@ -568,21 +765,19 @@ if ( false === $fbks_data_json ) {
 							<path d="M18 11.3l-1-1.1-4 4V3h-1.5v11.3L7 10.2l-1 1.1 6.2 5.8 5.8-5.8zm.5 3.7v3.5h-13V15H4v5h16v-5h-1.5z" fill="currentColor"></path>
 						</svg>
 					</button>
-				<?php elseif ( 'icon' === $fbks_image_click_target && in_array( $fbks_image_click_action, [ 'custom_url', 'page_post' ], true ) && ! empty( $fbks_active_image ) ) : ?>
-					<?php $fbks_active_icon_link_url = (string) ( $fbks_active_image['linkUrl'] ?? '' ); ?>
 					<a
-						class="pb-image-block-link-icon <?php echo 'hover' === $fbks_link_icon_display ? 'hover-only' : ''; ?>"
-						<?php if ( '' !== $fbks_active_icon_link_url ) : ?>
+						class="pb-image-block-link-icon <?php echo 'hover' === $fbks_effective_link_icon_display ? 'hover-only' : ''; ?>"
+						<?php if ( $fbks_show_link_icon && '' !== $fbks_active_icon_link_url ) : ?>
 							href="<?php echo esc_url( $fbks_active_icon_link_url ); ?>"
 						<?php else : ?>
 							hidden
 						<?php endif; ?>
-						<?php if ( '_blank' === (string) ( $fbks_active_image['linkTarget'] ?? '' ) ) : ?>
+						<?php if ( '_blank' === $fbks_active_icon_link_target ) : ?>
 							target="_blank"
 							rel="noopener noreferrer"
 						<?php endif; ?>
-						<?php if ( '' !== $fbks_link_icon_style ) : ?>
-							style="<?php echo esc_attr( $fbks_link_icon_style ); ?>"
+						<?php if ( '' !== $fbks_effective_link_icon_style ) : ?>
+							style="<?php echo esc_attr( $fbks_effective_link_icon_style ); ?>"
 						<?php endif; ?>
 						aria-label="<?php esc_attr_e( 'Open Link', 'folioblocks' ); ?>"
 					>
@@ -590,22 +785,35 @@ if ( false === $fbks_data_json ) {
 							<path d="M10 17.389H8.444A5.194 5.194 0 1 1 8.444 7H10v1.5H8.444a3.694 3.694 0 0 0 0 7.389H10v1.5ZM14 7h1.556a5.194 5.194 0 0 1 0 10.39H14v-1.5h1.556a3.694 3.694 0 0 0 0-7.39H14V7Zm-4.5 6h5v-1.5h-5V13Z"></path>
 						</svg>
 					</a>
-				<?php endif; ?>
 			<?php endif; ?>
 
 			<?php if ( ! empty( $fbks_active_image ) ) : ?>
-				<?php $fbks_active_link_url = (string) ( $fbks_active_image['linkUrl'] ?? '' ); ?>
-				<?php $fbks_active_link_target = (string) ( $fbks_active_image['linkTarget'] ?? '' ); ?>
+				<?php $fbks_active_link_url = ! empty( $fbks_active_image['overrideGalleryClickSettings'] ) ? '' : (string) ( $fbks_active_image['linkUrl'] ?? '' ); ?>
+				<?php $fbks_active_link_target = ! empty( $fbks_active_image['overrideGalleryClickSettings'] ) ? '' : (string) ( $fbks_active_image['linkTarget'] ?? '' ); ?>
 				<?php $fbks_active_link_class = 'pb-filmstrip-gallery-main-link'; ?>
 				<?php $fbks_active_link_attrs = ''; ?>
 				<?php $fbks_active_link_download = false; ?>
-				<?php if ( 'download' === $fbks_image_click_action && 'thumbnail' === $fbks_image_click_target && $fbks_enable_download ) : ?>
+				<?php if ( ! empty( $fbks_active_image['overrideGalleryClickSettings'] ) && 'media_file' === $fbks_effective_click_action ) : ?>
+					<?php $fbks_active_link_url = (string) ( $fbks_active_image['fullSrc'] ?? $fbks_active_image['src'] ?? '' ); ?>
+				<?php elseif ( ! empty( $fbks_active_image['overrideGalleryClickSettings'] ) && 'custom_url' === $fbks_effective_click_action ) : ?>
+					<?php $fbks_active_link_url = (string) ( $fbks_active_image['customUrl'] ?? '' ); ?>
+					<?php $fbks_active_link_target = ! empty( $fbks_active_image['customUrlOpenInNewTab'] ) ? '_blank' : ''; ?>
+				<?php elseif ( ! empty( $fbks_active_image['overrideGalleryClickSettings'] ) && 'page_post' === $fbks_effective_click_action ) : ?>
+					<?php $fbks_active_link_url = (string) ( $fbks_active_image['linkedPostUrl'] ?? '' ); ?>
+					<?php $fbks_active_link_target = ! empty( $fbks_active_image['linkedPostOpenInNewTab'] ) ? '_blank' : ''; ?>
+				<?php endif; ?>
+				<?php if ( 'media_file' !== $fbks_effective_click_action && ( 'thumbnail' !== $fbks_effective_click_target || ! in_array( $fbks_effective_click_action, [ 'custom_url', 'page_post' ], true ) ) ) : ?>
+					<?php $fbks_active_link_url = ''; ?>
+					<?php $fbks_active_link_target = ''; ?>
+				<?php endif; ?>
+				<?php if ( 'download' === $fbks_effective_click_action && 'thumbnail' === $fbks_effective_click_target && $fbks_effective_enable_download ) : ?>
 					<?php $fbks_active_link_url = (string) ( $fbks_active_image['fullSrc'] ?? $fbks_active_image['src'] ?? '' ); ?>
 					<?php $fbks_active_link_download = true; ?>
-				<?php elseif ( 'woocommerce' === $fbks_image_click_action && 'thumbnail' === $fbks_image_click_target && $fbks_enable_woo ) : ?>
+				<?php elseif ( 'woocommerce' === $fbks_effective_click_action && 'thumbnail' === $fbks_effective_click_target && $fbks_effective_enable_woo ) : ?>
 					<?php
 					$fbks_active_product_id = (int) ( $fbks_active_image['wooProductId'] ?? 0 );
-					$fbks_active_woo_action = (string) ( $fbks_active_image['wooLinkAction'] ?? $fbks_woo_default_link_action );
+					$fbks_active_woo_action_raw = (string) ( $fbks_active_image['wooLinkActionRaw'] ?? 'inherit' );
+					$fbks_active_woo_action = in_array( $fbks_active_woo_action_raw, [ 'add_to_cart', 'product' ], true ) ? $fbks_active_woo_action_raw : $fbks_effective_woo_default_link_action;
 					$fbks_active_product_url = (string) ( $fbks_active_image['wooProductUrl'] ?? '' );
 					if ( $fbks_active_product_id > 0 ) {
 						if ( 'product' === $fbks_active_woo_action && '' !== $fbks_active_product_url ) {
@@ -621,8 +829,6 @@ if ( false === $fbks_data_json ) {
 					}
 					?>
 				<?php endif; ?>
-				<?php $fbks_should_render_main_link = 'media_file' === $fbks_image_click_action || ( 'thumbnail' === $fbks_image_click_target && in_array( $fbks_image_click_action, [ 'custom_url', 'page_post', 'download', 'woocommerce' ], true ) ); ?>
-				<?php if ( $fbks_should_render_main_link ) : ?>
 					<a
 						class="<?php echo esc_attr( $fbks_active_link_class ); ?>"
 						<?php if ( '' !== $fbks_active_link_url ) : ?>
@@ -637,9 +843,8 @@ if ( false === $fbks_data_json ) {
 						<?php endif; ?>
 						<?php echo $fbks_active_link_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 					>
-				<?php endif; ?>
 					<img
-						class="pb-filmstrip-gallery-main-image <?php echo esc_attr( (string) ( $fbks_active_image['imgClass'] ?? '' ) ); ?>"
+						class="pb-filmstrip-gallery-main-image pb-image-block-img <?php echo esc_attr( (string) ( $fbks_active_image['imgClass'] ?? '' ) ); ?>"
 						src="<?php echo esc_url( (string) $fbks_active_image['src'] ); ?>"
 						<?php if ( ! empty( $fbks_active_image['srcSet'] ) ) : ?>
 							srcset="<?php echo esc_attr( (string) $fbks_active_image['srcSet'] ); ?>"
@@ -652,25 +857,24 @@ if ( false === $fbks_data_json ) {
 						loading="<?php echo $fbks_lazy_load ? 'lazy' : 'eager'; ?>"
 						decoding="async"
 					/>
-				<?php if ( $fbks_should_render_main_link ) : ?>
 					</a>
-				<?php endif; ?>
 				<div
-					class="pb-filmstrip-gallery-main-overlay-container"
+					class="pb-image-block-title-container"
 					<?php if ( '' === $fbks_overlay_html ) : ?>
 						style="display:none;"
 					<?php endif; ?>
 				>
-						<div class="pb-filmstrip-gallery-main-overlay">
+						<figcaption class="pb-image-block-title">
 							<?php echo $fbks_overlay_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Markup is assembled from escaped values above. ?>
-						</div>
+						</figcaption>
 				</div>
 			<?php else : ?>
-				<div class="pb-filmstrip-gallery-main-empty">
-					<?php esc_html_e( 'Select an image to preview it.', 'folioblocks' ); ?>
+					<div class="pb-filmstrip-gallery-main-empty">
+						<?php esc_html_e( 'Select an image to preview it.', 'folioblocks' ); ?>
+					</div>
+				<?php endif; ?>
 				</div>
-			<?php endif; ?>
-		</div>
+			</div>
 
 		<div class="pb-filmstrip-gallery-thumbnails-wrapper">
 			<?php if ( 'bottom' === $fbks_position && $fbks_has_multiple_images ) : ?>

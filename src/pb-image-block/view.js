@@ -33,8 +33,15 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		event.preventDefault();
 		event.stopPropagation();
 
+		const lightboxGroup = trigger.getAttribute( 'data-lightbox-group' );
 		const allImages = Array.from(
 			document.querySelectorAll( '.pb-image-block-lightbox' )
+		).filter(
+			( image ) =>
+				! image.hasAttribute( 'data-filmstrip-lightbox-disabled' ) &&
+				( ! lightboxGroup ||
+					image.getAttribute( 'data-lightbox-group' ) ===
+						lightboxGroup )
 		);
 		let currentIndex = allImages.indexOf( trigger );
 
@@ -142,8 +149,21 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 			const src = imageData.getAttribute( 'data-src' );
 			const caption = imageData.getAttribute( 'data-caption' );
+			const lightboxTheme =
+				imageData.getAttribute( 'data-lightbox-theme' ) === 'light'
+					? 'light'
+					: 'dark';
+			wrapper.classList.toggle(
+				'pb-image-lightbox--light',
+				lightboxTheme === 'light'
+			);
 
 			inner.innerHTML = '';
+			wrapper
+				.querySelectorAll(
+					'.lightbox-close, .lightbox-prev, .lightbox-next'
+				)
+				.forEach( ( control ) => control.remove() );
 
 			const close = document.createElement( 'button' );
 			close.className = 'lightbox-close';
@@ -170,7 +190,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				imageWrapper.appendChild( captionEl );
 			}
 
-			inner.appendChild( close );
+			wrapper.appendChild( close );
 			inner.appendChild( imageWrapper );
 			requestAnimationFrame( syncLightboxImageHeight );
 			if ( img.complete ) {
@@ -208,7 +228,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			}
 			document.dispatchEvent(
 				new CustomEvent( 'pbImageLightboxRendered', {
-					detail: { wrapper, inner },
+					detail: { wrapper, inner, trigger: imageData },
 				} )
 			);
 		}

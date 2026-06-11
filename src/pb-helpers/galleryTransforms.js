@@ -35,6 +35,11 @@ const CORE_GALLERY_ATTRS = new Set( [
 
 const DISABLED_TARGET_BLOCKS = [ 'core/group', 'core/columns', 'core/details' ];
 const TRANSFORM_PATCH_FLAG = '__fbksGalleryTransformPatched';
+const GALLERY_BLOCK_NAMES = new Set( [
+	...DEFAULT_GALLERY_BLOCKS,
+	'folioblocks/video-gallery-block',
+	'folioblocks/modular-gallery-block',
+] );
 let hasPatchedWrapperTransforms = false;
 let patchAttempts = 0;
 
@@ -71,6 +76,24 @@ const getSelectedImageSize = ( attributes = {}, sizes = {} ) =>
 	sizes.large ||
 	sizes.full ||
 	null;
+
+const hasGalleryParent = ( block ) => {
+	if ( ! block?.clientId ) {
+		return false;
+	}
+
+	const blockEditor = select( 'core/block-editor' );
+
+	if ( ! blockEditor ) {
+		return false;
+	}
+
+	const parentIds = blockEditor.getBlockParents( block.clientId, true ) || [];
+
+	return parentIds.some( ( parentId ) =>
+		GALLERY_BLOCK_NAMES.has( blockEditor.getBlockName( parentId ) )
+	);
+};
 
 const cloneInnerBlockTree = ( block ) =>
 	cloneBlock(
@@ -128,6 +151,20 @@ export const transformCoreImageToPbImage = ( attributes = {} ) => {
 		),
 		class: attributes.className || '',
 		...( getExifAttributesFromMedia( mediaRecord ) || {} ),
+	} );
+};
+
+const transformPbImageToCoreImage = ( attributes = {} ) => {
+	const normalizedSizes = normalizeImageSizes( attributes.sizes || {} );
+	const selectedSize = getSelectedImageSize( attributes, normalizedSizes );
+
+	return createBlock( 'core/image', {
+		id: attributes.id || undefined,
+		url: selectedSize?.url || attributes.src || '',
+		alt: attributes.alt || '',
+		caption: attributes.caption || '',
+		sizeSlug: attributes.imageSize || 'large',
+		className: attributes.class || undefined,
 	} );
 };
 
@@ -296,5 +333,99 @@ export const buildGalleryTransforms = (
 			},
 		],
 		to: [],
+	};
+};
+
+export const enableGalleryTransforms = ( blockName ) => {
+	const blockType = getBlockType( blockName );
+
+	if ( ! blockType ) {
+		return;
+	}
+
+	disableGalleryWrapperTransforms();
+	blockType.transforms = buildGalleryTransforms( blockName );
+};
+
+export const enableImageTransforms = ( blockName ) => {
+	const blockType = getBlockType( blockName );
+
+	if ( ! blockType ) {
+		return;
+	}
+
+	disableGalleryWrapperTransforms();
+	blockType.transforms = {
+		from: [
+			{
+				type: 'block',
+				blocks: [ 'core/image' ],
+				isMatch: ( attributes ) => Number( attributes?.id ) > 0,
+				transform: transformCoreImageToPbImage,
+			},
+		],
+		to: [
+			{
+				type: 'block',
+				blocks: [ 'core/image' ],
+				isMatch: ( attributes, block ) =>
+					Boolean( attributes?.src ) && ! hasGalleryParent( block ),
+				transform: transformPbImageToCoreImage,
+			},
+		],
+	};
+};
+
+const transformCoreVideoToPbVideo = ( blockName, attributes = {} ) =>
+	createBlock( blockName, {
+		videoUrl: attributes.src || '',
+		thumbnail: attributes.poster || '',
+		title: attributes.title || '',
+		description: attributes.caption || '',
+	} );
+
+const isSupportedVideoEmbed = ( attributes = {} ) => {
+	const providerSlug = ( attributes.providerNameSlug || '' ).toLowerCase();
+	const providerName = ( attributes.providerName || '' ).toLowerCase();
+	const url = ( attributes.url || '' ).toLowerCase();
+
+	return (
+		providerSlug === 'youtube' ||
+		providerSlug === 'vimeo' ||
+		providerName === 'youtube' ||
+		providerName === 'vimeo' ||
+		url.includes( 'youtube.com' ) ||
+		url.includes( 'youtu.be' ) ||
+		url.includes( 'vimeo.com' )
+	);
+};
+
+export const enableVideoTransforms = ( blockName ) => {
+	const blockType = getBlockType( blockName );
+
+	if ( ! blockType ) {
+		return;
+	}
+
+	blockType.transforms = {
+		from: [
+			{
+				type: 'block',
+				blocks: [ 'core/video' ],
+				isMatch: ( attributes ) => Boolean( attributes.src ),
+				transform: ( attributes ) =>
+					transformCoreVideoToPbVideo( blockName, attributes ),
+			},
+			{
+				type: 'block',
+				blocks: [ 'core/embed' ],
+				isMatch: isSupportedVideoEmbed,
+				transform: ( attributes ) =>
+					createBlock( blockName, {
+						videoUrl: attributes.url || '',
+						description: attributes.caption || '',
+					} ),
+			},
+		],
 	};
 };

@@ -58,12 +58,15 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	};
 
 	document.addEventListener( 'pbImageLightboxRendered', ( event ) => {
-		const { wrapper, inner } = event.detail || {};
+		const { wrapper } = event.detail || {};
 		if (
 			! wrapper ||
-			! inner ||
 			( ! wrapper.requestFullscreen && ! wrapper.webkitRequestFullscreen )
 		) {
+			return;
+		}
+		if ( wrapper.querySelector( '.lightbox-fullscreen' ) ) {
+			syncLightboxFullscreenButton();
 			return;
 		}
 
@@ -74,7 +77,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		button.addEventListener( 'click', () =>
 			toggleLightboxFullscreen( wrapper )
 		);
-		inner.appendChild( button );
+		wrapper.appendChild( button );
 		syncLightboxFullscreenButton();
 	} );
 
@@ -92,12 +95,15 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		}
 
 		const wrapper = document.querySelector( '.pb-image-lightbox' );
-		if ( ! wrapper?.querySelector( '.lightbox-fullscreen' ) ) {
+		const fullscreenButton = wrapper?.querySelector(
+			'.lightbox-fullscreen'
+		);
+		if ( ! fullscreenButton ) {
 			return;
 		}
 
 		event.preventDefault();
-		toggleLightboxFullscreen( wrapper );
+		fullscreenButton.click();
 	} );
 
 	document.addEventListener( 'pbImageLightboxClosing', ( event ) => {
@@ -150,9 +156,10 @@ const gallerySelectors = [
 	const getGalleryItems = ( gallery ) =>
 		Array.from( gallery.children ).filter(
 			( child ) =>
-				child.matches( '.pb-image-block-wrapper' ) ||
-				child.matches( '.wp-block-folioblocks-pb-image-block' ) ||
-				child.querySelector( '.pb-image-block-wrapper' )
+				! child.hasAttribute( 'data-pb-carousel-clone' ) &&
+				( child.matches( '.pb-image-block-wrapper' ) ||
+					child.matches( '.wp-block-folioblocks-pb-image-block' ) ||
+					child.querySelector( '.pb-image-block-wrapper' ) )
 		);
 
 	const shuffleItems = ( items ) => {

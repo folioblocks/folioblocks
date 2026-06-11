@@ -39,10 +39,10 @@ Core gallery features include:
 * Caption support and accessibility-friendly interactions
 * Drag-and-drop image ordering
 * 100% native Gutenberg block editing (no shortcodes, no separate gallery manager)
-* Block transforms to convert galleries in one click
 * WordPress 7.0 List View inspector support for gallery children
 
 Pro features include:
+* Block transforms to convert galleries and supported media blocks in one click
 * Custom image click actions for media files, custom URLs, Page/Post links, downloads, lightbox, and WooCommerce products
 * Gallery image filtering with per-image category assignment
 * WooCommerce product integration for images and videos
