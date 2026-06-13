@@ -9,6 +9,8 @@ import {
 	CheckboxControl,
 	SelectControl,
 	ToggleControl,
+	__experimentalToggleGroupControl as ToggleGroupControl,
+	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 	__experimentalToolsPanel as ToolsPanel,
 	__experimentalToolsPanelItem as ToolsPanelItem,
 } from '@wordpress/components';
@@ -20,7 +22,38 @@ import CompactColorControl, {
 import '../pb-helpers/applyThumbnails';
 import { enableVideoTransforms } from '../pb-helpers/galleryTransforms';
 
-enableVideoTransforms( 'folioblocks/pb-video-block' );
+enableVideoTransforms('folioblocks/pb-video-block');
+
+const DEFAULT_OVERLAY_BG_COLOR = '#f9f9f9';
+const DEFAULT_OVERLAY_TEXT_COLOR = '#000000';
+
+addFilter(
+	'folioBlocks.videoBlock.galleryHoverOverridesEnabled',
+	'folioblocks/video-block-premium-gallery-hover-overrides',
+	() => true
+);
+
+const LightboxThemeControl = ({ attributes, setAttributes }) => (
+	<ToggleGroupControl
+		label={__('Lightbox Appearance', 'folioblocks')}
+		value={attributes.lightboxTheme || 'dark'}
+		onChange={(lightboxTheme) => {
+			if (lightboxTheme) {
+				setAttributes({ lightboxTheme });
+			}
+		}}
+		isBlock
+		__nextHasNoMarginBottom
+		__next40pxDefaultSize
+		help={__(
+			'Choose a light or dark lightbox background.',
+			'folioblocks'
+		)}
+	>
+		<ToggleGroupControlOption label={__('Light', 'folioblocks')} value="light" />
+		<ToggleGroupControlOption label={__('Dark', 'folioblocks')} value="dark" />
+	</ToggleGroupControl>
+);
 
 const sanitizeExternalUrl = (url) => {
 	if (typeof url !== 'string' || url.trim() === '') {
@@ -57,6 +90,13 @@ const getAssignedFilterCategories = (attributes = {}) => {
 };
 
 addFilter(
+	'folioBlocks.videoBlock.lightboxTheme',
+	'folioblocks/video-block-premium-lightbox-theme',
+	(defaultContent, props) =>
+		props.isInsideGallery ? null : <LightboxThemeControl {...props} />
+);
+
+addFilter(
 	'folioBlocks.videoBlock.lightboxLayout',
 	'folioblocks/video-block-premium-lightbox-layout',
 	(defaultContent, props) => {
@@ -83,7 +123,7 @@ addFilter(
 
 		return (
 			<SelectControl
-				label={__('Lightbox Layout', 'folioblocks')}
+				label={__('Lightbox Content', 'folioblocks')}
 				value={attributes.lightboxLayout || 'video-only'}
 				options={options}
 				onChange={(value) =>
@@ -91,6 +131,10 @@ addFilter(
 				}
 				__nextHasNoMarginBottom
 				__next40pxDefaultSize
+				help={__(
+					'Choose what appears with the Video in the lightbox.',
+					'folioblocks'
+				)}
 			/>
 		);
 	}
@@ -100,20 +144,23 @@ addFilter(
 	'folioBlocks.videoBlock.customOverlayControls',
 	'folioblocks/video-block-premium-custom-overlay',
 	(defaultContent, props) => {
-		const { attributes, setAttributes, combinedVisibility } = props;
-
-		if (combinedVisibility !== 'onHover') {
-			return null;
-		}
+		const { attributes, setAttributes } = props;
 
 		return (
 			<>
 				<SelectControl
-					label={__('Overlay Style', 'folioblocks')}
+					label={__('Hover Style', 'folioblocks')}
 					value={attributes.overlayStyle || 'default'}
-					onChange={(value) =>
-						setAttributes({ overlayStyle: value })
-					}
+					onChange={(value) => {
+						const nextAttributes = { overlayStyle: value };
+						if (value === 'color') {
+							nextAttributes.overlayBgColor =
+								attributes.overlayBgColor || DEFAULT_OVERLAY_BG_COLOR;
+							nextAttributes.overlayTextColor =
+								attributes.overlayTextColor || DEFAULT_OVERLAY_TEXT_COLOR;
+						}
+						setAttributes(nextAttributes);
+					}}
 					options={[
 						{
 							label: __('Default Overlay', 'folioblocks'),
@@ -128,31 +175,75 @@ addFilter(
 							value: 'color',
 						},
 					]}
-					help={__(
-						'Choose the hover overlay style.',
-						'folioblocks'
-					)}
+					help={
+						(attributes.overlayStyle || 'default') === 'color'
+							? __(
+								'Displays the overlay content over custom overlay colors set in Styles panel.',
+								'folioblocks'
+							)
+							: __('Choose the hover overlay style.', 'folioblocks')
+					}
 					__nextHasNoMarginBottom
 					__next40pxDefaultSize
 				/>
-				{(attributes.overlayStyle || 'default') === 'color' && (
+			</>
+		);
+	}
+);
+
+addFilter(
+	'folioBlocks.videoBlock.hoverOverlayStyleControls',
+	'folioblocks/video-block-premium-hover-overlay-styles',
+	(defaultContent, { attributes, setAttributes, isInsideGallery }) => {
+		if (isInsideGallery || (attributes.overlayStyle || 'default') !== 'color') {
+			return null;
+		}
+
+		return (
+			<ToolsPanel
+				label={__('Gallery Hover Styles', 'folioblocks')}
+				resetAll={() =>
+					setAttributes({
+						overlayBgColor: DEFAULT_OVERLAY_BG_COLOR,
+						overlayTextColor: DEFAULT_OVERLAY_TEXT_COLOR,
+					})
+				}
+			>
+				<ToolsPanelItem
+					label={__('Overlay Colors', 'folioblocks')}
+					hasValue={() =>
+						(attributes.overlayBgColor || DEFAULT_OVERLAY_BG_COLOR) !==
+						DEFAULT_OVERLAY_BG_COLOR ||
+						(attributes.overlayTextColor || DEFAULT_OVERLAY_TEXT_COLOR) !==
+						DEFAULT_OVERLAY_TEXT_COLOR
+					}
+					onDeselect={() =>
+						setAttributes({
+							overlayBgColor: DEFAULT_OVERLAY_BG_COLOR,
+							overlayTextColor: DEFAULT_OVERLAY_TEXT_COLOR,
+						})
+					}
+					isShownByDefault
+				>
 					<CompactTwoColorControl
-						label={__('Overlay Colors', 'folioblocks')}
+						label={__('Color Overlay', 'folioblocks')}
 						value={{
-							first: attributes.overlayBgColor,
-							second: attributes.overlayTextColor,
+							first:
+								attributes.overlayTextColor || DEFAULT_OVERLAY_TEXT_COLOR,
+							second: attributes.overlayBgColor || DEFAULT_OVERLAY_BG_COLOR,
 						}}
 						onChange={(next) =>
 							setAttributes({
-								overlayBgColor: next?.first || '',
-								overlayTextColor: next?.second || '',
+								overlayTextColor:
+									next?.first || DEFAULT_OVERLAY_TEXT_COLOR,
+								overlayBgColor: next?.second || DEFAULT_OVERLAY_BG_COLOR,
 							})
 						}
-						firstLabel={__('Background', 'folioblocks')}
-						secondLabel={__('Text', 'folioblocks')}
+						firstLabel={__('Text', 'folioblocks')}
+						secondLabel={__('Background', 'folioblocks')}
 					/>
-				)}
-			</>
+				</ToolsPanelItem>
+			</ToolsPanel>
 		);
 	}
 );
@@ -160,13 +251,26 @@ addFilter(
 addFilter(
 	'folioBlocks.pbVideoBlock.filterCategories',
 	'folioblocks/pb-video-filter-category',
-	(output, { attributes, setAttributes, context }) => {
+	(
+		output,
+		{
+			attributes,
+			setAttributes,
+			context,
+			isInsideGallery,
+			galleryFilterEnabled,
+		}
+	) => {
 		const filterCategories =
 			context?.['folioBlocks/filterCategories'] || [];
 		const assignedCategories = getAssignedFilterCategories(attributes);
 
-		if (filterCategories.length === 0) {
-			return output;
+		if (
+			!isInsideGallery ||
+			!galleryFilterEnabled ||
+			filterCategories.length === 0
+		) {
+			return null;
 		}
 
 		const availableCategories = [
@@ -195,9 +299,8 @@ addFilter(
 
 		return (
 			<>
-				{output}
 				<PanelBody
-					title={__('Gallery Filtering Settings', 'folioblocks')}
+					title={__('Gallery Filtering Categories', 'folioblocks')}
 					initialOpen={true}
 				>
 					<p
@@ -272,7 +375,7 @@ addFilter(
 					onChange={(value) => {
 						setAttributes({ enableWooCommerce: !!value });
 
-						// When disabling Woo, revert product-specific lightbox layout + icon display
+						// When disabling Woo, revert product-specific Lightbox Content + icon display
 						if (!value) {
 							const next = { wooCartIconDisplay: 'hover' };
 							if (lightboxLayout === 'video-product') {
@@ -433,7 +536,7 @@ addFilter(
 										),
 										value: 'product',
 									},
-								  ]
+								]
 								: [
 									{
 										label: __(
@@ -449,7 +552,7 @@ addFilter(
 										),
 										value: 'product',
 									},
-								  ]
+								]
 						}
 						onChange={(value) =>
 							setAttributes({ wooLinkAction: value })
@@ -461,11 +564,11 @@ addFilter(
 								? __(
 									'Choose what happens when visitors click the Add To Cart icon. Select Inherit to follow the gallery default.',
 									'folioblocks'
-								  )
+								)
 								: __(
 									'Choose what happens when visitors click the Add To Cart icon.',
 									'folioblocks'
-								  )
+								)
 						}
 					/>
 				)}
@@ -708,19 +811,19 @@ addFilter(
 		const safeWooProductURL = sanitizeExternalUrl(wooProductURL);
 
 		// If a product is linked
-			if (wooProductId > 0) {
-				return (
-					<>
-						<div className="pb-video-lightbox-video">
-							{getVideoEmbedMarkup(
-								videoUrl,
-								isInVideoGallery ? { controls: false } : undefined
-							)}
-						</div>
-						<div className="pb-video-lightbox-info">
-							{wooProductName && (
-								<h2 className="pb-video-lightbox-product-title">
-									{wooProductName}
+		if (wooProductId > 0) {
+			return (
+				<>
+					<div className="pb-video-lightbox-video">
+						{getVideoEmbedMarkup(
+							videoUrl,
+							isInVideoGallery ? { controls: false } : undefined
+						)}
+					</div>
+					<div className="pb-video-lightbox-info">
+						{wooProductName && (
+							<h2 className="pb-video-lightbox-product-title">
+								{wooProductName}
 							</h2>
 						)}
 						{wooProductPrice && (
@@ -755,18 +858,18 @@ addFilter(
 		}
 
 		// Fallback: split layout if no product linked
-			return (
-				<>
-					<div className="pb-video-lightbox-video">
-						{getVideoEmbedMarkup(
-							videoUrl,
-							isInVideoGallery ? { controls: false } : undefined
-						)}
-					</div>
-					<div className="pb-video-lightbox-info">
-						{title && <h2 className="lightbox-title">{title}</h2>}
-						{description && (
-							<p className="lightbox-description">{description}</p>
+		return (
+			<>
+				<div className="pb-video-lightbox-video">
+					{getVideoEmbedMarkup(
+						videoUrl,
+						isInVideoGallery ? { controls: false } : undefined
+					)}
+				</div>
+				<div className="pb-video-lightbox-info">
+					{title && <h2 className="lightbox-title">{title}</h2>}
+					{description && (
+						<p className="lightbox-description">{description}</p>
 					)}
 				</div>
 			</>

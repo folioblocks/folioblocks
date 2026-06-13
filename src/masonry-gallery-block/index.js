@@ -4,11 +4,33 @@
  */
 
 import { registerBlockType } from '@wordpress/blocks';
+import { InnerBlocks } from '@wordpress/block-editor';
 import './style.scss';
 
 import Edit from './edit';
 import Save from './save';
 import metadata from './block.json';
+
+const deprecated = [
+	{
+		migrate: ( attributes ) => ( {
+			...attributes,
+			tabletColumns: 3,
+			mobileColumns: 2,
+		} ),
+		save: ( { attributes } ) => {
+			const { columns = 6 } = attributes;
+
+			return (
+				<div
+					className={ `pb-masonry-gallery cols-d-${ columns } cols-t-3 cols-m-2` }
+				>
+					<InnerBlocks.Content />
+				</div>
+			);
+		},
+	},
+];
 
 registerBlockType( metadata, {
 	icon: {
@@ -35,4 +57,5 @@ registerBlockType( metadata, {
 	},
 	edit: Edit,
 	save: Save,
+	deprecated,
 } );

@@ -38,6 +38,46 @@ import {
 } from "../pb-helpers/filterConstants";
 import "./editor.scss";
 
+const getOverlayContent = (titleVisibility, playButtonVisibility, showCategory) => {
+	const showTitle = titleVisibility !== "hidden";
+	const showPlayButton = playButtonVisibility !== "hidden";
+
+	if (showCategory && showTitle && showPlayButton) {
+		return "title-play-category";
+	}
+	if (showTitle && showPlayButton) {
+		return "title-play";
+	}
+	if (showTitle) {
+		return "title";
+	}
+	if (showPlayButton) {
+		return "play";
+	}
+	return "none";
+};
+
+const getOverlayVisibility = (titleVisibility, playButtonVisibility) =>
+	titleVisibility === "always" || playButtonVisibility === "always"
+		? "always"
+		: "onHover";
+
+const getOverlayContentAttributes = (content, visibility) => ({
+	titleVisibility:
+		content === "title" ||
+			content === "title-play" ||
+			content === "title-play-category"
+			? visibility
+			: "hidden",
+	playButtonVisibility:
+		content === "play" ||
+			content === "title-play" ||
+			content === "title-play-category"
+			? visibility
+			: "hidden",
+	showFilterCategory: content === "title-play-category",
+});
+
 export default function Edit({ attributes, setAttributes, clientId }) {
 	/**
 	 * Attribute Destructuring
@@ -47,6 +87,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		tabletColumns,
 		mobileColumns,
 		lightbox,
+		lightboxTheme,
 		lightboxLayout,
 		lazyLoad,
 		gap,
@@ -54,9 +95,12 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		thumbnailSize,
 		playButtonVisibility,
 		titleVisibility,
+		showFilterCategory,
 		overlayStyle,
 		overlayBgColor,
 		overlayTextColor,
+		filterCategories,
+		enableFilter,
 		activeFilter = FBKS_ALL_FILTER_TOKEN,
 		filterTextColor,
 		filterBgColor,
@@ -67,12 +111,15 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		wooCartIconDisplay,
 		wooDefaultLinkAction,
 	} = attributes;
-	const combinedVisibility =
-		titleVisibility === "hidden" && playButtonVisibility !== "hidden"
-			? playButtonVisibility
-			: titleVisibility;
-	const hidePlayButton =
-		combinedVisibility !== "hidden" && playButtonVisibility === "hidden";
+	const overlayContent = getOverlayContent(
+		titleVisibility,
+		playButtonVisibility,
+		showFilterCategory,
+	);
+	const overlayVisibility = getOverlayVisibility(
+		titleVisibility,
+		playButtonVisibility,
+	);
 
 	const checkoutUrl =
 		window.folioBlocksData?.checkoutUrl ||
@@ -150,11 +197,15 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			"folioBlocks/aspectRatio": aspectRatio,
 			"folioBlocks/playButtonVisibility": playButtonVisibility,
 			"folioBlocks/titleVisibility": titleVisibility,
+			"folioBlocks/showFilterCategory": showFilterCategory,
 			"folioBlocks/overlayStyle": overlayStyle,
 			"folioBlocks/overlayBgColor": overlayBgColor,
 			"folioBlocks/overlayTextColor": overlayTextColor,
+			"folioBlocks/filterCategories": filterCategories,
+			"folioBlocks/enableFilter": enableFilter,
 			"folioBlocks/activeFilter": normalizedActiveFilter,
 			"folioBlocks/lightbox": lightbox,
+			"folioBlocks/lightboxTheme": lightboxTheme,
 			"folioBlocks/lightboxLayout": lightboxLayout,
 			"folioBlocks/lazyLoad": lazyLoad,
 			"folioBlocks/enableWooCommerce": enableWooCommerce,
@@ -182,11 +233,15 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 				"folioBlocks/aspectRatio": aspectRatio,
 				"folioBlocks/playButtonVisibility": playButtonVisibility,
 				"folioBlocks/titleVisibility": titleVisibility,
+				"folioBlocks/showFilterCategory": showFilterCategory,
 				"folioBlocks/overlayStyle": overlayStyle,
 				"folioBlocks/overlayBgColor": overlayBgColor,
 				"folioBlocks/overlayTextColor": overlayTextColor,
+				"folioBlocks/filterCategories": filterCategories,
+				"folioBlocks/enableFilter": enableFilter,
 				"folioBlocks/activeFilter": normalizedActiveFilter,
 				"folioBlocks/lightbox": lightbox,
+				"folioBlocks/lightboxTheme": lightboxTheme,
 				"folioBlocks/lightboxLayout": lightboxLayout,
 				"folioBlocks/lazyLoad": lazyLoad,
 				"folioBlocks/enableWooCommerce": enableWooCommerce,
@@ -416,9 +471,31 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					/>
 				</PanelBody>
 				<PanelBody
-					title={__("Lightbox & Hover Overlay Settings", "folioblocks")}
+					title={__("Gallery Click Settings", "folioblocks")}
 					initialOpen={true}
 				>
+					{applyFilters(
+						"folioBlocks.videoGallery.lightboxTheme",
+						null,
+						{ attributes, setAttributes },
+					)}
+					{applyFilters(
+						"folioBlocks.videoGallery.lightboxLayout",
+						<div style={{ marginBottom: "8px" }}>
+							<Notice status="info" isDismissible={false}>
+								<strong>{__("Lightbox Content", "folioblocks")}</strong>
+								<br />
+								{__(
+									"This is a premium feature. Unlock all features:",
+									"folioblocks",
+								)}{" "}
+								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
+									{__("Upgrade to Pro", "folioblocks")}
+								</a>
+							</Notice>
+						</div>,
+						{ attributes, setAttributes },
+					)}
 					<ToggleControl
 						label={__("Enable Lightbox in Editor", "folioblocks")}
 						checked={!!lightbox}
@@ -429,11 +506,16 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 							"folioblocks",
 						)}
 					/>
+				</PanelBody>
+				<PanelBody
+					title={__("Gallery Hover Settings", "folioblocks")}
+					initialOpen={true}
+				>
 					{applyFilters(
-						"folioBlocks.videoGallery.lightboxLayout",
+						"folioBlocks.videoGallery.customOverlayControls",
 						<div style={{ marginBottom: "8px" }}>
 							<Notice status="info" isDismissible={false}>
-								<strong>{__("Lightbox Layout", "folioblocks")}</strong>
+								<strong>{__("Custom Hover Styles", "folioblocks")}</strong>
 								<br />
 								{__(
 									"This is a premium feature. Unlock all features:",
@@ -447,74 +529,65 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						{ attributes, setAttributes },
 					)}
 					<SelectControl
-						label={__("Title & Play Button Visibility", "folioblocks")}
-						value={combinedVisibility}
-						onChange={(val) => {
-							if (val === "hidden") {
-								setAttributes({
-									titleVisibility: "hidden",
-									playButtonVisibility: "hidden",
-								});
-								return;
-							}
-							setAttributes({
-								titleVisibility: val,
-								playButtonVisibility: hidePlayButton ? "hidden" : val,
-							});
-						}}
+						label={__("Overlay Content", "folioblocks")}
+						value={overlayContent}
+						onChange={(value) =>
+							setAttributes(
+								getOverlayContentAttributes(value, overlayVisibility),
+							)
+						}
 						options={[
 							{
-								label: __("Always Show", "folioblocks"),
-								value: "always",
+								label: __("None", "folioblocks"),
+								value: "none",
 							},
 							{
-								label: __("On Hover", "folioblocks"),
-								value: "onHover",
+								label: __("Play Button", "folioblocks"),
+								value: "play",
 							},
 							{
-								label: __("Hidden", "folioblocks"),
-								value: "hidden",
+								label: __("Video Title", "folioblocks"),
+								value: "title",
 							},
+							{
+								label: __("Video Title + Play Button", "folioblocks"),
+								value: "title-play",
+							},
+							...(enableFilter
+								? [
+									{
+										label: __(
+											"Video Title + Play Button + Filtering Category",
+											"folioblocks",
+										),
+										value: "title-play-category",
+									},
+								]
+								: []),
 						]}
-						help={__("Set visibility for title and play button overlays.")}
+						help={__("Choose what appears over video thumbnails.")}
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
-					{combinedVisibility !== "hidden" && (
+					{overlayContent !== "none" && (
 						<ToggleControl
-							label={__("Hide Play Button", "folioblocks")}
-							checked={hidePlayButton}
-							onChange={(val) =>
-								setAttributes({
-									playButtonVisibility: val ? "hidden" : combinedVisibility,
-								})
+							label={__("Always Display Overlay", "folioblocks")}
+							checked={overlayVisibility === "always"}
+							onChange={(alwaysDisplay) =>
+								setAttributes(
+									getOverlayContentAttributes(
+										overlayContent,
+										alwaysDisplay ? "always" : "onHover",
+									),
+								)
 							}
-							help={__("Hide only the play button overlay.", "folioblocks")}
+							help={__(
+								"Display overlay content at all times instead of on hover.",
+								"folioblocks",
+							)}
 							__nextHasNoMarginBottom
 						/>
 					)}
-					{combinedVisibility === "onHover" &&
-						applyFilters(
-							"folioBlocks.videoGallery.customOverlayControls",
-							<div style={{ marginBottom: "8px" }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__("Custom Overlay", "folioblocks")}</strong>
-									<br />
-									{__(
-										"This is a premium feature. Unlock all features:",
-										"folioblocks",
-									)}{" "}
-									<a
-										href={checkoutUrl}
-										target="_blank"
-										rel="noopener noreferrer"
-									>
-										{__("Upgrade to Pro", "folioblocks")}
-									</a>
-								</Notice>
-							</div>,
-							{ attributes, setAttributes, combinedVisibility },
-						)}
 				</PanelBody>
 				<PanelBody
 					title={__("Gallery Filtering Settings", "folioblocks")}
@@ -689,6 +762,11 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					attributes,
 					setAttributes,
 				})}
+				{applyFilters(
+					"folioBlocks.videoGallery.hoverOverlayStyleControls",
+					null,
+					{ attributes, setAttributes },
+				)}
 			</InspectorControls>
 
 			<div {...blockProps}>

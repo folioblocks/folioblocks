@@ -9,8 +9,8 @@ import {
 	ToggleControl,
 	SelectControl,
 	RangeControl,
-	ToggleGroupControl,
-	ToggleGroupControlOption,
+	__experimentalToggleGroupControl as ToggleGroupControl,
+	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from '@wordpress/components';
 import { registerImageClickActionPremiumControls } from '../pb-helpers/imageClickActionPremiumControls';
 import { registerImageClickStylePremiumControls } from '../pb-helpers/imageClickStylePremiumControls';
@@ -61,32 +61,6 @@ addFilter(
 	'folioBlocks.filmstripGallery.colorModeControl',
 	'folioblocks/filmstrip-gallery-premium-color-mode',
 	( _, { attributes, setAttributes } ) => {
-		const canUseToggleGroup =
-			typeof ToggleGroupControl === 'function' &&
-			typeof ToggleGroupControlOption === 'function';
-
-		if ( ! canUseToggleGroup ) {
-			return (
-				<SelectControl
-					label={ __( 'Color Mode', 'folioblocks' ) }
-					value={ attributes.colorMode || 'light' }
-					options={ [
-						{ label: __( 'Light', 'folioblocks' ), value: 'light' },
-						{ label: __( 'Dark', 'folioblocks' ), value: 'dark' },
-					] }
-					onChange={ ( value ) =>
-						setAttributes( { colorMode: value } )
-					}
-					__nextHasNoMarginBottom
-					__next40pxDefaultSize
-					help={ __(
-						'Switch between light and dark editor themes.',
-						'folioblocks'
-					) }
-				/>
-			);
-		}
-
 		return (
 			<ToggleGroupControl
 				label={ __( 'Color Mode', 'folioblocks' ) }

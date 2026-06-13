@@ -1,7 +1,7 @@
 ( function ( wp ) {
 	const { __ } = wp.i18n;
-	const { ToggleControl } = wp.components;
-	const { createElement, Fragment } = wp.element;
+	const { TextControl, ToggleControl } = wp.components;
+	const { createElement, Fragment, useEffect, useState } = wp.element;
 	const { addFilter } = wp.hooks;
 	const { registerPlugin } = wp.plugins;
 	const { useEntityProp } = wp.coreData;
@@ -109,6 +109,21 @@
 			'meta',
 			postId
 		);
+		const [ password, setPassword ] = useEntityProp(
+			'postType',
+			postType || 'post',
+			'password',
+			postId
+		);
+		const [ isPasswordControlOpen, setIsPasswordControlOpen ] = useState(
+			!! password
+		);
+
+		useEffect( () => {
+			if ( password ) {
+				setIsPasswordControlOpen( true );
+			}
+		}, [ password ] );
 
 		if (
 			! PluginDocumentSettingPanel ||
@@ -123,6 +138,54 @@
 			setMeta( { ...meta, [ key ]: !! value } );
 		};
 		const controls = [];
+
+		if ( postType === 'post' || postType === 'page' ) {
+			let passwordHelp = __(
+				'Require a password before visitors can view the page.',
+				'folioblocks'
+			);
+			if ( isPasswordControlOpen && ! password ) {
+				passwordHelp = __(
+					'Enter a password to protect this page.',
+					'folioblocks'
+				);
+			} else if ( password ) {
+				passwordHelp = __(
+					'Visitors must enter this password to view the page.',
+					'folioblocks'
+				);
+			}
+
+			controls.push(
+				createElement( ToggleControl, {
+					key: 'password-protection',
+					label: __( 'Password Protect Page', 'folioblocks' ),
+					checked: isPasswordControlOpen,
+					onChange: ( value ) => {
+						setIsPasswordControlOpen( value );
+						if ( ! value ) {
+							setPassword( '' );
+						}
+					},
+					help: passwordHelp,
+					__nextHasNoMarginBottom: true,
+				} )
+			);
+
+			if ( isPasswordControlOpen ) {
+				controls.push(
+					createElement( TextControl, {
+						key: 'page-password',
+						label: __( 'Page Password', 'folioblocks' ),
+						value: password || '',
+						onChange: setPassword,
+						autoComplete: 'new-password',
+						__nextHasNoMarginBottom: true,
+						__next40pxDefaultSize: true,
+					} )
+				);
+			}
+		}
 
 		if ( hasLazyLoad ) {
 			controls.push(

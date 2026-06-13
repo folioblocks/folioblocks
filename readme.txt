@@ -112,6 +112,22 @@ No, the galleries will remain in place on your site. However, the advanced layou
 
 == Changelog ==
 
+= 1.4.0 =
+* Added Pro Dark and Light appearance options and richer content combinations for image and video lightboxes.
+* Added Pro per-image click and hover overrides, allowing individual gallery images to use their own links, actions, hover content, and styles.
+* Added Pro per-video hover overrides so videos in the same gallery can use different hover styles, overlay content, visibility, and colors.
+* Added Image Block lightboxes, per-image click and hover settings, and improved active-image behavior to Filmstrip Gallery.
+* Added an optional Pro seamless looping mode to Carousel Gallery for continuous arrow, keyboard, swipe, and autoplay navigation.
+* Added a Pro fullscreen button and keyboard shortcut to standalone Image Block lightboxes.
+* Added a Pro action for syncing Image Block titles, captions, and alternative text back to the WordPress Media Library.
+* Added Pro password protection controls to the FolioBlocks Page Settings panel.
+* Improved Video Block and Video Gallery hover controls with flexible title, play button, filtering category, visibility, and Color Overlay options.
+* Improved WordPress 7.0 Content inspector support for Image Blocks, Video Blocks, and gallery filtering categories.
+* Moved Pro Lazy Load and Disable Right-Click controls into shared FolioBlocks Page & Post settings.
+* Fixed YouTube video previews in the Video Block and Video Gallery editor in Chromium browsers.
+* Fixed Filmstrip Gallery overlay sizing, per-image hover overrides, WooCommerce image sizing, and stale image-action behavior.
+* Fixed several Image Block, Gallery Click Settings, WooCommerce, and hover-overlay display issues.
+
 = 1.3.1 =
 * Refactored repeated Pro controls for Image Click Styles, gallery toggles, List View thumbnails, and editor filtering into shared helpers.
 * Improved editor-side filtering consistency for Grid, Justified, Masonry, and Video Gallery blocks.

@@ -15,7 +15,7 @@
  *
  * @package FolioBlocks
  * 
- * @fs_premium_only /languages/, /build/modular-gallery-block/, /build/pb-image-row, /build/pb-image-stack/, /build/background-video-block/premium-view.asset.php, /build/background-video-block/premium-view.js, /build/background-video-block/premium.asset.php, /build/background-video-block/premium.js, /build/carousel-gallery-block/premium-view.asset.php, /build/carousel-gallery-block/premium-view.js, /build/carousel-gallery-block/premium.asset.php, /build/carousel-gallery-block/premium.js, /build/filmstrip-gallery-block/premium-view.asset.php, /build/filmstrip-gallery-block/premium-view.js, /build/filmstrip-gallery-block/premium.asset.php, /build/filmstrip-gallery-block/premium.js, /build/grid-gallery-block/premium-view.asset.php, /build/grid-gallery-block/premium-view.js, /build/grid-gallery-block/premium.asset.php, /build/grid-gallery-block/premium.js, /build/justified-gallery-block/premium-view.asset.php, /build/justified-gallery-block/premium-view.js, /build/justified-gallery-block/premium.asset.php, /build/justified-gallery-block/premium.js, /build/masonry-gallery-block/premium-view.asset.php, /build/masonry-gallery-block/premium-view.js, /build/masonry-gallery-block/premium.asset.php, /build/masonry-gallery-block/premium.js, /build/modular-gallery-block/premium-view.asset.php, /build/modular-gallery-block/premium-view.js, /build/modular-gallery-block/premium.asset.php, /build/modular-gallery-block/premium.js, /build/pb-before-after-block/premium-view.asset.php, /build/pb-before-after-block/premium-view.js, /build/pb-before-after-block/premium.asset.php, /build/pb-before-after-block/premium.js, /build/pb-image-block/premium-view.asset.php, /build/pb-image-block/premium-view.js, /build/pb-image-block/premium.asset.php, /build/pb-image-block/premium.js, /build/pb-image-block/premium-view.asset.php, /build/pb-loupe-block/premium-view.js, /build/pb-loupe-block/premium.asset.php, /build/pb-loupe-block/premium.js, /build/pb-video-block/premium-view.asset.php, /build/pb-video-block/premium-view.js, /build/pb-video-block/premium.asset.php, /build/pb-video-block/premium.js, /build/video-gallery-block/premium-view.asset.php, /build/video-gallery-block/premium-view.js, /build/video-gallery-block/premium.asset.php, /build/video-gallery-block/premium.js
+ * @fs_premium_only /languages/, /includes/css/password-form.css, /build/modular-gallery-block/, /build/pb-image-row, /build/pb-image-stack/, /build/background-video-block/premium-view.asset.php, /build/background-video-block/premium-view.js, /build/background-video-block/premium.asset.php, /build/background-video-block/premium.js, /build/carousel-gallery-block/premium-view.asset.php, /build/carousel-gallery-block/premium-view.js, /build/carousel-gallery-block/premium.asset.php, /build/carousel-gallery-block/premium.js, /build/filmstrip-gallery-block/premium-view.asset.php, /build/filmstrip-gallery-block/premium-view.js, /build/filmstrip-gallery-block/premium.asset.php, /build/filmstrip-gallery-block/premium.js, /build/grid-gallery-block/premium-view.asset.php, /build/grid-gallery-block/premium-view.js, /build/grid-gallery-block/premium.asset.php, /build/grid-gallery-block/premium.js, /build/justified-gallery-block/premium-view.asset.php, /build/justified-gallery-block/premium-view.js, /build/justified-gallery-block/premium.asset.php, /build/justified-gallery-block/premium.js, /build/masonry-gallery-block/premium-view.asset.php, /build/masonry-gallery-block/premium-view.js, /build/masonry-gallery-block/premium.asset.php, /build/masonry-gallery-block/premium.js, /build/modular-gallery-block/premium-view.asset.php, /build/modular-gallery-block/premium-view.js, /build/modular-gallery-block/premium.asset.php, /build/modular-gallery-block/premium.js, /build/pb-before-after-block/premium-view.asset.php, /build/pb-before-after-block/premium-view.js, /build/pb-before-after-block/premium.asset.php, /build/pb-before-after-block/premium.js, /build/pb-image-block/premium-view.asset.php, /build/pb-image-block/premium-view.js, /build/pb-image-block/premium.asset.php, /build/pb-image-block/premium.js, /build/pb-image-block/premium-view.asset.php, /build/pb-loupe-block/premium-view.js, /build/pb-loupe-block/premium.asset.php, /build/pb-loupe-block/premium.js, /build/pb-video-block/premium-view.asset.php, /build/pb-video-block/premium-view.js, /build/pb-video-block/premium.asset.php, /build/pb-video-block/premium.js, /build/video-gallery-block/premium-view.asset.php, /build/video-gallery-block/premium-view.js, /build/video-gallery-block/premium.asset.php, /build/video-gallery-block/premium.js
  */
 
 if (! defined('ABSPATH')) {
@@ -30,6 +30,31 @@ define('FBKS_LEGACY_ALL_FILTER_TOKEN', 'All');
 
 require_once FBKS_PLUGIN_DIR . 'includes/php/filter-helpers.php';
 require_once FBKS_PLUGIN_DIR . 'includes/php/i18n.php';
+
+/**
+ * Ensure Safari can send the editor origin to external video embeds.
+ *
+ * Some security plugins and hosts replace WordPress's default admin referrer
+ * policy with "no-referrer". Safari then ignores a less restrictive policy on
+ * nested YouTube iframes, resulting in YouTube player Error 153.
+ */
+function fbks_block_editor_referrer_policy()
+{
+    return 'strict-origin-when-cross-origin';
+}
+add_filter('admin_referrer_policy', 'fbks_block_editor_referrer_policy', PHP_INT_MAX);
+
+function fbks_block_editor_referrer_meta()
+{
+    $screen = get_current_screen();
+
+    if (! $screen || ! method_exists($screen, 'is_block_editor') || ! $screen->is_block_editor()) {
+        return;
+    }
+
+    echo '<meta name="referrer" content="strict-origin-when-cross-origin">' . "\n";
+}
+add_action('admin_head', 'fbks_block_editor_referrer_meta', 0);
 
 if (function_exists('fbks_fs')) {
     fbks_fs()->set_basename(true, __FILE__);
@@ -452,6 +477,20 @@ if (function_exists('fbks_fs')) {
 }
 
 if (fbks_fs()->can_use_premium_code__premium_only()) {
+    add_action('wp_enqueue_scripts', function () {
+        if (! is_singular(array('post', 'page')) || ! post_password_required()) {
+            return;
+        }
+
+        $style_path = FBKS_PLUGIN_DIR . 'includes/css/password-form.css';
+        wp_enqueue_style(
+            'folioblocks-password-form',
+            FBKS_PLUGIN_URL . 'includes/css/password-form.css',
+            array(),
+            file_exists($style_path) ? filemtime($style_path) : FBKS_VERSION
+        );
+    });
+
     // Removes the add-to-cart query arg from the URL after adding a product to the cart.
     add_action('template_redirect', function () {
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- WooCommerce uses add-to-cart as a public GET action; this only removes the query arg after WooCommerce has handled it.

@@ -1251,7 +1251,7 @@ msgid "Lightbox Info"
 msgstr "Informazioni Lightbox"
 
 #: src/pb-video-block/premium.js:83 src/video-gallery-block/edit.js:477 src/video-gallery-block/premium.js:218
-msgid "Lightbox Layout"
+msgid "Lightbox Content"
 msgstr "Layout Lightbox"
 
 #: src/grid-gallery-block/premium.js:581 src/justified-gallery-block/premium.js:688 src/masonry-gallery-block/premium.js:747 src/video-gallery-block/premium.js:657

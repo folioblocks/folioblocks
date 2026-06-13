@@ -17,8 +17,8 @@ import {
 	ToolbarButton,
 	ToolbarGroup,
 	ToggleControl,
-	ToggleGroupControl,
-	ToggleGroupControlOption,
+	__experimentalToggleGroupControl as ToggleGroupControl,
+	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from '@wordpress/components';
 import { useState, useEffect } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
@@ -650,26 +650,11 @@ const LightboxContentControl = ( {
 	showProductInfoOption = false,
 } ) => {
 	const value = getLightboxContent( attributes );
-	const canUseToggleGroup =
-		typeof ToggleGroupControl === 'function' &&
-		typeof ToggleGroupControlOption === 'function';
 	const canInheritGalleryTheme = !! attributes.overrideGalleryClickSettings;
 	const lightboxTheme =
 		canInheritGalleryTheme || attributes.lightboxTheme !== 'inherit'
 			? attributes.lightboxTheme || 'inherit'
 			: 'dark';
-	const lightboxThemeOptions = [
-		...( canInheritGalleryTheme
-			? [
-					{
-						label: __( 'Inherit Gallery', 'folioblocks' ),
-						value: 'inherit',
-					},
-			  ]
-			: [] ),
-		{ label: __( 'Dark', 'folioblocks' ), value: 'dark' },
-		{ label: __( 'Light', 'folioblocks' ), value: 'light' },
-	];
 	const options = [
 		{ label: __( 'None', 'folioblocks' ), value: 'none' },
 		{ label: __( 'Show Image Title', 'folioblocks' ), value: 'title' },
@@ -705,15 +690,14 @@ const LightboxContentControl = ( {
 
 	return (
 		<>
-			{ canUseToggleGroup ? (
-				<ToggleGroupControl
+			<ToggleGroupControl
 					__next40pxDefaultSize
 					__nextHasNoMarginBottom
 					value={ lightboxTheme }
 					isBlock
 					label={ __( 'Lightbox Appearance', 'folioblocks' ) }
 					help={ __(
-						'Choose a dark or light lightbox background.',
+						'Choose a light or dark lightbox background.',
 						'folioblocks'
 					) }
 					onChange={ ( lightboxTheme ) => {
@@ -729,30 +713,14 @@ const LightboxContentControl = ( {
 						/>
 					) }
 					<ToggleGroupControlOption
-						label={ __( 'Dark', 'folioblocks' ) }
-						value="dark"
-					/>
-					<ToggleGroupControlOption
 						label={ __( 'Light', 'folioblocks' ) }
 						value="light"
 					/>
-				</ToggleGroupControl>
-			) : (
-				<SelectControl
-					label={ __( 'Lightbox Appearance', 'folioblocks' ) }
-					value={ lightboxTheme }
-					options={ lightboxThemeOptions }
-					onChange={ ( lightboxTheme ) =>
-						setAttributes( { lightboxTheme } )
-					}
-					__nextHasNoMarginBottom
-					__next40pxDefaultSize
-					help={ __(
-						'Choose a dark or light lightbox background.',
-						'folioblocks'
-					) }
-				/>
-			) }
+					<ToggleGroupControlOption
+						label={ __( 'Dark', 'folioblocks' ) }
+						value="dark"
+					/>
+			</ToggleGroupControl>
 			<SelectControl
 				label={ __( 'Lightbox Content', 'folioblocks' ) }
 				value={

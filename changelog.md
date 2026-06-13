@@ -15,7 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added shared Gallery Click Settings, Gallery Click Styles, Gallery Hover Settings, and per-image click and hover overrides to Filmstrip Gallery.
 - Added Image Block lightbox support to Filmstrip Gallery, including scoped Filmstrip image navigation, inherited and per-image lightbox appearance/content settings, and EXIF display.
 - Added Filmstrip Lightbox-to-fullscreen handoff, with the Lightbox fullscreen control hidden when Filmstrip fullscreen is disabled.
-- Added optional seamless front-end looping to Carousel Gallery, with the first image centered beside the preceding last image and continuous arrow, keyboard, swipe, and autoplay navigation.
+- Added optional Pro seamless front-end looping to Carousel Gallery, with the first image centered beside the preceding last image and continuous arrow, keyboard, swipe, and autoplay navigation.
+- Added native WordPress password protection controls to the FolioBlocks Page Settings panel for Posts and Pages.
+- Added Video Title, Play Button, and Filtering Category combinations to Video Block and Video Gallery Overlay Content controls.
+- Added Pro-only per-video Gallery Hover Settings overrides to Video Blocks inside Video Galleries, including per-video hover styles, overlay content, visibility, and Color Overlay colors.
 
 ### Changed
 - Moved Pro Lazy Load and Disable Right-Click controls from individual block settings into a conditional FolioBlocks panel in the editor Page & Post settings.
@@ -28,6 +31,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reworked Filmstrip Gallery editor and front-end main-image markup to use the shared Image Block media and overlay structure, keeping overlays and action controls aligned to the displayed image.
 - Updated Filmstrip Gallery front-end image switching to resolve effective gallery or per-image click actions, destinations, icon styles, hover overlays, and Lightbox settings.
 - Updated Filmstrip fullscreen mode to quietly inherit the active image's effective Lightbox Dark or Light appearance when Lightbox is enabled.
+- Styled native WordPress password forms with a simple, neutral, responsive layout on password-protected Posts and Pages.
+- Split Video Gallery and Video Block click and hover settings into dedicated inspector panels.
+- Added Dark and Light appearance modes for Video Gallery and standalone Video Block lightboxes.
+- Moved Video Block thumbnail, video URL, title, description, and conditional gallery filtering categories into the WordPress 7.0 Content inspector while preserving their existing Settings inspector locations on older WordPress versions.
+- Reworked Video Block and Video Gallery hover controls to use Hover Style, Overlay Content, and Always Display Overlay controls consistent with the photo galleries.
+- Moved Video Block and Video Gallery Color Overlay color controls into Gallery Hover Styles tools panels and added neutral default overlay colors.
+- Updated Video Block and Video Gallery play buttons with a circular border that inherits the effective overlay text color.
+- Renamed Video Block and Video Gallery Lightbox Layout controls to Lightbox Content and reordered Lightbox Appearance choices to list Light before Dark.
 
 ### Fixed
 - Fixed an Image Block editor crash when changing gallery overlay content from EXIF Data to Product Info.
@@ -36,6 +47,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed Filmstrip Gallery per-image hover overrides not rendering on the front end.
 - Fixed Filmstrip Gallery WooCommerce-linked images rendering at a different size than their overlay wrapper.
 - Fixed Filmstrip Gallery action controls and links retaining stale WooCommerce, download, Custom URL, or Page/Post behavior when switching images.
+- Fixed stray control syntax text appearing in Gallery Click Settings when Image Downloads were enabled.
+- Fixed YouTube videos failing to preview in the Video Block and Video Gallery editor in Chromium browsers by using the WordPress oEmbed preview flow.
+- Fixed Color Overlay titles, filtering categories, and play buttons inheriting the text shadow used by image-based hover styles.
 
 ## [1.3.1] - 2026-06-03
 ### Added

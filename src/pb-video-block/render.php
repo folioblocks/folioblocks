@@ -13,13 +13,18 @@ if (! function_exists('is_plugin_active')) {
 	include_once ABSPATH . 'wp-admin/includes/plugin.php';
 }
 $fbks_context = $block->context ?? [];
+$fbks_can_override_gallery_hover = fbks_fs()->can_use_premium_code__premium_only();
+$fbks_override_gallery_hover = $fbks_can_override_gallery_hover && ! empty($attributes['overrideGalleryHoverSettings']);
+$fbks_hover_context = $fbks_override_gallery_hover ? [] : $fbks_context;
 
 $fbks_thumbnail = esc_url($attributes['thumbnail'] ?? '');
 $fbks_title = esc_html($attributes['title'] ?? '');
 $fbks_video_url = esc_url($attributes['videoUrl'] ?? '');
 $fbks_aspect = esc_attr($attributes['aspectRatio'] ?? '16:9');
-$fbks_play_visibility = esc_attr($attributes['playButtonVisibility'] ?? 'always');
-$fbks_title_visibility = esc_attr($attributes['titleVisibility'] ?? 'always');
+$fbks_play_visibility = esc_attr($fbks_hover_context['folioBlocks/playButtonVisibility'] ?? ($attributes['playButtonVisibility'] ?? 'always'));
+$fbks_title_visibility = esc_attr($fbks_hover_context['folioBlocks/titleVisibility'] ?? ($attributes['titleVisibility'] ?? 'always'));
+$fbks_show_filter_category = ! empty($fbks_context['folioBlocks/enableFilter'] ?? false)
+	&& ! empty($fbks_hover_context['folioBlocks/showFilterCategory'] ?? ($attributes['showFilterCategory'] ?? false));
 $fbks_overlay_style = 'default';
 $fbks_overlay_bg_color = '';
 $fbks_overlay_text_color = '';
@@ -65,9 +70,11 @@ if (fbks_fs()->can_use_premium_code__premium_only()) {
 	$fbks_border_radius = absint($fbks_context['folioBlocks/borderRadius'] ?? ($attributes['borderRadius'] ?? 0));
 	$fbks_drop_shadow = ! empty($fbks_context['folioBlocks/dropShadow'] ?? ($attributes['dropShadow'] ?? false));
 	$fbks_lazy_load = ! empty($attributes['lazyLoad']);
-	$fbks_overlay_style = $fbks_context['folioBlocks/overlayStyle'] ?? ($attributes['overlayStyle'] ?? 'default');
-	$fbks_overlay_bg_color = $fbks_context['folioBlocks/overlayBgColor'] ?? ($attributes['overlayBgColor'] ?? '');
-	$fbks_overlay_text_color = $fbks_context['folioBlocks/overlayTextColor'] ?? ($attributes['overlayTextColor'] ?? '');
+	$fbks_overlay_style = $fbks_hover_context['folioBlocks/overlayStyle'] ?? ($attributes['overlayStyle'] ?? 'default');
+	$fbks_overlay_bg_color = $fbks_hover_context['folioBlocks/overlayBgColor'] ?? ($attributes['overlayBgColor'] ?? '');
+	$fbks_overlay_text_color = $fbks_hover_context['folioBlocks/overlayTextColor'] ?? ($attributes['overlayTextColor'] ?? '');
+	$fbks_overlay_bg_color = $fbks_overlay_bg_color ?: '#f9f9f9';
+	$fbks_overlay_text_color = $fbks_overlay_text_color ?: '#000000';
 
 	$fbks_woo_active = is_plugin_active('woocommerce/woocommerce.php');
 	$fbks_enable_woo = ($fbks_context['folioBlocks/enableWooCommerce'] ?? ($attributes['enableWooCommerce'] ?? false)) && $fbks_woo_active;
@@ -135,7 +142,9 @@ if (! $fbks_thumbnail) {
 	);
 }
 // Determine layout classes and structure
-$fbks_layout = $attributes['lightboxLayout'] ?? 'video-only';
+$fbks_layout = $fbks_context['folioBlocks/lightboxLayout'] ?? ($attributes['lightboxLayout'] ?? 'video-only');
+$fbks_lightbox_theme = $fbks_context['folioBlocks/lightboxTheme'] ?? ($attributes['lightboxTheme'] ?? 'dark');
+$fbks_lightbox_theme = 'light' === $fbks_lightbox_theme ? 'light' : 'dark';
 $fbks_layout_class = '';
 if ($fbks_layout === 'split') {
 	$fbks_layout_class = 'split-layout';
@@ -147,8 +156,8 @@ if (fbks_fs()->can_use_premium_code__premium_only()) {
 	$fbks_combined_visibility = ('hidden' === $fbks_title_visibility && 'hidden' !== $fbks_play_visibility)
 		? $fbks_play_visibility
 		: $fbks_title_visibility;
-	$fbks_has_color_overlay = ('color' === $fbks_overlay_style && 'onHover' === $fbks_combined_visibility);
-	$fbks_has_blur_overlay = ('blur' === $fbks_overlay_style && 'onHover' === $fbks_combined_visibility);
+	$fbks_has_color_overlay = ('color' === $fbks_overlay_style);
+	$fbks_has_blur_overlay = ('blur' === $fbks_overlay_style);
 	if ($fbks_has_color_overlay) {
 		if ('' !== $fbks_overlay_bg_color) {
 			$fbks_style .= '--pb-video-overlay-bg:' . $fbks_overlay_bg_color . ';';
@@ -221,6 +230,9 @@ if ($fbks_title) {
 						</svg>
 					</div>
 				<?php endif; ?>
+				<?php if ($fbks_show_filter_category && $fbks_filter_category) : ?>
+					<div class="video-category-overlay <?php echo esc_attr($fbks_combined_visibility); ?>"><?php echo esc_html($fbks_filter_category); ?></div>
+				<?php endif; ?>
 			</div>
 		</div>
 
@@ -254,7 +266,7 @@ if ($fbks_title) {
 		?>
 	</div>
 	<!-- Lightbox Markup -->
-	<div id="<?php echo esc_attr($fbks_lightbox_dom_id); ?>" class="pb-video-lightbox <?php echo esc_attr($fbks_layout_class); ?>" data-lbx="<?php echo esc_attr($fbks_lightbox_id); ?>" role="dialog" tabindex="-1" aria-modal="true" aria-hidden="true" aria-label="<?php echo esc_attr($fbks_lightbox_aria_label); ?>">
+	<div id="<?php echo esc_attr($fbks_lightbox_dom_id); ?>" class="pb-video-lightbox <?php echo esc_attr($fbks_layout_class); ?><?php echo 'light' === $fbks_lightbox_theme ? ' light-mode' : ''; ?>" data-lbx="<?php echo esc_attr($fbks_lightbox_id); ?>" role="dialog" tabindex="-1" aria-modal="true" aria-hidden="true" aria-label="<?php echo esc_attr($fbks_lightbox_aria_label); ?>">
 			<div class="pb-video-lightbox-inner">
 				<button class="pb-video-lightbox-close" aria-label="<?php esc_attr_e('Close', 'folioblocks'); ?>">×</button>
 
