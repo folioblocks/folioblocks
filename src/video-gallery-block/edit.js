@@ -36,6 +36,7 @@ import {
 	FBKS_ALL_FILTER_TOKEN,
 	fbksNormalizeActiveFilterValue,
 } from "../pb-helpers/filterConstants";
+import { isValidHttpUrl } from "../pb-helpers/urlValidation";
 import "./editor.scss";
 
 const getOverlayContent = (titleVisibility, playButtonVisibility, showCategory) => {
@@ -141,6 +142,13 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 	// Local state for filter input field
 
 	const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+	const validateVideoUrl = (url) => {
+		const trimmedUrl = typeof url === "string" ? url.trim() : "";
+		if (isValidHttpUrl(trimmedUrl)) {
+			return trimmedUrl;
+		}
+		return "";
+	};
 
 	// Selected block in the editor
 	const selectedBlock = useSelect((select) => {
@@ -331,7 +339,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						handleVideoSelect(media);
 					}}
 					onSelectURL={(url) => {
-						if (!url) {
+						const validUrl = validateVideoUrl(url);
+						if (!validUrl) {
 							return;
 						}
 
@@ -339,7 +348,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						const newBlock = wp.blocks.createBlock(
 							"folioblocks/pb-video-block",
 							{
-								videoUrl: url,
+								videoUrl: validUrl,
 								title: defaultTitle,
 								alt: defaultTitle,
 							},
@@ -403,11 +412,15 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 							setIsVideoModalOpen(false);
 						}}
 						onSelectURL={(url) => {
+							const validUrl = validateVideoUrl(url);
+							if (!validUrl) {
+								return;
+							}
 							const defaultTitle = __("Video", "folioblocks");
 							const newBlock = wp.blocks.createBlock(
 								"folioblocks/pb-video-block",
 								{
-									videoUrl: url,
+									videoUrl: validUrl,
 									title: defaultTitle,
 									alt: defaultTitle,
 								},

@@ -40,6 +40,11 @@ import {
 } from "@wordpress/icons";
 import CompactColorControl from "../pb-helpers/CompactColorControl";
 import { IconBackgroundVideo } from "../pb-helpers/icons";
+import ValidatedUrlControl from "../pb-helpers/ValidatedUrlControl";
+import {
+	isValidHttpUrl,
+	isValidVimeoUrl,
+} from "../pb-helpers/urlValidation";
 import "./editor.scss";
 
 /**
@@ -498,12 +503,13 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 	};
 
 	const onSelectVideoUrl = (url) => {
-		if (!url) {
+		const trimmedUrl = typeof url === "string" ? url.trim() : "";
+		if (!isValidHttpUrl(trimmedUrl)) {
 			return;
 		}
 
-		const isLikelyVimeo = /vimeo\.com/i.test(url);
-		const vimeoId = extractVimeoId(url);
+		const isLikelyVimeo = /vimeo\.com/i.test(trimmedUrl);
+		const vimeoId = extractVimeoId(trimmedUrl);
 
 		if (isLikelyVimeo) {
 			setAttributes({
@@ -511,7 +517,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 				mediaDesktop: {
 					provider: "vimeo",
 					id: vimeoId,
-					url,
+					url: trimmedUrl,
 				},
 			});
 			return;
@@ -522,7 +528,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			mediaDesktop: {
 				provider: "self",
 				id: null,
-				url,
+				url: trimmedUrl,
 				mime: "",
 			},
 		});
@@ -773,11 +779,16 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 
 					{desktopProvider === "vimeo" && (
 						<>
-							<TextControl
+							<ValidatedUrlControl
 								label={__("Vimeo URL", "folioblocks")}
 								value={vimeoUrlValue}
 								placeholder={__("https://vimeo.com/12345678", "folioblocks")}
 								onChange={onChangeVimeoUrl}
+								validate={isValidVimeoUrl}
+								invalidHelp={__(
+									"Enter a valid Vimeo URL beginning with http:// or https://.",
+									"folioblocks",
+								)}
 								help={__(
 									"Paste a Vimeo URL. The block will extract the Vimeo video ID when possible.",
 									"folioblocks",

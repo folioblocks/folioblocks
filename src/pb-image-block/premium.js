@@ -52,6 +52,8 @@ import {
 } from '@wordpress/icons';
 import { wooCartIcon } from '../pb-helpers/icons.js';
 import { syncImageMetadataToMedia } from '../pb-helpers/syncImageMetadata.js';
+import ValidatedUrlControl from '../pb-helpers/ValidatedUrlControl.js';
+import { isValidHttpUrl } from '../pb-helpers/urlValidation.js';
 
 const ImageMetadataSyncControl = ( { attributes = {} } ) => {
 	const [ status, setStatus ] = useState( '' );
@@ -815,14 +817,16 @@ addFilter(
 
 		return (
 			<>
-				<TextControl
+				<ValidatedUrlControl
 					label={ __( 'Custom URL', 'folioblocks' ) }
-					type="url"
 					value={ attributes.customUrl || '' }
 					onChange={ ( value ) =>
 						setAttributes( {
 							customUrl: value,
 						} )
+					}
+					validate={ ( value ) =>
+						isValidHttpUrl( value, { allowRelative: true } )
 					}
 					__nextHasNoMarginBottom
 					__next40pxDefaultSize
@@ -878,13 +882,17 @@ addFilter(
 					) }
 					renderContent={ () => (
 						<div style={ { padding: '12px', width: '280px' } }>
-							<TextControl
+							<ValidatedUrlControl
 								label={ __( 'Custom URL', 'folioblocks' ) }
-								type="url"
 								value={ attributes.customUrl || '' }
 								onChange={ ( value ) =>
 									setAttributes( {
 										customUrl: value,
+									} )
+								}
+								validate={ ( value ) =>
+									isValidHttpUrl( value, {
+										allowRelative: true,
 									} )
 								}
 								__nextHasNoMarginBottom

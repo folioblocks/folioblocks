@@ -91,6 +91,16 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 		$fbks_custom_url = isset( $attributes['customUrl'] ) && is_string( $attributes['customUrl'] )
 			? trim( $attributes['customUrl'] )
 			: '';
+		$fbks_custom_url_is_relative = preg_match( '#^(?:/|\./|\.\./)\S*$#', $fbks_custom_url );
+		$fbks_custom_url_parts = $fbks_custom_url && ! $fbks_custom_url_is_relative
+			? wp_parse_url( $fbks_custom_url )
+			: false;
+		$fbks_custom_url_is_absolute = is_array( $fbks_custom_url_parts )
+			&& isset( $fbks_custom_url_parts['scheme'], $fbks_custom_url_parts['host'] )
+			&& in_array( strtolower( $fbks_custom_url_parts['scheme'] ), [ 'http', 'https' ], true );
+		if ( ! $fbks_custom_url_is_relative && ! $fbks_custom_url_is_absolute ) {
+			$fbks_custom_url = '';
+		}
 		if ( '' !== $fbks_custom_url ) {
 			if ( 'thumbnail' === $fbks_image_click_target ) {
 				$fbks_link_url = esc_url( $fbks_custom_url );

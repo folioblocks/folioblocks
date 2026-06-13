@@ -1,0 +1,9 @@
+.pb-validated-url-control {
+	margin-bottom: 16px;
+}
+
+.pb-validated-url-control.is-invalid {
+	.components-base-control__help {
+		color: #cc1818;
+	}
+}

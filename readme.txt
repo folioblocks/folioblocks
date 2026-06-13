@@ -127,6 +127,7 @@ No, the galleries will remain in place on your site. However, the advanced layou
 * Fixed YouTube video previews in the Video Block and Video Gallery editor in Chromium browsers.
 * Fixed Filmstrip Gallery overlay sizing, per-image hover overrides, WooCommerce image sizing, and stale image-action behavior.
 * Fixed several Image Block, Gallery Click Settings, WooCommerce, and hover-overlay display issues.
+* Fixed Amber's bug :D
 
 = 1.3.1 =
 * Refactored repeated Pro controls for Image Click Styles, gallery toggles, List View thumbnails, and editor filtering into shared helpers.

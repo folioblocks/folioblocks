@@ -57,8 +57,14 @@ if ( $fbks_poster_url ) {
 // Build a small, explicit data payload for view.js.
 $fbks_media_provider = ( is_array( $fbks_media_desktop ) && ! empty( $fbks_media_desktop['provider'] ) ) ? (string) $fbks_media_desktop['provider'] : '';
 $fbks_media_url      = ( is_array( $fbks_media_desktop ) && ! empty( $fbks_media_desktop['url'] ) ) ? (string) $fbks_media_desktop['url'] : '';
+$fbks_parsed_media_url = $fbks_media_url ? wp_parse_url( $fbks_media_url ) : false;
+$fbks_media_url = (
+	is_array( $fbks_parsed_media_url ) &&
+	isset( $fbks_parsed_media_url['scheme'], $fbks_parsed_media_url['host'] ) &&
+	in_array( strtolower( $fbks_parsed_media_url['scheme'] ), [ 'http', 'https' ], true )
+) ? esc_url_raw( $fbks_media_url ) : '';
 $fbks_vimeo_id = '';
-if ( 'vimeo' === $fbks_media_provider && is_array( $fbks_media_desktop ) && ! empty( $fbks_media_desktop['id'] ) ) {
+if ( 'vimeo' === $fbks_media_provider && $fbks_media_url && is_array( $fbks_media_desktop ) && ! empty( $fbks_media_desktop['id'] ) ) {
 	$fbks_vimeo_id = (string) $fbks_media_desktop['id'];
 }
 

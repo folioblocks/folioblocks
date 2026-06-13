@@ -50,6 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed stray control syntax text appearing in Gallery Click Settings when Image Downloads were enabled.
 - Fixed YouTube videos failing to preview in the Video Block and Video Gallery editor in Chromium browsers by using the WordPress oEmbed preview flow.
 - Fixed Color Overlay titles, filtering categories, and play buttons inheriting the text shadow used by image-based hover styles.
+- Fixed Video Block, Video Gallery, Background Video, and custom image URL fields accepting arbitrary text instead of requiring valid URLs.
 
 ## [1.3.1] - 2026-06-03
 ### Added

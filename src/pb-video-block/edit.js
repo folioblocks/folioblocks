@@ -36,6 +36,8 @@ import {
 	getVideoProviderData,
 	getVideoProviderLabel,
 } from "../pb-helpers/videoProviders";
+import { isValidHttpUrl } from "../pb-helpers/urlValidation";
+import ValidatedUrlControl from "../pb-helpers/ValidatedUrlControl";
 import {
 	FBKS_ALL_FILTER_TOKEN,
 	fbksNormalizeActiveFilterValue,
@@ -228,6 +230,18 @@ export default function Edit({ attributes, setAttributes, context }) {
 
 	const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 	const [isLightboxOpen, setLightboxOpen] = useState(false);
+	const updateVideoUrl = (nextUrl) => {
+		const trimmedUrl = typeof nextUrl === "string" ? nextUrl.trim() : "";
+		if (!trimmedUrl) {
+			setAttributes({ videoUrl: "" });
+			return true;
+		}
+		if (!isValidHttpUrl(trimmedUrl)) {
+			return false;
+		}
+		setAttributes({ videoUrl: trimmedUrl });
+		return true;
+	};
 	const shouldUseContentInspector = isWordPressVersionAtLeast(
 		window.folioBlocksData?.wpVersion,
 		"7.0",
@@ -560,7 +574,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 					</MediaUploadCheck>
 				</div>
 			)}
-			<TextControl
+			<ValidatedUrlControl
 				label={__("Video URL", "folioblocks")}
 				value={videoUrl}
 				onChange={(val) => setAttributes({ videoUrl: val })}
@@ -668,8 +682,9 @@ export default function Edit({ attributes, setAttributes, context }) {
 									setIsVideoModalOpen(false);
 								}}
 								onSelectURL={(url) => {
-									setAttributes({ videoUrl: url });
-									setIsVideoModalOpen(false);
+									if (updateVideoUrl(url)) {
+										setIsVideoModalOpen(false);
+									}
 								}}
 								onError={(errorMessage) => {
 									console.error(errorMessage);
@@ -1050,10 +1065,9 @@ export default function Edit({ attributes, setAttributes, context }) {
 						labels={{ title: __("Add Video", "folioblocks") }}
 						allowedTypes={["video"]}
 						onSelect={(media) => setAttributes({ videoUrl: media.url })}
-						onSelectURL={(url) => setAttributes({ videoUrl: url })}
+						onSelectURL={updateVideoUrl}
 						accept="video/*"
 						addToGallery={false}
-						notices={[]}
 					/>
 				) : (
 					<div

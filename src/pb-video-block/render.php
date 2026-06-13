@@ -19,7 +19,15 @@ $fbks_hover_context = $fbks_override_gallery_hover ? [] : $fbks_context;
 
 $fbks_thumbnail = esc_url($attributes['thumbnail'] ?? '');
 $fbks_title = esc_html($attributes['title'] ?? '');
-$fbks_video_url = esc_url($attributes['videoUrl'] ?? '');
+$fbks_raw_video_url = isset($attributes['videoUrl']) && is_string($attributes['videoUrl'])
+	? trim($attributes['videoUrl'])
+	: '';
+$fbks_parsed_video_url = $fbks_raw_video_url ? wp_parse_url($fbks_raw_video_url) : false;
+$fbks_video_url = is_array($fbks_parsed_video_url)
+	&& isset($fbks_parsed_video_url['scheme'], $fbks_parsed_video_url['host'])
+	&& in_array(strtolower($fbks_parsed_video_url['scheme']), ['http', 'https'], true)
+	? esc_url($fbks_raw_video_url)
+	: '';
 $fbks_aspect = esc_attr($attributes['aspectRatio'] ?? '16:9');
 $fbks_play_visibility = esc_attr($fbks_hover_context['folioBlocks/playButtonVisibility'] ?? ($attributes['playButtonVisibility'] ?? 'always'));
 $fbks_title_visibility = esc_attr($fbks_hover_context['folioBlocks/titleVisibility'] ?? ($attributes['titleVisibility'] ?? 'always'));
