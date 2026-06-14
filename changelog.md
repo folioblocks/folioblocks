@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved Video Block and Video Gallery Color Overlay color controls into Gallery Hover Styles tools panels and added neutral default overlay colors.
 - Updated Video Block and Video Gallery play buttons with a circular border that inherits the effective overlay text color.
 - Renamed Video Block and Video Gallery Lightbox Layout controls to Lightbox Content and reordered Lightbox Appearance choices to list Light before Dark.
+- Reworked free-version Pro feature notices across image, video, gallery, Before & After, Loupe, and Background Video blocks with clearer feature summaries and consistent Get FolioBlocks Pro actions.
 
 ### Fixed
 - Fixed an Image Block editor crash when changing gallery overlay content from EXIF Data to Product Info.
@@ -51,6 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed YouTube videos failing to preview in the Video Block and Video Gallery editor in Chromium browsers by using the WordPress oEmbed preview flow.
 - Fixed Color Overlay titles, filtering categories, and play buttons inheriting the text shadow used by image-based hover styles.
 - Fixed Video Block, Video Gallery, Background Video, and custom image URL fields accepting arbitrary text instead of requiring valid URLs.
+- Fixed Pro gallery transforms sometimes being unavailable when premium scripts loaded before their gallery block registrations.
 
 ## [1.3.1] - 2026-06-03
 ### Added

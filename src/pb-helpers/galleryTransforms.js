@@ -1,6 +1,7 @@
 import { cloneBlock, createBlock, getBlockType } from '@wordpress/blocks';
 import { select } from '@wordpress/data';
 import { decodeEntities } from '@wordpress/html-entities';
+import { addFilter } from '@wordpress/hooks';
 import { getExifAttributesFromMedia } from './exifMetadata';
 
 const DEFAULT_GALLERY_BLOCKS = [
@@ -42,6 +43,23 @@ const GALLERY_BLOCK_NAMES = new Set( [
 ] );
 let hasPatchedWrapperTransforms = false;
 let patchAttempts = 0;
+const enabledGalleryTransforms = new Set();
+const galleryTransformAttempts = new Map();
+
+addFilter(
+	'blocks.registerBlockType',
+	'folioblocks/register-gallery-transforms',
+	( settings, blockName ) => {
+		if ( ! enabledGalleryTransforms.has( blockName ) ) {
+			return settings;
+		}
+
+		return {
+			...settings,
+			transforms: buildGalleryTransforms( blockName ),
+		};
+	}
+);
 
 const getTransformAttributes = ( attributes = {} ) => {
 	const next = {};
@@ -337,12 +355,19 @@ export const buildGalleryTransforms = (
 };
 
 export const enableGalleryTransforms = ( blockName ) => {
+	enabledGalleryTransforms.add( blockName );
 	const blockType = getBlockType( blockName );
 
 	if ( ! blockType ) {
+		const attempts = ( galleryTransformAttempts.get( blockName ) || 0 ) + 1;
+		galleryTransformAttempts.set( blockName, attempts );
+		if ( attempts < 20 ) {
+			setTimeout( () => enableGalleryTransforms( blockName ), 50 );
+		}
 		return;
 	}
 
+	galleryTransformAttempts.delete( blockName );
 	disableGalleryWrapperTransforms();
 	blockType.transforms = buildGalleryTransforms( blockName );
 };

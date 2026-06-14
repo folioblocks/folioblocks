@@ -38,6 +38,7 @@ import {
 } from "../pb-helpers/videoProviders";
 import { isValidHttpUrl } from "../pb-helpers/urlValidation";
 import ValidatedUrlControl from "../pb-helpers/ValidatedUrlControl";
+import ProFeatureNotice from "../pb-helpers/ProFeatureNotice";
 import {
 	FBKS_ALL_FILTER_TOKEN,
 	fbksNormalizeActiveFilterValue,
@@ -52,10 +53,6 @@ const ASPECT_RATIOS = {
 	"3:2": "aspect-3-2",
 	"1:1": "aspect-1-1",
 };
-const checkoutUrl =
-	window.folioBlocksData?.checkoutUrl ||
-	"https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks&utm_medium=video-block&utm_campaign=upgrade";
-
 const isWordPressVersionAtLeast = (version, minimumVersion) => {
 	const currentParts = String(version || "")
 		.split(".")
@@ -743,12 +740,28 @@ export default function Edit({ attributes, setAttributes, context }) {
 								attributes,
 								setAttributes,
 								isInsideGallery,
-							})}
-							{applyFilters("folioBlocks.videoBlock.lightboxLayout", null, {
-								attributes,
-								setAttributes,
-								isInsideGallery,
-							})}
+								})}
+								{applyFilters(
+									"folioBlocks.videoBlock.lightboxLayout",
+									<ProFeatureNotice
+										title={__("Video Lightbox", "folioblocks")}
+										description={__(
+											"Create a richer, more polished viewing experience for your video.",
+											"folioblocks",
+										)}
+										features={[
+											__("Choose a light or dark appearance.", "folioblocks"),
+											__("Display the video title and description.", "folioblocks"),
+											__("Customize the information shown in the lightbox.", "folioblocks"),
+										]}
+										campaign="video-lightbox"
+									/>,
+									{
+										attributes,
+										setAttributes,
+										isInsideGallery,
+									},
+								)}
 							<ToggleControl
 								label={__("Enable Lightbox in Editor", "folioblocks")}
 								checked={!!lightbox}
@@ -780,23 +793,19 @@ export default function Edit({ attributes, setAttributes, context }) {
 							)}
 							{(!isInsideGallery || overridesGalleryHover) && applyFilters(
 								"folioBlocks.videoBlock.customOverlayControls",
-								<div style={{ marginBottom: "8px" }}>
-									<Notice status="info" isDismissible={false}>
-										<strong>{__("Custom Hover Styles", "folioblocks")}</strong>
-										<br />
-										{__(
-											"This is a premium feature. Unlock all features:",
-											"folioblocks",
-										)}{" "}
-										<a
-											href={checkoutUrl}
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											{__("Upgrade to Pro", "folioblocks")}
-										</a>
-									</Notice>
-								</div>,
+								<ProFeatureNotice
+									title={__("Video Hover Settings", "folioblocks")}
+									description={__(
+										"Give individual videos their own hover appearance and behavior.",
+										"folioblocks",
+									)}
+									features={[
+										__("Choose gradient, blur, or color hover styles.", "folioblocks"),
+										__("Customize overlay and play-button colors.", "folioblocks"),
+										__("Override gallery hover settings for individual videos.", "folioblocks"),
+									]}
+									campaign="video-hover-settings"
+								/>,
 								{ attributes, setAttributes, isInsideGallery },
 							)}
 							{(!isInsideGallery || overridesGalleryHover) && <SelectControl
@@ -882,25 +891,19 @@ export default function Edit({ attributes, setAttributes, context }) {
 						{!isInsideGallery &&
 							applyFilters(
 								"folioBlocks.videoBlock.wooCommerceControls",
-								<div style={{ marginBottom: "8px" }}>
-									<Notice status="info" isDismissible={false}>
-										<strong>
-											{__("WooCommerce Integration", "folioblocks")}
-										</strong>
-										<br />
-										{__(
-											"This is a premium feature. Unlock all features:",
-											"folioblocks",
-										)}{" "}
-										<a
-											href={checkoutUrl}
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											{__("Upgrade to Pro", "folioblocks")}
-										</a>
-									</Notice>
-								</div>,
+								<ProFeatureNotice
+									title={__("WooCommerce Integration", "folioblocks")}
+									description={__(
+										"Connect videos directly to products in your store.",
+										"folioblocks",
+									)}
+									features={[
+										__("Link videos to WooCommerce products.", "folioblocks"),
+										__("Add product and cart actions.", "folioblocks"),
+										__("Display product information with videos.", "folioblocks"),
+									]}
+									campaign="woocommerce-video"
+								/>,
 								{
 									attributes,
 									setAttributes,
@@ -936,38 +939,24 @@ export default function Edit({ attributes, setAttributes, context }) {
 				<InspectorControls group="advanced">
 					{applyFilters(
 						"folioBlocks.videoBlock.disableRightClickToggle",
-						<div style={{ marginBottom: "8px" }}>
-							<Notice status="info" isDismissible={false}>
-								<strong>{__("Disable Right-Click", "folioblocks")}</strong>
-								<br />
-								{__(
-									"This is a premium feature. Unlock all features:",
-									"folioblocks",
-								)}{" "}
-								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-									{__("Upgrade to Pro", "folioblocks")}
-								</a>
-							</Notice>
-						</div>,
+						<ProFeatureNotice
+							title={__("Protection and Performance", "folioblocks")}
+							description={__(
+								"Add page-level controls for protecting and loading your media.",
+								"folioblocks",
+							)}
+							features={[
+								__("Disable right-click on displayed media.", "folioblocks"),
+								__("Lazy-load videos and thumbnails.", "folioblocks"),
+							]}
+							campaign="media-protection-performance"
+							compact
+						/>,
 						{ attributes, setAttributes },
 					)}
 					{applyFilters(
 						"folioBlocks.videoBlock.lazyLoadToggle",
-						<div style={{ marginBottom: "8px" }}>
-							<Notice status="info" isDismissible={false}>
-								<strong>
-									{__("Enable Lazy Load of Images", "folioblocks")}
-								</strong>
-								<br />
-								{__(
-									"This is a premium feature. Unlock all features:",
-									"folioblocks",
-								)}{" "}
-								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-									{__("Upgrade to Pro", "folioblocks")}
-								</a>
-							</Notice>
-						</div>,
+						null,
 						{ attributes, setAttributes },
 					)}
 				</InspectorControls>

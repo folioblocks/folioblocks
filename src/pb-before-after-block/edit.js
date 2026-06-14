@@ -13,7 +13,6 @@ import {
 	Button,
 	Icon,
 	PanelBody,
-	Notice,
 	ToolbarGroup,
 	ToolbarButton,
 	SelectControl,
@@ -24,6 +23,7 @@ import { applyFilters } from "@wordpress/hooks";
 import { media } from "@wordpress/icons";
 import { IconBeforeAfter } from "../pb-helpers/icons";
 import { getImageSizeOptions } from "../pb-helpers/imageSizeOptions";
+import { specialistProFeatureNotice } from "../pb-helpers/specialistProFeatureNotices";
 import "./editor.scss";
 
 function CustomPlaceholder({
@@ -116,10 +116,6 @@ export default function Edit({ attributes, setAttributes }) {
 		[],
 	);
 	const imageSizeOptions = getImageSizeOptions(availableImageSizes, __);
-
-	const checkoutUrl =
-		window.folioBlocksData?.checkoutUrl ||
-		"https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks&utm_medium=before-after-block&utm_campaign=upgrade";
 
 	// Block Preview Image
 	if (preview) {
@@ -322,49 +318,13 @@ export default function Edit({ attributes, setAttributes }) {
 							/>
 							{applyFilters(
 								"folioBlocks.beforeAfter.dragHandlePosition",
-								<div style={{ marginBottom: "8px" }}>
-									<Notice status="info" isDismissible={false}>
-										<strong>
-											{__("Drag Handle Starting Postion", "folioblocks")}
-										</strong>
-										<br />
-										{__(
-											"This is a premium feature. Unlock all features:",
-											"folioblocks",
-										)}{" "}
-										<a
-											href={checkoutUrl}
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											{__("Upgrade to Pro", "folioblocks")}
-										</a>
-									</Notice>
-								</div>,
+								specialistProFeatureNotice("beforeAfterControls"),
 								{ attributes, setAttributes },
 							)}
 
 							{applyFilters(
 								"folioBlocks.beforeAfter.showLabelsToggle",
-								<div style={{ marginBottom: "8px" }}>
-									<Notice status="info" isDismissible={false}>
-										<strong>
-											{__("Show Before & After Labels", "folioblocks")}
-										</strong>
-										<br />
-										{__(
-											"This is a premium feature. Unlock all features:",
-											"folioblocks",
-										)}{" "}
-										<a
-											href={checkoutUrl}
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											{__("Upgrade to Pro", "folioblocks")}
-										</a>
-									</Notice>
-								</div>,
+								null,
 								{ attributes, setAttributes },
 							)}
 						</PanelBody>
@@ -372,46 +332,12 @@ export default function Edit({ attributes, setAttributes }) {
 					<InspectorControls group="advanced">
 						{applyFilters(
 							"folioBlocks.beforeAfter.disableRightClickToggle",
-							<div style={{ marginBottom: "8px" }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__("Disable Right-Click", "folioblocks")}</strong>
-									<br />
-									{__(
-										"This is a premium feature. Unlock all features:",
-										"folioblocks",
-									)}{" "}
-									<a
-										href={checkoutUrl}
-										target="_blank"
-										rel="noopener noreferrer"
-									>
-										{__("Upgrade to Pro", "folioblocks")}
-									</a>
-								</Notice>
-							</div>,
+							specialistProFeatureNotice("protectionPerformance"),
 							{ attributes, setAttributes },
 						)}
 						{applyFilters(
 							"folioBlocks.beforeAfter.lazyLoadToggle",
-							<div style={{ marginBottom: "8px" }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>
-										{__("Enable Lazy Load of Images", "folioblocks")}
-									</strong>
-									<br />
-									{__(
-										"This is a premium feature. Unlock all features:",
-										"folioblocks",
-									)}{" "}
-									<a
-										href={checkoutUrl}
-										target="_blank"
-										rel="noopener noreferrer"
-									>
-										{__("Upgrade to Pro", "folioblocks")}
-									</a>
-								</Notice>
-							</div>,
+							null,
 							{ attributes, setAttributes },
 						)}
 					</InspectorControls>
@@ -422,28 +348,7 @@ export default function Edit({ attributes, setAttributes }) {
 								title={__("Slider & Label Styles", "folioblocks")}
 								initialOpen={true}
 							>
-								<div style={{ marginBottom: "8px" }}>
-									<Notice status="info" isDismissible={false}>
-										<strong>
-											{__(
-												"Enable Slider & Label Style Controls",
-												"folioblocks",
-											)}
-										</strong>
-										<br />
-										{__(
-											"This is a premium feature. Unlock all features:",
-											"folioblocks",
-										)}{" "}
-										<a
-											href={checkoutUrl}
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											{__("Upgrade to Pro", "folioblocks")}
-										</a>
-									</Notice>
-								</div>
+								{specialistProFeatureNotice("beforeAfterStyles")}
 							</PanelBody>,
 							{ attributes, setAttributes },
 						)}

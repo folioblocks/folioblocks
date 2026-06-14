@@ -30,10 +30,6 @@ import '../pb-helpers/applyThumbnails';
 import { registerImageClickStylePremiumControls } from '../pb-helpers/imageClickStylePremiumControls.js';
 import { enableImageTransforms } from '../pb-helpers/galleryTransforms';
 import { registerImageHoverActionPremiumControls } from '../pb-helpers/imageHoverActionPremiumControls.js';
-import {
-	registerDisableRightClickPremiumControl,
-	registerLazyLoadPremiumControl,
-} from '../pb-helpers/simplePremiumControls.js';
 
 enableImageTransforms( 'folioblocks/pb-image-block' );
 
@@ -343,21 +339,6 @@ registerImageClickStylePremiumControls( {
 	hookPrefix: 'folioBlocks.imageBlock',
 	namespace: 'folioblocks/image-block',
 	panelLabel: __( 'Image Click Styles', 'folioblocks' ),
-	hideInsideGallery: true,
-} );
-
-registerDisableRightClickPremiumControl( {
-	hookPrefix: 'folioBlocks.imageBlock',
-	namespace: 'folioblocks/image-block',
-	label: __( 'Disable Right-Click', 'folioblocks' ),
-	hideInsideGallery: true,
-} );
-
-registerLazyLoadPremiumControl( {
-	hookPrefix: 'folioBlocks.imageBlock',
-	namespace: 'folioblocks/image-block',
-	help: __( 'Enables lazy loading of image.', 'folioblocks' ),
-	defaultValue: true,
 	hideInsideGallery: true,
 } );
 

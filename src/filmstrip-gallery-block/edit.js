@@ -12,7 +12,6 @@ import {
 } from '@wordpress/block-editor';
 import {
 	PanelBody,
-	Notice,
 	SelectControl,
 	ToolbarGroup,
 	ToolbarButton,
@@ -32,6 +31,7 @@ import { decodeEntities } from '@wordpress/html-entities';
 import { IconFilmstripGallery, IconPBSpinner } from '../pb-helpers/icons';
 import { getExifAttributesFromMedia } from '../pb-helpers/exifMetadata';
 import { getImageSizeOptions } from '../pb-helpers/imageSizeOptions';
+import { imageProFeatureNotice } from '../pb-helpers/imageProFeatureNotices';
 import './editor.scss';
 
 const ALLOWED_BLOCKS = [ 'folioblocks/pb-image-block' ];
@@ -178,9 +178,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		pauseOnHover = false,
 		enableFullscreen = false,
 	} = attributes;
-	const checkoutUrl =
-		window.folioBlocksData?.checkoutUrl ||
-		'https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks&utm_medium=filmstrip-gallery-block&utm_campaign=upgrade';
 
 	// Runtime override: if WooCommerce is not active, force Woo features off without mutating saved attributes
 	const hasWooCommerce = window.folioBlocksData?.hasWooCommerce ?? false;
@@ -1111,25 +1108,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 
 					{ applyFilters(
 						'folioBlocks.filmstripGallery.enableAutoplayToggle',
-						<div style={ { marginBottom: '8px' } }>
-							<Notice status="info" isDismissible={ false }>
-								<strong>
-									{ __( 'Enable Autoplay', 'folioblocks' ) }
-								</strong>
-								<br />
-								{ __(
-									'This is a premium feature. Unlock all features:',
-									'folioblocks'
-								) }{ ' ' }
-								<a
-									href={ checkoutUrl }
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									{ __( 'Upgrade to Pro', 'folioblocks' ) }
-								</a>
-							</Notice>
-						</div>,
+						imageProFeatureNotice( 'filmstripPlayback' ),
 						{ attributes, setAttributes }
 					) }
 					<SelectControl
@@ -1161,54 +1140,12 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					/>
 					{ applyFilters(
 						'folioBlocks.filmstripGallery.enableFullscreenToggle',
-						<div style={ { marginBottom: '8px' } }>
-							<Notice status="info" isDismissible={ false }>
-								<strong>
-									{ __(
-										'Enable Full-Screen Mode',
-										'folioblocks'
-									) }
-								</strong>
-								<br />
-								{ __(
-									'This is a premium feature. Unlock all features:',
-									'folioblocks'
-								) }{ ' ' }
-								<a
-									href={ checkoutUrl }
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									{ __( 'Upgrade to Pro', 'folioblocks' ) }
-								</a>
-							</Notice>
-						</div>,
+						null,
 						{ attributes, setAttributes }
 					) }
 					{ applyFilters(
 						'folioBlocks.filmstripGallery.randomizeOrderToggle',
-						<div style={ { marginBottom: '8px' } }>
-							<Notice status="info" isDismissible={ false }>
-								<strong>
-									{ __(
-										'Randomize Image Order',
-										'folioblocks'
-									) }
-								</strong>
-								<br />
-								{ __(
-									'This is a premium feature. Unlock all features:',
-									'folioblocks'
-								) }{ ' ' }
-								<a
-									href={ checkoutUrl }
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									{ __( 'Upgrade to Pro', 'folioblocks' ) }
-								</a>
-							</Notice>
-						</div>,
+						null,
 						{ attributes, setAttributes }
 					) }
 				</PanelBody>
@@ -1232,25 +1169,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					/>
 					{ applyFilters(
 						'folioBlocks.filmstripGallery.imageClickActionNotice',
-						<div style={ { marginBottom: '8px' } }>
-							<Notice status="info" isDismissible={ false }>
-								<strong>
-									{ __( 'Custom Image Linking', 'folioblocks' ) }
-								</strong>
-								<br />
-								{ __(
-									'This is a premium feature. Unlock all features:',
-									'folioblocks'
-								) }{ ' ' }
-								<a
-									href={ checkoutUrl }
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									{ __( 'Upgrade to Pro', 'folioblocks' ) }
-								</a>
-							</Notice>
-						</div>,
+						imageProFeatureNotice( 'clickActions' ),
 						{
 							attributes,
 							setAttributes,
@@ -1310,25 +1229,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				>
 					{ applyFilters(
 						'folioBlocks.filmstripGallery.onHoverTitleToggle',
-						<div style={ { marginBottom: '8px' } }>
-							<Notice status="info" isDismissible={ false }>
-								<strong>
-									{ __( 'Gallery Hover Settings', 'folioblocks' ) }
-								</strong>
-								<br />
-								{ __(
-									'This is a premium feature. Unlock all features:',
-									'folioblocks'
-								) }{ ' ' }
-								<a
-									href={ checkoutUrl }
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									{ __( 'Upgrade to Pro', 'folioblocks' ) }
-								</a>
-							</Notice>
-						</div>,
+						imageProFeatureNotice( 'hoverSettings' ),
 						{ attributes, setAttributes }
 					) }
 				</PanelBody>
@@ -1336,51 +1237,12 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			<InspectorControls group="advanced">
 				{ applyFilters(
 					'folioBlocks.filmstripGallery.disableRightClickToggle',
-					<div style={ { marginBottom: '8px' } }>
-						<Notice status="info" isDismissible={ false }>
-							<strong>
-								{ __( 'Disable Right-Click', 'folioblocks' ) }
-							</strong>
-							<br />
-							{ __(
-								'This is a premium feature. Unlock all features:',
-								'folioblocks'
-							) }{ ' ' }
-							<a
-								href={ checkoutUrl }
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								{ __( 'Upgrade to Pro', 'folioblocks' ) }
-							</a>
-						</Notice>
-					</div>,
+					imageProFeatureNotice( 'protectionPerformance' ),
 					{ attributes, setAttributes }
 				) }
 				{ applyFilters(
 					'folioBlocks.filmstripGallery.lazyLoadToggle',
-					<div style={ { marginBottom: '8px' } }>
-						<Notice status="info" isDismissible={ false }>
-							<strong>
-								{ __(
-									'Enable Lazy Load of Images',
-									'folioblocks'
-								) }
-							</strong>
-							<br />
-							{ __(
-								'This is a premium feature. Unlock all features:',
-								'folioblocks'
-							) }{ ' ' }
-							<a
-								href={ checkoutUrl }
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								{ __( 'Upgrade to Pro', 'folioblocks' ) }
-							</a>
-						</Notice>
-					</div>,
+					null,
 					{ attributes, setAttributes }
 				) }
 			</InspectorControls>
@@ -1391,25 +1253,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				>
 					{ applyFilters(
 						'folioBlocks.filmstripGallery.colorModeControl',
-						<div style={ { marginBottom: '8px' } }>
-							<Notice status="info" isDismissible={ false }>
-								<strong>
-									{ __( 'Color Mode', 'folioblocks' ) }
-								</strong>
-								<br />
-								{ __(
-									'This is a premium feature. Unlock all features:',
-									'folioblocks'
-								) }{ ' ' }
-								<a
-									href={ checkoutUrl }
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									{ __( 'Upgrade to Pro', 'folioblocks' ) }
-								</a>
-							</Notice>
-						</div>,
+						imageProFeatureNotice( 'filmstripColorMode' ),
 						{
 							attributes,
 							setAttributes,

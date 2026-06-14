@@ -13,7 +13,6 @@ import {
 import { useSelect } from '@wordpress/data';
 import {
 	PanelBody,
-	Notice,
 	ToggleControl,
 	TextareaControl,
 	TextControl,
@@ -36,6 +35,7 @@ import {
 	hasStoredExifAttributes,
 } from '../pb-helpers/exifMetadata';
 import { getImageSizeOptions } from '../pb-helpers/imageSizeOptions';
+import { imageProFeatureNotice } from '../pb-helpers/imageProFeatureNotices';
 import './editor.scss';
 
 const getImageClickAction = ( {
@@ -314,9 +314,6 @@ export default function Edit( {
 		'folioBlocks/linkIconBgColor': contextLinkIconBgColor,
 	} = context || {};
 
-	const checkoutUrl =
-		window.folioBlocksData?.checkoutUrl ||
-		'https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks&utm_medium=image-block&utm_campaign=upgrade';
 	const isInsideGallery = Object.keys( context || {} ).some( ( key ) =>
 		key.startsWith( 'folioBlocks/' )
 	);
@@ -875,30 +872,20 @@ export default function Edit( {
 							{ ! isInsideGallery &&
 								applyFilters(
 									'folioBlocks.imageBlock.lazyLoadToggle',
-									<div style={ { marginBottom: '8px' } }>
-										<Notice status="info" isDismissible={ false }>
-											<strong>
-												{ __(
-													'Enable Lazy Load of Images',
-													'folioblocks'
-												) }
-											</strong>
-											<br />
-											{ __(
-												'This is a premium feature. Unlock all features:',
-												'folioblocks'
-											) }{ ' ' }
-											<a
-												href={ checkoutUrl }
-												target="_blank"
-												rel="noopener noreferrer"
-											>
-												{ __( 'Upgrade to Pro', 'folioblocks' ) }
-											</a>
-										</Notice>
-									</div>,
+									imageProFeatureNotice( 'protectionPerformance' ),
 									{ attributes, setAttributes }
 								) }
+						</PanelBody>
+					) }
+					{ isInsideGallery && ! galleryOverridesEnabled && (
+						<PanelBody
+							title={ __(
+								'Per-Image Gallery Overrides',
+								'folioblocks'
+							) }
+							initialOpen={ true }
+						>
+							{ imageProFeatureNotice( 'imageOverrides' ) }
 						</PanelBody>
 					) }
 					{ showImageClickPanel && (
@@ -949,25 +936,7 @@ export default function Edit( {
 									/>
 									{ applyFilters(
 										'folioBlocks.imageBlock.imageClickActionNotice',
-										<div style={ { marginBottom: '8px' } }>
-											<Notice status="info" isDismissible={ false }>
-												<strong>
-													{ __( 'Custom Image Linking', 'folioblocks' ) }
-												</strong>
-												<br />
-												{ __(
-													'This is a premium feature. Unlock all features:',
-													'folioblocks'
-												) }{ ' ' }
-												<a
-													href={ checkoutUrl }
-													target="_blank"
-													rel="noopener noreferrer"
-												>
-													{ __( 'Upgrade to Pro', 'folioblocks' ) }
-												</a>
-											</Notice>
-										</div>,
+										imageProFeatureNotice( 'clickActions' ),
 										{
 											attributes,
 											setAttributes,
@@ -1093,25 +1062,7 @@ export default function Edit( {
 									overrideGalleryHoverSettings ) &&
 									applyFilters(
 										'folioBlocks.imageBlock.onHoverTitleToggle',
-										<div style={ { marginBottom: '8px' } }>
-											<Notice status="info" isDismissible={ false }>
-												<strong>
-													{ __( 'Image Hover Settings', 'folioblocks' ) }
-												</strong>
-												<br />
-												{ __(
-													'This is a premium feature. Unlock all features:',
-													'folioblocks'
-												) }{ ' ' }
-												<a
-													href={ checkoutUrl }
-													target="_blank"
-													rel="noopener noreferrer"
-												>
-													{ __( 'Upgrade to Pro', 'folioblocks' ) }
-												</a>
-											</Notice>
-										</div>,
+										imageProFeatureNotice( 'hoverSettings' ),
 										{
 											attributes: {
 												...attributes,
@@ -1153,25 +1104,7 @@ export default function Edit( {
 								) }
 								{ applyFilters(
 									'folioBlocks.imageBlock.cameraMetadataControls',
-									<div style={ { marginBottom: '8px' } }>
-										<Notice status="info" isDismissible={ false }>
-											<strong>
-												{ __( 'EXIF Data', 'folioblocks' ) }
-											</strong>
-											<br />
-											{ __(
-												'This is a premium feature. Unlock all features:',
-												'folioblocks'
-											) }{ ' ' }
-											<a
-												href={ checkoutUrl }
-												target="_blank"
-												rel="noopener noreferrer"
-											>
-												{ __( 'Upgrade to Pro', 'folioblocks' ) }
-											</a>
-										</Notice>
-									</div>,
+									imageProFeatureNotice( 'exif' ),
 									{ attributes, setAttributes }
 								) }
 							</PanelBody>

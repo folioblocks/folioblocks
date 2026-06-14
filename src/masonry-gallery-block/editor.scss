@@ -28,6 +28,8 @@
 .pb-masonry-gallery .wp-block-folioblocks-pb-image-block {
 	position: static; // or `relative`, but *not* absolute
 	opacity: 1 !important;
+	transform: none !important;
+	transition: none !important;
 }
 
 

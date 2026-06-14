@@ -13,7 +13,6 @@ import {
 	MediaPlaceholder,
 } from '@wordpress/block-editor';
 import {
-	Notice,
 	ToolbarGroup,
 	ToolbarButton,
 	PanelBody,
@@ -27,6 +26,7 @@ import { applyFilters } from '@wordpress/hooks';
 import { IconModularGallery } from '../pb-helpers/icons';
 import { getExifAttributesFromMedia } from '../pb-helpers/exifMetadata';
 import { getImageSizeOptions } from '../pb-helpers/imageSizeOptions';
+import { imageProFeatureNotice } from '../pb-helpers/imageProFeatureNotices';
 
 import './editor.scss';
 
@@ -149,9 +149,6 @@ export default function Edit( props ) {
 	const { clientId, attributes, setAttributes } = props;
 	const { noGap, lightbox, lightboxCaption, preview } = attributes;
 
-	const checkoutUrl =
-		window.folioBlocksData?.checkoutUrl ||
-		'https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks&utm_medium=modular-gallery-block&utm_campaign=upgrade';
 
 	// Block Preview Image
 	if ( preview ) {
@@ -732,25 +729,7 @@ export default function Edit( props ) {
 					/>
 					{ applyFilters(
 						'folioBlocks.modularGallery.imageClickActionNotice',
-						<div style={ { marginBottom: '8px' } }>
-							<Notice status="info" isDismissible={ false }>
-								<strong>
-									{ __( 'Custom Image Linking', 'folioblocks' ) }
-								</strong>
-								<br />
-								{ __(
-									'This is a premium feature. Unlock all features:',
-									'folioblocks'
-								) }{ ' ' }
-								<a
-									href={ checkoutUrl }
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									{ __( 'Upgrade to Pro', 'folioblocks' ) }
-								</a>
-							</Notice>
-						</div>,
+						imageProFeatureNotice( 'clickActions' ),
 						{
 							attributes,
 							setAttributes,
@@ -794,52 +773,13 @@ export default function Edit( props ) {
 						>
 							{ applyFilters(
 								'folioBlocks.modularGallery.onHoverTitleToggle',
-								<div style={ { marginBottom: '8px' } }>
-									<Notice status="info" isDismissible={ false }>
-										<strong>
-											{ __( 'Gallery Hover Settings', 'folioblocks' ) }
-										</strong>
-										<br />
-										{ __(
-											'This is a premium feature. Unlock all features:',
-											'folioblocks'
-										) }{ ' ' }
-										<a
-											href={ checkoutUrl }
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											{ __( 'Upgrade to Pro', 'folioblocks' ) }
-										</a>
-									</Notice>
-								</div>,
+								imageProFeatureNotice( 'hoverSettings' ),
 								{ attributes, setAttributes }
 							) }
 						</PanelBody>
 						{ applyFilters(
 							'folioBlocks.modularGallery.lazyLoadToggle',
-					<div style={ { marginBottom: '8px' } }>
-						<Notice status="info" isDismissible={ false }>
-							<strong>
-								{ __(
-									'Enable Lazy Load of Images',
-									'folioblocks'
-								) }
-							</strong>
-							<br />
-							{ __(
-								'This is a premium feature. Unlock all features:',
-								'folioblocks'
-							) }{ ' ' }
-							<a
-								href={ checkoutUrl }
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								{ __( 'Upgrade to Pro', 'folioblocks' ) }
-							</a>
-						</Notice>
-					</div>,
+					imageProFeatureNotice( 'protectionPerformance' ),
 					{ attributes, setAttributes }
 				) }
 			</InspectorControls>
@@ -850,28 +790,7 @@ export default function Edit( props ) {
 				>
 					{ applyFilters(
 						'folioBlocks.modularGallery.imageStyles',
-						<div style={ { marginBottom: '8px' } }>
-							<Notice status="info" isDismissible={ false }>
-								<strong>
-									{ __(
-										'Enable Image Styles',
-										'folioblocks'
-									) }
-								</strong>
-								<br />
-								{ __(
-									'This is a premium feature. Unlock all features:',
-									'folioblocks'
-								) }{ ' ' }
-								<a
-									href={ checkoutUrl }
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									{ __( 'Upgrade to Pro', 'folioblocks' ) }
-								</a>
-							</Notice>
-						</div>,
+						imageProFeatureNotice( 'imageStyles' ),
 						{ attributes, setAttributes }
 					) }
 				</PanelBody>

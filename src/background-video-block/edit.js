@@ -40,6 +40,7 @@ import {
 } from "@wordpress/icons";
 import CompactColorControl from "../pb-helpers/CompactColorControl";
 import { IconBackgroundVideo } from "../pb-helpers/icons";
+import { specialistProFeatureNotice } from "../pb-helpers/specialistProFeatureNotices";
 import ValidatedUrlControl from "../pb-helpers/ValidatedUrlControl";
 import {
 	isValidHttpUrl,
@@ -206,10 +207,6 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		preview,
 		vimeoAspectRatio,
 	} = attributes;
-
-	const checkoutUrl =
-		window.folioBlocksData?.checkoutUrl ||
-		"https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks&utm_medium=background-video-block&utm_campaign=upgrade";
 
 	// Block Preview Image
 	if (preview) {
@@ -674,23 +671,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 									"folioblocks",
 								)}
 							/>
-							<div style={{ marginBottom: "8px" }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__("Responsive Controls", "folioblocks")}</strong>
-									<br />
-									{__(
-										"This is a premium feature. Unlock all features:",
-										"folioblocks",
-									)}{" "}
-									<a
-										href={checkoutUrl}
-										target="_blank"
-										rel="noopener noreferrer"
-									>
-										{__("Upgrade to Pro", "folioblocks")}
-									</a>
-								</Notice>
-							</div>
+							{specialistProFeatureNotice("backgroundVideoResponsive")}
 						</>,
 						{ attributes, setAttributes },
 					)}
@@ -892,19 +873,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			<InspectorControls group="advanced">
 				{applyFilters(
 					"folioBlocks.backgroundVideoBlock.disableRightClickToggle",
-					<div style={{ marginBottom: "8px" }}>
-						<Notice status="info" isDismissible={false}>
-							<strong>{__("Disable Right-Click", "folioblocks")}</strong>
-							<br />
-							{__(
-								"This is a premium feature. Unlock all features:",
-								"folioblocks",
-							)}{" "}
-							<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-								{__("Upgrade to Pro", "folioblocks")}
-							</a>
-						</Notice>
-					</div>,
+					specialistProFeatureNotice("protection"),
 					{ attributes, setAttributes },
 				)}
 			</InspectorControls>

@@ -18,7 +18,6 @@ import {
 	ToolbarGroup,
 	ToolbarButton,
 	RangeControl,
-	Notice,
 	Panel,
 } from "@wordpress/components";
 import { useState, useRef } from "@wordpress/element";
@@ -27,6 +26,7 @@ import { applyFilters } from "@wordpress/hooks";
 import { media } from "@wordpress/icons";
 import { IconLoupe } from "../pb-helpers/icons";
 import { getImageSizeOptions } from "../pb-helpers/imageSizeOptions";
+import { specialistProFeatureNotice } from "../pb-helpers/specialistProFeatureNotices";
 import "./editor.scss";
 
 export default function Edit({ attributes, setAttributes }) {
@@ -40,9 +40,6 @@ export default function Edit({ attributes, setAttributes }) {
 		loupeTheme,
 		preview,
 	} = attributes;
-	const checkoutUrl =
-		window.folioBlocksData?.checkoutUrl ||
-		"https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks&utm_medium=loupe-block&utm_campaign=upgrade";
 	const wrapperRef = useRef(null);
 	const availableImageSizes = useSelect(
 		(select) => select("core/block-editor").getSettings()?.imageSizes || [],
@@ -277,36 +274,12 @@ export default function Edit({ attributes, setAttributes }) {
 					/>
 					{applyFilters(
 						"folioBlocks.loupeBlock.loupeShapeControl",
-						<div style={{ marginBottom: "8px" }}>
-							<Notice status="info" isDismissible={false}>
-								<strong>{__("Loupe Shape", "folioblocks")}</strong>
-								<br />
-								{__(
-									"This is a premium feature. Unlock all features:",
-									"folioblocks",
-								)}{" "}
-								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-									{__("Upgrade to Pro", "folioblocks")}
-								</a>
-							</Notice>
-						</div>,
+						specialistProFeatureNotice("loupeAppearance"),
 						{ attributes, setAttributes },
 					)}
 					{applyFilters(
 						"folioBlocks.loupeBlock.loupeThemeControl",
-						<div style={{ marginBottom: "8px" }}>
-							<Notice status="info" isDismissible={false}>
-								<strong>{__("Loupe Theme", "folioblocks")}</strong>
-								<br />
-								{__(
-									"This is a premium feature. Unlock all features:",
-									"folioblocks",
-								)}{" "}
-								<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-									{__("Upgrade to Pro", "folioblocks")}
-								</a>
-							</Notice>
-						</div>,
+						null,
 						{ attributes, setAttributes },
 					)}
 				</PanelBody>
@@ -314,19 +287,7 @@ export default function Edit({ attributes, setAttributes }) {
 			<InspectorControls group="advanced">
 				{applyFilters(
 					"folioBlocks.loupeBlock.disableRightClickToggle",
-					<div style={{ marginBottom: "8px" }}>
-						<Notice status="info" isDismissible={false}>
-							<strong>{__("Disable Right-Click", "folioblocks")}</strong>
-							<br />
-							{__(
-								"This is a premium feature. Unlock all features:",
-								"folioblocks",
-							)}{" "}
-							<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-								{__("Upgrade to Pro", "folioblocks")}
-							</a>
-						</Notice>
-					</div>,
+					specialistProFeatureNotice("protection"),
 					{ attributes, setAttributes },
 				)}
 			</InspectorControls>
