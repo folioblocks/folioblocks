@@ -36,6 +36,7 @@ import {
 } from '../pb-helpers/exifMetadata';
 import { getImageSizeOptions } from '../pb-helpers/imageSizeOptions';
 import { imageProFeatureNotice } from '../pb-helpers/imageProFeatureNotices';
+import { getShadowStyleClass } from '../pb-helpers/ImageStyleControl';
 import './editor.scss';
 
 const getImageClickAction = ( {
@@ -379,9 +380,12 @@ export default function Edit( {
 			: undefined,
 	};
 
-	const effectiveDropShadow = isInsideGallery
-		? context[ 'folioBlocks/dropShadow' ]
-		: dropShadow;
+	const shadowStyleClass = getShadowStyleClass(
+		isInsideGallery
+			? context[ 'folioBlocks/shadowStyle' ]
+			: attributes.shadowStyle,
+		isInsideGallery ? context[ 'folioBlocks/dropShadow' ] : dropShadow
+	);
 
 	const ctxHoverStyle = hoverContext?.[ 'folioBlocks/onHoverStyle' ];
 	const effectiveOnHoverStyle =
@@ -1157,7 +1161,7 @@ export default function Edit( {
 							className={ [
 								'pb-image-block',
 								overlayEnabled ? hoverVariantClass : '',
-								effectiveDropShadow ? 'dropshadow' : '',
+								shadowStyleClass,
 								shouldShowDownloadIcon ? 'has-download' : '',
 							]
 								.filter( Boolean )
@@ -1286,7 +1290,7 @@ export default function Edit( {
 						className={ [
 							'pb-image-block',
 							overlayEnabled ? hoverVariantClass : '',
-							effectiveDropShadow ? 'dropshadow' : '',
+							shadowStyleClass,
 							shouldShowDownloadIcon ? 'has-download' : '',
 						]
 							.filter( Boolean )

@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.4.0] - Unreleased
 ### Added
+- Added responsive desktop, tablet, and mobile gap controls to Masonry, Justified, Modular, and Video Galleries.
+- Added a fullscreen control to Video Block and Video Gallery lightboxes that expands the playing video.
+- Added the same drop shadow style presets to Video Block and Video Gallery thumbnails.
+- Added Subtle, Soft, Elevated, and Dramatic drop shadow presets for Image Block and photo galleries.
+- Added tap-to-hide Lightbox controls and captions for distraction-free image viewing, plus swipe navigation on touch devices.
 - Added Dark and Light appearance options for image lightboxes, with per-image overrides able to inherit future gallery appearance changes.
 - Added combined Image Title, Image Caption, and EXIF Data display options for image lightboxes.
 - Added optional WooCommerce and Page/URL link icons when thumbnail linking is enabled.
@@ -21,6 +26,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added Pro-only per-video Gallery Hover Settings overrides to Video Blocks inside Video Galleries, including per-video hover styles, overlay content, visibility, and Color Overlay colors.
 
 ### Changed
+- Made responsive image gap controls for Masonry and Justified Galleries a FolioBlocks Pro feature while retaining the free Remove Image Gap option.
+- Improved Justified Gallery row balancing so completed rows stay closer to the preferred row height.
+- Consolidated image and video border, radius, color, and drop shadow controls into a shared Image Style control with consistent 15px border width and 50px radius limits.
 - Moved Pro Lazy Load and Disable Right-Click controls from individual block settings into a conditional FolioBlocks panel in the editor Page & Post settings.
 - Moved gallery, Image Block, and Video Block transforms into FolioBlocks Pro.
 - Moved per-image gallery filtering categories into the WordPress 7.0 Content inspector while preserving their Settings inspector location on older WordPress versions.
@@ -42,6 +50,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reworked free-version Pro feature notices across image, video, gallery, Before & After, Loupe, and Background Video blocks with clearer feature summaries and consistent Get FolioBlocks Pro actions.
 
 ### Fixed
+- Fixed gallery transforms dropping matching responsive column and gap settings.
+- Fixed Justified Gallery rows sometimes stopping short of the gallery edge when using larger image gaps.
+- Fixed Hide Unknown EXIF Fields failing when missing metadata was stored using a different site locale.
+- Fixed image Lightbox navigation arrows overlapping captions on mobile devices.
 - Fixed an Image Block editor crash when changing gallery overlay content from EXIF Data to Product Info.
 - Fixed the Filmstrip Gallery `useSelect` capabilities warning caused by unstable selector return values.
 - Fixed Filmstrip Gallery horizontal-image overlays extending beyond the displayed image in the editor and front end.

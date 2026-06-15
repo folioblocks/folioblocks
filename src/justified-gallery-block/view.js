@@ -1,4 +1,6 @@
 // Justified Gallery Block - View JS
+import { calculateJustifiedLayout } from '../pb-helpers/justifiedLayout';
+
 document.addEventListener( 'DOMContentLoaded', () => {
 	const containers = document.querySelectorAll( '.pb-justified-gallery' );
 	const layoutInstances = new WeakMap();
@@ -28,7 +30,6 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			? parsedMobileRowHeight
 			: desktopRowHeight;
 		const noGap = container.dataset.noGap === 'true';
-		const gap = noGap ? 0 : 10;
 		const getRowHeightForWidth = ( width ) => {
 			if ( width <= 600 ) {
 				return mobileRowHeight;
@@ -37,6 +38,22 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				return tabletRowHeight;
 			}
 			return desktopRowHeight;
+		};
+		const getGapForWidth = ( width ) => {
+			if ( noGap ) {
+				return 0;
+			}
+
+			const styles = window.getComputedStyle( wrapper || container );
+			let property = '--pb-gallery-gap-desktop';
+			if ( width <= 600 ) {
+				property = '--pb-gallery-gap-mobile';
+			} else if ( width <= 1024 ) {
+				property = '--pb-gallery-gap-tablet';
+			}
+
+			const gap = parseFloat( styles.getPropertyValue( property ) );
+			return Number.isFinite( gap ) ? gap : 10;
 		};
 
 		let resizeTimeout;
@@ -50,6 +67,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			const targetRowHeight = getRowHeightForWidth(
 				container.clientWidth
 			);
+			const gap = getGapForWidth( container.clientWidth );
 
 			const wrappers = container.querySelectorAll(
 				'.wp-block-folioblocks-pb-image-block:not(.is-hidden)'
@@ -62,65 +80,30 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				return { wrapper: imageWrapper, width, height };
 			} );
 
-			const rows = [];
-			let currentRow = [];
-			let currentRowWidth = 0;
-
-			images.forEach( ( img ) => {
-				const aspectRatio = img.width / img.height;
-				const scaledWidth = aspectRatio * targetRowHeight;
-				currentRow.push( { ...img, scaledWidth, aspectRatio } );
-				currentRowWidth += scaledWidth + gap;
-
-				if (
-					currentRowWidth >= containerWidth &&
-					currentRow.length > 0
-				) {
-					rows.push( currentRow );
-					currentRow = [];
-					currentRowWidth = 0;
-				}
+			const rows = calculateJustifiedLayout( {
+				items: images.map( ( img ) => ( {
+					...img,
+					aspectRatio: img.width / img.height,
+				} ) ),
+				containerWidth,
+				targetRowHeight,
+				gap,
 			} );
 
-			if ( currentRow.length > 0 ) {
-				rows.push( currentRow );
-			}
-
 			rows.forEach( ( row ) => {
-				const totalScaledWidth = row.reduce(
-					( sum, img ) => sum + img.scaledWidth,
-					0
-				);
-				const totalGaps = ( row.length - 1 ) * gap;
-				const isFinalRow = row === rows[ rows.length - 1 ];
-				const rowFillRatio =
-					( totalScaledWidth + totalGaps ) / containerWidth;
-				const shouldScale = ! isFinalRow || rowFillRatio > 0.9;
-				const scale = shouldScale
-					? Math.min(
-							( containerWidth - totalGaps ) / totalScaledWidth,
-							1
-					  )
-					: 1;
-
 				row.forEach( ( img, index ) => {
-					const isLast = index === row.length - 1;
-					const finalWidth =
-						Math.round( img.scaledWidth * scale ) -
-						( isLast ? 1 : 0 );
-					const finalHeight = Math.round( targetRowHeight * scale );
 					img.wrapper.style.setProperty(
 						'--pb-width',
-						`${ finalWidth }px`
+						`${ img.layoutWidth }px`
 					);
 					img.wrapper.style.setProperty(
 						'--pb-height',
-						`${ finalHeight }px`
+						`${ img.layoutHeight }px`
 					);
 					const isLastInRow = index === row.length - 1;
 					const inlineMarginValue =
-						! isLastInRow && ! noGap ? `${ gap }px` : '0px';
-					const blockMarginValue = ! noGap ? `${ gap }px` : '0px';
+						! isLastInRow && gap > 0 ? `${ gap }px` : '0px';
+					const blockMarginValue = gap > 0 ? `${ gap }px` : '0px';
 					img.wrapper.style.setProperty(
 						'--pb-margin-inline',
 						inlineMarginValue

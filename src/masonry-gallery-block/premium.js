@@ -3,19 +3,16 @@
  * Premium JS
  */
 import { __ } from '@wordpress/i18n';
-import {
-	ToggleControl,
-	RangeControl,
-} from '@wordpress/components';
 import { addFilter } from '@wordpress/hooks';
 import { useEffect, useRef } from '@wordpress/element';
-import CompactColorControl from '../pb-helpers/CompactColorControl';
+import ImageStyleControl from '../pb-helpers/ImageStyleControl';
 import { registerImageClickActionPremiumControls } from '../pb-helpers/imageClickActionPremiumControls';
 import { registerImageClickStylePremiumControls } from '../pb-helpers/imageClickStylePremiumControls';
 import { registerImageHoverActionPremiumControls } from '../pb-helpers/imageHoverActionPremiumControls';
 import { registerFilteringPremiumControls } from '../pb-helpers/filteringPremiumControls';
 import { registerListViewThumbnailEnhancements } from '../pb-helpers/listViewThumbnailEnhancements';
 import { enableGalleryTransforms } from '../pb-helpers/galleryTransforms';
+import { registerResponsiveGapPremiumControl } from '../pb-helpers/responsiveGapPremiumControl';
 import {
 	registerDisableRightClickPremiumControl,
 	registerLazyLoadPremiumControl,
@@ -23,6 +20,11 @@ import {
 } from '../pb-helpers/simplePremiumControls';
 
 enableGalleryTransforms( 'folioblocks/masonry-gallery-block' );
+registerResponsiveGapPremiumControl( {
+	hookName: 'folioBlocks.masonryGallery.responsiveGapControl',
+	gapsHookName: 'folioBlocks.masonryGallery.responsiveGaps',
+	namespace: 'folioblocks/masonry-gallery',
+} );
 
 registerListViewThumbnailEnhancements( {
 	hookPrefix: 'folioBlocks.masonryGallery',
@@ -154,58 +156,11 @@ addFilter(
 		};
 
 		return (
-			<>
-				<CompactColorControl
-					label={ __( 'Border Color', 'folioblocks' ) }
-					value={ attributes.borderColor }
-					onChange={ ( borderColor ) => {
-						setAttributes( { borderColor } );
-						forceRefresh();
-					} }
-					help={ __( 'Set Image border color.', 'folioblocks' ) }
-				/>
-
-				<RangeControl
-					label={ __( 'Border Width', 'folioblocks' ) }
-					value={ attributes.borderWidth }
-					onChange={ ( value ) => {
-						setAttributes( { borderWidth: value } );
-						forceRefresh();
-					} }
-					min={ 0 }
-					max={ 15 }
-					__next40pxDefaultSize
-					__nextHasNoMarginBottom
-					help={ __( 'Set Image border width.', 'folioblocks' ) }
-				/>
-
-				<RangeControl
-					label={ __( 'Border Radius', 'folioblocks' ) }
-					value={ attributes.borderRadius }
-					onChange={ ( value ) => {
-						setAttributes( { borderRadius: value } );
-						forceRefresh();
-					} }
-					min={ 0 }
-					max={ 50 }
-					__next40pxDefaultSize
-					__nextHasNoMarginBottom
-					help={ __( 'Set Image border radius.', 'folioblocks' ) }
-				/>
-
-				<ToggleControl
-					label={ __( 'Enable Drop Shadow', 'folioblocks' ) }
-					checked={ !! attributes.dropShadow }
-					onChange={ ( newDropShadow ) =>
-						setAttributes( { dropShadow: newDropShadow } )
-					}
-					__nextHasNoMarginBottom
-					help={ __(
-						'Applies a subtle drop shadow to images.',
-						'folioblocks'
-					) }
-				/>
-			</>
+			<ImageStyleControl
+				attributes={ attributes }
+				setAttributes={ setAttributes }
+				onChange={ forceRefresh }
+			/>
 		);
 	}
 );

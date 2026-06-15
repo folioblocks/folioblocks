@@ -42,6 +42,7 @@
 	"borderRadius": { "type": "number", "default": 0 },
 	"borderColor": { "type": "string", "default": "#ffffff" }, 
 	"dropShadow": { "type": "boolean", "default": false }, 
+	"shadowStyle": { "type": "string", "enum": ["", "none", "subtle", "soft", "elevated", "dramatic"], "default": "" },
 	"lazyLoad": { "type": "boolean", "default": false }, 
 	"disableRightClick": { "type": "boolean", "default": false },
 	"lightbox":        { "type": "boolean", "default": false },
@@ -84,7 +85,8 @@
 	"folioBlocks/borderWidth",
 	"folioBlocks/borderRadius",
 	"folioBlocks/borderColor", 
-	"folioBlocks/dropShadow"
+	"folioBlocks/dropShadow",
+	"folioBlocks/shadowStyle"
 ],
 "textdomain": "folioblocks",
 "editorScript": [

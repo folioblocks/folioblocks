@@ -261,6 +261,12 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 	$fbks_dropshadow = isset( $fbks_context['folioBlocks/dropShadow'] )
 		? (bool) $fbks_context['folioBlocks/dropShadow']
 		: ( ! empty( $attributes['dropShadow'] ) || ! empty( $attributes['dropshadow'] ) );
+	$fbks_shadow_style = sanitize_key( $fbks_context['folioBlocks/shadowStyle'] ?? ( $attributes['shadowStyle'] ?? '' ) );
+	$fbks_valid_shadow_styles = [ 'none', 'subtle', 'soft', 'elevated', 'dramatic' ];
+	if ( ! in_array( $fbks_shadow_style, $fbks_valid_shadow_styles, true ) ) {
+		$fbks_shadow_style = $fbks_dropshadow ? 'soft' : 'none';
+	}
+	$fbks_shadow_class = 'none' === $fbks_shadow_style ? '' : ' dropshadow dropshadow--' . $fbks_shadow_style;
 
 
 	$fbks_filter_categories = [];
@@ -347,7 +353,10 @@ $fbks_is_unknown_exif_value = static function ( $fbks_value, $fbks_unknown ) {
 		return true;
 	}
 
-	return strtolower( trim( $fbks_value ) ) === strtolower( $fbks_unknown );
+	$fbks_normalized_value = strtolower( trim( $fbks_value ) );
+
+	return 'unknown' === $fbks_normalized_value
+		|| $fbks_normalized_value === strtolower( trim( $fbks_unknown ) );
 };
 
 $fbks_get_lightbox_exif = static function () use ( $attributes, $fbks_get_exif_icon, $fbks_hide_unknown_lightbox_exif, $fbks_is_unknown_exif_value ) {
@@ -442,7 +451,7 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 	<figure
 		class="pb-image-block
       <?php if ( fbks_fs()->can_use_premium_code__premium_only() && $fbks_title_hover ) { echo ' title-hover ' . esc_attr( $fbks_hover_variant_class ); } ?>
-      <?php if ( fbks_fs()->can_use_premium_code__premium_only() ) { echo ( ! empty( $fbks_dropshadow ) ) ? ' dropshadow' : ''; } ?>"
+      <?php if ( fbks_fs()->can_use_premium_code__premium_only() ) { echo esc_attr( $fbks_shadow_class ); } ?>"
 		<?php if ( fbks_fs()->can_use_premium_code__premium_only() && ! empty( $fbks_img_styles ) ) : ?>
 			style="<?php echo esc_attr( $fbks_img_styles ); ?>"
 		<?php endif; ?>

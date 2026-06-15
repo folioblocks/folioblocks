@@ -20,9 +20,23 @@
 		opacity 0.6s ease,
 		transform 0.6s ease;
 
-	&.drop-shadow {
-		box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+	&.drop-shadow,
+	&.dropshadow,
+	&.dropshadow--soft {
+		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 		transition: box-shadow 0.3s ease-in-out;
+	}
+
+	&.dropshadow--subtle {
+		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.22);
+	}
+
+	&.dropshadow--elevated {
+		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+	}
+
+	&.dropshadow--dramatic {
+		box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
 	}
 
 	&.aspect-21-9 {
@@ -321,6 +335,29 @@
 		cursor: pointer;
 		z-index: 10000;
 	}
+
+	.lightbox-fullscreen {
+		position: fixed;
+		right: clamp(18px, 3vw, 32px);
+		bottom: clamp(18px, 3vw, 32px);
+		width: 32px;
+		height: 32px;
+		padding: 2px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: transparent;
+		border: none;
+		color: #fff;
+		cursor: pointer;
+		z-index: 10000;
+
+		.lightbox-fullscreen-icon {
+			width: 28px;
+			height: 28px;
+			fill: currentcolor;
+		}
+	}
 }
 
 // Shared layout logic
@@ -453,6 +490,7 @@
 }
 
 .pb-video-lightbox-close:focus-visible,
+.pb-video-lightbox .lightbox-fullscreen:focus-visible,
 .pb-view-product-button:focus-visible {
 	outline: 2px solid var(--wp--preset--color--accent, #007cba);
 	outline-offset: 2px;
@@ -462,6 +500,7 @@
 	background: rgba(255, 255, 255, 0.94);
 
 	.pb-video-lightbox-close,
+	.lightbox-fullscreen,
 	.pb-video-lightbox-info {
 		color: #111;
 	}

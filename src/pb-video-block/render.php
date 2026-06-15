@@ -64,6 +64,7 @@ $fbks_woo_product_url         = '';
 
 $fbks_style = '';
 $fbks_drop_shadow = false;
+$fbks_shadow_style = 'none';
 $fbks_cart_button_style_vars = '';
 $fbks_lazy_load = false;
 $fbks_border_color = '';
@@ -77,6 +78,11 @@ if (fbks_fs()->can_use_premium_code__premium_only()) {
 	$fbks_border_width = absint($fbks_context['folioBlocks/borderWidth'] ?? ($attributes['borderWidth'] ?? 0));
 	$fbks_border_radius = absint($fbks_context['folioBlocks/borderRadius'] ?? ($attributes['borderRadius'] ?? 0));
 	$fbks_drop_shadow = ! empty($fbks_context['folioBlocks/dropShadow'] ?? ($attributes['dropShadow'] ?? false));
+	$fbks_shadow_style = sanitize_key($fbks_context['folioBlocks/shadowStyle'] ?? ($attributes['shadowStyle'] ?? ''));
+	$fbks_valid_shadow_styles = ['none', 'subtle', 'soft', 'elevated', 'dramatic'];
+	if (! in_array($fbks_shadow_style, $fbks_valid_shadow_styles, true)) {
+		$fbks_shadow_style = $fbks_drop_shadow ? 'soft' : 'none';
+	}
 	$fbks_lazy_load = ! empty($attributes['lazyLoad']);
 	$fbks_overlay_style = $fbks_hover_context['folioBlocks/overlayStyle'] ?? ($attributes['overlayStyle'] ?? 'default');
 	$fbks_overlay_bg_color = $fbks_hover_context['folioBlocks/overlayBgColor'] ?? ($attributes['overlayBgColor'] ?? '');
@@ -202,8 +208,8 @@ if ($fbks_title) {
 			echo ' has-color-overlay';
 		} ?><?php if ($fbks_has_blur_overlay) {
 				echo ' has-blur-overlay';
-			} ?><?php if (fbks_fs()->can_use_premium_code__premium_only()) {
-					echo $fbks_drop_shadow ? ' drop-shadow' : '';
+			} ?><?php if (fbks_fs()->can_use_premium_code__premium_only() && 'none' !== $fbks_shadow_style) {
+					echo ' dropshadow dropshadow--' . esc_attr($fbks_shadow_style);
 				} ?>"
 		role="button"
 		tabindex="0"

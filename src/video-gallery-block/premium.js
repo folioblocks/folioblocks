@@ -14,9 +14,8 @@ import {
 } from "@wordpress/components";
 import { useEffect } from "@wordpress/element";
 import { addFilter } from "@wordpress/hooks";
-import CompactColorControl, {
-	CompactTwoColorControl,
-} from "../pb-helpers/CompactColorControl";
+import { CompactTwoColorControl } from "../pb-helpers/CompactColorControl";
+import ImageStyleControl from "../pb-helpers/ImageStyleControl";
 import { registerFilteringPremiumControls } from "../pb-helpers/filteringPremiumControls";
 
 const DEFAULT_OVERLAY_BG_COLOR = "#f9f9f9";
@@ -341,98 +340,15 @@ addFilter(
 );
 
 addFilter(
-	"folioBlocks.videoGallery.borderColorControl",
-	"folioblocks/video-gallery-premium-border-color",
+	"folioBlocks.videoGallery.imageStyles",
+	"folioblocks/video-gallery-premium-image-styles",
 	(defaultContent, props) => {
 		const { attributes, setAttributes } = props;
 		return (
-			<CompactColorControl
-				label={__("Border Color", "folioblocks")}
-				value={attributes.borderColor}
-				onChange={(borderColor) => setAttributes({ borderColor })}
-				help={__("Set Video block border color.", "folioblocks")}
-			/>
-		);
-	},
-);
-
-addFilter(
-	"folioBlocks.videoGallery.borderWidthControl",
-	"folioblocks/video-gallery-premium-border-width",
-	(defaultContent, props) => {
-		const { attributes, setAttributes, clientId, updateBlockAttributes } =
-			props;
-
-		return (
-			<RangeControl
-				label={__("Border Width", "folioblocks")}
-				value={attributes.borderWidth}
-				onChange={(value) => {
-					setAttributes({ borderWidth: value });
-					if (typeof updateBlockAttributes === "function") {
-						setTimeout(() => {
-							updateBlockAttributes(clientId, {
-								_forceRefresh: Date.now(),
-							});
-						}, 50);
-					}
-				}}
-				min={0}
-				max={20}
-				__next40pxDefaultSize={true}
-				__nextHasNoMarginBottom={true}
-				help={__("Set Video block border width.", "folioblocks")}
-			/>
-		);
-	},
-);
-
-addFilter(
-	"folioBlocks.videoGallery.borderRadiusControl",
-	"folioblocks/video-gallery-premium-border-radius",
-	(defaultContent, props) => {
-		const { attributes, setAttributes, clientId, updateBlockAttributes } =
-			props;
-
-		return (
-			<RangeControl
-				label={__("Border Radius", "folioblocks")}
-				value={attributes.borderRadius}
-				onChange={(value) => {
-					setAttributes({ borderRadius: value });
-					if (typeof updateBlockAttributes === "function") {
-						setTimeout(() => {
-							updateBlockAttributes(clientId, {
-								_forceRefresh: Date.now(),
-							});
-						}, 50);
-					}
-				}}
-				min={0}
-				max={50}
-				__next40pxDefaultSize={true}
-				__nextHasNoMarginBottom={true}
-				help={__("Set Video block border radius.", "folioblocks")}
-			/>
-		);
-	},
-);
-
-addFilter(
-	"folioBlocks.videoGallery.dropShadowToggle",
-	"folioblocks/video-gallery-premium-drop-shadow",
-	(defaultContent, props) => {
-		const { attributes, setAttributes } = props;
-
-		return (
-			<ToggleControl
-				label={__("Enable Drop Shadow", "folioblocks")}
-				checked={!!attributes.dropShadow}
-				onChange={(newDropShadow) =>
-					setAttributes({ dropShadow: newDropShadow })
-				}
-				__nextHasNoMarginBottom={true}
-				help={__("Applies a subtle drop shadow.", "folioblocks")}
+			<ImageStyleControl
+				attributes={attributes}
+				setAttributes={setAttributes}
+				subject={__("Video", "folioblocks")}
 			/>
 		);
 	},

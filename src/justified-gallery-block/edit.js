@@ -23,12 +23,17 @@ import { plus } from '@wordpress/icons';
 import { useCallback, useEffect, useRef, useState } from '@wordpress/element';
 import { decodeEntities } from '@wordpress/html-entities';
 import { applyFilters } from '@wordpress/hooks';
-import ResponsiveRangeControl from '../pb-helpers/ResponsiveRangeControl';
 import { IconJustifiedGallery, IconPBSpinner } from '../pb-helpers/icons';
 import { fbksNormalizeActiveFilterValue } from '../pb-helpers/filterConstants';
 import { getExifAttributesFromMedia } from '../pb-helpers/exifMetadata';
 import { getImageSizeOptions } from '../pb-helpers/imageSizeOptions';
 import { imageProFeatureNotice } from '../pb-helpers/imageProFeatureNotices';
+import {
+	getGalleryGapForWidth,
+	resolveLegacyGalleryGaps,
+} from '../pb-helpers/galleryGap';
+import { calculateJustifiedLayout } from '../pb-helpers/justifiedLayout';
+import ResponsiveRangeControl from '../pb-helpers/ResponsiveRangeControl';
 import './editor.scss';
 
 const ALLOWED_BLOCKS = [ 'folioblocks/pb-image-block' ];
@@ -151,10 +156,20 @@ const getRowHeightForWidth = (
 };
 
 export default function Edit( { attributes, setAttributes, clientId } ) {
-	const { noGap = false, preview, lightbox, lightboxCaption } = attributes;
+	const { preview, lightbox, lightboxCaption } = attributes;
 	const rowHeight = attributes.rowHeight ?? 250;
 	const tabletRowHeight = attributes.tabletRowHeight ?? rowHeight;
 	const mobileRowHeight = attributes.mobileRowHeight ?? rowHeight;
+	const responsiveGaps = applyFilters(
+		'folioBlocks.justifiedGallery.responsiveGaps',
+		resolveLegacyGalleryGaps( attributes ),
+		attributes
+	);
+	const effectiveGapAttributes = {
+		...attributes,
+		...responsiveGaps,
+		noGap: false,
+	};
 
 	// Block Preview Image
 	if ( preview ) {
@@ -328,70 +343,34 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				tablet: tabletRowHeight,
 				mobile: mobileRowHeight,
 			} );
-			const gap = attributes.noGap ? 0 : 10;
-			const rows = [];
-			let currentRow = [];
-			let currentRowWidth = 0;
-
-			images.forEach( ( img ) => {
-				const aspectRatio = img.width / img.height;
-				const scaledWidth = aspectRatio * targetRowHeight;
-				currentRow.push( { ...img, scaledWidth, aspectRatio } );
-				currentRowWidth += scaledWidth + gap;
-
-				if (
-					currentRowWidth >= containerWidth &&
-					currentRow.length > 0
-				) {
-					rows.push( currentRow );
-					currentRow = [];
-					currentRowWidth = 0;
-				}
+			const gap = getGalleryGapForWidth(
+				effectiveGapAttributes,
+				node.clientWidth
+			);
+			const rows = calculateJustifiedLayout( {
+				items: images.map( ( img ) => ( {
+					...img,
+					aspectRatio: img.width / img.height,
+				} ) ),
+				containerWidth,
+				targetRowHeight,
+				gap,
 			} );
 
-			if ( currentRow.length > 0 ) {
-				rows.push( currentRow );
-			}
-
 			rows.forEach( ( row ) => {
-				const totalScaledWidth = row.reduce(
-					( sum, img ) => sum + img.scaledWidth,
-					0
-				);
-				const totalGaps = ( row.length - 1 ) * gap;
-				const isFinalRow = row === rows[ rows.length - 1 ];
-				const rowFillRatio =
-					( totalScaledWidth + totalGaps ) / containerWidth;
-				const shouldScale = ! isFinalRow || rowFillRatio > 0.9;
-				const scale = shouldScale
-					? Math.min(
-							( containerWidth - totalGaps ) / totalScaledWidth,
-							1
-					  )
-					: 1;
-
 				row.forEach( ( img, index ) => {
-					const isLast = index === row.length - 1;
-					const finalWidth =
-						Math.round( img.scaledWidth * scale ) -
-						( isLast ? 1 : 0 );
-					const finalHeight = Math.round( targetRowHeight * scale );
 					img.wrapper.style.setProperty(
 						'--pb-width',
-						`${ finalWidth }px`
+						`${ img.layoutWidth }px`
 					);
 					img.wrapper.style.setProperty(
 						'--pb-height',
-						`${ finalHeight }px`
+						`${ img.layoutHeight }px`
 					);
 					const isLastInRow = index === row.length - 1;
 					const inlineMarginValue =
-						! isLastInRow && ! attributes.noGap
-							? `${ gap }px`
-							: '0px';
-					const blockMarginValue = ! attributes.noGap
-						? `${ gap }px`
-						: '0px';
+						! isLastInRow && gap > 0 ? `${ gap }px` : '0px';
+					const blockMarginValue = gap > 0 ? `${ gap }px` : '0px';
 					img.wrapper.style.setProperty(
 						'--pb-margin-inline',
 						inlineMarginValue
@@ -422,6 +401,9 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		tabletRowHeight,
 		mobileRowHeight,
 		attributes.noGap,
+		attributes.gap,
+		attributes.tabletGap,
+		attributes.mobileGap,
 		attributes.activeFilter,
 		attributes.filterCategories,
 	] );
@@ -441,6 +423,9 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			'--pb--filter-active-text':
 				attributes.activeFilterTextColor || '#fff',
 			'--pb--filter-active-bg': attributes.activeFilterBgColor || '#000',
+			'--pb-gallery-gap-desktop': `${ responsiveGaps.gap }px`,
+			'--pb-gallery-gap-tablet': `${ responsiveGaps.tabletGap }px`,
+			'--pb-gallery-gap-mobile': `${ responsiveGaps.mobileGap }px`,
 		},
 	} );
 
@@ -594,21 +579,29 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						lockTabletMobileToDesktop={ false }
 						onChange={ ( newValues ) => setAttributes( newValues ) }
 						help={ __(
-							'Approximate target Row Height for Justified layout.'
-						) }
-					/>
-					<ToggleControl
-						label={ __( 'Remove Image Gap', 'folioblocks' ) }
-						checked={ noGap }
-						onChange={ ( value ) =>
-							setAttributes( { noGap: value } )
-						}
-						help={ __(
-							'Remove image gap from gallery.',
+							'Set the preferred row height. Rows adjust as needed to fill the gallery width.',
 							'folioblocks'
 						) }
-						__nextHasNoMarginBottom
 					/>
+					{ applyFilters(
+							'folioBlocks.justifiedGallery.responsiveGapControl',
+							<>
+								<ToggleControl
+									label={ __( 'Remove Image Gap', 'folioblocks' ) }
+									checked={ !! attributes.noGap }
+									onChange={ ( noGap ) =>
+										setAttributes( { noGap } )
+									}
+									help={ __(
+										'Remove gap between images.',
+										'folioblocks'
+									) }
+									__nextHasNoMarginBottom
+								/>
+								{ imageProFeatureNotice( 'responsiveGaps' ) }
+							</>,
+							{ attributes, setAttributes }
+					) }
 
 					{ applyFilters(
 						'folioBlocks.justifiedGallery.randomizeToggle',

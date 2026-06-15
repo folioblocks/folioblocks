@@ -86,15 +86,32 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			} );
 			return true;
 		}
-		const gap = container.closest( '.no-gap' ) ? 0 : 10;
 		const children = Array.from( container.children );
 		const containerWidth = container.clientWidth;
+		const modularGallery = container.closest( '.pb-modular-gallery' );
+		const wrapper = container.closest(
+			'.wp-block-folioblocks-modular-gallery-block'
+		);
+		const styles = window.getComputedStyle( wrapper || modularGallery );
+		let gapProperty = '--pb-gallery-gap-desktop';
+		if ( containerWidth <= 600 ) {
+			gapProperty = '--pb-gallery-gap-mobile';
+		} else if ( containerWidth <= 1024 ) {
+			gapProperty = '--pb-gallery-gap-tablet';
+		}
+		const responsiveGap = parseFloat(
+			styles.getPropertyValue( gapProperty )
+		);
+		let gap = Number.isFinite( responsiveGap ) ? responsiveGap : 10;
+		if ( modularGallery?.classList.contains( 'no-gap' ) ) {
+			gap = 0;
+		}
 
 		if ( ! children.length || ! containerWidth ) {
 			return false;
 		}
 
-		const totalAspectRatio = children.reduce( ( sum, child ) => {
+		const layoutItems = children.map( ( child ) => {
 			if (
 				child.classList.contains(
 					'wp-block-folioblocks-pb-image-block'
@@ -104,7 +121,11 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				if ( img ) {
 					const aspectRatio = getImageAspectRatio( img );
 					if ( aspectRatio ) {
-						return sum + aspectRatio;
+						return {
+							aspectRatio,
+							isStack: false,
+							stackImageCount: 0,
+						};
 					}
 				}
 			} else if ( child.classList.contains( 'pb-image-stack' ) ) {
@@ -118,19 +139,40 @@ document.addEventListener( 'DOMContentLoaded', () => {
 						}
 					} );
 					if ( totalInverseRatio > 0 ) {
-						return sum + 1 / totalInverseRatio;
+						return {
+							aspectRatio: 1 / totalInverseRatio,
+							isStack: true,
+							stackImageCount: imgs.length,
+						};
 					}
 				}
 			}
-			return sum;
-		}, 0 );
+			return null;
+		} );
+		const totalAspectRatio = layoutItems.reduce(
+			( sum, item ) => sum + ( item?.aspectRatio || 0 ),
+			0
+		);
 
-		if ( ! totalAspectRatio || ! Number.isFinite( totalAspectRatio ) ) {
+		if (
+			layoutItems.some( ( item ) => ! item ) ||
+			! totalAspectRatio ||
+			! Number.isFinite( totalAspectRatio )
+		) {
 			return false;
 		}
 
+		const stackGapWidthAdjustment = layoutItems.reduce( ( sum, item ) => {
+			if ( ! item.isStack ) {
+				return sum;
+			}
+			const stackGaps = Math.max( 0, item.stackImageCount - 1 );
+			return sum + stackGaps * gap * item.aspectRatio;
+		}, 0 );
 		const targetHeight =
-			( containerWidth - gap * ( children.length - 1 ) ) /
+			( containerWidth -
+				gap * ( children.length - 1 ) +
+				stackGapWidthAdjustment ) /
 			totalAspectRatio;
 
 		if ( ! targetHeight || ! Number.isFinite( targetHeight ) ) {
@@ -180,7 +222,9 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				);
 				const stackAspectRatio =
 					totalInverseRatio > 0 ? 1 / totalInverseRatio : 1;
-				const width = targetHeight * stackAspectRatio;
+				const stackGaps = Math.max( 0, imgs.length - 1 ) * gap;
+				const width =
+					Math.max( 1, targetHeight - stackGaps ) * stackAspectRatio;
 				child.style.width = `${ width }px`;
 				child.style.height = `${ targetHeight }px`;
 				child.style.marginRight = `${ gap }px`;
@@ -202,7 +246,10 @@ document.addEventListener( 'DOMContentLoaded', () => {
 					const aspectRatio = getImageAspectRatio( img );
 					const effectiveStackHeight =
 						totalFigureInverseRatio > 0
-							? targetHeight - gap * ( figures.length - 1 )
+							? Math.max(
+									1,
+									targetHeight - gap * ( figures.length - 1 )
+							  )
 							: targetHeight;
 
 					const figureHeight =

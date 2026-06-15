@@ -53,6 +53,11 @@
 			"type": "boolean",
 			"default": false
 		},
+		"shadowStyle": {
+			"type": "string",
+			"enum": ["", "none", "subtle", "soft", "elevated", "dramatic"],
+			"default": ""
+		},
 		"borderWidth": {
 			"type": "number",
 			"default": 0
@@ -64,6 +69,18 @@
 		"borderColor": {
 			"type": "string",
 			"default": "#ffffff"
+		},
+		"gap": {
+			"type": "number",
+			"default": 10
+		},
+		"tabletGap": {
+			"type": "number",
+			"default": 10
+		},
+		"mobileGap": {
+			"type": "number",
+			"default": 10
 		},
 		"noGap": {
 			"type": "boolean",
@@ -257,6 +274,7 @@
 		"folioBlocks/borderWidth": "borderWidth",
 		"folioBlocks/borderRadius": "borderRadius",
 		"folioBlocks/dropShadow": "dropShadow",
+		"folioBlocks/shadowStyle": "shadowStyle",
 		"folioBlocks/noGap": "noGap",
 		"folioBlocks/lightbox": "lightbox",
 		"folioBlocks/lightboxCaption": "lightboxCaption",

@@ -190,7 +190,8 @@ $fbks_get_srcset = static function ( $fbks_image_id, $fbks_size_slug ) {
 
 		$fbks_output = '<div class="pb-hover-exif">';
 		foreach ( $fbks_fields as $fbks_field ) {
-			if ( $fbks_hide_unknown && ( ! is_string( $fbks_field['value'] ) || '' === trim( $fbks_field['value'] ) ) ) {
+			$fbks_normalized_value = is_string( $fbks_field['value'] ) ? strtolower( trim( $fbks_field['value'] ) ) : '';
+			if ( $fbks_hide_unknown && ( '' === $fbks_normalized_value || 'unknown' === $fbks_normalized_value || strtolower( $fbks_unknown ) === $fbks_normalized_value ) ) {
 				continue;
 			}
 			$fbks_value = is_string( $fbks_field['value'] ) && '' !== trim( $fbks_field['value'] )

@@ -15,6 +15,19 @@ const presets = {
 		campaign: "gallery-randomize",
 		compact: true,
 	},
+	responsiveGaps: {
+		title: __("Responsive Gallery Gaps", "folioblocks"),
+		description: __(
+			"Fine-tune gallery spacing independently for every screen size.",
+			"folioblocks",
+		),
+		features: [
+			__("Set custom desktop, tablet, and mobile gaps.", "folioblocks"),
+			__("Choose any spacing from 0 to 50 pixels.", "folioblocks"),
+		],
+		campaign: "responsive-gallery-gaps",
+		compact: true,
+	},
 	clickActions: {
 		title: __("Advanced Click Actions", "folioblocks"),
 		description: __(

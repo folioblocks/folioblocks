@@ -13,9 +13,8 @@ import {
 	__experimentalToolsPanelItem as ToolsPanelItem,
 } from '@wordpress/components';
 import { alignLeft, alignCenter, alignRight } from '@wordpress/icons';
-import CompactColorControl, {
-	CompactTwoColorControl,
-} from '../pb-helpers/CompactColorControl';
+import { CompactTwoColorControl } from '../pb-helpers/CompactColorControl';
+import ImageStyleControl from '../pb-helpers/ImageStyleControl';
 import { addFilter } from '@wordpress/hooks';
 import { registerImageClickActionPremiumControls } from '../pb-helpers/imageClickActionPremiumControls';
 import { registerImageClickStylePremiumControls } from '../pb-helpers/imageClickStylePremiumControls';
@@ -273,58 +272,11 @@ addFilter(
 		};
 
 		return (
-			<>
-				<CompactColorControl
-					label={ __( 'Border Color', 'folioblocks' ) }
-					value={ attributes.borderColor }
-					onChange={ ( borderColor ) => {
-						setAttributes( { borderColor } );
-						forceRefresh();
-					} }
-					help={ __( 'Set Image border color.', 'folioblocks' ) }
-				/>
-
-				<RangeControl
-					label={ __( 'Border Width', 'folioblocks' ) }
-					value={ attributes.borderWidth }
-					onChange={ ( value ) => {
-						setAttributes( { borderWidth: value } );
-						forceRefresh();
-					} }
-					min={ 0 }
-					max={ 15 }
-					__next40pxDefaultSize
-					__nextHasNoMarginBottom
-					help={ __( 'Set Image border width.', 'folioblocks' ) }
-				/>
-
-				<RangeControl
-					label={ __( 'Border Radius', 'folioblocks' ) }
-					value={ attributes.borderRadius }
-					onChange={ ( value ) => {
-						setAttributes( { borderRadius: value } );
-						forceRefresh();
-					} }
-					min={ 0 }
-					max={ 50 }
-					__next40pxDefaultSize
-					__nextHasNoMarginBottom
-					help={ __( 'Set Image border radius.', 'folioblocks' ) }
-				/>
-
-				<ToggleControl
-					label={ __( 'Enable Drop Shadow', 'folioblocks' ) }
-					checked={ !! attributes.dropShadow }
-					onChange={ ( newDropShadow ) =>
-						setAttributes( { dropShadow: newDropShadow } )
-					}
-					__nextHasNoMarginBottom
-					help={ __(
-						'Applies a subtle drop shadow to images.',
-						'folioblocks'
-					) }
-				/>
-			</>
+			<ImageStyleControl
+				attributes={ attributes }
+				setAttributes={ setAttributes }
+				onChange={ forceRefresh }
+			/>
 		);
 	}
 );

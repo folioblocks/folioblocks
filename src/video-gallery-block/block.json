@@ -38,6 +38,8 @@
     	"tabletColumns": { "type": "number", "default": 2 },
     	"mobileColumns": { "type": "number", "default": 1},
 		"gap": { "type": "number", "default": 10 },
+		"tabletGap": { "type": "number" },
+		"mobileGap": { "type": "number" },
 		"enableWooCommerce": { "type": "boolean", "default": false },
         "wooCartIconDisplay": { "type": "string", "enum": ["hover", "always"], "default": "hover"},
 		"wooDefaultLinkAction": { "type": "string", "enum": ["product", "add_to_cart"], "default": "add_to_cart" },
@@ -50,6 +52,7 @@
 		"borderRadius": { "type": "number", "default": 0 },
   		"borderColor": { "type": "string", "default": "#ffffff" },
         "dropShadow": { "type": "boolean", "default": false },
+		"shadowStyle": { "type": "string", "enum": ["", "none", "subtle", "soft", "elevated", "dramatic"], "default": "" },
 		"aspectRatio": { "type": "string", "default": "16:9" },
   		"playButtonVisibility": { "type": "string", "default": "onHover"},
 		"titleVisibility": { "type": "string", "default": "onHover" },
@@ -128,7 +131,8 @@
 		"folioBlocks/borderColor": "borderColor",
 		"folioBlocks/borderWidth": "borderWidth",
 		"folioBlocks/borderRadius": "borderRadius",
-		"folioBlocks/dropShadow": "dropShadow"
+		"folioBlocks/dropShadow": "dropShadow",
+		"folioBlocks/shadowStyle": "shadowStyle"
   	},
 	"editorScript": [
     "file:./index.js",

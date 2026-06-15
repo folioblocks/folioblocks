@@ -52,6 +52,7 @@
 			"chipOverlayBgColor": { "type": "string", "default": "#f9f9f9" },
 			"chipOverlayTextColor": { "type": "string", "default": "#000000" },
 			"dropShadow": { "type": "boolean", "default": false },
+			"shadowStyle": { "type": "string", "enum": ["", "none", "subtle", "soft", "elevated", "dramatic"], "default": "" },
 		"filterCategory": { "type": "string", "default": ""}, 
 		"filterCategories": { "type": "array", "items": { "type": "string" }, "default": [] },
 		"enableDownload": { "type": "boolean" },
@@ -96,6 +97,7 @@
 	"usesContext": [
 		"folioBlocks/resolution",
 		"folioBlocks/dropShadow",
+		"folioBlocks/shadowStyle",
 		"folioBlocks/lightbox",
 		"folioBlocks/lightboxCaption",
 		"folioBlocks/lightboxTheme",

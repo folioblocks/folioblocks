@@ -53,8 +53,25 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			return parseColumnClass( innerGallery, 'd', 6 );
 		};
 
+		const getGapForWidth = ( width ) => {
+			if ( gallery.classList.contains( 'no-gap' ) ) {
+				return 0;
+			}
+
+			const styles = window.getComputedStyle( gallery );
+			let property = '--pb-gallery-gap-desktop';
+			if ( width <= 600 ) {
+				property = '--pb-gallery-gap-mobile';
+			} else if ( width <= 1024 ) {
+				property = '--pb-gallery-gap-tablet';
+			}
+
+			const gap = parseFloat( styles.getPropertyValue( property ) );
+			return Number.isFinite( gap ) ? gap : 10;
+		};
+
 		const applyCustomMasonryLayout = () => {
-			const gap = gallery.closest( '.no-gap' ) ? 0 : 10;
+			const gap = getGapForWidth( innerGallery.offsetWidth );
 			const columns = getColumnsForWidth( innerGallery.offsetWidth );
 			const columnHeights = Array( columns ).fill( 0 );
 			const columnWidth = Math.round(

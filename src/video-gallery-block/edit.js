@@ -13,7 +13,6 @@ import {
 } from "@wordpress/block-editor";
 import {
 	PanelBody,
-	RangeControl,
 	SelectControl,
 	ToggleControl,
 	ToolbarButton,
@@ -37,6 +36,7 @@ import {
 } from "../pb-helpers/filterConstants";
 import { isValidHttpUrl } from "../pb-helpers/urlValidation";
 import ProFeatureNotice from "../pb-helpers/ProFeatureNotice";
+import { resolveGalleryGaps } from "../pb-helpers/galleryGap";
 import "./editor.scss";
 
 const getOverlayContent = (titleVisibility, playButtonVisibility, showCategory) => {
@@ -91,7 +91,6 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		lightboxTheme,
 		lightboxLayout,
 		lazyLoad,
-		gap,
 		aspectRatio,
 		thumbnailSize,
 		playButtonVisibility,
@@ -112,6 +111,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		wooCartIconDisplay,
 		wooDefaultLinkAction,
 	} = attributes;
+	const responsiveGaps = resolveGalleryGaps(attributes);
 	const overlayContent = getOverlayContent(
 		titleVisibility,
 		playButtonVisibility,
@@ -221,13 +221,16 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			"--pb--filter-bg-color": filterBgColor || "transparent",
 			"--pb--filter-active-text": activeFilterTextColor || "#fff",
 			"--pb--filter-active-bg": activeFilterBgColor || "#000",
+			"--pb-gallery-gap-desktop": `${responsiveGaps.gap}px`,
+			"--pb-gallery-gap-tablet": `${responsiveGaps.tabletGap}px`,
+			"--pb-gallery-gap-mobile": `${responsiveGaps.mobileGap}px`,
 		},
 	});
 
 	const innerBlocksProps = useInnerBlocksProps(
 		{
 			className: `pb-video-gallery cols-d-${columns} cols-t-${tabletColumns} cols-m-${mobileColumns}`,
-			style: { "--gap": `${gap}px` },
+			style: { "--gap": `${responsiveGaps.gap}px` },
 		},
 		{
 			allowedBlocks: ["folioblocks/pb-video-block"],
@@ -444,16 +447,19 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						mobileColumns={mobileColumns}
 						onChange={(newValues) => setAttributes(newValues)}
 					/>
-					<RangeControl
-						label={__("Gap Between Items (px)", "folioblocks")}
-						value={gap}
-						onChange={(val) => setAttributes({ gap: val })}
+					<ResponsiveRangeControl
+						label={__("Gap Between Items", "folioblocks")}
+						columns={responsiveGaps.gap}
+						tabletColumns={responsiveGaps.tabletGap}
+						mobileColumns={responsiveGaps.mobileGap}
+						desktopKey="gap"
+						tabletKey="tabletGap"
+						mobileKey="mobileGap"
 						min={0}
-						max={40}
-						step={1}
-						__nextHasNoMarginBottom
-						__next40pxDefaultSize
-						help={__("Set gap size between Thumbnails.", "folioblocks")}
+						max={50}
+						lockTabletMobileToDesktop={false}
+						onChange={(newValues) => setAttributes(newValues)}
+						help={__("Set the space between video thumbnails.", "folioblocks")}
 					/>
 					<SelectControl
 						label={__("Thumbnail Resolution", "folioblocks")}
@@ -676,7 +682,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					initialOpen={true}
 				>
 					{applyFilters(
-						"folioBlocks.videoGallery.borderColorControl",
+						"folioBlocks.videoGallery.imageStyles",
 						<ProFeatureNotice
 							title={__("Video Thumbnail Styles", "folioblocks")}
 							description={__(
@@ -690,21 +696,6 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 							]}
 							campaign="video-gallery-thumbnail-styles"
 						/>,
-						{ attributes, setAttributes },
-					)}
-					{applyFilters(
-						"folioBlocks.videoGallery.borderWidthControl",
-						null,
-						{ attributes, setAttributes },
-					)}
-					{applyFilters(
-						"folioBlocks.videoGallery.borderRadiusControl",
-						null,
-						{ attributes, setAttributes },
-					)}
-					{applyFilters(
-						"folioBlocks.videoGallery.dropShadowToggle",
-						null,
 						{ attributes, setAttributes },
 					)}
 				</PanelBody>

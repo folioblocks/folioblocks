@@ -20,7 +20,6 @@ import {
 } from '@wordpress/components';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { useEffect, useRef, useState } from '@wordpress/element';
-import ResponsiveRangeControl from '../pb-helpers/ResponsiveRangeControl';
 import { plus } from '@wordpress/icons';
 import { applyFilters } from '@wordpress/hooks';
 import { decodeEntities } from '@wordpress/html-entities';
@@ -29,6 +28,11 @@ import { fbksNormalizeActiveFilterValue } from '../pb-helpers/filterConstants';
 import { getExifAttributesFromMedia } from '../pb-helpers/exifMetadata';
 import { getImageSizeOptions } from '../pb-helpers/imageSizeOptions';
 import { imageProFeatureNotice } from '../pb-helpers/imageProFeatureNotices';
+import {
+	getGalleryGapForWidth,
+	resolveLegacyGalleryGaps,
+} from '../pb-helpers/galleryGap';
+import ResponsiveRangeControl from '../pb-helpers/ResponsiveRangeControl';
 import './editor.scss';
 
 const ALLOWED_BLOCKS = [ 'folioblocks/pb-image-block' ];
@@ -173,6 +177,19 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 	const activeFilter = fbksNormalizeActiveFilterValue(
 		attributes.activeFilter
 	);
+	const hasDropShadow = attributes.shadowStyle
+		? attributes.shadowStyle !== 'none'
+		: attributes.dropShadow;
+	const responsiveGaps = applyFilters(
+		'folioBlocks.masonryGallery.responsiveGaps',
+		resolveLegacyGalleryGaps( attributes ),
+		attributes
+	);
+	const effectiveGapAttributes = {
+		...attributes,
+		...responsiveGaps,
+		noGap: false,
+	};
 
 	const blockProps = useBlockProps( {
 		context: {
@@ -187,6 +204,9 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 			'--pb--filter-active-text':
 				attributes.activeFilterTextColor || '#fff',
 			'--pb--filter-active-bg': attributes.activeFilterBgColor || '#000',
+			'--pb-gallery-gap-desktop': `${ responsiveGaps.gap }px`,
+			'--pb-gallery-gap-tablet': `${ responsiveGaps.tabletGap }px`,
+			'--pb-gallery-gap-mobile': `${ responsiveGaps.mobileGap }px`,
 		},
 	} );
 
@@ -336,7 +356,10 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 			return;
 		}
 
-		const gap = attributes.noGap ? 0 : 10;
+		const gap = getGalleryGapForWidth(
+			effectiveGapAttributes,
+			gallery.offsetWidth
+		);
 		const columns = getColumnsForWidth( gallery.offsetWidth );
 		const columnHeights = Array( columns ).fill( 0 );
 
@@ -467,6 +490,9 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 	}, [
 		innerBlocks,
 		attributes.noGap,
+		attributes.gap,
+		attributes.tabletGap,
+		attributes.mobileGap,
 		attributes.columns,
 		attributes.tabletColumns,
 		attributes.mobileColumns,
@@ -585,16 +611,25 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 						mobileColumns={ mobileColumns }
 						onChange={ ( newValues ) => setAttributes( newValues ) }
 					/>
-					<ToggleControl
-						label={ __( 'Remove Image Gap', 'folioblocks' ) }
-						checked={ attributes.noGap || false }
-						onChange={ ( noGap ) => setAttributes( { noGap } ) }
-						help={ __(
-							'Remove gap between images.',
-							'folioblocks'
-						) }
-						__nextHasNoMarginBottom
-					/>
+					{ applyFilters(
+							'folioBlocks.masonryGallery.responsiveGapControl',
+							<>
+								<ToggleControl
+									label={ __( 'Remove Image Gap', 'folioblocks' ) }
+									checked={ !! attributes.noGap }
+									onChange={ ( noGap ) =>
+										setAttributes( { noGap } )
+									}
+									help={ __(
+										'Remove gap between images.',
+										'folioblocks'
+									) }
+									__nextHasNoMarginBottom
+								/>
+								{ imageProFeatureNotice( 'responsiveGaps' ) }
+							</>,
+							{ attributes, setAttributes }
+					) }
 					{ applyFilters(
 						'folioBlocks.masonryGallery.randomizeToggle',
 						imageProFeatureNotice( 'randomize' ),
@@ -726,7 +761,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 			<div
 				{ ...blockProps }
 				className={ `${ blockProps.className } ${
-					attributes.dropShadow ? 'drop-shadow' : ''
+					hasDropShadow ? 'drop-shadow' : ''
 				}` }
 			>
 				{ isLoading && (

@@ -20,7 +20,6 @@ import {
 	ToolbarButton,
 	ToolbarGroup,
 	Modal,
-	RangeControl,
 	ToggleControl,
 	Notice,
 	SandBox,
@@ -30,7 +29,9 @@ import { useState, useEffect } from "@wordpress/element";
 import { useSelect } from "@wordpress/data";
 import { applyFilters } from "@wordpress/hooks";
 import { IconVideoBlock, IconPlayButton } from "../pb-helpers/icons";
-import CompactColorControl from "../pb-helpers/CompactColorControl.js";
+import ImageStyleControl, {
+	getShadowStyleClass,
+} from "../pb-helpers/ImageStyleControl.js";
 import {
 	getVideoIframeSrc,
 	getVideoProviderData,
@@ -318,6 +319,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 	const inheritedBorderWidth = context?.["folioBlocks/borderWidth"];
 	const inheritedBorderRadius = context?.["folioBlocks/borderRadius"];
 	const inheritedDropShadow = context?.["folioBlocks/dropShadow"];
+	const inheritedShadowStyle = context?.["folioBlocks/shadowStyle"];
 	// Cart icon styling (provided by Video Gallery via context)
 	const inheritedCartIconColor = context?.["folioBlocks/cartIconColor"];
 	const inheritedCartIconBgColor = context?.["folioBlocks/cartIconBgColor"];
@@ -338,6 +340,9 @@ export default function Edit({ attributes, setAttributes, context }) {
 		}
 		if (inheritedDropShadow !== undefined) {
 			setAttributes({ dropShadow: inheritedDropShadow });
+		}
+		if (inheritedShadowStyle !== undefined) {
+			setAttributes({ shadowStyle: inheritedShadowStyle });
 		}
 		if (lazyLoad !== undefined && attributes.lazyLoad !== lazyLoad) {
 			setAttributes({ lazyLoad });
@@ -491,6 +496,10 @@ export default function Edit({ attributes, setAttributes, context }) {
 		: 0;
 	const effectiveBorderRadius =
 		inheritedBorderRadius ?? attributes.borderRadius ?? 0;
+	const shadowStyleClass = getShadowStyleClass(
+		inheritedShadowStyle ?? attributes.shadowStyle,
+		inheritedDropShadow ?? attributes.dropShadow,
+	);
 
 	// Set Block Thumbnail
 	const setThumbnail = (media) => {
@@ -969,37 +978,10 @@ export default function Edit({ attributes, setAttributes, context }) {
 							title={__("Video Block Styles", "folioblocks")}
 							initialOpen={true}
 						>
-							<CompactColorControl
-								label={__("Border Color", "folioblocks")}
-								value={attributes.borderColor}
-								onChange={(borderColor) => setAttributes({ borderColor })}
-								help={__("Set Video border color.", "folioblocks")}
-							/>
-							<RangeControl
-								label={__("Border Width", "folioblocks")}
-								value={attributes.borderWidth}
-								onChange={(value) => setAttributes({ borderWidth: value })}
-								min={0}
-								max={20}
-								__next40pxDefaultSize
-								__nextHasNoMarginBottom
-								help={__("Set Video border width.", "folioblocks")}
-							/>
-							<RangeControl
-								label={__("Border Radius", "folioblocks")}
-								value={attributes.borderRadius}
-								onChange={(value) => setAttributes({ borderRadius: value })}
-								min={0}
-								max={100}
-								__next40pxDefaultSize
-								__nextHasNoMarginBottom
-								help={__("Set Video border radius.", "folioblocks")}
-							/>
-							<ToggleControl
-								label={__("Enable Drop Shadow", "folioblocks")}
-								checked={!!attributes.dropShadow}
-								onChange={(value) => setAttributes({ dropShadow: value })}
-								help={__("Enable drop shadow effect.", "folioblocks")}
+							<ImageStyleControl
+								attributes={attributes}
+								setAttributes={setAttributes}
+								subject={__("Video", "folioblocks")}
 							/>
 						</PanelBody>
 						{applyFilters("folioBlocks.videoBlock.iconStyleControls", null, {
@@ -1062,7 +1044,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 					<div
 						className={`pb-video-block ${ASPECT_RATIOS[effectiveAspectRatio]}${showOverlayAlways ? " has-overlay-always" : ""
 							}${showOverlayOnHover ? " has-overlay-hover" : ""}${isColorOverlay ? " has-color-overlay" : ""
-							}${isBlurOverlay ? " has-blur-overlay" : ""}${attributes.dropShadow ? " drop-shadow" : ""
+							}${isBlurOverlay ? " has-blur-overlay" : ""}${shadowStyleClass ? ` ${shadowStyleClass}` : ""
 							}`}
 						style={{
 							"--pb-border-width": `${effectiveBorderWidth}px`,

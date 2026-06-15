@@ -194,6 +194,18 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			if ( ! lightbox.classList.contains( 'active' ) ) {
 				return;
 			}
+			const fullscreenElement =
+				document.fullscreenElement ||
+				document.webkitFullscreenElement ||
+				document.mozFullScreenElement ||
+				document.msFullscreenElement;
+			if (
+				fullscreenElement &&
+				( fullscreenElement === lightbox ||
+					lightbox.contains( fullscreenElement ) )
+			) {
+				exitFullscreen();
+			}
 			lightbox.classList.remove( 'active' );
 			lightbox.setAttribute( 'aria-hidden', 'true' );
 			block.setAttribute( 'aria-expanded', 'false' );

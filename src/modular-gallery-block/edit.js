@@ -27,6 +27,11 @@ import { IconModularGallery } from '../pb-helpers/icons';
 import { getExifAttributesFromMedia } from '../pb-helpers/exifMetadata';
 import { getImageSizeOptions } from '../pb-helpers/imageSizeOptions';
 import { imageProFeatureNotice } from '../pb-helpers/imageProFeatureNotices';
+import ResponsiveRangeControl from '../pb-helpers/ResponsiveRangeControl';
+import {
+	getGalleryGapForWidth,
+	resolveGalleryGaps,
+} from '../pb-helpers/galleryGap';
 
 import './editor.scss';
 
@@ -148,7 +153,7 @@ const debounce = ( fn, delay ) => {
 export default function Edit( props ) {
 	const { clientId, attributes, setAttributes } = props;
 	const { noGap, lightbox, lightboxCaption, preview } = attributes;
-
+	const responsiveGaps = resolveGalleryGaps( attributes );
 
 	// Block Preview Image
 	if ( preview ) {
@@ -345,7 +350,7 @@ export default function Edit( props ) {
 
 			// Proceed with layout calculation for the row (unchanged)
 			const containerWidth = row.clientWidth;
-			const gap = noGap ? 0 : 10;
+			const gap = getGalleryGapForWidth( attributes, containerWidth );
 			const totalGaps = gap * ( wrappers.length - 1 );
 
 			const aspectRatios = [];
@@ -355,6 +360,7 @@ export default function Edit( props ) {
 			wrappers.forEach( ( wrapper ) => {
 				let ratio;
 				let isStack = false;
+				let stackImageCount = 0;
 
 				if (
 					wrapper.classList.contains(
@@ -372,6 +378,7 @@ export default function Edit( props ) {
 				) {
 					isStack = true;
 					const images = wrapper.querySelectorAll( 'img' );
+					stackImageCount = images.length;
 					let totalStackHeight = 0;
 					images.forEach( ( img ) => {
 						if ( img.naturalWidth && img.naturalHeight ) {
@@ -387,7 +394,7 @@ export default function Edit( props ) {
 				if ( ratio ) {
 					aspectRatios.push( ratio );
 					totalNaturalWidth += ratio;
-					stackMeta.push( { isStack, wrapper } );
+					stackMeta.push( { isStack, stackImageCount, wrapper } );
 				}
 			} );
 
@@ -398,14 +405,34 @@ export default function Edit( props ) {
 				return;
 			}
 
-			const targetHeight = Math.round(
-				( containerWidth - totalGaps ) / totalNaturalWidth
+			const stackGapWidthAdjustment = stackMeta.reduce(
+				( total, item, index ) => {
+					if ( ! item.isStack ) {
+						return total;
+					}
+					const stackGaps = Math.max( 0, item.stackImageCount - 1 );
+					return total + stackGaps * gap * aspectRatios[ index ];
+				},
+				0
+			);
+			const targetHeight = Math.max(
+				1,
+				Math.floor(
+					( containerWidth - totalGaps + stackGapWidthAdjustment ) /
+						totalNaturalWidth
+				)
 			);
 
 			let usedWidth = 0;
-			const widths = aspectRatios.map( ( ratio ) =>
-				Math.floor( ratio * targetHeight )
-			);
+			const widths = aspectRatios.map( ( ratio, index ) => {
+				const item = stackMeta[ index ];
+				const stackGaps = item.isStack
+					? Math.max( 0, item.stackImageCount - 1 ) * gap
+					: 0;
+				return Math.floor(
+					ratio * Math.max( 1, targetHeight - stackGaps )
+				);
+			} );
 			widths.forEach( ( width ) => {
 				usedWidth += width;
 			} );
@@ -458,10 +485,11 @@ export default function Edit( props ) {
 						}
 					} );
 
-					const totalStackGaps = noGap
-						? 0
-						: ( images.length - 1 ) * 10;
-					const usableHeight = layout.height - totalStackGaps;
+					const totalStackGaps = ( images.length - 1 ) * gap;
+					const usableHeight = Math.max(
+						1,
+						layout.height - totalStackGaps
+					);
 
 					images.forEach( ( img, idx ) => {
 						const share = ratios[ idx ] / totalRatio;
@@ -484,9 +512,9 @@ export default function Edit( props ) {
 
 						if ( blockWrapper ) {
 							blockWrapper.style.marginBottom =
-								noGap || idx === images.length - 1
+								gap === 0 || idx === images.length - 1
 									? '0px'
-									: '10px';
+									: `${ gap }px`;
 						}
 					} );
 				}
@@ -530,7 +558,13 @@ export default function Edit( props ) {
 		requestAnimationFrame( () => {
 			recalculateLayoutDebounced();
 		} );
-	}, [ innerBlocks, noGap ] );
+	}, [
+		innerBlocks,
+		noGap,
+		attributes.gap,
+		attributes.tabletGap,
+		attributes.mobileGap,
+	] );
 
 	useEffect( () => {
 		const observer = new ResizeObserver( () => {
@@ -543,7 +577,13 @@ export default function Edit( props ) {
 			observer.observe( container );
 		}
 		return () => observer.disconnect();
-	}, [ innerBlocks, noGap ] );
+	}, [
+		innerBlocks,
+		noGap,
+		attributes.gap,
+		attributes.tabletGap,
+		attributes.mobileGap,
+	] );
 
 	const blockProps = useBlockProps( {
 		ref: containerRef,
@@ -553,6 +593,11 @@ export default function Edit( props ) {
 			'folioBlocks/rowLayouts': rowLayouts,
 			'folioBlocks/enableWooCommerce': effectiveEnableWoo,
 			'folioBlocks/hasWooCommerce': hasWooCommerce,
+		},
+		style: {
+			'--pb-gallery-gap-desktop': `${ responsiveGaps.gap }px`,
+			'--pb-gallery-gap-tablet': `${ responsiveGaps.tabletGap }px`,
+			'--pb-gallery-gap-mobile': `${ responsiveGaps.mobileGap }px`,
 		},
 	} );
 	const innerBlocksProps = useInnerBlocksProps(
@@ -701,15 +746,27 @@ export default function Edit( props ) {
 							'folioblocks'
 						) }
 					/>
-					<ToggleControl
-						label={ __( 'Remove Image Gap', 'folioblocks' ) }
-						checked={ attributes.noGap || false }
-						onChange={ ( noGap ) => setAttributes( { noGap } ) }
+					<ResponsiveRangeControl
+						label={ __( 'Gap Between Items', 'folioblocks' ) }
+						columns={ responsiveGaps.gap }
+						tabletColumns={ responsiveGaps.tabletGap }
+						mobileColumns={ responsiveGaps.mobileGap }
+						desktopKey="gap"
+						tabletKey="tabletGap"
+						mobileKey="mobileGap"
+						min={ 0 }
+						max={ 50 }
+						lockTabletMobileToDesktop={ false }
+						onChange={ ( newValues ) =>
+							setAttributes( {
+								...newValues,
+								noGap: false,
+							} )
+						}
 						help={ __(
-							'Remove gap between images.',
+							'Set the space between gallery images.',
 							'folioblocks'
 						) }
-						__nextHasNoMarginBottom
 					/>
 				</PanelBody>
 				<PanelBody

@@ -42,6 +42,12 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 		const createExifOverlay = ( image, hideUnknownFields = false ) => {
 			const unknown = 'Unknown';
+			const isUnknownValue = ( value ) => {
+				const normalizedValue = String( value || '' )
+					.trim()
+					.toLowerCase();
+				return ! normalizedValue || normalizedValue === 'unknown';
+			};
 			const fields = [
 				{ icon: 'camera', value: image?.exifCamera },
 				{
@@ -58,8 +64,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			fields
 				.filter(
 					( field ) =>
-						! hideUnknownFields ||
-						!! String( field.value || '' ).trim()
+						! hideUnknownFields || ! isUnknownValue( field.value )
 				)
 				.forEach( ( field ) => {
 				const item = document.createElement( 'span' );
@@ -205,6 +210,12 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				.replaceAll( '"', '&quot;' )
 				.replaceAll( "'", '&#039;' );
 		const createLightboxExif = ( image, hideUnknownFields ) => {
+			const isUnknownValue = ( value ) => {
+				const normalizedValue = String( value || '' )
+					.trim()
+					.toLowerCase();
+				return ! normalizedValue || normalizedValue === 'unknown';
+			};
 			const fields = [
 				[ 'camera', 'Camera', image.exifCamera ],
 				[ 'aspectRatio', 'Focal Length', image.exifFocalLength ],
@@ -213,7 +224,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				[ 'iso', 'ISO', image.exifIso ],
 			].filter(
 				( field ) =>
-					! hideUnknownFields || !! String( field[ 2 ] || '' ).trim()
+					! hideUnknownFields || ! isUnknownValue( field[ 2 ] )
 			);
 			if ( ! fields.length ) {
 				return '';

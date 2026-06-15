@@ -53,6 +53,18 @@
 			"type": "number",
 			"default": 2
 		},
+		"gap": {
+			"type": "number",
+			"default": 10
+		},
+		"tabletGap": {
+			"type": "number",
+			"default": 10
+		},
+		"mobileGap": {
+			"type": "number",
+			"default": 10
+		},
 		"noGap": {
 			"type": "boolean",
 			"default": false
@@ -60,6 +72,11 @@
 		"dropShadow": {
 			"type": "boolean",
 			"default": false
+		},
+		"shadowStyle": {
+			"type": "string",
+			"enum": ["", "none", "subtle", "soft", "elevated", "dramatic"],
+			"default": ""
 		},
 		"resolution": {
 			"type": "string",
@@ -397,6 +414,7 @@
 		"folioBlocks/borderWidth": "borderWidth",
 		"folioBlocks/borderRadius": "borderRadius",
 		"folioBlocks/dropShadow": "dropShadow",
+		"folioBlocks/shadowStyle": "shadowStyle",
 		"folioBlocks/lightbox": "lightbox",
 		"folioBlocks/lightboxCaption": "lightboxCaption",
 		"folioBlocks/lightboxTheme": "lightboxTheme",

@@ -50,6 +50,16 @@ const apertureIcon = (
 
 const FilmstripExifOverlay = ( { attributes, hideUnknownFields = false } ) => {
 	const unknownValue = __( 'Unknown', 'folioblocks' );
+	const isUnknownValue = ( value ) => {
+		const normalizedValue = String( value || '' )
+			.trim()
+			.toLowerCase();
+		return (
+			! normalizedValue ||
+			normalizedValue === 'unknown' ||
+			normalizedValue === unknownValue.trim().toLowerCase()
+		);
+	};
 	const fields = [
 		{ icon: capturePhoto, value: attributes.exifCamera },
 		{ icon: aspectRatio, value: attributes.exifFocalLength },
@@ -57,7 +67,9 @@ const FilmstripExifOverlay = ( { attributes, hideUnknownFields = false } ) => {
 		{ icon: apertureIcon, value: attributes.exifAperture },
 		{ icon: 'iso', value: attributes.exifIso },
 	]
-		.filter( ( field ) => ! hideUnknownFields || !! field.value )
+		.filter(
+			( field ) => ! hideUnknownFields || ! isUnknownValue( field.value )
+		)
 		.map( ( field ) => ( {
 			...field,
 			value: field.value || unknownValue,

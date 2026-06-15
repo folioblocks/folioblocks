@@ -12,14 +12,22 @@ const DEFAULT_GALLERY_BLOCKS = [
 	'folioblocks/filmstrip-gallery-block',
 ];
 
-const EXCLUDED_ATTRS = new Set( [
+const LAYOUT_ATTRS = new Set( [
 	'columns',
 	'tabletColumns',
 	'mobileColumns',
 	'rowHeight',
+	'tabletRowHeight',
+	'mobileRowHeight',
 	'rowWidth',
 	'gap',
+	'tabletGap',
+	'mobileGap',
 	'noGap',
+] );
+
+const EXCLUDED_ATTRS = new Set( [
+	...LAYOUT_ATTRS,
 	'preview',
 	'isGridGallery',
 ] );
@@ -61,7 +69,7 @@ addFilter(
 	}
 );
 
-const getTransformAttributes = ( attributes = {} ) => {
+const getTransformAttributes = ( attributes = {}, targetBlockName = '' ) => {
 	const next = {};
 	Object.entries( attributes ).forEach( ( [ key, value ] ) => {
 		if ( EXCLUDED_ATTRS.has( key ) ) {
@@ -72,6 +80,17 @@ const getTransformAttributes = ( attributes = {} ) => {
 		}
 		next[ key ] = value;
 	} );
+
+	const targetAttributes = getBlockType( targetBlockName )?.attributes || {};
+	LAYOUT_ATTRS.forEach( ( key ) => {
+		if (
+			Object.prototype.hasOwnProperty.call( targetAttributes, key ) &&
+			typeof attributes[ key ] !== 'undefined'
+		) {
+			next[ key ] = attributes[ key ];
+		}
+	} );
+
 	return next;
 };
 
@@ -330,7 +349,7 @@ export const buildGalleryTransforms = (
 				transform: ( attributes, innerBlocks ) =>
 					createBlock(
 						currentBlockName,
-						getTransformAttributes( attributes ),
+						getTransformAttributes( attributes, currentBlockName ),
 						cloneInnerBlocks( innerBlocks )
 					),
 			} ) ),
