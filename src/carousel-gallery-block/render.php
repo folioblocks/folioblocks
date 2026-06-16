@@ -10,11 +10,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Base attributes (free features)
 $fbks_wrapper_attributes = array(
+	'class'                   => 'is-loading',
 	'data-vertical-on-mobile' => empty( $attributes['verticalOnMobile'] ) ? 'false' : 'true',
 );
+$fbks_gap = 10;
+$fbks_tablet_gap = 10;
+$fbks_mobile_gap = 10;
 
 if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 	// Premium-only attributes
+	$fbks_gap = max( 0, min( 50, intval( $attributes['gap'] ?? 10 ) ) );
+	$fbks_tablet_gap = max( 0, min( 50, intval( $attributes['tabletGap'] ?? $fbks_gap ) ) );
+	$fbks_mobile_gap = max( 0, min( 50, intval( $attributes['mobileGap'] ?? $fbks_gap ) ) );
 
 	// Autoplay
 	if ( ! empty( $attributes['autoplay'] ) ) {
@@ -36,10 +43,13 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 	}
 
 	if ( ! empty( $attributes['randomizeOrder'] ) ) {
-		$fbks_wrapper_attributes['class']          = 'pb-randomized';
+		$fbks_wrapper_attributes['class']         .= ' pb-randomized';
 		$fbks_wrapper_attributes['data-randomize'] = 'true';
 	}
 }
+$fbks_wrapper_attributes['style'] = '--pb-gallery-gap-desktop:' . $fbks_gap . 'px;'
+	. '--pb-gallery-gap-tablet:' . $fbks_tablet_gap . 'px;'
+	. '--pb-gallery-gap-mobile:' . $fbks_mobile_gap . 'px;';
 
 $fbks_wrapper_attr_string = get_block_wrapper_attributes( $fbks_wrapper_attributes );
 $fbks_controls_background_color = ! empty( $attributes['controlsBackgroundColor'] )
@@ -64,6 +74,7 @@ $fbks_controls_icon_color = ! empty( $attributes['controlsIconColor'] )
 				"
 			>
 					<button
+						type="button"
 						class="pb-carousel-chevron prev"
 						aria-label="<?php esc_attr_e( 'Previous slide', 'folioblocks' ); ?>"
 					>
@@ -74,6 +85,7 @@ $fbks_controls_icon_color = ! empty( $attributes['controlsIconColor'] )
 
 				<?php if ( ! empty( $attributes['autoplay'] ) ) : ?>
 						<button
+							type="button"
 							class="pb-carousel-play-button"
 							aria-label="<?php esc_attr_e( 'Play/Pause carousel', 'folioblocks' ); ?>"
 						>
@@ -87,6 +99,7 @@ $fbks_controls_icon_color = ! empty( $attributes['controlsIconColor'] )
 				<?php endif; ?>
 
 					<button
+						type="button"
 						class="pb-carousel-chevron next"
 						aria-label="<?php esc_attr_e( 'Next slide', 'folioblocks' ); ?>"
 					>

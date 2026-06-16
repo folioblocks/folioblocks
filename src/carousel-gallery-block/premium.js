@@ -21,6 +21,7 @@ import { registerImageClickStylePremiumControls } from '../pb-helpers/imageClick
 import { registerImageHoverActionPremiumControls } from '../pb-helpers/imageHoverActionPremiumControls';
 import { registerListViewThumbnailEnhancements } from '../pb-helpers/listViewThumbnailEnhancements';
 import { enableGalleryTransforms } from '../pb-helpers/galleryTransforms';
+import { registerResponsiveGapPremiumControl } from '../pb-helpers/responsiveGapPremiumControl';
 import {
 	registerDisableRightClickPremiumControl,
 	registerLazyLoadPremiumControl,
@@ -28,6 +29,11 @@ import {
 } from '../pb-helpers/simplePremiumControls';
 
 enableGalleryTransforms( 'folioblocks/carousel-gallery-block' );
+registerResponsiveGapPremiumControl( {
+	hookName: 'folioBlocks.carouselGallery.responsiveGapControl',
+	gapsHookName: 'folioBlocks.carouselGallery.responsiveGaps',
+	namespace: 'folioblocks/carousel-gallery',
+} );
 
 const DEFAULT_CONTROLS_BACKGROUND_COLOR = 'rgba(0, 0, 0, 0.5)';
 const DEFAULT_CONTROLS_ICON_COLOR = '#ffffff';
@@ -308,6 +314,7 @@ addFilter(
 					}` }
 				>
 					<button
+						type="button"
 						onClick={ goToPrevSlide }
 						className="pb-carousel-chevron prev"
 						style={ {
@@ -332,6 +339,7 @@ addFilter(
 
 					{ attributes.autoplay && (
 						<button
+							type="button"
 							className="pb-carousel-play-button"
 							aria-label={ isPlaying ? 'Pause' : 'Play' }
 							onClick={ () => setIsPlaying( ( prev ) => ! prev ) }
@@ -369,6 +377,7 @@ addFilter(
 					) }
 
 					<button
+						type="button"
 						onClick={ goToNextSlide }
 						className="pb-carousel-chevron next"
 						style={ {

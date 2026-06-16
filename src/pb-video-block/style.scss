@@ -276,9 +276,8 @@
 	visibility: hidden;
 	transition: opacity 0.3s ease;
 	align-items: center;
-	backdrop-filter: blur(6px);
-	-webkit-backdrop-filter: blur(6px);
-	background: rgba(0, 0, 0, 0.9);
+	--pb-video-lightbox-backdrop: rgba(0, 0, 0, 0.9);
+	background: transparent;
 	display: flex;
 	inset: 0;
 	justify-content: center;
@@ -288,6 +287,16 @@
 	width: 100vw;
 	height: 100vh;
 	z-index: 9999;
+
+	&::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: var(--pb-video-lightbox-backdrop);
+		backdrop-filter: blur(6px);
+		-webkit-backdrop-filter: blur(6px);
+		pointer-events: none;
+	}
 
 	&.active {
 		display: flex;
@@ -391,14 +400,30 @@
 		overflow-y: auto;
 		max-height: 84vh;
 
-		h2.pb-video-lightbox-title {
+		h2.pb-video-lightbox-title,
+		h2.lightbox-title,
+		h2.pb-video-lightbox-product-title,
+		h2.pb-product-name {
+			color: inherit;
+		}
+
+		p.pb-video-lightbox-description,
+		p.lightbox-description,
+		.pb-video-lightbox-product-price,
+		.pb-lightbox-product-info {
+			color: inherit;
+		}
+
+		h2.pb-video-lightbox-title,
+		h2.lightbox-title {
 			font-size: clamp(1rem, 2vw + 0.5rem, 2rem);
 			font-weight: 600;
 			margin-bottom: 1rem;
 			line-height: 1.2;
 		}
 
-		p.pb-video-lightbox-description {
+		p.pb-video-lightbox-description,
+		p.lightbox-description {
 			font-size: clamp(0.875rem, 1.2vw + 0.4rem, 1.125rem);
 			line-height: 1.6;
 			margin: 0;
@@ -497,7 +522,7 @@
 }
 
 .pb-video-lightbox.light-mode {
-	background: rgba(255, 255, 255, 0.94);
+	--pb-video-lightbox-backdrop: rgba(255, 255, 255, 0.94);
 
 	.pb-video-lightbox-close,
 	.lightbox-fullscreen,

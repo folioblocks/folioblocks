@@ -29,6 +29,15 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		if ( ! trigger ) {
 			return;
 		}
+		const userAgent = window.navigator.userAgent;
+		const isSafari =
+			/^((?!chrome|android).)*safari/i.test( userAgent ) &&
+			! /crios|fxios|edgios/i.test( userAgent );
+		const carouselBlock = trigger.closest(
+			'.wp-block-folioblocks-carousel-gallery-block'
+		);
+		const useSafariBlurFallback = isSafari && carouselBlock;
+		let safariBlurTargets = [];
 
 		event.preventDefault();
 		event.stopPropagation();
@@ -60,6 +69,19 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 		wrapper.appendChild( inner );
 		document.body.appendChild( wrapper );
+
+		if ( useSafariBlurFallback ) {
+			wrapper.classList.add( 'pb-image-lightbox--safari-filter' );
+			safariBlurTargets = Array.from( document.body.children ).filter(
+				( element ) =>
+					element !== wrapper &&
+					! element.classList.contains( 'pb-focus-sentinel-start' ) &&
+					! element.classList.contains( 'pb-focus-sentinel-end' )
+			);
+			safariBlurTargets.forEach( ( element ) =>
+				element.classList.add( 'pb-safari-lightbox-blur-source' )
+			);
+		}
 
 		document.body.classList.add( 'pb-lightbox-open' );
 		let suppressImageClick = false;
@@ -187,6 +209,9 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				} )
 			);
 			wrapper.remove();
+			safariBlurTargets.forEach( ( element ) =>
+				element.classList.remove( 'pb-safari-lightbox-blur-source' )
+			);
 			document.body.classList.remove( 'pb-lightbox-open' );
 			focusStart.remove();
 			focusEnd.remove();
@@ -202,11 +227,17 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 		window.addEventListener( 'resize', handleViewportResize );
 
-		// Close lightbox when clicking outside the image and controls (on the backdrop)
+		// Close when clicking outside the actual image, caption, and controls.
 		wrapper.addEventListener( 'click', ( e ) => {
-			if ( e.target === wrapper ) {
-				closeLightbox();
+			const interactiveTarget = e.target.closest(
+				'.lightbox-image img, .lightbox-caption, .lightbox-close, .lightbox-prev, .lightbox-next, .lightbox-fullscreen'
+			);
+
+			if ( interactiveTarget ) {
+				return;
 			}
+
+			closeLightbox();
 		} );
 
 		function renderLightbox( index ) {

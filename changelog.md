@@ -46,14 +46,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reworked Video Block and Video Gallery hover controls to use Hover Style, Overlay Content, and Always Display Overlay controls consistent with the photo galleries.
 - Moved Video Block and Video Gallery Color Overlay color controls into Gallery Hover Styles tools panels and added neutral default overlay colors.
 - Updated Video Block and Video Gallery play buttons with a circular border that inherits the effective overlay text color.
+- Added responsive Desktop, Tablet, and Mobile gap controls to Carousel Gallery.
 - Renamed Video Block and Video Gallery Lightbox Layout controls to Lightbox Content and reordered Lightbox Appearance choices to list Light before Dark.
 - Reworked free-version Pro feature notices across image, video, gallery, Before & After, Loupe, and Background Video blocks with clearer feature summaries and consistent Get FolioBlocks Pro actions.
+- Updated the Free vs Pro settings page with FolioBlocks 1.4 features and current control names.
 
 ### Fixed
 - Fixed gallery transforms dropping matching responsive column and gap settings.
 - Fixed Justified Gallery rows sometimes stopping short of the gallery edge when using larger image gaps.
 - Fixed Hide Unknown EXIF Fields failing when missing metadata was stored using a different site locale.
 - Fixed image Lightbox navigation arrows overlapping captions on mobile devices.
+- Fixed Video Block and Video Gallery lightbox titles retaining dark-mode text colors when using Light appearance.
+- Fixed Carousel Galleries occasionally appearing too small when reopening a page in the block editor.
+- Fixed Elevated and Dramatic image shadows being clipped by Carousel Gallery containers.
+- Improved Safari reliability for large gallery blur overlays and added a direct-filter fallback for Carousel Lightbox backgrounds.
 - Fixed an Image Block editor crash when changing gallery overlay content from EXIF Data to Product Info.
 - Fixed the Filmstrip Gallery `useSelect` capabilities warning caused by unstable selector return values.
 - Fixed Filmstrip Gallery horizontal-image overlays extending beyond the displayed image in the editor and front end.

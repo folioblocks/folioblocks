@@ -290,6 +290,8 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				gallery.style.overflowX = '';
 				gallery.setAttribute( 'tabindex', '0' );
 				gallery.classList.add( 'pb-carousel-ready' );
+				block.classList.remove( 'is-loading' );
+				block.classList.add( 'pb-carousel-loaded' );
 				isReady = true;
 			} );
 		};
