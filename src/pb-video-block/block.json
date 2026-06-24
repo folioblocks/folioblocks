@@ -23,6 +23,9 @@
 "attributes": {
 	"preview": { "type": "boolean", "default": false },
 	"videoUrl": { "type": "string", "default": "" },
+	"videoWidth": { "type": "number", "default": 0 },
+	"videoHeight": { "type": "number", "default": 0 },
+	"videoDimensionsUrl": { "type": "string", "default": "" },
 	"thumbnail": { "type": "string", "default": "" },
 	"title": { "type": "string", "default": "" },
 	"description": { "type": "string", "default": "" },

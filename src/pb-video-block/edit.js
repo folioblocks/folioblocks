@@ -195,6 +195,9 @@ function getVideoEmbedMarkup(videoUrl, youtubeEmbedPreview) {
 export default function Edit({ attributes, setAttributes, context }) {
 	const {
 		videoUrl,
+		videoWidth,
+		videoHeight,
+		videoDimensionsUrl,
 		thumbnail,
 		thumbnailId,
 		title,
@@ -244,14 +247,68 @@ export default function Edit({ attributes, setAttributes, context }) {
 		window.folioBlocksData?.wpVersion,
 		"7.0",
 	);
-	const isYouTubeVideo = getVideoProviderData(videoUrl).provider === "youtube";
-	const youtubeEmbedPreview = useSelect(
+	const videoProvider = getVideoProviderData(videoUrl).provider;
+	const isYouTubeVideo = videoProvider === "youtube";
+	const isOEmbedVideo = isYouTubeVideo || videoProvider === "vimeo";
+	const videoEmbedPreview = useSelect(
 		(select) =>
-			isYouTubeVideo && isLightboxOpen
+			isOEmbedVideo
 				? select("core").getEmbedPreview(videoUrl)
 				: undefined,
-		[isLightboxOpen, isYouTubeVideo, videoUrl],
+		[isOEmbedVideo, videoUrl],
 	);
+	const youtubeEmbedPreview = isYouTubeVideo ? videoEmbedPreview : undefined;
+
+	useEffect(() => {
+		const width = Number(videoEmbedPreview?.width) || 0;
+		const height = Number(videoEmbedPreview?.height) || 0;
+		if (!width || !height) {
+			return;
+		}
+		if (
+			videoDimensionsUrl !== videoUrl ||
+			videoWidth !== width ||
+			videoHeight !== height
+		) {
+			setAttributes({
+				videoWidth: width,
+				videoHeight: height,
+				videoDimensionsUrl: videoUrl,
+			});
+		}
+	}, [
+		videoEmbedPreview,
+		videoUrl,
+		videoDimensionsUrl,
+		videoWidth,
+		videoHeight,
+		setAttributes,
+	]);
+
+	useEffect(() => {
+		if (!videoUrl || videoProvider !== "self") {
+			return undefined;
+		}
+
+		const video = document.createElement("video");
+		video.preload = "metadata";
+		video.src = videoUrl;
+		const storeVideoDimensions = () => {
+			if (video.videoWidth > 0 && video.videoHeight > 0) {
+				setAttributes({
+					videoWidth: video.videoWidth,
+					videoHeight: video.videoHeight,
+					videoDimensionsUrl: videoUrl,
+				});
+			}
+		};
+		video.addEventListener("loadedmetadata", storeVideoDimensions);
+		return () => {
+			video.removeEventListener("loadedmetadata", storeVideoDimensions);
+			video.removeAttribute("src");
+			video.load();
+		};
+	}, [videoProvider, videoUrl, setAttributes]);
 
 	// Effect: Listen for Escape key to close lightbox
 	useEffect(() => {
@@ -377,6 +434,11 @@ export default function Edit({ attributes, setAttributes, context }) {
 	// ---------------------------
 	const effectiveThumbnailSize = inheritedThumbnailSize ?? thumbnailSize;
 	const effectiveAspectRatio = inheritedAspectRatio || aspectRatio;
+	const hasVideoDimensions =
+		videoDimensionsUrl === videoUrl && videoWidth > 0 && videoHeight > 0;
+	const videoLightboxRatio = hasVideoDimensions
+		? videoWidth / videoHeight
+		: 16 / 9;
 	const effectivePlayButtonVisibility =
 		(overridesGalleryHover ? undefined : inheritedPlayButtonVisibility) ??
 		playButtonVisibility ??
@@ -1117,8 +1179,9 @@ export default function Edit({ attributes, setAttributes, context }) {
 								? "video-product-layout"
 								: ""
 							} ${effectiveLightboxTheme === "light" ? "light-mode" : ""}`}
+						style={{ "--pb-video-lightbox-ratio": videoLightboxRatio }}
 						onClick={(e) => {
-							if (e.target.classList.contains("pb-video-lightbox")) {
+							if (!e.target.closest(".pb-video-lightbox-video, .pb-video-lightbox-info, .pb-video-lightbox-close, .lightbox-fullscreen")) {
 								setLightboxOpen(false);
 							}
 						}}

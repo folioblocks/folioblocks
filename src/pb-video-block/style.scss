@@ -272,6 +272,7 @@
 // Base Lightbox Content
 
 .pb-video-lightbox {
+	--pb-video-lightbox-ratio: 1.7778;
 	opacity: 0;
 	visibility: hidden;
 	transition: opacity 0.3s ease;
@@ -286,7 +287,7 @@
 	left: 0;
 	width: 100vw;
 	height: 100vh;
-	z-index: 9999;
+	z-index: 990000 !important;
 
 	&::before {
 		content: '';
@@ -306,7 +307,7 @@
 
 	.pb-video-lightbox-inner {
 		position: relative;
-		width: min(90vw, calc(80vh * 16 / 9));
+		width: min(90vw, calc(80vh * var(--pb-video-lightbox-ratio)));
 		max-width: none;
 		max-height: none;
 		overflow: visible;
@@ -315,7 +316,7 @@
 	.pb-video-lightbox-video {
 		position: relative;
 		width: 100%;
-		aspect-ratio: 16 / 9;
+		aspect-ratio: var(--pb-video-lightbox-ratio);
 		overflow: hidden;
 
 		iframe,
@@ -376,7 +377,7 @@
 	.pb-video-lightbox-inner {
 		--pb-lightbox-gap: clamp(1rem, 2vw, 2rem);
 		--pb-lightbox-info-width: clamp(18rem, 22vw, 26rem);
-		--pb-lightbox-video-max-width: calc(84vh * 16 / 9);
+		--pb-lightbox-video-max-width: calc(84vh * var(--pb-video-lightbox-ratio));
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -493,7 +494,7 @@
 	.pb-video-lightbox.video-product-layout .pb-video-lightbox-inner {
 		flex-direction: column;
 		align-items: stretch;
-		width: min(90vw, calc(80vh * 16 / 9));
+		width: min(90vw, calc(80vh * var(--pb-video-lightbox-ratio)));
 		max-height: 86vh;
 		overflow-y: auto;
 	}

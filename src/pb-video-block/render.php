@@ -28,7 +28,19 @@ $fbks_video_url = is_array($fbks_parsed_video_url)
 	&& in_array(strtolower($fbks_parsed_video_url['scheme']), ['http', 'https'], true)
 	? esc_url($fbks_raw_video_url)
 	: '';
-$fbks_aspect = esc_attr($attributes['aspectRatio'] ?? '16:9');
+$fbks_aspect = $fbks_context['folioBlocks/aspectRatio'] ?? ($attributes['aspectRatio'] ?? '16:9');
+$fbks_valid_aspects = ['21:9', '16:9', '9:16', '4:3', '3:2', '1:1'];
+if (! in_array($fbks_aspect, $fbks_valid_aspects, true)) {
+	$fbks_aspect = '16:9';
+}
+$fbks_video_width = absint($attributes['videoWidth'] ?? 0);
+$fbks_video_height = absint($attributes['videoHeight'] ?? 0);
+$fbks_dimensions_url = isset($attributes['videoDimensionsUrl']) && is_string($attributes['videoDimensionsUrl'])
+	? trim($attributes['videoDimensionsUrl'])
+	: '';
+$fbks_video_ratio = $fbks_dimensions_url === $fbks_raw_video_url && $fbks_video_width > 0 && $fbks_video_height > 0
+	? $fbks_video_width / $fbks_video_height
+	: 16 / 9;
 $fbks_play_visibility = esc_attr($fbks_hover_context['folioBlocks/playButtonVisibility'] ?? ($attributes['playButtonVisibility'] ?? 'always'));
 $fbks_title_visibility = esc_attr($fbks_hover_context['folioBlocks/titleVisibility'] ?? ($attributes['titleVisibility'] ?? 'always'));
 $fbks_show_filter_category = ! empty($fbks_context['folioBlocks/enableFilter'] ?? false)
@@ -280,7 +292,7 @@ if ($fbks_title) {
 		?>
 	</div>
 	<!-- Lightbox Markup -->
-	<div id="<?php echo esc_attr($fbks_lightbox_dom_id); ?>" class="pb-video-lightbox <?php echo esc_attr($fbks_layout_class); ?><?php echo 'light' === $fbks_lightbox_theme ? ' light-mode' : ''; ?>" data-lbx="<?php echo esc_attr($fbks_lightbox_id); ?>" role="dialog" tabindex="-1" aria-modal="true" aria-hidden="true" aria-label="<?php echo esc_attr($fbks_lightbox_aria_label); ?>">
+	<div id="<?php echo esc_attr($fbks_lightbox_dom_id); ?>" class="pb-video-lightbox <?php echo esc_attr($fbks_layout_class); ?><?php echo 'light' === $fbks_lightbox_theme ? ' light-mode' : ''; ?>" data-lbx="<?php echo esc_attr($fbks_lightbox_id); ?>" role="dialog" tabindex="-1" aria-modal="true" aria-hidden="true" aria-label="<?php echo esc_attr($fbks_lightbox_aria_label); ?>" style="--pb-video-lightbox-ratio: <?php echo esc_attr((string) $fbks_video_ratio); ?>;">
 			<div class="pb-video-lightbox-inner">
 				<button class="pb-video-lightbox-close" aria-label="<?php esc_attr_e('Close', 'folioblocks'); ?>">×</button>
 

@@ -57,15 +57,168 @@
 
 /* Constrained sizing is delegated to an inner Group block. */
 
-/*
- * In editor, ensure the root Group added inside Background Video stays full width
- * even when the parent uses flex alignment classes.
- */
 .pb-bgvid__content-inner
 	> .block-editor-inner-blocks
 	> .block-editor-block-list__layout
-	> .wp-block-group {
+	> .wp-block-group,
+.pb-bgvid__content-inner
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout
+	> .wp-block-columns {
 	align-self: stretch !important;
 	width: 100% !important;
 	max-width: none !important;
+	min-height: 100% !important;
+	height: 100% !important;
+}
+
+.pb-bgvid__content-inner
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout
+	> .wp-block-columns
+	> .block-editor-inner-blocks,
+.pb-bgvid__content-inner
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout
+	> .wp-block-columns
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout,
+.pb-bgvid__content-inner
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout
+	> .wp-block-columns
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout
+	> .wp-block-column {
+	min-height: 100% !important;
+	height: 100% !important;
+}
+
+.pb-bgvid__content-inner
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout
+	> .wp-block-columns
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout
+	> .wp-block-column {
+	display: flex !important;
+	flex-direction: column !important;
+	align-self: stretch !important;
+}
+
+.pb-bgvid__content-inner
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout
+	> .wp-block-columns.are-vertically-aligned-top
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout
+	> .wp-block-column,
+.pb-bgvid__content-inner
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout
+	> .wp-block-columns
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout
+	> .wp-block-column.is-vertically-aligned-top {
+	justify-content: flex-start !important;
+}
+
+.pb-bgvid__content-inner
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout
+	> .wp-block-columns.are-vertically-aligned-center
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout
+	> .wp-block-column,
+.pb-bgvid__content-inner
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout
+	> .wp-block-columns
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout
+	> .wp-block-column.is-vertically-aligned-center {
+	justify-content: center !important;
+}
+
+.pb-bgvid__content-inner
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout
+	> .wp-block-columns.are-vertically-aligned-bottom
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout
+	> .wp-block-column,
+.pb-bgvid__content-inner
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout
+	> .wp-block-columns
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout
+	> .wp-block-column.is-vertically-aligned-bottom {
+	justify-content: flex-end !important;
+}
+
+.pb-bgvid__content-inner
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout
+	> .wp-block-group
+	> .block-editor-inner-blocks,
+.pb-bgvid__content-inner
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout
+	> .wp-block-group
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout {
+	width: 100% !important;
+	min-height: 100% !important;
+	height: 100% !important;
+}
+
+.pb-bgvid__content-inner.is-v-top
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout
+	> .wp-block-group
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout,
+.pb-bgvid__content-inner.is-v-stretch
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout
+	> .wp-block-group
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+}
+
+.pb-bgvid__content-inner.is-v-center
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout
+	> .wp-block-group
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.pb-bgvid__content-inner.is-v-bottom
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout
+	> .wp-block-group
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+}
+
+.pb-bgvid__content-inner.is-v-space-between
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout
+	> .wp-block-group
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 }

@@ -57,6 +57,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed Hide Unknown EXIF Fields failing when missing metadata was stored using a different site locale.
 - Fixed image Lightbox navigation arrows overlapping captions on mobile devices.
 - Fixed Video Block and Video Gallery lightbox titles retaining dark-mode text colors when using Light appearance.
+- Fixed Video Block and Video Gallery lightboxes appearing beneath theme headers and other high-stacking elements by mounting them at the document root.
 - Fixed Carousel Galleries occasionally appearing too small when reopening a page in the block editor.
 - Fixed Elevated and Dramatic image shadows being clipped by Carousel Gallery containers.
 - Improved Safari reliability for large gallery blur overlays and added a direct-filter fallback for Carousel Lightbox backgrounds.
