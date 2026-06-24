@@ -1,5 +1,5 @@
 {
-  "translation-revision-date": "2026-06-02T13:08:20.283Z",
+  "translation-revision-date": "2026-06-24T05:34:48.369Z",
   "generator": "FolioBlocks custom i18n tooling",
   "domain": "messages",
   "locale_data": {
@@ -39,11 +39,20 @@
       "Add Videos": [
         "Lägg till videor"
       ],
+      "Add a visitor-facing filter bar.": [
+        "Lägg till ett filterfält som riktar sig mot besökare."
+      ],
       "Add content…": [
         "Lägg till innehåll…"
       ],
       "Add image caption.": [
         "Lägg till bildtext."
+      ],
+      "Add product and cart actions.": [
+        "Lägg till produkt- och kundvagnsåtgärder."
+      ],
+      "Add rounded corners.": [
+        "Lägg till rundade hörn."
       ],
       "Add to Cart": [
         "Lägg till i Varukorgen"
@@ -63,6 +72,9 @@
       "Adds a soft blur overlay behind the title or product info.": [
         "Lägger till ett mjukt oskärpeöverlägg bakom titeln eller produktinformationen."
       ],
+      "Adjust horizontal focal points per device.": [
+        "Justera horisontella fokuspunkter per enhet."
+      ],
       "Adjust the default amount of columns on %s.": [
         "Justera standardantalet kolumner pa %s."
       ],
@@ -75,6 +87,15 @@
       "Adjust the vertical focal point per device.": [
         "Justera den vertikala fokuspunkten per enhet."
       ],
+      "Adjust vertical focal points per device.": [
+        "Justera vertikala fokuspunkter per enhet."
+      ],
+      "Advanced Click Actions": [
+        "Avancerade klickåtgärder"
+      ],
+      "Advanced Comparison Controls": [
+        "Avancerade jämförelsekontroller"
+      ],
       "Affects layout on mobile only. Switch ONLY when all images are vertical in orientation.": [
         "Påverkar endast layouten på mobila enheter. Slå ENDAST på när alla bilder är vertikalt orienterade."
       ],
@@ -83,12 +104,6 @@
       ],
       "After Image": [
         "Efter-bild"
-      ],
-      "Align content bottom": [
-        "Justera innehåll till nederkant"
-      ],
-      "Align content top": [
-        "Justera innehåll till överkant"
       ],
       "All": [
         "Alla"
@@ -99,8 +114,8 @@
       "Always": [
         "Alltid"
       ],
-      "Always Show": [
-        "Visa alltid"
+      "Always Display Overlay": [
+        "Visa alltid överlägg"
       ],
       "Aperture": [
         "Bländare"
@@ -108,17 +123,32 @@
       "Appearance": [
         "Utseende"
       ],
-      "Applies a subtle drop shadow to images.": [
-        "Lägger till en subtil skugga på bilderna."
+      "Apply image drop shadows.": [
+        "Applicera bildskuggor."
       ],
-      "Applies a subtle drop shadow.": [
-        "Lägger till en subtil skugga."
+      "Apply thumbnail drop shadows.": [
+        "Applicera miniatyrbildsskuggor."
+      ],
+      "Assign multiple categories to images.": [
+        "Tilldela flera kategorier till bilder."
+      ],
+      "Assign multiple categories to videos.": [
+        "Tilldela flera kategorier till videor."
+      ],
+      "Automatically advance carousel slides.": [
+        "Flytta automatiskt karusellbilder."
+      ],
+      "Automatically advance filmstrip images.": [
+        "Förflytta automatiskt filmremsbilder."
       ],
       "Automatically advance to the next image in the carousel.": [
         "Växla automatiskt till nästa bild i karusellen."
       ],
       "Automatically advance to the next image in the gallery.": [
         "Växla automatiskt till nästa bild i galleriet."
+      ],
+      "Automatically shuffle gallery images.": [
+        "Blanda automatiskt galleribilder."
       ],
       "Autoplay Speed (seconds)": [
         "Hastighet för automatisk uppspelning (sekunder)"
@@ -168,14 +198,14 @@
       "Carousel Gallery Settings": [
         "Inställningar för Carousel Gallery"
       ],
+      "Carousel Playback and Controls": [
+        "Karuselluppspelning och kontroller"
+      ],
       "Carousel Styles": [
         "Karusellstilar"
       ],
       "Center": [
         "Centrera"
-      ],
-      "Center content vertically": [
-        "Centrera innehåll vertikalt"
       ],
       "Change Image": [
         "Byt bild"
@@ -201,6 +231,33 @@
       "Chip Overlay": [
         "Etikettöverlägg"
       ],
+      "Choose a circular or square loupe.": [
+        "Välj en rund eller fyrkantig lupp."
+      ],
+      "Choose a drop shadow style for the %s.": [
+        "Välj en skuggstil för %s."
+      ],
+      "Choose a light or dark appearance.": [
+        "Välj ett ljust eller mörkt utseende."
+      ],
+      "Choose a light or dark lightbox background.": [
+        "Välj en ljus eller mörk ljusbordsbakgrund."
+      ],
+      "Choose any spacing from 0 to 50 pixels.": [
+        "Välj valfritt avstånd från 0 till 50 pixlar."
+      ],
+      "Choose gradient, blur, color, or chip hover styles.": [
+        "Välj stilar för gradient, oskärpa, färg eller chip."
+      ],
+      "Choose gradient, blur, or color hover styles.": [
+        "Välj stilar för gradient, oskärpa eller färg."
+      ],
+      "Choose label placement for each slider orientation.": [
+        "Välj etikettplacering för varje skjutreglage."
+      ],
+      "Choose label text and background colors.": [
+        "Välj etiketttext och bakgrundsfärger."
+      ],
       "Choose the hover overlay style.": [
         "Välj stil för hovringsöverlägget."
       ],
@@ -209,6 +266,9 @@
       ],
       "Choose what appears when hovering over images.": [
         "Välj vad som visas när du hovrar över bilder."
+      ],
+      "Choose what appears with the Video in the lightbox.": [
+        "Välj vad som ska visas med videon i ljuslådan."
       ],
       "Choose what happens when visitors click gallery images.": [
         "Välj vad som händer när besökare klickar på galleribilder."
@@ -230,6 +290,9 @@
       ],
       "Choose what happens when visitors use this image product link. Select Inherit to follow the gallery default.": [
         "Välj vad som händer när besökare använder produktlänken för den här bilden. Välj Ärv för att följa galleriets standardinställning."
+      ],
+      "Choose when navigation controls appear.": [
+        "Välj när navigeringskontroller visas."
       ],
       "Choose when to display the Add to Cart icon.": [
         "Välj när Lägg till i varukorg-ikonen ska visas."
@@ -264,17 +327,44 @@
       "Columns": [
         "Kolumner"
       ],
+      "Configure playback timing and behavior.": [
+        "Konfigurera uppspelningstid och beteende."
+      ],
+      "Control filter-bar typography.": [
+        "Kontroll filter-bar typografi."
+      ],
       "Controls Alignment": [
         "Justering av kontroller"
       ],
-      "Custom Image Linking": [
-        "Anpassad bildlänkning"
-      ],
-      "Custom Overlay": [
-        "Anpassat Överlägg"
+      "Create a brighter or more cinematic presentation.": [
+        "Skapa en ljusare eller mer filmisk presentation."
       ],
       "Custom URL": [
         "Anpassad URL"
+      ],
+      "Customize border colors and widths.": [
+        "Anpassa kantfärger och -bredder."
+      ],
+      "Customize control colors and appearance.": [
+        "Anpassa kontrollfärger och utseende."
+      ],
+      "Customize filter text and background colors.": [
+        "Anpassa filtertext och bakgrundsfärger."
+      ],
+      "Customize filter-bar typography and colors.": [
+        "Anpassa filterfältets typografi och färger."
+      ],
+      "Customize overlay and play-button colors.": [
+        "Anpassa färgerna på överlägget och uppspelningsknapparna."
+      ],
+      "Customize overlay colors.": [
+        "Anpassa överläggsfärger."
+      ],
+      "Customize the information shown in the lightbox.": [
+        "Anpassa informationen som visas i ljuslådan."
+      ],
+      "Customize the slider handle and line color.": [
+        "Anpassa skjutreglaget och linjefärgen."
       ],
       "Dark": [
         "Mörk"
@@ -309,17 +399,20 @@
       "Disable on Mobile": [
         "Inaktivera på mobil"
       ],
+      "Disable right-click on compatible FolioBlocks media.": [
+        "Inaktivera högerklicka på kompatibla FolioBlocks-media."
+      ],
+      "Disable right-click on displayed media.": [
+        "Inaktivera högerklicka på visat media."
+      ],
       "Display Add to Cart Icon": [
         "Visa Lägg till i Varukorgen-ikon"
       ],
       "Display Before & After labels.": [
         "Visa etiketterna Före och Efter."
       ],
-      "Display Image Caption inside the lightbox.": [
-        "Visa bildtext i Lightbox."
-      ],
-      "Display Image Caption or Product Info inside the Lightbox.": [
-        "Visa bildtext eller produktinfo i lightboxen."
+      "Display Before and After labels.": [
+        "Visa före- och efteretiketter."
       ],
       "Display Image Download Icon": [
         "Visa Nedladdnings-ikon för bild"
@@ -327,11 +420,17 @@
       "Display Link Target Icon": [
         "Visa ikon för länkmål"
       ],
-      "Display image title, image caption, or EXIF data when hovering over images.": [
-        "Visa bildtitel, bildtext eller EXIF-data när du hovrar över bilder."
+      "Display camera details in overlays and lightboxes.": [
+        "Visa kameradetaljer i överlägg och ljusbord."
       ],
-      "Display image title, image caption, or product info when hovering over images.": [
-        "Visa bildtitel, bildtext eller produktinformation när du hovrar över bilder."
+      "Display product information with videos.": [
+        "Visa produktinformation med videor."
+      ],
+      "Display the video title and description.": [
+        "Visa videons titel och beskrivning."
+      ],
+      "Display video titles and descriptions.": [
+        "Visa videotitlar och beskrivningar."
       ],
       "Displays the overlay content in a compact chip above the image.": [
         "Visar överläggsinnehållet i en kompakt etikett ovanför bilden."
@@ -341,9 +440,6 @@
       ],
       "Displays the overlay content over custom overlay colors set in Styles panel.": [
         "Visar överläggsinnehållet över anpassade överläggsfärger som anges i panelen Stilar."
-      ],
-      "Distribute content vertically": [
-        "Fördela innehållet vertikalt"
       ],
       "Download Icon": [
         "Nedladdnings-ikon"
@@ -357,8 +453,11 @@
       "Drag Handle Starting Position (%)": [
         "Startposition för draghandtag (%)"
       ],
-      "Drag Handle Starting Postion": [
-        "Startposition för draghandtag"
+      "Dramatic": [
+        "Dramatisk"
+      ],
+      "Drop Shadow": [
+        "Drop Shadow"
       ],
       "E-Commerce Settings": [
         "E-handelsinställningar"
@@ -369,8 +468,8 @@
       "EXIF DATA": [
         "EXIF-DATA"
       ],
-      "EXIF Data": [
-        "EXIF-data"
+      "EXIF Metadata": [
+        "EXIF-metadata"
       ],
       "Edit Custom URL": [
         "Redigera anpassad URL"
@@ -381,14 +480,14 @@
       "Edit WooCommerce Product": [
         "Redigera WooCommerce-produkt"
       ],
+      "Elevated": [
+        "Upphöjd"
+      ],
       "Enable Autoplay": [
         "Aktivera automatisk uppspelning"
       ],
       "Enable Carousel Controls": [
         "Aktivera karusellkontroller"
-      ],
-      "Enable Drop Shadow": [
-        "Aktivera skugga"
       ],
       "Enable Full-Screen Mode": [
         "Aktivera helskärmsläge"
@@ -396,26 +495,11 @@
       "Enable Full-Screen Mode for the gallery on the frontend.": [
         "Aktivera helskärmsläge för galleriet på frontenden."
       ],
-      "Enable Image Border Color": [
-        "Aktivera kantfärg för videominiatyr"
-      ],
-      "Enable Image Border Radius": [
-        "Aktivera hörnradie för videominiatyr"
-      ],
-      "Enable Image Border Width": [
-        "Aktivera kantbredd för videominiatyr"
-      ],
       "Enable Image Downloads": [
         "Aktivera bildnedladdningar"
       ],
-      "Enable Image Drop Shadow": [
-        "Aktivera skugga för videominiatyr"
-      ],
       "Enable Image Filtering": [
         "Aktivera bildfiltrering"
-      ],
-      "Enable Image Styles": [
-        "Aktivera bildstilar"
       ],
       "Enable Lazy Load of Images": [
         "Aktivera lazy load för bilder"
@@ -429,26 +513,11 @@
       "Enable Video Filtering": [
         "Aktivera videofiltrering"
       ],
-      "Enable Woo Commerce": [
-        "Aktivera WooCommerce"
-      ],
       "Enable WooCommerce Integration": [
         "Aktivera WooCommerce-integration"
       ],
-      "Enable drop shadow effect.": [
-        "Aktivera skuggeffekt."
-      ],
-      "Enable image Lightbox on click.": [
-        "Aktivera bild-lightbox vid klick."
-      ],
       "Enable image filtering with categories.": [
         "Aktivera bildfiltrering med kategorier."
-      ],
-      "Enable the carousel to loop infinitely.": [
-        "Låt karusellen loopa oändligt."
-      ],
-      "Enable video filtering with categories.": [
-        "Aktivera videofiltrering med kategorier."
       ],
       "Enables lazy loading of gallery images.": [
         "Aktiverar lazy loading av galleri-bilder."
@@ -456,17 +525,26 @@
       "Enables lazy loading of image.": [
         "Aktiverar lazy loading av bild."
       ],
+      "Enter a valid URL beginning with http:// or https://.": [
+        "Ange en giltig URL som börjar med http:// eller https://."
+      ],
       "Fade Overlay": [
         "Tonat överlägg"
       ],
       "Fades in a clean title overlay when hovering over the image.": [
         "Tonar in ett rent titelöverlägg när du hovrar över bilden."
       ],
+      "Filmstrip Color Mode": [
+        "Färgläge för filmremsor"
+      ],
       "Filmstrip Gallery": [
         "Filmremsgalleri"
       ],
       "Filmstrip Gallery Settings": [
         "Inställningar för Filmstrip Gallery"
+      ],
+      "Filmstrip Playback and Display": [
+        "Uppspelning och visning av filmremsor"
       ],
       "Filmstrip thumbnails": [
         "Filmstrip-miniatyrer"
@@ -477,14 +555,8 @@
       "Filter Bar Colors": [
         "Färger för filterfält"
       ],
-      "Filter Bar Styles": [
-        "Stilar för filterfält"
-      ],
       "Filter Categories": [
         "Filterkategorier"
-      ],
-      "Filter Styles Controls": [
-        "Stilkontroller för filter"
       ],
       "Focal Length": [
         "Brännvidd"
@@ -513,6 +585,12 @@
       "Gallery Click Styles": [
         "Stilar för galleriklick"
       ],
+      "Gallery Filtering": [
+        "Gallerifiltrering"
+      ],
+      "Gallery Filtering Categories": [
+        "Gallerifiltreringskategorier"
+      ],
       "Gallery Filtering Settings": [
         "Inställningar för gallerifiltrering"
       ],
@@ -534,11 +612,14 @@
       "Gallery thumbnail": [
         "Galleriminiatyr"
       ],
-      "Gap Between Items (px)": [
-        "Avstånd mellan objekt (px)"
+      "Gap Between Items": [
+        "Gap Between Items"
       ],
       "General Gallery Settings": [
         "Allmänna galleriinställningar"
+      ],
+      "Get FolioBlocks Pro": [
+        "Skaffa FolioBlocks Pro"
       ],
       "Gradient Bottom": [
         "Toning längst ned"
@@ -552,23 +633,14 @@
       "Height": [
         "Höjd"
       ],
-      "Hidden": [
-        "Dold"
-      ],
       "Hide EXIF fields that do not have a value.": [
         "Dölj EXIF-fält som saknar värde."
       ],
       "Hide EXIF rows that do not have a value.": [
         "Dölj EXIF-rader som saknar värde."
       ],
-      "Hide Play Button": [
-        "Dölj uppspelningsknapp"
-      ],
       "Hide Unknown EXIF Fields": [
         "Dölj okända EXIF-fält"
-      ],
-      "Hide only the play button overlay.": [
-        "Dölj endast uppspelningsknappen överlägget."
       ],
       "Horizontal": [
         "Horisontell"
@@ -588,6 +660,9 @@
       "Icon": [
         "Ikon"
       ],
+      "Image": [
+        "Bild"
+      ],
       "Image Block Settings": [
         "Inställningar för Image Block"
       ],
@@ -605,9 +680,6 @@
       ],
       "Image Content": [
         "Bildinnehåll"
-      ],
-      "Image Filtering Settings": [
-        "Inställningar för bildfiltrering"
       ],
       "Image Hover Settings": [
         "Inställningar för bildhovring"
@@ -639,11 +711,20 @@
       "Inherit (Gallery Default)": [
         "Ärv (galleriets standard)"
       ],
+      "Inherit Gallery": [
+        "Arv Galleri"
+      ],
       "Justified Gallery": [
         "Justerat galleri"
       ],
       "Justified Gallery Settings": [
         "Inställningar för Justified Gallery"
+      ],
+      "Keep repeat visits feeling fresh.": [
+        "Fortsätt att återbesöken känns fräsch."
+      ],
+      "Keep technical information attached to the image.": [
+        "Håll teknisk information bifogad till bilden."
       ],
       "Label Background Color": [
         "Etikettens bakgrundsfärg"
@@ -657,6 +738,15 @@
       "Large": [
         "Stor"
       ],
+      "Lazy-load compatible images.": [
+        "Lazy-load kompatibla bilder."
+      ],
+      "Lazy-load gallery images.": [
+        "Lazy-load galleribilder."
+      ],
+      "Lazy-load videos and thumbnails.": [
+        "Lata ladda videor och miniatyrer."
+      ],
       "Left": [
         "Vänster"
       ],
@@ -669,17 +759,11 @@
       "Light": [
         "Ljus"
       ],
-      "Lightbox & Hover Overlay Settings": [
-        "Inställningar för Lightbox och Hovrings-överlägg"
+      "Lightbox Appearance": [
+        "Ljuslådans utseende"
       ],
       "Lightbox Content": [
         "Lightbox-innehåll"
-      ],
-      "Lightbox Info": [
-        "Lightbox-information"
-      ],
-      "Lightbox Content": [
-        "Lightbox-layout"
       ],
       "Line Height": [
         "Radhöjd"
@@ -705,6 +789,12 @@
       "Link this video to a WooCommerce product.": [
         "Koppla den här videon till en WooCommerce-produkt."
       ],
+      "Link to media files, custom URLs, Pages, or Posts.": [
+        "Länk till mediefiler, anpassade webbadresser, sidor eller inlägg."
+      ],
+      "Link videos to WooCommerce products.": [
+        "Länka videor till WooCommerce-produkter."
+      ],
       "Linked Page or Post": [
         "Länkad sida eller inlägg"
       ],
@@ -716,6 +806,12 @@
       ],
       "Loop Carousel Slides": [
         "Loopa karusellens bilder"
+      ],
+      "Loop slides continuously.": [
+        "Slingan glider kontinuerligt."
+      ],
+      "Loupe Appearance": [
+        "Luppens utseende"
       ],
       "Loupe Block": [
         "Luppblock"
@@ -744,8 +840,20 @@
       "Masonry Gallery Settings": [
         "Inställningar för Masonry Gallery"
       ],
+      "Match the filmstrip controls to your site.": [
+        "Matcha filmremskontrollerna med din webbplats."
+      ],
+      "Media Protection": [
+        "Mediaskydd"
+      ],
       "Medium": [
         "Medium"
+      ],
+      "Metadata could not be synced to the Media Library.": [
+        "Metadata kunde inte synkroniseras till mediebiblioteket."
+      ],
+      "Metadata synced to the Media Library.": [
+        "Metadata synkroniseras till mediebiblioteket."
       ],
       "Mobile": [
         "Mobil"
@@ -764,6 +872,9 @@
       ],
       "None": [
         "Ingen"
+      ],
+      "Offer downloads or connect WooCommerce products.": [
+        "Erbjud nedladdningar eller anslut WooCommerce-produkter."
       ],
       "On Hover": [
         "Vid hovring"
@@ -795,6 +906,9 @@
       "Open the custom URL in a new browser tab.": [
         "Öppna den anpassade URL:en i en ny webbläsarflik."
       ],
+      "Open the filmstrip in fullscreen mode.": [
+        "Öppna filmremsan i helskärmsläge."
+      ],
       "Open the linked page or post in a new browser tab.": [
         "Öppna den länkade sidan eller inlägget i en ny webbläsarflik."
       ],
@@ -804,14 +918,35 @@
       "Overlay Content": [
         "Överläggs-innehåll"
       ],
-      "Overlay Style": [
-        "Överläggs-stil"
-      ],
       "Overlay color": [
         "Överläggs-färg"
       ],
       "Overlay opacity": [
         "Överläggs-opacitet"
+      ],
+      "Override Gallery Click Settings": [
+        "Åsidosätt Galleri Klicka på Inställningar"
+      ],
+      "Override Gallery Hover Settings": [
+        "Åsidosätt Gallery Hover Settings"
+      ],
+      "Override click behavior for individual images.": [
+        "Åsidosätt klickbeteende för enskilda bilder."
+      ],
+      "Override gallery click settings.": [
+        "Åsidosätt inställningar för galleriklick."
+      ],
+      "Override gallery hover settings for individual videos.": [
+        "Åsidosätt inställningar för galleriets pekare för enskilda videor."
+      ],
+      "Override gallery hover settings.": [
+        "Åsidosätt inställningar för muspekaren i galleriet."
+      ],
+      "Override hover settings for individual images.": [
+        "Åsidosätt svävningsinställningarna för enskilda bilder."
+      ],
+      "Override hover settings for individual videos.": [
+        "Åsidosätt svävningsinställningarna för enskilda videor."
       ],
       "Pause autoplay": [
         "Pausa automatisk uppspelning"
@@ -821,6 +956,12 @@
       ],
       "Pause on Hover": [
         "Pausa vid hovring"
+      ],
+      "Per-Image Gallery Overrides": [
+        "Åsidosätter per bildgalleri"
+      ],
+      "Play Button": [
+        "Spela-knappen"
       ],
       "Play autoplay": [
         "Starta automatisk uppspelning"
@@ -846,11 +987,23 @@
       "Product Link Behavior": [
         "Beteende för produktlänk"
       ],
+      "Protection and Performance": [
+        "Skydd och prestanda"
+      ],
+      "Randomize Gallery Order": [
+        "Randomisera galleriordning"
+      ],
       "Randomize Image Order": [
         "Slumpa bildordningen"
       ],
+      "Randomize image order.": [
+        "Slumpmässig bildordning."
+      ],
       "Randomize order of images.": [
         "Slumpa ordningen på bilderna."
+      ],
+      "Read stored EXIF metadata.": [
+        "Läs lagrad EXIF-metadata."
       ],
       "Remove": [
         "Ta bort"
@@ -867,9 +1020,6 @@
       "Remove gap between images.": [
         "Ta bort mellanrummet mellan bilderna."
       ],
-      "Remove image gap from gallery.": [
-        "Ta bort bildmellanrum från galleriet."
-      ],
       "Replace After Image": [
         "Ersätt efter-bild"
       ],
@@ -885,8 +1035,14 @@
       "Resolution": [
         "Upplösning"
       ],
-      "Responsive Controls": [
-        "Responsiva kontroller"
+      "Responsive Background Video Controls": [
+        "Responsiva bakgrundsvideokontroller"
+      ],
+      "Responsive Gallery Gaps": [
+        "Responsiva galleriluckor"
+      ],
+      "Return to the first slide after reaching the end.": [
+        "Återgå till den första bilden efter att ha nått slutet."
       ],
       "Right": [
         "Höger"
@@ -951,41 +1107,26 @@
       "Separate categories with commas": [
         "Separera kategorier med kommatecken"
       ],
+      "Set %s border color.": [
+        "Ställ in %s kantfärg."
+      ],
+      "Set %s border radius.": [
+        "Ställ in %s kantradie."
+      ],
+      "Set %s border width.": [
+        "Ställ in %s kantbredd."
+      ],
       "Set Before & After label position.": [
         "Ange position för etiketterna Före och Efter."
-      ],
-      "Set Image border color.": [
-        "Ange bildens kantfärg."
-      ],
-      "Set Image border radius.": [
-        "Ange bildens hörnradie."
-      ],
-      "Set Image border width.": [
-        "Ange bildens kantbredd."
-      ],
-      "Set Video block border color.": [
-        "Ange videoblockets kantfärg."
-      ],
-      "Set Video block border radius.": [
-        "Ange videoblockets hörnradie."
-      ],
-      "Set Video block border width.": [
-        "Ange videoblockets kantbredd."
-      ],
-      "Set Video border color.": [
-        "Ange videons kantfärg."
-      ],
-      "Set Video border radius.": [
-        "Ange videons hörnradie."
-      ],
-      "Set Video border width.": [
-        "Ange videons kantbredd."
       ],
       "Set alignment of the filter bar.": [
         "Ange justeringen för filterfältet."
       ],
       "Set background and icon colors for the carousel controls.": [
         "Ange bakgrunds- och ikonfärger för karusellkontrollerna."
+      ],
+      "Set custom desktop, tablet, and mobile gaps.": [
+        "Ställ in anpassade luckor för dator, surfplatta och mobil."
       ],
       "Set display preference for Image Download icon.": [
         "Välj hur bildens nedladdningsikon ska visas."
@@ -996,8 +1137,8 @@
       "Set each image destination from its individual Image Block settings.": [
         "Ange varje bilds destination från dess individuella bildblocksinställningar."
       ],
-      "Set gap size between Thumbnails.": [
-        "Ange avståndet mellan miniatyrerna."
+      "Set independent desktop, tablet, and mobile heights.": [
+        "Ställ in oberoende höjder för stationära datorer, surfplattor och mobiler."
       ],
       "Set starting position for slider drag handle.": [
         "Ange startposition för reglagets draghandtag."
@@ -1010,6 +1151,18 @@
       ],
       "Set the horizontal alignment of carousel controls.": [
         "Ange den horisontella justeringen för karusellkontrollerna."
+      ],
+      "Set the preferred row height. Rows adjust as needed to fill the gallery width.": [
+        "Ställ in önskad radhöjd. Raderna justeras efter behov för att fylla galleriets bredd."
+      ],
+      "Set the slider handle starting position.": [
+        "Ställ in skjuthandtagets startposition."
+      ],
+      "Set the space between gallery images.": [
+        "Ställ in utrymmet mellan galleribilder."
+      ],
+      "Set the space between video thumbnails.": [
+        "Ställ in utrymmet mellan videominiatyrer."
       ],
       "Set thumbnail aspect ratio.": [
         "Ange miniatyrens bildförhållande."
@@ -1032,17 +1185,20 @@
       "Show Image Caption": [
         "Visa bildtext"
       ],
-      "Show Image Caption in Lightbox": [
-        "Visa bildtext i lightbox"
-      ],
-      "Show Image Caption or Product Info in Lightbox": [
-        "Visa bildtext eller produktinfo i lightbox"
+      "Show Image Caption & EXIF Data": [
+        "Visa bildtext och EXIF-data"
       ],
       "Show Image Title": [
         "Visa bildtitel"
       ],
-      "Show Overlay on Hover": [
-        "Visa överlägg vid hovring"
+      "Show Image Title & Caption": [
+        "Visa bildtitel och bildtext"
+      ],
+      "Show Image Title & EXIF Data": [
+        "Visa bildtitel & EXIF-data"
+      ],
+      "Show Image Title, Caption, & EXIF Data": [
+        "Visa bildtitel, bildtext och EXIF-data"
       ],
       "Show Product Info": [
         "Visa produktinfo"
@@ -1062,6 +1218,12 @@
       "Slider Orientation": [
         "Reglagets riktning"
       ],
+      "Slider and Label Styles": [
+        "Skjutreglage och etikettstilar"
+      ],
+      "Soft": [
+        "Mjuk"
+      ],
       "Square": [
         "Fyrkant"
       ],
@@ -1071,8 +1233,14 @@
       "Start typing to search for products in your WooCommerce store. Click a result to link it.": [
         "Börja skriva för att söka efter produkter i din WooCommerce-butik. Klicka på ett resultat för att länka det."
       ],
-      "Stretch content height": [
-        "Sträck innehållets höjd"
+      "Style the active filtering category.": [
+        "Stil den aktiva filtreringskategorin."
+      ],
+      "Subtle": [
+        "Subtil"
+      ],
+      "Supports YouTube, Vimeo, Bunny Stream, or ": [
+        "Stöder YouTube, Vimeo, Bunny Stream eller "
       ],
       "Swap Position": [
         "Byt plats"
@@ -1080,14 +1248,17 @@
       "Switch between light and dark editor themes.": [
         "Växla mellan ljusa och mörka redigeringsteman."
       ],
+      "Sync to Media Library": [
+        "Synkronisera till mediebibliotek"
+      ],
+      "Syncing…": [
+        "Synkroniseras..."
+      ],
       "Tablet": [
         "Surfplatta"
       ],
       "Text": [
         "Text"
-      ],
-      "This is a premium feature. Unlock all features:": [
-        "Det här är en premiumfunktion. Lås upp alla funktioner:"
       ],
       "Thumbnail": [
         "Miniatyr"
@@ -1107,9 +1278,6 @@
       "Time between automatic slide transitions.": [
         "Tid mellan automatiska bildväxlingar."
       ],
-      "Title & Play Button Visibility": [
-        "Synlighet för titel och uppspelningsknapp"
-      ],
       "Toggle visibility of navigation arrows.": [
         "Växla synligheten för navigeringspilar."
       ],
@@ -1121,9 +1289,6 @@
       ],
       "Unknown": [
         "Okänd"
-      ],
-      "Upgrade to Pro": [
-        "Uppgradera till Pro"
       ],
       "Upload or select images to create a Filmstrip Gallery.": [
         "Ladda upp eller välj bilder för att skapa ett Filmstrip-galleri."
@@ -1140,6 +1305,15 @@
       "Upload or select images to create a carousel.": [
         "Ladda upp eller välj bilder för att skapa en karusell."
       ],
+      "Use a light or dark loupe frame.": [
+        "Använd en ljus eller mörk luppram."
+      ],
+      "Use click behavior configured specifically for this image.": [
+        "Använd klickbeteende som konfigurerats specifikt för den här bilden."
+      ],
+      "Use hover behavior configured specifically for this image.": [
+        "Använd hovringsbeteende som konfigurerats specifikt för den här bilden."
+      ],
       "Use this video": [
         "Använd denna video"
       ],
@@ -1148,9 +1322,6 @@
       ],
       "Vertical": [
         "Vertikal"
-      ],
-      "Vertical Content Alignment": [
-        "Vertikal innehållsjustering"
       ],
       "Vertical Images": [
         "Vertikala bilder"
@@ -1170,11 +1341,26 @@
       "Video Block Styles": [
         "Stilar för Video Block"
       ],
+      "Video Click Settings": [
+        "Video Klicka på Inställningar"
+      ],
+      "Video Content": [
+        "Videoinnehåll"
+      ],
       "Video Gallery": [
         "Videogalleri"
       ],
+      "Video Gallery Filtering": [
+        "Videogallerifiltrering"
+      ],
       "Video Gallery Settings": [
         "Inställningar för Video Gallery"
+      ],
+      "Video Hover Settings": [
+        "Inställningar för videosvävare"
+      ],
+      "Video Lightbox": [
+        "Video ljuslåda"
       ],
       "Video Only": [
         "Endast video"
@@ -1190,6 +1376,9 @@
       ],
       "Video Title": [
         "Videotitel"
+      ],
+      "Video Title + Play Button": [
+        "Videotitel + uppspelningsknapp"
       ],
       "Video URL": [
         "Video-URL"

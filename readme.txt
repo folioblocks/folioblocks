@@ -44,14 +44,19 @@ Core gallery features include:
 Pro features include:
 * Block transforms to convert galleries and supported media blocks in one click
 * Custom image click actions for media files, custom URLs, Page/Post links, downloads, lightbox, and WooCommerce products
+* Per-image click and hover overrides inside galleries
 * Gallery image filtering with per-image category assignment
 * WooCommerce product integration for images and videos
 * Download full-resolution images
 * Randomize image order
+* Seamless looping for Carousel Gallery
 * Disable right-click / content protection
 * Lazy load images for faster performance
 * Hover effects, image overlays, and overlay content controls
 * EXIF metadata display in lightboxes and hover overlays
+* Light and Dark lightbox appearances, fullscreen viewing, swipe navigation, and combined title, caption, and EXIF layouts
+* Password protection controls for Posts and Pages
+* Responsive desktop, tablet, and mobile gallery gaps
 * Pro List View thumbnails for easier gallery reordering
 * Advanced gallery styling controls for borders, shadows, radius, filter bars, icons, and overlays
 
@@ -113,21 +118,22 @@ No, the galleries will remain in place on your site. However, the advanced layou
 == Changelog ==
 
 = 1.4.0 =
-* Added Pro Dark and Light appearance options and richer content combinations for image and video lightboxes.
-* Added Pro per-image click and hover overrides, allowing individual gallery images to use their own links, actions, hover content, and styles.
-* Added Pro per-video hover overrides so videos in the same gallery can use different hover styles, overlay content, visibility, and colors.
-* Added Image Block lightboxes, per-image click and hover settings, and improved active-image behavior to Filmstrip Gallery.
-* Added an optional Pro seamless looping mode to Carousel Gallery for continuous arrow, keyboard, swipe, and autoplay navigation.
-* Added a Pro fullscreen button and keyboard shortcut to standalone Image Block lightboxes.
-* Added a Pro action for syncing Image Block titles, captions, and alternative text back to the WordPress Media Library.
-* Added Pro password protection controls to the FolioBlocks Page Settings panel.
-* Improved Video Block and Video Gallery hover controls with flexible title, play button, filtering category, visibility, and Color Overlay options.
-* Improved WordPress 7.0 Content inspector support for Image Blocks, Video Blocks, and gallery filtering categories.
-* Moved Pro Lazy Load and Disable Right-Click controls into shared FolioBlocks Page & Post settings.
-* Fixed YouTube video previews in the Video Block and Video Gallery editor in Chromium browsers.
-* Fixed Filmstrip Gallery overlay sizing, per-image hover overrides, WooCommerce image sizing, and stale image-action behavior.
-* Fixed several Image Block, Gallery Click Settings, WooCommerce, and hover-overlay display issues.
-* Fixed Amber's bug :D
+* Added responsive desktop, tablet, and mobile gap controls to Carousel, Masonry, Justified, Modular, and Video Galleries.
+* Added fullscreen controls to Video Block and Video Gallery lightboxes.
+* Added Subtle, Soft, Elevated, and Dramatic drop-shadow presets to Image Block, Video Block, and photo and video galleries.
+* Added tap-to-hide controls and captions plus touch swipe navigation to image lightboxes.
+* Added Light and Dark image and video lightbox appearances, including inheritable per-image appearance overrides.
+* Added combined image title, caption, and EXIF content layouts for image lightboxes.
+* Added optional WooCommerce and Page/URL link icons for linked thumbnails.
+* Added a Pro fullscreen button and F keyboard shortcut to Image Block lightboxes.
+* Added a Pro action for syncing Image Block titles, captions, and alternative text to the WordPress Media Library.
+* Added Pro per-image click and hover overrides to Grid, Justified, Masonry, Carousel, Modular, and Filmstrip Galleries.
+* Added Gallery Click Settings, Gallery Click Styles, Gallery Hover Settings, and per-image overrides to Filmstrip Gallery.
+* Added Filmstrip Gallery image lightboxes with scoped navigation, inherited or per-image appearance and content, EXIF display, and fullscreen handoff.
+* Added optional Pro seamless looping to Carousel Gallery for continuous arrow, keyboard, swipe, and autoplay navigation.
+* Added Pro password protection controls for Posts and Pages to the FolioBlocks Page Settings panel.
+* Added Video Title, Play Button, and Filtering Category combinations to Video Block and Video Gallery overlays.
+* Added Pro per-video hover overrides for Video Galleries, including styles, overlay content, visibility, and Color Overlay colors.
 
 = 1.3.1 =
 * Refactored repeated Pro controls for Image Click Styles, gallery toggles, List View thumbnails, and editor filtering into shared helpers.

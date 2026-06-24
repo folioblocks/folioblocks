@@ -52,20 +52,33 @@ const GALLERY_BLOCK_NAMES = new Set( [
 let hasPatchedWrapperTransforms = false;
 let patchAttempts = 0;
 const enabledGalleryTransforms = new Set();
+const enabledImageTransforms = new Set();
+const enabledVideoTransforms = new Set();
 const galleryTransformAttempts = new Map();
 
 addFilter(
 	'blocks.registerBlockType',
 	'folioblocks/register-gallery-transforms',
 	( settings, blockName ) => {
-		if ( ! enabledGalleryTransforms.has( blockName ) ) {
-			return settings;
+		if ( enabledGalleryTransforms.has( blockName ) ) {
+			return {
+				...settings,
+				transforms: buildGalleryTransforms( blockName ),
+			};
 		}
 
-		return {
-			...settings,
-			transforms: buildGalleryTransforms( blockName ),
-		};
+		if ( enabledImageTransforms.has( blockName ) ) {
+			return { ...settings, transforms: buildImageTransforms() };
+		}
+
+		if ( enabledVideoTransforms.has( blockName ) ) {
+			return {
+				...settings,
+				transforms: buildVideoTransforms( blockName ),
+			};
+		}
+
+		return settings;
 	}
 );
 
@@ -391,7 +404,28 @@ export const enableGalleryTransforms = ( blockName ) => {
 	blockType.transforms = buildGalleryTransforms( blockName );
 };
 
+const buildImageTransforms = () => ( {
+	from: [
+		{
+			type: 'block',
+			blocks: [ 'core/image' ],
+			isMatch: ( attributes ) => Number( attributes?.id ) > 0,
+			transform: transformCoreImageToPbImage,
+		},
+	],
+	to: [
+		{
+			type: 'block',
+			blocks: [ 'core/image' ],
+			isMatch: ( attributes, block ) =>
+				Boolean( attributes?.src ) && ! hasGalleryParent( block ),
+			transform: transformPbImageToCoreImage,
+		},
+	],
+} );
+
 export const enableImageTransforms = ( blockName ) => {
+	enabledImageTransforms.add( blockName );
 	const blockType = getBlockType( blockName );
 
 	if ( ! blockType ) {
@@ -399,25 +433,7 @@ export const enableImageTransforms = ( blockName ) => {
 	}
 
 	disableGalleryWrapperTransforms();
-	blockType.transforms = {
-		from: [
-			{
-				type: 'block',
-				blocks: [ 'core/image' ],
-				isMatch: ( attributes ) => Number( attributes?.id ) > 0,
-				transform: transformCoreImageToPbImage,
-			},
-		],
-		to: [
-			{
-				type: 'block',
-				blocks: [ 'core/image' ],
-				isMatch: ( attributes, block ) =>
-					Boolean( attributes?.src ) && ! hasGalleryParent( block ),
-				transform: transformPbImageToCoreImage,
-			},
-		],
-	};
+	blockType.transforms = buildImageTransforms();
 };
 
 const transformCoreVideoToPbVideo = ( blockName, attributes = {} ) =>
@@ -444,32 +460,35 @@ const isSupportedVideoEmbed = ( attributes = {} ) => {
 	);
 };
 
+const buildVideoTransforms = ( blockName ) => ( {
+	from: [
+		{
+			type: 'block',
+			blocks: [ 'core/video' ],
+			isMatch: ( attributes ) => Boolean( attributes.src ),
+			transform: ( attributes ) =>
+				transformCoreVideoToPbVideo( blockName, attributes ),
+		},
+		{
+			type: 'block',
+			blocks: [ 'core/embed' ],
+			isMatch: isSupportedVideoEmbed,
+			transform: ( attributes ) =>
+				createBlock( blockName, {
+					videoUrl: attributes.url || '',
+					description: attributes.caption || '',
+				} ),
+		},
+	],
+} );
+
 export const enableVideoTransforms = ( blockName ) => {
+	enabledVideoTransforms.add( blockName );
 	const blockType = getBlockType( blockName );
 
 	if ( ! blockType ) {
 		return;
 	}
 
-	blockType.transforms = {
-		from: [
-			{
-				type: 'block',
-				blocks: [ 'core/video' ],
-				isMatch: ( attributes ) => Boolean( attributes.src ),
-				transform: ( attributes ) =>
-					transformCoreVideoToPbVideo( blockName, attributes ),
-			},
-			{
-				type: 'block',
-				blocks: [ 'core/embed' ],
-				isMatch: isSupportedVideoEmbed,
-				transform: ( attributes ) =>
-					createBlock( blockName, {
-						videoUrl: attributes.url || '',
-						description: attributes.caption || '',
-					} ),
-			},
-		],
-	};
+	blockType.transforms = buildVideoTransforms( blockName );
 };

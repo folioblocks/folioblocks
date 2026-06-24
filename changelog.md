@@ -52,6 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated the Free vs Pro settings page with FolioBlocks 1.4 features and current control names.
 
 ### Fixed
+- Fixed Image Block and Video Block transforms disappearing when premium scripts loaded before their block registrations, restoring transforms from core Image, Video, YouTube, and Vimeo blocks.
 - Fixed gallery transforms dropping matching responsive column and gap settings.
 - Fixed Justified Gallery rows sometimes stopping short of the gallery edge when using larger image gaps.
 - Fixed Hide Unknown EXIF Fields failing when missing metadata was stored using a different site locale.
