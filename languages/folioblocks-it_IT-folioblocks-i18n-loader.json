@@ -1,5 +1,5 @@
 {
-  "translation-revision-date": "2026-06-02T13:08:20.470Z",
+  "translation-revision-date": "2026-06-24T05:34:48.533Z",
   "generator": "FolioBlocks custom i18n tooling",
   "domain": "messages",
   "locale_data": {
@@ -39,11 +39,20 @@
       "Add Videos": [
         "Aggiungi video"
       ],
+      "Add a visitor-facing filter bar.": [
+        "Aggiungi una barra filtro rivolta ai visitatori."
+      ],
       "Add content…": [
         "Aggiungi contenuto…"
       ],
       "Add image caption.": [
         "Aggiungi una didascalia all'immagine."
+      ],
+      "Add product and cart actions.": [
+        "Aggiungi azioni sul prodotto e sul carrello."
+      ],
+      "Add rounded corners.": [
+        "Aggiungi angoli arrotondati."
       ],
       "Add to Cart": [
         "Aggiungi al carrello"
@@ -63,6 +72,9 @@
       "Adds a soft blur overlay behind the title or product info.": [
         "Aggiunge un overlay con sfocatura leggera dietro al titolo o alle informazioni del prodotto."
       ],
+      "Adjust horizontal focal points per device.": [
+        "Regola i punti focali orizzontali per dispositivo."
+      ],
       "Adjust the default amount of columns on %s.": [
         "Regola il numero predefinito di colonne su %s."
       ],
@@ -75,6 +87,15 @@
       "Adjust the vertical focal point per device.": [
         "Regola il punto focale verticale per dispositivo."
       ],
+      "Adjust vertical focal points per device.": [
+        "Regola i punti focali verticali per dispositivo."
+      ],
+      "Advanced Click Actions": [
+        "Azioni clic avanzate"
+      ],
+      "Advanced Comparison Controls": [
+        "Controlli di confronto avanzati"
+      ],
       "Affects layout on mobile only. Switch ONLY when all images are vertical in orientation.": [
         "Influisce solo sul layout mobile. Attiva questa opzione SOLO quando tutte le immagini hanno orientamento verticale."
       ],
@@ -83,12 +104,6 @@
       ],
       "After Image": [
         "Immagine dopo"
-      ],
-      "Align content bottom": [
-        "Allinea contenuto in basso"
-      ],
-      "Align content top": [
-        "Allinea contenuto in alto"
       ],
       "All": [
         "Tutti"
@@ -99,8 +114,8 @@
       "Always": [
         "Sempre"
       ],
-      "Always Show": [
-        "Mostra sempre"
+      "Always Display Overlay": [
+        "Visualizza sempre sovrapposizione"
       ],
       "Aperture": [
         "Apertura"
@@ -108,17 +123,32 @@
       "Appearance": [
         "Aspetto"
       ],
-      "Applies a subtle drop shadow to images.": [
-        "Applica una leggera ombra alle immagini."
+      "Apply image drop shadows.": [
+        "Applicare ombre esterne all'immagine."
       ],
-      "Applies a subtle drop shadow.": [
-        "Applica una leggera ombra."
+      "Apply thumbnail drop shadows.": [
+        "Applicare ombre esterne alle miniature."
+      ],
+      "Assign multiple categories to images.": [
+        "Assegna più categorie alle immagini."
+      ],
+      "Assign multiple categories to videos.": [
+        "Assegna più categorie ai video."
+      ],
+      "Automatically advance carousel slides.": [
+        "Avanza automaticamente le diapositive del carosello."
+      ],
+      "Automatically advance filmstrip images.": [
+        "Avanza automaticamente le immagini della pellicola."
       ],
       "Automatically advance to the next image in the carousel.": [
         "Avanza automaticamente all'immagine successiva nel carosello."
       ],
       "Automatically advance to the next image in the gallery.": [
         "Avanza automaticamente all'immagine successiva nella galleria."
+      ],
+      "Automatically shuffle gallery images.": [
+        "Mescola automaticamente le immagini della galleria."
       ],
       "Autoplay Speed (seconds)": [
         "Velocità autoplay (secondi)"
@@ -168,14 +198,14 @@
       "Carousel Gallery Settings": [
         "Impostazioni di Carousel Gallery"
       ],
+      "Carousel Playback and Controls": [
+        "Riproduzione e controlli del carosello"
+      ],
       "Carousel Styles": [
         "Stili Carousel"
       ],
       "Center": [
         "Centro"
-      ],
-      "Center content vertically": [
-        "Centra contenuto verticalmente"
       ],
       "Change Image": [
         "Cambia immagine"
@@ -201,6 +231,33 @@
       "Chip Overlay": [
         "Overlay etichetta"
       ],
+      "Choose a circular or square loupe.": [
+        "Scegli una lente di ingrandimento circolare o quadrata."
+      ],
+      "Choose a drop shadow style for the %s.": [
+        "Scegli uno stile di ombreggiatura per %s."
+      ],
+      "Choose a light or dark appearance.": [
+        "Scegli un aspetto chiaro o scuro."
+      ],
+      "Choose a light or dark lightbox background.": [
+        "Scegli uno sfondo lightbox chiaro o scuro."
+      ],
+      "Choose any spacing from 0 to 50 pixels.": [
+        "Scegli qualsiasi spaziatura compresa tra 0 e 50 pixel."
+      ],
+      "Choose gradient, blur, color, or chip hover styles.": [
+        "Scegli gli stili sfumatura, sfocatura, colore o chip al passaggio del mouse."
+      ],
+      "Choose gradient, blur, or color hover styles.": [
+        "Scegli gli stili sfumatura, sfocatura o colore al passaggio del mouse."
+      ],
+      "Choose label placement for each slider orientation.": [
+        "Scegli il posizionamento dell'etichetta per ciascun orientamento del dispositivo di scorrimento."
+      ],
+      "Choose label text and background colors.": [
+        "Scegli il testo dell'etichetta e i colori dello sfondo."
+      ],
       "Choose the hover overlay style.": [
         "Scegli lo stile dell'overlay al passaggio del mouse."
       ],
@@ -209,6 +266,9 @@
       ],
       "Choose what appears when hovering over images.": [
         "Scegli cosa appare al passaggio del mouse sulle immagini."
+      ],
+      "Choose what appears with the Video in the lightbox.": [
+        "Scegli cosa appare con il video nella lightbox."
       ],
       "Choose what happens when visitors click gallery images.": [
         "Scegli cosa succede quando i visitatori fanno clic sulle immagini della galleria."
@@ -230,6 +290,9 @@
       ],
       "Choose what happens when visitors use this image product link. Select Inherit to follow the gallery default.": [
         "Scegli cosa succede quando i visitatori usano il link prodotto di questa immagine. Seleziona Eredita per seguire l’impostazione predefinita della galleria."
+      ],
+      "Choose when navigation controls appear.": [
+        "Scegli quando visualizzare i controlli di navigazione."
       ],
       "Choose when to display the Add to Cart icon.": [
         "Scegli quando mostrare l'icona Aggiungi al carrello."
@@ -264,17 +327,44 @@
       "Columns": [
         "Colonne"
       ],
+      "Configure playback timing and behavior.": [
+        "Configura i tempi e il comportamento della riproduzione."
+      ],
+      "Control filter-bar typography.": [
+        "Controlla la tipografia della barra dei filtri."
+      ],
       "Controls Alignment": [
         "Allineamento controlli"
       ],
-      "Custom Image Linking": [
-        "Collegamenti immagine personalizzati"
-      ],
-      "Custom Overlay": [
-        "Overlay personalizzato"
+      "Create a brighter or more cinematic presentation.": [
+        "Crea una presentazione più brillante o cinematografica."
       ],
       "Custom URL": [
         "URL personalizzato"
+      ],
+      "Customize border colors and widths.": [
+        "Personalizza i colori e le larghezze dei bordi."
+      ],
+      "Customize control colors and appearance.": [
+        "Personalizza i colori e l'aspetto dei controlli."
+      ],
+      "Customize filter text and background colors.": [
+        "Personalizza il testo del filtro e i colori dello sfondo."
+      ],
+      "Customize filter-bar typography and colors.": [
+        "Personalizza la tipografia e i colori della barra dei filtri."
+      ],
+      "Customize overlay and play-button colors.": [
+        "Personalizza i colori della sovrapposizione e dei pulsanti di riproduzione."
+      ],
+      "Customize overlay colors.": [
+        "Personalizza i colori di sovrapposizione."
+      ],
+      "Customize the information shown in the lightbox.": [
+        "Personalizza le informazioni mostrate nella lightbox."
+      ],
+      "Customize the slider handle and line color.": [
+        "Personalizza la maniglia del dispositivo di scorrimento e il colore della linea."
       ],
       "Dark": [
         "Scuro"
@@ -309,17 +399,20 @@
       "Disable on Mobile": [
         "Disabilita su mobile"
       ],
+      "Disable right-click on compatible FolioBlocks media.": [
+        "Disattiva il clic con il pulsante destro del mouse sui supporti FolioBlocks compatibili."
+      ],
+      "Disable right-click on displayed media.": [
+        "Disabilita il clic con il pulsante destro del mouse sul supporto visualizzato."
+      ],
       "Display Add to Cart Icon": [
         "Mostra icona Aggiungi al carrello"
       ],
       "Display Before & After labels.": [
         "Mostra le etichette Prima e Dopo."
       ],
-      "Display Image Caption inside the lightbox.": [
-        "Mostra la didascalia dell'immagine nella Lightbox."
-      ],
-      "Display Image Caption or Product Info inside the Lightbox.": [
-        "Mostra la didascalia dell'immagine o le informazioni del prodotto nella Lightbox."
+      "Display Before and After labels.": [
+        "Visualizza le etichette Prima e Dopo."
       ],
       "Display Image Download Icon": [
         "Mostra icona di download dell'immagine"
@@ -327,11 +420,17 @@
       "Display Link Target Icon": [
         "Mostra icona di destinazione del link"
       ],
-      "Display image title, image caption, or EXIF data when hovering over images.": [
-        "Mostra il titolo, la didascalia o i dati EXIF al passaggio del mouse sulle immagini."
+      "Display camera details in overlays and lightboxes.": [
+        "Visualizza i dettagli della telecamera in sovrapposizioni e lightbox."
       ],
-      "Display image title, image caption, or product info when hovering over images.": [
-        "Mostra il titolo, la didascalia o le informazioni del prodotto al passaggio del mouse sulle immagini."
+      "Display product information with videos.": [
+        "Visualizza le informazioni sul prodotto con i video."
+      ],
+      "Display the video title and description.": [
+        "Visualizza il titolo e la descrizione del video."
+      ],
+      "Display video titles and descriptions.": [
+        "Visualizza titoli e descrizioni dei video."
       ],
       "Displays the overlay content in a compact chip above the image.": [
         "Mostra il contenuto dell’overlay in un’etichetta compatta sopra l’immagine."
@@ -341,9 +440,6 @@
       ],
       "Displays the overlay content over custom overlay colors set in Styles panel.": [
         "Mostra il contenuto dell’overlay sopra i colori personalizzati impostati nel pannello Stili."
-      ],
-      "Distribute content vertically": [
-        "Distribuisci contenuto verticalmente"
       ],
       "Download Icon": [
         "Icona di download"
@@ -357,8 +453,11 @@
       "Drag Handle Starting Position (%)": [
         "Posizione iniziale del cursore (%)"
       ],
-      "Drag Handle Starting Postion": [
-        "Posizione iniziale del cursore"
+      "Dramatic": [
+        "Drammatico"
+      ],
+      "Drop Shadow": [
+        "Sfalsa ombra"
       ],
       "E-Commerce Settings": [
         "Impostazioni e-commerce"
@@ -369,8 +468,8 @@
       "EXIF DATA": [
         "DATI EXIF"
       ],
-      "EXIF Data": [
-        "Dati EXIF"
+      "EXIF Metadata": [
+        "Metadati EXIF"
       ],
       "Edit Custom URL": [
         "Modifica URL personalizzato"
@@ -381,14 +480,14 @@
       "Edit WooCommerce Product": [
         "Modifica prodotto WooCommerce"
       ],
+      "Elevated": [
+        "Elevato"
+      ],
       "Enable Autoplay": [
         "Abilita autoplay"
       ],
       "Enable Carousel Controls": [
         "Abilita controlli Carousel"
-      ],
-      "Enable Drop Shadow": [
-        "Abilita ombra"
       ],
       "Enable Full-Screen Mode": [
         "Abilita modalità schermo intero"
@@ -396,26 +495,11 @@
       "Enable Full-Screen Mode for the gallery on the frontend.": [
         "Abilita la modalità schermo intero per la galleria nel frontend."
       ],
-      "Enable Image Border Color": [
-        "Abilita colore bordo immagine"
-      ],
-      "Enable Image Border Radius": [
-        "Abilita raggio bordo immagine"
-      ],
-      "Enable Image Border Width": [
-        "Abilita spessore bordo immagine"
-      ],
       "Enable Image Downloads": [
         "Abilita download immagini"
       ],
-      "Enable Image Drop Shadow": [
-        "Abilita ombra immagine"
-      ],
       "Enable Image Filtering": [
         "Abilita filtro immagini"
-      ],
-      "Enable Image Styles": [
-        "Abilita stili immagine"
       ],
       "Enable Lazy Load of Images": [
         "Abilita lazy load delle immagini"
@@ -429,26 +513,11 @@
       "Enable Video Filtering": [
         "Abilita filtro video"
       ],
-      "Enable Woo Commerce": [
-        "Abilita WooCommerce"
-      ],
       "Enable WooCommerce Integration": [
         "Abilita integrazione WooCommerce"
       ],
-      "Enable drop shadow effect.": [
-        "Abilita l'effetto ombra."
-      ],
-      "Enable image Lightbox on click.": [
-        "Abilita la Lightbox dell'immagine al clic."
-      ],
       "Enable image filtering with categories.": [
         "Abilita il filtro immagini con categorie."
-      ],
-      "Enable the carousel to loop infinitely.": [
-        "Abilita il loop infinito del carosello."
-      ],
-      "Enable video filtering with categories.": [
-        "Abilita il filtro video con categorie."
       ],
       "Enables lazy loading of gallery images.": [
         "Abilita il lazy loading delle immagini della galleria."
@@ -456,17 +525,26 @@
       "Enables lazy loading of image.": [
         "Abilita il lazy loading dell'immagine."
       ],
+      "Enter a valid URL beginning with http:// or https://.": [
+        "Inserisci un URL valido che inizi con http:// o https://."
+      ],
       "Fade Overlay": [
         "Overlay in dissolvenza"
       ],
       "Fades in a clean title overlay when hovering over the image.": [
         "Mostra in dissolvenza un overlay pulito del titolo al passaggio del mouse sull’immagine."
       ],
+      "Filmstrip Color Mode": [
+        "Modalità colore pellicola"
+      ],
       "Filmstrip Gallery": [
         "Galleria a pellicola"
       ],
       "Filmstrip Gallery Settings": [
         "Impostazioni di Filmstrip Gallery"
+      ],
+      "Filmstrip Playback and Display": [
+        "Riproduzione e visualizzazione della pellicola"
       ],
       "Filmstrip thumbnails": [
         "Miniature Filmstrip"
@@ -477,14 +555,8 @@
       "Filter Bar Colors": [
         "Colori barra filtro"
       ],
-      "Filter Bar Styles": [
-        "Stili barra filtro"
-      ],
       "Filter Categories": [
         "Categorie filtro"
-      ],
-      "Filter Styles Controls": [
-        "Controlli stile filtro"
       ],
       "Focal Length": [
         "Lunghezza focale"
@@ -513,6 +585,12 @@
       "Gallery Click Styles": [
         "Stili clic galleria"
       ],
+      "Gallery Filtering": [
+        "Filtraggio della galleria"
+      ],
+      "Gallery Filtering Categories": [
+        "Categorie di filtraggio della galleria"
+      ],
       "Gallery Filtering Settings": [
         "Impostazioni del filtro galleria"
       ],
@@ -534,11 +612,14 @@
       "Gallery thumbnail": [
         "Miniatura galleria"
       ],
-      "Gap Between Items (px)": [
-        "Spazio tra elementi (px)"
+      "Gap Between Items": [
+        "Spazio tra gli elementi"
       ],
       "General Gallery Settings": [
         "Impostazioni generali galleria"
+      ],
+      "Get FolioBlocks Pro": [
+        "Ottieni FolioBlocks Pro"
       ],
       "Gradient Bottom": [
         "Sfumatura inferiore"
@@ -552,23 +633,14 @@
       "Height": [
         "Altezza"
       ],
-      "Hidden": [
-        "Nascosto"
-      ],
       "Hide EXIF fields that do not have a value.": [
         "Nascondi i campi EXIF senza valore."
       ],
       "Hide EXIF rows that do not have a value.": [
         "Nascondi le righe EXIF senza valore."
       ],
-      "Hide Play Button": [
-        "Nascondi pulsante di riproduzione"
-      ],
       "Hide Unknown EXIF Fields": [
         "Nascondi campi EXIF sconosciuti"
-      ],
-      "Hide only the play button overlay.": [
-        "Nascondi solo l'overlay del pulsante di riproduzione."
       ],
       "Horizontal": [
         "Orizzontale"
@@ -588,6 +660,9 @@
       "Icon": [
         "Icona"
       ],
+      "Image": [
+        "Immagine"
+      ],
       "Image Block Settings": [
         "Impostazioni di Image Block"
       ],
@@ -605,9 +680,6 @@
       ],
       "Image Content": [
         "Contenuto immagine"
-      ],
-      "Image Filtering Settings": [
-        "Impostazioni filtro immagine"
       ],
       "Image Hover Settings": [
         "Impostazioni hover immagine"
@@ -639,11 +711,20 @@
       "Inherit (Gallery Default)": [
         "Eredita (predefinito galleria)"
       ],
+      "Inherit Gallery": [
+        "Eredita Galleria"
+      ],
       "Justified Gallery": [
         "Galleria giustificata"
       ],
       "Justified Gallery Settings": [
         "Impostazioni di Justified Gallery"
+      ],
+      "Keep repeat visits feeling fresh.": [
+        "Mantieni le visite ripetute sempre fresche."
+      ],
+      "Keep technical information attached to the image.": [
+        "Mantieni le informazioni tecniche allegate all'immagine."
       ],
       "Label Background Color": [
         "Colore di sfondo etichetta"
@@ -657,6 +738,15 @@
       "Large": [
         "Grande"
       ],
+      "Lazy-load compatible images.": [
+        "Immagini compatibili con il caricamento lento."
+      ],
+      "Lazy-load gallery images.": [
+        "Immagini della galleria a caricamento lento."
+      ],
+      "Lazy-load videos and thumbnails.": [
+        "Video e miniature a caricamento lento."
+      ],
       "Left": [
         "Sinistra"
       ],
@@ -669,17 +759,11 @@
       "Light": [
         "Chiaro"
       ],
-      "Lightbox & Hover Overlay Settings": [
-        "Impostazioni Lightbox e overlay hover"
+      "Lightbox Appearance": [
+        "Aspetto della scatola luminosa"
       ],
       "Lightbox Content": [
         "Contenuto Lightbox"
-      ],
-      "Lightbox Info": [
-        "Informazioni Lightbox"
-      ],
-      "Lightbox Layout": [
-        "Layout Lightbox"
       ],
       "Line Height": [
         "Altezza riga"
@@ -705,6 +789,12 @@
       "Link this video to a WooCommerce product.": [
         "Collega questo video a un prodotto WooCommerce."
       ],
+      "Link to media files, custom URLs, Pages, or Posts.": [
+        "Collegamento a file multimediali, URL personalizzati, pagine o post."
+      ],
+      "Link videos to WooCommerce products.": [
+        "Collega video ai prodotti WooCommerce."
+      ],
       "Linked Page or Post": [
         "Pagina o articolo collegato"
       ],
@@ -716,6 +806,12 @@
       ],
       "Loop Carousel Slides": [
         "Loop delle slide del Carousel"
+      ],
+      "Loop slides continuously.": [
+        "Il ciclo scorre continuamente."
+      ],
+      "Loupe Appearance": [
+        "Aspetto della lente di ingrandimento"
       ],
       "Loupe Block": [
         "Blocco lente"
@@ -744,8 +840,20 @@
       "Masonry Gallery Settings": [
         "Impostazioni di Masonry Gallery"
       ],
+      "Match the filmstrip controls to your site.": [
+        "Abbina i controlli della pellicola al tuo sito."
+      ],
+      "Media Protection": [
+        "Protezione dei media"
+      ],
       "Medium": [
         "Medio"
+      ],
+      "Metadata could not be synced to the Media Library.": [
+        "Impossibile sincronizzare i metadati con il Catalogo multimediale."
+      ],
+      "Metadata synced to the Media Library.": [
+        "Metadati sincronizzati con il Catalogo multimediale."
       ],
       "Mobile": [
         "Mobile"
@@ -764,6 +872,9 @@
       ],
       "None": [
         "Nessuno"
+      ],
+      "Offer downloads or connect WooCommerce products.": [
+        "Offri download o connetti prodotti WooCommerce."
       ],
       "On Hover": [
         "Al passaggio del mouse"
@@ -795,6 +906,9 @@
       "Open the custom URL in a new browser tab.": [
         "Apri l’URL personalizzato in una nuova scheda del browser."
       ],
+      "Open the filmstrip in fullscreen mode.": [
+        "Apri la pellicola in modalità a schermo intero."
+      ],
       "Open the linked page or post in a new browser tab.": [
         "Apri la pagina o l’articolo collegato in una nuova scheda del browser."
       ],
@@ -804,14 +918,35 @@
       "Overlay Content": [
         "Contenuto overlay"
       ],
-      "Overlay Style": [
-        "Stile overlay"
-      ],
       "Overlay color": [
         "Colore overlay"
       ],
       "Overlay opacity": [
         "Opacità overlay"
+      ],
+      "Override Gallery Click Settings": [
+        "Sostituisci Galleria Fai clic su Impostazioni"
+      ],
+      "Override Gallery Hover Settings": [
+        "Sostituisci le impostazioni al passaggio del mouse sulla Galleria"
+      ],
+      "Override click behavior for individual images.": [
+        "Sostituisci il comportamento dei clic per le singole immagini."
+      ],
+      "Override gallery click settings.": [
+        "Sostituisci le impostazioni dei clic sulla galleria."
+      ],
+      "Override gallery hover settings for individual videos.": [
+        "Sostituisci le impostazioni del passaggio del mouse sulla galleria per i singoli video."
+      ],
+      "Override gallery hover settings.": [
+        "Sostituisci le impostazioni del passaggio del mouse sulla galleria."
+      ],
+      "Override hover settings for individual images.": [
+        "Sostituisci le impostazioni al passaggio del mouse per le singole immagini."
+      ],
+      "Override hover settings for individual videos.": [
+        "Sostituisci le impostazioni al passaggio del mouse per i singoli video."
       ],
       "Pause autoplay": [
         "Metti in pausa autoplay"
@@ -821,6 +956,12 @@
       ],
       "Pause on Hover": [
         "Pausa al passaggio del mouse"
+      ],
+      "Per-Image Gallery Overrides": [
+        "Sostituzioni della galleria per immagine"
+      ],
+      "Play Button": [
+        "Pulsante Riproduci"
       ],
       "Play autoplay": [
         "Riprendi autoplay"
@@ -846,11 +987,23 @@
       "Product Link Behavior": [
         "Comportamento link prodotto"
       ],
+      "Protection and Performance": [
+        "Protezione e prestazioni"
+      ],
+      "Randomize Gallery Order": [
+        "Randomizza l'ordine delle gallerie"
+      ],
       "Randomize Image Order": [
         "Ordine immagini casuale"
       ],
+      "Randomize image order.": [
+        "Randomizza l'ordine delle immagini."
+      ],
       "Randomize order of images.": [
         "Casualizza l'ordine delle immagini."
+      ],
+      "Read stored EXIF metadata.": [
+        "Leggere i metadati EXIF ​​memorizzati."
       ],
       "Remove": [
         "Rimuovi"
@@ -867,9 +1020,6 @@
       "Remove gap between images.": [
         "Rimuovi lo spazio tra le immagini."
       ],
-      "Remove image gap from gallery.": [
-        "Rimuovi lo spazio tra le immagini dalla galleria."
-      ],
       "Replace After Image": [
         "Sostituisci immagine dopo"
       ],
@@ -885,8 +1035,14 @@
       "Resolution": [
         "Risoluzione"
       ],
-      "Responsive Controls": [
-        "Controlli responsive"
+      "Responsive Background Video Controls": [
+        "Controlli video in background reattivi"
+      ],
+      "Responsive Gallery Gaps": [
+        "Lacune nella galleria reattiva"
+      ],
+      "Return to the first slide after reaching the end.": [
+        "Ritorna alla prima diapositiva dopo aver raggiunto la fine."
       ],
       "Right": [
         "Destra"
@@ -951,41 +1107,26 @@
       "Separate categories with commas": [
         "Separa le categorie con virgole"
       ],
+      "Set %s border color.": [
+        "Imposta il colore del bordo di %s."
+      ],
+      "Set %s border radius.": [
+        "Imposta il raggio del bordo %s."
+      ],
+      "Set %s border width.": [
+        "Imposta la larghezza del bordo %s."
+      ],
       "Set Before & After label position.": [
         "Imposta la posizione delle etichette Prima e Dopo."
-      ],
-      "Set Image border color.": [
-        "Imposta il colore del bordo dell'immagine."
-      ],
-      "Set Image border radius.": [
-        "Imposta il raggio del bordo dell'immagine."
-      ],
-      "Set Image border width.": [
-        "Imposta lo spessore del bordo dell'immagine."
-      ],
-      "Set Video block border color.": [
-        "Imposta il colore del bordo del blocco video."
-      ],
-      "Set Video block border radius.": [
-        "Imposta il raggio del bordo del blocco video."
-      ],
-      "Set Video block border width.": [
-        "Imposta lo spessore del bordo del blocco video."
-      ],
-      "Set Video border color.": [
-        "Imposta il colore del bordo del video."
-      ],
-      "Set Video border radius.": [
-        "Imposta il raggio del bordo del video."
-      ],
-      "Set Video border width.": [
-        "Imposta lo spessore del bordo del video."
       ],
       "Set alignment of the filter bar.": [
         "Imposta l'allineamento della barra filtro."
       ],
       "Set background and icon colors for the carousel controls.": [
         "Imposta i colori di sfondo e delle icone per i controlli del Carousel."
+      ],
+      "Set custom desktop, tablet, and mobile gaps.": [
+        "Imposta spazi personalizzati per desktop, tablet e dispositivi mobili."
       ],
       "Set display preference for Image Download icon.": [
         "Imposta la preferenza di visualizzazione per l'icona di download dell'immagine."
@@ -996,8 +1137,8 @@
       "Set each image destination from its individual Image Block settings.": [
         "Imposta la destinazione di ogni immagine dalle impostazioni del relativo blocco immagine."
       ],
-      "Set gap size between Thumbnails.": [
-        "Imposta la distanza tra le miniature."
+      "Set independent desktop, tablet, and mobile heights.": [
+        "Imposta altezze indipendenti per desktop, tablet e dispositivi mobili."
       ],
       "Set starting position for slider drag handle.": [
         "Imposta la posizione iniziale del cursore."
@@ -1010,6 +1151,18 @@
       ],
       "Set the horizontal alignment of carousel controls.": [
         "Imposta l'allineamento orizzontale dei controlli del Carousel."
+      ],
+      "Set the preferred row height. Rows adjust as needed to fill the gallery width.": [
+        "Imposta l'altezza della riga preferita. Le righe vengono adattate secondo necessità per riempire la larghezza della galleria."
+      ],
+      "Set the slider handle starting position.": [
+        "Imposta la posizione iniziale della maniglia del cursore."
+      ],
+      "Set the space between gallery images.": [
+        "Imposta lo spazio tra le immagini della galleria."
+      ],
+      "Set the space between video thumbnails.": [
+        "Imposta lo spazio tra le miniature dei video."
       ],
       "Set thumbnail aspect ratio.": [
         "Imposta le proporzioni della miniatura."
@@ -1032,17 +1185,20 @@
       "Show Image Caption": [
         "Mostra didascalia immagine"
       ],
-      "Show Image Caption in Lightbox": [
-        "Mostra didascalia immagine nella Lightbox"
-      ],
-      "Show Image Caption or Product Info in Lightbox": [
-        "Mostra didascalia immagine o info prodotto nella Lightbox"
+      "Show Image Caption & EXIF Data": [
+        "Mostra didascalia immagine e dati EXIF"
       ],
       "Show Image Title": [
         "Mostra titolo immagine"
       ],
-      "Show Overlay on Hover": [
-        "Mostra overlay al passaggio del mouse"
+      "Show Image Title & Caption": [
+        "Mostra titolo e didascalia dell'immagine"
+      ],
+      "Show Image Title & EXIF Data": [
+        "Mostra titolo immagine e dati EXIF"
+      ],
+      "Show Image Title, Caption, & EXIF Data": [
+        "Mostra titolo immagine, didascalia e dati EXIF"
       ],
       "Show Product Info": [
         "Mostra info prodotto"
@@ -1062,6 +1218,12 @@
       "Slider Orientation": [
         "Orientamento cursore"
       ],
+      "Slider and Label Styles": [
+        "Stili del cursore e dell'etichetta"
+      ],
+      "Soft": [
+        "Morbido"
+      ],
       "Square": [
         "Quadrato"
       ],
@@ -1071,8 +1233,14 @@
       "Start typing to search for products in your WooCommerce store. Click a result to link it.": [
         "Inizia a digitare per cercare prodotti nel tuo negozio WooCommerce. Fai clic su un risultato per collegarlo."
       ],
-      "Stretch content height": [
-        "Allunga l'altezza del contenuto"
+      "Style the active filtering category.": [
+        "Applicare uno stile alla categoria di filtro attiva."
+      ],
+      "Subtle": [
+        "Impercettibile"
+      ],
+      "Supports YouTube, Vimeo, Bunny Stream, or ": [
+        "Supporta YouTube, Vimeo, Bunny Stream o "
       ],
       "Swap Position": [
         "Scambia posizione"
@@ -1080,14 +1248,17 @@
       "Switch between light and dark editor themes.": [
         "Passa tra i temi chiaro e scuro dell'editor."
       ],
+      "Sync to Media Library": [
+        "Sincronizza con il catalogo multimediale"
+      ],
+      "Syncing…": [
+        "Sincronizzazione…"
+      ],
       "Tablet": [
         "Tablet"
       ],
       "Text": [
         "Testo"
-      ],
-      "This is a premium feature. Unlock all features:": [
-        "Questa è una funzione premium. Sblocca tutte le funzioni:"
       ],
       "Thumbnail": [
         "Miniatura"
@@ -1107,9 +1278,6 @@
       "Time between automatic slide transitions.": [
         "Tempo tra le transizioni automatiche delle slide."
       ],
-      "Title & Play Button Visibility": [
-        "Visibilità del titolo e del pulsante di riproduzione"
-      ],
       "Toggle visibility of navigation arrows.": [
         "Attiva o disattiva la visibilità delle frecce di navigazione."
       ],
@@ -1121,9 +1289,6 @@
       ],
       "Unknown": [
         "Sconosciuto"
-      ],
-      "Upgrade to Pro": [
-        "Passa a Pro"
       ],
       "Upload or select images to create a Filmstrip Gallery.": [
         "Carica o seleziona immagini per creare una galleria Filmstrip."
@@ -1140,6 +1305,15 @@
       "Upload or select images to create a carousel.": [
         "Carica o seleziona immagini per creare un carosello."
       ],
+      "Use a light or dark loupe frame.": [
+        "Utilizzare una montatura per occhiali chiara o scura."
+      ],
+      "Use click behavior configured specifically for this image.": [
+        "Utilizza il comportamento di clic configurato specificatamente per questa immagine."
+      ],
+      "Use hover behavior configured specifically for this image.": [
+        "Utilizza il comportamento al passaggio del mouse configurato appositamente per questa immagine."
+      ],
       "Use this video": [
         "Usa questo video"
       ],
@@ -1148,9 +1322,6 @@
       ],
       "Vertical": [
         "Verticale"
-      ],
-      "Vertical Content Alignment": [
-        "Allineamento verticale del contenuto"
       ],
       "Vertical Images": [
         "Immagini verticali"
@@ -1170,11 +1341,26 @@
       "Video Block Styles": [
         "Stili di Video Block"
       ],
+      "Video Click Settings": [
+        "Fare clic su Impostazioni"
+      ],
+      "Video Content": [
+        "Contenuti video"
+      ],
       "Video Gallery": [
         "Galleria video"
       ],
+      "Video Gallery Filtering": [
+        "Filtraggio della galleria video"
+      ],
       "Video Gallery Settings": [
         "Impostazioni di Video Gallery"
+      ],
+      "Video Hover Settings": [
+        "Impostazioni del video al passaggio del mouse"
+      ],
+      "Video Lightbox": [
+        "Scatola luminosa video"
       ],
       "Video Only": [
         "Solo video"
@@ -1190,6 +1376,9 @@
       ],
       "Video Title": [
         "Titolo video"
+      ],
+      "Video Title + Play Button": [
+        "Titolo video + pulsante Riproduci"
       ],
       "Video URL": [
         "URL video"

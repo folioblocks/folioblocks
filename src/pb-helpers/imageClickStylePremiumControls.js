@@ -18,7 +18,7 @@ const RESET_ICON_COLOR_ATTRIBUTES = {
 const isLinkIconEnabled = ( attributes = {} ) =>
 	( attributes.imageClickAction === 'custom_url' ||
 		attributes.imageClickAction === 'page_post' ) &&
-	( attributes.imageClickTarget || 'icon' ) === 'icon';
+	( attributes.linkIconDisplay || 'hover' ) !== 'none';
 
 const IconColorPanelItem = ( {
 	attributes,
@@ -77,7 +77,9 @@ export const registerImageClickStylePremiumControls = ( {
 			}
 
 			const enableDownload = !! attributes.enableDownload;
-			const enableWooCommerce = !! attributes.enableWooCommerce;
+			const enableWooCommerce =
+				!! attributes.enableWooCommerce &&
+				( attributes.wooCartIconDisplay || 'hover' ) !== 'none';
 			const enableLinkIcon = isLinkIconEnabled( attributes );
 
 			if ( ! enableDownload && ! enableWooCommerce && ! enableLinkIcon ) {

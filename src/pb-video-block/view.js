@@ -47,6 +47,12 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		if ( ! lightbox || ! videoContainer ) {
 			return;
 		}
+
+		// Keep the modal at the document root so theme and page-builder
+		// stacking contexts cannot render headers or sticky elements above it.
+		if ( lightbox.parentElement !== document.body ) {
+			document.body.appendChild( lightbox );
+		}
 			const closeButton = lightbox.querySelector(
 				'.pb-video-lightbox-close'
 			);
@@ -81,7 +87,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			 *  ----------------------------------------------------------------
 			 * @param videoUrl
 			 */
-			function setVideoSource( videoUrl ) {
+		function setVideoSource( videoUrl ) {
 				videoContainer.classList.remove( 'has-local-video' );
 				const iframeSrc = getVideoIframeSrc( videoUrl, {
 					autoplay: true,
@@ -93,11 +99,24 @@ document.addEventListener( 'DOMContentLoaded', () => {
 					return;
 				}
 
-				// Self-hosted video
+				// Self-hosted video: use its intrinsic dimensions for the lightbox.
 				iframe.style.display = 'none';
 				iframe.src = '';
 				videoContainer.classList.add( 'has-local-video' );
-				videoContainer.innerHTML = `<video src="${ videoUrl }" controls autoplay></video>`;
+				videoContainer.innerHTML = '';
+				const video = document.createElement( 'video' );
+				video.src = videoUrl;
+				video.controls = true;
+				video.autoplay = true;
+				video.addEventListener( 'loadedmetadata', () => {
+					if ( video.videoWidth > 0 && video.videoHeight > 0 ) {
+						lightbox.style.setProperty(
+							'--pb-video-lightbox-ratio',
+							String( video.videoWidth / video.videoHeight )
+						);
+					}
+				} );
+				videoContainer.appendChild( video );
 			}
 
 		function getFocusableElements( container ) {
@@ -194,6 +213,18 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			if ( ! lightbox.classList.contains( 'active' ) ) {
 				return;
 			}
+			const fullscreenElement =
+				document.fullscreenElement ||
+				document.webkitFullscreenElement ||
+				document.mozFullScreenElement ||
+				document.msFullscreenElement;
+			if (
+				fullscreenElement &&
+				( fullscreenElement === lightbox ||
+					lightbox.contains( fullscreenElement ) )
+			) {
+				exitFullscreen();
+			}
 			lightbox.classList.remove( 'active' );
 			lightbox.setAttribute( 'aria-hidden', 'true' );
 			block.setAttribute( 'aria-expanded', 'false' );
@@ -244,6 +275,19 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			) {
 				closeLightbox();
 			}
+		} );
+
+		// Match the image lightbox: close when the backdrop is clicked.
+		lightbox.addEventListener( 'click', ( e ) => {
+			const lightboxContent = e.target.closest(
+				'.pb-video-lightbox-video, .pb-video-lightbox-info, .pb-video-lightbox-close, .lightbox-fullscreen'
+			);
+
+			if ( lightboxContent ) {
+				return;
+			}
+
+			closeLightbox();
 		} );
 
 		document.addEventListener( 'keydown', ( e ) => {

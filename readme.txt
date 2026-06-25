@@ -5,7 +5,7 @@ Tags: gallery, image gallery, photo gallery, video gallery, lightbox,
 Tested up to:      7.0
 Requires at least: 6.3
 Requires PHP: 7.4
-Stable tag:        1.3.1
+Stable tag:        1.4.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -39,19 +39,24 @@ Core gallery features include:
 * Caption support and accessibility-friendly interactions
 * Drag-and-drop image ordering
 * 100% native Gutenberg block editing (no shortcodes, no separate gallery manager)
-* Block transforms to convert galleries in one click
 * WordPress 7.0 List View inspector support for gallery children
 
 Pro features include:
+* Block transforms to convert galleries and supported media blocks in one click
 * Custom image click actions for media files, custom URLs, Page/Post links, downloads, lightbox, and WooCommerce products
+* Per-image click and hover overrides inside galleries
 * Gallery image filtering with per-image category assignment
 * WooCommerce product integration for images and videos
 * Download full-resolution images
 * Randomize image order
+* Seamless looping for Carousel Gallery
 * Disable right-click / content protection
 * Lazy load images for faster performance
 * Hover effects, image overlays, and overlay content controls
 * EXIF metadata display in lightboxes and hover overlays
+* Light and Dark lightbox appearances, fullscreen viewing, swipe navigation, and combined title, caption, and EXIF layouts
+* Password protection controls for Posts and Pages
+* Responsive desktop, tablet, and mobile gallery gaps
 * Pro List View thumbnails for easier gallery reordering
 * Advanced gallery styling controls for borders, shadows, radius, filter bars, icons, and overlays
 
@@ -111,6 +116,24 @@ No, the galleries will remain in place on your site. However, the advanced layou
 6. Video Gallery block populated with images
 
 == Changelog ==
+
+= 1.4.0 =
+* Added responsive desktop, tablet, and mobile gap controls to Carousel, Masonry, Justified, Modular, and Video Galleries.
+* Added fullscreen controls to Video Block and Video Gallery lightboxes.
+* Added Subtle, Soft, Elevated, and Dramatic drop-shadow presets to Image Block, Video Block, and photo and video galleries.
+* Added tap-to-hide controls and captions plus touch swipe navigation to image lightboxes.
+* Added Light and Dark image and video lightbox appearances, including inheritable per-image appearance overrides.
+* Added combined image title, caption, and EXIF content layouts for image lightboxes.
+* Added optional WooCommerce and Page/URL link icons for linked thumbnails.
+* Added a Pro fullscreen button and F keyboard shortcut to Image Block lightboxes.
+* Added a Pro action for syncing Image Block titles, captions, and alternative text to the WordPress Media Library.
+* Added Pro per-image click and hover overrides to Grid, Justified, Masonry, Carousel, Modular, and Filmstrip Galleries.
+* Added Gallery Click Settings, Gallery Click Styles, Gallery Hover Settings, and per-image overrides to Filmstrip Gallery.
+* Added Filmstrip Gallery image lightboxes with scoped navigation, inherited or per-image appearance and content, EXIF display, and fullscreen handoff.
+* Added optional Pro seamless looping to Carousel Gallery for continuous arrow, keyboard, swipe, and autoplay navigation.
+* Added Pro password protection controls for Posts and Pages to the FolioBlocks Page Settings panel.
+* Added Video Title, Play Button, and Filtering Category combinations to Video Block and Video Gallery overlays.
+* Added Pro per-video hover overrides for Video Galleries, including styles, overlay content, visibility, and Color Overlay colors.
 
 = 1.3.1 =
 * Refactored repeated Pro controls for Image Click Styles, gallery toggles, List View thumbnails, and editor filtering into shared helpers.

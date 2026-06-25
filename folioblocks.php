@@ -3,7 +3,7 @@
 /**
  * Plugin Name:       FolioBlocks
  * Description:       Create fast, responsive photo and video gallery with grid, masonry, justified, modular, and carousel layouts—ideal for photographers and creatives.
- * Version:           1.3.1
+ * Version:           1.4.0
  * Requires at least: 6.3
  * Requires PHP:      7.4
  * Author:            FolioBlocks
@@ -15,14 +15,14 @@
  *
  * @package FolioBlocks
  * 
- * @fs_premium_only /languages/, /build/modular-gallery-block/, /build/pb-image-row, /build/pb-image-stack/, /build/background-video-block/premium-view.asset.php, /build/background-video-block/premium-view.js, /build/background-video-block/premium.asset.php, /build/background-video-block/premium.js, /build/carousel-gallery-block/premium-view.asset.php, /build/carousel-gallery-block/premium-view.js, /build/carousel-gallery-block/premium.asset.php, /build/carousel-gallery-block/premium.js, /build/filmstrip-gallery-block/premium-view.asset.php, /build/filmstrip-gallery-block/premium-view.js, /build/filmstrip-gallery-block/premium.asset.php, /build/filmstrip-gallery-block/premium.js, /build/grid-gallery-block/premium-view.asset.php, /build/grid-gallery-block/premium-view.js, /build/grid-gallery-block/premium.asset.php, /build/grid-gallery-block/premium.js, /build/justified-gallery-block/premium-view.asset.php, /build/justified-gallery-block/premium-view.js, /build/justified-gallery-block/premium.asset.php, /build/justified-gallery-block/premium.js, /build/masonry-gallery-block/premium-view.asset.php, /build/masonry-gallery-block/premium-view.js, /build/masonry-gallery-block/premium.asset.php, /build/masonry-gallery-block/premium.js, /build/modular-gallery-block/premium-view.asset.php, /build/modular-gallery-block/premium-view.js, /build/modular-gallery-block/premium.asset.php, /build/modular-gallery-block/premium.js, /build/pb-before-after-block/premium-view.asset.php, /build/pb-before-after-block/premium-view.js, /build/pb-before-after-block/premium.asset.php, /build/pb-before-after-block/premium.js, /build/pb-image-block/premium-view.asset.php, /build/pb-image-block/premium-view.js, /build/pb-image-block/premium.asset.php, /build/pb-image-block/premium.js, /build/pb-image-block/premium-view.asset.php, /build/pb-loupe-block/premium-view.js, /build/pb-loupe-block/premium.asset.php, /build/pb-loupe-block/premium.js, /build/pb-video-block/premium-view.asset.php, /build/pb-video-block/premium-view.js, /build/pb-video-block/premium.asset.php, /build/pb-video-block/premium.js, /build/video-gallery-block/premium-view.asset.php, /build/video-gallery-block/premium-view.js, /build/video-gallery-block/premium.asset.php, /build/video-gallery-block/premium.js
+ * @fs_premium_only /languages/, /includes/css/password-form.css, /build/modular-gallery-block/, /build/pb-image-row, /build/pb-image-stack/, /build/background-video-block/premium-view.asset.php, /build/background-video-block/premium-view.js, /build/background-video-block/premium.asset.php, /build/background-video-block/premium.js, /build/carousel-gallery-block/premium-view.asset.php, /build/carousel-gallery-block/premium-view.js, /build/carousel-gallery-block/premium.asset.php, /build/carousel-gallery-block/premium.js, /build/filmstrip-gallery-block/premium-view.asset.php, /build/filmstrip-gallery-block/premium-view.js, /build/filmstrip-gallery-block/premium.asset.php, /build/filmstrip-gallery-block/premium.js, /build/grid-gallery-block/premium-view.asset.php, /build/grid-gallery-block/premium-view.js, /build/grid-gallery-block/premium.asset.php, /build/grid-gallery-block/premium.js, /build/justified-gallery-block/premium-view.asset.php, /build/justified-gallery-block/premium-view.js, /build/justified-gallery-block/premium.asset.php, /build/justified-gallery-block/premium.js, /build/masonry-gallery-block/premium-view.asset.php, /build/masonry-gallery-block/premium-view.js, /build/masonry-gallery-block/premium.asset.php, /build/masonry-gallery-block/premium.js, /build/modular-gallery-block/premium-view.asset.php, /build/modular-gallery-block/premium-view.js, /build/modular-gallery-block/premium.asset.php, /build/modular-gallery-block/premium.js, /build/pb-before-after-block/premium-view.asset.php, /build/pb-before-after-block/premium-view.js, /build/pb-before-after-block/premium.asset.php, /build/pb-before-after-block/premium.js, /build/pb-image-block/premium-view.asset.php, /build/pb-image-block/premium-view.js, /build/pb-image-block/premium.asset.php, /build/pb-image-block/premium.js, /build/pb-image-block/premium-view.asset.php, /build/pb-loupe-block/premium-view.js, /build/pb-loupe-block/premium.asset.php, /build/pb-loupe-block/premium.js, /build/pb-video-block/premium-view.asset.php, /build/pb-video-block/premium-view.js, /build/pb-video-block/premium.asset.php, /build/pb-video-block/premium.js, /build/video-gallery-block/premium-view.asset.php, /build/video-gallery-block/premium-view.js, /build/video-gallery-block/premium.asset.php, /build/video-gallery-block/premium.js
  */
 
 if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FBKS_VERSION', '1.3.1');
+define('FBKS_VERSION', '1.4.0');
 define('FBKS_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('FBKS_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('FBKS_ALL_FILTER_TOKEN', 'all');
@@ -30,6 +30,31 @@ define('FBKS_LEGACY_ALL_FILTER_TOKEN', 'All');
 
 require_once FBKS_PLUGIN_DIR . 'includes/php/filter-helpers.php';
 require_once FBKS_PLUGIN_DIR . 'includes/php/i18n.php';
+
+/**
+ * Ensure Safari can send the editor origin to external video embeds.
+ *
+ * Some security plugins and hosts replace WordPress's default admin referrer
+ * policy with "no-referrer". Safari then ignores a less restrictive policy on
+ * nested YouTube iframes, resulting in YouTube player Error 153.
+ */
+function fbks_block_editor_referrer_policy()
+{
+    return 'strict-origin-when-cross-origin';
+}
+add_filter('admin_referrer_policy', 'fbks_block_editor_referrer_policy', PHP_INT_MAX);
+
+function fbks_block_editor_referrer_meta()
+{
+    $screen = get_current_screen();
+
+    if (! $screen || ! method_exists($screen, 'is_block_editor') || ! $screen->is_block_editor()) {
+        return;
+    }
+
+    echo '<meta name="referrer" content="strict-origin-when-cross-origin">' . "\n";
+}
+add_action('admin_head', 'fbks_block_editor_referrer_meta', 0);
 
 if (function_exists('fbks_fs')) {
     fbks_fs()->set_basename(true, __FILE__);
@@ -57,6 +82,7 @@ if (function_exists('fbks_fs')) {
                 'type'                => 'plugin',
                 'public_key'          => 'pk_9719a603d337d33af1a1193508cdf',
                 'is_premium'          => true,
+                'premium_suffix'      => '(Pro)',
                 // If your plugin is a serviceware, set this option to false.
                 'has_premium_version' => true,
                 'has_addons'          => false,
@@ -127,6 +153,18 @@ if (function_exists('fbks_fs')) {
                 );
 
                 wp_enqueue_script('folioblocks-shared-data');
+
+                if (fbks_fs()->can_use_premium_code__premium_only()) {
+                    $page_settings_path = FBKS_PLUGIN_DIR . 'includes/js/page-media-settings.js';
+                    wp_enqueue_script(
+                        'folioblocks-page-media-settings',
+                        FBKS_PLUGIN_URL . 'includes/js/page-media-settings.js',
+                        array('wp-components', 'wp-core-data', 'wp-data', 'wp-editor', 'wp-element', 'wp-hooks', 'wp-i18n', 'wp-plugins'),
+                        file_exists($page_settings_path) ? filemtime($page_settings_path) : FBKS_VERSION,
+                        true
+                    );
+                    wp_set_script_translations('folioblocks-page-media-settings', 'folioblocks');
+                }
             });
         }
 
@@ -182,6 +220,162 @@ if (function_exists('fbks_fs')) {
         }
     }
     add_action('init', 'fbks_block_init');
+
+    function fbks_register_page_media_settings_meta()
+    {
+        $post_types = get_post_types(array('show_in_rest' => true), 'names');
+        $meta_args = array(
+            'type'              => 'boolean',
+            'single'            => true,
+            'default'           => false,
+            'show_in_rest'      => true,
+            'sanitize_callback' => 'rest_sanitize_boolean',
+            'auth_callback'     => function () {
+                return current_user_can('edit_posts');
+            },
+        );
+
+        foreach ($post_types as $post_type) {
+            register_post_meta($post_type, 'fbksLazyLoad', $meta_args);
+            register_post_meta($post_type, 'fbksDisableRightClick', $meta_args);
+        }
+    }
+    add_action('init', 'fbks_register_page_media_settings_meta');
+
+    function fbks_apply_page_media_settings_to_blocks($parsed_block)
+    {
+        if (! fbks_fs()->can_use_premium_code__premium_only()) {
+            return $parsed_block;
+        }
+
+        $post_id = get_the_ID();
+        if (! $post_id || empty($parsed_block['blockName'])) {
+            return $parsed_block;
+        }
+
+        $lazy_load_blocks = array(
+            'folioblocks/before-after-block',
+            'folioblocks/carousel-gallery-block',
+            'folioblocks/filmstrip-gallery-block',
+            'folioblocks/grid-gallery-block',
+            'folioblocks/justified-gallery-block',
+            'folioblocks/masonry-gallery-block',
+            'folioblocks/modular-gallery-block',
+            'folioblocks/pb-image-block',
+            'folioblocks/pb-video-block',
+            'folioblocks/video-gallery-block',
+        );
+        $right_click_blocks = array(
+            'folioblocks/background-video-block',
+            'folioblocks/before-after-block',
+            'folioblocks/carousel-gallery-block',
+            'folioblocks/filmstrip-gallery-block',
+            'folioblocks/grid-gallery-block',
+            'folioblocks/justified-gallery-block',
+            'folioblocks/masonry-gallery-block',
+            'folioblocks/modular-gallery-block',
+            'folioblocks/pb-image-block',
+            'folioblocks/pb-loupe-block',
+            'folioblocks/pb-video-block',
+            'folioblocks/video-gallery-block',
+        );
+
+        if (
+            in_array($parsed_block['blockName'], $lazy_load_blocks, true) &&
+            metadata_exists('post', $post_id, 'fbksLazyLoad')
+        ) {
+            $parsed_block['attrs']['lazyLoad'] = (bool) get_post_meta($post_id, 'fbksLazyLoad', true);
+        }
+
+        if (
+            in_array($parsed_block['blockName'], $right_click_blocks, true) &&
+            metadata_exists('post', $post_id, 'fbksDisableRightClick')
+        ) {
+            $parsed_block['attrs']['disableRightClick'] = (bool) get_post_meta($post_id, 'fbksDisableRightClick', true);
+        }
+
+        return $parsed_block;
+    }
+    add_filter('render_block_data', 'fbks_apply_page_media_settings_to_blocks');
+
+    function fbks_enforce_page_media_settings_on_rendered_blocks($block_content, $block)
+    {
+        if (
+            ! fbks_fs()->can_use_premium_code__premium_only() ||
+            empty($block['blockName']) ||
+            '' === $block_content
+        ) {
+            return $block_content;
+        }
+
+        $post_id = get_the_ID();
+        if (! $post_id) {
+            return $block_content;
+        }
+
+        $lazy_load_blocks = array(
+            'folioblocks/before-after-block',
+            'folioblocks/carousel-gallery-block',
+            'folioblocks/filmstrip-gallery-block',
+            'folioblocks/grid-gallery-block',
+            'folioblocks/justified-gallery-block',
+            'folioblocks/masonry-gallery-block',
+            'folioblocks/modular-gallery-block',
+            'folioblocks/pb-image-block',
+            'folioblocks/pb-video-block',
+            'folioblocks/video-gallery-block',
+        );
+        $right_click_blocks = array(
+            'folioblocks/background-video-block',
+            'folioblocks/before-after-block',
+            'folioblocks/carousel-gallery-block',
+            'folioblocks/filmstrip-gallery-block',
+            'folioblocks/grid-gallery-block',
+            'folioblocks/justified-gallery-block',
+            'folioblocks/masonry-gallery-block',
+            'folioblocks/modular-gallery-block',
+            'folioblocks/pb-image-block',
+            'folioblocks/pb-loupe-block',
+            'folioblocks/pb-video-block',
+            'folioblocks/video-gallery-block',
+        );
+
+        if (
+            in_array($block['blockName'], $lazy_load_blocks, true) &&
+            metadata_exists('post', $post_id, 'fbksLazyLoad')
+        ) {
+            $lazy_load = (bool) get_post_meta($post_id, 'fbksLazyLoad', true);
+            $block_content = str_replace(
+                $lazy_load ? 'loading="eager"' : 'loading="lazy"',
+                $lazy_load ? 'loading="lazy"' : 'loading="eager"',
+                $block_content
+            );
+            $block_content = str_replace(
+                $lazy_load ? '"lazyLoad":false' : '"lazyLoad":true',
+                $lazy_load ? '"lazyLoad":true' : '"lazyLoad":false',
+                $block_content
+            );
+        }
+
+        if (
+            in_array($block['blockName'], $right_click_blocks, true) &&
+            metadata_exists('post', $post_id, 'fbksDisableRightClick') &&
+            class_exists('WP_HTML_Tag_Processor')
+        ) {
+            $processor = new WP_HTML_Tag_Processor($block_content);
+            if ($processor->next_tag()) {
+                if ((bool) get_post_meta($post_id, 'fbksDisableRightClick', true)) {
+                    $processor->set_attribute('data-disable-right-click', 'true');
+                } else {
+                    $processor->remove_attribute('data-disable-right-click');
+                }
+                $block_content = $processor->get_updated_html();
+            }
+        }
+
+        return $block_content;
+    }
+    add_filter('render_block', 'fbks_enforce_page_media_settings_on_rendered_blocks', 10, 2);
 
     // Filter to load block assets on demand.
     add_filter('should_load_block_assets_on_demand', '__return_true');
@@ -244,6 +438,7 @@ if (function_exists('fbks_fs')) {
     }, 99);
     // Load settings + system info pages
     require_once plugin_dir_path(__FILE__) . 'includes/admin/common.php';
+    require_once plugin_dir_path(__FILE__) . 'includes/admin/review-request.php';
     require_once plugin_dir_path(__FILE__) . 'includes/admin/settings-page.php';
     require_once plugin_dir_path(__FILE__) . 'includes/admin/system-info.php';
     require_once plugin_dir_path(__FILE__) . 'includes/admin/free-pro.php';
@@ -283,6 +478,20 @@ if (function_exists('fbks_fs')) {
 }
 
 if (fbks_fs()->can_use_premium_code__premium_only()) {
+    add_action('wp_enqueue_scripts', function () {
+        if (! is_singular(array('post', 'page')) || ! post_password_required()) {
+            return;
+        }
+
+        $style_path = FBKS_PLUGIN_DIR . 'includes/css/password-form.css';
+        wp_enqueue_style(
+            'folioblocks-password-form',
+            FBKS_PLUGIN_URL . 'includes/css/password-form.css',
+            array(),
+            file_exists($style_path) ? filemtime($style_path) : FBKS_VERSION
+        );
+    });
+
     // Removes the add-to-cart query arg from the URL after adding a product to the cart.
     add_action('template_redirect', function () {
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- WooCommerce uses add-to-cart as a public GET action; this only removes the query arg after WooCommerce has handled it.

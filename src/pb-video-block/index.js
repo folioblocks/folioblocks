@@ -2,44 +2,11 @@
  * PB Video Block
  * Index JS
  */
-import { createBlock, registerBlockType } from '@wordpress/blocks';
+import { registerBlockType } from '@wordpress/blocks';
 import './style.scss';
 import Edit from './edit';
 import Save from './save';
 import metadata from './block.json';
-
-const transformCoreVideoToPbVideo = ( attributes = {} ) => {
-	const videoUrl = attributes.src || '';
-
-	return createBlock( metadata.name, {
-		videoUrl,
-		thumbnail: attributes.poster || '',
-		title: attributes.title || '',
-		description: attributes.caption || '',
-	} );
-};
-
-const isSupportedVideoEmbed = ( attributes = {} ) => {
-	const providerSlug = ( attributes.providerNameSlug || '' ).toLowerCase();
-	const providerName = ( attributes.providerName || '' ).toLowerCase();
-	const url = ( attributes.url || '' ).toLowerCase();
-
-	return (
-		providerSlug === 'youtube' ||
-		providerSlug === 'vimeo' ||
-		providerName === 'youtube' ||
-		providerName === 'vimeo' ||
-		url.includes( 'youtube.com' ) ||
-		url.includes( 'youtu.be' ) ||
-		url.includes( 'vimeo.com' )
-	);
-};
-
-const transformVideoEmbedToPbVideo = ( attributes = {} ) =>
-	createBlock( metadata.name, {
-		videoUrl: attributes.url || '',
-		description: attributes.caption || '',
-	} );
 
 registerBlockType( metadata.name, {
 	icon: {
@@ -55,20 +22,4 @@ registerBlockType( metadata.name, {
 	},
 	edit: Edit,
 	save: Save,
-	transforms: {
-		from: [
-			{
-				type: 'block',
-				blocks: [ 'core/video' ],
-				isMatch: ( attributes ) => !! attributes.src,
-				transform: transformCoreVideoToPbVideo,
-			},
-			{
-				type: 'block',
-				blocks: [ 'core/embed' ],
-				isMatch: isSupportedVideoEmbed,
-				transform: transformVideoEmbedToPbVideo,
-			},
-		],
-	},
 } );

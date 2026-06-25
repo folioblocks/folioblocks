@@ -6,6 +6,7 @@
  * - Vimeo
  * - Bunny.net Stream (embed/play URLs)
  */
+import { isValidHttpUrl } from './urlValidation';
 
 const YOUTUBE_ID_FALLBACK = /^[a-zA-Z0-9_-]+$/;
 const VIMEO_ID_FALLBACK = /^\d+$/;
@@ -16,7 +17,10 @@ const tryParseUrl = ( rawUrl ) => {
 	}
 
 	try {
-		const parsed = new URL( rawUrl, window.location.origin );
+		if ( ! isValidHttpUrl( rawUrl ) ) {
+			return null;
+		}
+		const parsed = new URL( rawUrl );
 		const protocol = ( parsed.protocol || '' ).toLowerCase();
 		if ( protocol !== 'http:' && protocol !== 'https:' ) {
 			return null;

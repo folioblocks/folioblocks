@@ -20,7 +20,12 @@ $fbks_filter_decoration_class = '';
 $fbks_columns_desktop = intval( $attributes['columns'] ?? 3 );
 $fbks_columns_tablet  = intval( $attributes['tabletColumns'] ?? 2 );
 $fbks_columns_mobile  = intval( $attributes['mobileColumns'] ?? 1 );
-$fbks_gap             = intval( $attributes['gap'] ?? 10 );
+$fbks_gap             = max( 0, min( 50, intval( $attributes['gap'] ?? 10 ) ) );
+$fbks_tablet_gap      = max( 0, min( 50, intval( $attributes['tabletGap'] ?? $fbks_gap ) ) );
+$fbks_mobile_gap      = max( 0, min( 50, intval( $attributes['mobileGap'] ?? $fbks_gap ) ) );
+$fbks_gap_styles      = '--pb-gallery-gap-desktop:' . $fbks_gap . 'px;';
+$fbks_gap_styles     .= '--pb-gallery-gap-tablet:' . $fbks_tablet_gap . 'px;';
+$fbks_gap_styles     .= '--pb-gallery-gap-mobile:' . $fbks_mobile_gap . 'px;';
 
 if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 	$fbks_enable_filter    = ! empty( $attributes['enableFilter'] );
@@ -93,18 +98,15 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 }
 
 // Default wrapper attributes
-$fbks_wrapper_attributes = get_block_wrapper_attributes();
+$fbks_wrapper_args = [
+	'style' => $fbks_gap_styles . $fbks_active_styles . $fbks_inactive_styles,
+];
 
-// Premium filtering attributes override
-if ( fbks_fs()->can_use_premium_code__premium_only() ) {
-  	if ( ! empty( $fbks_enable_filter ) ) {
-		$fbks_wrapper_attributes = get_block_wrapper_attributes([
-			'data-active-filter' => $fbks_active_filter,
-			'style'              => $fbks_active_styles . $fbks_inactive_styles,
-		]);
-	}
+if ( fbks_fs()->can_use_premium_code__premium_only() && ! empty( $fbks_enable_filter ) ) {
+	$fbks_wrapper_args['data-active-filter'] = $fbks_active_filter;
 }
 
+$fbks_wrapper_attributes = get_block_wrapper_attributes( $fbks_wrapper_args );
 echo '<div ' . wp_kses_post( $fbks_wrapper_attributes ) . '>';
 
 if ( fbks_fs()->can_use_premium_code__premium_only() ) {

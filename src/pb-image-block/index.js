@@ -2,80 +2,11 @@
  * PB Image Block
  * Index JS
  */
-import { createBlock, registerBlockType } from '@wordpress/blocks';
-import { select } from '@wordpress/data';
+import { registerBlockType } from '@wordpress/blocks';
 import './style.scss';
 import Edit from './edit';
 import Save from './save';
 import metadata from './block.json';
-import {
-	disableGalleryWrapperTransforms,
-	transformCoreImageToPbImage,
-} from '../pb-helpers/galleryTransforms';
-
-disableGalleryWrapperTransforms();
-
-const GALLERY_BLOCK_NAMES = new Set( [
-	'folioblocks/grid-gallery-block',
-	'folioblocks/masonry-gallery-block',
-	'folioblocks/justified-gallery-block',
-	'folioblocks/carousel-gallery-block',
-	'folioblocks/filmstrip-gallery-block',
-	'folioblocks/video-gallery-block',
-	'folioblocks/modular-gallery-block',
-] );
-
-const normalizeImageSizes = ( sizes = {} ) =>
-	Object.fromEntries(
-		Object.entries( sizes )
-			.filter( ( [ , size ] ) => size?.url || size?.source_url )
-			.map( ( [ slug, size ] ) => [
-				slug,
-				{
-					...size,
-					url: size.url || size.source_url,
-				},
-			] )
-	);
-
-const getSelectedImageSize = ( attributes = {}, sizes = {} ) =>
-	sizes[ attributes.sizeSlug ] ||
-	sizes[ attributes.imageSize ] ||
-	sizes.large ||
-	sizes.full ||
-	null;
-
-const hasGalleryParent = ( block ) => {
-	if ( ! block?.clientId ) {
-		return false;
-	}
-
-	const blockEditor = select( 'core/block-editor' );
-
-	if ( ! blockEditor ) {
-		return false;
-	}
-
-	const parentIds = blockEditor.getBlockParents( block.clientId, true ) || [];
-
-	return parentIds.some( ( parentId ) =>
-		GALLERY_BLOCK_NAMES.has( blockEditor.getBlockName( parentId ) )
-	);
-};
-
-const transformPbImageToCoreImage = ( attributes = {} ) => {
-	const normalizedSizes = normalizeImageSizes( attributes.sizes || {} );
-	const selectedSize = getSelectedImageSize( attributes, normalizedSizes );
-
-	return createBlock( 'core/image', {
-		id: attributes.id || undefined,
-		url: selectedSize?.url || attributes.src || '',
-		alt: attributes.alt || '',
-		caption: attributes.caption || '',
-		sizeSlug: attributes.imageSize || 'large',
-		className: attributes.class || undefined,
-	} );
-};
 
 registerBlockType( metadata, {
 	icon: {
@@ -92,23 +23,4 @@ registerBlockType( metadata, {
 	},
 	edit: Edit,
 	save: Save,
-	transforms: {
-		from: [
-			{
-				type: 'block',
-				blocks: [ 'core/image' ],
-				isMatch: ( attributes ) => Number( attributes?.id ) > 0,
-				transform: transformCoreImageToPbImage,
-			},
-		],
-		to: [
-			{
-				type: 'block',
-				blocks: [ 'core/image' ],
-				isMatch: ( attributes, block ) =>
-					Boolean( attributes?.src ) && ! hasGalleryParent( block ),
-				transform: transformPbImageToCoreImage,
-			},
-		],
-	},
 } );

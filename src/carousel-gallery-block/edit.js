@@ -13,7 +13,6 @@ import {
 } from '@wordpress/block-editor';
 import {
 	PanelBody,
-	Notice,
 	SelectControl,
 	ToolbarGroup,
 	ToolbarButton,
@@ -27,6 +26,8 @@ import { applyFilters } from '@wordpress/hooks';
 import { IconCarouselGallery, IconPBSpinner } from '../pb-helpers/icons';
 import { getExifAttributesFromMedia } from '../pb-helpers/exifMetadata';
 import { getImageSizeOptions } from '../pb-helpers/imageSizeOptions';
+import { imageProFeatureNotice } from '../pb-helpers/imageProFeatureNotices';
+import { resolveLegacyGalleryGaps } from '../pb-helpers/galleryGap';
 import './editor.scss';
 
 const getImageClickAction = ( {
@@ -135,9 +136,6 @@ const getImageClickHelp = ( value ) => {
 
 export default function Edit( { clientId, attributes, setAttributes } ) {
 	const ALLOWED_BLOCKS = [ 'folioblocks/pb-image-block' ];
-	const checkoutUrl =
-		window.folioBlocksData?.checkoutUrl ||
-		'https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks&utm_medium=carousel-gallery-block&utm_campaign=upgrade';
 	const [ isLoading, setIsLoading ] = useState( false );
 
 	const { carouselHeight, preview, lightbox, lightboxCaption } = attributes;
@@ -156,6 +154,11 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 	const effectiveEnableWoo = hasWooCommerce
 		? attributes.enableWooCommerce || false
 		: false;
+	const responsiveGaps = applyFilters(
+		'folioBlocks.carouselGallery.responsiveGaps',
+		resolveLegacyGalleryGaps( attributes ),
+		attributes
+	);
 	useEffect( () => {
 		const wooActive = window.folioBlocksData?.hasWooCommerce ?? false;
 		if ( wooActive !== attributes.hasWooCommerce ) {
@@ -166,6 +169,11 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 	const blockProps = useBlockProps( {
 		'data-carousel-height': carouselHeight, // optional debug aid
 		'data-in-carousel': true, // optional debug aid
+		style: {
+			'--pb-gallery-gap-desktop': `${ responsiveGaps.gap }px`,
+			'--pb-gallery-gap-tablet': `${ responsiveGaps.tabletGap }px`,
+			'--pb-gallery-gap-mobile': `${ responsiveGaps.mobileGap }px`,
+		},
 	} );
 	const galleryRef = useRef( null );
 
@@ -182,18 +190,6 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 		[]
 	);
 	const imageSizeOptions = getImageSizeOptions( availableImageSizes, __ );
-
-	const calculateCarouselHeight = () => {
-		const container = galleryRef.current;
-		const width = container?.offsetWidth || containerWidth || 0;
-
-		const isMobile = width <= 768;
-		const [ w, h ] =
-			isMobile && attributes.verticalOnMobile ? [ 2, 3 ] : [ 3, 2 ];
-		const ratio = h / w;
-
-		return Math.round( width * 0.85 * ratio );
-	};
 
 	const onSelectImages = async ( media ) => {
 		if ( ! media || media.length === 0 ) {
@@ -290,23 +286,43 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 		[ innerRef ]
 	);
 
-	// Calculate and set carousel height based on aspect ratio and container width
 	const [ containerWidth, setContainerWidth ] = useState( 0 );
-	// Watch the carousel container width and update containerWidth
+
+	// The editor canvas can report a zero or transitional width while restoring
+	// blocks. Observe the outer block and remeasure as the canvas settles.
 	useEffect( () => {
-		if ( ! galleryRef.current ) {
+		const gallery = galleryRef.current;
+		if ( ! gallery ) {
 			return;
 		}
 
-		const observer = new ResizeObserver( ( [ entry ] ) => {
-			setContainerWidth( entry.contentRect.width );
-		} );
+		const observedElement = gallery.parentElement || gallery;
+		const measureWidth = () => {
+			const width = gallery.offsetWidth || observedElement.offsetWidth;
+			if ( Number.isFinite( width ) && width > 0 ) {
+				setContainerWidth( width );
+			}
+		};
+		const observer = new ResizeObserver( measureWidth );
+		const animationFrame = requestAnimationFrame( measureWidth );
+		const settleTimeouts = [ 100, 300, 750 ].map( ( delay ) =>
+			setTimeout( measureWidth, delay )
+		);
 
-		observer.observe( galleryRef.current );
+		observer.observe( observedElement );
 
-		return () => observer.disconnect();
+		return () => {
+			observer.disconnect();
+			cancelAnimationFrame( animationFrame );
+			settleTimeouts.forEach( clearTimeout );
+		};
 	}, [ innerBlocks.length, isLoading, attributes.align ] );
+
 	useEffect( () => {
+		if ( ! Number.isFinite( containerWidth ) || containerWidth <= 0 ) {
+			return;
+		}
+
 		const isMobile = containerWidth <= 768;
 		const [ w, h ] =
 			isMobile && attributes.verticalOnMobile ? [ 2, 3 ] : [ 3, 2 ];
@@ -324,30 +340,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 			}, 100 );
 			return () => clearTimeout( timeout );
 		}
-	}, [ containerWidth ] );
-
-	// Recalculate when block alignment changes (normal → wide → full)
-	useEffect( () => {
-		// Run even when align is undefined (normal width)
-		const runRecalc = () => {
-			const newHeight = calculateCarouselHeight();
-			const currentAlign = attributes.align || 'normal';
-
-			if (
-				! isNaN( newHeight ) &&
-				newHeight !== attributes.carouselHeight
-			) {
-				setAttributes( { carouselHeight: newHeight } );
-			}
-		};
-
-		// Delay until after DOM updates so wrapper width is correct
-		const raf = requestAnimationFrame( () => {
-			setTimeout( runRecalc, 0 );
-		} );
-
-		return () => cancelAnimationFrame( raf );
-	}, [ attributes.align ] );
+	}, [ containerWidth, attributes.verticalOnMobile ] );
 
 	// Determine if this block or one of its children is selected
 	const isBlockOrChildSelected = useSelect(
@@ -707,52 +700,18 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 						__next40pxDefaultSize
 					/>
 					{ applyFilters(
+						'folioBlocks.carouselGallery.responsiveGapControl',
+						imageProFeatureNotice( 'responsiveGaps' ),
+						{ attributes, setAttributes }
+					) }
+					{ applyFilters(
 						'folioBlocks.carouselGallery.enableAutoplayToggle',
-						<div style={ { marginBottom: '8px' } }>
-							<Notice status="info" isDismissible={ false }>
-								<strong>
-									{ __( 'Enable Autoplay', 'folioblocks' ) }
-								</strong>
-								<br />
-								{ __(
-									'This is a premium feature. Unlock all features:',
-									'folioblocks'
-								) }{ ' ' }
-								<a
-									href={ checkoutUrl }
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									{ __( 'Upgrade to Pro', 'folioblocks' ) }
-								</a>
-							</Notice>
-						</div>,
+						imageProFeatureNotice( 'carouselPlayback' ),
 						{ attributes, setAttributes }
 					) }
 					{ applyFilters(
 						'folioBlocks.carouselGallery.showControlsToggle',
-						<div style={ { marginBottom: '8px' } }>
-							<Notice status="info" isDismissible={ false }>
-								<strong>
-									{ __(
-										'Enable Carousel Controls',
-										'folioblocks'
-									) }
-								</strong>
-								<br />
-								{ __(
-									'This is a premium feature. Unlock all features:',
-									'folioblocks'
-								) }{ ' ' }
-								<a
-									href={ checkoutUrl }
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									{ __( 'Upgrade to Pro', 'folioblocks' ) }
-								</a>
-							</Notice>
-						</div>,
+						null,
 						{ attributes, setAttributes }
 					) }
 				</PanelBody>
@@ -773,25 +732,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 					/>
 					{ applyFilters(
 						'folioBlocks.carouselGallery.imageClickActionNotice',
-						<div style={ { marginBottom: '8px' } }>
-							<Notice status="info" isDismissible={ false }>
-								<strong>
-									{ __( 'Custom Image Linking', 'folioblocks' ) }
-								</strong>
-								<br />
-								{ __(
-									'This is a premium feature. Unlock all features:',
-									'folioblocks'
-								) }{ ' ' }
-								<a
-									href={ checkoutUrl }
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									{ __( 'Upgrade to Pro', 'folioblocks' ) }
-								</a>
-							</Notice>
-						</div>,
+						imageProFeatureNotice( 'clickActions' ),
 						{
 							attributes,
 							setAttributes,
@@ -835,25 +776,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 					>
 						{ applyFilters(
 							'folioBlocks.carouselGallery.onHoverTitleToggle',
-							<div style={ { marginBottom: '8px' } }>
-								<Notice status="info" isDismissible={ false }>
-									<strong>
-										{ __( 'Gallery Hover Settings', 'folioblocks' ) }
-									</strong>
-									<br />
-									{ __(
-										'This is a premium feature. Unlock all features:',
-										'folioblocks'
-									) }{ ' ' }
-									<a
-										href={ checkoutUrl }
-										target="_blank"
-										rel="noopener noreferrer"
-									>
-										{ __( 'Upgrade to Pro', 'folioblocks' ) }
-									</a>
-								</Notice>
-							</div>,
+							imageProFeatureNotice( 'hoverSettings' ),
 							{ attributes, setAttributes }
 						) }
 					</PanelBody>
@@ -861,84 +784,19 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 			<InspectorControls group="advanced">
 				{ applyFilters(
 					'folioBlocks.carouselGallery.disableRightClickToggle',
-					<div style={ { marginBottom: '8px' } }>
-						<Notice status="info" isDismissible={ false }>
-							<strong>
-								{ __( 'Disable Right-Click', 'folioblocks' ) }
-							</strong>
-							<br />
-							{ __(
-								'This is a premium feature. Unlock all features:',
-								'folioblocks'
-							) }{ ' ' }
-							<a
-								href={ checkoutUrl }
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								{ __( 'Upgrade to Pro', 'folioblocks' ) }
-							</a>
-						</Notice>
-					</div>,
+					imageProFeatureNotice( 'protectionPerformance' ),
 					{ attributes, setAttributes }
 				) }
 				{ applyFilters(
 					'folioBlocks.carouselGallery.lazyLoadToggle',
-					<div style={ { marginBottom: '8px' } }>
-						<Notice status="info" isDismissible={ false }>
-							<strong>
-								{ __(
-									'Enable Lazy Load of Images',
-									'folioblocks'
-								) }
-							</strong>
-							<br />
-							{ __(
-								'This is a premium feature. Unlock all features:',
-								'folioblocks'
-							) }{ ' ' }
-							<a
-								href={ checkoutUrl }
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								{ __( 'Upgrade to Pro', 'folioblocks' ) }
-							</a>
-						</Notice>
-					</div>,
+					null,
 					{ attributes, setAttributes }
 				) }
 			</InspectorControls>
 			<InspectorControls group="styles">
 				{ applyFilters(
 					'folioBlocks.carouselGallery.controlStyleSettings',
-					<PanelBody
-						title={ __( 'Carousel Styles', 'folioblocks' ) }
-						initialOpen={ true }
-					>
-						<div style={ { marginBottom: '8px' } }>
-							<Notice status="info" isDismissible={ false }>
-								<strong>
-									{ __(
-										'Carousel Control Styles',
-										'folioblocks'
-									) }
-								</strong>
-								<br />
-								{ __(
-									'This is a premium feature. Unlock all features:',
-									'folioblocks'
-								) }{ ' ' }
-								<a
-									href={ checkoutUrl }
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									{ __( 'Upgrade to Pro', 'folioblocks' ) }
-								</a>
-							</Notice>
-						</div>
-					</PanelBody>,
+					<PanelBody title={ __( 'Carousel Control Styles', 'folioblocks' ) } initialOpen={ true }>{ imageProFeatureNotice( 'carouselControls' ) }</PanelBody>,
 					{ attributes, setAttributes }
 				) }
 				<PanelBody
@@ -947,28 +805,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 				>
 					{ applyFilters(
 						'folioBlocks.carouselGallery.imageStyles',
-						<div style={ { marginBottom: '8px' } }>
-							<Notice status="info" isDismissible={ false }>
-								<strong>
-									{ __(
-										'Enable Image Styles',
-										'folioblocks'
-									) }
-								</strong>
-								<br />
-								{ __(
-									'This is a premium feature. Unlock all features:',
-									'folioblocks'
-								) }{ ' ' }
-								<a
-									href={ checkoutUrl }
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									{ __( 'Upgrade to Pro', 'folioblocks' ) }
-								</a>
-							</Notice>
-						</div>,
+						imageProFeatureNotice( 'imageStyles' ),
 						{ attributes, setAttributes }
 					) }
 				</PanelBody>

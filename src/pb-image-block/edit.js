@@ -13,7 +13,6 @@ import {
 import { useSelect } from '@wordpress/data';
 import {
 	PanelBody,
-	Notice,
 	ToggleControl,
 	TextareaControl,
 	TextControl,
@@ -36,6 +35,8 @@ import {
 	hasStoredExifAttributes,
 } from '../pb-helpers/exifMetadata';
 import { getImageSizeOptions } from '../pb-helpers/imageSizeOptions';
+import { imageProFeatureNotice } from '../pb-helpers/imageProFeatureNotices';
+import { getShadowStyleClass } from '../pb-helpers/ImageStyleControl';
 import './editor.scss';
 
 const getImageClickAction = ( {
@@ -314,12 +315,21 @@ export default function Edit( {
 		'folioBlocks/linkIconBgColor': contextLinkIconBgColor,
 	} = context || {};
 
-	const checkoutUrl =
-		window.folioBlocksData?.checkoutUrl ||
-		'https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks&utm_medium=image-block&utm_campaign=upgrade';
 	const isInsideGallery = Object.keys( context || {} ).some( ( key ) =>
 		key.startsWith( 'folioBlocks/' )
 	);
+	const galleryOverridesEnabled =
+		applyFilters( 'folioBlocks.imageBlock.galleryOverridesEnabled', false );
+	const overrideGalleryClickSettings =
+		isInsideGallery &&
+		galleryOverridesEnabled &&
+		!! attributes.overrideGalleryClickSettings;
+	const overrideGalleryHoverSettings =
+		isInsideGallery &&
+		galleryOverridesEnabled &&
+		!! attributes.overrideGalleryHoverSettings;
+	const clickContext = overrideGalleryClickSettings ? {} : context || {};
+	const hoverContext = overrideGalleryHoverSettings ? {} : context || {};
 	const imageSizeAttr = attributes.imageSize || 'large';
 	const effectiveResolution = isInsideGallery
 		? context[ 'folioBlocks/resolution' ] || imageSizeAttr
@@ -370,44 +380,46 @@ export default function Edit( {
 			: undefined,
 	};
 
-	const effectiveDropShadow = isInsideGallery
-		? context[ 'folioBlocks/dropShadow' ]
-		: dropShadow;
+	const shadowStyleClass = getShadowStyleClass(
+		isInsideGallery
+			? context[ 'folioBlocks/shadowStyle' ]
+			: attributes.shadowStyle,
+		isInsideGallery ? context[ 'folioBlocks/dropShadow' ] : dropShadow
+	);
 
-	const ctxHoverStyle = context?.[ 'folioBlocks/onHoverStyle' ];
+	const ctxHoverStyle = hoverContext?.[ 'folioBlocks/onHoverStyle' ];
 	const effectiveOnHoverStyle =
 		ctxHoverStyle ?? attributes.onHoverStyle ?? 'fade-overlay';
-	const overlayBgColor = isInsideGallery
-		? context?.[ 'folioBlocks/overlayBgColor' ] ?? ''
+	const overlayBgColor = isInsideGallery && ! overrideGalleryHoverSettings
+		? hoverContext?.[ 'folioBlocks/overlayBgColor' ] ?? ''
 		: attributes.overlayBgColor ?? '';
-	const overlayTextColor = isInsideGallery
-		? context?.[ 'folioBlocks/overlayTextColor' ] ?? ''
+	const overlayTextColor = isInsideGallery && ! overrideGalleryHoverSettings
+		? hoverContext?.[ 'folioBlocks/overlayTextColor' ] ?? ''
 		: attributes.overlayTextColor ?? '';
-	const chipOverlayBgColor = isInsideGallery
-		? context?.[ 'folioBlocks/chipOverlayBgColor' ] ?? ''
+	const chipOverlayBgColor = isInsideGallery && ! overrideGalleryHoverSettings
+		? hoverContext?.[ 'folioBlocks/chipOverlayBgColor' ] ?? ''
 		: attributes.chipOverlayBgColor ?? '';
-	const chipOverlayTextColor = isInsideGallery
-		? context?.[ 'folioBlocks/chipOverlayTextColor' ] ?? ''
+	const chipOverlayTextColor = isInsideGallery && ! overrideGalleryHoverSettings
+		? hoverContext?.[ 'folioBlocks/chipOverlayTextColor' ] ?? ''
 		: attributes.chipOverlayTextColor ?? '';
-	const effectiveHoverTitle = isInsideGallery
-		? context[ 'folioBlocks/onHoverTitle' ] ?? false
+	const effectiveHoverTitle = isInsideGallery && ! overrideGalleryHoverSettings
+		? hoverContext[ 'folioBlocks/onHoverTitle' ] ?? false
 		: attributes.showTitleOnHover ??
 		  attributes.hoverTitle ??
 		  attributes.onHoverTitle ??
 		  false;
-	const effectiveOverlayContent =
-		context?.[ 'folioBlocks/overlayContent' ] ??
+	const configuredOverlayContent =
+		hoverContext?.[ 'folioBlocks/overlayContent' ] ??
 		attributes.overlayContent ??
 		( (
-			context?.[ 'folioBlocks/wooProductPriceOnHover' ] ??
+			hoverContext?.[ 'folioBlocks/wooProductPriceOnHover' ] ??
 			attributes.wooProductPriceOnHover
 		)
 			? 'product'
 			: 'title' );
-
 	// Compute overlay state and matching CSS class for the chosen variant
 	const overlayEnabled =
-		( context?.[ 'folioBlocks/onHoverTitle' ] ??
+		( hoverContext?.[ 'folioBlocks/onHoverTitle' ] ??
 			attributes.onHoverTitle ??
 			effectiveHoverTitle ) === true;
 
@@ -441,30 +453,38 @@ export default function Edit( {
 			  }
 			: {};
 
-	const effectiveDownloadEnabled = isInsideGallery
+	const effectiveDownloadEnabled =
+		isInsideGallery && ! overrideGalleryClickSettings
 		? contextEnableDownload
 		: enableDownload;
-	const effectiveDownloadOnHover = isInsideGallery
+	const effectiveDownloadOnHover =
+		isInsideGallery && ! overrideGalleryClickSettings
 		? contextDownloadOnHover
 		: downloadOnHover;
 
 	// Icon colors (gallery context wins when inside a gallery; attributes used when standalone)
-	const effectiveDownloadIconColor = isInsideGallery
+	const effectiveDownloadIconColor =
+		isInsideGallery && ! overrideGalleryClickSettings
 		? contextDownloadIconColor ?? ''
 		: downloadIconColor ?? '';
-	const effectiveDownloadIconBgColor = isInsideGallery
+	const effectiveDownloadIconBgColor =
+		isInsideGallery && ! overrideGalleryClickSettings
 		? contextDownloadIconBgColor ?? ''
 		: downloadIconBgColor ?? '';
-	const effectiveCartIconColor = isInsideGallery
+	const effectiveCartIconColor =
+		isInsideGallery && ! overrideGalleryClickSettings
 		? contextCartIconColor ?? ''
 		: cartIconColor ?? '';
-	const effectiveCartIconBgColor = isInsideGallery
+	const effectiveCartIconBgColor =
+		isInsideGallery && ! overrideGalleryClickSettings
 		? contextCartIconBgColor ?? ''
 		: cartIconBgColor ?? '';
-	const effectiveLinkIconColor = isInsideGallery
+	const effectiveLinkIconColor =
+		isInsideGallery && ! overrideGalleryClickSettings
 		? contextLinkIconColor ?? ''
 		: attributes.linkIconColor ?? '';
-	const effectiveLinkIconBgColor = isInsideGallery
+	const effectiveLinkIconBgColor =
+		isInsideGallery && ! overrideGalleryClickSettings
 		? contextLinkIconBgColor ?? ''
 		: attributes.linkIconBgColor ?? '';
 
@@ -499,18 +519,46 @@ export default function Edit( {
 		context?.[ 'folioBlocks/hasWooCommerce' ] ??
 		window.folioBlocksData?.hasWooCommerce ??
 		false;
-	const enableWooCommerce =
-		context?.[ 'folioBlocks/enableWooCommerce' ] ??
-		!! attributes.enableWooCommerce;
-	const effectiveWooActive = hasWooCommerce && enableWooCommerce;
 	const contextImageClickAction =
+		clickContext?.[ 'folioBlocks/imageClickAction' ] || '';
+	const configuredImageClickAction =
+		contextImageClickAction || attributes.imageClickAction || '';
+	const enableWooCommerce =
+		clickContext?.[ 'folioBlocks/enableWooCommerce' ] ??
+		!! attributes.enableWooCommerce;
+	const effectiveWooActive =
+		hasWooCommerce &&
+		enableWooCommerce &&
+		( ! configuredImageClickAction ||
+			configuredImageClickAction === 'woocommerce' );
+	const galleryImageClickAction =
 		context?.[ 'folioBlocks/imageClickAction' ] || '';
+	const galleryHoverWooActive =
+		hasWooCommerce &&
+		!! context?.[ 'folioBlocks/enableWooCommerce' ] &&
+		( ! galleryImageClickAction ||
+			galleryImageClickAction === 'woocommerce' );
+	const effectiveHoverWooActive = overrideGalleryHoverSettings
+		? effectiveWooActive
+		: galleryHoverWooActive;
+	const effectiveOverlayContent =
+		configuredOverlayContent === 'product' && ! effectiveHoverWooActive
+			? 'title'
+			: configuredOverlayContent;
+	const hasHoverOverlayContent =
+		effectiveOverlayContent === 'product'
+			? effectiveHoverWooActive && Number( attributes.wooProductId ) > 0
+			: effectiveOverlayContent === 'caption'
+			? !! caption?.trim()
+			: effectiveOverlayContent === 'exif'
+			? true
+			: !! title?.trim();
 	const effectiveImageClickTarget =
-		context?.[ 'folioBlocks/imageClickTarget' ] ||
+		clickContext?.[ 'folioBlocks/imageClickTarget' ] ||
 		attributes.imageClickTarget ||
 		'icon';
 	const effectiveLinkIconDisplay =
-		context?.[ 'folioBlocks/linkIconDisplay' ] ||
+		clickContext?.[ 'folioBlocks/linkIconDisplay' ] ||
 		attributes.linkIconDisplay ||
 		'hover';
 	// Alias used by premium controls (keep naming consistent with other galleries)
@@ -527,6 +575,7 @@ export default function Edit( {
 	// OR (B) Woo is effectively active (so the product link control can render)
 	const showImageClickPanel =
 		! isInsideGallery ||
+		galleryOverridesEnabled ||
 		!! effectiveWooActive ||
 		contextImageClickAction === 'custom_url' ||
 		contextImageClickAction === 'page_post';
@@ -647,10 +696,12 @@ export default function Edit( {
 	const shouldShowImageBlockSettingsPanel =
 		! shouldUseContentInspector || ! isInsideGallery;
 	const imageClickAction = getImageClickAction( {
-		lightbox,
+		lightbox:
+			clickContext?.[ 'folioBlocks/lightbox' ] ??
+			lightbox,
 		enableDownload: effectiveDownloadEnabled,
-		enableWooCommerce: effectiveWooActive,
-		imageClickAction: isInsideGallery
+		enableWooCommerce: enableWooCommerce && hasWooCommerce,
+		imageClickAction: isInsideGallery && ! overrideGalleryClickSettings
 			? contextImageClickAction
 			: attributes.imageClickAction,
 	} );
@@ -671,23 +722,25 @@ export default function Edit( {
 		? imageClickAction
 		: 'none';
 	const shouldShowCustomUrlControls =
-		activeImageClickAction === 'custom_url' &&
-		( ! isInsideGallery || contextImageClickAction === 'custom_url' );
+		activeImageClickAction === 'custom_url';
 	const shouldShowPagePostControls =
-		activeImageClickAction === 'page_post' &&
-		( ! isInsideGallery || contextImageClickAction === 'page_post' );
+		activeImageClickAction === 'page_post';
 	const shouldShowWooProductToolbar =
 		src &&
 		activeImageClickAction === 'woocommerce' &&
-		!! effectiveWooActive;
+		!! hasWooCommerce;
 	const shouldShowLinkIcon =
 		( activeImageClickAction === 'custom_url' ||
 			activeImageClickAction === 'page_post' ) &&
-		effectiveImageClickTarget === 'icon';
+		effectiveLinkIconDisplay !== 'none';
 	const shouldShowDownloadIcon =
 		!! effectiveDownloadEnabled && effectiveImageClickTarget === 'icon';
 	const shouldShowWooIcon =
-		!! effectiveWooActive && effectiveImageClickTarget === 'icon';
+		activeImageClickAction === 'woocommerce' &&
+		!! effectiveWooActive &&
+		( clickContext?.[ 'folioBlocks/wooCartIconDisplay' ] ||
+			attributes.wooCartIconDisplay ||
+			'hover' ) !== 'none';
 
 	return (
 		<>
@@ -742,8 +795,13 @@ export default function Edit( {
 						{
 							attributes,
 							setAttributes,
-							isInsideGallery,
-							contextWooDefaultLinkAction,
+							isInsideGallery:
+								isInsideGallery &&
+								! overrideGalleryClickSettings,
+							contextWooDefaultLinkAction:
+								overrideGalleryClickSettings
+									? ''
+									: contextWooDefaultLinkAction,
 						}
 					) }
 				{ isInImageRow && ! isInImageStack && (
@@ -801,40 +859,37 @@ export default function Edit( {
 							/>
 						) }
 							{ ! shouldUseContentInspector && (
-								<ImageMetadataControls
-									alt={ alt }
-									title={ title }
-									caption={ caption }
-									setAttributes={ setAttributes }
-								/>
+								<>
+									<ImageMetadataControls
+										alt={ alt }
+										title={ title }
+										caption={ caption }
+										setAttributes={ setAttributes }
+									/>
+									{ applyFilters(
+										'folioBlocks.imageBlock.metadataSyncControl',
+										null,
+										{ attributes }
+									) }
+								</>
 							) }
 							{ ! isInsideGallery &&
 								applyFilters(
 									'folioBlocks.imageBlock.lazyLoadToggle',
-									<div style={ { marginBottom: '8px' } }>
-										<Notice status="info" isDismissible={ false }>
-											<strong>
-												{ __(
-													'Enable Lazy Load of Images',
-													'folioblocks'
-												) }
-											</strong>
-											<br />
-											{ __(
-												'This is a premium feature. Unlock all features:',
-												'folioblocks'
-											) }{ ' ' }
-											<a
-												href={ checkoutUrl }
-												target="_blank"
-												rel="noopener noreferrer"
-											>
-												{ __( 'Upgrade to Pro', 'folioblocks' ) }
-											</a>
-										</Notice>
-									</div>,
+									imageProFeatureNotice( 'protectionPerformance' ),
 									{ attributes, setAttributes }
 								) }
+						</PanelBody>
+					) }
+					{ isInsideGallery && ! galleryOverridesEnabled && (
+						<PanelBody
+							title={ __(
+								'Per-Image Gallery Overrides',
+								'folioblocks'
+							) }
+							initialOpen={ true }
+						>
+							{ imageProFeatureNotice( 'imageOverrides' ) }
 						</PanelBody>
 					) }
 					{ showImageClickPanel && (
@@ -842,7 +897,27 @@ export default function Edit( {
 							title={ __( 'Image Click Settings', 'folioblocks' ) }
 							initialOpen={ true }
 						>
-							{ ! isInsideGallery && (
+							{ isInsideGallery && galleryOverridesEnabled && (
+								<ToggleControl
+									label={ __(
+										'Override Gallery Click Settings',
+										'folioblocks'
+									) }
+									checked={ overrideGalleryClickSettings }
+									onChange={ ( value ) =>
+										setAttributes( {
+											overrideGalleryClickSettings: value,
+										} )
+									}
+									__nextHasNoMarginBottom
+									help={ __(
+										'Use click behavior configured specifically for this image.',
+										'folioblocks'
+									) }
+								/>
+							) }
+							{ ( ! isInsideGallery ||
+								overrideGalleryClickSettings ) && (
 								<>
 									<SelectControl
 										label={ __(
@@ -865,25 +940,7 @@ export default function Edit( {
 									/>
 									{ applyFilters(
 										'folioBlocks.imageBlock.imageClickActionNotice',
-										<div style={ { marginBottom: '8px' } }>
-											<Notice status="info" isDismissible={ false }>
-												<strong>
-													{ __( 'Custom Image Linking', 'folioblocks' ) }
-												</strong>
-												<br />
-												{ __(
-													'This is a premium feature. Unlock all features:',
-													'folioblocks'
-												) }{ ' ' }
-												<a
-													href={ checkoutUrl }
-													target="_blank"
-													rel="noopener noreferrer"
-												>
-													{ __( 'Upgrade to Pro', 'folioblocks' ) }
-												</a>
-											</Notice>
-										</div>,
+										imageProFeatureNotice( 'clickActions' ),
 										{
 											attributes,
 											setAttributes,
@@ -893,7 +950,7 @@ export default function Edit( {
 									) }
 								</>
 							) }
-							{ effectiveWooActive &&
+							{ hasWooCommerce &&
 								activeImageClickAction === 'woocommerce' &&
 								applyFilters(
 									'folioBlocks.imageBlock.wooProductLinkControl',
@@ -902,84 +959,125 @@ export default function Edit( {
 										attributes,
 										setAttributes,
 										effectiveWooActive,
-										isInsideGallery,
-										contextWooDefaultLinkAction,
+										isInsideGallery:
+											isInsideGallery &&
+											! overrideGalleryClickSettings,
+										contextWooDefaultLinkAction:
+											overrideGalleryClickSettings
+												? ''
+												: contextWooDefaultLinkAction,
 									}
 								) }
-							{ ! isInsideGallery &&
+							{ ( ! isInsideGallery ||
+								overrideGalleryClickSettings ) &&
 								activeImageClickAction === 'lightbox' &&
 								applyFilters(
 									'folioBlocks.imageBlock.lightboxControls',
 									null,
 									{ attributes, setAttributes }
 								) }
-							{ ! isInsideGallery &&
+							{ ( ! isInsideGallery ||
+								overrideGalleryClickSettings ) &&
 								activeImageClickAction === 'download' &&
 								applyFilters(
 									'folioBlocks.imageBlock.downloadControls',
 									null,
-									{ attributes, setAttributes, isInsideGallery }
+									{
+										attributes,
+										setAttributes,
+										isInsideGallery: false,
+									}
 								) }
-							{ ! isInsideGallery &&
+							{ ( ! isInsideGallery ||
+								overrideGalleryClickSettings ) &&
 								activeImageClickAction === 'woocommerce' &&
 								applyFilters(
 									'folioBlocks.imageBlock.wooCommerceControls',
 									null,
-									{ attributes, setAttributes, isInsideGallery }
+									{
+										attributes,
+										setAttributes,
+										isInsideGallery: false,
+									}
 								) }
 							{ shouldShowCustomUrlControls &&
 								applyFilters(
 									'folioBlocks.imageBlock.customUrlControls',
 									null,
-									{ attributes, setAttributes, isInsideGallery }
+									{
+										attributes,
+										setAttributes,
+										isInsideGallery:
+											isInsideGallery &&
+											! overrideGalleryClickSettings,
+									}
 								) }
 							{ shouldShowPagePostControls &&
 								applyFilters(
 									'folioBlocks.imageBlock.pagePostLinkControls',
 									null,
-									{ attributes, setAttributes, isInsideGallery }
+									{
+										attributes,
+										setAttributes,
+										isInsideGallery:
+											isInsideGallery &&
+											! overrideGalleryClickSettings,
+									}
 								) }
 							</PanelBody>
 						) }
-						{ applyFilters(
-							'folioBlocks.imageBlock.filterCategoryControl',
-							null,
-							{
-								attributes,
-								setAttributes,
-								filterCategories,
-								context,
-								isInsideGallery,
-							}
-						) }
-						{ ! isInsideGallery && (
+						{ ! shouldUseContentInspector &&
+							applyFilters(
+								'folioBlocks.imageBlock.filterCategoryControl',
+								null,
+								{
+									attributes,
+									setAttributes,
+									filterCategories,
+									context,
+									isInsideGallery,
+								}
+							) }
+						{ ( ! isInsideGallery || galleryOverridesEnabled ) && (
 							<PanelBody
 								title={ __( 'Image Hover Settings', 'folioblocks' ) }
 								initialOpen={ true }
 							>
-								{ applyFilters(
-									'folioBlocks.imageBlock.onHoverTitleToggle',
-									<div style={ { marginBottom: '8px' } }>
-										<Notice status="info" isDismissible={ false }>
-											<strong>
-												{ __( 'Image Hover Settings', 'folioblocks' ) }
-											</strong>
-											<br />
-											{ __(
-												'This is a premium feature. Unlock all features:',
-												'folioblocks'
-											) }{ ' ' }
-											<a
-												href={ checkoutUrl }
-												target="_blank"
-												rel="noopener noreferrer"
-											>
-												{ __( 'Upgrade to Pro', 'folioblocks' ) }
-											</a>
-										</Notice>
-									</div>,
-									{ attributes, setAttributes }
+								{ isInsideGallery && (
+									<ToggleControl
+										label={ __(
+											'Override Gallery Hover Settings',
+											'folioblocks'
+										) }
+										checked={ overrideGalleryHoverSettings }
+										onChange={ ( value ) =>
+											setAttributes( {
+												overrideGalleryHoverSettings: value,
+											} )
+										}
+										__nextHasNoMarginBottom
+										help={ __(
+											'Use hover behavior configured specifically for this image.',
+											'folioblocks'
+										) }
+									/>
 								) }
+								{ ( ! isInsideGallery ||
+									overrideGalleryHoverSettings ) &&
+									applyFilters(
+										'folioBlocks.imageBlock.onHoverTitleToggle',
+										imageProFeatureNotice( 'hoverSettings' ),
+										{
+											attributes: {
+												...attributes,
+												imageClickAction:
+													activeImageClickAction,
+												enableWooCommerce:
+													effectiveHoverWooActive,
+											},
+											setAttributes,
+										}
+									) }
 							</PanelBody>
 						) }
 					</InspectorControls>
@@ -1004,29 +1102,27 @@ export default function Edit( {
 									setAttributes={ setAttributes }
 								/>
 								{ applyFilters(
+									'folioBlocks.imageBlock.metadataSyncControl',
+									null,
+									{ attributes }
+								) }
+								{ applyFilters(
 									'folioBlocks.imageBlock.cameraMetadataControls',
-									<div style={ { marginBottom: '8px' } }>
-										<Notice status="info" isDismissible={ false }>
-											<strong>
-												{ __( 'EXIF Data', 'folioblocks' ) }
-											</strong>
-											<br />
-											{ __(
-												'This is a premium feature. Unlock all features:',
-												'folioblocks'
-											) }{ ' ' }
-											<a
-												href={ checkoutUrl }
-												target="_blank"
-												rel="noopener noreferrer"
-											>
-												{ __( 'Upgrade to Pro', 'folioblocks' ) }
-											</a>
-										</Notice>
-									</div>,
+									imageProFeatureNotice( 'exif' ),
 									{ attributes, setAttributes }
 								) }
 							</PanelBody>
+							{ applyFilters(
+								'folioBlocks.imageBlock.filterCategoryControl',
+								null,
+								{
+									attributes,
+									setAttributes,
+									filterCategories,
+									context,
+									isInsideGallery,
+								}
+							) }
 						</InspectorControls>
 					) }
 					<InspectorControls group="styles">
@@ -1041,8 +1137,9 @@ export default function Edit( {
 					{
 						attributes,
 						setAttributes,
-						isInsideGallery,
-						context,
+						isInsideGallery:
+							isInsideGallery && ! overrideGalleryClickSettings,
+						context: clickContext,
 					}
 				) }
 				{ applyFilters(
@@ -1051,8 +1148,9 @@ export default function Edit( {
 					{
 						attributes,
 						setAttributes,
-						isInsideGallery,
-						context,
+						isInsideGallery:
+							isInsideGallery && ! overrideGalleryHoverSettings,
+						context: hoverContext,
 					}
 				) }
 			</InspectorControls>
@@ -1063,7 +1161,7 @@ export default function Edit( {
 							className={ [
 								'pb-image-block',
 								overlayEnabled ? hoverVariantClass : '',
-								effectiveDropShadow ? 'dropshadow' : '',
+								shadowStyleClass,
 								shouldShowDownloadIcon ? 'has-download' : '',
 							]
 								.filter( Boolean )
@@ -1093,16 +1191,7 @@ export default function Edit( {
 										className="pb-image-block-img"
 									/>
 										{ effectiveHoverTitle &&
-											( Number( attributes.wooProductId ) >
-												0 ||
-												( title &&
-													title.trim() !== '' ) ||
-												( effectiveOverlayContent ===
-													'caption' &&
-													caption &&
-													caption.trim() !== '' ) ||
-												effectiveOverlayContent ===
-													'exif' ) && (
+											hasHoverOverlayContent && (
 											<div className="pb-image-block-title-container">
 												<figcaption className="pb-image-block-title">
 													{ ( () => {
@@ -1113,8 +1202,9 @@ export default function Edit( {
 																{
 																	attributes,
 																	setAttributes,
-																	effectiveWooActive,
-																	context,
+																	effectiveWooActive:
+																		effectiveHoverWooActive,
+																	context: hoverContext,
 																	title,
 																	caption,
 																	effectiveOverlayContent,
@@ -1151,8 +1241,10 @@ export default function Edit( {
 											effectiveDownloadOnHover,
 											sizes,
 											src,
-											context,
-											isInsideGallery,
+												context: clickContext,
+												isInsideGallery:
+													isInsideGallery &&
+													! overrideGalleryClickSettings,
 											downloadIconStyleVars,
 											effectiveDownloadIconColor,
 											effectiveDownloadIconBgColor,
@@ -1166,8 +1258,10 @@ export default function Edit( {
 											setAttributes,
 												effectiveWooActive:
 													shouldShowWooIcon,
-											context,
-											isInsideGallery,
+												context: clickContext,
+												isInsideGallery:
+													isInsideGallery &&
+													! overrideGalleryClickSettings,
 											cartIconStyleVars,
 											effectiveCartIconColor,
 											effectiveCartIconBgColor,
@@ -1196,7 +1290,7 @@ export default function Edit( {
 						className={ [
 							'pb-image-block',
 							overlayEnabled ? hoverVariantClass : '',
-							effectiveDropShadow ? 'dropshadow' : '',
+							shadowStyleClass,
 							shouldShowDownloadIcon ? 'has-download' : '',
 						]
 							.filter( Boolean )
@@ -1223,14 +1317,7 @@ export default function Edit( {
 									className="pb-image-block-img"
 								/>
 									{ effectiveHoverTitle &&
-										( Number( attributes.wooProductId ) > 0 ||
-											( title && title.trim() !== '' ) ||
-											( effectiveOverlayContent ===
-												'caption' &&
-												caption &&
-												caption.trim() !== '' ) ||
-											effectiveOverlayContent ===
-												'exif' ) && (
+										hasHoverOverlayContent && (
 										<div className="pb-image-block-title-container">
 											<figcaption className="pb-image-block-title">
 												{ ( () => {
@@ -1241,8 +1328,9 @@ export default function Edit( {
 															{
 																attributes,
 																setAttributes,
-																effectiveWooActive,
-																context,
+																effectiveWooActive:
+																	effectiveHoverWooActive,
+																context: hoverContext,
 																title,
 																caption,
 																effectiveOverlayContent,
@@ -1278,8 +1366,10 @@ export default function Edit( {
 										effectiveDownloadOnHover,
 										sizes,
 										src,
-										context,
-										isInsideGallery,
+										context: clickContext,
+										isInsideGallery:
+											isInsideGallery &&
+											! overrideGalleryClickSettings,
 										downloadIconStyleVars,
 										effectiveDownloadIconColor,
 										effectiveDownloadIconBgColor,
@@ -1292,8 +1382,10 @@ export default function Edit( {
 										attributes,
 										setAttributes,
 										effectiveWooActive: shouldShowWooIcon,
-										context,
-										isInsideGallery,
+										context: clickContext,
+										isInsideGallery:
+											isInsideGallery &&
+											! overrideGalleryClickSettings,
 										cartIconStyleVars,
 										effectiveCartIconColor,
 										effectiveCartIconBgColor,

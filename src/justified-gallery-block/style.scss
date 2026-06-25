@@ -4,11 +4,27 @@
  **/
 
 .wp-block-folioblocks-justified-gallery-block {
+	--pb-gallery-gap-active: var(--pb-gallery-gap-desktop, 10px);
+
 	opacity: 1;
 	transition: opacity 0.3s ease;
 
 	&.is-loading {
 		opacity: 0;
+	}
+}
+
+@media (max-width: 1024px) {
+
+	.wp-block-folioblocks-justified-gallery-block {
+		--pb-gallery-gap-active: var(--pb-gallery-gap-tablet, 10px);
+	}
+}
+
+@media (max-width: 600px) {
+
+	.wp-block-folioblocks-justified-gallery-block {
+		--pb-gallery-gap-active: var(--pb-gallery-gap-mobile, 10px);
 	}
 }
 
@@ -99,7 +115,7 @@
 		--pb-filter-decoration-inactive: none;
 	}
 
-	/* If the chosen decoration is line-through, decorate ONLY the non-active items. */
+	/* If line-through is chosen, decorate only the non-active items. */
 	&[style*="--pb-filter-text-decoration: line-through"] {
 		--pb-filter-decoration-active: none;
 		--pb-filter-decoration-inactive: line-through;

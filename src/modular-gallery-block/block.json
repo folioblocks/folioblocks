@@ -2,7 +2,7 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
 	"name": "folioblocks/modular-gallery-block",
-	"version": "1.2.1",
+	"version": "1.4",
 	"title": "Modular Gallery",
 	"category": "folioblocks",
 	"icon": "<svg viewBox=\"0 0 1247.24 1247.24\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-hidden=\"true\"><g id=\"Layer_1-2\"><g><path d=\"M1141.13,83.62h-599.75c-12.42,0-22.49,10.07-22.49,22.49v279.01c0,12.42,10.07,22.49,22.49,22.49h599.74c12.42,0,22.49-10.07,22.49-22.49V106.11c.01-12.42-10.06-22.49-22.48-22.49ZM1115.45,359.45h-548.39v-227.66h548.39v227.66Z\"/><path d=\"M1141.13,461.62h-408.62c-12.42,0-22.49,10.07-22.49,22.49v279.01c0,12.42,10.07,22.49,22.49,22.49h408.62c12.42,0,22.49-10.07,22.49-22.49v-279.01c0-12.42-10.07-22.49-22.49-22.49ZM1115.45,737.45h-357.27v-227.66h357.27v227.66Z\"/><path d=\"M1141.13,839.62h-408.62c-12.42,0-22.49,10.07-22.49,22.49v279.01c0,12.42,10.07,22.49,22.49,22.49h408.62c12.42,0,22.49-10.07,22.49-22.49v-279.01c0-12.42-10.07-22.49-22.49-22.49ZM1115.45,1115.45h-357.27v-227.66h357.27v227.66Z\"/><path d=\"M633.99,461.62H106.11c-12.42,0-22.49,10.07-22.49,22.49v657.01c0,12.42,10.07,22.49,22.49,22.49h527.88c12.42,0,22.49-10.07,22.49-22.49V484.11c0-12.42-10.07-22.49-22.49-22.49ZM608.32,1115.45H131.79V509.79h476.53v605.66Z\"/><path d=\"M106.11,407.62h336.76c12.42,0,22.49-10.07,22.49-22.49V106.11c.01-12.42-10.07-22.49-22.49-22.49H106.11c-12.42,0-22.49,10.07-22.49,22.49v279.01c0,12.42,10.07,22.49,22.49,22.49ZM131.79,131.79h285.41v227.66H131.79v-227.66Z\"/></g></g></svg>",
@@ -53,6 +53,11 @@
 			"type": "boolean",
 			"default": false
 		},
+		"shadowStyle": {
+			"type": "string",
+			"enum": ["", "none", "subtle", "soft", "elevated", "dramatic"],
+			"default": ""
+		},
 		"borderWidth": {
 			"type": "number",
 			"default": 0
@@ -64,6 +69,18 @@
 		"borderColor": {
 			"type": "string",
 			"default": "#ffffff"
+		},
+		"gap": {
+			"type": "number",
+			"default": 10
+		},
+		"tabletGap": {
+			"type": "number",
+			"default": 10
+		},
+		"mobileGap": {
+			"type": "number",
+			"default": 10
 		},
 		"noGap": {
 			"type": "boolean",
@@ -85,6 +102,11 @@
 			"type": "boolean",
 			"default": false
 		},
+		"lightboxTheme": {
+			"type": "string",
+			"enum": [ "dark", "light" ],
+			"default": "dark"
+		},
 		"lightboxContent": {
 			"type": "string",
 			"enum": [
@@ -92,7 +114,11 @@
 				"title",
 				"caption",
 					"product",
-					"exif"
+					"exif",
+					"title_exif",
+					"caption_exif",
+					"title_caption",
+					"title_caption_exif"
 			],
 			"default": ""
 		},
@@ -158,6 +184,7 @@
 		"wooCartIconDisplay": {
 			"type": "string",
 			"enum": [
+				"none",
 				"hover",
 				"always"
 			],
@@ -224,6 +251,7 @@
 		"linkIconDisplay": {
 			"type": "string",
 			"enum": [
+				"none",
 				"hover",
 				"always"
 			],
@@ -246,9 +274,11 @@
 		"folioBlocks/borderWidth": "borderWidth",
 		"folioBlocks/borderRadius": "borderRadius",
 		"folioBlocks/dropShadow": "dropShadow",
+		"folioBlocks/shadowStyle": "shadowStyle",
 		"folioBlocks/noGap": "noGap",
 		"folioBlocks/lightbox": "lightbox",
 		"folioBlocks/lightboxCaption": "lightboxCaption",
+		"folioBlocks/lightboxTheme": "lightboxTheme",
 		"folioBlocks/lightboxContent": "lightboxContent",
 		"folioBlocks/hideUnknownExifFields": "hideUnknownExifFields",
 		"folioBlocks/onHoverTitle": "onHoverTitle",

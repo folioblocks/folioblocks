@@ -12,7 +12,6 @@ import {
 } from '@wordpress/block-editor';
 import {
 	PanelBody,
-	Notice,
 	SelectControl,
 	ToolbarGroup,
 	ToolbarButton,
@@ -32,6 +31,7 @@ import { decodeEntities } from '@wordpress/html-entities';
 import { IconFilmstripGallery, IconPBSpinner } from '../pb-helpers/icons';
 import { getExifAttributesFromMedia } from '../pb-helpers/exifMetadata';
 import { getImageSizeOptions } from '../pb-helpers/imageSizeOptions';
+import { imageProFeatureNotice } from '../pb-helpers/imageProFeatureNotices';
 import './editor.scss';
 
 const ALLOWED_BLOCKS = [ 'folioblocks/pb-image-block' ];
@@ -48,30 +48,47 @@ const apertureIcon = (
 	</svg>
 );
 
-const FilmstripExifOverlay = ( { attributes } ) => {
+const FilmstripExifOverlay = ( { attributes, hideUnknownFields = false } ) => {
 	const unknownValue = __( 'Unknown', 'folioblocks' );
+	const isUnknownValue = ( value ) => {
+		const normalizedValue = String( value || '' )
+			.trim()
+			.toLowerCase();
+		return (
+			! normalizedValue ||
+			normalizedValue === 'unknown' ||
+			normalizedValue === unknownValue.trim().toLowerCase()
+		);
+	};
 	const fields = [
-		{ icon: capturePhoto, value: attributes.exifCamera || unknownValue },
-		{ icon: aspectRatio, value: attributes.exifFocalLength || unknownValue },
-		{ icon: timeToRead, value: attributes.exifShutterSpeed || unknownValue },
-		{ icon: apertureIcon, value: attributes.exifAperture || unknownValue },
-		{ icon: 'iso', value: attributes.exifIso || unknownValue },
-	];
+		{ icon: capturePhoto, value: attributes.exifCamera },
+		{ icon: aspectRatio, value: attributes.exifFocalLength },
+		{ icon: timeToRead, value: attributes.exifShutterSpeed },
+		{ icon: apertureIcon, value: attributes.exifAperture },
+		{ icon: 'iso', value: attributes.exifIso },
+	]
+		.filter(
+			( field ) => ! hideUnknownFields || ! isUnknownValue( field.value )
+		)
+		.map( ( field ) => ( {
+			...field,
+			value: field.value || unknownValue,
+		} ) );
 
 	return (
-		<div className="pb-filmstrip-gallery-exif">
+		<div className="pb-hover-exif">
 			{ fields.map( ( field, index ) => (
-				<span className="pb-filmstrip-gallery-exif__item" key={ index }>
-					<span className="pb-filmstrip-gallery-exif__icon">
+				<span className="pb-hover-exif__item" key={ index }>
+					<span className="pb-hover-exif__icon">
 						{ field.icon === 'iso' ? (
-							<span className="pb-filmstrip-gallery-exif-icon__iso">
+							<span className="pb-hover-exif-icon__iso">
 								ISO
 							</span>
 						) : (
 							<Icon icon={ field.icon } size={ 18 } />
 						) }
 					</span>
-					<span className="pb-filmstrip-gallery-exif__value">
+					<span className="pb-hover-exif__value">
 						{ field.value }
 					</span>
 				</span>
@@ -99,10 +116,19 @@ const getImageClickAction = ( {
 
 const getImageClickAttributes = ( value ) => {
 	switch ( value ) {
+		case 'lightbox':
+			return {
+				imageClickAction: 'lightbox',
+				imageClickTarget: 'icon',
+				lightbox: true,
+				enableDownload: false,
+				enableWooCommerce: false,
+			};
 		case 'download':
 			return {
 				imageClickAction: 'download',
 				imageClickTarget: 'icon',
+				lightbox: false,
 				enableDownload: true,
 				enableWooCommerce: false,
 			};
@@ -110,12 +136,14 @@ const getImageClickAttributes = ( value ) => {
 			return {
 				imageClickAction: 'woocommerce',
 				imageClickTarget: 'icon',
+				lightbox: false,
 				enableDownload: false,
 				enableWooCommerce: true,
 			};
 		case 'media_file':
 			return {
 				imageClickAction: 'media_file',
+				lightbox: false,
 				enableDownload: false,
 				enableWooCommerce: false,
 			};
@@ -123,6 +151,7 @@ const getImageClickAttributes = ( value ) => {
 			return {
 				imageClickAction: 'custom_url',
 				imageClickTarget: 'icon',
+				lightbox: false,
 				enableDownload: false,
 				enableWooCommerce: false,
 			};
@@ -130,6 +159,7 @@ const getImageClickAttributes = ( value ) => {
 			return {
 				imageClickAction: 'page_post',
 				imageClickTarget: 'icon',
+				lightbox: false,
 				enableDownload: false,
 				enableWooCommerce: false,
 			};
@@ -137,34 +167,10 @@ const getImageClickAttributes = ( value ) => {
 		default:
 			return {
 				imageClickAction: 'none',
+				lightbox: false,
 				enableDownload: false,
 				enableWooCommerce: false,
 			};
-	}
-};
-
-const getImageClickHelp = ( value ) => {
-	switch ( value ) {
-		case 'woocommerce':
-			return __(
-				'Choose WooCommerce products from the individual Image Block settings.',
-				'folioblocks'
-			);
-		case 'custom_url':
-			return __(
-				'Add custom URLs from the individual Image Block settings.',
-				'folioblocks'
-			);
-		case 'page_post':
-			return __(
-				'Choose pages or posts from the individual Image Block settings.',
-				'folioblocks'
-			);
-		default:
-			return __(
-				'Choose what happens when visitors click gallery images.',
-				'folioblocks'
-			);
 	}
 };
 
@@ -184,9 +190,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		pauseOnHover = false,
 		enableFullscreen = false,
 	} = attributes;
-	const checkoutUrl =
-		window.folioBlocksData?.checkoutUrl ||
-		'https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks&utm_medium=filmstrip-gallery-block&utm_campaign=upgrade';
 
 	// Runtime override: if WooCommerce is not active, force Woo features off without mutating saved attributes
 	const hasWooCommerce = window.folioBlocksData?.hasWooCommerce ?? false;
@@ -201,6 +204,8 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	}, [ attributes.hasWooCommerce, setAttributes ] );
 	const [ isLoading, setIsLoading ] = useState( false );
 	const [ activeIndex, setActiveIndex ] = useState( 0 );
+	const [ loadedImageAspectRatio, setLoadedImageAspectRatio ] =
+		useState( null );
 	const thumbnailsRef = useRef( null );
 	const { replaceInnerBlocks, updateBlockAttributes, selectBlock } =
 		useDispatch( 'core/block-editor' );
@@ -467,6 +472,16 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	const activeBlock = innerBlocks[ activeIndex ];
 	const activeImageAttributes = activeBlock?.attributes || {};
 	const activeImageSrc = getImageSrcForResolution( activeBlock, resolution );
+	const activeImageAspectRatio =
+		loadedImageAspectRatio ||
+		( Number( activeImageAttributes.width ) > 0 &&
+		Number( activeImageAttributes.height ) > 0
+			? Number( activeImageAttributes.width ) /
+			  Number( activeImageAttributes.height )
+			: 1 );
+	useEffect( () => {
+		setLoadedImageAspectRatio( null );
+	}, [ activeImageSrc ] );
 	const activeImageSizes = activeBlock?.attributes?.sizes || {};
 	const activeImageAlt =
 		activeBlock?.attributes?.alt ||
@@ -487,43 +502,151 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	const activeImageProductPrice = String(
 		activeImageAttributes.wooProductPrice || ''
 	).trim();
+	const overrideGalleryHoverSettings =
+		!! activeImageAttributes.overrideGalleryHoverSettings;
+	const effectiveHoverAttributes = overrideGalleryHoverSettings
+		? activeImageAttributes
+		: attributes;
+	const effectiveHoverEnabled =
+		effectiveHoverAttributes.showTitleOnHover ??
+		effectiveHoverAttributes.hoverTitle ??
+		effectiveHoverAttributes.onHoverTitle ??
+		false;
+	const effectiveHoverWooActive = overrideGalleryHoverSettings
+		? hasWooCommerce &&
+		  !! activeImageAttributes.enableWooCommerce &&
+		  ( ! activeImageAttributes.imageClickAction ||
+				activeImageAttributes.imageClickAction === 'woocommerce' )
+		: effectiveEnableWoo;
 	const overlayContent =
-		attributes.overlayContent ||
-		( attributes.wooProductPriceOnHover ? 'product' : 'title' );
-		const showOverlay =
-			!! attributes.onHoverTitle &&
-			( activeImageProductId > 0 ||
-				!! activeImageTitle ||
-				!! activeImageCaption ||
-				overlayContent === 'exif' );
+		effectiveHoverAttributes.overlayContent ||
+		( effectiveHoverAttributes.wooProductPriceOnHover
+			? 'product'
+			: 'title' );
+	const effectiveOverlayContent =
+		overlayContent === 'product' && ! effectiveHoverWooActive
+			? 'title'
+			: overlayContent;
+	const showOverlay =
+		!! effectiveHoverEnabled &&
+		( effectiveOverlayContent === 'product'
+			? effectiveHoverWooActive && activeImageProductId > 0
+			: effectiveOverlayContent === 'caption'
+			? !! activeImageCaption
+			: effectiveOverlayContent === 'exif'
+			? true
+			: !! activeImageTitle );
 	const showProductOverlay =
 		showOverlay &&
-		effectiveEnableWoo &&
-		overlayContent === 'product' &&
+		effectiveHoverWooActive &&
+		effectiveOverlayContent === 'product' &&
 		activeImageProductId > 0;
-		const showCaptionOverlay = overlayContent === 'caption';
-		const showExifOverlay = overlayContent === 'exif';
+	const showCaptionOverlay = effectiveOverlayContent === 'caption';
+	const showExifOverlay = effectiveOverlayContent === 'exif';
+	const hoverClassMap = {
+		'blur-overlay': 'pb-hover-blur-overlay',
+		'fade-overlay': 'pb-hover-fade-overlay',
+		'gradient-bottom': 'pb-hover-gradient-bottom',
+		chip: 'pb-hover-chip',
+		'color-overlay': 'pb-hover-color-overlay',
+	};
+	const hoverVariantClass =
+		hoverClassMap[ effectiveHoverAttributes.onHoverStyle ] ||
+		'pb-hover-blur-overlay';
+	const hoverStyleVars =
+		effectiveHoverAttributes.onHoverStyle === 'color-overlay'
+			? {
+					'--pb-overlay-bg':
+						effectiveHoverAttributes.overlayBgColor || '#f9f9f9',
+					'--pb-overlay-color':
+						effectiveHoverAttributes.overlayTextColor || '#000000',
+			  }
+			: effectiveHoverAttributes.onHoverStyle === 'chip'
+			? {
+					'--pb-chip-overlay-bg':
+						effectiveHoverAttributes.chipOverlayBgColor ||
+						'#f9f9f9',
+					'--pb-chip-overlay-color':
+						effectiveHoverAttributes.chipOverlayTextColor ||
+						'#000000',
+			  }
+			: {};
 	const hasMultipleImages = innerBlocks.length > 1;
 	const showStripArrowsBottom =
 		filmstripPosition === 'bottom' && hasMultipleImages;
 	const showStripArrowsVertical =
 		filmstripPosition !== 'bottom' && hasMultipleImages;
+	const overrideGalleryClickSettings =
+		!! activeImageAttributes.overrideGalleryClickSettings;
+	const effectiveClickAttributes = overrideGalleryClickSettings
+		? activeImageAttributes
+		: attributes;
+	const effectiveClickAction = getImageClickAction( {
+		enableDownload: effectiveClickAttributes.enableDownload,
+		enableWooCommerce:
+			hasWooCommerce && !! effectiveClickAttributes.enableWooCommerce,
+		imageClickAction: effectiveClickAttributes.imageClickAction,
+	} );
+	const effectiveClickWoo =
+		hasWooCommerce &&
+		!! effectiveClickAttributes.enableWooCommerce &&
+		effectiveClickAction === 'woocommerce';
 	const effectiveDownloadEnabled =
-		!! attributes.enableDownload && ! effectiveEnableWoo;
+		!! effectiveClickAttributes.enableDownload &&
+		! effectiveClickWoo &&
+		( effectiveClickAttributes.imageClickTarget || 'icon' ) === 'icon';
 	const downloadIconStyleVars = {
-		...( isCustomIconColor( attributes.downloadIconColor, '#000000' )
-			? { '--pb-download-icon-color': attributes.downloadIconColor }
+		...( isCustomIconColor(
+			effectiveClickAttributes.downloadIconColor,
+			'#000000'
+		)
+			? {
+					'--pb-download-icon-color':
+						effectiveClickAttributes.downloadIconColor,
+			  }
 			: {} ),
-		...( isCustomIconColor( attributes.downloadIconBgColor, '#ffffff' )
-			? { '--pb-download-icon-bg': attributes.downloadIconBgColor }
+		...( isCustomIconColor(
+			effectiveClickAttributes.downloadIconBgColor,
+			'#ffffff'
+		)
+			? {
+					'--pb-download-icon-bg':
+						effectiveClickAttributes.downloadIconBgColor,
+			  }
 			: {} ),
 	};
 	const cartIconStyleVars = {
-		...( isCustomIconColor( attributes.cartIconColor, '#000000' )
-			? { '--pb-cart-icon-color': attributes.cartIconColor }
+		...( isCustomIconColor(
+			effectiveClickAttributes.cartIconColor,
+			'#000000'
+		)
+			? { '--pb-cart-icon-color': effectiveClickAttributes.cartIconColor }
 			: {} ),
-		...( isCustomIconColor( attributes.cartIconBgColor, '#ffffff' )
-			? { '--pb-cart-icon-bg': attributes.cartIconBgColor }
+		...( isCustomIconColor(
+			effectiveClickAttributes.cartIconBgColor,
+			'#ffffff'
+		)
+			? {
+					'--pb-cart-icon-bg':
+						effectiveClickAttributes.cartIconBgColor,
+			  }
+			: {} ),
+	};
+	const linkIconStyleVars = {
+		...( isCustomIconColor(
+			effectiveClickAttributes.linkIconColor,
+			'#000000'
+		)
+			? { '--pb-link-icon-color': effectiveClickAttributes.linkIconColor }
+			: {} ),
+		...( isCustomIconColor(
+			effectiveClickAttributes.linkIconBgColor,
+			'#ffffff'
+		)
+			? {
+					'--pb-link-icon-bg':
+						effectiveClickAttributes.linkIconBgColor,
+			  }
 			: {} ),
 	};
 	const imageSizeOptions = getImageSizeOptions( availableImageSizes, __ );
@@ -631,8 +754,8 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 							</button>
 						</>
 					) }
-					{ ( autoplay || enableFullscreen ) && (
-						<div className="pb-filmstrip-gallery-bottom-controls">
+						{ ( autoplay || enableFullscreen ) && (
+							<div className="pb-filmstrip-gallery-bottom-controls">
 							{ autoplay && (
 								<button
 									type="button"
@@ -689,32 +812,44 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 								>
 									<Icon icon={ fullscreen } size={ 16 } />
 								</button>
-							) }
-						</div>
-					) }
-					{ applyFilters(
-						'folioBlocks.imageBlock.downloadButton',
+								) }
+							</div>
+						) }
+						<div
+							className={ `pb-filmstrip-gallery-main-media pb-image-block ${
+								showOverlay ? hoverVariantClass : ''
+							}` }
+							style={ {
+								'--pb-filmstrip-image-ratio':
+									activeImageAspectRatio,
+								...hoverStyleVars,
+							} }
+						>
+						{ applyFilters(
+							'folioBlocks.imageBlock.downloadButton',
 						null,
 						{
 							attributes: activeImageAttributes,
 							setAttributes: () => {},
 							effectiveDownloadEnabled,
 							effectiveDownloadOnHover:
-								attributes.downloadOnHover ?? true,
+								effectiveClickAttributes.downloadOnHover ?? true,
 							sizes: activeImageSizes,
 							src: activeImageSrc,
 							context: {
 								'folioBlocks/enableDownload':
-									attributes.enableDownload,
+									effectiveClickAttributes.enableDownload,
 								'folioBlocks/downloadOnHover':
-									attributes.downloadOnHover ?? true,
+									effectiveClickAttributes.downloadOnHover ??
+									true,
 							},
 							isInsideGallery: true,
 							downloadIconStyleVars,
 							effectiveDownloadIconColor:
-								attributes.downloadIconColor ?? '',
+								effectiveClickAttributes.downloadIconColor ?? '',
 							effectiveDownloadIconBgColor:
-								attributes.downloadIconBgColor ?? '',
+								effectiveClickAttributes.downloadIconBgColor ??
+								'',
 						}
 					) }
 					{ applyFilters(
@@ -723,24 +858,56 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						{
 							attributes: activeImageAttributes,
 							setAttributes: () => {},
-							effectiveWooActive: effectiveEnableWoo,
+							effectiveWooActive: effectiveClickWoo,
 							context: {
 								'folioBlocks/wooCartIconDisplay':
-									attributes.wooCartIconDisplay,
+									effectiveClickAttributes.wooCartIconDisplay,
 								'folioBlocks/wooDefaultLinkAction':
-									attributes.wooDefaultLinkAction,
+									effectiveClickAttributes.wooDefaultLinkAction,
 							},
 							isInsideGallery: true,
 							cartIconStyleVars,
 							effectiveCartIconColor:
-								attributes.cartIconColor ?? '',
+								effectiveClickAttributes.cartIconColor ?? '',
 							effectiveCartIconBgColor:
-								attributes.cartIconBgColor ?? '',
+								effectiveClickAttributes.cartIconBgColor ?? '',
 						}
 					) }
+						{ [ 'custom_url', 'page_post' ].includes(
+							effectiveClickAction
+						) &&
+							applyFilters(
+								'folioBlocks.imageBlock.linkButton',
+								null,
+								{
+									attributes: activeImageAttributes,
+									setAttributes: () => {},
+									activeImageClickAction: effectiveClickAction,
+									effectiveLinkIconDisplay:
+										effectiveClickAttributes.linkIconDisplay ||
+										'hover',
+									linkIconStyleVars,
+								}
+							) }
 
-					{ activeImageSrc ? (
-						<img src={ activeImageSrc } alt={ activeImageAlt } />
+						{ activeImageSrc ? (
+							<img
+								className="pb-filmstrip-gallery-main-image pb-image-block-img"
+								src={ activeImageSrc }
+								alt={ activeImageAlt }
+								onLoad={ ( event ) => {
+									const image = event.currentTarget;
+									if (
+										image.naturalWidth > 0 &&
+										image.naturalHeight > 0
+									) {
+										setLoadedImageAspectRatio(
+											image.naturalWidth /
+												image.naturalHeight
+										);
+									}
+								} }
+							/>
 					) : (
 						<div className="pb-filmstrip-gallery-main-empty">
 							{ __(
@@ -750,8 +917,8 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						</div>
 					) }
 					{ showOverlay && (
-						<div className="pb-filmstrip-gallery-main-overlay-container">
-							<div className="pb-filmstrip-gallery-main-overlay">
+							<div className="pb-image-block-title-container">
+								<figcaption className="pb-image-block-title">
 								{ showProductOverlay ? (
 									<>
 										{ activeImageProductName && (
@@ -767,14 +934,14 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 												} }
 											/>
 										) }
-										{ ! activeImageProductName &&
-											! activeImageProductPrice &&
-											activeImageTitle }
 									</>
 									) : showExifOverlay ? (
-										<FilmstripExifOverlay
-											attributes={ activeImageAttributes }
-										/>
+											<FilmstripExifOverlay
+												attributes={ activeImageAttributes }
+												hideUnknownFields={
+													!! effectiveHoverAttributes.hideUnknownExifFields
+												}
+											/>
 									) : showCaptionOverlay &&
 									  activeImageCaption ? (
 									<span
@@ -785,10 +952,11 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 								) : (
 									activeImageTitle
 								) }
+								</figcaption>
 							</div>
+						) }
 						</div>
-					) }
-				</div>
+					</div>
 
 				<div className="pb-filmstrip-gallery-thumbnails-wrapper">
 					{ showStripArrowsBottom && (
@@ -952,25 +1120,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 
 					{ applyFilters(
 						'folioBlocks.filmstripGallery.enableAutoplayToggle',
-						<div style={ { marginBottom: '8px' } }>
-							<Notice status="info" isDismissible={ false }>
-								<strong>
-									{ __( 'Enable Autoplay', 'folioblocks' ) }
-								</strong>
-								<br />
-								{ __(
-									'This is a premium feature. Unlock all features:',
-									'folioblocks'
-								) }{ ' ' }
-								<a
-									href={ checkoutUrl }
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									{ __( 'Upgrade to Pro', 'folioblocks' ) }
-								</a>
-							</Notice>
-						</div>,
+						imageProFeatureNotice( 'filmstripPlayback' ),
 						{ attributes, setAttributes }
 					) }
 					<SelectControl
@@ -1002,54 +1152,12 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					/>
 					{ applyFilters(
 						'folioBlocks.filmstripGallery.enableFullscreenToggle',
-						<div style={ { marginBottom: '8px' } }>
-							<Notice status="info" isDismissible={ false }>
-								<strong>
-									{ __(
-										'Enable Full-Screen Mode',
-										'folioblocks'
-									) }
-								</strong>
-								<br />
-								{ __(
-									'This is a premium feature. Unlock all features:',
-									'folioblocks'
-								) }{ ' ' }
-								<a
-									href={ checkoutUrl }
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									{ __( 'Upgrade to Pro', 'folioblocks' ) }
-								</a>
-							</Notice>
-						</div>,
+						null,
 						{ attributes, setAttributes }
 					) }
 					{ applyFilters(
 						'folioBlocks.filmstripGallery.randomizeOrderToggle',
-						<div style={ { marginBottom: '8px' } }>
-							<Notice status="info" isDismissible={ false }>
-								<strong>
-									{ __(
-										'Randomize Image Order',
-										'folioblocks'
-									) }
-								</strong>
-								<br />
-								{ __(
-									'This is a premium feature. Unlock all features:',
-									'folioblocks'
-								) }{ ' ' }
-								<a
-									href={ checkoutUrl }
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									{ __( 'Upgrade to Pro', 'folioblocks' ) }
-								</a>
-							</Notice>
-						</div>,
+						null,
 						{ attributes, setAttributes }
 					) }
 				</PanelBody>
@@ -1073,25 +1181,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					/>
 					{ applyFilters(
 						'folioBlocks.filmstripGallery.imageClickActionNotice',
-						<div style={ { marginBottom: '8px' } }>
-							<Notice status="info" isDismissible={ false }>
-								<strong>
-									{ __( 'Custom Image Linking', 'folioblocks' ) }
-								</strong>
-								<br />
-								{ __(
-									'This is a premium feature. Unlock all features:',
-									'folioblocks'
-								) }{ ' ' }
-								<a
-									href={ checkoutUrl }
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									{ __( 'Upgrade to Pro', 'folioblocks' ) }
-								</a>
-							</Notice>
-						</div>,
+						imageProFeatureNotice( 'clickActions' ),
 						{
 							attributes,
 							setAttributes,
@@ -1108,6 +1198,15 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 								setAttributes,
 								hasWooCommerce,
 								effectiveEnableWoo,
+							}
+						) }
+					{ activeImageClickAction === 'lightbox' &&
+						applyFilters(
+							'folioBlocks.filmstripGallery.lightboxControls',
+							null,
+							{
+								attributes,
+								setAttributes,
 							}
 						) }
 					{ ( activeImageClickAction === 'custom_url' ||
@@ -1142,25 +1241,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				>
 					{ applyFilters(
 						'folioBlocks.filmstripGallery.onHoverTitleToggle',
-						<div style={ { marginBottom: '8px' } }>
-							<Notice status="info" isDismissible={ false }>
-								<strong>
-									{ __( 'Gallery Hover Settings', 'folioblocks' ) }
-								</strong>
-								<br />
-								{ __(
-									'This is a premium feature. Unlock all features:',
-									'folioblocks'
-								) }{ ' ' }
-								<a
-									href={ checkoutUrl }
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									{ __( 'Upgrade to Pro', 'folioblocks' ) }
-								</a>
-							</Notice>
-						</div>,
+						imageProFeatureNotice( 'hoverSettings' ),
 						{ attributes, setAttributes }
 					) }
 				</PanelBody>
@@ -1168,51 +1249,12 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			<InspectorControls group="advanced">
 				{ applyFilters(
 					'folioBlocks.filmstripGallery.disableRightClickToggle',
-					<div style={ { marginBottom: '8px' } }>
-						<Notice status="info" isDismissible={ false }>
-							<strong>
-								{ __( 'Disable Right-Click', 'folioblocks' ) }
-							</strong>
-							<br />
-							{ __(
-								'This is a premium feature. Unlock all features:',
-								'folioblocks'
-							) }{ ' ' }
-							<a
-								href={ checkoutUrl }
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								{ __( 'Upgrade to Pro', 'folioblocks' ) }
-							</a>
-						</Notice>
-					</div>,
+					imageProFeatureNotice( 'protectionPerformance' ),
 					{ attributes, setAttributes }
 				) }
 				{ applyFilters(
 					'folioBlocks.filmstripGallery.lazyLoadToggle',
-					<div style={ { marginBottom: '8px' } }>
-						<Notice status="info" isDismissible={ false }>
-							<strong>
-								{ __(
-									'Enable Lazy Load of Images',
-									'folioblocks'
-								) }
-							</strong>
-							<br />
-							{ __(
-								'This is a premium feature. Unlock all features:',
-								'folioblocks'
-							) }{ ' ' }
-							<a
-								href={ checkoutUrl }
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								{ __( 'Upgrade to Pro', 'folioblocks' ) }
-							</a>
-						</Notice>
-					</div>,
+					null,
 					{ attributes, setAttributes }
 				) }
 			</InspectorControls>
@@ -1223,25 +1265,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				>
 					{ applyFilters(
 						'folioBlocks.filmstripGallery.colorModeControl',
-						<div style={ { marginBottom: '8px' } }>
-							<Notice status="info" isDismissible={ false }>
-								<strong>
-									{ __( 'Color Mode', 'folioblocks' ) }
-								</strong>
-								<br />
-								{ __(
-									'This is a premium feature. Unlock all features:',
-									'folioblocks'
-								) }{ ' ' }
-								<a
-									href={ checkoutUrl }
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									{ __( 'Upgrade to Pro', 'folioblocks' ) }
-								</a>
-							</Notice>
-						</div>,
+						imageProFeatureNotice( 'filmstripColorMode' ),
 						{
 							attributes,
 							setAttributes,
@@ -1250,6 +1274,14 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				</PanelBody>
 				{ applyFilters(
 					'folioBlocks.filmstripGallery.iconStyleControls',
+					null,
+					{
+						attributes,
+						setAttributes,
+					}
+				) }
+				{ applyFilters(
+					'folioBlocks.filmstripGallery.hoverOverlayStyleControls',
 					null,
 					{
 						attributes,

@@ -20,9 +20,23 @@
 		opacity 0.6s ease,
 		transform 0.6s ease;
 
-	&.drop-shadow {
-		box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+	&.drop-shadow,
+	&.dropshadow,
+	&.dropshadow--soft {
+		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 		transition: box-shadow 0.3s ease-in-out;
+	}
+
+	&.dropshadow--subtle {
+		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.22);
+	}
+
+	&.dropshadow--elevated {
+		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+	}
+
+	&.dropshadow--dramatic {
+		box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
 	}
 
 	&.aspect-21-9 {
@@ -98,6 +112,7 @@
 	}
 
 	.video-title-overlay,
+	.video-category-overlay,
 	.video-play-button svg {
 		color: white !important;
 		fill: currentcolor;
@@ -110,12 +125,19 @@
 	&.has-color-overlay {
 
 		.video-title-overlay,
-		.video-play-button svg {
+		.video-category-overlay,
+		.video-play-button {
 			color: var(--pb-video-overlay-text, #fff) !important;
+			text-shadow: none;
+		}
+
+		.video-play-button svg {
+			text-shadow: none;
 		}
 	}
 
-	.video-title-overlay {
+	.video-title-overlay,
+	.video-category-overlay {
 		font-size:
  clamp(0.9rem, 5cqi, 1.8rem); // 5cqi = 5% of container inline size
 		font-weight: 600;
@@ -126,36 +148,53 @@
 		text-overflow: ellipsis;
 	}
 
+	.video-category-overlay {
+		font-size: clamp(0.7rem, 3cqi, 1rem);
+		font-weight: 500;
+		margin-top: 10px;
+		margin-bottom: 0;
+		opacity: 0.85;
+	}
+
 	.video-play-button {
 		font-size:
  clamp(0.9rem, 5cqi, 1.8rem); // 5cqi = 5% of container inline size
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		color: #fff;
+		border: 1px solid currentcolor;
+		border-radius: 999px;
+		padding: 0.35em;
 	}
 
 	.video-play-button svg {
 		width: 1em;
 		height: 1em;
+		color: inherit !important;
 	}
 
 	// Visibility logic
 	.video-title-overlay.onHover,
+	.video-category-overlay.onHover,
 	.video-play-button.onHover {
 		opacity: 0;
 	}
 
 	&:hover .video-title-overlay.onHover,
+	&:hover .video-category-overlay.onHover,
 	&:hover .video-play-button.onHover {
 		opacity: 1;
 	}
 
 	.video-title-overlay.always,
+	.video-category-overlay.always,
 	.video-play-button.always {
 		opacity: 1;
 	}
 
 	.video-title-overlay.hidden,
+	.video-category-overlay.hidden,
 	.video-play-button.hidden {
 		display: none;
 	}
@@ -180,6 +219,7 @@
 	background: var(--pb-video-overlay-bg, rgba(0, 0, 0, 0.35));
 }
 
+.has-blur-overlay.has-overlay-always .video-overlay,
 .has-blur-overlay.has-overlay-hover:hover .video-overlay {
 	background: rgba(0, 0, 0, 0.65);
 	backdrop-filter: blur(6px);
@@ -229,16 +269,16 @@
 }
 
 // Lightbox Styles
-// Base Lightbox Layout
+// Base Lightbox Content
 
 .pb-video-lightbox {
+	--pb-video-lightbox-ratio: 1.7778;
 	opacity: 0;
 	visibility: hidden;
 	transition: opacity 0.3s ease;
 	align-items: center;
-	backdrop-filter: blur(6px);
-	-webkit-backdrop-filter: blur(6px);
-	background: rgba(0, 0, 0, 0.9);
+	--pb-video-lightbox-backdrop: rgba(0, 0, 0, 0.9);
+	background: transparent;
 	display: flex;
 	inset: 0;
 	justify-content: center;
@@ -247,7 +287,17 @@
 	left: 0;
 	width: 100vw;
 	height: 100vh;
-	z-index: 9999;
+	z-index: 990000 !important;
+
+	&::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: var(--pb-video-lightbox-backdrop);
+		backdrop-filter: blur(6px);
+		-webkit-backdrop-filter: blur(6px);
+		pointer-events: none;
+	}
 
 	&.active {
 		display: flex;
@@ -257,7 +307,7 @@
 
 	.pb-video-lightbox-inner {
 		position: relative;
-		width: min(90vw, calc(80vh * 16 / 9));
+		width: min(90vw, calc(80vh * var(--pb-video-lightbox-ratio)));
 		max-width: none;
 		max-height: none;
 		overflow: visible;
@@ -266,7 +316,7 @@
 	.pb-video-lightbox-video {
 		position: relative;
 		width: 100%;
-		aspect-ratio: 16 / 9;
+		aspect-ratio: var(--pb-video-lightbox-ratio);
 		overflow: hidden;
 
 		iframe,
@@ -295,6 +345,29 @@
 		cursor: pointer;
 		z-index: 10000;
 	}
+
+	.lightbox-fullscreen {
+		position: fixed;
+		right: clamp(18px, 3vw, 32px);
+		bottom: clamp(18px, 3vw, 32px);
+		width: 32px;
+		height: 32px;
+		padding: 2px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: transparent;
+		border: none;
+		color: #fff;
+		cursor: pointer;
+		z-index: 10000;
+
+		.lightbox-fullscreen-icon {
+			width: 28px;
+			height: 28px;
+			fill: currentcolor;
+		}
+	}
 }
 
 // Shared layout logic
@@ -304,7 +377,7 @@
 	.pb-video-lightbox-inner {
 		--pb-lightbox-gap: clamp(1rem, 2vw, 2rem);
 		--pb-lightbox-info-width: clamp(18rem, 22vw, 26rem);
-		--pb-lightbox-video-max-width: calc(84vh * 16 / 9);
+		--pb-lightbox-video-max-width: calc(84vh * var(--pb-video-lightbox-ratio));
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -328,14 +401,30 @@
 		overflow-y: auto;
 		max-height: 84vh;
 
-		h2.pb-video-lightbox-title {
+		h2.pb-video-lightbox-title,
+		h2.lightbox-title,
+		h2.pb-video-lightbox-product-title,
+		h2.pb-product-name {
+			color: inherit;
+		}
+
+		p.pb-video-lightbox-description,
+		p.lightbox-description,
+		.pb-video-lightbox-product-price,
+		.pb-lightbox-product-info {
+			color: inherit;
+		}
+
+		h2.pb-video-lightbox-title,
+		h2.lightbox-title {
 			font-size: clamp(1rem, 2vw + 0.5rem, 2rem);
 			font-weight: 600;
 			margin-bottom: 1rem;
 			line-height: 1.2;
 		}
 
-		p.pb-video-lightbox-description {
+		p.pb-video-lightbox-description,
+		p.lightbox-description {
 			font-size: clamp(0.875rem, 1.2vw + 0.4rem, 1.125rem);
 			line-height: 1.6;
 			margin: 0;
@@ -405,7 +494,7 @@
 	.pb-video-lightbox.video-product-layout .pb-video-lightbox-inner {
 		flex-direction: column;
 		align-items: stretch;
-		width: min(90vw, calc(80vh * 16 / 9));
+		width: min(90vw, calc(80vh * var(--pb-video-lightbox-ratio)));
 		max-height: 86vh;
 		overflow-y: auto;
 	}
@@ -427,7 +516,36 @@
 }
 
 .pb-video-lightbox-close:focus-visible,
+.pb-video-lightbox .lightbox-fullscreen:focus-visible,
 .pb-view-product-button:focus-visible {
 	outline: 2px solid var(--wp--preset--color--accent, #007cba);
 	outline-offset: 2px;
+}
+
+.pb-video-lightbox.light-mode {
+	--pb-video-lightbox-backdrop: rgba(255, 255, 255, 0.94);
+
+	.pb-video-lightbox-close,
+	.lightbox-fullscreen,
+	.pb-video-lightbox-info {
+		color: #111;
+	}
+
+	.pb-video-lightbox-info .pb-view-product-button {
+		color: #111;
+		border-color: #111;
+	}
+
+	&.video-product-layout .pb-video-lightbox-info {
+		a.pb-video-lightbox-product-button {
+			color: #fff;
+			background: #111;
+			border-color: #111;
+
+			&:hover {
+				color: #111;
+				background: #fff;
+			}
+		}
+	}
 }

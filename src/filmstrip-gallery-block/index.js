@@ -7,12 +7,6 @@ import './style.scss';
 import Edit from './edit';
 import Save from './save';
 import metadata from './block.json';
-import {
-	buildGalleryTransforms,
-	disableGalleryWrapperTransforms,
-} from '../pb-helpers/galleryTransforms';
-
-disableGalleryWrapperTransforms();
 
 registerBlockType( metadata, {
 	icon: {
@@ -39,5 +33,4 @@ registerBlockType( metadata, {
 	},
 	edit: Edit,
 	save: Save,
-	transforms: buildGalleryTransforms( metadata.name ),
 } );

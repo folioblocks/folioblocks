@@ -3,6 +3,121 @@
  * Premium View JS
  */
 document.addEventListener( 'DOMContentLoaded', () => {
+	const getFullscreenElement = () =>
+		document.fullscreenElement || document.webkitFullscreenElement;
+	const fullscreenIcon =
+		'<svg class="lightbox-fullscreen-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 9V5h4v1.5H6.5V9H5zm10-2.5V5h4v4h-1.5V6.5H15zM6.5 15v2.5H9V19H5v-4h1.5zm11 0H19v4h-4v-1.5h2.5z"/></svg>';
+	const exitFullscreenIcon =
+		'<svg class="lightbox-fullscreen-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 5v4H5V7.5h2.5V5H9zm6 0h1.5v2.5H19V9h-4V5zM5 15h4v4H7.5v-2.5H5V15zm10 0h4v1.5h-2.5V19H15v-4z"/></svg>';
+
+	const syncLightboxFullscreenButton = () => {
+		const wrapper = document.querySelector( '.pb-image-lightbox' );
+		const button = wrapper?.querySelector( '.lightbox-fullscreen' );
+		if ( ! button ) {
+			return;
+		}
+
+		const isFullscreen = getFullscreenElement() === wrapper;
+		button.innerHTML = isFullscreen ? exitFullscreenIcon : fullscreenIcon;
+		button.setAttribute(
+			'aria-label',
+			isFullscreen ? 'Exit fullscreen' : 'Open fullscreen'
+		);
+		button.setAttribute( 'aria-pressed', isFullscreen ? 'true' : 'false' );
+	};
+
+	const exitLightboxFullscreen = ( wrapper ) => {
+		if ( getFullscreenElement() !== wrapper ) {
+			return;
+		}
+
+		if ( document.exitFullscreen ) {
+			const exitPromise = document.exitFullscreen();
+			if ( exitPromise?.catch ) {
+				exitPromise.catch( () => {} );
+			}
+		} else if ( document.webkitExitFullscreen ) {
+			document.webkitExitFullscreen();
+		}
+	};
+
+	const toggleLightboxFullscreen = ( wrapper ) => {
+		if ( getFullscreenElement() === wrapper ) {
+			exitLightboxFullscreen( wrapper );
+			return;
+		}
+
+		if ( wrapper.requestFullscreen ) {
+			const requestPromise = wrapper.requestFullscreen();
+			if ( requestPromise?.catch ) {
+				requestPromise.catch( () => {} );
+			}
+		} else if ( wrapper.webkitRequestFullscreen ) {
+			wrapper.webkitRequestFullscreen();
+		}
+	};
+
+	document.addEventListener( 'pbImageLightboxRendered', ( event ) => {
+		const { wrapper } = event.detail || {};
+		if (
+			! wrapper ||
+			( ! wrapper.requestFullscreen && ! wrapper.webkitRequestFullscreen )
+		) {
+			return;
+		}
+		if ( wrapper.querySelector( '.lightbox-fullscreen' ) ) {
+			syncLightboxFullscreenButton();
+			return;
+		}
+
+		const button = document.createElement( 'button' );
+		button.className = 'lightbox-fullscreen';
+		button.type = 'button';
+		button.setAttribute( 'aria-keyshortcuts', 'F' );
+		button.addEventListener( 'click', () =>
+			toggleLightboxFullscreen( wrapper )
+		);
+		wrapper.appendChild( button );
+		syncLightboxFullscreenButton();
+	} );
+
+	document.addEventListener( 'keydown', ( event ) => {
+		if (
+			event.key.toLowerCase() !== 'f' ||
+			event.metaKey ||
+			event.ctrlKey ||
+			event.altKey ||
+			event.target?.closest?.(
+				'input, textarea, select, [contenteditable="true"], [role="textbox"]'
+			)
+		) {
+			return;
+		}
+
+		const wrapper = document.querySelector( '.pb-image-lightbox' );
+		const fullscreenButton = wrapper?.querySelector(
+			'.lightbox-fullscreen'
+		);
+		if ( ! fullscreenButton ) {
+			return;
+		}
+
+		event.preventDefault();
+		fullscreenButton.click();
+	} );
+
+	document.addEventListener( 'pbImageLightboxClosing', ( event ) => {
+		exitLightboxFullscreen( event.detail?.wrapper );
+	} );
+	document.addEventListener(
+		'fullscreenchange',
+		syncLightboxFullscreenButton
+	);
+	document.addEventListener(
+		'webkitfullscreenchange',
+		syncLightboxFullscreenButton
+	);
+
 	// Add Disable -Right-Click
 	document.addEventListener(
 		'contextmenu',
@@ -41,9 +156,10 @@ const gallerySelectors = [
 	const getGalleryItems = ( gallery ) =>
 		Array.from( gallery.children ).filter(
 			( child ) =>
-				child.matches( '.pb-image-block-wrapper' ) ||
-				child.matches( '.wp-block-folioblocks-pb-image-block' ) ||
-				child.querySelector( '.pb-image-block-wrapper' )
+				! child.hasAttribute( 'data-pb-carousel-clone' ) &&
+				( child.matches( '.pb-image-block-wrapper' ) ||
+					child.matches( '.wp-block-folioblocks-pb-image-block' ) ||
+					child.querySelector( '.pb-image-block-wrapper' ) )
 		);
 
 	const shuffleItems = ( items ) => {

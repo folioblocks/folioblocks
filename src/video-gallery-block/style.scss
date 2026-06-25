@@ -4,6 +4,8 @@
  **/
 
 .wp-block-folioblocks-video-gallery-block {
+	--pb-gallery-gap-active: var(--pb-gallery-gap-desktop, var(--gap, 10px));
+
 	opacity: 1;
 	transition: opacity 0.3s ease;
 
@@ -14,14 +16,15 @@
 
 /* Video Gallery Container */
 
+.wp-block-folioblocks-pb-video-block {
+	box-sizing: border-box;
+	transition: all 0.3s ease;
+}
+
 .pb-video-gallery {
 	display: grid;
-	gap: var(--gap, 10px);
+	gap: var(--pb-gallery-gap-active, var(--gap, 10px));
 	grid-template-columns: repeat(var(--columns, 4), 1fr);
-
-	>.wp-block-folioblocks-pb-video-block {
-		box-sizing: border-box;
-	}
 
 	&.cols-d-1 {
 		--columns: 1;
@@ -79,6 +82,20 @@
 		&.cols-m-3 {
 			--columns: 3;
 		}
+	}
+}
+
+@media (max-width: 1024px) {
+
+	.wp-block-folioblocks-video-gallery-block {
+		--pb-gallery-gap-active: var(--pb-gallery-gap-tablet, var(--gap, 10px));
+	}
+}
+
+@media (max-width: 600px) {
+
+	.wp-block-folioblocks-video-gallery-block {
+		--pb-gallery-gap-active: var(--pb-gallery-gap-mobile, var(--gap, 10px));
 	}
 }
 
@@ -140,7 +157,7 @@
 		--pb-filter-decoration-inactive: none;
 	}
 
-	/* If the chosen decoration is line-through, decorate ONLY the non-active items. */
+	/* If line-through is chosen, decorate only the non-active items. */
 	&[style*="--pb-filter-text-decoration: line-through"] {
 		--pb-filter-decoration-active: none;
 		--pb-filter-decoration-inactive: line-through;
@@ -152,14 +169,5 @@
 }
 
 .wp-block-folioblocks-pb-video-block-wrapper.is-hidden {
-	display: none;
-}
-
-/* Smooth filtering transitions and layout fix */
-.wp-block-folioblocks-pb-video-block {
-	transition: all 0.3s ease;
-}
-
-.wp-block-folioblocks-pb-video-block.is-hidden {
 	display: none;
 }

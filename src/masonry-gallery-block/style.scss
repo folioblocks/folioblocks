@@ -5,6 +5,8 @@
 
 
 .wp-block-folioblocks-masonry-gallery-block {
+	--pb-gallery-gap-active: var(--pb-gallery-gap-desktop, 10px);
+
 	opacity: 1;
 	transition: opacity 0.3s ease;
 
@@ -20,9 +22,23 @@
 	margin: 0 auto;
 	padding: 0;
 	position: relative;
-	column-gap: var(--column-gap, 10px);
-	row-gap: var(--row-gap, 10px);
+	column-gap: var(--pb-gallery-gap-active, 10px);
+	row-gap: var(--pb-gallery-gap-active, 10px);
 	grid-template-columns: repeat(var(--columns, 4), 1fr);
+}
+
+@media (max-width: 1024px) {
+
+	.wp-block-folioblocks-masonry-gallery-block {
+		--pb-gallery-gap-active: var(--pb-gallery-gap-tablet, 10px);
+	}
+}
+
+@media (max-width: 600px) {
+
+	.wp-block-folioblocks-masonry-gallery-block {
+		--pb-gallery-gap-active: var(--pb-gallery-gap-mobile, 10px);
+	}
 }
 
 .pb-masonry-gallery .wp-block-folioblocks-pb-image-block {
@@ -94,7 +110,9 @@
 		--pb-filter-decoration-inactive: none;
 	}
 
-	/* If the chosen decoration is line-through, decorate ONLY the non-active items. */
+	/* If the chosen decoration is line-through,
+	 * decorate ONLY the non-active items.
+	 */
 	&[style*="--pb-filter-text-decoration: line-through"] {
 		--pb-filter-decoration-active: none;
 		--pb-filter-decoration-inactive: line-through;

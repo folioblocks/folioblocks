@@ -4,6 +4,76 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - Unreleased
+### Added
+- Added responsive desktop, tablet, and mobile gap controls to Masonry, Justified, Modular, and Video Galleries.
+- Added a fullscreen control to Video Block and Video Gallery lightboxes that expands the playing video.
+- Added the same drop shadow style presets to Video Block and Video Gallery thumbnails.
+- Added Subtle, Soft, Elevated, and Dramatic drop shadow presets for Image Block and photo galleries.
+- Added tap-to-hide Lightbox controls and captions for distraction-free image viewing, plus swipe navigation on touch devices.
+- Added Dark and Light appearance options for image lightboxes, with per-image overrides able to inherit future gallery appearance changes.
+- Added combined Image Title, Image Caption, and EXIF Data display options for image lightboxes.
+- Added optional WooCommerce and Page/URL link icons when thumbnail linking is enabled.
+- Added a Pro-only fullscreen button to Image Block lightboxes, positioned at the bottom right and available with the `F` keyboard shortcut.
+- Added a Pro-only, permission-aware per-image action for syncing Image Block titles, captions, and alternative text to the WordPress Media Library, with loading, success, and error feedback.
+- Added Pro-only per-image click and hover overrides for Grid, Justified, Masonry, Carousel, and Modular gallery Image Blocks, including effective-action destination controls for WooCommerce products, custom URLs, and Page/Post links.
+- Added shared Gallery Click Settings, Gallery Click Styles, Gallery Hover Settings, and per-image click and hover overrides to Filmstrip Gallery.
+- Added Image Block lightbox support to Filmstrip Gallery, including scoped Filmstrip image navigation, inherited and per-image lightbox appearance/content settings, and EXIF display.
+- Added Filmstrip Lightbox-to-fullscreen handoff, with the Lightbox fullscreen control hidden when Filmstrip fullscreen is disabled.
+- Added optional Pro seamless front-end looping to Carousel Gallery, with the first image centered beside the preceding last image and continuous arrow, keyboard, swipe, and autoplay navigation.
+- Added native WordPress password protection controls to the FolioBlocks Page Settings panel for Posts and Pages.
+- Added Video Title, Play Button, and Filtering Category combinations to Video Block and Video Gallery Overlay Content controls.
+- Added Pro-only per-video Gallery Hover Settings overrides to Video Blocks inside Video Galleries, including per-video hover styles, overlay content, visibility, and Color Overlay colors.
+
+### Changed
+- Made responsive image gap controls for Masonry and Justified Galleries a FolioBlocks Pro feature while retaining the free Remove Image Gap option.
+- Improved Justified Gallery row balancing so completed rows stay closer to the preferred row height.
+- Consolidated image and video border, radius, color, and drop shadow controls into a shared Image Style control with consistent 15px border width and 50px radius limits.
+- Moved Pro Lazy Load and Disable Right-Click controls from individual block settings into a conditional FolioBlocks panel in the editor Page & Post settings.
+- Moved gallery, Image Block, and Video Block transforms into FolioBlocks Pro.
+- Moved per-image gallery filtering categories into the WordPress 7.0 Content inspector while preserving their Settings inspector location on older WordPress versions.
+- Renamed the per-image filtering panel to Gallery Filtering Categories.
+- Restyled Image Block EXIF metadata as a compact read-only card with clearer spacing and visual separation from editable image metadata.
+- Updated WooCommerce Product Info lightbox and hover-overlay content so images without linked products display no fallback caption or title.
+- Updated Filmstrip Gallery editor previews and front-end hover overlays to follow the same no-fallback Product Info behavior.
+- Reworked Filmstrip Gallery editor and front-end main-image markup to use the shared Image Block media and overlay structure, keeping overlays and action controls aligned to the displayed image.
+- Updated Filmstrip Gallery front-end image switching to resolve effective gallery or per-image click actions, destinations, icon styles, hover overlays, and Lightbox settings.
+- Updated Filmstrip fullscreen mode to quietly inherit the active image's effective Lightbox Dark or Light appearance when Lightbox is enabled.
+- Styled native WordPress password forms with a simple, neutral, responsive layout on password-protected Posts and Pages.
+- Split Video Gallery and Video Block click and hover settings into dedicated inspector panels.
+- Added Dark and Light appearance modes for Video Gallery and standalone Video Block lightboxes.
+- Moved Video Block thumbnail, video URL, title, description, and conditional gallery filtering categories into the WordPress 7.0 Content inspector while preserving their existing Settings inspector locations on older WordPress versions.
+- Reworked Video Block and Video Gallery hover controls to use Hover Style, Overlay Content, and Always Display Overlay controls consistent with the photo galleries.
+- Moved Video Block and Video Gallery Color Overlay color controls into Gallery Hover Styles tools panels and added neutral default overlay colors.
+- Updated Video Block and Video Gallery play buttons with a circular border that inherits the effective overlay text color.
+- Added responsive Desktop, Tablet, and Mobile gap controls to Carousel Gallery.
+- Renamed Video Block and Video Gallery Lightbox Layout controls to Lightbox Content and reordered Lightbox Appearance choices to list Light before Dark.
+- Reworked free-version Pro feature notices across image, video, gallery, Before & After, Loupe, and Background Video blocks with clearer feature summaries and consistent Get FolioBlocks Pro actions.
+- Updated the Free vs Pro settings page with FolioBlocks 1.4 features and current control names.
+
+### Fixed
+- Fixed Image Block and Video Block transforms disappearing when premium scripts loaded before their block registrations, restoring transforms from core Image, Video, YouTube, and Vimeo blocks.
+- Fixed gallery transforms dropping matching responsive column and gap settings.
+- Fixed Justified Gallery rows sometimes stopping short of the gallery edge when using larger image gaps.
+- Fixed Hide Unknown EXIF Fields failing when missing metadata was stored using a different site locale.
+- Fixed image Lightbox navigation arrows overlapping captions on mobile devices.
+- Fixed Video Block and Video Gallery lightbox titles retaining dark-mode text colors when using Light appearance.
+- Fixed Video Block and Video Gallery lightboxes appearing beneath theme headers and other high-stacking elements by mounting them at the document root.
+- Fixed Carousel Galleries occasionally appearing too small when reopening a page in the block editor.
+- Fixed Elevated and Dramatic image shadows being clipped by Carousel Gallery containers.
+- Improved Safari reliability for large gallery blur overlays and added a direct-filter fallback for Carousel Lightbox backgrounds.
+- Fixed an Image Block editor crash when changing gallery overlay content from EXIF Data to Product Info.
+- Fixed the Filmstrip Gallery `useSelect` capabilities warning caused by unstable selector return values.
+- Fixed Filmstrip Gallery horizontal-image overlays extending beyond the displayed image in the editor and front end.
+- Fixed Filmstrip Gallery per-image hover overrides not rendering on the front end.
+- Fixed Filmstrip Gallery WooCommerce-linked images rendering at a different size than their overlay wrapper.
+- Fixed Filmstrip Gallery action controls and links retaining stale WooCommerce, download, Custom URL, or Page/Post behavior when switching images.
+- Fixed stray control syntax text appearing in Gallery Click Settings when Image Downloads were enabled.
+- Fixed YouTube videos failing to preview in the Video Block and Video Gallery editor in Chromium browsers by using the WordPress oEmbed preview flow.
+- Fixed Color Overlay titles, filtering categories, and play buttons inheriting the text shadow used by image-based hover styles.
+- Fixed Video Block, Video Gallery, Background Video, and custom image URL fields accepting arbitrary text instead of requiring valid URLs.
+- Fixed Pro gallery transforms sometimes being unavailable when premium scripts loaded before their gallery block registrations.
+
 ## [1.3.1] - 2026-06-03
 ### Added
 - Added shared premium control helpers for repeated Image Click Styles, simple gallery toggles, List View thumbnails, and gallery filtering editor controls.

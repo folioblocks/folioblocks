@@ -1,0 +1,35 @@
+.pb-pro-feature-notice {
+	margin: 0 0 16px;
+
+	.components-notice__content {
+		margin: 12px 12px 12px 0;
+	}
+}
+
+.pb-pro-feature-notice__description {
+	margin: 6px 0 0;
+}
+
+.pb-pro-feature-notice__features {
+	margin: 8px 0 0 18px;
+}
+
+.pb-pro-feature-notice__features li {
+	margin-bottom: 4px;
+}
+
+.pb-pro-feature-notice__actions {
+	margin-top: 12px;
+}
+
+.pb-pro-feature-notice--compact .pb-pro-feature-notice__description {
+	margin-bottom: 0;
+}
+
+.pb-pro-feature-notice--compact .pb-pro-feature-notice__features {
+	display: none;
+}
+
+.pb-pro-feature-notice--compact .pb-pro-feature-notice__actions {
+	margin-top: 8px;
+}

@@ -64,39 +64,9 @@ export const registerPremiumToggleControl = ( {
 	);
 };
 
-export const registerDisableRightClickPremiumControl = ( {
-	hookPrefix,
-	namespace,
-	label = __( 'Disable Right-Click on Page', 'folioblocks' ),
-	hideInsideGallery = false,
-} ) =>
-	registerPremiumToggleControl( {
-		hookName: `${ hookPrefix }.disableRightClickToggle`,
-		namespace,
-		attribute: 'disableRightClick',
-		label,
-		help: __( 'Prevents visitors from right-clicking.', 'folioblocks' ),
-		hideInsideGallery,
-		coerceBoolean: true,
-	} );
+export const registerDisableRightClickPremiumControl = () => {};
 
-export const registerLazyLoadPremiumControl = ( {
-	hookPrefix,
-	namespace,
-	help = __( 'Enables lazy loading of gallery images.', 'folioblocks' ),
-	defaultValue = false,
-	hideInsideGallery = false,
-} ) =>
-	registerPremiumToggleControl( {
-		hookName: `${ hookPrefix }.lazyLoadToggle`,
-		namespace,
-		attribute: 'lazyLoad',
-		label: __( 'Enable Lazy Load of Images', 'folioblocks' ),
-		help,
-		defaultValue,
-		hideInsideGallery,
-		coerceBoolean: true,
-	} );
+export const registerLazyLoadPremiumControl = () => {};
 
 export const registerRandomizeOrderPremiumControl = ( {
 	hookPrefix,

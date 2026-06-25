@@ -6,7 +6,6 @@
 
 import { __ } from "@wordpress/i18n";
 import {
-	BlockControls,
 	InspectorControls,
 	MediaPlaceholder,
 	MediaUpload,
@@ -20,8 +19,6 @@ import {
 	PanelBody,
 	RangeControl,
 	TextControl,
-	ToolbarDropdownMenu,
-	ToolbarGroup,
 	ToggleControl,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
@@ -31,15 +28,14 @@ import {
 import { useDispatch, useSelect } from "@wordpress/data";
 import { useEffect, useMemo, useRef, useState } from "@wordpress/element";
 import { applyFilters } from "@wordpress/hooks";
-import {
-	justifyTop,
-	justifyCenterVertical,
-	justifyBottom,
-	justifySpaceBetweenVertical,
-	justifyStretchVertical,
-} from "@wordpress/icons";
 import CompactColorControl from "../pb-helpers/CompactColorControl";
 import { IconBackgroundVideo } from "../pb-helpers/icons";
+import { specialistProFeatureNotice } from "../pb-helpers/specialistProFeatureNotices";
+import ValidatedUrlControl from "../pb-helpers/ValidatedUrlControl";
+import {
+	isValidHttpUrl,
+	isValidVimeoUrl,
+} from "../pb-helpers/urlValidation";
 import "./editor.scss";
 
 /**
@@ -127,51 +123,46 @@ const buildPosterObject = (media) => {
 };
 
 const HORIZONTAL_ALIGNMENT_VALUES = ["left", "center", "right", "stretch"];
-
-const VERTICAL_ALIGNMENT_OPTIONS = [
-	{
-		value: "top",
-		icon: justifyTop,
-		label: __("Align content top", "folioblocks"),
-	},
-	{
-		value: "center",
-		icon: justifyCenterVertical,
-		label: __("Center content vertically", "folioblocks"),
-	},
-	{
-		value: "bottom",
-		icon: justifyBottom,
-		label: __("Align content bottom", "folioblocks"),
-	},
-	{
-		value: "space-between",
-		icon: justifySpaceBetweenVertical,
-		label: __("Distribute content vertically", "folioblocks"),
-	},
-	{
-		value: "stretch",
-		icon: justifyStretchVertical,
-		label: __("Stretch content height", "folioblocks"),
-	},
+const VERTICAL_ALIGNMENT_VALUES = [
+	"top",
+	"center",
+	"bottom",
+	"space-between",
+	"stretch",
 ];
 
 const normalizeAlignment = (value, allowed, fallback) =>
 	allowed.includes(value) ? value : fallback;
 
-const DEFAULT_CONTENT_GROUP_TEMPLATE = [
+const DEFAULT_CONTENT_COLUMNS_TEMPLATE = [
 	[
-		"core/group",
+		"core/columns",
 		{
-			layout: { type: "default" },
+			verticalAlignment: "center",
 		},
 		[
 			[
-				"core/paragraph",
-				{
-					placeholder: __("Add content…", "folioblocks"),
-				},
+				"core/column",
+				{},
+				[
+					[
+						"core/group",
+						{
+							layout: { type: "constrained" },
+						},
+						[
+							[
+								"core/paragraph",
+								{
+									placeholder: __("Add content…", "folioblocks"),
+								},
+							],
+						],
+					],
+				],
 			],
+			["core/column", {}, []],
+			["core/column", {}, []],
 		],
 	],
 ];
@@ -201,10 +192,6 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		preview,
 		vimeoAspectRatio,
 	} = attributes;
-
-	const checkoutUrl =
-		window.folioBlocksData?.checkoutUrl ||
-		"https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks&utm_medium=background-video-block&utm_campaign=upgrade";
 
 	// Block Preview Image
 	if (preview) {
@@ -411,14 +398,26 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			clientId,
 			[
 				createBlock(
-					"core/group",
+					"core/columns",
 					{
-						layout: { type: "default" },
+						verticalAlignment: "center",
 					},
 					[
-						createBlock("core/paragraph", {
-							placeholder: __("Add content…", "folioblocks"),
-						}),
+						createBlock("core/column", {}, [
+							createBlock(
+								"core/group",
+								{
+									layout: { type: "constrained" },
+								},
+								[
+									createBlock("core/paragraph", {
+										placeholder: __("Add content…", "folioblocks"),
+									}),
+								],
+							),
+						]),
+						createBlock("core/column"),
+						createBlock("core/column"),
 					],
 				),
 			],
@@ -498,12 +497,13 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 	};
 
 	const onSelectVideoUrl = (url) => {
-		if (!url) {
+		const trimmedUrl = typeof url === "string" ? url.trim() : "";
+		if (!isValidHttpUrl(trimmedUrl)) {
 			return;
 		}
 
-		const isLikelyVimeo = /vimeo\.com/i.test(url);
-		const vimeoId = extractVimeoId(url);
+		const isLikelyVimeo = /vimeo\.com/i.test(trimmedUrl);
+		const vimeoId = extractVimeoId(trimmedUrl);
 
 		if (isLikelyVimeo) {
 			setAttributes({
@@ -511,7 +511,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 				mediaDesktop: {
 					provider: "vimeo",
 					id: vimeoId,
-					url,
+					url: trimmedUrl,
 				},
 			});
 			return;
@@ -522,7 +522,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			mediaDesktop: {
 				provider: "self",
 				id: null,
-				url,
+				url: trimmedUrl,
 				mime: "",
 			},
 		});
@@ -561,21 +561,17 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 	);
 	const verticalContentAlignment = normalizeAlignment(
 		verticalAlignment,
-		VERTICAL_ALIGNMENT_OPTIONS.map((option) => option.value),
+		VERTICAL_ALIGNMENT_VALUES,
 		"top",
 	);
-	const verticalAlignmentIcon =
-		VERTICAL_ALIGNMENT_OPTIONS.find(
-			(option) => option.value === verticalContentAlignment,
-		)?.icon || justifyTop;
 
 	const innerBlocksProps = useInnerBlocksProps(
 		{
 			className: `pb-bgvid__content-inner is-h-${horizontalContentAlignment} is-v-${verticalContentAlignment} is-full-width`,
 		},
 		{
-			allowedBlocks: ["core/group"],
-			template: hasAnyBackground ? DEFAULT_CONTENT_GROUP_TEMPLATE : undefined,
+			allowedBlocks: ["core/columns"],
+			template: hasAnyBackground ? DEFAULT_CONTENT_COLUMNS_TEMPLATE : undefined,
 			templateLock: false,
 			orientation: "vertical",
 		},
@@ -588,23 +584,6 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 
 	return (
 		<>
-			<BlockControls>
-				<ToolbarGroup label={__("Vertical Content Alignment", "folioblocks")}>
-					<ToolbarDropdownMenu
-						icon={verticalAlignmentIcon}
-						label={__("Vertical Content Alignment", "folioblocks")}
-						controls={VERTICAL_ALIGNMENT_OPTIONS.map((option) => ({
-							title: option.label,
-							icon: option.icon,
-							isActive: verticalContentAlignment === option.value,
-							onClick: () =>
-								setAttributes({
-									verticalAlignment: option.value,
-								}),
-						}))}
-					/>
-				</ToolbarGroup>
-			</BlockControls>
 			<InspectorControls>
 				<PanelBody
 					title={__("Sizing & Focal Point", "folioblocks")}
@@ -668,23 +647,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 									"folioblocks",
 								)}
 							/>
-							<div style={{ marginBottom: "8px" }}>
-								<Notice status="info" isDismissible={false}>
-									<strong>{__("Responsive Controls", "folioblocks")}</strong>
-									<br />
-									{__(
-										"This is a premium feature. Unlock all features:",
-										"folioblocks",
-									)}{" "}
-									<a
-										href={checkoutUrl}
-										target="_blank"
-										rel="noopener noreferrer"
-									>
-										{__("Upgrade to Pro", "folioblocks")}
-									</a>
-								</Notice>
-							</div>
+							{specialistProFeatureNotice("backgroundVideoResponsive")}
 						</>,
 						{ attributes, setAttributes },
 					)}
@@ -773,11 +736,16 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 
 					{desktopProvider === "vimeo" && (
 						<>
-							<TextControl
+							<ValidatedUrlControl
 								label={__("Vimeo URL", "folioblocks")}
 								value={vimeoUrlValue}
 								placeholder={__("https://vimeo.com/12345678", "folioblocks")}
 								onChange={onChangeVimeoUrl}
+								validate={isValidVimeoUrl}
+								invalidHelp={__(
+									"Enter a valid Vimeo URL beginning with http:// or https://.",
+									"folioblocks",
+								)}
 								help={__(
 									"Paste a Vimeo URL. The block will extract the Vimeo video ID when possible.",
 									"folioblocks",
@@ -881,19 +849,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			<InspectorControls group="advanced">
 				{applyFilters(
 					"folioBlocks.backgroundVideoBlock.disableRightClickToggle",
-					<div style={{ marginBottom: "8px" }}>
-						<Notice status="info" isDismissible={false}>
-							<strong>{__("Disable Right-Click", "folioblocks")}</strong>
-							<br />
-							{__(
-								"This is a premium feature. Unlock all features:",
-								"folioblocks",
-							)}{" "}
-							<a href={checkoutUrl} target="_blank" rel="noopener noreferrer">
-								{__("Upgrade to Pro", "folioblocks")}
-							</a>
-						</Notice>
-					</div>,
+					specialistProFeatureNotice("protection"),
 					{ attributes, setAttributes },
 				)}
 			</InspectorControls>

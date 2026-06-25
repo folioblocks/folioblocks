@@ -13,7 +13,6 @@ import {
 } from '@wordpress/block-editor';
 import {
 	PanelBody,
-	Notice,
 	ToggleControl,
 	SelectControl,
 	ToolbarGroup,
@@ -21,7 +20,6 @@ import {
 } from '@wordpress/components';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { useEffect, useRef, useState } from '@wordpress/element';
-import ResponsiveRangeControl from '../pb-helpers/ResponsiveRangeControl';
 import { plus } from '@wordpress/icons';
 import { applyFilters } from '@wordpress/hooks';
 import { decodeEntities } from '@wordpress/html-entities';
@@ -29,6 +27,12 @@ import { IconMasonryGallery, IconPBSpinner } from '../pb-helpers/icons';
 import { fbksNormalizeActiveFilterValue } from '../pb-helpers/filterConstants';
 import { getExifAttributesFromMedia } from '../pb-helpers/exifMetadata';
 import { getImageSizeOptions } from '../pb-helpers/imageSizeOptions';
+import { imageProFeatureNotice } from '../pb-helpers/imageProFeatureNotices';
+import {
+	getGalleryGapForWidth,
+	resolveLegacyGalleryGaps,
+} from '../pb-helpers/galleryGap';
+import ResponsiveRangeControl from '../pb-helpers/ResponsiveRangeControl';
 import './editor.scss';
 
 const ALLOWED_BLOCKS = [ 'folioblocks/pb-image-block' ];
@@ -160,9 +164,6 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 	}, [ window.folioBlocksData?.hasWooCommerce ] );
 
 	const [ isLoading, setIsLoading ] = useState( false );
-	const checkoutUrl =
-		window.folioBlocksData?.checkoutUrl ||
-		'https://folioblocks.com/folioblocks-pricing/?utm_source=folioblocks&utm_medium=masonry-gallery-block&utm_campaign=upgrade';
 
 	// Block Preview Image
 	if ( preview ) {
@@ -176,6 +177,19 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 	const activeFilter = fbksNormalizeActiveFilterValue(
 		attributes.activeFilter
 	);
+	const hasDropShadow = attributes.shadowStyle
+		? attributes.shadowStyle !== 'none'
+		: attributes.dropShadow;
+	const responsiveGaps = applyFilters(
+		'folioBlocks.masonryGallery.responsiveGaps',
+		resolveLegacyGalleryGaps( attributes ),
+		attributes
+	);
+	const effectiveGapAttributes = {
+		...attributes,
+		...responsiveGaps,
+		noGap: false,
+	};
 
 	const blockProps = useBlockProps( {
 		context: {
@@ -190,6 +204,9 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 			'--pb--filter-active-text':
 				attributes.activeFilterTextColor || '#fff',
 			'--pb--filter-active-bg': attributes.activeFilterBgColor || '#000',
+			'--pb-gallery-gap-desktop': `${ responsiveGaps.gap }px`,
+			'--pb-gallery-gap-tablet': `${ responsiveGaps.tabletGap }px`,
+			'--pb-gallery-gap-mobile': `${ responsiveGaps.mobileGap }px`,
 		},
 	} );
 
@@ -339,7 +356,10 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 			return;
 		}
 
-		const gap = attributes.noGap ? 0 : 10;
+		const gap = getGalleryGapForWidth(
+			effectiveGapAttributes,
+			gallery.offsetWidth
+		);
 		const columns = getColumnsForWidth( gallery.offsetWidth );
 		const columnHeights = Array( columns ).fill( 0 );
 
@@ -470,6 +490,9 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 	}, [
 		innerBlocks,
 		attributes.noGap,
+		attributes.gap,
+		attributes.tabletGap,
+		attributes.mobileGap,
 		attributes.columns,
 		attributes.tabletColumns,
 		attributes.mobileColumns,
@@ -588,40 +611,28 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 						mobileColumns={ mobileColumns }
 						onChange={ ( newValues ) => setAttributes( newValues ) }
 					/>
-					<ToggleControl
-						label={ __( 'Remove Image Gap', 'folioblocks' ) }
-						checked={ attributes.noGap || false }
-						onChange={ ( noGap ) => setAttributes( { noGap } ) }
-						help={ __(
-							'Remove gap between images.',
-							'folioblocks'
-						) }
-						__nextHasNoMarginBottom
-					/>
 					{ applyFilters(
-						'folioBlocks.masonryGallery.randomizeToggle',
-						<div style={ { marginBottom: '8px' } }>
-							<Notice status="info" isDismissible={ false }>
-								<strong>
-									{ __(
-										'Randomize Image Order',
+							'folioBlocks.masonryGallery.responsiveGapControl',
+							<>
+								<ToggleControl
+									label={ __( 'Remove Image Gap', 'folioblocks' ) }
+									checked={ !! attributes.noGap }
+									onChange={ ( noGap ) =>
+										setAttributes( { noGap } )
+									}
+									help={ __(
+										'Remove gap between images.',
 										'folioblocks'
 									) }
-								</strong>
-								<br />
-								{ __(
-									'This is a premium feature. Unlock all features:',
-									'folioblocks'
-								) }{ ' ' }
-								<a
-									href={ checkoutUrl }
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									{ __( 'Upgrade to Pro', 'folioblocks' ) }
-								</a>
-							</Notice>
-						</div>,
+									__nextHasNoMarginBottom
+								/>
+								{ imageProFeatureNotice( 'responsiveGaps' ) }
+							</>,
+							{ attributes, setAttributes }
+					) }
+					{ applyFilters(
+						'folioBlocks.masonryGallery.randomizeToggle',
+						imageProFeatureNotice( 'randomize' ),
 						{ attributes, setAttributes }
 					) }
 				</PanelBody>
@@ -642,25 +653,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 					/>
 					{ applyFilters(
 						'folioBlocks.masonryGallery.imageClickActionNotice',
-						<div style={ { marginBottom: '8px' } }>
-							<Notice status="info" isDismissible={ false }>
-								<strong>
-									{ __( 'Custom Image Linking', 'folioblocks' ) }
-								</strong>
-								<br />
-								{ __(
-									'This is a premium feature. Unlock all features:',
-									'folioblocks'
-								) }{ ' ' }
-								<a
-									href={ checkoutUrl }
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									{ __( 'Upgrade to Pro', 'folioblocks' ) }
-								</a>
-							</Notice>
-						</div>,
+						imageProFeatureNotice( 'clickActions' ),
 						{
 							attributes,
 							setAttributes,
@@ -704,25 +697,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 					>
 						{ applyFilters(
 							'folioBlocks.masonryGallery.onHoverTitleToggle',
-							<div style={ { marginBottom: '8px' } }>
-								<Notice status="info" isDismissible={ false }>
-									<strong>
-										{ __( 'Gallery Hover Settings', 'folioblocks' ) }
-									</strong>
-									<br />
-									{ __(
-										'This is a premium feature. Unlock all features:',
-										'folioblocks'
-									) }{ ' ' }
-									<a
-										href={ checkoutUrl }
-										target="_blank"
-										rel="noopener noreferrer"
-									>
-										{ __( 'Upgrade to Pro', 'folioblocks' ) }
-									</a>
-								</Notice>
-							</div>,
+							imageProFeatureNotice( 'hoverSettings' ),
 							{ attributes, setAttributes }
 						) }
 					</PanelBody>
@@ -732,28 +707,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 				>
 					{ applyFilters(
 						'folioBlocks.masonryGallery.enableFilterToggle',
-						<div style={ { marginBottom: '8px' } }>
-							<Notice status="info" isDismissible={ false }>
-								<strong>
-									{ __(
-										'Enable Image Filtering',
-										'folioblocks'
-									) }
-								</strong>
-								<br />
-								{ __(
-									'This is a premium feature. Unlock all features:',
-									'folioblocks'
-								) }{ ' ' }
-								<a
-									href={ checkoutUrl }
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									{ __( 'Upgrade to Pro', 'folioblocks' ) }
-								</a>
-							</Notice>
-						</div>,
+						imageProFeatureNotice( 'filtering' ),
 						{ attributes, setAttributes }
 					) }
 				</PanelBody>
@@ -761,51 +715,12 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 			<InspectorControls group="advanced">
 				{ applyFilters(
 					'folioBlocks.masonryGallery.disableRightClickToggle',
-					<div style={ { marginBottom: '8px' } }>
-						<Notice status="info" isDismissible={ false }>
-							<strong>
-								{ __( 'Disable Right-Click', 'folioblocks' ) }
-							</strong>
-							<br />
-							{ __(
-								'This is a premium feature. Unlock all features:',
-								'folioblocks'
-							) }{ ' ' }
-							<a
-								href={ checkoutUrl }
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								{ __( 'Upgrade to Pro', 'folioblocks' ) }
-							</a>
-						</Notice>
-					</div>,
+					imageProFeatureNotice( 'protectionPerformance' ),
 					{ attributes, setAttributes }
 				) }
 				{ applyFilters(
 					'folioBlocks.masonryGallery.lazyLoadToggle',
-					<div style={ { marginBottom: '8px' } }>
-						<Notice status="info" isDismissible={ false }>
-							<strong>
-								{ __(
-									'Enable Lazy Load of Images',
-									'folioblocks'
-								) }
-							</strong>
-							<br />
-							{ __(
-								'This is a premium feature. Unlock all features:',
-								'folioblocks'
-							) }{ ' ' }
-							<a
-								href={ checkoutUrl }
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								{ __( 'Upgrade to Pro', 'folioblocks' ) }
-							</a>
-						</Notice>
-					</div>,
+					null,
 					{ attributes, setAttributes }
 				) }
 			</InspectorControls>
@@ -816,58 +731,13 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 				>
 					{ applyFilters(
 						'folioBlocks.masonryGallery.imageStyles',
-						<div style={ { marginBottom: '8px' } }>
-							<Notice status="info" isDismissible={ false }>
-								<strong>
-									{ __(
-										'Enable Image Styles',
-										'folioblocks'
-									) }
-								</strong>
-								<br />
-								{ __(
-									'This is a premium feature. Unlock all features:',
-									'folioblocks'
-								) }{ ' ' }
-								<a
-									href={ checkoutUrl }
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									{ __( 'Upgrade to Pro', 'folioblocks' ) }
-								</a>
-							</Notice>
-						</div>,
+						imageProFeatureNotice( 'imageStyles' ),
 						{ attributes, setAttributes }
 					) }
 				</PanelBody>
 				{ applyFilters(
 					'folioBlocks.masonryGallery.filterStyleSettings',
-					<PanelBody
-						title={ __(
-							'Gallery Filtering Styles',
-							'folioblocks'
-						) }
-						initialOpen={ true }
-					>
-						<Notice status="info" isDismissible={ false }>
-							<strong>
-								{ __( 'Filter Bar Styles', 'folioblocks' ) }
-							</strong>
-							<br />
-							{ __(
-								'This is a premium feature. Unlock all features:',
-								'folioblocks'
-							) }{ ' ' }
-							<a
-								href={ checkoutUrl }
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								{ __( 'Upgrade to Pro', 'folioblocks' ) }
-							</a>
-						</Notice>
-					</PanelBody>,
+					<PanelBody title={ __( 'Gallery Filtering Styles', 'folioblocks' ) } initialOpen={ true }>{ imageProFeatureNotice( 'filterStyles' ) }</PanelBody>,
 					{ attributes, setAttributes }
 				) }
 				{ applyFilters(
@@ -891,7 +761,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 			<div
 				{ ...blockProps }
 				className={ `${ blockProps.className } ${
-					attributes.dropShadow ? 'drop-shadow' : ''
+					hasDropShadow ? 'drop-shadow' : ''
 				}` }
 			>
 				{ isLoading && (

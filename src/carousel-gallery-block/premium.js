@@ -13,19 +13,27 @@ import {
 	__experimentalToolsPanelItem as ToolsPanelItem,
 } from '@wordpress/components';
 import { alignLeft, alignCenter, alignRight } from '@wordpress/icons';
-import CompactColorControl, {
-	CompactTwoColorControl,
-} from '../pb-helpers/CompactColorControl';
+import { CompactTwoColorControl } from '../pb-helpers/CompactColorControl';
+import ImageStyleControl from '../pb-helpers/ImageStyleControl';
 import { addFilter } from '@wordpress/hooks';
 import { registerImageClickActionPremiumControls } from '../pb-helpers/imageClickActionPremiumControls';
 import { registerImageClickStylePremiumControls } from '../pb-helpers/imageClickStylePremiumControls';
 import { registerImageHoverActionPremiumControls } from '../pb-helpers/imageHoverActionPremiumControls';
 import { registerListViewThumbnailEnhancements } from '../pb-helpers/listViewThumbnailEnhancements';
+import { enableGalleryTransforms } from '../pb-helpers/galleryTransforms';
+import { registerResponsiveGapPremiumControl } from '../pb-helpers/responsiveGapPremiumControl';
 import {
 	registerDisableRightClickPremiumControl,
 	registerLazyLoadPremiumControl,
 	registerRandomizeOrderPremiumControl,
 } from '../pb-helpers/simplePremiumControls';
+
+enableGalleryTransforms( 'folioblocks/carousel-gallery-block' );
+registerResponsiveGapPremiumControl( {
+	hookName: 'folioBlocks.carouselGallery.responsiveGapControl',
+	gapsHookName: 'folioBlocks.carouselGallery.responsiveGaps',
+	namespace: 'folioblocks/carousel-gallery',
+} );
 
 const DEFAULT_CONTROLS_BACKGROUND_COLOR = 'rgba(0, 0, 0, 0.5)';
 const DEFAULT_CONTROLS_ICON_COLOR = '#ffffff';
@@ -76,27 +84,19 @@ addFilter(
 						) }
 					/>
 				) }
+				<ToggleControl
+					label={ __( 'Loop Carousel Slides', 'folioblocks' ) }
+					checked={ attributes.loopSlides || false }
+					onChange={ ( value ) =>
+						setAttributes( { loopSlides: value } )
+					}
+					__nextHasNoMarginBottom
+					help={ __(
+						'Return to the first slide after reaching the end.',
+						'folioblocks'
+					) }
+				/>
 			</>
-		);
-	}
-);
-addFilter(
-	'folioBlocks.carouselGallery.loopSlides',
-	'folioblocks/carousel-gallery-premium-controls',
-	( defaultContent, props ) => {
-		const { attributes, setAttributes } = props;
-
-		return (
-			<ToggleControl
-				label={ __( 'Loop Carousel Slides', 'folioblocks' ) }
-				checked={ attributes.loopSlides || false }
-				onChange={ ( value ) => setAttributes( { loopSlides: value } ) }
-				__nextHasNoMarginBottom
-				help={ __(
-					'Enable the carousel to loop infinitely.',
-					'folioblocks'
-				) }
-			/>
 		);
 	}
 );
@@ -278,58 +278,11 @@ addFilter(
 		};
 
 		return (
-			<>
-				<CompactColorControl
-					label={ __( 'Border Color', 'folioblocks' ) }
-					value={ attributes.borderColor }
-					onChange={ ( borderColor ) => {
-						setAttributes( { borderColor } );
-						forceRefresh();
-					} }
-					help={ __( 'Set Image border color.', 'folioblocks' ) }
-				/>
-
-				<RangeControl
-					label={ __( 'Border Width', 'folioblocks' ) }
-					value={ attributes.borderWidth }
-					onChange={ ( value ) => {
-						setAttributes( { borderWidth: value } );
-						forceRefresh();
-					} }
-					min={ 0 }
-					max={ 15 }
-					__next40pxDefaultSize
-					__nextHasNoMarginBottom
-					help={ __( 'Set Image border width.', 'folioblocks' ) }
-				/>
-
-				<RangeControl
-					label={ __( 'Border Radius', 'folioblocks' ) }
-					value={ attributes.borderRadius }
-					onChange={ ( value ) => {
-						setAttributes( { borderRadius: value } );
-						forceRefresh();
-					} }
-					min={ 0 }
-					max={ 50 }
-					__next40pxDefaultSize
-					__nextHasNoMarginBottom
-					help={ __( 'Set Image border radius.', 'folioblocks' ) }
-				/>
-
-				<ToggleControl
-					label={ __( 'Enable Drop Shadow', 'folioblocks' ) }
-					checked={ !! attributes.dropShadow }
-					onChange={ ( newDropShadow ) =>
-						setAttributes( { dropShadow: newDropShadow } )
-					}
-					__nextHasNoMarginBottom
-					help={ __(
-						'Applies a subtle drop shadow to images.',
-						'folioblocks'
-					) }
-				/>
-			</>
+			<ImageStyleControl
+				attributes={ attributes }
+				setAttributes={ setAttributes }
+				onChange={ forceRefresh }
+			/>
 		);
 	}
 );
@@ -361,6 +314,7 @@ addFilter(
 					}` }
 				>
 					<button
+						type="button"
 						onClick={ goToPrevSlide }
 						className="pb-carousel-chevron prev"
 						style={ {
@@ -385,6 +339,7 @@ addFilter(
 
 					{ attributes.autoplay && (
 						<button
+							type="button"
 							className="pb-carousel-play-button"
 							aria-label={ isPlaying ? 'Pause' : 'Play' }
 							onClick={ () => setIsPlaying( ( prev ) => ! prev ) }
@@ -422,6 +377,7 @@ addFilter(
 					) }
 
 					<button
+						type="button"
 						onClick={ goToNextSlide }
 						className="pb-carousel-chevron next"
 						style={ {

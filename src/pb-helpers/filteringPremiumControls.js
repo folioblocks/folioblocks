@@ -279,7 +279,7 @@ export const registerFilteringPremiumControls = ( {
 
 			return (
 				<ToolsPanel
-					label={ __( 'Filter Bar Styles', 'folioblocks' ) }
+					label={ __( 'Gallery Filtering Styles', 'folioblocks' ) }
 					resetAll={ () =>
 						setAttributes( {
 							filterFontFamily: '',

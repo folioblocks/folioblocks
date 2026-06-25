@@ -6,7 +6,9 @@ import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 import {
 	CheckboxControl,
+	Button,
 	Dropdown,
+	Notice,
 	SelectControl,
 	Spinner,
 	PanelBody,
@@ -15,19 +17,28 @@ import {
 	ToolbarButton,
 	ToolbarGroup,
 	ToggleControl,
+	__experimentalToggleGroupControl as ToggleGroupControl,
+	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from '@wordpress/components';
 import { useState, useEffect } from '@wordpress/element';
+import { useSelect } from '@wordpress/data';
 import { useDebounce } from '@wordpress/compose';
 import apiFetch from '@wordpress/api-fetch';
 import ProductSearchControl from '../pb-helpers/ProductSearchControl.js';
 import CompactColorControl from '../pb-helpers/CompactColorControl.js';
+import ImageStyleControl from '../pb-helpers/ImageStyleControl.js';
 import '../pb-helpers/applyThumbnails';
 import { registerImageClickStylePremiumControls } from '../pb-helpers/imageClickStylePremiumControls.js';
+import { enableImageTransforms } from '../pb-helpers/galleryTransforms';
 import { registerImageHoverActionPremiumControls } from '../pb-helpers/imageHoverActionPremiumControls.js';
-import {
-	registerDisableRightClickPremiumControl,
-	registerLazyLoadPremiumControl,
-} from '../pb-helpers/simplePremiumControls.js';
+
+enableImageTransforms( 'folioblocks/pb-image-block' );
+
+addFilter(
+	'folioBlocks.imageBlock.galleryOverridesEnabled',
+	'folioblocks/pb-image-block-gallery-overrides-enabled',
+	() => true
+);
 import {
 	Icon,
 	aspectRatio,
@@ -37,6 +48,77 @@ import {
 	timeToRead,
 } from '@wordpress/icons';
 import { wooCartIcon } from '../pb-helpers/icons.js';
+import { syncImageMetadataToMedia } from '../pb-helpers/syncImageMetadata.js';
+import ValidatedUrlControl from '../pb-helpers/ValidatedUrlControl.js';
+import { isValidHttpUrl } from '../pb-helpers/urlValidation.js';
+
+const ImageMetadataSyncControl = ( { attributes = {} } ) => {
+	const [ status, setStatus ] = useState( '' );
+	const [ isSyncing, setIsSyncing ] = useState( false );
+	const attachmentId = Number( attributes.id || 0 );
+	const canSyncMedia = useSelect(
+		( select ) =>
+			attachmentId
+				? select( 'core' ).canUser( 'update', 'media', attachmentId )
+				: false,
+		[ attachmentId ]
+	);
+
+	if ( canSyncMedia !== true ) {
+		return null;
+	}
+
+	const syncMetadata = async () => {
+		setIsSyncing( true );
+		setStatus( '' );
+
+		try {
+			await syncImageMetadataToMedia( attachmentId, attributes );
+			setStatus( 'success' );
+		} catch ( error ) {
+			setStatus( 'error' );
+		} finally {
+			setIsSyncing( false );
+		}
+	};
+
+	return (
+		<div style={ { marginTop: '16px' } }>
+			<Button
+				variant="secondary"
+				onClick={ syncMetadata }
+				isBusy={ isSyncing }
+				disabled={ isSyncing }
+			>
+				{ isSyncing
+					? __( 'Syncing…', 'folioblocks' )
+					: __( 'Sync to Media Library', 'folioblocks' ) }
+			</Button>
+			{ status === 'success' && (
+				<Notice status="success" isDismissible={ false }>
+					{ __(
+						'Metadata synced to the Media Library.',
+						'folioblocks'
+					) }
+				</Notice>
+			) }
+			{ status === 'error' && (
+				<Notice status="error" isDismissible={ false }>
+					{ __(
+						'Metadata could not be synced to the Media Library.',
+						'folioblocks'
+					) }
+				</Notice>
+			) }
+		</div>
+	);
+};
+
+addFilter(
+	'folioBlocks.imageBlock.metadataSyncControl',
+	'folioblocks/pb-image-block-metadata-sync-control',
+	( Original, props ) => <ImageMetadataSyncControl { ...props } />
+);
 
 const getAssignedFilterCategories = ( attributes = {} ) => {
 	const assignedCategories = Array.isArray( attributes.filterCategories )
@@ -96,14 +178,13 @@ const getWooLinkActionSelectState = (
 
 const setWooProductAttributes = ( product, setAttributes ) => {
 	if ( ! product || ! product.id ) {
-		setAttributes( {
-			wooProductId: 0,
-			wooProductName: '',
-			wooProductPrice: '',
-			wooProductURL: '',
-			wooProductDescription: '',
-			wooProductImage: '',
-		} );
+			setAttributes( {
+				wooProductId: 0,
+				wooProductName: '',
+				wooProductPrice: '',
+				wooProductURL: '',
+				wooProductImage: '',
+			} );
 		return;
 	}
 
@@ -130,9 +211,11 @@ const isUnknownExifValue = ( value, unknownValue ) => {
 		return true;
 	}
 
+	const normalizedValue = String( value ).trim().toLowerCase();
+
 	return (
-		String( value ).trim().toLowerCase() ===
-		String( unknownValue ).trim().toLowerCase()
+		normalizedValue === 'unknown' ||
+		normalizedValue === String( unknownValue ).trim().toLowerCase()
 	);
 };
 
@@ -259,21 +342,6 @@ registerImageClickStylePremiumControls( {
 	hookPrefix: 'folioBlocks.imageBlock',
 	namespace: 'folioblocks/image-block',
 	panelLabel: __( 'Image Click Styles', 'folioblocks' ),
-	hideInsideGallery: true,
-} );
-
-registerDisableRightClickPremiumControl( {
-	hookPrefix: 'folioBlocks.imageBlock',
-	namespace: 'folioblocks/image-block',
-	label: __( 'Disable Right-Click', 'folioblocks' ),
-	hideInsideGallery: true,
-} );
-
-registerLazyLoadPremiumControl( {
-	hookPrefix: 'folioBlocks.imageBlock',
-	namespace: 'folioblocks/image-block',
-	help: __( 'Enables lazy loading of image.', 'folioblocks' ),
-	defaultValue: true,
 	hideInsideGallery: true,
 } );
 
@@ -453,6 +521,22 @@ const LinkTargetControls = ( {
 						if ( value === 'thumbnail' ) {
 							nextAttributes.lightbox = false;
 							nextAttributes.enableLightbox = false;
+							if ( isCustomOrPage ) {
+								nextAttributes.linkIconDisplay = 'none';
+							}
+							if ( imageClickAction === 'woocommerce' ) {
+								nextAttributes.wooCartIconDisplay = 'none';
+							}
+						} else {
+							if ( isCustomOrPage && linkIconDisplay === 'none' ) {
+								nextAttributes.linkIconDisplay = 'hover';
+							}
+							if (
+								imageClickAction === 'woocommerce' &&
+								attributes.wooCartIconDisplay === 'none'
+							) {
+								nextAttributes.wooCartIconDisplay = 'hover';
+							}
 						}
 						setAttributes( nextAttributes );
 					} }
@@ -471,8 +555,7 @@ const LinkTargetControls = ( {
 					}
 				/>
 			) }
-			{ imageClickTarget === 'icon' &&
-				! isGalleryChild &&
+			{ ! isGalleryChild &&
 				showLightboxControls && (
 				<>
 					{ showIconDisplayControls && (
@@ -480,6 +563,10 @@ const LinkTargetControls = ( {
 							label={ __( 'Display Link Target Icon', 'folioblocks' ) }
 							value={ linkIconDisplay }
 							options={ [
+								{
+									label: __( 'None', 'folioblocks' ),
+									value: 'none',
+								},
 								{
 									label: __( 'On Hover', 'folioblocks' ),
 									value: 'hover',
@@ -500,6 +587,7 @@ const LinkTargetControls = ( {
 							) }
 						/>
 					) }
+					{ imageClickTarget === 'icon' && (
 					<ToggleControl
 						label={ __( 'Enable Lightbox', 'folioblocks' ) }
 						checked={ lightbox }
@@ -515,7 +603,8 @@ const LinkTargetControls = ( {
 							'folioblocks'
 						) }
 					/>
-					{ lightbox && (
+					) }
+					{ imageClickTarget === 'icon' && lightbox && (
 						<LightboxContentControl
 							attributes={ attributes }
 							setAttributes={ setAttributes }
@@ -547,11 +636,35 @@ const LightboxContentControl = ( {
 	showProductInfoOption = false,
 } ) => {
 	const value = getLightboxContent( attributes );
+	const canInheritGalleryTheme = !! attributes.overrideGalleryClickSettings;
+	const lightboxTheme =
+		canInheritGalleryTheme || attributes.lightboxTheme !== 'inherit'
+			? attributes.lightboxTheme || 'inherit'
+			: 'dark';
 	const options = [
 		{ label: __( 'None', 'folioblocks' ), value: 'none' },
 		{ label: __( 'Show Image Title', 'folioblocks' ), value: 'title' },
 		{ label: __( 'Show Image Caption', 'folioblocks' ), value: 'caption' },
 		{ label: __( 'Show EXIF Data', 'folioblocks' ), value: 'exif' },
+		{
+			label: __( 'Show Image Title & EXIF Data', 'folioblocks' ),
+			value: 'title_exif',
+		},
+		{
+			label: __( 'Show Image Caption & EXIF Data', 'folioblocks' ),
+			value: 'caption_exif',
+		},
+		{
+			label: __( 'Show Image Title & Caption', 'folioblocks' ),
+			value: 'title_caption',
+		},
+		{
+			label: __(
+				'Show Image Title, Caption, & EXIF Data',
+				'folioblocks'
+			),
+			value: 'title_caption_exif',
+		},
 	];
 
 	if ( showProductInfoOption ) {
@@ -563,6 +676,37 @@ const LightboxContentControl = ( {
 
 	return (
 		<>
+			<ToggleGroupControl
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
+					value={ lightboxTheme }
+					isBlock
+					label={ __( 'Lightbox Appearance', 'folioblocks' ) }
+					help={ __(
+						'Choose a light or dark lightbox background.',
+						'folioblocks'
+					) }
+					onChange={ ( lightboxTheme ) => {
+						if ( lightboxTheme ) {
+							setAttributes( { lightboxTheme } );
+						}
+					} }
+				>
+					{ canInheritGalleryTheme && (
+						<ToggleGroupControlOption
+							label={ __( 'Inherit Gallery', 'folioblocks' ) }
+							value="inherit"
+						/>
+					) }
+					<ToggleGroupControlOption
+						label={ __( 'Light', 'folioblocks' ) }
+						value="light"
+					/>
+					<ToggleGroupControlOption
+						label={ __( 'Dark', 'folioblocks' ) }
+						value="dark"
+					/>
+			</ToggleGroupControl>
 			<SelectControl
 				label={ __( 'Lightbox Content', 'folioblocks' ) }
 				value={
@@ -585,7 +729,12 @@ const LightboxContentControl = ( {
 					'folioblocks'
 				) }
 			/>
-			{ value === 'exif' && (
+			{ [
+				'exif',
+				'title_exif',
+				'caption_exif',
+				'title_caption_exif',
+			].includes( value ) && (
 				<ToggleControl
 					label={ __( 'Hide Unknown EXIF Fields', 'folioblocks' ) }
 					checked={ !! attributes.hideUnknownExifFields }
@@ -652,14 +801,16 @@ addFilter(
 
 		return (
 			<>
-				<TextControl
+				<ValidatedUrlControl
 					label={ __( 'Custom URL', 'folioblocks' ) }
-					type="url"
 					value={ attributes.customUrl || '' }
 					onChange={ ( value ) =>
 						setAttributes( {
 							customUrl: value,
 						} )
+					}
+					validate={ ( value ) =>
+						isValidHttpUrl( value, { allowRelative: true } )
 					}
 					__nextHasNoMarginBottom
 					__next40pxDefaultSize
@@ -715,13 +866,17 @@ addFilter(
 					) }
 					renderContent={ () => (
 						<div style={ { padding: '12px', width: '280px' } }>
-							<TextControl
+							<ValidatedUrlControl
 								label={ __( 'Custom URL', 'folioblocks' ) }
-								type="url"
 								value={ attributes.customUrl || '' }
 								onChange={ ( value ) =>
 									setAttributes( {
 										customUrl: value,
+									} )
+								}
+								validate={ ( value ) =>
+									isValidHttpUrl( value, {
+										allowRelative: true,
 									} )
 								}
 								__nextHasNoMarginBottom
@@ -1046,11 +1201,14 @@ addFilter(
 					showLightboxControls={ false }
 					showIconDisplayControls={ false }
 				/>
-				{ imageClickTarget === 'icon' && (
 					<SelectControl
 						label={ __( 'Display Add to Cart Icon', 'folioblocks' ) }
 						value={ wooCartIconDisplay || 'hover' }
 						options={ [
+							{
+								label: __( 'None', 'folioblocks' ),
+								value: 'none',
+							},
 							{
 								label: __( 'On Hover', 'folioblocks' ),
 								value: 'hover',
@@ -1070,7 +1228,6 @@ addFilter(
 							'folioblocks'
 						) }
 					/>
-				) }
 					{ imageClickTarget === 'icon' && (
 						<ToggleControl
 							label={ __( 'Enable Lightbox', 'folioblocks' ) }
@@ -1260,7 +1417,7 @@ addFilter(
 		return (
 			<>
 				<PanelBody
-					title={ __( 'Image Filtering Settings', 'folioblocks' ) }
+					title={ __( 'Gallery Filtering Categories', 'folioblocks' ) }
 					initialOpen={ true }
 				>
 					<p
@@ -1321,49 +1478,9 @@ addFilter(
 				title={ __( 'Image Styles', 'folioblocks' ) }
 				initialOpen={ true }
 			>
-				<CompactColorControl
-					label={ __( 'Border Color', 'folioblocks' ) }
-					value={ attributes.borderColor }
-					onChange={ ( borderColor ) =>
-						setAttributes( { borderColor } )
-					}
-					help={ __( 'Set Image border color.', 'folioblocks' ) }
-				/>
-				<RangeControl
-					label={ __( 'Border Width', 'folioblocks' ) }
-					value={ attributes.borderWidth }
-					onChange={ ( value ) =>
-						setAttributes( { borderWidth: value } )
-					}
-					min={ 0 }
-					max={ 20 }
-					__next40pxDefaultSize
-					__nextHasNoMarginBottom
-					help={ __( 'Set Image border width.', 'folioblocks' ) }
-				/>
-				<RangeControl
-					label={ __( 'Border Radius', 'folioblocks' ) }
-					value={ attributes.borderRadius }
-					onChange={ ( value ) =>
-						setAttributes( { borderRadius: value } )
-					}
-					min={ 0 }
-					max={ 50 }
-					__next40pxDefaultSize
-					__nextHasNoMarginBottom
-					help={ __( 'Set Image border radius.', 'folioblocks' ) }
-				/>
-				<ToggleControl
-					label={ __( 'Enable Drop Shadow', 'folioblocks' ) }
-					checked={ !! attributes.dropShadow }
-					onChange={ ( newDropShadow ) =>
-						setAttributes( { dropShadow: newDropShadow } )
-					}
-					__nextHasNoMarginBottom
-					help={ __(
-						'Applies a subtle drop shadow to images.',
-						'folioblocks'
-					) }
+				<ImageStyleControl
+					attributes={ attributes }
+					setAttributes={ setAttributes }
 				/>
 			</PanelBody>
 		);
@@ -1373,19 +1490,15 @@ addFilter(
 addFilter(
 	'folioBlocks.imageBlock.downloadButton',
 	'folioblocks/pb-image-block-download-button',
-	(
-		Original,
-		{
-			attributes,
-			setAttributes,
-			effectiveDownloadEnabled,
-			effectiveDownloadOnHover,
-			sizes,
-			src,
-			context,
-			isInsideGallery,
-			downloadIconStyleVars,
-		}
+		(
+			Original,
+			{
+				effectiveDownloadEnabled,
+				effectiveDownloadOnHover,
+				sizes,
+				src,
+				downloadIconStyleVars,
+			}
 	) => {
 		if ( ! effectiveDownloadEnabled || ! src ) {
 			return null;
@@ -1444,6 +1557,9 @@ addFilter(
 		if ( ! url ) {
 			return null;
 		}
+		if ( effectiveLinkIconDisplay === 'none' ) {
+			return null;
+		}
 
 		return (
 			<a
@@ -1469,11 +1585,10 @@ addFilter(
 	'folioblocks/pb-image-block-hover-overlay-content',
 	(
 		Original,
-		{
-			attributes,
-			setAttributes,
-			effectiveWooActive,
-			context,
+			{
+				attributes,
+				effectiveWooActive,
+				context,
 			title,
 			caption,
 			effectiveOverlayContent,
@@ -1513,11 +1628,14 @@ addFilter(
 				) : null;
 			}
 
-			if ( overlayContent !== 'product' || ! effectiveWooActive ) {
+			if ( overlayContent !== 'product' ) {
 			return showTitle && title ? <>{ title }</> : null;
 		}
 
-		if ( Number( attributes.wooProductId ) > 0 ) {
+		if (
+			effectiveWooActive &&
+			Number( attributes.wooProductId ) > 0
+		) {
 			return (
 				<>
 					{ attributes.wooProductName && (
@@ -1537,7 +1655,7 @@ addFilter(
 			);
 		}
 
-		return showTitle && title ? <>{ title }</> : null;
+		return null;
 	}
 );
 addFilter(
@@ -1545,13 +1663,11 @@ addFilter(
 	'folioblocks/pb-image-block-add-to-cart-button',
 	(
 		Original,
-		{
-			attributes,
-			setAttributes,
-			effectiveWooActive,
-			context,
-			isInsideGallery,
-			cartIconStyleVars,
+			{
+				attributes,
+				effectiveWooActive,
+				context,
+				cartIconStyleVars,
 		}
 	) => {
 		if ( ! effectiveWooActive || Number( attributes.wooProductId ) <= 0 ) {
@@ -1561,6 +1677,9 @@ addFilter(
 			context?.[ 'folioBlocks/wooCartIconDisplay' ] ??
 			attributes.wooCartIconDisplay ??
 			'hover';
+		if ( cartDisplay === 'none' ) {
+			return null;
+		}
 		const galleryDefault = context?.[ 'folioBlocks/wooDefaultLinkAction' ];
 		const attrAction = attributes.wooLinkAction ?? 'inherit';
 		const linkAction =
