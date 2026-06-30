@@ -5,7 +5,7 @@ add_action('admin_enqueue_scripts', 'fbks_admin_styles');
 
 function fbks_admin_styles($hook)
 {
-	if ($hook !== 'toplevel_page_folioblocks-settings') {
+	if (! in_array($hook, array('toplevel_page_folioblocks-settings', 'folioblocks_page_folioblocks-global-settings'), true)) {
 		return;
 	}
 
@@ -132,6 +132,126 @@ if (! function_exists('fbks_extract_news_item_image')) {
 		}
 
 		return '';
+	}
+}
+
+if (! function_exists('fbks_trim_news_excerpt')) {
+	function fbks_trim_news_excerpt($excerpt_html, $word_limit = 25)
+	{
+		$excerpt = trim(wp_specialchars_decode(wp_strip_all_tags($excerpt_html), ENT_QUOTES));
+		if ('' === $excerpt) {
+			return '';
+		}
+
+		return wp_trim_words($excerpt, $word_limit, '…');
+	}
+}
+
+if (! function_exists('fbks_get_rest_featured_image')) {
+	function fbks_get_rest_featured_image($media_id)
+	{
+		$media_id = absint($media_id);
+		if (0 === $media_id) {
+			return '';
+		}
+
+		$endpoint = add_query_arg(
+			array(
+				'_fields' => 'source_url,media_details.sizes',
+			),
+			'https://folioblocks.com/wp-json/wp/v2/media/' . $media_id
+		);
+
+		$response = wp_remote_get(
+			$endpoint,
+			array(
+				'timeout' => 8,
+			)
+		);
+
+		if (is_wp_error($response) || 200 !== wp_remote_retrieve_response_code($response)) {
+			return '';
+		}
+
+		$media = json_decode(wp_remote_retrieve_body($response), true);
+		if (! is_array($media)) {
+			return '';
+		}
+
+		$sizes = isset($media['media_details']['sizes']) && is_array($media['media_details']['sizes'])
+			? $media['media_details']['sizes']
+			: array();
+
+		foreach (array('medium_large', 'large', 'medium', 'full') as $size) {
+			if (! empty($sizes[$size]['source_url']) && fbks_news_url_looks_like_image($sizes[$size]['source_url'])) {
+				return esc_url($sizes[$size]['source_url']);
+			}
+		}
+
+		if (! empty($media['source_url']) && fbks_news_url_looks_like_image($media['source_url'])) {
+			return esc_url($media['source_url']);
+		}
+
+		return '';
+	}
+}
+
+if (! function_exists('fbks_get_dashboard_news_from_rest')) {
+	function fbks_get_dashboard_news_from_rest()
+	{
+		$endpoint = add_query_arg(
+			array(
+				'per_page' => 5,
+				'_fields'  => 'link,date,title.rendered,excerpt.rendered,featured_media',
+			),
+			'https://folioblocks.com/wp-json/wp/v2/posts'
+		);
+
+		$response = wp_remote_get(
+			$endpoint,
+			array(
+				'timeout' => 8,
+			)
+		);
+
+		if (is_wp_error($response) || 200 !== wp_remote_retrieve_response_code($response)) {
+			return array();
+		}
+
+		$posts = json_decode(wp_remote_retrieve_body($response), true);
+		if (! is_array($posts)) {
+			return array();
+		}
+
+		$news_items = array();
+
+		foreach ($posts as $post) {
+			if (! is_array($post)) {
+				continue;
+			}
+
+			$title        = isset($post['title']['rendered']) ? $post['title']['rendered'] : '';
+			$link         = isset($post['link']) ? $post['link'] : '';
+			$date         = isset($post['date']) ? strtotime($post['date']) : false;
+			$excerpt_html = isset($post['excerpt']['rendered']) ? $post['excerpt']['rendered'] : '';
+			$title        = trim(wp_specialchars_decode(wp_strip_all_tags($title), ENT_QUOTES));
+			$excerpt      = fbks_trim_news_excerpt($excerpt_html);
+			$image        = ! empty($post['featured_media']) ? fbks_get_rest_featured_image($post['featured_media']) : '';
+
+			if ('' === $title || '' === $link) {
+				continue;
+			}
+
+			$news_items[] = array(
+				'title' => $title,
+				'link'  => esc_url($link),
+				'date'  => $date ? date_i18n(get_option('date_format'), $date) : '',
+				'desc'  => $excerpt,
+				'image' => $image,
+			);
+		}
+
+		return $news_items;
 	}
 }
 
@@ -515,6 +635,17 @@ function fbks_render_settings_page()
 						<?php endif; ?>
 					</div>
 				</div>
+				<div class="pb-dashboard-box pb-global-settings-callout">
+					<h2><?php esc_html_e('Global Settings:', 'folioblocks'); ?></h2>
+					<p>
+						<?php esc_html_e('Set site-wide FolioBlocks defaults in one place. The first planned feature for this page is a dynamic Watermark Overlay with block-level overrides.', 'folioblocks'); ?>
+					</p>
+					<p class="buy-button-wrapper">
+						<a class="button button-primary buy-button" href="<?php echo esc_url(admin_url('admin.php?page=folioblocks-global-settings')); ?>">
+							<?php esc_html_e('Open Global Settings', 'folioblocks'); ?>
+						</a>
+					</p>
+				</div>
 				<?php if (! fbks_fs()->can_use_premium_code()) : ?>
 					<div class="pb-dashboard-box">
 						<h2><?php esc_html_e('Pro Version - Features:', 'folioblocks'); ?></h2>
@@ -557,7 +688,7 @@ function fbks_render_settings_page()
 					}
 
 					// Try loading cached simplified feed data
-					$port_news_cached = get_transient('folioblocks_news_safe_cache');
+					$port_news_cached = get_transient('folioblocks_news_safe_cache_v2');
 					$port_rss_items = array();
 					$port_has_items = false;
 					$port_cache_requires_refresh = false;
@@ -583,10 +714,19 @@ function fbks_render_settings_page()
 						$port_rss_items = $port_news_cached;
 						$port_has_items = ! empty($port_rss_items);
 					} else {
-						// Fetch fresh feed from site
-						$port_rss = fetch_feed('https://folioblocks.com/feed/');
+						$port_sanitized = fbks_get_dashboard_news_from_rest();
 
-						if (! is_wp_error($port_rss)) {
+						if (! empty($port_sanitized)) {
+							set_transient('folioblocks_news_safe_cache_v2', $port_sanitized, 6 * HOUR_IN_SECONDS);
+
+							$port_rss_items = $port_sanitized;
+							$port_has_items = true;
+						}
+
+						// Fetch fresh feed from site
+						$port_rss = $port_has_items ? null : fetch_feed('https://folioblocks.com/feed/');
+
+						if (! $port_has_items && ! is_wp_error($port_rss)) {
 							$port_maxitems  = $port_rss->get_item_quantity(5);
 							$port_items_raw = $port_rss->get_items(0, $port_maxitems);
 
@@ -603,14 +743,7 @@ function fbks_render_settings_page()
 									if (empty($port_desc_raw) && method_exists($item, 'get_content')) {
 										$port_desc_raw = $item->get_content();
 									}
-									$port_desc_stripped = wp_strip_all_tags($port_desc_raw);
-									$port_words = explode(' ', $port_desc_stripped);
-									if (count($port_words) > 25) {
-										$port_words = array_slice($port_words, 0, 25);
-										$port_desc  = implode(' ', $port_words) . '…';
-									} else {
-										$port_desc = $port_desc_stripped;
-									}
+									$port_desc = fbks_trim_news_excerpt($port_desc_raw);
 
 									$port_image = fbks_extract_news_item_image($item, $port_desc_raw);
 
@@ -624,7 +757,7 @@ function fbks_render_settings_page()
 								}
 
 								// Save sanitized array for 6 hours
-								set_transient('folioblocks_news_safe_cache', $port_sanitized, 6 * HOUR_IN_SECONDS);
+								set_transient('folioblocks_news_safe_cache_v2', $port_sanitized, 6 * HOUR_IN_SECONDS);
 
 								$port_rss_items = $port_sanitized;
 								$port_has_items = true;

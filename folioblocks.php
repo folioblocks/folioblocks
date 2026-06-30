@@ -3,7 +3,7 @@
 /**
  * Plugin Name:       FolioBlocks
  * Description:       Create fast, responsive photo and video gallery with grid, masonry, justified, modular, and carousel layouts—ideal for photographers and creatives.
- * Version:           1.4.1
+ * Version:           1.5.0
  * Requires at least: 6.3
  * Requires PHP:      7.4
  * Author:            FolioBlocks
@@ -22,13 +22,14 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FBKS_VERSION', '1.4.1');
+define('FBKS_VERSION', '1.5.0');
 define('FBKS_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('FBKS_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('FBKS_ALL_FILTER_TOKEN', 'all');
 define('FBKS_LEGACY_ALL_FILTER_TOKEN', 'All');
 
 require_once FBKS_PLUGIN_DIR . 'includes/php/filter-helpers.php';
+require_once FBKS_PLUGIN_DIR . 'includes/php/css-values.php';
 require_once FBKS_PLUGIN_DIR . 'includes/php/i18n.php';
 
 /**
@@ -407,6 +408,14 @@ if (function_exists('fbks_fs')) {
             'folioblocks-settings',         // SAME slug as main page
             'fbks_render_settings_page'
         );
+        add_submenu_page(
+            'folioblocks-settings',
+            __('Global Settings', 'folioblocks'),
+            __('Global Settings', 'folioblocks'),
+            'manage_options',
+            'folioblocks-global-settings',
+            'fbks_render_global_settings_page'
+        );
         if (! fbks_fs()->can_use_premium_code__premium_only()) {
             add_submenu_page(
                 'folioblocks-settings',
@@ -440,6 +449,7 @@ if (function_exists('fbks_fs')) {
     require_once plugin_dir_path(__FILE__) . 'includes/admin/common.php';
     require_once plugin_dir_path(__FILE__) . 'includes/admin/review-request.php';
     require_once plugin_dir_path(__FILE__) . 'includes/admin/settings-page.php';
+    require_once plugin_dir_path(__FILE__) . 'includes/admin/global-settings.php';
     require_once plugin_dir_path(__FILE__) . 'includes/admin/system-info.php';
     require_once plugin_dir_path(__FILE__) . 'includes/admin/free-pro.php';
     // Load CSS for Admin pages
@@ -448,12 +458,17 @@ if (function_exists('fbks_fs')) {
     {
         $admin_pages = array(
             'toplevel_page_folioblocks-settings',
+            'folioblocks_page_folioblocks-global-settings',
             'folioblocks_page_folioblocks-free-vs-pro',
             'folioblocks_page_folioblocks-system-info',
         );
 
         if (! in_array($hook, $admin_pages, true)) {
             return;
+        }
+
+        if ('folioblocks_page_folioblocks-global-settings' === $hook) {
+            wp_enqueue_media();
         }
 
         $style_path = plugin_dir_path(__FILE__) . 'includes/admin/settings-page.css';

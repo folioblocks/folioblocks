@@ -736,11 +736,6 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 					) }
 				</PanelBody>
 				{ applyFilters(
-					'folioBlocks.masonryGallery.filterStyleSettings',
-					<PanelBody title={ __( 'Gallery Filtering Styles', 'folioblocks' ) } initialOpen={ true }>{ imageProFeatureNotice( 'filterStyles' ) }</PanelBody>,
-					{ attributes, setAttributes }
-				) }
-				{ applyFilters(
 					'folioBlocks.masonryGallery.iconStyleControls',
 					null,
 					{
@@ -755,6 +750,11 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 						attributes,
 						setAttributes,
 					}
+				) }
+				{ applyFilters(
+					'folioBlocks.masonryGallery.filterStyleSettings',
+					<PanelBody title={ __( 'Gallery Filtering Styles', 'folioblocks' ) } initialOpen={ true }>{ imageProFeatureNotice( 'filterStyles' ) }</PanelBody>,
+					{ attributes, setAttributes }
 				) }
 			</InspectorControls>
 

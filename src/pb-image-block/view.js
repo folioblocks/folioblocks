@@ -2,7 +2,11 @@
  * PB Image Block
  * View JS
  */
+import { initTiltHoverEffects } from '../pb-helpers/tiltHoverEffect';
+
 document.addEventListener( 'DOMContentLoaded', () => {
+	initTiltHoverEffects();
+
 	// Track input method for focus visibility control
 	let userUsedKeyboard = false;
 	window.addEventListener( 'keydown', ( e ) => {

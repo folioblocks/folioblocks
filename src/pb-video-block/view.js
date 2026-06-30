@@ -4,6 +4,7 @@
  */
 
 import { getVideoIframeSrc } from '../pb-helpers/videoProviders';
+import { initTiltHoverEffects } from '../pb-helpers/tiltHoverEffect';
 
 let userUsedKeyboard = false;
 window.addEventListener( 'keydown', ( e ) => {
@@ -18,6 +19,7 @@ const hasWooCommerce = !! document.querySelector( '.woocommerce' );
 
 document.addEventListener( 'DOMContentLoaded', () => {
 	const blocks = document.querySelectorAll( '.pb-video-block' );
+	initTiltHoverEffects();
 
 	/**
 	 * ----------------------------------------------------------------

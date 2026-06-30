@@ -2,6 +2,8 @@
  * Filmstrip Gallery Block
  * Premium View JS
  */
+import { initTiltHoverEffects } from '../pb-helpers/tiltHoverEffect';
+
 document.addEventListener( 'DOMContentLoaded', () => {
 	// Disable right-click if enabled by any filmstrip instance.
 	document.addEventListener(
@@ -797,8 +799,30 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				'pb-hover-gradient-bottom',
 				'pb-hover-chip',
 				'pb-hover-color-overlay',
+				'pb-hover-gradient-overlay',
 			];
-			mainMedia.classList.remove( ...hoverClasses );
+			const hoverEffectClasses = [
+				'pb-effect-zoom-in',
+				'pb-effect-zoom-out',
+				'pb-effect-lift',
+				'pb-effect-tilt',
+				'pb-effect-pop',
+				'pb-effect-glare',
+				'pb-effect-pan',
+				'pb-effect-desaturate',
+			];
+			const overlayEntranceClasses = [
+				'pb-overlay-enter-fade',
+				'pb-overlay-enter-slide-up',
+				'pb-overlay-enter-slide-down',
+				'pb-overlay-enter-slide-left',
+				'pb-overlay-enter-slide-right',
+			];
+			mainMedia.classList.remove(
+				...hoverClasses,
+				...hoverEffectClasses,
+				...overlayEntranceClasses
+			);
 			if ( hoverEnabled ) {
 				const hoverClassMap = {
 					'blur-overlay': 'pb-hover-blur-overlay',
@@ -806,23 +830,83 @@ document.addEventListener( 'DOMContentLoaded', () => {
 					'gradient-bottom': 'pb-hover-gradient-bottom',
 					chip: 'pb-hover-chip',
 					'color-overlay': 'pb-hover-color-overlay',
+					'gradient-overlay': 'pb-hover-gradient-overlay',
 				};
 				mainMedia.classList.add(
 					hoverClassMap[ hoverSettings.onHoverStyle ] ||
 						'pb-hover-blur-overlay'
 				);
+				const overlayEntranceClassMap = {
+					fade: 'pb-overlay-enter-fade',
+					'slide-up': 'pb-overlay-enter-slide-up',
+					'slide-down': 'pb-overlay-enter-slide-down',
+					'slide-left': 'pb-overlay-enter-slide-left',
+					'slide-right': 'pb-overlay-enter-slide-right',
+				};
+				if ( overlayEntranceClassMap[ hoverSettings.overlayEntrance ] ) {
+					mainMedia.classList.add(
+						overlayEntranceClassMap[ hoverSettings.overlayEntrance ]
+					);
+				}
 			}
+			const hoverEffectClassMap = {
+				'zoom-in': 'pb-effect-zoom-in',
+				'zoom-out': 'pb-effect-zoom-out',
+				lift: 'pb-effect-lift',
+				tilt: 'pb-effect-tilt',
+				pop: 'pb-effect-pop',
+				glare: 'pb-effect-glare',
+				pan: 'pb-effect-pan',
+				desaturate: 'pb-effect-desaturate',
+			};
+			if ( hoverEffectClassMap[ hoverSettings.hoverEffect ] ) {
+				mainMedia.classList.add(
+					hoverEffectClassMap[ hoverSettings.hoverEffect ]
+				);
+			}
+			initTiltHoverEffects( galleryRoot );
 
 			[
 				'--pb-overlay-bg',
 				'--pb-overlay-color',
 				'--pb-chip-overlay-bg',
 				'--pb-chip-overlay-color',
+				'--pb-overlay-font-family',
+				'--pb-overlay-font-weight',
+				'--pb-overlay-font-style',
 			].forEach( ( property ) => mainMedia.style.removeProperty( property ) );
+			if ( hoverSettings.overlayFontFamily ) {
+				mainMedia.style.setProperty(
+					'--pb-overlay-font-family',
+					hoverSettings.overlayFontFamily
+				);
+			}
+			if ( hoverSettings.overlayFontWeight ) {
+				mainMedia.style.setProperty(
+					'--pb-overlay-font-weight',
+					hoverSettings.overlayFontWeight
+				);
+			}
+			if ( hoverSettings.overlayFontStyle ) {
+				mainMedia.style.setProperty(
+					'--pb-overlay-font-style',
+					hoverSettings.overlayFontStyle
+				);
+			}
 			if ( hoverSettings.onHoverStyle === 'color-overlay' ) {
 				mainMedia.style.setProperty(
 					'--pb-overlay-bg',
 					hoverSettings.overlayBgColor || '#f9f9f9'
+				);
+				mainMedia.style.setProperty(
+					'--pb-overlay-color',
+					hoverSettings.overlayTextColor || '#000000'
+				);
+			} else if ( hoverSettings.onHoverStyle === 'gradient-overlay' ) {
+				mainMedia.style.setProperty(
+					'--pb-overlay-bg',
+					hoverSettings.overlayBgGradient ||
+						'linear-gradient(135deg, rgba(255,255,255,0.92) 0%, rgba(226,232,240,0.82) 100%)'
 				);
 				mainMedia.style.setProperty(
 					'--pb-overlay-color',

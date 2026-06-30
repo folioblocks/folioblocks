@@ -87,6 +87,9 @@
 		align-items: center;
 		justify-content: center;
 		font-size: clamp(0.8rem, 5cqi, 1rem);
+		font-family: var(--pb-overlay-font-family, inherit);
+		font-weight: var(--pb-overlay-font-weight, inherit);
+		font-style: var(--pb-overlay-font-style, inherit);
 		text-align: center;
 		line-height: 1.5;
 		opacity: 0;
@@ -106,7 +109,7 @@
 
 		.pb-product-price {
 			margin-top: 2px;
-			font-weight: 600; /* makes it pop a bit */
+			font-weight: var(--pb-overlay-font-weight, 600); /* makes it pop a bit */
 		}
 	}
 
@@ -118,6 +121,47 @@
 	&:hover .pb-image-block-title {
 		opacity: 1;
 	}
+}
+
+.pb-image-block.pb-hover-blur-overlay.pb-overlay-enter-fade .pb-image-block-title {
+	transform: none;
+	transition:
+		opacity var(--pb-hover-duration, 0.35s) ease,
+		transform var(--pb-hover-duration, 0.35s) ease;
+}
+
+.pb-image-block.pb-hover-blur-overlay.pb-overlay-enter-slide-up .pb-image-block-title,
+.pb-image-block.pb-hover-blur-overlay.pb-overlay-enter-slide-down .pb-image-block-title,
+.pb-image-block.pb-hover-blur-overlay.pb-overlay-enter-slide-left .pb-image-block-title,
+.pb-image-block.pb-hover-blur-overlay.pb-overlay-enter-slide-right .pb-image-block-title {
+	transition:
+		opacity var(--pb-hover-duration, 0.35s) ease,
+		transform var(--pb-hover-duration, 0.35s) ease;
+}
+
+.pb-image-block.pb-hover-blur-overlay.pb-overlay-enter-slide-up .pb-image-block-title {
+	transform: translateY(100%);
+}
+
+.pb-image-block.pb-hover-blur-overlay.pb-overlay-enter-slide-down .pb-image-block-title {
+	transform: translateY(-100%);
+}
+
+.pb-image-block.pb-hover-blur-overlay.pb-overlay-enter-slide-left .pb-image-block-title {
+	transform: translateX(100%);
+}
+
+.pb-image-block.pb-hover-blur-overlay.pb-overlay-enter-slide-right .pb-image-block-title {
+	transform: translateX(-100%);
+}
+
+.pb-image-block.pb-hover-blur-overlay.pb-overlay-enter-fade:hover .pb-image-block-title,
+.pb-image-block.pb-hover-blur-overlay.pb-overlay-enter-slide-up:hover .pb-image-block-title,
+.pb-image-block.pb-hover-blur-overlay.pb-overlay-enter-slide-down:hover .pb-image-block-title,
+.pb-image-block.pb-hover-blur-overlay.pb-overlay-enter-slide-left:hover .pb-image-block-title,
+.pb-image-block.pb-hover-blur-overlay.pb-overlay-enter-slide-right:hover .pb-image-block-title {
+	opacity: 1;
+	transform: none;
 }
 
 //Download & Add To Cart Button Styles
@@ -511,6 +555,9 @@
 	/* Tunables */
 	--pb-hover-duration: 0.35s;
 	--pb-hover-scale: 1.065;
+	--pb-hover-pop-scale: 1.035;
+	--pb-tilt-x: 0deg;
+	--pb-tilt-y: 0deg;
 		--pb-overlay-bg: #f9f9f9;
 		--pb-overlay-color: #000;
 		--pb-chip-overlay-bg: #f9f9f9;
@@ -526,7 +573,15 @@
 .pb-image-block.pb-hover-fade-overlay,
 .pb-image-block.pb-hover-gradient-bottom,
 .pb-image-block.pb-hover-chip,
-.pb-image-block.pb-hover-color-overlay {
+.pb-image-block.pb-hover-color-overlay,
+.pb-image-block.pb-hover-gradient-overlay,
+.pb-image-block.pb-effect-zoom-in,
+.pb-image-block.pb-effect-zoom-out,
+.pb-image-block.pb-effect-tilt,
+.pb-image-block.pb-effect-pop,
+.pb-image-block.pb-effect-glare,
+.pb-image-block.pb-effect-pan,
+.pb-image-block.pb-effect-desaturate {
 	position: relative;
 	overflow: hidden; /* respect figure border radius */
 }
@@ -535,7 +590,8 @@
 .pb-image-block.pb-hover-fade-overlay .pb-image-block-title-container,
 .pb-image-block.pb-hover-gradient-bottom .pb-image-block-title-container,
 .pb-image-block.pb-hover-chip .pb-image-block-title-container,
-.pb-image-block.pb-hover-color-overlay .pb-image-block-title-container {
+.pb-image-block.pb-hover-color-overlay .pb-image-block-title-container,
+.pb-image-block.pb-hover-gradient-overlay .pb-image-block-title-container {
 	position: absolute;
 	inset: 0;
 	pointer-events: none; /* overlays shouldn't block icons/links */
@@ -544,18 +600,24 @@
 /* Shared caption text rules (product name / price supported) */
 .pb-image-block.pb-hover-fade-overlay .pb-image-block-title,
 .pb-image-block.pb-hover-color-overlay .pb-image-block-title,
-	.pb-image-block.pb-hover-gradient-bottom .pb-image-block-title,
-	.pb-image-block.pb-hover-chip .pb-image-block-title {
-		box-sizing: border-box;
-		color: #000;
-	}
+.pb-image-block.pb-hover-gradient-overlay .pb-image-block-title,
+.pb-image-block.pb-hover-gradient-bottom .pb-image-block-title,
+.pb-image-block.pb-hover-chip .pb-image-block-title {
+	box-sizing: border-box;
+	color: #000;
+	font-family: var(--pb-overlay-font-family, inherit);
+	font-weight: var(--pb-overlay-font-weight, inherit);
+	font-style: var(--pb-overlay-font-style, inherit);
+}
 
 .pb-image-block.pb-hover-fade-overlay .pb-product-name,
 .pb-image-block.pb-hover-color-overlay .pb-product-name,
+.pb-image-block.pb-hover-gradient-overlay .pb-product-name,
 .pb-image-block.pb-hover-gradient-bottom .pb-product-name,
 .pb-image-block.pb-hover-chip .pb-product-name,
 .pb-image-block.pb-hover-fade-overlay .pb-product-price,
 .pb-image-block.pb-hover-color-overlay .pb-product-price,
+.pb-image-block.pb-hover-gradient-overlay .pb-product-price,
 .pb-image-block.pb-hover-gradient-bottom .pb-product-price,
 .pb-image-block.pb-hover-chip .pb-product-price {
 	display: block;
@@ -565,10 +627,11 @@
 
 .pb-image-block.pb-hover-fade-overlay .pb-product-price,
 .pb-image-block.pb-hover-color-overlay .pb-product-price,
+.pb-image-block.pb-hover-gradient-overlay .pb-product-price,
 .pb-image-block.pb-hover-gradient-bottom .pb-product-price,
 .pb-image-block.pb-hover-chip .pb-product-price {
 	margin-top: 2px;
-	font-weight: 600;
+	font-weight: var(--pb-overlay-font-weight, 600);
 }
 
 /* 4) Full-cover fade overlay (centered caption) */
@@ -584,8 +647,8 @@
 	text-align: center;
 	line-height: 1.5;
 	padding: var(--pb-overlay-pad);
-		background: rgba(0, 0, 0, 0.65);
-		color: #fff;
+	background: rgba(0, 0, 0, 0.65);
+	color: #fff;
 	font-size: clamp(0.8rem, 5cqi, 1rem);
 	opacity: 0;
 	transform: scale(0.98);
@@ -603,7 +666,7 @@
 
 	.pb-product-price {
 		margin-top: 2px;
-		font-weight: 600; /* makes it pop a bit */
+		font-weight: var(--pb-overlay-font-weight, 600); /* makes it pop a bit */
 	}
 }
 
@@ -612,8 +675,9 @@
 	transform: scale(1);
 }
 
-/* 4b) Full-cover color overlay (custom colors) */
-.pb-image-block.pb-hover-color-overlay .pb-image-block-title {
+/* 4b) Full-cover custom background overlays */
+.pb-image-block.pb-hover-color-overlay .pb-image-block-title,
+.pb-image-block.pb-hover-gradient-overlay .pb-image-block-title {
 	position: absolute;
 	inset: -0.5px;
 	width: calc(100% + 1px);
@@ -644,13 +708,70 @@
 
 	.pb-product-price {
 		margin-top: 2px;
-		font-weight: 600; /* makes it pop a bit */
+		font-weight: var(--pb-overlay-font-weight, 600); /* makes it pop a bit */
 	}
 }
 
-.pb-image-block.pb-hover-color-overlay:hover .pb-image-block-title {
+.pb-image-block.pb-hover-color-overlay:hover .pb-image-block-title,
+.pb-image-block.pb-hover-gradient-overlay:hover .pb-image-block-title {
 	opacity: 1;
 	transform: scale(1);
+}
+
+.pb-image-block.pb-hover-gradient-overlay .pb-image-block-title {
+	background: var(
+		--pb-overlay-bg,
+		linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(226, 232, 240, 0.82) 100%)
+	);
+}
+
+.pb-image-block.pb-hover-fade-overlay.pb-overlay-enter-fade .pb-image-block-title,
+.pb-image-block.pb-hover-color-overlay.pb-overlay-enter-fade .pb-image-block-title,
+.pb-image-block.pb-hover-gradient-overlay.pb-overlay-enter-fade .pb-image-block-title {
+	transform: none;
+}
+
+.pb-image-block.pb-hover-fade-overlay.pb-overlay-enter-slide-up .pb-image-block-title,
+.pb-image-block.pb-hover-color-overlay.pb-overlay-enter-slide-up .pb-image-block-title,
+.pb-image-block.pb-hover-gradient-overlay.pb-overlay-enter-slide-up .pb-image-block-title {
+	transform: translateY(100%);
+}
+
+.pb-image-block.pb-hover-fade-overlay.pb-overlay-enter-slide-down .pb-image-block-title,
+.pb-image-block.pb-hover-color-overlay.pb-overlay-enter-slide-down .pb-image-block-title,
+.pb-image-block.pb-hover-gradient-overlay.pb-overlay-enter-slide-down .pb-image-block-title {
+	transform: translateY(-100%);
+}
+
+.pb-image-block.pb-hover-fade-overlay.pb-overlay-enter-slide-left .pb-image-block-title,
+.pb-image-block.pb-hover-color-overlay.pb-overlay-enter-slide-left .pb-image-block-title,
+.pb-image-block.pb-hover-gradient-overlay.pb-overlay-enter-slide-left .pb-image-block-title {
+	transform: translateX(100%);
+}
+
+.pb-image-block.pb-hover-fade-overlay.pb-overlay-enter-slide-right .pb-image-block-title,
+.pb-image-block.pb-hover-color-overlay.pb-overlay-enter-slide-right .pb-image-block-title,
+.pb-image-block.pb-hover-gradient-overlay.pb-overlay-enter-slide-right .pb-image-block-title {
+	transform: translateX(-100%);
+}
+
+.pb-image-block.pb-hover-fade-overlay.pb-overlay-enter-fade:hover .pb-image-block-title,
+.pb-image-block.pb-hover-color-overlay.pb-overlay-enter-fade:hover .pb-image-block-title,
+.pb-image-block.pb-hover-gradient-overlay.pb-overlay-enter-fade:hover .pb-image-block-title,
+.pb-image-block.pb-hover-fade-overlay.pb-overlay-enter-slide-up:hover .pb-image-block-title,
+.pb-image-block.pb-hover-color-overlay.pb-overlay-enter-slide-up:hover .pb-image-block-title,
+.pb-image-block.pb-hover-gradient-overlay.pb-overlay-enter-slide-up:hover .pb-image-block-title,
+.pb-image-block.pb-hover-fade-overlay.pb-overlay-enter-slide-down:hover .pb-image-block-title,
+.pb-image-block.pb-hover-color-overlay.pb-overlay-enter-slide-down:hover .pb-image-block-title,
+.pb-image-block.pb-hover-gradient-overlay.pb-overlay-enter-slide-down:hover .pb-image-block-title,
+.pb-image-block.pb-hover-fade-overlay.pb-overlay-enter-slide-left:hover .pb-image-block-title,
+.pb-image-block.pb-hover-color-overlay.pb-overlay-enter-slide-left:hover .pb-image-block-title,
+.pb-image-block.pb-hover-gradient-overlay.pb-overlay-enter-slide-left:hover .pb-image-block-title,
+.pb-image-block.pb-hover-fade-overlay.pb-overlay-enter-slide-right:hover .pb-image-block-title,
+.pb-image-block.pb-hover-color-overlay.pb-overlay-enter-slide-right:hover .pb-image-block-title,
+.pb-image-block.pb-hover-gradient-overlay.pb-overlay-enter-slide-right:hover .pb-image-block-title {
+	opacity: 1;
+	transform: none;
 }
 
 /* 5) Bottom gradient slide-up */
@@ -758,7 +879,8 @@
 
 	.pb-image-block.pb-hover-fade-overlay .pb-hover-exif,
 	.pb-image-block.pb-hover-blur-overlay .pb-hover-exif,
-	.pb-image-block.pb-hover-color-overlay .pb-hover-exif {
+	.pb-image-block.pb-hover-color-overlay .pb-hover-exif,
+	.pb-image-block.pb-hover-gradient-overlay .pb-hover-exif {
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
@@ -767,7 +889,8 @@
 
 	.pb-image-block.pb-hover-fade-overlay .pb-hover-exif__item,
 	.pb-image-block.pb-hover-blur-overlay .pb-hover-exif__item,
-	.pb-image-block.pb-hover-color-overlay .pb-hover-exif__item {
+	.pb-image-block.pb-hover-color-overlay .pb-hover-exif__item,
+	.pb-image-block.pb-hover-gradient-overlay .pb-hover-exif__item {
 		flex-direction: row;
 		gap: clamp(2px, 1.5cqi, 4px);
 	}
@@ -787,15 +910,110 @@
 		gap: clamp(2px, 1.5cqi, 4px);
 	}
 
+	.pb-image-block.pb-effect-zoom-in img.pb-image-block-img,
+	.pb-image-block.pb-effect-zoom-out img.pb-image-block-img,
+	.pb-image-block.pb-effect-pan img.pb-image-block-img,
+	.pb-image-block.pb-effect-desaturate img.pb-image-block-img {
+		transition:
+			transform var(--pb-hover-duration) ease,
+			filter var(--pb-hover-duration) ease;
+		will-change: transform;
+	}
+
+	.pb-image-block.pb-effect-lift,
+	.pb-image-block.pb-effect-tilt,
+	.pb-image-block.pb-effect-pop {
+		transition:
+			transform var(--pb-hover-duration) ease,
+			box-shadow var(--pb-hover-duration) ease;
+		transform-style: preserve-3d;
+		will-change: transform;
+	}
+
+	.pb-image-block.pb-effect-zoom-in:hover img.pb-image-block-img {
+		transform: scale(var(--pb-hover-scale));
+	}
+
+	.pb-image-block.pb-effect-zoom-out img.pb-image-block-img {
+		transform: scale(var(--pb-hover-scale));
+	}
+
+	.pb-image-block.pb-effect-zoom-out:hover img.pb-image-block-img {
+		transform: scale(1);
+	}
+
+	.pb-image-block.pb-effect-lift:hover {
+		transform: translateY(-4px);
+		box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+	}
+
+	.pb-image-block.pb-effect-tilt:hover {
+		transform:
+			perspective(900px)
+			rotateX(var(--pb-tilt-x, 0deg))
+			rotateY(var(--pb-tilt-y, 0deg))
+			scale(1.035);
+		box-shadow: 0 14px 30px rgba(0, 0, 0, 0.18);
+	}
+
+	.pb-image-block.pb-effect-pop:hover {
+		transform: scale(var(--pb-hover-pop-scale));
+		box-shadow: 0 10px 22px rgba(0, 0, 0, 0.16);
+	}
+
+	.pb-image-block.pb-effect-glare::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: 3;
+		pointer-events: none;
+		background: linear-gradient(
+			115deg,
+			transparent 0%,
+			transparent 36%,
+			rgba(255, 255, 255, 0.5) 48%,
+			transparent 62%,
+			transparent 100%
+		);
+		opacity: 0;
+		transform: translateX(-120%);
+		transition:
+			opacity var(--pb-hover-duration) ease,
+			transform 0.55s ease;
+	}
+
+	.pb-image-block.pb-effect-glare:hover::after {
+		opacity: 1;
+		transform: translateX(120%);
+	}
+
+	.pb-image-block.pb-effect-pan img.pb-image-block-img {
+		transform: scale(1.08) translateX(-2%);
+	}
+
+	.pb-image-block.pb-effect-pan:hover img.pb-image-block-img {
+		transform: scale(1.08) translateX(2%);
+	}
+
+	.pb-image-block.pb-effect-desaturate img.pb-image-block-img {
+		filter: saturate(1);
+	}
+
+	.pb-image-block.pb-effect-desaturate:hover img.pb-image-block-img {
+		filter: saturate(0);
+	}
+
 	/* Reduced motion */
 	@media (prefers-reduced-motion: reduce) {
 
-	.pb-image-block.pb-hover-zoom img,
-	.pb-image-block.pb-hover-tilt img,
-	.pb-image-block.pb-hover-pan img,
-	.pb-image-block.pb-hover-glare::after,
-	.pb-image-block.pb-hover-lift img,
-	.pb-image-block.pb-hover-pop img {
+	.pb-image-block.pb-effect-zoom-in img,
+	.pb-image-block.pb-effect-zoom-out img,
+	.pb-image-block.pb-effect-pan img,
+	.pb-image-block.pb-effect-desaturate img,
+	.pb-image-block.pb-effect-lift,
+	.pb-image-block.pb-effect-tilt,
+	.pb-image-block.pb-effect-pop,
+	.pb-image-block.pb-effect-glare::after {
 		transition: none !important;
 		transform: none !important;
 		animation: none !important;
@@ -804,6 +1022,7 @@
 	.pb-image-block.pb-hover-fade-overlay .pb-image-block-title,
 	.pb-image-block.pb-hover-blur-overlay img.pb-image-block-img,
 	.pb-image-block.pb-hover-color-overlay .pb-image-block-title,
+	.pb-image-block.pb-hover-gradient-overlay .pb-image-block-title,
 	.pb-image-block.pb-hover-gradient-bottom .pb-image-block-title,
 	.pb-image-block.pb-hover-chip .pb-image-block-title {
 		transition: none !important;

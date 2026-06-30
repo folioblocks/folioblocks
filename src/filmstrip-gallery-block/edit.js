@@ -32,6 +32,8 @@ import { IconFilmstripGallery, IconPBSpinner } from '../pb-helpers/icons';
 import { getExifAttributesFromMedia } from '../pb-helpers/exifMetadata';
 import { getImageSizeOptions } from '../pb-helpers/imageSizeOptions';
 import { imageProFeatureNotice } from '../pb-helpers/imageProFeatureNotices';
+import { getOverlayTypographyCSS } from '../pb-helpers/overlayTypographyControls';
+import { getTiltHoverHandlers } from '../pb-helpers/tiltHoverEffect';
 import './editor.scss';
 
 const ALLOWED_BLOCKS = [ 'folioblocks/pb-image-block' ];
@@ -549,15 +551,48 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		'gradient-bottom': 'pb-hover-gradient-bottom',
 		chip: 'pb-hover-chip',
 		'color-overlay': 'pb-hover-color-overlay',
+		'gradient-overlay': 'pb-hover-gradient-overlay',
 	};
 	const hoverVariantClass =
 		hoverClassMap[ effectiveHoverAttributes.onHoverStyle ] ||
 		'pb-hover-blur-overlay';
+	const hoverEffectClassMap = {
+		'zoom-in': 'pb-effect-zoom-in',
+		'zoom-out': 'pb-effect-zoom-out',
+		lift: 'pb-effect-lift',
+		tilt: 'pb-effect-tilt',
+		pop: 'pb-effect-pop',
+		glare: 'pb-effect-glare',
+		pan: 'pb-effect-pan',
+		desaturate: 'pb-effect-desaturate',
+	};
+	const hoverEffectClass =
+		hoverEffectClassMap[ effectiveHoverAttributes.hoverEffect ] || '';
+	const tiltHoverHandlers =
+		effectiveHoverAttributes.hoverEffect === 'tilt'
+			? getTiltHoverHandlers()
+			: {};
+	const overlayEntranceClassMap = {
+		fade: 'pb-overlay-enter-fade',
+		'slide-up': 'pb-overlay-enter-slide-up',
+		'slide-down': 'pb-overlay-enter-slide-down',
+		'slide-left': 'pb-overlay-enter-slide-left',
+		'slide-right': 'pb-overlay-enter-slide-right',
+	};
+	const overlayEntranceClass =
+		overlayEntranceClassMap[ effectiveHoverAttributes.overlayEntrance ] ||
+		'';
 	const hoverStyleVars =
-		effectiveHoverAttributes.onHoverStyle === 'color-overlay'
+		effectiveHoverAttributes.onHoverStyle === 'color-overlay' ||
+		effectiveHoverAttributes.onHoverStyle === 'gradient-overlay'
 			? {
 					'--pb-overlay-bg':
-						effectiveHoverAttributes.overlayBgColor || '#f9f9f9',
+						effectiveHoverAttributes.onHoverStyle ===
+						'gradient-overlay'
+							? effectiveHoverAttributes.overlayBgGradient ||
+							  'linear-gradient(135deg, rgba(255,255,255,0.92) 0%, rgba(226,232,240,0.82) 100%)'
+							: effectiveHoverAttributes.overlayBgColor ||
+							  '#f9f9f9',
 					'--pb-overlay-color':
 						effectiveHoverAttributes.overlayTextColor || '#000000',
 			  }
@@ -571,6 +606,9 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						'#000000',
 			  }
 			: {};
+	const overlayTypographyVars = getOverlayTypographyCSS(
+		effectiveHoverAttributes
+	);
 	const hasMultipleImages = innerBlocks.length > 1;
 	const showStripArrowsBottom =
 		filmstripPosition === 'bottom' && hasMultipleImages;
@@ -816,13 +854,15 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 							</div>
 						) }
 						<div
+							{ ...tiltHoverHandlers }
 							className={ `pb-filmstrip-gallery-main-media pb-image-block ${
 								showOverlay ? hoverVariantClass : ''
-							}` }
+							} ${ showOverlay ? overlayEntranceClass : '' } ${ hoverEffectClass }` }
 							style={ {
 								'--pb-filmstrip-image-ratio':
 									activeImageAspectRatio,
 								...hoverStyleVars,
+								...overlayTypographyVars,
 							} }
 						>
 						{ applyFilters(

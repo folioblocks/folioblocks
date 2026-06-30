@@ -37,6 +37,8 @@ import {
 import { getImageSizeOptions } from '../pb-helpers/imageSizeOptions';
 import { imageProFeatureNotice } from '../pb-helpers/imageProFeatureNotices';
 import { getShadowStyleClass } from '../pb-helpers/ImageStyleControl';
+import { getOverlayTypographyCSS } from '../pb-helpers/overlayTypographyControls';
+import { getTiltHoverHandlers } from '../pb-helpers/tiltHoverEffect';
 import './editor.scss';
 
 const getImageClickAction = ( {
@@ -393,9 +395,21 @@ export default function Edit( {
 	const overlayBgColor = isInsideGallery && ! overrideGalleryHoverSettings
 		? hoverContext?.[ 'folioBlocks/overlayBgColor' ] ?? ''
 		: attributes.overlayBgColor ?? '';
+	const overlayBgGradient = isInsideGallery && ! overrideGalleryHoverSettings
+		? hoverContext?.[ 'folioBlocks/overlayBgGradient' ] ?? ''
+		: attributes.overlayBgGradient ?? '';
 	const overlayTextColor = isInsideGallery && ! overrideGalleryHoverSettings
 		? hoverContext?.[ 'folioBlocks/overlayTextColor' ] ?? ''
 		: attributes.overlayTextColor ?? '';
+	const overlayFontFamily = isInsideGallery && ! overrideGalleryHoverSettings
+		? hoverContext?.[ 'folioBlocks/overlayFontFamily' ] ?? ''
+		: attributes.overlayFontFamily ?? '';
+	const overlayFontWeight = isInsideGallery && ! overrideGalleryHoverSettings
+		? hoverContext?.[ 'folioBlocks/overlayFontWeight' ] ?? ''
+		: attributes.overlayFontWeight ?? '';
+	const overlayFontStyle = isInsideGallery && ! overrideGalleryHoverSettings
+		? hoverContext?.[ 'folioBlocks/overlayFontStyle' ] ?? ''
+		: attributes.overlayFontStyle ?? '';
 	const chipOverlayBgColor = isInsideGallery && ! overrideGalleryHoverSettings
 		? hoverContext?.[ 'folioBlocks/chipOverlayBgColor' ] ?? ''
 		: attributes.chipOverlayBgColor ?? '';
@@ -408,6 +422,14 @@ export default function Edit( {
 		  attributes.hoverTitle ??
 		  attributes.onHoverTitle ??
 		  false;
+	const effectiveHoverEffect =
+		( isInsideGallery && ! overrideGalleryHoverSettings
+			? hoverContext?.[ 'folioBlocks/hoverEffect' ]
+			: attributes.hoverEffect ) || 'none';
+	const effectiveOverlayEntrance =
+		( isInsideGallery && ! overrideGalleryHoverSettings
+			? hoverContext?.[ 'folioBlocks/overlayEntrance' ]
+			: attributes.overlayEntrance ) || 'default';
 	const configuredOverlayContent =
 		hoverContext?.[ 'folioBlocks/overlayContent' ] ??
 		attributes.overlayContent ??
@@ -429,13 +451,42 @@ export default function Edit( {
 		'gradient-bottom': 'pb-hover-gradient-bottom',
 		chip: 'pb-hover-chip',
 		'color-overlay': 'pb-hover-color-overlay',
+		'gradient-overlay': 'pb-hover-gradient-overlay',
 	};
 	const hoverVariantClass =
 		hoverClassMap[ effectiveOnHoverStyle ] || 'pb-hover-fade-overlay';
+	const hoverEffectClassMap = {
+		'zoom-in': 'pb-effect-zoom-in',
+		'zoom-out': 'pb-effect-zoom-out',
+		lift: 'pb-effect-lift',
+		tilt: 'pb-effect-tilt',
+		pop: 'pb-effect-pop',
+		glare: 'pb-effect-glare',
+		pan: 'pb-effect-pan',
+		desaturate: 'pb-effect-desaturate',
+	};
+	const hoverEffectClass = hoverEffectClassMap[ effectiveHoverEffect ] || '';
+	const tiltHoverHandlers =
+		effectiveHoverEffect === 'tilt' ? getTiltHoverHandlers() : {};
+	const overlayEntranceClassMap = {
+		fade: 'pb-overlay-enter-fade',
+		'slide-up': 'pb-overlay-enter-slide-up',
+		'slide-down': 'pb-overlay-enter-slide-down',
+		'slide-left': 'pb-overlay-enter-slide-left',
+		'slide-right': 'pb-overlay-enter-slide-right',
+	};
+	const overlayEntranceClass =
+		overlayEntranceClassMap[ effectiveOverlayEntrance ] || '';
 	const overlayStyleVars =
-		effectiveOnHoverStyle === 'color-overlay'
+		effectiveOnHoverStyle === 'color-overlay' ||
+		effectiveOnHoverStyle === 'gradient-overlay'
 			? {
-					...( overlayBgColor
+					...( effectiveOnHoverStyle === 'gradient-overlay' &&
+					overlayBgGradient
+						? { '--pb-overlay-bg': overlayBgGradient }
+						: {} ),
+					...( effectiveOnHoverStyle === 'color-overlay' &&
+					overlayBgColor
 						? { '--pb-overlay-bg': overlayBgColor }
 						: {} ),
 					...( overlayTextColor
@@ -452,6 +503,11 @@ export default function Edit( {
 						: {} ),
 			  }
 			: {};
+	const overlayTypographyVars = getOverlayTypographyCSS( {
+		overlayFontFamily,
+		overlayFontWeight,
+		overlayFontStyle,
+	} );
 
 	const effectiveDownloadEnabled =
 		isInsideGallery && ! overrideGalleryClickSettings
@@ -617,7 +673,11 @@ export default function Edit( {
 	const blockProps = useBlockProps( {
 		className: isHidden ? 'is-hidden' : undefined,
 	} );
-	const baseFigureStyle = { ...imageStyle, ...overlayStyleVars };
+	const baseFigureStyle = {
+		...imageStyle,
+		...overlayStyleVars,
+		...overlayTypographyVars,
+	};
 	const figureStyle = context[ 'folioBlocks/inCarousel' ]
 		? { ...baseFigureStyle, height: `${ displayHeight }px` }
 		: baseFigureStyle;
@@ -1158,9 +1218,12 @@ export default function Edit( {
 				<div className="pb-image-block-wrapper">
 					<div { ...blockProps }>
 						<figure
+							{ ...tiltHoverHandlers }
 							className={ [
 								'pb-image-block',
 								overlayEnabled ? hoverVariantClass : '',
+								overlayEnabled ? overlayEntranceClass : '',
+								hoverEffectClass,
 								shadowStyleClass,
 								shouldShowDownloadIcon ? 'has-download' : '',
 							]
@@ -1287,9 +1350,12 @@ export default function Edit( {
 			) : (
 				<div { ...blockProps }>
 					<figure
+						{ ...tiltHoverHandlers }
 						className={ [
 							'pb-image-block',
 							overlayEnabled ? hoverVariantClass : '',
+							overlayEnabled ? overlayEntranceClass : '',
+							hoverEffectClass,
 							shadowStyleClass,
 							shouldShowDownloadIcon ? 'has-download' : '',
 						]

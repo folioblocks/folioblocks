@@ -37,6 +37,8 @@ $fbks_cart_icon_style = '';
 $fbks_link_icon_style = '';
 $fbks_overlay_content = 'title';
 $fbks_hover_variant_class = '';
+$fbks_hover_effect_class = '';
+$fbks_overlay_entrance_class = '';
 $fbks_hover_style = '';
 $fbks_hide_unknown_exif = ! empty( $attributes['hideUnknownExifFields'] );
 $fbks_woo_active = false;
@@ -93,21 +95,58 @@ if ( $fbks_can_use_premium ) {
 	$fbks_on_hover_title = ! empty( $attributes['onHoverTitle'] );
 	$fbks_hover_class_map = [
 		'blur-overlay'   => 'pb-hover-blur-overlay',
-		'fade-overlay'   => 'pb-hover-fade-overlay',
+		'fade-overlay'    => 'pb-hover-fade-overlay',
 		'gradient-bottom' => 'pb-hover-gradient-bottom',
 		'chip'            => 'pb-hover-chip',
-		'color-overlay'   => 'pb-hover-color-overlay',
+		'color-overlay'    => 'pb-hover-color-overlay',
+		'gradient-overlay' => 'pb-hover-gradient-overlay',
 	];
 	$fbks_on_hover_style = isset( $attributes['onHoverStyle'] ) && isset( $fbks_hover_class_map[ $attributes['onHoverStyle'] ] )
 		? $attributes['onHoverStyle']
 		: 'blur-overlay';
 	$fbks_hover_variant_class = $fbks_hover_class_map[ $fbks_on_hover_style ];
+	$fbks_hover_effect = sanitize_key( $attributes['hoverEffect'] ?? 'none' );
+	$fbks_hover_effect_class_map = [
+		'zoom-in'    => 'pb-effect-zoom-in',
+		'zoom-out'   => 'pb-effect-zoom-out',
+		'lift'       => 'pb-effect-lift',
+		'tilt'       => 'pb-effect-tilt',
+		'pop'        => 'pb-effect-pop',
+		'glare'      => 'pb-effect-glare',
+		'pan'        => 'pb-effect-pan',
+		'desaturate' => 'pb-effect-desaturate',
+	];
+	$fbks_hover_effect_class = $fbks_hover_effect_class_map[ $fbks_hover_effect ] ?? '';
+	$fbks_overlay_entrance = sanitize_key( $attributes['overlayEntrance'] ?? 'default' );
+	$fbks_overlay_entrance_class_map = [
+		'fade'        => 'pb-overlay-enter-fade',
+		'slide-up'    => 'pb-overlay-enter-slide-up',
+		'slide-down'  => 'pb-overlay-enter-slide-down',
+		'slide-left'  => 'pb-overlay-enter-slide-left',
+		'slide-right' => 'pb-overlay-enter-slide-right',
+	];
+	$fbks_overlay_entrance_class = $fbks_overlay_entrance_class_map[ $fbks_overlay_entrance ] ?? '';
+	$fbks_overlay_font_family = fbks_sanitize_css_font_family_value( (string) ( $attributes['overlayFontFamily'] ?? '' ) );
+	$fbks_overlay_font_weight = fbks_sanitize_css_font_weight_value( (string) ( $attributes['overlayFontWeight'] ?? '' ) );
+	$fbks_overlay_font_style = fbks_sanitize_css_font_style_value( (string) ( $attributes['overlayFontStyle'] ?? '' ) );
+	$fbks_hover_style .= $fbks_overlay_font_family ? '--pb-overlay-font-family:' . $fbks_overlay_font_family . ';' : '';
+	$fbks_hover_style .= $fbks_overlay_font_weight ? '--pb-overlay-font-weight:' . $fbks_overlay_font_weight . ';' : '';
+	$fbks_hover_style .= $fbks_overlay_font_style ? '--pb-overlay-font-style:' . $fbks_overlay_font_style . ';' : '';
 	if ( 'color-overlay' === $fbks_on_hover_style ) {
-		$fbks_hover_style .= '--pb-overlay-bg:' . (string) ( $attributes['overlayBgColor'] ?? '#f9f9f9' ) . ';';
-		$fbks_hover_style .= '--pb-overlay-color:' . (string) ( $attributes['overlayTextColor'] ?? '#000000' ) . ';';
+		$fbks_overlay_bg = fbks_sanitize_css_color_value( (string) ( $attributes['overlayBgColor'] ?? '#f9f9f9' ) );
+		$fbks_overlay_text = fbks_sanitize_css_color_value( (string) ( $attributes['overlayTextColor'] ?? '#000000' ) );
+		$fbks_hover_style .= $fbks_overlay_bg ? '--pb-overlay-bg:' . $fbks_overlay_bg . ';' : '';
+		$fbks_hover_style .= $fbks_overlay_text ? '--pb-overlay-color:' . $fbks_overlay_text . ';' : '';
+	} elseif ( 'gradient-overlay' === $fbks_on_hover_style ) {
+		$fbks_overlay_bg = fbks_sanitize_css_background_value( (string) ( $attributes['overlayBgGradient'] ?? '' ) );
+		$fbks_overlay_text = fbks_sanitize_css_color_value( (string) ( $attributes['overlayTextColor'] ?? '#000000' ) );
+		$fbks_hover_style .= $fbks_overlay_bg ? '--pb-overlay-bg:' . $fbks_overlay_bg . ';' : '';
+		$fbks_hover_style .= $fbks_overlay_text ? '--pb-overlay-color:' . $fbks_overlay_text . ';' : '';
 	} elseif ( 'chip' === $fbks_on_hover_style ) {
-		$fbks_hover_style .= '--pb-chip-overlay-bg:' . (string) ( $attributes['chipOverlayBgColor'] ?? '#f9f9f9' ) . ';';
-		$fbks_hover_style .= '--pb-chip-overlay-color:' . (string) ( $attributes['chipOverlayTextColor'] ?? '#000000' ) . ';';
+		$fbks_chip_overlay_bg = fbks_sanitize_css_background_value( (string) ( $attributes['chipOverlayBgColor'] ?? '#f9f9f9' ) );
+		$fbks_chip_overlay_text = fbks_sanitize_css_color_value( (string) ( $attributes['chipOverlayTextColor'] ?? '#000000' ) );
+		$fbks_hover_style .= $fbks_chip_overlay_bg ? '--pb-chip-overlay-bg:' . $fbks_chip_overlay_bg . ';' : '';
+		$fbks_hover_style .= $fbks_chip_overlay_text ? '--pb-chip-overlay-color:' . $fbks_chip_overlay_text . ';' : '';
 	}
 	$fbks_lazy_load = ! empty( $attributes['lazyLoad'] );
 	$fbks_disable_right_click = ! empty( $attributes['disableRightClick'] );
@@ -337,11 +376,17 @@ if ( is_array( $fbks_inner_blocks ) && ! empty( $fbks_inner_blocks ) ) {
 			'overrideGalleryHoverSettings' => ! empty( $fbks_image_attrs['overrideGalleryHoverSettings'] ),
 			'onHoverTitle'     => ! empty( $fbks_image_attrs['showTitleOnHover'] ) || ! empty( $fbks_image_attrs['hoverTitle'] ) || ! empty( $fbks_image_attrs['onHoverTitle'] ),
 			'onHoverStyle'     => isset( $fbks_image_attrs['onHoverStyle'] ) ? (string) $fbks_image_attrs['onHoverStyle'] : 'blur-overlay',
+			'hoverEffect'      => isset( $fbks_image_attrs['hoverEffect'] ) ? sanitize_key( $fbks_image_attrs['hoverEffect'] ) : 'none',
+			'overlayEntrance'  => isset( $fbks_image_attrs['overlayEntrance'] ) ? sanitize_key( $fbks_image_attrs['overlayEntrance'] ) : 'default',
 			'overlayContent'   => isset( $fbks_image_attrs['overlayContent'] ) ? (string) $fbks_image_attrs['overlayContent'] : 'title',
-			'overlayBgColor'   => isset( $fbks_image_attrs['overlayBgColor'] ) ? (string) $fbks_image_attrs['overlayBgColor'] : '#f9f9f9',
-			'overlayTextColor' => isset( $fbks_image_attrs['overlayTextColor'] ) ? (string) $fbks_image_attrs['overlayTextColor'] : '#000000',
-			'chipOverlayBgColor' => isset( $fbks_image_attrs['chipOverlayBgColor'] ) ? (string) $fbks_image_attrs['chipOverlayBgColor'] : '#f9f9f9',
-			'chipOverlayTextColor' => isset( $fbks_image_attrs['chipOverlayTextColor'] ) ? (string) $fbks_image_attrs['chipOverlayTextColor'] : '#000000',
+			'overlayBgColor'    => fbks_sanitize_css_color_value( isset( $fbks_image_attrs['overlayBgColor'] ) ? (string) $fbks_image_attrs['overlayBgColor'] : '#f9f9f9' ),
+			'overlayBgGradient' => fbks_sanitize_css_background_value( isset( $fbks_image_attrs['overlayBgGradient'] ) ? (string) $fbks_image_attrs['overlayBgGradient'] : '' ),
+			'overlayTextColor' => fbks_sanitize_css_color_value( isset( $fbks_image_attrs['overlayTextColor'] ) ? (string) $fbks_image_attrs['overlayTextColor'] : '#000000' ),
+			'overlayFontFamily' => fbks_sanitize_css_font_family_value( isset( $fbks_image_attrs['overlayFontFamily'] ) ? (string) $fbks_image_attrs['overlayFontFamily'] : '' ),
+			'overlayFontWeight' => fbks_sanitize_css_font_weight_value( isset( $fbks_image_attrs['overlayFontWeight'] ) ? (string) $fbks_image_attrs['overlayFontWeight'] : '' ),
+			'overlayFontStyle'  => fbks_sanitize_css_font_style_value( isset( $fbks_image_attrs['overlayFontStyle'] ) ? (string) $fbks_image_attrs['overlayFontStyle'] : '' ),
+			'chipOverlayBgColor' => fbks_sanitize_css_background_value( isset( $fbks_image_attrs['chipOverlayBgColor'] ) ? (string) $fbks_image_attrs['chipOverlayBgColor'] : '#f9f9f9' ),
+			'chipOverlayTextColor' => fbks_sanitize_css_color_value( isset( $fbks_image_attrs['chipOverlayTextColor'] ) ? (string) $fbks_image_attrs['chipOverlayTextColor'] : '#000000' ),
 			'hideUnknownExifFields' => ! empty( $fbks_image_attrs['hideUnknownExifFields'] ),
 			'enableWooCommerce' => ! empty( $fbks_image_attrs['enableWooCommerce'] ),
 			'imageClickAction' => isset( $fbks_image_attrs['imageClickAction'] ) ? (string) $fbks_image_attrs['imageClickAction'] : '',
@@ -431,11 +476,17 @@ if ( empty( $fbks_images ) && ! empty( $attributes['images'] ) && is_array( $att
 			'overrideGalleryHoverSettings' => ! empty( $fbks_image['overrideGalleryHoverSettings'] ),
 			'onHoverTitle'     => ! empty( $fbks_image['showTitleOnHover'] ) || ! empty( $fbks_image['hoverTitle'] ) || ! empty( $fbks_image['onHoverTitle'] ),
 			'onHoverStyle'     => isset( $fbks_image['onHoverStyle'] ) ? (string) $fbks_image['onHoverStyle'] : 'blur-overlay',
+			'hoverEffect'      => isset( $fbks_image['hoverEffect'] ) ? sanitize_key( $fbks_image['hoverEffect'] ) : 'none',
+			'overlayEntrance'  => isset( $fbks_image['overlayEntrance'] ) ? sanitize_key( $fbks_image['overlayEntrance'] ) : 'default',
 			'overlayContent'   => isset( $fbks_image['overlayContent'] ) ? (string) $fbks_image['overlayContent'] : 'title',
-			'overlayBgColor'   => isset( $fbks_image['overlayBgColor'] ) ? (string) $fbks_image['overlayBgColor'] : '#f9f9f9',
-			'overlayTextColor' => isset( $fbks_image['overlayTextColor'] ) ? (string) $fbks_image['overlayTextColor'] : '#000000',
-			'chipOverlayBgColor' => isset( $fbks_image['chipOverlayBgColor'] ) ? (string) $fbks_image['chipOverlayBgColor'] : '#f9f9f9',
-			'chipOverlayTextColor' => isset( $fbks_image['chipOverlayTextColor'] ) ? (string) $fbks_image['chipOverlayTextColor'] : '#000000',
+			'overlayBgColor'    => fbks_sanitize_css_color_value( isset( $fbks_image['overlayBgColor'] ) ? (string) $fbks_image['overlayBgColor'] : '#f9f9f9' ),
+			'overlayBgGradient' => fbks_sanitize_css_background_value( isset( $fbks_image['overlayBgGradient'] ) ? (string) $fbks_image['overlayBgGradient'] : '' ),
+			'overlayTextColor' => fbks_sanitize_css_color_value( isset( $fbks_image['overlayTextColor'] ) ? (string) $fbks_image['overlayTextColor'] : '#000000' ),
+			'overlayFontFamily' => fbks_sanitize_css_font_family_value( isset( $fbks_image['overlayFontFamily'] ) ? (string) $fbks_image['overlayFontFamily'] : '' ),
+			'overlayFontWeight' => fbks_sanitize_css_font_weight_value( isset( $fbks_image['overlayFontWeight'] ) ? (string) $fbks_image['overlayFontWeight'] : '' ),
+			'overlayFontStyle'  => fbks_sanitize_css_font_style_value( isset( $fbks_image['overlayFontStyle'] ) ? (string) $fbks_image['overlayFontStyle'] : '' ),
+			'chipOverlayBgColor' => fbks_sanitize_css_background_value( isset( $fbks_image['chipOverlayBgColor'] ) ? (string) $fbks_image['chipOverlayBgColor'] : '#f9f9f9' ),
+			'chipOverlayTextColor' => fbks_sanitize_css_color_value( isset( $fbks_image['chipOverlayTextColor'] ) ? (string) $fbks_image['chipOverlayTextColor'] : '#000000' ),
 			'hideUnknownExifFields' => ! empty( $fbks_image['hideUnknownExifFields'] ),
 			'enableWooCommerce' => ! empty( $fbks_image['enableWooCommerce'] ),
 			'imageClickAction' => isset( $fbks_image['imageClickAction'] ) ? (string) $fbks_image['imageClickAction'] : '',
@@ -524,6 +575,8 @@ if ( $fbks_can_use_premium && ! empty( $fbks_active_image['overrideGalleryClickS
 $fbks_effective_on_hover_title = $fbks_on_hover_title;
 $fbks_effective_overlay_content = $fbks_overlay_content;
 $fbks_effective_hover_variant_class = $fbks_hover_variant_class;
+$fbks_effective_hover_effect_class = $fbks_hover_effect_class;
+$fbks_effective_overlay_entrance_class = $fbks_overlay_entrance_class;
 $fbks_effective_hover_style = $fbks_hover_style;
 $fbks_effective_hide_unknown_exif = $fbks_hide_unknown_exif;
 $fbks_effective_hover_woo = $fbks_enable_woo;
@@ -532,17 +585,36 @@ if ( $fbks_can_use_premium && ! empty( $fbks_active_image['overrideGalleryHoverS
 	$fbks_effective_overlay_content = isset( $fbks_active_image['overlayContent'] ) ? (string) $fbks_active_image['overlayContent'] : 'title';
 	$fbks_effective_hover_style_key = isset( $fbks_active_image['onHoverStyle'] ) ? (string) $fbks_active_image['onHoverStyle'] : 'blur-overlay';
 	$fbks_effective_hover_variant_class = $fbks_hover_class_map[ $fbks_effective_hover_style_key ] ?? 'pb-hover-blur-overlay';
+	$fbks_effective_hover_effect_key = isset( $fbks_active_image['hoverEffect'] ) ? sanitize_key( $fbks_active_image['hoverEffect'] ) : 'none';
+	$fbks_effective_hover_effect_class = $fbks_hover_effect_class_map[ $fbks_effective_hover_effect_key ] ?? '';
+	$fbks_effective_overlay_entrance_key = isset( $fbks_active_image['overlayEntrance'] ) ? sanitize_key( $fbks_active_image['overlayEntrance'] ) : 'default';
+	$fbks_effective_overlay_entrance_class = $fbks_overlay_entrance_class_map[ $fbks_effective_overlay_entrance_key ] ?? '';
 	$fbks_effective_hide_unknown_exif = ! empty( $fbks_active_image['hideUnknownExifFields'] );
 	$fbks_effective_hover_woo = $fbks_woo_active &&
 		! empty( $fbks_active_image['enableWooCommerce'] ) &&
 		( '' === (string) ( $fbks_active_image['imageClickAction'] ?? '' ) || 'woocommerce' === (string) $fbks_active_image['imageClickAction'] );
 	$fbks_effective_hover_style = '';
+	$fbks_overlay_font_family = fbks_sanitize_css_font_family_value( (string) ( $fbks_active_image['overlayFontFamily'] ?? '' ) );
+	$fbks_overlay_font_weight = fbks_sanitize_css_font_weight_value( (string) ( $fbks_active_image['overlayFontWeight'] ?? '' ) );
+	$fbks_overlay_font_style = fbks_sanitize_css_font_style_value( (string) ( $fbks_active_image['overlayFontStyle'] ?? '' ) );
+	$fbks_effective_hover_style .= $fbks_overlay_font_family ? '--pb-overlay-font-family:' . $fbks_overlay_font_family . ';' : '';
+	$fbks_effective_hover_style .= $fbks_overlay_font_weight ? '--pb-overlay-font-weight:' . $fbks_overlay_font_weight . ';' : '';
+	$fbks_effective_hover_style .= $fbks_overlay_font_style ? '--pb-overlay-font-style:' . $fbks_overlay_font_style . ';' : '';
 	if ( 'color-overlay' === $fbks_effective_hover_style_key ) {
-		$fbks_effective_hover_style .= '--pb-overlay-bg:' . (string) ( $fbks_active_image['overlayBgColor'] ?? '#f9f9f9' ) . ';';
-		$fbks_effective_hover_style .= '--pb-overlay-color:' . (string) ( $fbks_active_image['overlayTextColor'] ?? '#000000' ) . ';';
+		$fbks_overlay_bg = fbks_sanitize_css_color_value( (string) ( $fbks_active_image['overlayBgColor'] ?? '#f9f9f9' ) );
+		$fbks_overlay_text = fbks_sanitize_css_color_value( (string) ( $fbks_active_image['overlayTextColor'] ?? '#000000' ) );
+		$fbks_effective_hover_style .= $fbks_overlay_bg ? '--pb-overlay-bg:' . $fbks_overlay_bg . ';' : '';
+		$fbks_effective_hover_style .= $fbks_overlay_text ? '--pb-overlay-color:' . $fbks_overlay_text . ';' : '';
+	} elseif ( 'gradient-overlay' === $fbks_effective_hover_style_key ) {
+		$fbks_overlay_bg = fbks_sanitize_css_background_value( (string) ( $fbks_active_image['overlayBgGradient'] ?? '' ) );
+		$fbks_overlay_text = fbks_sanitize_css_color_value( (string) ( $fbks_active_image['overlayTextColor'] ?? '#000000' ) );
+		$fbks_effective_hover_style .= $fbks_overlay_bg ? '--pb-overlay-bg:' . $fbks_overlay_bg . ';' : '';
+		$fbks_effective_hover_style .= $fbks_overlay_text ? '--pb-overlay-color:' . $fbks_overlay_text . ';' : '';
 	} elseif ( 'chip' === $fbks_effective_hover_style_key ) {
-		$fbks_effective_hover_style .= '--pb-chip-overlay-bg:' . (string) ( $fbks_active_image['chipOverlayBgColor'] ?? '#f9f9f9' ) . ';';
-		$fbks_effective_hover_style .= '--pb-chip-overlay-color:' . (string) ( $fbks_active_image['chipOverlayTextColor'] ?? '#000000' ) . ';';
+		$fbks_chip_overlay_bg = fbks_sanitize_css_background_value( (string) ( $fbks_active_image['chipOverlayBgColor'] ?? '#f9f9f9' ) );
+		$fbks_chip_overlay_text = fbks_sanitize_css_color_value( (string) ( $fbks_active_image['chipOverlayTextColor'] ?? '#000000' ) );
+		$fbks_effective_hover_style .= $fbks_chip_overlay_bg ? '--pb-chip-overlay-bg:' . $fbks_chip_overlay_bg . ';' : '';
+		$fbks_effective_hover_style .= $fbks_chip_overlay_text ? '--pb-chip-overlay-color:' . $fbks_chip_overlay_text . ';' : '';
 	}
 }
 if ( 'product' === $fbks_effective_overlay_content && ! $fbks_effective_hover_woo ) {
@@ -606,10 +678,16 @@ $fbks_data_payload = [
 		'overlayContent'         => $fbks_overlay_content,
 		'hideUnknownExifFields' => $fbks_hide_unknown_exif,
 		'onHoverStyle'           => $attributes['onHoverStyle'] ?? 'blur-overlay',
-		'overlayBgColor'         => $attributes['overlayBgColor'] ?? '#f9f9f9',
-		'overlayTextColor'       => $attributes['overlayTextColor'] ?? '#000000',
-		'chipOverlayBgColor'     => $attributes['chipOverlayBgColor'] ?? '#f9f9f9',
-		'chipOverlayTextColor'   => $attributes['chipOverlayTextColor'] ?? '#000000',
+		'hoverEffect'            => sanitize_key( $attributes['hoverEffect'] ?? 'none' ),
+		'overlayEntrance'        => sanitize_key( $attributes['overlayEntrance'] ?? 'default' ),
+		'overlayBgColor'         => fbks_sanitize_css_color_value( (string) ( $attributes['overlayBgColor'] ?? '#f9f9f9' ) ),
+		'overlayBgGradient'      => fbks_sanitize_css_background_value( (string) ( $attributes['overlayBgGradient'] ?? '' ) ),
+		'overlayTextColor'       => fbks_sanitize_css_color_value( (string) ( $attributes['overlayTextColor'] ?? '#000000' ) ),
+		'overlayFontFamily'      => fbks_sanitize_css_font_family_value( (string) ( $attributes['overlayFontFamily'] ?? '' ) ),
+		'overlayFontWeight'      => fbks_sanitize_css_font_weight_value( (string) ( $attributes['overlayFontWeight'] ?? '' ) ),
+		'overlayFontStyle'       => fbks_sanitize_css_font_style_value( (string) ( $attributes['overlayFontStyle'] ?? '' ) ),
+		'chipOverlayBgColor'     => fbks_sanitize_css_background_value( (string) ( $attributes['chipOverlayBgColor'] ?? '#f9f9f9' ) ),
+		'chipOverlayTextColor'   => fbks_sanitize_css_color_value( (string) ( $attributes['chipOverlayTextColor'] ?? '#000000' ) ),
 		'enableDownload'         => $fbks_enable_download,
 		'downloadOnHover'        => $fbks_download_on_hover,
 		'downloadIconColor'      => $attributes['downloadIconColor'] ?? '',
@@ -708,7 +786,7 @@ if ( false === $fbks_data_json ) {
 				<?php endif; ?>
 
 				<?php $fbks_active_image_ratio = ! empty( $fbks_active_image['width'] ) && ! empty( $fbks_active_image['height'] ) ? (float) $fbks_active_image['width'] / (float) $fbks_active_image['height'] : 1; ?>
-				<div class="pb-filmstrip-gallery-main-media pb-image-block <?php echo esc_attr( $fbks_effective_on_hover_title ? $fbks_effective_hover_variant_class : '' ); ?>" style="--pb-filmstrip-image-ratio: <?php echo esc_attr( $fbks_active_image_ratio ); ?>;<?php echo esc_attr( $fbks_effective_hover_style ); ?>">
+				<div class="pb-filmstrip-gallery-main-media pb-image-block <?php echo esc_attr( $fbks_effective_on_hover_title ? $fbks_effective_hover_variant_class : '' ); ?> <?php echo esc_attr( $fbks_effective_on_hover_title ? $fbks_effective_overlay_entrance_class : '' ); ?> <?php echo esc_attr( $fbks_effective_hover_effect_class ); ?>" style="--pb-filmstrip-image-ratio: <?php echo esc_attr( $fbks_active_image_ratio ); ?>;<?php echo esc_attr( $fbks_effective_hover_style ); ?>">
 				<?php if ( $fbks_can_use_premium ) : ?>
 					<?php
 					$fbks_active_product_id = (int) ( $fbks_active_image['wooProductId'] ?? 0 );

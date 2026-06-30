@@ -9,14 +9,14 @@
 	"description": "Stacks images vertically with consistent spacing and full-width alignment.",
 	"example": {},
 	"textdomain": "folioblocks",
-	"parent": [ "folioblocks/pb-image-row" ],
-	"allowedBlocks": [ "folioblocks/pb-image-block" ],
+	"parent": ["folioblocks/pb-image-row"],
+	"allowedBlocks": ["folioblocks/pb-image-block", "folioblocks/pb-image-row"],
 	"supports": {
 		"inserter": false,
 		"anchor": false,
 		"ariaLabel": true,
 		"html": false
-    },
+	},
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",

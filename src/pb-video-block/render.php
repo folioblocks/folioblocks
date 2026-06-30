@@ -50,6 +50,8 @@ $fbks_overlay_bg_color = '';
 $fbks_overlay_text_color = '';
 $fbks_has_color_overlay = false;
 $fbks_has_blur_overlay = false;
+$fbks_hover_effect_class = '';
+$fbks_overlay_entrance_class = '';
 $fbks_filter_categories = [];
 if (! empty($attributes['filterCategories']) && is_array($attributes['filterCategories'])) {
 	foreach ($attributes['filterCategories'] as $fbks_category) {
@@ -97,10 +99,14 @@ if (fbks_fs()->can_use_premium_code__premium_only()) {
 	}
 	$fbks_lazy_load = ! empty($attributes['lazyLoad']);
 	$fbks_overlay_style = $fbks_hover_context['folioBlocks/overlayStyle'] ?? ($attributes['overlayStyle'] ?? 'default');
+	$fbks_hover_effect = sanitize_key($fbks_hover_context['folioBlocks/hoverEffect'] ?? ($attributes['hoverEffect'] ?? 'none'));
+	$fbks_overlay_entrance = sanitize_key($fbks_hover_context['folioBlocks/overlayEntrance'] ?? ($attributes['overlayEntrance'] ?? 'default'));
 	$fbks_overlay_bg_color = $fbks_hover_context['folioBlocks/overlayBgColor'] ?? ($attributes['overlayBgColor'] ?? '');
+	$fbks_overlay_bg_gradient = $fbks_hover_context['folioBlocks/overlayBgGradient'] ?? ($attributes['overlayBgGradient'] ?? '');
 	$fbks_overlay_text_color = $fbks_hover_context['folioBlocks/overlayTextColor'] ?? ($attributes['overlayTextColor'] ?? '');
-	$fbks_overlay_bg_color = $fbks_overlay_bg_color ?: '#f9f9f9';
-	$fbks_overlay_text_color = $fbks_overlay_text_color ?: '#000000';
+	$fbks_overlay_bg_color = fbks_sanitize_css_color_value($fbks_overlay_bg_color ?: '#f9f9f9');
+	$fbks_overlay_bg_gradient = fbks_sanitize_css_background_value($fbks_overlay_bg_gradient ?: 'linear-gradient(135deg, rgba(255,255,255,0.92) 0%, rgba(226,232,240,0.82) 100%)');
+	$fbks_overlay_text_color = fbks_sanitize_css_color_value($fbks_overlay_text_color ?: '#000000');
 
 	$fbks_woo_active = is_plugin_active('woocommerce/woocommerce.php');
 	$fbks_enable_woo = ($fbks_context['folioBlocks/enableWooCommerce'] ?? ($attributes['enableWooCommerce'] ?? false)) && $fbks_woo_active;
@@ -183,13 +189,41 @@ if (fbks_fs()->can_use_premium_code__premium_only()) {
 		? $fbks_play_visibility
 		: $fbks_title_visibility;
 	$fbks_has_color_overlay = ('color' === $fbks_overlay_style);
+	$fbks_has_gradient_overlay = ('gradient' === $fbks_overlay_style);
 	$fbks_has_blur_overlay = ('blur' === $fbks_overlay_style);
+	$fbks_hover_effect_class_map = [
+		'zoom-in'    => 'pb-effect-zoom-in',
+		'zoom-out'   => 'pb-effect-zoom-out',
+		'lift'       => 'pb-effect-lift',
+		'tilt'       => 'pb-effect-tilt',
+		'pop'        => 'pb-effect-pop',
+		'glare'      => 'pb-effect-glare',
+		'pan'        => 'pb-effect-pan',
+		'desaturate' => 'pb-effect-desaturate',
+	];
+	$fbks_hover_effect_class = $fbks_hover_effect_class_map[$fbks_hover_effect] ?? '';
+	$fbks_overlay_entrance_class_map = [
+		'fade'        => 'pb-overlay-enter-fade',
+		'slide-up'    => 'pb-overlay-enter-slide-up',
+		'slide-down'  => 'pb-overlay-enter-slide-down',
+		'slide-left'  => 'pb-overlay-enter-slide-left',
+		'slide-right' => 'pb-overlay-enter-slide-right',
+	];
+	$fbks_overlay_entrance_class = $fbks_overlay_entrance_class_map[$fbks_overlay_entrance] ?? '';
 	if ($fbks_has_color_overlay) {
 		if ('' !== $fbks_overlay_bg_color) {
-			$fbks_style .= '--pb-video-overlay-bg:' . $fbks_overlay_bg_color . ';';
+			$fbks_style .= '--pb-video-overlay-bg:' . esc_attr($fbks_overlay_bg_color) . ';';
 		}
 		if ('' !== $fbks_overlay_text_color) {
-			$fbks_style .= '--pb-video-overlay-text:' . $fbks_overlay_text_color . ';';
+			$fbks_style .= '--pb-video-overlay-text:' . esc_attr($fbks_overlay_text_color) . ';';
+		}
+	}
+	if ($fbks_has_gradient_overlay) {
+		if ('' !== $fbks_overlay_bg_gradient) {
+			$fbks_style .= '--pb-video-overlay-bg:' . esc_attr($fbks_overlay_bg_gradient) . ';';
+		}
+		if ('' !== $fbks_overlay_text_color) {
+			$fbks_style .= '--pb-video-overlay-text:' . esc_attr($fbks_overlay_text_color) . ';';
 		}
 	}
 }
@@ -218,8 +252,14 @@ if ($fbks_title) {
 	<div class="pb-video-block aspect-<?php echo esc_attr(str_replace(':', '-', $fbks_aspect)); ?><?php echo esc_attr($fbks_overlay_class); ?>
 		<?php if ($fbks_has_color_overlay) {
 			echo ' has-color-overlay';
+		} ?><?php if ($fbks_has_gradient_overlay) {
+			echo ' has-gradient-overlay';
 		} ?><?php if ($fbks_has_blur_overlay) {
 				echo ' has-blur-overlay';
+			} ?><?php if (! empty($fbks_overlay_entrance_class)) {
+				echo ' ' . esc_attr($fbks_overlay_entrance_class);
+			} ?><?php if (! empty($fbks_hover_effect_class)) {
+				echo ' ' . esc_attr($fbks_hover_effect_class);
 			} ?><?php if (fbks_fs()->can_use_premium_code__premium_only() && 'none' !== $fbks_shadow_style) {
 					echo ' dropshadow dropshadow--' . esc_attr($fbks_shadow_style);
 				} ?>"

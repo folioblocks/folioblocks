@@ -4,6 +4,38 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2026-06-29
+### Added
+- Added full Gradient Overlay support for Image Block, Video Block, image galleries, Video Gallery, and Filmstrip Gallery.
+- Added a dedicated Gradient Overlay style for full-cover gradient backgrounds while preserving the existing Bottom Gradient image overlay behavior.
+- Added Hover Effect controls with Zoom In, Zoom Out, Lift, Tilt, Pop, Glare, Pan, and Desaturate effects.
+- Added pointer-aware Tilt hover behavior so image and video surfaces tilt based on cursor position.
+- Added Overlay Entrance controls for supported overlays, including fade and slide directions.
+- Added overlay typography controls for Image Block and image gallery overlays, including theme font family plus weight and style.
+- Added gradient overlay support to gallery defaults and per-image or per-video hover overrides.
+- Added gradient-safe CSS background sanitization for overlay backgrounds.
+- Added support for Image Rows inside Modular Gallery Image Stacks.
+- Added an Image Stack toolbar button for inserting a nested Image Row.
+- Added an initial FolioBlocks Global Settings page with saved watermark management.
+- Added multiple named saved watermarks with upload/select image controls, default watermark selection, and compact editable saved watermark rows.
+- Added live watermark previews with aspect-ratio preview buttons and a larger modal preview.
+
+### Changed
+- Renamed Gradient Bottom to Bottom Gradient in the editor while preserving the existing `gradient-bottom` saved value for backwards compatibility.
+- Renamed Hover Style controls to Overlay Style for clearer editor wording.
+- Split overlay background controls so Color Overlay uses solid colors and Gradient Overlay uses gradient backgrounds.
+- Updated Video Block and Video Gallery overlays to use separate Color Overlay and Gradient Overlay styles.
+- Improved Tilt, Pop, Glare, and related hover effects so they apply consistently across image and video blocks.
+- Updated Modular Gallery Image Rows and Image Stacks so empty placeholder Image Blocks are removed automatically when a populated Image Block is dragged in.
+- Improved Modular Gallery editor layout recalculation after dragging images into large galleries.
+- Simplified saved watermark settings to focus on image, opacity, size, inset, position, and repeat controls.
+- Updated watermark preview inset handling so the inset is calculated from the preview short edge and applied equally on all sides.
+- Removed the sidebar and quick links from the initial watermark settings experience to give the content more room.
+
+### Fixed
+- Fixed Modular Gallery layouts sometimes requiring an extra image move before recalculating after newly dragged images finished loading.
+- Fixed redundant Image Row editor layout application that could reuse the first row layout across other rows in large Modular Galleries.
+
 ## [1.4.0] - 2026-06-25
 ### Added
 - Added responsive desktop, tablet, and mobile gap controls to Masonry, Justified, Modular, and Video Galleries.

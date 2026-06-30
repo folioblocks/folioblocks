@@ -5,7 +5,7 @@ Tags: gallery, image gallery, photo gallery, video gallery, lightbox,
 Tested up to:      7.0
 Requires at least: 6.3
 Requires PHP: 7.4
-Stable tag:        1.4.1
+Stable tag:        1.5.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -125,6 +125,18 @@ No, the galleries will remain in place on your site. However, the **advanced lay
 6. Video Gallery block populated with images
 
 == Changelog ==
+
+= 1.5.0 =
+* Added full Gradient Overlay support for Image Block, Video Block, image galleries, Video Gallery, and Filmstrip Gallery.
+* Renamed the existing Gradient Bottom image overlay to Bottom Gradient while preserving backwards compatibility.
+* Split overlay background controls so Color Overlay uses solid colors and Gradient Overlay uses gradient backgrounds.
+* Added Hover Effect controls with Zoom In, Zoom Out, Lift, Tilt, Pop, Glare, Pan, and Desaturate effects.
+* Improved Tilt hover behavior so it responds to pointer position and visibly tilts the whole image or video surface.
+* Added Overlay Entrance controls for supported overlays, including fade and slide directions.
+* Added overlay typography controls for Image Block and image gallery overlays, including theme font family plus weight and style.
+* Added gradient-safe CSS sanitization for overlay backgrounds.
+* Added gradient overlay support to gallery defaults and per-image or per-video hover overrides.
+* Renamed Hover Style controls to Overlay Style for clearer editor wording.
 
 = 1.4.0 =
 * Added responsive desktop, tablet, and mobile gap controls to Carousel, Masonry, Justified, Modular, and Video Galleries.

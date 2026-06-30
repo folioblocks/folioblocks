@@ -2,9 +2,9 @@
 
 ## Goal
 
-Add a Pro Watermark Overlay feature for FolioBlocks that lets site owners upload one global watermark asset, preview it live in settings, and render it dynamically on gallery images where it is useful.
+Add a Pro Watermark Overlay feature for FolioBlocks that lets site owners save multiple named watermarks, choose one as the default, preview them live in settings, and render them dynamically on gallery images where useful.
 
-The strongest product model is context-aware watermarking: users can keep small gallery thumbnails clean while showing the watermark on larger image views such as the lightbox.
+The strongest product model is context-aware watermarking: users can keep small gallery thumbnails clean while showing the watermark on larger image views such as the lightbox. Watermarking should be treated primarily as a block/media feature with global defaults, not as a page-level feature.
 
 ## Product Model
 
@@ -12,10 +12,11 @@ Watermark Overlay should be a visual protection and branding layer, not destruct
 
 Recommended model:
 
-- A global watermark asset is uploaded in a FolioBlocks settings page.
-- Global defaults define how the watermark appears.
-- Individual blocks can enable, disable, or override watermark behavior.
-- Thumbnail and lightbox visibility are controlled separately.
+- Multiple named watermarks are managed in FolioBlocks > Global Settings.
+- Each saved watermark stores its own asset and display settings.
+- One saved watermark can be marked as the default.
+- Individual gallery blocks can use the default watermark, select another saved watermark, or disable watermark behavior.
+- Thumbnail and lightbox visibility are controlled at the gallery/block level, not on the saved watermark.
 - The watermark is rendered dynamically with CSS/markup on the frontend.
 
 This keeps the feature reversible and avoids generating duplicate media files in the MVP.
@@ -37,15 +38,17 @@ The feature should integrate with the existing gallery/image model rather than c
 
 Include:
 
-- Global watermark image upload.
+- Multiple saved watermarks.
+- Watermark naming.
+- Default watermark selection.
+- Watermark image upload per saved watermark.
 - Live preview on the settings page.
 - Global default opacity.
 - Global default size.
 - Global default position.
-- Global default blend mode.
-- Global default visibility for thumbnails.
-- Global default visibility for lightbox images.
 - Per-block enable/disable toggle.
+- Per-block use default / select watermark / disabled mode.
+- Per-block saved watermark selection.
 - Per-block thumbnail visibility toggle.
 - Per-block lightbox visibility toggle.
 - Frontend thumbnail overlay rendering.
@@ -56,66 +59,99 @@ Out of scope for MVP:
 - Permanently modifying image files.
 - Generating watermarked derivative images.
 - Watermarked download files.
-- Per-image watermark assets.
-- Multiple watermark presets.
+- Per-image watermark selection.
 - Client-specific watermark text.
 - Watermark analytics or deterrence tracking.
 - Full DRM-style image protection.
 
-## Global Settings
+## Global Settings Page
 
-Add a Watermark section to the FolioBlocks settings/admin area.
+Add a Global Settings page under the FolioBlocks admin menu. Watermark Overlay should be the first major section, but the page should be named broadly so it can later hold global lightbox defaults, gallery defaults, protection defaults, and other plugin-wide behavior.
+
+Recommended first navigation:
+
+- FolioBlocks > Dashboard
+- FolioBlocks > Global Settings
+- FolioBlocks > Free vs Pro
+- FolioBlocks > System Info
+
+Recommended initial Global Settings sections:
+
+- Watermarks.
+- Future Global Defaults placeholder.
+- Implementation notes/help text explaining that global settings are defaults and block controls can override them.
 
 Recommended settings:
 
 ```json
 {
-  "watermark": {
+  "watermarks": {
     "enabledByDefault": false,
-    "assetId": 0,
-    "assetUrl": "",
-    "opacity": 0.28,
-    "size": 24,
-    "position": "center",
-    "blendMode": "normal",
-    "showOnThumbnails": false,
-    "showInLightbox": true,
-    "repeat": "no-repeat"
+    "defaultWatermarkId": "studio-white-logo",
+    "items": [
+      {
+        "id": "studio-white-logo",
+        "name": "Studio White Logo",
+        "assetId": 0,
+        "assetUrl": "",
+        "opacity": 0.28,
+        "sizeMode": "auto",
+        "sizeScale": "medium",
+        "size": 16,
+        "position": "center",
+        "inset": 4,
+        "repeat": "no-repeat"
+      }
+    ]
   }
 }
 ```
 
 Recommended controls:
 
+- Saved watermark list.
+- Add watermark.
+- Duplicate watermark.
+- Delete watermark.
+- Set as default.
+- Watermark name.
 - Watermark image upload.
 - Remove watermark image.
 - Enable watermark by default for new blocks.
-- Show on thumbnails.
-- Show in lightbox.
 - Position: center, top left, top right, bottom left, bottom right.
-- Size as percentage of image width.
+- Size mode: auto, small, medium, large, custom.
+- Custom size as percentage of the rendered image short edge.
+- Edge inset as percentage of the rendered image short edge, rendered as the same pixel inset on all sides.
 - Opacity slider.
-- Blend mode select.
 - Repeat/tile toggle.
+- Compact saved watermark rows.
+- Edit button/expanded editor for saved watermarks.
+- Save Watermark action inside the active add/edit area.
 
 Recommended accepted asset types:
 
-- PNG.
-- SVG if the current media security posture allows it.
-- WebP with transparency.
+- WordPress-supported raster image uploads, including PNG, JPEG, WebP, and GIF where the Media Library allows them.
+- Transparent PNG.
+- Transparent WebP.
 
-PNG should be the safest default recommendation because transparent PNG watermarks are widely understood by non-technical users.
+PNG should be the safest default recommendation because transparent PNG watermarks are widely understood by non-technical users. SVG should not be part of the default upload promise because WordPress does not allow SVG uploads by default; only support SVG if the site explicitly enables and sanitizes SVG media uploads.
+
+Avoid user-facing "preset" wording. The UI should say "watermark", "saved watermark", "default watermark", and "select watermark". Internally the saved records can behave like presets, but the product language should match the user's workflow.
 
 ## Settings Page Live Preview
 
-The settings page should include a live preview panel.
+The settings page should include a live preview panel for each saved watermark, or at minimum for the currently edited watermark.
 
 Preview behavior:
 
 - Show a neutral sample image.
-- Layer the uploaded watermark over the sample image.
-- Update opacity, size, position, repeat, and blend mode immediately as controls change.
+- Layer the selected saved watermark over the sample image.
+- Update opacity, size, position, repeat, and aspect ratio immediately as controls change.
 - Update the preview as soon as the user chooses an image from the WordPress media modal, before saving.
+- Keep saved watermark rows compact after saving, with an edit action that opens the full controls.
+- Provide aspect-ratio preview buttons so users can test square, portrait, landscape, and wide image proportions.
+- Let users click the preview to open a larger modal preview.
+- Keep the watermark management screen focused on the watermark content, without the Global Settings sidebar or quick links.
 - Include a light/dark sample toggle if it remains simple.
 
 The preview should not try to reproduce every gallery layout. Its job is to help users tune the watermark visually.
@@ -125,7 +161,7 @@ Suggested preview markup:
 ```html
 <div class="fbks-watermark-preview">
   <img class="fbks-watermark-preview__image" src="sample.jpg" alt="">
-  <img class="fbks-watermark-preview__mark" src="watermark.png" alt="">
+  <span class="fbks-watermark-preview__mark" aria-hidden="true"></span>
 </div>
 ```
 
@@ -136,8 +172,27 @@ Suggested CSS variables:
 --fbks-watermark-size
 --fbks-watermark-position
 --fbks-watermark-repeat
---fbks-watermark-blend-mode
 ```
+
+## Watermark Sizing Strategy
+
+Avoid sizing watermarks from image width alone. A watermark sized as a fixed percentage of width can look too large on portrait images and too small on square or narrow images.
+
+Recommended default:
+
+```text
+watermarkSize = renderedShortEdge * percentage
+```
+
+Suggested defaults:
+
+- Small: 10% of short edge.
+- Medium: 16% of short edge.
+- Large: 22% of short edge.
+- Custom: 5% to 40% of short edge.
+- Inset: 4% of short edge, converted to one pixel value that is applied equally to all sides.
+
+This keeps the watermark visually proportional across 2:3 portrait, 1:1 square, 3:4 portrait, 4:3 landscape, and wide landscape images.
 
 Difficulty:
 
@@ -147,11 +202,12 @@ Difficulty:
 
 ## Block Controls
 
-Add Pro controls to image and gallery blocks.
+Add Pro controls to image and gallery blocks. Watermark controls should live in a dedicated Watermark inspector panel, not in the WordPress Advanced panel. Advanced already contains unrelated WordPress controls, and watermarking is visual media behavior rather than a technical block setting.
 
 Recommended controls:
 
-- Watermark: inherit global / enabled / disabled.
+- Watermark: use default / select watermark / disabled.
+- Watermark select control populated with saved watermark names.
 - Show on thumbnails.
 - Show in lightbox.
 - Optional opacity override.
@@ -162,13 +218,14 @@ Recommended MVP control shape:
 
 ```json
 {
-  "watermarkMode": "inherit",
+  "watermarkMode": "default",
+  "watermarkId": "",
   "watermarkShowOnThumbnails": null,
   "watermarkShowInLightbox": null
 }
 ```
 
-Use `inherit` as the default so global settings can shape behavior without cluttering each block.
+Use `default` as the default so blocks inherit the default saved watermark without cluttering each block.
 
 If local style overrides are added later:
 
@@ -181,6 +238,14 @@ If local style overrides are added later:
 ```
 
 Keep the first block UI small. The settings page is where the detailed visual tuning should happen.
+
+Recommended hierarchy:
+
+- Global Settings define saved watermarks and the default watermark.
+- Block Watermark panel controls use default / select watermark / disabled behavior.
+- Gallery-level controls decide whether the chosen watermark appears on thumbnails, in the lightbox, or both.
+- Individual image overrides can be deferred.
+- Page-level controls should be limited to future broad exceptions such as disabling watermarks on a page, not the primary workflow.
 
 ## Frontend Rendering
 
@@ -217,11 +282,10 @@ Suggested CSS:
   background-position: var(--pb-watermark-position, center);
   background-size: var(--pb-watermark-size, 24%) auto;
   opacity: var(--pb-watermark-opacity, 0.28);
-  mix-blend-mode: var(--pb-watermark-blend-mode, normal);
 }
 ```
 
-For a single non-repeating watermark, `background-image` on an overlay is simpler than rendering an extra `<img>` for every image.
+For non-repeating watermarks, `background-image` on an overlay is simpler than rendering an extra `<img>` for every image. The chosen saved watermark should resolve to CSS variables for asset URL, opacity, position, repeat, size, and inset.
 
 ## Context-Aware Display
 
@@ -318,7 +382,7 @@ Implementation options:
 
 Recommended approach:
 
-- Use global/default settings for lightbox watermark styling.
+- Use the resolved saved watermark settings for lightbox watermark styling.
 - Use per-image or per-block data attributes only for visibility decisions.
 - Keep one reusable overlay element inside the lightbox image container.
 
@@ -371,8 +435,8 @@ Settings page:
 
 Editor:
 
-- New blocks inherit global defaults.
-- Existing blocks can enable or disable watermarking.
+- New blocks use the default saved watermark when watermarking is enabled by default.
+- Existing blocks can use default, select another saved watermark, or disable watermarking.
 - Thumbnail watermark preview appears when enabled.
 - Thumbnail watermark preview disappears when disabled.
 - Gallery block context passes settings to image blocks.
@@ -401,11 +465,11 @@ Responsive:
 
 ## Suggested Implementation Order
 
-1. Add global watermark settings schema and sanitization.
-2. Add settings page upload controls.
+1. Add saved watermark settings schema and sanitization.
+2. Add settings page controls for adding, naming, editing, deleting, and setting a default watermark.
 3. Add live preview to the settings page.
 4. Expose sanitized watermark settings to editor JavaScript.
-5. Add block attributes and Pro controls for enable/inherit, thumbnails, and lightbox visibility.
+5. Add block attributes and Pro controls for use default, select watermark, disabled, thumbnails, and lightbox visibility.
 6. Pass gallery watermark settings through block context to image blocks.
 7. Render thumbnail overlay when enabled.
 8. Add lightbox overlay rendering and update behavior.
@@ -417,8 +481,8 @@ Responsive:
 - Minimum thumbnail width threshold.
 - Separate thumbnail and lightbox opacity/size/position.
 - Tiled watermark only in lightbox.
-- Per-block custom watermark asset.
+- Per-block custom watermark settings without creating a saved watermark.
 - Text-based watermark using site name, client name, or project name.
 - Server-side generated watermarked preview derivatives.
 - Watermarked download generation.
-- Presets for subtle, proofing, portfolio, and strong protection styles.
+- Optional automatic watermark suggestions for bright or dark images.

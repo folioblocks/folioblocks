@@ -709,11 +709,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					) }
 				</PanelBody>
 				{ applyFilters(
-					'folioBlocks.justifiedGallery.filterStyleSettings',
-					<PanelBody title={ __( 'Gallery Filtering Styles', 'folioblocks' ) } initialOpen={ true }>{ imageProFeatureNotice( 'filterStyles' ) }</PanelBody>,
-					{ attributes, setAttributes }
-				) }
-				{ applyFilters(
 					'folioBlocks.justifiedGallery.iconStyleControls',
 					null,
 					{
@@ -728,6 +723,11 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						attributes,
 						setAttributes,
 					}
+				) }
+				{ applyFilters(
+					'folioBlocks.justifiedGallery.filterStyleSettings',
+					<PanelBody title={ __( 'Gallery Filtering Styles', 'folioblocks' ) } initialOpen={ true }>{ imageProFeatureNotice( 'filterStyles' ) }</PanelBody>,
+					{ attributes, setAttributes }
 				) }
 			</InspectorControls>
 

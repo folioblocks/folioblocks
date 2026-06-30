@@ -19,7 +19,30 @@ import ImageStyleControl from "../pb-helpers/ImageStyleControl";
 import { registerFilteringPremiumControls } from "../pb-helpers/filteringPremiumControls";
 
 const DEFAULT_OVERLAY_BG_COLOR = "#f9f9f9";
+const DEFAULT_OVERLAY_BG_GRADIENT =
+	"linear-gradient(135deg, rgba(255,255,255,0.92) 0%, rgba(226,232,240,0.82) 100%)";
 const DEFAULT_OVERLAY_TEXT_COLOR = "#000000";
+const isGradientValue = (value) =>
+	typeof value === "string" && value.toLowerCase().includes("gradient(");
+const HOVER_EFFECT_OPTIONS = [
+	{ label: __("None", "folioblocks"), value: "none" },
+	{ label: __("Zoom In", "folioblocks"), value: "zoom-in" },
+	{ label: __("Zoom Out", "folioblocks"), value: "zoom-out" },
+	{ label: __("Lift", "folioblocks"), value: "lift" },
+	{ label: __("Tilt", "folioblocks"), value: "tilt" },
+	{ label: __("Pop", "folioblocks"), value: "pop" },
+	{ label: __("Glare", "folioblocks"), value: "glare" },
+	{ label: __("Pan", "folioblocks"), value: "pan" },
+	{ label: __("Desaturate", "folioblocks"), value: "desaturate" },
+];
+const OVERLAY_ENTRANCE_OPTIONS = [
+	{ label: __("Default", "folioblocks"), value: "default" },
+	{ label: __("Fade", "folioblocks"), value: "fade" },
+	{ label: __("Slide Up", "folioblocks"), value: "slide-up" },
+	{ label: __("Slide Down", "folioblocks"), value: "slide-down" },
+	{ label: __("Slide Left", "folioblocks"), value: "slide-left" },
+	{ label: __("Slide Right", "folioblocks"), value: "slide-right" },
+];
 
 const LightboxThemeControl = ({ attributes, setAttributes }) => (
 	<ToggleGroupControl
@@ -240,13 +263,37 @@ addFilter(
 		return (
 			<>
 				<SelectControl
-					label={__("Hover Style", "folioblocks")}
+					label={__("Hover Effect", "folioblocks")}
+					value={attributes.hoverEffect || "none"}
+					options={HOVER_EFFECT_OPTIONS}
+					onChange={(hoverEffect) => setAttributes({ hoverEffect })}
+					help={__(
+						"Choose how video thumbnails move or change on hover.",
+						"folioblocks",
+					)}
+					__nextHasNoMarginBottom
+					__next40pxDefaultSize
+				/>
+				<SelectControl
+					label={__("Overlay Style", "folioblocks")}
 					value={attributes.overlayStyle || "default"}
 					onChange={(value) => {
 						const nextAttributes = { overlayStyle: value };
 						if (value === "color") {
-							nextAttributes.overlayBgColor =
-								attributes.overlayBgColor || DEFAULT_OVERLAY_BG_COLOR;
+							nextAttributes.overlayBgColor = isGradientValue(
+								attributes.overlayBgColor,
+							)
+								? DEFAULT_OVERLAY_BG_COLOR
+								: attributes.overlayBgColor || DEFAULT_OVERLAY_BG_COLOR;
+							nextAttributes.overlayTextColor =
+								attributes.overlayTextColor || DEFAULT_OVERLAY_TEXT_COLOR;
+						}
+						if (value === "gradient") {
+							nextAttributes.overlayBgGradient =
+								attributes.overlayBgGradient ||
+								(isGradientValue(attributes.overlayBgColor)
+									? attributes.overlayBgColor
+									: DEFAULT_OVERLAY_BG_GRADIENT);
 							nextAttributes.overlayTextColor =
 								attributes.overlayTextColor || DEFAULT_OVERLAY_TEXT_COLOR;
 						}
@@ -265,15 +312,38 @@ addFilter(
 							label: __("Color Overlay", "folioblocks"),
 							value: "color",
 						},
+						{
+							label: __("Gradient Overlay", "folioblocks"),
+							value: "gradient",
+						},
 					]}
 					help={
 						(attributes.overlayStyle || "default") === "color"
 							? __(
-								"Displays the overlay content over custom overlay colors set in Styles panel.",
+								"Displays the overlay content over a solid background color set in Styles panel.",
+								"folioblocks",
+							)
+							: (attributes.overlayStyle || "default") === "gradient"
+							? __(
+								"Displays the overlay content over a gradient background set in Styles panel.",
 								"folioblocks",
 							)
 							: __("Choose the hover overlay style.", "folioblocks")
 					}
+					__nextHasNoMarginBottom
+					__next40pxDefaultSize
+				/>
+				<SelectControl
+					label={__("Overlay Entrance", "folioblocks")}
+					value={attributes.overlayEntrance || "default"}
+					options={OVERLAY_ENTRANCE_OPTIONS}
+					onChange={(overlayEntrance) =>
+						setAttributes({ overlayEntrance })
+					}
+					help={__(
+						"Choose how overlay content enters each thumbnail.",
+						"folioblocks",
+					)}
 					__nextHasNoMarginBottom
 					__next40pxDefaultSize
 				/>
@@ -286,16 +356,26 @@ addFilter(
 	"folioBlocks.videoGallery.hoverOverlayStyleControls",
 	"folioblocks/video-gallery-premium-hover-overlay-styles",
 	(defaultContent, { attributes, setAttributes }) => {
-		if ((attributes.overlayStyle || "default") !== "color") {
+		const overlayStyle = attributes.overlayStyle || "default";
+		const isColorOverlay = overlayStyle === "color";
+		const isGradientOverlay = overlayStyle === "gradient";
+
+		if (!isColorOverlay && !isGradientOverlay) {
 			return null;
 		}
+		const bgAttribute = isGradientOverlay
+			? "overlayBgGradient"
+			: "overlayBgColor";
+		const defaultBg = isGradientOverlay
+			? DEFAULT_OVERLAY_BG_GRADIENT
+			: DEFAULT_OVERLAY_BG_COLOR;
 
 		return (
 			<ToolsPanel
 				label={__("Gallery Hover Styles", "folioblocks")}
 				resetAll={() =>
 					setAttributes({
-						overlayBgColor: DEFAULT_OVERLAY_BG_COLOR,
+						[bgAttribute]: defaultBg,
 						overlayTextColor: DEFAULT_OVERLAY_TEXT_COLOR,
 					})
 				}
@@ -303,35 +383,40 @@ addFilter(
 				<ToolsPanelItem
 					label={__("Overlay Colors", "folioblocks")}
 					hasValue={() =>
-						(attributes.overlayBgColor || DEFAULT_OVERLAY_BG_COLOR) !==
-						DEFAULT_OVERLAY_BG_COLOR ||
+						(attributes[bgAttribute] || defaultBg) !== defaultBg ||
 						(attributes.overlayTextColor || DEFAULT_OVERLAY_TEXT_COLOR) !==
 						DEFAULT_OVERLAY_TEXT_COLOR
 					}
 					onDeselect={() =>
 						setAttributes({
-							overlayBgColor: DEFAULT_OVERLAY_BG_COLOR,
+							[bgAttribute]: defaultBg,
 							overlayTextColor: DEFAULT_OVERLAY_TEXT_COLOR,
 						})
 					}
 					isShownByDefault
 				>
 					<CompactTwoColorControl
-						label={__("Color Overlay", "folioblocks")}
+						label={
+							isGradientOverlay
+								? __("Gradient Overlay", "folioblocks")
+								: __("Color Overlay", "folioblocks")
+						}
 						value={{
 							first:
 								attributes.overlayTextColor || DEFAULT_OVERLAY_TEXT_COLOR,
-							second: attributes.overlayBgColor || DEFAULT_OVERLAY_BG_COLOR,
+							second: attributes[bgAttribute] || defaultBg,
 						}}
 						onChange={(next) =>
 							setAttributes({
 								overlayTextColor:
 									next?.first || DEFAULT_OVERLAY_TEXT_COLOR,
-								overlayBgColor: next?.second || DEFAULT_OVERLAY_BG_COLOR,
+								[bgAttribute]: next?.second || defaultBg,
 							})
 						}
 						firstLabel={__("Text", "folioblocks")}
 						secondLabel={__("Background", "folioblocks")}
+						secondSupportsGradient={isGradientOverlay}
+						secondGradientOnly={isGradientOverlay}
 					/>
 				</ToolsPanelItem>
 			</ToolsPanel>

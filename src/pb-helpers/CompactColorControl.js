@@ -7,7 +7,11 @@ import {
 } from '@wordpress/components';
 import { useState, useRef } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
-import { useSettings } from '@wordpress/block-editor';
+import {
+	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
+	__experimentalColorGradientControl as ColorGradientControl,
+	useSettings,
+} from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
 
 function useThemePalette() {
@@ -24,7 +28,7 @@ function useThemePalette() {
 		'color.palette.theme',
 		'color.palette.default',
 		'color.palette.custom',
-		'color.custom',
+		'color.custom'
 	);
 
 	const legacy = useSelect( ( select ) => {
@@ -80,6 +84,72 @@ function useThemePalette() {
 	return { themeColors, disableCustomColors };
 }
 
+function useThemeGradients() {
+	const [
+		gradientsCombinedSetting,
+		gradientsThemeSetting,
+		gradientsDefaultSetting,
+		gradientsCustomSetting,
+		customGradientsSetting,
+	] = useSettings(
+		'color.gradients',
+		'color.gradients.theme',
+		'color.gradients.default',
+		'color.gradients.custom',
+		'color.customGradient'
+	);
+
+	const legacy = useSelect( ( select ) => {
+		const settings = select( 'core/block-editor' )?.getSettings?.();
+		const features = settings?.__experimentalFeatures;
+		const gradients = features?.color?.gradients;
+
+		return {
+			gradients: settings?.gradients ?? [],
+			gradientsTheme: gradients?.theme ?? [],
+			gradientsDefault: gradients?.default ?? [],
+			gradientsCustom: gradients?.custom ?? [],
+			disableCustomGradients: !! settings?.disableCustomGradients,
+		};
+	}, [] );
+
+	const themeGradients = gradientsThemeSetting ?? legacy.gradientsTheme ?? [];
+	const customGradients =
+		gradientsCustomSetting ?? legacy.gradientsCustom ?? [];
+	const defaultGradients =
+		gradientsDefaultSetting ?? legacy.gradientsDefault ?? [];
+
+	let gradients = [ ...themeGradients, ...customGradients ];
+
+	if ( ! gradients.length ) {
+		gradients = [ ...defaultGradients ];
+	}
+
+	if ( ! gradients.length ) {
+		gradients = gradientsCombinedSetting ?? legacy.gradients ?? [];
+	}
+
+	const seen = new Set();
+	const themeGradientsList = ( gradients || [] ).filter( ( gradient ) => {
+		const key =
+			gradient?.gradient || gradient?.slug || JSON.stringify( gradient );
+		if ( seen.has( key ) ) {
+			return false;
+		}
+		seen.add( key );
+		return true;
+	} );
+
+	const disableCustomGradients =
+		customGradientsSetting === false ? true : legacy.disableCustomGradients;
+
+	return { themeGradients: themeGradientsList, disableCustomGradients };
+}
+
+const isGradientValue = ( nextValue ) =>
+	typeof nextValue === 'string' &&
+	/\b(?:linear|radial|conic)-gradient\(/i.test( nextValue );
+
 export default function CompactColorControl( {
 	label,
 	value,
@@ -88,11 +158,15 @@ export default function CompactColorControl( {
 } ) {
 	const [ isOpen, setIsOpen ] = useState( false );
 	const buttonRef = useRef();
+	const controlId = useRef(
+		`pb-compact-color-control-${ Math.random().toString( 36 ).slice( 2 ) }`
+	).current;
 
 	const { themeColors, disableCustomColors } = useThemePalette();
 
 	return (
 		<BaseControl
+			id={ controlId }
 			label={ label }
 			help={ help }
 			__nextHasNoMarginBottom
@@ -182,10 +256,20 @@ export function CompactTwoColorControl( {
 	onChange,
 	firstLabel = __( 'Default', 'folioblocks' ),
 	secondLabel = __( 'Hover', 'folioblocks' ),
+	secondSupportsGradient = false,
+	secondGradientOnly = false,
+	secondColorLabel = __( 'Color', 'folioblocks' ),
+	secondGradientLabel = __( 'Gradient', 'folioblocks' ),
 } ) {
 	const [ isOpen, setIsOpen ] = useState( false );
 	const buttonRef = useRef();
+	const controlId = useRef(
+		`pb-compact-two-color-control-${ Math.random()
+			.toString( 36 )
+			.slice( 2 ) }`
+	).current;
 	const { themeColors, disableCustomColors } = useThemePalette();
+	const { themeGradients, disableCustomGradients } = useThemeGradients();
 
 	const first = value?.first;
 	const second = value?.second;
@@ -194,9 +278,66 @@ export function CompactTwoColorControl( {
 		onChange( { ...( value || {} ), first: next } );
 	const setSecond = ( next ) =>
 		onChange( { ...( value || {} ), second: next } );
+	const setSecondColor = ( next ) => {
+		if ( next !== undefined ) {
+			setSecond( next );
+		}
+	};
+	const setSecondGradient = ( next ) => {
+		if ( next !== undefined ) {
+			setSecond( next );
+		}
+	};
+
+	const renderColorPalette = ( nextValue, nextOnChange ) => (
+		<ColorPalette
+			colors={ themeColors }
+			value={ nextValue }
+			onChange={ nextOnChange }
+			disableCustomColors={ disableCustomColors }
+			__experimentalIsRenderedInSidebar
+		/>
+	);
+
+	const renderSecondControl = () => {
+		if ( ! secondSupportsGradient || ! ColorGradientControl ) {
+			return renderColorPalette( second, setSecond );
+		}
+
+		if ( secondGradientOnly ) {
+			return (
+				<ColorGradientControl
+					label={ `${ secondLabel } ${ secondGradientLabel }` }
+					showTitle={ false }
+					gradients={ themeGradients }
+					gradientValue={ second }
+					onGradientChange={ setSecondGradient }
+					disableCustomGradients={ disableCustomGradients }
+					__experimentalIsRenderedInSidebar
+				/>
+			);
+		}
+
+		return (
+			<ColorGradientControl
+				label={ `${ secondLabel } ${ secondColorLabel } / ${ secondGradientLabel }` }
+				showTitle={ false }
+				colors={ themeColors }
+				gradients={ themeGradients }
+				colorValue={ isGradientValue( second ) ? undefined : second }
+				gradientValue={ isGradientValue( second ) ? second : undefined }
+				onColorChange={ setSecondColor }
+				onGradientChange={ setSecondGradient }
+				disableCustomColors={ disableCustomColors }
+				disableCustomGradients={ disableCustomGradients }
+				__experimentalIsRenderedInSidebar
+			/>
+		);
+	};
 
 	return (
 		<BaseControl
+			id={ controlId }
 			label={ label }
 			__nextHasNoMarginBottom
 			className="pb-compact-two-color-control"
@@ -278,25 +419,11 @@ export function CompactTwoColorControl( {
 									{ name: 'second', title: secondLabel },
 								] }
 							>
-								{ ( tab ) => (
-									<ColorPalette
-										colors={ themeColors }
-										value={
-											tab.name === 'first'
-												? first
-												: second
-										}
-										onChange={
-											tab.name === 'first'
-												? setFirst
-												: setSecond
-										}
-										disableCustomColors={
-											disableCustomColors
-										}
-										__experimentalIsRenderedInSidebar
-									/>
-								) }
+								{ ( tab ) =>
+									tab.name === 'first'
+										? renderColorPalette( first, setFirst )
+										: renderSecondControl()
+								}
 							</TabPanel>
 						</div>
 					</Popover>

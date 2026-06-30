@@ -44,6 +44,7 @@ import {
 	FBKS_ALL_FILTER_TOKEN,
 	fbksNormalizeActiveFilterValue,
 } from "../pb-helpers/filterConstants";
+import { getTiltHoverHandlers } from "../pb-helpers/tiltHoverEffect";
 import "./editor.scss";
 
 const ASPECT_RATIOS = {
@@ -209,6 +210,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 		overrideGalleryHoverSettings,
 		overlayStyle,
 		overlayBgColor,
+		overlayBgGradient,
 		overlayTextColor,
 		filterCategory,
 		filterCategories,
@@ -342,7 +344,10 @@ export default function Edit({ attributes, setAttributes, context }) {
 	const inheritedTitleVisibility = context?.["folioBlocks/titleVisibility"];
 	const inheritedShowFilterCategory = context?.["folioBlocks/showFilterCategory"];
 	const inheritedOverlayStyle = context?.["folioBlocks/overlayStyle"];
+	const inheritedHoverEffect = context?.["folioBlocks/hoverEffect"];
+	const inheritedOverlayEntrance = context?.["folioBlocks/overlayEntrance"];
 	const inheritedOverlayBgColor = context?.["folioBlocks/overlayBgColor"];
+	const inheritedOverlayBgGradient = context?.["folioBlocks/overlayBgGradient"];
 	const inheritedOverlayTextColor = context?.["folioBlocks/overlayTextColor"];
 	const inheritedThumbnailSize = context?.["folioBlocks/thumbnailSize"];
 
@@ -460,10 +465,22 @@ export default function Edit({ attributes, setAttributes, context }) {
 		(overridesGalleryHover ? undefined : inheritedOverlayStyle) ??
 		overlayStyle ??
 		"default";
+	const effectiveHoverEffect =
+		(overridesGalleryHover ? undefined : inheritedHoverEffect) ??
+		attributes.hoverEffect ??
+		"none";
+	const effectiveOverlayEntrance =
+		(overridesGalleryHover ? undefined : inheritedOverlayEntrance) ??
+		attributes.overlayEntrance ??
+		"default";
 	const effectiveOverlayBgColor =
 		(overridesGalleryHover ? undefined : inheritedOverlayBgColor) ||
 		overlayBgColor ||
 		"#f9f9f9";
+	const effectiveOverlayBgGradient =
+		(overridesGalleryHover ? undefined : inheritedOverlayBgGradient) ||
+		overlayBgGradient ||
+		"linear-gradient(135deg, rgba(255,255,255,0.92) 0%, rgba(226,232,240,0.82) 100%)";
 	const effectiveOverlayTextColor =
 		(overridesGalleryHover ? undefined : inheritedOverlayTextColor) ||
 		overlayTextColor ||
@@ -497,12 +514,38 @@ export default function Edit({ attributes, setAttributes, context }) {
 		effectivePlayButtonVisibility === "onHover" ||
 		effectiveTitleVisibility === "onHover";
 	const isColorOverlay = effectiveOverlayStyle === "color";
+	const isGradientOverlay = effectiveOverlayStyle === "gradient";
 	const isBlurOverlay = effectiveOverlayStyle === "blur";
+	const hoverEffectClassMap = {
+		"zoom-in": "pb-effect-zoom-in",
+		"zoom-out": "pb-effect-zoom-out",
+		lift: "pb-effect-lift",
+		tilt: "pb-effect-tilt",
+		pop: "pb-effect-pop",
+		glare: "pb-effect-glare",
+		pan: "pb-effect-pan",
+		desaturate: "pb-effect-desaturate",
+	};
+	const hoverEffectClass = hoverEffectClassMap[effectiveHoverEffect] || "";
+	const tiltHoverHandlers =
+		effectiveHoverEffect === "tilt" ? getTiltHoverHandlers() : {};
+	const overlayEntranceClassMap = {
+		fade: "pb-overlay-enter-fade",
+		"slide-up": "pb-overlay-enter-slide-up",
+		"slide-down": "pb-overlay-enter-slide-down",
+		"slide-left": "pb-overlay-enter-slide-left",
+		"slide-right": "pb-overlay-enter-slide-right",
+	};
+	const overlayEntranceClass =
+		overlayEntranceClassMap[effectiveOverlayEntrance] || "";
 	const overlayStyleVars = {
 		...(isColorOverlay && effectiveOverlayBgColor
 			? { "--pb-video-overlay-bg": effectiveOverlayBgColor }
 			: {}),
-		...(isColorOverlay && effectiveOverlayTextColor
+		...(isGradientOverlay && effectiveOverlayBgGradient
+			? { "--pb-video-overlay-bg": effectiveOverlayBgGradient }
+			: {}),
+		...((isColorOverlay || isGradientOverlay) && effectiveOverlayTextColor
 			? { "--pb-video-overlay-text": effectiveOverlayTextColor }
 			: {}),
 	};
@@ -1104,9 +1147,11 @@ export default function Edit({ attributes, setAttributes, context }) {
 					/>
 				) : (
 					<div
+						{...tiltHoverHandlers}
 						className={`pb-video-block ${ASPECT_RATIOS[effectiveAspectRatio]}${showOverlayAlways ? " has-overlay-always" : ""
 							}${showOverlayOnHover ? " has-overlay-hover" : ""}${isColorOverlay ? " has-color-overlay" : ""
-							}${isBlurOverlay ? " has-blur-overlay" : ""}${shadowStyleClass ? ` ${shadowStyleClass}` : ""
+							}${isGradientOverlay ? " has-gradient-overlay" : ""
+							}${isBlurOverlay ? " has-blur-overlay" : ""}${overlayEntranceClass ? ` ${overlayEntranceClass}` : ""}${hoverEffectClass ? ` ${hoverEffectClass}` : ""}${shadowStyleClass ? ` ${shadowStyleClass}` : ""
 							}`}
 						style={{
 							"--pb-border-width": `${effectiveBorderWidth}px`,
