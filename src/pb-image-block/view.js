@@ -132,6 +132,32 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				: 0;
 			const activeImage = activeImageWrapper.querySelector( 'img' );
 			if ( activeImage ) {
+				const availableWidth = Math.max(
+					1,
+					activeImageWrapper.clientWidth
+				);
+				const availableHeight = Math.max(
+					1,
+					wrapper.clientHeight * 0.94 - captionHeight
+				);
+				const naturalWidth = activeImage.naturalWidth || 0;
+				const naturalHeight = activeImage.naturalHeight || 0;
+
+				if ( naturalWidth > 0 && naturalHeight > 0 ) {
+					const aspectRatio = naturalWidth / naturalHeight;
+					const availableRatio = availableWidth / availableHeight;
+					const imageHeight =
+						availableRatio > aspectRatio
+							? availableHeight
+							: availableWidth / aspectRatio;
+					const imageWidth = imageHeight * aspectRatio;
+
+					activeImage.style.width = `${ Math.round( imageWidth ) }px`;
+					activeImage.style.height = `${ Math.round(
+						imageHeight
+					) }px`;
+				}
+
 				const wrapperRect = wrapper.getBoundingClientRect();
 				const imageRect = activeImage.getBoundingClientRect();
 				wrapper.style.setProperty(
@@ -148,8 +174,27 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			);
 		}
 
+		function scheduleLightboxSync( frames = 3 ) {
+			let remainingFrames = Math.max( 1, frames );
+
+			const syncFrame = () => {
+				syncLightboxImageHeight();
+				remainingFrames -= 1;
+
+				if ( remainingFrames > 0 ) {
+					window.requestAnimationFrame( syncFrame );
+				}
+			};
+
+			syncFrame();
+		}
+
 		function handleViewportResize() {
-			window.requestAnimationFrame( syncLightboxImageHeight );
+			scheduleLightboxSync( 4 );
+		}
+
+		function handleLightboxSyncRequest( syncEvent ) {
+			scheduleLightboxSync( syncEvent.detail?.frames || 4 );
 		}
 
 		function setChromeHidden( isHidden ) {
@@ -188,7 +233,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 						control.removeAttribute( 'aria-hidden' );
 					}
 				} );
-			window.requestAnimationFrame( syncLightboxImageHeight );
+			scheduleLightboxSync( 3 );
 		}
 
 		function showPreviousImage() {
@@ -217,6 +262,18 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			focusEnd.remove();
 			document.removeEventListener( 'keydown', keyHandler );
 			window.removeEventListener( 'resize', handleViewportResize );
+			document.removeEventListener(
+				'fullscreenchange',
+				handleViewportResize
+			);
+			document.removeEventListener(
+				'webkitfullscreenchange',
+				handleViewportResize
+			);
+			wrapper.removeEventListener(
+				'pbImageLightboxSync',
+				handleLightboxSyncRequest
+			);
 			if (
 				previouslyFocused &&
 				typeof previouslyFocused.focus === 'function'
@@ -226,6 +283,15 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		}
 
 		window.addEventListener( 'resize', handleViewportResize );
+		document.addEventListener( 'fullscreenchange', handleViewportResize );
+		document.addEventListener(
+			'webkitfullscreenchange',
+			handleViewportResize
+		);
+		wrapper.addEventListener(
+			'pbImageLightboxSync',
+			handleLightboxSyncRequest
+		);
 
 		// Close when clicking outside the actual image, caption, and controls.
 		wrapper.addEventListener( 'click', ( e ) => {
@@ -312,7 +378,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 			wrapper.appendChild( close );
 			inner.appendChild( imageWrapper );
-			window.requestAnimationFrame( syncLightboxImageHeight );
+			scheduleLightboxSync( 3 );
 			if ( img.complete ) {
 				syncLightboxImageHeight();
 			}

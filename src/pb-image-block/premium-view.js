@@ -10,6 +10,14 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	const exitFullscreenIcon =
 		'<svg class="lightbox-fullscreen-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 5v4H5V7.5h2.5V5H9zm6 0h1.5v2.5H19V9h-4V5zM5 15h4v4H7.5v-2.5H5V15zm10 0h4v1.5h-2.5V19H15v-4z"/></svg>';
 
+	const requestLightboxGeometrySync = ( wrapper, frames = 6 ) => {
+		wrapper?.dispatchEvent(
+			new CustomEvent( 'pbImageLightboxSync', {
+				detail: { frames },
+			} )
+		);
+	};
+
 	const syncLightboxFullscreenButton = () => {
 		const wrapper = document.querySelector( '.pb-image-lightbox' );
 		const button = wrapper?.querySelector( '.lightbox-fullscreen' );
@@ -24,6 +32,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			isFullscreen ? 'Exit fullscreen' : 'Open fullscreen'
 		);
 		button.setAttribute( 'aria-pressed', isFullscreen ? 'true' : 'false' );
+		requestLightboxGeometrySync( wrapper, 8 );
 	};
 
 	const exitLightboxFullscreen = ( wrapper ) => {
@@ -43,17 +52,25 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 	const toggleLightboxFullscreen = ( wrapper ) => {
 		if ( getFullscreenElement() === wrapper ) {
+			requestLightboxGeometrySync( wrapper, 8 );
 			exitLightboxFullscreen( wrapper );
 			return;
 		}
 
+		requestLightboxGeometrySync( wrapper, 8 );
 		if ( wrapper.requestFullscreen ) {
 			const requestPromise = wrapper.requestFullscreen();
+			if ( requestPromise?.then ) {
+				requestPromise.then( () =>
+					requestLightboxGeometrySync( wrapper, 10 )
+				);
+			}
 			if ( requestPromise?.catch ) {
 				requestPromise.catch( () => {} );
 			}
 		} else if ( wrapper.webkitRequestFullscreen ) {
 			wrapper.webkitRequestFullscreen();
+			requestLightboxGeometrySync( wrapper, 10 );
 		}
 	};
 
@@ -130,7 +147,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		{ capture: true }
 	);
 
-const gallerySelectors = [
+	const gallerySelectors = [
 		'.pb-grid-gallery',
 		'.pb-justified-gallery',
 		'.pb-masonry-gallery',
@@ -139,16 +156,16 @@ const gallerySelectors = [
 
 	const getRandomizedGallery = ( wrapper ) => {
 		if (
-			gallerySelectors.some( ( selector ) =>
-				wrapper.matches( selector )
-			)
+			gallerySelectors.some( ( selector ) => wrapper.matches( selector ) )
 		) {
 			return wrapper;
 		}
 
 		return (
 			Array.from( wrapper.children ).find( ( child ) =>
-				gallerySelectors.some( ( selector ) => child.matches( selector ) )
+				gallerySelectors.some( ( selector ) =>
+					child.matches( selector )
+				)
 			) || wrapper.querySelector( gallerySelectors.join( ',' ) )
 		);
 	};
@@ -264,7 +281,7 @@ const gallerySelectors = [
 					const url = new URL( window.location.href );
 					url.searchParams.set( 'add-to-cart', String( productId ) );
 					window.location.href = url.toString();
-				} catch ( err ) {
+				} catch {
 					const sep = window.location.href.includes( '?' )
 						? '&'
 						: '?';
@@ -400,7 +417,7 @@ const gallerySelectors = [
 							// Replace the element with the returned fragment.
 							try {
 								el.outerHTML = html;
-							} catch ( err ) {
+							} catch {
 								// Ignore fragment update failures.
 							}
 						} );

@@ -126,6 +126,11 @@ No, the galleries will remain in place on your site. However, the **advanced lay
 
 == Changelog ==
 
+= 1.4.1 =
+* Fixed a bug in the Image Block Lightbox that prevented some images from being properlly sized. 
+* Fixed a bug in Modular Gallery where gallery images could flash on screen before gallery styles had properlly loaded. 
+
+
 = 1.4.0 =
 * Added responsive desktop, tablet, and mobile gap controls to Carousel, Masonry, Justified, Modular, and Video Galleries.
 * Added fullscreen controls to Video Block and Video Gallery lightboxes.

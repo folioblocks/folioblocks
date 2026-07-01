@@ -4,6 +4,11 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.1] - 2026-07-01
+### Fixed
+- Fixed a bug in the Image Block Lightbox that prevented some images from being properlly sized. 
+- Fixed a bug in Modular Gallery where gallery images could flash on screen before gallery styles had properlly loaded. 
+
 ## [1.4.0] - 2026-06-25
 ### Added
 - Added responsive desktop, tablet, and mobile gap controls to Masonry, Justified, Modular, and Video Galleries.
