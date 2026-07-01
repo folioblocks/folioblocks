@@ -331,6 +331,24 @@
 			],
 			"default": ""
 		},
+		"enableWatermarking": {
+			"type": "boolean",
+			"default": false
+		},
+		"watermarkId": {
+			"type": "string",
+			"default": ""
+		},
+		"watermarkDisplay": {
+			"type": "string",
+			"enum": [
+				"none",
+				"gallery",
+				"lightbox",
+				"both"
+			],
+			"default": "none"
+		},
 		"inCarousel": {
 			"type": "boolean",
 			"default": true
@@ -484,6 +502,9 @@
 		"folioBlocks/linkIconBgColor": "linkIconBgColor",
 		"folioBlocks/imageClickTarget": "imageClickTarget",
 		"folioBlocks/linkIconDisplay": "linkIconDisplay",
+		"folioBlocks/enableWatermarking": "enableWatermarking",
+		"folioBlocks/watermarkId": "watermarkId",
+		"folioBlocks/watermarkDisplay": "watermarkDisplay",
 		"folioBlocks/overlayContent": "overlayContent"
 	},
 	"textdomain": "folioblocks",

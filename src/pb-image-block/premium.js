@@ -31,8 +31,17 @@ import '../pb-helpers/applyThumbnails';
 import { registerImageClickStylePremiumControls } from '../pb-helpers/imageClickStylePremiumControls.js';
 import { enableImageTransforms } from '../pb-helpers/galleryTransforms';
 import { registerImageHoverActionPremiumControls } from '../pb-helpers/imageHoverActionPremiumControls.js';
+import {
+	registerImageBlockWatermarkOverlay,
+	registerWatermarkOverlayControls,
+} from '../pb-helpers/watermarkOverlayControls.js';
 
 enableImageTransforms( 'folioblocks/pb-image-block' );
+registerImageBlockWatermarkOverlay();
+registerWatermarkOverlayControls( {
+	hookPrefix: 'folioBlocks.imageBlock',
+	namespace: 'folioblocks/pb-image-block',
+} );
 
 addFilter(
 	'folioBlocks.imageBlock.galleryOverridesEnabled',

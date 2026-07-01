@@ -17,6 +17,7 @@ import { registerImageClickStylePremiumControls } from '../pb-helpers/imageClick
 import { registerImageHoverActionPremiumControls } from '../pb-helpers/imageHoverActionPremiumControls';
 import { registerListViewThumbnailEnhancements } from '../pb-helpers/listViewThumbnailEnhancements';
 import { enableGalleryTransforms } from '../pb-helpers/galleryTransforms';
+import { registerWatermarkOverlayControls } from '../pb-helpers/watermarkOverlayControls';
 import {
 	registerDisableRightClickPremiumControl,
 	registerLazyLoadPremiumControl,
@@ -29,6 +30,11 @@ registerImageHoverActionPremiumControls( {
 	hookPrefix: 'folioBlocks.filmstripGallery',
 	namespace: 'folioblocks/filmstrip-gallery',
 	stylePanelLabel: __( 'Gallery Hover Styles', 'folioblocks' ),
+} );
+
+registerWatermarkOverlayControls( {
+	hookPrefix: 'folioBlocks.filmstripGallery',
+	namespace: 'folioblocks/filmstrip-gallery',
 } );
 
 const shuffleBlocks = ( blocks ) => {

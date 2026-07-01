@@ -770,6 +770,16 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						{ attributes, setAttributes }
 					) }
 				</PanelBody>
+				<PanelBody
+					title={ __( 'Watermark Overlay', 'folioblocks' ) }
+					initialOpen={ false }
+				>
+					{ applyFilters(
+						'folioBlocks.gridGallery.watermarkControls',
+						imageProFeatureNotice( 'watermarkOverlay' ),
+						{ attributes, setAttributes }
+					) }
+				</PanelBody>
 			</InspectorControls>
 			<InspectorControls group="advanced">
 				{ applyFilters(

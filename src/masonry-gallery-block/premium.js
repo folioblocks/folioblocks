@@ -13,6 +13,7 @@ import { registerFilteringPremiumControls } from '../pb-helpers/filteringPremium
 import { registerListViewThumbnailEnhancements } from '../pb-helpers/listViewThumbnailEnhancements';
 import { enableGalleryTransforms } from '../pb-helpers/galleryTransforms';
 import { registerResponsiveGapPremiumControl } from '../pb-helpers/responsiveGapPremiumControl';
+import { registerWatermarkOverlayControls } from '../pb-helpers/watermarkOverlayControls';
 import {
 	registerDisableRightClickPremiumControl,
 	registerLazyLoadPremiumControl,
@@ -27,6 +28,11 @@ registerResponsiveGapPremiumControl( {
 } );
 
 registerListViewThumbnailEnhancements( {
+	hookPrefix: 'folioBlocks.masonryGallery',
+	namespace: 'folioblocks/masonry-gallery',
+} );
+
+registerWatermarkOverlayControls( {
 	hookPrefix: 'folioBlocks.masonryGallery',
 	namespace: 'folioblocks/masonry-gallery',
 } );

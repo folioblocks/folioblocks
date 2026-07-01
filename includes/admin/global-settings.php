@@ -144,6 +144,82 @@ if (! function_exists('fbks_get_watermark_settings')) {
 	}
 }
 
+if (! function_exists('fbks_get_watermark_by_id')) {
+	function fbks_get_watermark_by_id($watermark_id)
+	{
+		$watermark_id = sanitize_key($watermark_id);
+		if ('' === $watermark_id) {
+			return null;
+		}
+
+		$settings = fbks_get_watermark_settings();
+		foreach ($settings['items'] as $item) {
+			if ($watermark_id === $item['id'] && ! empty($item['assetUrl'])) {
+				return $item;
+			}
+		}
+
+		return null;
+	}
+}
+
+if (! function_exists('fbks_get_watermark_css_position')) {
+	function fbks_get_watermark_css_position($position)
+	{
+		$positions = array(
+			'center'       => 'center',
+			'top-left'     => 'top left',
+			'top-right'    => 'top right',
+			'bottom-left'  => 'bottom left',
+			'bottom-right' => 'bottom right',
+		);
+
+		return isset($positions[$position]) ? $positions[$position] : $positions['bottom-right'];
+	}
+}
+
+if (! function_exists('fbks_get_watermark_overlay_style')) {
+	function fbks_get_watermark_overlay_style($item)
+	{
+		$item = wp_parse_args($item, fbks_get_watermark_item_defaults());
+		if (empty($item['assetUrl'])) {
+			return '';
+		}
+		$render_size = (float) $item['size'];
+
+		return sprintf(
+			'--pb-watermark-image:url(%1$s);--pb-watermark-opacity:%2$s;--pb-watermark-size:%3$s%%;--pb-watermark-render-size:%4$s%%;--pb-watermark-inset:%5$scqw;--pb-watermark-position:%6$s;--pb-watermark-repeat:%7$s;',
+			esc_url($item['assetUrl']),
+			esc_attr((string) $item['opacity']),
+			esc_attr((string) $item['size']),
+			esc_attr((string) $render_size),
+			esc_attr((string) $item['inset']),
+			esc_attr(fbks_get_watermark_css_position($item['position'])),
+			esc_attr($item['repeat'])
+		);
+	}
+}
+
+if (! function_exists('fbks_get_watermark_overlay_data_attrs')) {
+	function fbks_get_watermark_overlay_data_attrs($item)
+	{
+		$item = wp_parse_args($item, fbks_get_watermark_item_defaults());
+		if (empty($item['assetUrl'])) {
+			return '';
+		}
+
+		return sprintf(
+			' data-watermark-image="%1$s" data-watermark-opacity="%2$s" data-watermark-size="%3$s" data-watermark-inset="%4$s" data-watermark-position="%5$s" data-watermark-repeat="%6$s"',
+			esc_url($item['assetUrl']),
+			esc_attr((string) $item['opacity']),
+			esc_attr((string) $item['size']),
+			esc_attr((string) $item['inset']),
+			esc_attr(fbks_get_watermark_css_position($item['position'])),
+			esc_attr($item['repeat'])
+		);
+	}
+}
+
 if (! function_exists('fbks_get_watermark_position_label')) {
 	function fbks_get_watermark_position_label($position)
 	{
@@ -208,11 +284,12 @@ if (! function_exists('fbks_get_watermark_preview_style')) {
 			'bottom-right' => 'bottom right',
 		);
 		$background_position = isset($position_parts[$item['position']]) ? $position_parts[$item['position']] : $position_parts['bottom-right'];
+		$render_size = (float) $item['size'];
 		$style = sprintf(
-			'--pb-watermark-preview-opacity:%1$s;--pb-watermark-preview-size:%2$s%%;--pb-watermark-preview-render-size:%3$spx;--pb-watermark-preview-render-inset:%4$spx;--pb-watermark-preview-position:%5$s;--pb-watermark-preview-repeat:%6$s;',
+			'--pb-watermark-preview-opacity:%1$s;--pb-watermark-preview-size:%2$s%%;--pb-watermark-preview-render-size:%3$s%%;--pb-watermark-preview-render-inset:%4$spx;--pb-watermark-preview-position:%5$s;--pb-watermark-preview-repeat:%6$s;',
 			esc_attr((string) $item['opacity']),
 			esc_attr((string) $item['size']),
-			esc_attr((string) $item['size']),
+			esc_attr((string) $render_size),
 			esc_attr((string) $item['inset']),
 			esc_attr($background_position),
 			esc_attr($item['repeat'])
@@ -312,7 +389,7 @@ if (! function_exists('fbks_render_watermark_fields')) {
 					</label>
 
 					<label class="pb-settings-field">
-						<span><?php esc_html_e('Size (% of short edge)', 'folioblocks'); ?></span>
+						<span><?php esc_html_e('Size', 'folioblocks'); ?></span>
 						<input type="number" min="5" max="40" step="1" name="fbks_watermarks[items][<?php echo esc_attr($field_key); ?>][size]" value="<?php echo esc_attr((string) $item['size']); ?>" data-watermark-setting="size" />
 					</label>
 

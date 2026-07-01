@@ -932,6 +932,16 @@ export default function Edit(props) {
 						{ attributes, setAttributes },
 					)}
 				</PanelBody>
+				<PanelBody
+					title={__("Watermark Overlay", "folioblocks")}
+					initialOpen={false}
+				>
+					{applyFilters(
+						"folioBlocks.modularGallery.watermarkControls",
+						imageProFeatureNotice("watermarkOverlay"),
+						{ attributes, setAttributes },
+					)}
+				</PanelBody>
 				{applyFilters(
 					"folioBlocks.modularGallery.lazyLoadToggle",
 					imageProFeatureNotice("protectionPerformance"),

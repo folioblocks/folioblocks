@@ -7,6 +7,20 @@ import { initTiltHoverEffects } from '../pb-helpers/tiltHoverEffect';
 document.addEventListener( 'DOMContentLoaded', () => {
 	initTiltHoverEffects();
 
+	const getWatermarkRenderMetrics = (
+		width,
+		height,
+		sizeRatio,
+		insetRatio
+	) => {
+		const shortEdge = Math.min( width, height );
+
+		return {
+			renderSize: ( shortEdge * sizeRatio ) / 100,
+			renderInset: ( shortEdge * insetRatio ) / 100,
+		};
+	};
+
 	// Track input method for focus visibility control
 	let userUsedKeyboard = false;
 	window.addEventListener( 'keydown', ( e ) => {
@@ -136,14 +150,88 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				: 0;
 			const activeImage = activeImageWrapper.querySelector( 'img' );
 			if ( activeImage ) {
+				const availableWidth = Math.max(
+					1,
+					activeImageWrapper.clientWidth
+				);
+				const availableHeight = Math.max(
+					1,
+					wrapper.clientHeight * 0.94 - captionHeight
+				);
+				const naturalWidth = activeImage.naturalWidth || 0;
+				const naturalHeight = activeImage.naturalHeight || 0;
+
+				if ( naturalWidth > 0 && naturalHeight > 0 ) {
+					const aspectRatio = naturalWidth / naturalHeight;
+					const availableRatio = availableWidth / availableHeight;
+					const imageHeight =
+						availableRatio > aspectRatio
+							? availableHeight
+							: availableWidth / aspectRatio;
+					const imageWidth = imageHeight * aspectRatio;
+
+					activeImage.style.width = `${ Math.round( imageWidth ) }px`;
+					activeImage.style.height = `${ Math.round(
+						imageHeight
+					) }px`;
+				}
+
 				const wrapperRect = wrapper.getBoundingClientRect();
 				const imageRect = activeImage.getBoundingClientRect();
+				const imageWrapperRect =
+					activeImageWrapper.getBoundingClientRect();
+				const watermarkOverlay = activeImageWrapper.querySelector(
+					'.pb-watermark-overlay--lightbox'
+				);
 				wrapper.style.setProperty(
 					'--pb-lightbox-image-center',
 					`${
 						imageRect.top + imageRect.height / 2 - wrapperRect.top
 					}px`
 				);
+				if ( watermarkOverlay ) {
+					const insetRatio = Number.parseFloat(
+						watermarkOverlay.getAttribute(
+							'data-watermark-inset-ratio'
+						) || '0'
+					);
+					const sizeRatio = Number.parseFloat(
+						watermarkOverlay.getAttribute(
+							'data-watermark-size-ratio'
+						) || '16'
+					);
+					const { renderSize, renderInset } =
+						getWatermarkRenderMetrics(
+							imageRect.width,
+							imageRect.height,
+							sizeRatio,
+							insetRatio
+						);
+					watermarkOverlay.style.setProperty(
+						'--pb-watermark-lightbox-left',
+						`${ imageRect.left - imageWrapperRect.left }px`
+					);
+					watermarkOverlay.style.setProperty(
+						'--pb-watermark-lightbox-top',
+						`${ imageRect.top - imageWrapperRect.top }px`
+					);
+					watermarkOverlay.style.setProperty(
+						'--pb-watermark-lightbox-width',
+						`${ imageRect.width }px`
+					);
+					watermarkOverlay.style.setProperty(
+						'--pb-watermark-lightbox-height',
+						`${ imageRect.height }px`
+					);
+					watermarkOverlay.style.setProperty(
+						'--pb-watermark-inset',
+						`${ renderInset }px`
+					);
+					watermarkOverlay.style.setProperty(
+						'--pb-watermark-render-size',
+						`${ renderSize }px`
+					);
+				}
 			}
 
 			activeImageWrapper.style.setProperty(
@@ -152,8 +240,27 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			);
 		}
 
+		function scheduleLightboxSync( frames = 3 ) {
+			let remainingFrames = Math.max( 1, frames );
+
+			const syncFrame = () => {
+				syncLightboxImageHeight();
+				remainingFrames -= 1;
+
+				if ( remainingFrames > 0 ) {
+					window.requestAnimationFrame( syncFrame );
+				}
+			};
+
+			syncFrame();
+		}
+
 		function handleViewportResize() {
-			window.requestAnimationFrame( syncLightboxImageHeight );
+			scheduleLightboxSync( 4 );
+		}
+
+		function handleLightboxSyncRequest( syncEvent ) {
+			scheduleLightboxSync( syncEvent.detail?.frames || 4 );
 		}
 
 		function setChromeHidden( isHidden ) {
@@ -192,7 +299,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 						control.removeAttribute( 'aria-hidden' );
 					}
 				} );
-			window.requestAnimationFrame( syncLightboxImageHeight );
+			scheduleLightboxSync( 3 );
 		}
 
 		function showPreviousImage() {
@@ -221,6 +328,18 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			focusEnd.remove();
 			document.removeEventListener( 'keydown', keyHandler );
 			window.removeEventListener( 'resize', handleViewportResize );
+			document.removeEventListener(
+				'fullscreenchange',
+				handleViewportResize
+			);
+			document.removeEventListener(
+				'webkitfullscreenchange',
+				handleViewportResize
+			);
+			wrapper.removeEventListener(
+				'pbImageLightboxSync',
+				handleLightboxSyncRequest
+			);
 			if (
 				previouslyFocused &&
 				typeof previouslyFocused.focus === 'function'
@@ -230,6 +349,15 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		}
 
 		window.addEventListener( 'resize', handleViewportResize );
+		document.addEventListener( 'fullscreenchange', handleViewportResize );
+		document.addEventListener(
+			'webkitfullscreenchange',
+			handleViewportResize
+		);
+		wrapper.addEventListener(
+			'pbImageLightboxSync',
+			handleLightboxSyncRequest
+		);
 
 		// Close when clicking outside the actual image, caption, and controls.
 		wrapper.addEventListener( 'click', ( e ) => {
@@ -307,6 +435,55 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 			imageWrapper.appendChild( img );
 
+			const watermarkImage = imageData.getAttribute(
+				'data-watermark-image'
+			);
+			if ( watermarkImage ) {
+				const escapedWatermarkImage = watermarkImage.replace(
+					/["\\]/g,
+					'\\$&'
+				);
+				const watermarkOverlay = document.createElement( 'span' );
+				watermarkOverlay.className =
+					'pb-watermark-overlay pb-watermark-overlay--lightbox';
+				watermarkOverlay.setAttribute( 'aria-hidden', 'true' );
+				watermarkOverlay.setAttribute(
+					'data-watermark-inset-ratio',
+					imageData.getAttribute( 'data-watermark-inset' ) || '4'
+				);
+				watermarkOverlay.setAttribute(
+					'data-watermark-size-ratio',
+					imageData.getAttribute( 'data-watermark-size' ) || '16'
+				);
+				watermarkOverlay.style.setProperty(
+					'--pb-watermark-image',
+					`url("${ escapedWatermarkImage }")`
+				);
+				watermarkOverlay.style.setProperty(
+					'--pb-watermark-opacity',
+					imageData.getAttribute( 'data-watermark-opacity' ) || '0.28'
+				);
+				watermarkOverlay.style.setProperty(
+					'--pb-watermark-size',
+					imageData.getAttribute( 'data-watermark-size' ) || '16'
+				);
+				watermarkOverlay.style.setProperty(
+					'--pb-watermark-inset',
+					'0px'
+				);
+				watermarkOverlay.style.setProperty(
+					'--pb-watermark-position',
+					imageData.getAttribute( 'data-watermark-position' ) ||
+						'bottom right'
+				);
+				watermarkOverlay.style.setProperty(
+					'--pb-watermark-repeat',
+					imageData.getAttribute( 'data-watermark-repeat' ) ||
+						'no-repeat'
+				);
+				imageWrapper.appendChild( watermarkOverlay );
+			}
+
 			if ( caption ) {
 				const captionEl = document.createElement( 'div' );
 				captionEl.className = 'lightbox-caption';
@@ -316,7 +493,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 			wrapper.appendChild( close );
 			inner.appendChild( imageWrapper );
-			window.requestAnimationFrame( syncLightboxImageHeight );
+			scheduleLightboxSync( 3 );
 			if ( img.complete ) {
 				syncLightboxImageHeight();
 			}

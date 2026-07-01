@@ -380,6 +380,36 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 	);
 }
 
+$fbks_show_gallery_watermark = false;
+$fbks_show_lightbox_watermark = false;
+$fbks_watermark_style = '';
+$fbks_watermark_data_attrs = '';
+if ( fbks_fs()->can_use_premium_code__premium_only() ) {
+	$fbks_watermark_enabled = (bool) (
+		$fbks_context['folioBlocks/enableWatermarking'] ??
+		( $attributes['enableWatermarking'] ?? false )
+	);
+	$fbks_watermark_id = sanitize_key(
+		$fbks_context['folioBlocks/watermarkId'] ??
+		( $attributes['watermarkId'] ?? '' )
+	);
+	$fbks_watermark_display = sanitize_key(
+		$fbks_context['folioBlocks/watermarkDisplay'] ??
+		( $attributes['watermarkDisplay'] ?? 'none' )
+	);
+	if ( ! in_array( $fbks_watermark_display, [ 'none', 'gallery', 'lightbox', 'both' ], true ) ) {
+		$fbks_watermark_display = 'none';
+	}
+
+	$fbks_watermark_item = function_exists( 'fbks_get_watermark_by_id' ) ? fbks_get_watermark_by_id( $fbks_watermark_id ) : null;
+	if ( $fbks_watermark_enabled && is_array( $fbks_watermark_item ) ) {
+		$fbks_watermark_style = function_exists( 'fbks_get_watermark_overlay_style' ) ? fbks_get_watermark_overlay_style( $fbks_watermark_item ) : '';
+		$fbks_watermark_data_attrs = function_exists( 'fbks_get_watermark_overlay_data_attrs' ) ? fbks_get_watermark_overlay_data_attrs( $fbks_watermark_item ) : '';
+		$fbks_show_gallery_watermark = '' !== $fbks_watermark_style && in_array( $fbks_watermark_display, [ 'gallery', 'both' ], true );
+		$fbks_show_lightbox_watermark = '' !== $fbks_watermark_data_attrs && in_array( $fbks_watermark_display, [ 'lightbox', 'both' ], true );
+	}
+}
+
 $fbks_wrapper_attributes_args = [];
 
 if ( ! empty( $fbks_disable_right_click ) ) {
@@ -555,6 +585,9 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 				class="pb-image-block-lightbox"
 				data-src="<?php echo esc_url( $fbks_full_src ); ?>"
 				data-lightbox-theme="<?php echo esc_attr( $fbks_lightbox_theme ); ?>"
+				<?php if ( fbks_fs()->can_use_premium_code__premium_only() && $fbks_show_lightbox_watermark ) : ?>
+					<?php echo wp_kses_data( $fbks_watermark_data_attrs ); ?>
+				<?php endif; ?>
 				<?php if ( ! empty( $fbks_lightbox_caption ) ) : ?>
 					data-caption="<?php echo esc_attr( $fbks_lightbox_caption ); ?>"
 				<?php endif; ?>
@@ -591,6 +624,10 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 				echo wp_kses_post( $fbks_image_html );
 			}
 			?>
+		<?php endif; ?>
+
+		<?php if ( fbks_fs()->can_use_premium_code__premium_only() && $fbks_show_gallery_watermark ) : ?>
+			<span class="pb-watermark-overlay" style="<?php echo esc_attr( $fbks_watermark_style ); ?>" aria-hidden="true"></span>
 		<?php endif; ?>
 
 		<?php

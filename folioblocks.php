@@ -137,6 +137,7 @@ if (function_exists('fbks_fs')) {
                     'wpVersion'      => get_bloginfo('version'),
                     'isPro'          => (function_exists('fbks_fs') && fbks_fs()->can_use_premium_code()),
                     'hasWooCommerce' => $woo_active,
+                    'watermarks'     => function_exists('fbks_get_watermark_settings') ? fbks_get_watermark_settings() : array('items' => array()),
                 ];
 
                 wp_register_script(

@@ -1140,6 +1140,18 @@ export default function Edit( {
 									) }
 							</PanelBody>
 						) }
+						{ ! isInsideGallery && (
+							<PanelBody
+								title={ __( 'Watermark Overlay', 'folioblocks' ) }
+								initialOpen={ false }
+							>
+								{ applyFilters(
+									'folioBlocks.imageBlock.watermarkControls',
+									imageProFeatureNotice( 'watermarkOverlay' ),
+									{ attributes, setAttributes }
+								) }
+							</PanelBody>
+						) }
 					</InspectorControls>
 					{ shouldUseContentInspector && (
 						<InspectorControls group="content">
@@ -1253,6 +1265,15 @@ export default function Edit( {
 										height={ height }
 										className="pb-image-block-img"
 									/>
+									{ applyFilters(
+										'folioBlocks.imageBlock.watermarkOverlay',
+										null,
+										{
+											attributes,
+											context,
+											isInsideGallery,
+										}
+									) }
 										{ effectiveHoverTitle &&
 											hasHoverOverlayContent && (
 											<div className="pb-image-block-title-container">
@@ -1382,6 +1403,15 @@ export default function Edit( {
 									height={ height }
 									className="pb-image-block-img"
 								/>
+								{ applyFilters(
+									'folioBlocks.imageBlock.watermarkOverlay',
+									null,
+									{
+										attributes,
+										context,
+										isInsideGallery,
+									}
+								) }
 									{ effectiveHoverTitle &&
 										hasHoverOverlayContent && (
 										<div className="pb-image-block-title-container">

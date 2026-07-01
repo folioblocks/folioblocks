@@ -242,6 +242,24 @@
 			],
 			"default": ""
 		},
+		"enableWatermarking": {
+			"type": "boolean",
+			"default": false
+		},
+		"watermarkId": {
+			"type": "string",
+			"default": ""
+		},
+		"watermarkDisplay": {
+			"type": "string",
+			"enum": [
+				"none",
+				"gallery",
+				"lightbox",
+				"both"
+			],
+			"default": "none"
+		},
 		"linkIconColor": {
 			"type": "string",
 			"default": "#000000"
@@ -322,6 +340,9 @@
 		"folioBlocks/linkIconBgColor": "linkIconBgColor",
 		"folioBlocks/imageClickTarget": "imageClickTarget",
 		"folioBlocks/linkIconDisplay": "linkIconDisplay",
+		"folioBlocks/enableWatermarking": "enableWatermarking",
+		"folioBlocks/watermarkId": "watermarkId",
+		"folioBlocks/watermarkDisplay": "watermarkDisplay",
 		"folioBlocks/overlayContent": "overlayContent"
 	},
 	"editorScript": [

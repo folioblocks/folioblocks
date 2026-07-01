@@ -711,6 +711,16 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 						{ attributes, setAttributes }
 					) }
 				</PanelBody>
+				<PanelBody
+					title={ __( 'Watermark Overlay', 'folioblocks' ) }
+					initialOpen={ false }
+				>
+					{ applyFilters(
+						'folioBlocks.masonryGallery.watermarkControls',
+						imageProFeatureNotice( 'watermarkOverlay' ),
+						{ attributes, setAttributes }
+					) }
+				</PanelBody>
 			</InspectorControls>
 			<InspectorControls group="advanced">
 				{ applyFilters(

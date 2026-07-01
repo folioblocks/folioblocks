@@ -9,12 +9,18 @@ import { registerImageClickActionPremiumControls } from '../pb-helpers/imageClic
 import { registerImageClickStylePremiumControls } from '../pb-helpers/imageClickStylePremiumControls';
 import { registerImageHoverActionPremiumControls } from '../pb-helpers/imageHoverActionPremiumControls';
 import { registerListViewThumbnailEnhancements } from '../pb-helpers/listViewThumbnailEnhancements';
+import { registerWatermarkOverlayControls } from '../pb-helpers/watermarkOverlayControls';
 import {
 	registerDisableRightClickPremiumControl,
 	registerLazyLoadPremiumControl,
 } from '../pb-helpers/simplePremiumControls';
 
 registerListViewThumbnailEnhancements( {
+	hookPrefix: 'folioBlocks.modularGallery',
+	namespace: 'folioblocks/modular-gallery',
+} );
+
+registerWatermarkOverlayControls( {
 	hookPrefix: 'folioBlocks.modularGallery',
 	namespace: 'folioblocks/modular-gallery',
 } );

@@ -87,6 +87,9 @@
 		"imageClickAction": { "type": "string", "enum": ["none", "lightbox", "download", "woocommerce", "media_file", "custom_url", "page_post"], "default": "" },
 		"imageClickTarget": { "type": "string", "enum": ["icon", "thumbnail"], "default": "icon" },
 		"linkIconDisplay": { "type": "string", "enum": ["none", "hover", "always"], "default": "hover" },
+		"enableWatermarking": { "type": "boolean", "default": false },
+		"watermarkId": { "type": "string", "default": "" },
+		"watermarkDisplay": { "type": "string", "enum": ["none", "gallery", "lightbox", "both"], "default": "none" },
 		"customUrl": { "type": "string", "default": "" },
 		"customUrlOpenInNewTab": { "type": "boolean", "default": false },
 		"linkedPostId": { "type": "number", "default": 0 },
@@ -147,7 +150,10 @@
 		"folioBlocks/inCarousel",
 		"folioBlocks/imageClickAction",
 		"folioBlocks/imageClickTarget",
-		"folioBlocks/linkIconDisplay"
+		"folioBlocks/linkIconDisplay",
+		"folioBlocks/enableWatermarking",
+		"folioBlocks/watermarkId",
+		"folioBlocks/watermarkDisplay"
 	],
 	"textdomain": "folioblocks",
 	"editorScript": [

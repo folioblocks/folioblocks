@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added an initial FolioBlocks Global Settings page with saved watermark management.
 - Added multiple named saved watermarks with upload/select image controls, default watermark selection, and compact editable saved watermark rows.
 - Added live watermark previews with aspect-ratio preview buttons and a larger modal preview.
+- Added Pro Watermark Overlay controls for Image Block and image gallery blocks, with editor previews and frontend rendering on gallery images, lightbox images, or both.
 
 ### Changed
 - Renamed Gradient Bottom to Bottom Gradient in the editor while preserving the existing `gradient-bottom` saved value for backwards compatibility.
@@ -30,11 +31,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved Modular Gallery editor layout recalculation after dragging images into large galleries.
 - Simplified saved watermark settings to focus on image, opacity, size, inset, position, and repeat controls.
 - Updated watermark preview inset handling so the inset is calculated from the preview short edge and applied equally on all sides.
+- Updated watermark overlay layering so watermarks sit above images while remaining beneath hover overlays, links, cart, download, and lightbox controls.
+- Restored watermark overlay sizing to use percentage-based sizing from the rendered image, keeping gallery thumbnail watermarks proportional to the image size.
 - Removed the sidebar and quick links from the initial watermark settings experience to give the content more room.
 
 ### Fixed
 - Fixed Modular Gallery layouts sometimes requiring an extra image move before recalculating after newly dragged images finished loading.
 - Fixed redundant Image Row editor layout application that could reuse the first row layout across other rows in large Modular Galleries.
+- Fixed Image Block lightbox sizing so smaller source images can expand correctly in fullscreen mode while keeping watermark overlays aligned to the rendered image.
 
 ## [1.4.0] - 2026-06-25
 ### Added
