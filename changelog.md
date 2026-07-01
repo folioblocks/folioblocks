@@ -4,7 +4,7 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.5.0] - 2026-06-29
+## [1.5.0] - 2026-07-02
 ### Added
 - Added full Gradient Overlay support for Image Block, Video Block, image galleries, Video Gallery, and Filmstrip Gallery.
 - Added a dedicated Gradient Overlay style for full-cover gradient backgrounds while preserving the existing Bottom Gradient image overlay behavior.
@@ -39,7 +39,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed Modular Gallery layouts sometimes requiring an extra image move before recalculating after newly dragged images finished loading.
 - Fixed redundant Image Row editor layout application that could reuse the first row layout across other rows in large Modular Galleries.
 - Fixed nested Modular Gallery Image Rows inside Image Stacks so increasing the gallery gap preserves each image's natural aspect ratio.
+
+## [1.4.1] - 2026-07-01
+### Fixed
 - Fixed Image Block lightbox sizing so smaller source images can expand correctly in fullscreen mode while keeping watermark overlays aligned to the rendered image.
+- Fixed a bug in Modular Gallery where gallery images could flash on screen before gallery styles had properlly loaded. 
 
 ## [1.4.0] - 2026-06-25
 ### Added
