@@ -166,6 +166,15 @@ const getRowAspectRatio = (rowWrapper) => {
 	}, 0);
 };
 
+const getRowImageCount = (rowWrapper) => {
+	const row = rowWrapper?.querySelector(".pb-image-row");
+	return row
+		? Array.from(row.children).filter((child) =>
+				child.classList.contains("wp-block-folioblocks-pb-image-block"),
+		  ).length
+		: 0;
+};
+
 const getStackItems = (stackWrapper) => {
 	const stack = stackWrapper?.querySelector(".pb-image-stack");
 	if (!stack) {
@@ -181,7 +190,14 @@ const getStackItems = (stackWrapper) => {
 
 			if (child.classList.contains("wp-block-folioblocks-pb-image-row")) {
 				const ratio = getRowAspectRatio(child);
-				return ratio ? { wrapper: child, type: "row", ratio } : null;
+				return ratio
+					? {
+							wrapper: child,
+							type: "row",
+							ratio,
+							imageCount: getRowImageCount(child),
+					  }
+					: null;
 			}
 
 			return null;
@@ -198,6 +214,16 @@ const getStackAspectRatio = (stackWrapper) => {
 
 	return totalInverseRatio > 0 ? 1 / totalInverseRatio : 0;
 };
+
+const getStackNestedRowGapAdjustment = (stackItems, gap) =>
+	stackItems.reduce((total, item) => {
+		if (item.type !== "row") {
+			return total;
+		}
+
+		const rowGaps = Math.max(0, item.imageCount - 1) * gap;
+		return total + rowGaps / item.ratio;
+	}, 0);
 
 const applyImageWrapperLayout = (wrapper, width, height, marginRight = "0") => {
 	wrapper.style.width = `${width}px`;
@@ -233,22 +259,7 @@ const applyNestedRowLayout = (rowWrapper, width, height, gap) => {
 		return;
 	}
 
-	const totalGaps = gap * (imageWrappers.length - 1);
-	const usableWidth = Math.max(1, width - totalGaps);
-	const widths = ratios.map((ratio) =>
-		Math.floor((ratio / totalRatio) * usableWidth),
-	);
-	let remainingWidth =
-		width -
-		totalGaps -
-		widths.reduce((total, imageWidth) => total + imageWidth, 0);
-
-	let index = 0;
-	while (remainingWidth > 0 && widths.length) {
-		widths[index % widths.length]++;
-		remainingWidth--;
-		index++;
-	}
+	const widths = ratios.map((ratio) => ratio * height);
 
 	imageWrappers.forEach((wrapper, imageIndex) => {
 		applyImageWrapperLayout(
@@ -266,20 +277,19 @@ const applyStackLayout = (stackWrapper, layout, gap) => {
 	stackWrapper.style.marginRight = layout.marginRight;
 
 	const stackItems = getStackItems(stackWrapper);
-	const totalInverseRatio = stackItems.reduce(
-		(total, item) => total + 1 / item.ratio,
-		0,
-	);
-	if (!totalInverseRatio) {
+	if (!stackItems.length) {
 		return;
 	}
 
-	const totalStackGaps = Math.max(0, stackItems.length - 1) * gap;
-	const usableHeight = Math.max(1, layout.height - totalStackGaps);
-
 	stackItems.forEach((item, index) => {
-		const share = 1 / item.ratio / totalInverseRatio;
-		const itemHeight = Math.round(share * usableHeight);
+		const itemHeight =
+			item.type === "row"
+				? Math.max(
+						1,
+						(layout.width - Math.max(0, item.imageCount - 1) * gap) /
+							item.ratio,
+				  )
+				: layout.width / item.ratio;
 		const marginBottom =
 			gap === 0 || index === stackItems.length - 1 ? "0px" : `${gap}px`;
 
@@ -489,6 +499,7 @@ export default function Edit(props) {
 				let ratio;
 				let isStack = false;
 				let stackImageCount = 0;
+				let nestedRowGapAdjustment = 0;
 
 				if (wrapper.classList.contains("wp-block-folioblocks-pb-image-block")) {
 					ratio = getImageAspectRatio(wrapper.querySelector("img"));
@@ -496,14 +507,24 @@ export default function Edit(props) {
 					wrapper.classList.contains("wp-block-folioblocks-pb-image-stack")
 				) {
 					isStack = true;
-					stackImageCount = getStackItems(wrapper).length;
+					const stackItems = getStackItems(wrapper);
+					stackImageCount = stackItems.length;
+					nestedRowGapAdjustment = getStackNestedRowGapAdjustment(
+						stackItems,
+						gap,
+					);
 					ratio = getStackAspectRatio(wrapper);
 				}
 
 				if (ratio) {
 					aspectRatios.push(ratio);
 					totalNaturalWidth += ratio;
-					stackMeta.push({ isStack, stackImageCount, wrapper });
+					stackMeta.push({
+						isStack,
+						stackImageCount,
+						nestedRowGapAdjustment,
+						wrapper,
+					});
 				}
 			});
 
@@ -518,10 +539,23 @@ export default function Edit(props) {
 				const stackGaps = Math.max(0, item.stackImageCount - 1);
 				return total + stackGaps * gap * aspectRatios[index];
 			}, 0);
+			const nestedRowGapWidthAdjustment = stackMeta.reduce(
+				(total, item, index) => {
+					if (!item.isStack) {
+						return total;
+					}
+
+					return total + item.nestedRowGapAdjustment * aspectRatios[index];
+				},
+				0,
+			);
 			const targetHeight = Math.max(
 				1,
 				Math.floor(
-					(containerWidth - totalGaps + stackGapWidthAdjustment) /
+					(containerWidth -
+						totalGaps +
+						stackGapWidthAdjustment -
+						nestedRowGapWidthAdjustment) /
 						totalNaturalWidth,
 				),
 			);
@@ -532,7 +566,13 @@ export default function Edit(props) {
 				const stackGaps = item.isStack
 					? Math.max(0, item.stackImageCount - 1) * gap
 					: 0;
-				return Math.floor(ratio * Math.max(1, targetHeight - stackGaps));
+				const nestedRowGapAdjustment = item.isStack
+					? item.nestedRowGapAdjustment
+					: 0;
+				return Math.floor(
+					ratio *
+						Math.max(1, targetHeight - stackGaps + nestedRowGapAdjustment),
+				);
 			});
 			widths.forEach((width) => {
 				usedWidth += width;

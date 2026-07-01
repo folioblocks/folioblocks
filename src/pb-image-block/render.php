@@ -627,7 +627,7 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 		<?php endif; ?>
 
 		<?php if ( fbks_fs()->can_use_premium_code__premium_only() && $fbks_show_gallery_watermark ) : ?>
-			<span class="pb-watermark-overlay" style="<?php echo esc_attr( $fbks_watermark_style ); ?>" aria-hidden="true"></span>
+			<span class="pb-watermark-overlay" style="<?php echo esc_attr( $fbks_watermark_style ); ?>"<?php echo wp_kses_data( $fbks_watermark_data_attrs ); ?> aria-hidden="true"></span>
 		<?php endif; ?>
 
 		<?php

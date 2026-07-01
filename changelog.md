@@ -32,12 +32,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Simplified saved watermark settings to focus on image, opacity, size, inset, position, and repeat controls.
 - Updated watermark preview inset handling so the inset is calculated from the preview short edge and applied equally on all sides.
 - Updated watermark overlay layering so watermarks sit above images while remaining beneath hover overlays, links, cart, download, and lightbox controls.
-- Restored watermark overlay sizing to use percentage-based sizing from the rendered image, keeping gallery thumbnail watermarks proportional to the image size.
+- Updated watermark overlay sizing to use one shared short-edge formula across dashboard previews, editor overlays, frontend gallery images, and lightbox images.
 - Removed the sidebar and quick links from the initial watermark settings experience to give the content more room.
 
 ### Fixed
 - Fixed Modular Gallery layouts sometimes requiring an extra image move before recalculating after newly dragged images finished loading.
 - Fixed redundant Image Row editor layout application that could reuse the first row layout across other rows in large Modular Galleries.
+- Fixed nested Modular Gallery Image Rows inside Image Stacks so increasing the gallery gap preserves each image's natural aspect ratio.
 - Fixed Image Block lightbox sizing so smaller source images can expand correctly in fullscreen mode while keeping watermark overlays aligned to the rendered image.
 
 ## [1.4.0] - 2026-06-25

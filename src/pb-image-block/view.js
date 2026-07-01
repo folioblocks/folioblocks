@@ -21,6 +21,62 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		};
 	};
 
+	const syncGalleryWatermark = ( watermarkOverlay ) => {
+		const imageBlock = watermarkOverlay.closest( '.pb-image-block' );
+		const image = imageBlock?.querySelector( '.pb-image-block-img' );
+
+		if ( ! image ) {
+			return;
+		}
+
+		const imageRect = image.getBoundingClientRect();
+		const sizeRatio = Number.parseFloat(
+			watermarkOverlay.getAttribute( 'data-watermark-size' ) || '16'
+		);
+		const insetRatio = Number.parseFloat(
+			watermarkOverlay.getAttribute( 'data-watermark-inset' ) || '4'
+		);
+		const { renderSize, renderInset } = getWatermarkRenderMetrics(
+			imageRect.width,
+			imageRect.height,
+			sizeRatio,
+			insetRatio
+		);
+
+		watermarkOverlay.style.setProperty(
+			'--pb-watermark-render-size',
+			`${ renderSize }px`
+		);
+		watermarkOverlay.style.setProperty(
+			'--pb-watermark-inset',
+			`${ renderInset }px`
+		);
+	};
+
+	const syncGalleryWatermarks = () => {
+		document
+			.querySelectorAll( '.pb-image-block .pb-watermark-overlay' )
+			.forEach( ( watermarkOverlay ) => {
+				if (
+					watermarkOverlay.classList.contains(
+						'pb-watermark-overlay--lightbox'
+					)
+				) {
+					return;
+				}
+
+				syncGalleryWatermark( watermarkOverlay );
+			} );
+	};
+
+	const scheduleGalleryWatermarkSync = () => {
+		window.requestAnimationFrame( syncGalleryWatermarks );
+	};
+
+	window.addEventListener( 'resize', scheduleGalleryWatermarkSync );
+	document.addEventListener( 'load', scheduleGalleryWatermarkSync, true );
+	scheduleGalleryWatermarkSync();
+
 	// Track input method for focus visibility control
 	let userUsedKeyboard = false;
 	window.addEventListener( 'keydown', ( e ) => {

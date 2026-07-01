@@ -1,6 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { addFilter } from '@wordpress/hooks';
 import { Notice, SelectControl, ToggleControl } from '@wordpress/components';
+import { useEffect, useRef, useState } from '@wordpress/element';
 
 const DISPLAY_NONE = 'none';
 const DISPLAY_GALLERY = 'gallery';
@@ -19,6 +20,15 @@ export const getSavedWatermarks = () => {
 
 export const getSavedWatermarkById = ( watermarkId ) =>
 	getSavedWatermarks().find( ( item ) => item.id === watermarkId ) || null;
+
+const getWatermarkRenderMetrics = ( width, height, sizeRatio, insetRatio ) => {
+	const shortEdge = Math.min( width, height );
+
+	return {
+		renderSize: ( shortEdge * sizeRatio ) / 100,
+		renderInset: ( shortEdge * insetRatio ) / 100,
+	};
+};
 
 export const isWatermarkDisplayOnGalleryImages = ( display ) =>
 	[ DISPLAY_GALLERY, DISPLAY_BOTH ].includes( display );
@@ -90,7 +100,56 @@ export const getEffectiveWatermarkState = ( {
 };
 
 export const WatermarkOverlay = ( props = {} ) => {
+	const overlayRef = useRef( null );
+	const [ renderMetrics, setRenderMetrics ] = useState( null );
 	const { enabled, watermark, display } = getEffectiveWatermarkState( props );
+
+	useEffect( () => {
+		const overlay = overlayRef.current;
+		const imageBlock = overlay?.closest( '.pb-image-block' );
+		const image = imageBlock?.querySelector( '.pb-image-block-img' );
+
+		if ( ! enabled || ! watermark || ! overlay || ! image ) {
+			return undefined;
+		}
+
+		const syncMetrics = () => {
+			const imageRect = image.getBoundingClientRect();
+			const sizeRatio = Number( watermark.size ?? 16 );
+			const insetRatio = Number( watermark.inset ?? 4 );
+			const { renderSize, renderInset } = getWatermarkRenderMetrics(
+				imageRect.width,
+				imageRect.height,
+				Number.isFinite( sizeRatio ) ? sizeRatio : 16,
+				Number.isFinite( insetRatio ) ? insetRatio : 4
+			);
+
+			setRenderMetrics( {
+				'--pb-watermark-render-size': `${ renderSize }px`,
+				'--pb-watermark-inset': `${ renderInset }px`,
+			} );
+		};
+		const scheduleSync = () => window.requestAnimationFrame( syncMetrics );
+		const resizeObserver =
+			typeof window.ResizeObserver !== 'undefined'
+				? new window.ResizeObserver( scheduleSync )
+				: null;
+
+		scheduleSync();
+		image.addEventListener( 'load', scheduleSync );
+		window.addEventListener( 'resize', scheduleSync );
+		if ( resizeObserver ) {
+			resizeObserver.observe( image );
+		}
+
+		return () => {
+			image.removeEventListener( 'load', scheduleSync );
+			window.removeEventListener( 'resize', scheduleSync );
+			if ( resizeObserver ) {
+				resizeObserver.disconnect();
+			}
+		};
+	}, [ enabled, watermark ] );
 
 	if (
 		! enabled ||
@@ -102,8 +161,12 @@ export const WatermarkOverlay = ( props = {} ) => {
 
 	return (
 		<span
+			ref={ overlayRef }
 			className="pb-watermark-overlay"
-			style={ getWatermarkStyleVars( watermark ) }
+			style={ {
+				...getWatermarkStyleVars( watermark ),
+				...( renderMetrics || {} ),
+			} }
 			aria-hidden="true"
 		/>
 	);

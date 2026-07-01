@@ -389,7 +389,7 @@ if (! function_exists('fbks_render_watermark_fields')) {
 					</label>
 
 					<label class="pb-settings-field">
-						<span><?php esc_html_e('Size', 'folioblocks'); ?></span>
+						<span><?php esc_html_e('Size (% of short edge)', 'folioblocks'); ?></span>
 						<input type="number" min="5" max="40" step="1" name="fbks_watermarks[items][<?php echo esc_attr($field_key); ?>][size]" value="<?php echo esc_attr((string) $item['size']); ?>" data-watermark-setting="size" />
 					</label>
 
@@ -566,11 +566,12 @@ if (! function_exists('fbks_render_global_settings_page')) {
 					const inset = getCardSetting(card, 'inset', '4');
 					const position = getCardSetting(card, 'position', 'bottom-right');
 					const repeat = getCardSetting(card, 'repeat', 'no-repeat');
-					const sample = card.querySelector('.pb-watermark-sample');
-					const computedSize = getRenderSize(sample, size);
-					const computedInset = getRenderInset(sample, inset);
 
 					previews.forEach((preview) => {
+						const previewSample = preview.closest('.pb-watermark-sample') || preview.closest('.pb-watermark-card__thumb') || card.querySelector('.pb-watermark-sample');
+						const computedSize = getRenderSize(previewSample, size);
+						const computedInset = getRenderInset(previewSample, inset);
+
 						preview.style.setProperty('--pb-watermark-preview-opacity', opacity);
 						preview.style.setProperty('--pb-watermark-preview-size', `${size}%`);
 						preview.style.setProperty('--pb-watermark-preview-render-size', `${computedSize}px`);

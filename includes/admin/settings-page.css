@@ -385,11 +385,11 @@
 
 .pb-watermark-card__thumb-mark {
 	position: absolute;
-	inset: 8%;
+	inset: var(--pb-watermark-preview-render-inset, 4px);
 	display: block;
 	opacity: var(--pb-watermark-preview-opacity, 0.28);
 	background-color: transparent;
-	background-size: contain;
+	background-size: var(--pb-watermark-preview-render-size, 40px) auto;
 	background-position: var(--pb-watermark-preview-position, bottom right);
 	background-repeat: var(--pb-watermark-preview-repeat, no-repeat);
 }
