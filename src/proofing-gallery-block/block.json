@@ -1,0 +1,36 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "folioblocks/proofing-gallery-block",
+	"version": "1.0",
+	"title": "Proofing Gallery",
+	"category": "folioblocks",
+	"icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1247.24 1247.24\"><g fill=\"none\" stroke=\"currentColor\" stroke-width=\"45\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M415 130H176c-25.65 0-46.53 20.89-46.53 46.57V415\"/><path d=\"M832 130h238c25.65 0 46.53 20.89 46.53 46.57V415\"/><path d=\"M1117 832v238c0 25.68-20.88 46.57-46.53 46.57H832\"/><path d=\"M415 1117H176c-25.65 0-46.53-20.89-46.53-46.57V832\"/><path stroke-width=\"90\" d=\"M365 625l175 175 345-430\"/></g></svg>",
+	"description": "Let clients select, approve, and comment on images in a private proofing gallery.",
+	"example": {
+		"attributes": {
+			"preview": true
+		}
+	},
+	"supports": {
+		"html": false
+	},
+	"attributes": {
+		"preview": {
+			"type": "boolean",
+			"default": false
+		}
+	},
+	"textdomain": "folioblocks",
+	"editorScript": [
+		"file:./index.js",
+		"file:./premium.js"
+	],
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"viewScript": [
+		"file:./view.js",
+		"file:./premium-view.js"
+	]
+}
