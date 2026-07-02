@@ -6,6 +6,7 @@ import {
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from '@wordpress/components';
+import { LightboxSocialSharingControls } from './socialSharingControls';
 
 const getLightboxContent = (attributes) => {
 	if (attributes.lightboxContent) {
@@ -26,6 +27,7 @@ const LightboxContentControl = ({
 	setAttributes,
 	showProductInfoOption = false,
 	showAppearanceControl = true,
+	context = {},
 }) => {
 	const value = getLightboxContent(attributes);
 	const options = [
@@ -144,6 +146,11 @@ const LightboxContentControl = ({
 						)}
 					/>
 				)}
+			<LightboxSocialSharingControls
+				attributes={attributes}
+				setAttributes={setAttributes}
+				context={context}
+			/>
 		</>
 	);
 };
@@ -526,7 +533,7 @@ export const registerImageClickActionPremiumControls = ({
 		`${hookPrefix}.lightboxControls`,
 		`${namespace}-premium-click-action-lightbox`,
 		(defaultContent, props) => {
-			const { attributes, setAttributes } = props;
+			const { attributes, setAttributes, context } = props;
 			const { enableWooCommerce } = attributes;
 
 			return (
@@ -535,6 +542,7 @@ export const registerImageClickActionPremiumControls = ({
 					setAttributes={setAttributes}
 					showProductInfoOption={!!enableWooCommerce}
 					showAppearanceControl={supportsLightbox}
+					context={context}
 				/>
 			);
 		}

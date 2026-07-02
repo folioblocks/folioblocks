@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added multiple named saved watermarks with upload/select image controls, default watermark selection, and compact editable saved watermark rows.
 - Added live watermark previews with aspect-ratio preview buttons and a larger modal preview.
 - Added Pro Watermark Overlay controls for Image Block and image gallery blocks, with editor previews and frontend rendering on gallery images, lightbox images, or both.
+- Added a Pro page-level Disable Drag To Save control for compatible FolioBlocks media.
+- Added Wistia, Dailymotion, VideoPress, Loom, and Cloudflare Stream support to Video Block and Video Gallery embeds.
+- Added Social Media Sharing controls for Image Block and image gallery lightboxes and hover overlays.
+- Added a FolioBlocks blue editor icon cue with tooltip for Image Blocks that have per-image gallery overrides enabled.
 
 ### Changed
 - Renamed Gradient Bottom to Bottom Gradient in the editor while preserving the existing `gradient-bottom` saved value for backwards compatibility.
@@ -34,6 +38,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated watermark overlay layering so watermarks sit above images while remaining beneath hover overlays, links, cart, download, and lightbox controls.
 - Updated watermark overlay sizing to use one shared short-edge formula across dashboard previews, editor overlays, frontend gallery images, and lightbox images.
 - Removed the sidebar and quick links from the initial watermark settings experience to give the content more room.
+- Refined Social Media Sharing controls so sharing sources are selected once in a dedicated panel, while Lightbox and Overlay Content controls only manage where sharing appears.
+- Improved Social Media Sharing editor controls, overlay icons, and lightbox icons for better spacing, consistent circular icon sizing, and clearer source selection.
 
 ### Fixed
 - Fixed Modular Gallery layouts sometimes requiring an extra image move before recalculating after newly dragged images finished loading.

@@ -147,6 +147,25 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		{ capture: true }
 	);
 
+	// Disable drag-to-save for protected FolioBlocks media.
+	const disableDragToSave = document.querySelector(
+		'[data-disable-drag-to-save="true"]'
+	);
+	if ( disableDragToSave ) {
+		document.addEventListener(
+			'dragstart',
+			( e ) => {
+				const protectedMedia = e.target.closest(
+					'[data-disable-drag-to-save="true"] img, [data-disable-drag-to-save="true"] video, .pb-image-lightbox img'
+				);
+				if ( protectedMedia ) {
+					e.preventDefault();
+				}
+			},
+			{ capture: true }
+		);
+	}
+
 	const gallerySelectors = [
 		'.pb-grid-gallery',
 		'.pb-justified-gallery',
@@ -281,7 +300,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 					const url = new URL( window.location.href );
 					url.searchParams.set( 'add-to-cart', String( productId ) );
 					window.location.href = url.toString();
-				} catch ( err ) {
+				} catch {
 					const sep = window.location.href.includes( '?' )
 						? '&'
 						: '?';
@@ -417,7 +436,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 							// Replace the element with the returned fragment.
 							try {
 								el.outerHTML = html;
-							} catch ( err ) {
+							} catch {
 								// Ignore fragment update failures.
 							}
 						} );

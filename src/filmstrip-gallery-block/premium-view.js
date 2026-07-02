@@ -25,6 +25,36 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		return;
 	}
 
+	document.body.addEventListener( 'click', ( event ) => {
+		const shareLink = event.target.closest( '.pb-social-share__link' );
+		if ( ! shareLink ) {
+			return;
+		}
+
+		event.stopPropagation();
+
+		const copyUrl = shareLink.getAttribute( 'data-pb-copy-share-url' );
+		if ( ! copyUrl ) {
+			return;
+		}
+
+		event.preventDefault();
+		if ( window.navigator.clipboard?.writeText ) {
+			window.navigator.clipboard.writeText( copyUrl );
+			return;
+		}
+
+		const textarea = document.createElement( 'textarea' );
+		textarea.value = copyUrl;
+		textarea.setAttribute( 'readonly', 'readonly' );
+		textarea.style.position = 'fixed';
+		textarea.style.top = '-9999px';
+		document.body.appendChild( textarea );
+		textarea.select();
+		document.execCommand( 'copy' );
+		textarea.remove();
+	} );
+
 	let activeKeyboardGallery = galleries.length === 1 ? galleries[ 0 ] : null;
 
 		const getFullscreenElement = () =>
@@ -40,6 +70,98 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			aperture:
 				'<svg viewBox="-16 -16 495 495" aria-hidden="true" focusable="false"><path fill="currentColor" d="M395.195,67.805C351.47,24.08,293.335,0,231.5,0S111.529,24.08,67.805,67.805S0,169.664,0,231.5S24.08,351.47,67.805,395.195S169.664,463,231.5,463s119.971-24.08,163.695-67.805S463,293.335,463,231.5S438.919,111.529,395.195,67.805z M443.392,186.803c-0.321,0.232-0.631,0.484-0.92,0.772l-79.886,79.886V59.168c7.689,5.873,15.045,12.285,22.002,19.243C414.732,108.555,434.877,146.025,443.392,186.803z M188.262,347.586l-72.848-72.848v-94.2l65.124-65.124h94.2l72.848,72.848v94.201l-65.124,65.124H188.262z M347.586,48.671v118.378L198.094,17.557C209.049,15.871,220.207,15,231.5,15C273.258,15,313.208,26.748,347.586,48.671z M78.411,78.411c28.553-28.552,63.68-48.134,101.964-57.36l79.362,79.362H59.168C65.042,92.725,71.454,85.369,78.411,78.411z M48.67,115.414h110.654L16.613,258.126C15.544,249.358,15,240.471,15,231.5C15,189.741,26.748,149.791,48.67,115.414z M19.607,276.196c0.321-0.232,0.631-0.484,0.92-0.772l79.886-79.886v208.294c-7.688-5.873-15.045-12.285-22.002-19.243C48.268,354.445,28.123,316.974,19.607,276.196z M115.414,414.329V295.951l149.491,149.491C253.951,447.129,242.792,448,231.5,448C189.741,448,149.791,436.252,115.414,414.329z M384.588,384.588c-28.553,28.552-63.68,48.134-101.965,57.36l-79.362-79.362h200.569C397.958,370.275,391.546,377.631,384.588,384.588z M414.329,347.586H303.675l142.712-142.712c1.068,8.767,1.613,17.655,1.613,26.626C448,273.258,436.252,313.208,414.329,347.586z"/></svg>',
 			iso: '<span class="pb-hover-exif-icon__iso">ISO</span>',
+		};
+
+		const socialServices = {
+			facebook: { label: 'Facebook', icon: 'f' },
+			linkedin: { label: 'LinkedIn', icon: 'in' },
+			x: { label: 'X', icon: 'x' },
+			bluesky: { label: 'Bluesky', icon: 'b' },
+			pinterest: { label: 'Pinterest', icon: 'p' },
+			threads: { label: 'Threads', icon: 't' },
+			mastodon: { label: 'Mastodon', icon: 'm' },
+			copy: {
+				label: 'Copy Link',
+				icon: '<svg viewBox="0 0 640 640" aria-hidden="true" focusable="false"><path d="M451.5 160C434.9 160 418.8 164.5 404.7 172.7C388.9 156.7 370.5 143.3 350.2 133.2C378.4 109.2 414.3 96 451.5 96C537.9 96 608 166 608 252.5C608 294 591.5 333.8 562.2 363.1L491.1 434.2C461.8 463.5 422 480 380.5 480C294.1 480 224 410 224 323.5C224 322 224 320.5 224.1 319C224.6 301.3 239.3 287.4 257 287.9C274.7 288.4 288.6 303.1 288.1 320.8C288.1 321.7 288.1 322.6 288.1 323.4C288.1 374.5 329.5 415.9 380.6 415.9C405.1 415.9 428.6 406.2 446 388.8L517.1 317.7C534.4 300.4 544.2 276.8 544.2 252.3C544.2 201.2 502.8 159.8 451.7 159.8zM307.2 237.3C305.3 236.5 303.4 235.4 301.7 234.2C289.1 227.7 274.7 224 259.6 224C235.1 224 211.6 233.7 194.2 251.1L123.1 322.2C105.8 339.5 96 363.1 96 387.6C96 438.7 137.4 480.1 188.5 480.1C205 480.1 221.1 475.7 235.2 467.5C251 483.5 269.4 496.9 289.8 507C261.6 530.9 225.8 544.2 188.5 544.2C102.1 544.2 32 474.2 32 387.7C32 346.2 48.5 306.4 77.8 277.1L148.9 206C178.2 176.7 218 160.2 259.5 160.2C346.1 160.2 416 230.8 416 317.1C416 318.4 416 319.7 416 321C415.6 338.7 400.9 352.6 383.2 352.2C365.5 351.8 351.6 337.1 352 319.4C352 318.6 352 317.9 352 317.1C352 283.4 334 253.8 307.2 237.5z"/></svg>',
+			},
+		};
+
+		const normalizeSocialSources = ( sources ) =>
+			( Array.isArray( sources ) ? sources : [] )
+				.filter( ( source, index, list ) =>
+					socialServices[ source ] && list.indexOf( source ) === index
+				)
+				.slice( 0, 5 );
+
+		const getShareUrl = ( image ) => {
+			const url = new URL( window.location.href );
+			url.searchParams.delete( 'fbks_share_image' );
+			if ( image.id ) {
+				url.searchParams.set( 'fbks_share_image', String( image.id ) );
+			}
+			return url.toString();
+		};
+
+		const getSocialServiceUrl = ( source, shareUrl, title, imageUrl ) => {
+			const encodedUrl = encodeURIComponent( shareUrl );
+			const encodedTitle = encodeURIComponent( title || document.title );
+			const encodedText = encodeURIComponent(
+				`${ title || document.title } ${ shareUrl }`
+			);
+			switch ( source ) {
+				case 'facebook':
+					return `https://www.facebook.com/sharer/sharer.php?u=${ encodedUrl }`;
+				case 'linkedin':
+					return `https://www.linkedin.com/sharing/share-offsite/?url=${ encodedUrl }`;
+				case 'x':
+					return `https://twitter.com/intent/tweet?url=${ encodedUrl }&text=${ encodedTitle }`;
+				case 'bluesky':
+					return `https://bsky.app/intent/compose?text=${ encodedText }`;
+				case 'pinterest':
+					return `https://www.pinterest.com/pin/create/button/?url=${ encodedUrl }&media=${ encodeURIComponent(
+						imageUrl || ''
+					) }&description=${ encodedTitle }`;
+				case 'threads':
+					return `https://www.threads.net/intent/post?text=${ encodedText }`;
+				case 'mastodon':
+					return `https://mastodon.social/share?text=${ encodedText }`;
+				default:
+					return shareUrl;
+			}
+		};
+
+		const createSocialShare = ( image, sources, variant = 'overlay' ) => {
+			const normalizedSources = normalizeSocialSources( sources );
+			const wrapper = document.createElement( 'div' );
+			wrapper.className = `pb-social-share pb-social-share--${ variant }`;
+			wrapper.setAttribute( 'aria-label', 'Share image' );
+			const shareUrl = getShareUrl( image );
+			const title = image.title || document.title;
+			const imageUrl = image.fullSrc || image.src || '';
+
+			normalizedSources.forEach( ( source ) => {
+				const service = socialServices[ source ];
+				const link = document.createElement( 'a' );
+				link.className = `pb-social-share__link pb-social-share__link--${ source }`;
+				link.href =
+					source === 'copy'
+						? shareUrl
+						: getSocialServiceUrl( source, shareUrl, title, imageUrl );
+				link.setAttribute( 'aria-label', `Share on ${ service.label }` );
+				if ( source === 'copy' ) {
+					link.dataset.pbCopyShareUrl = shareUrl;
+				} else {
+					link.target = '_blank';
+					link.rel = 'noopener noreferrer';
+				}
+				const iconHtml = service.icon.startsWith( '<svg' )
+					? service.icon
+					: `<span class="pb-hover-exif-icon__iso">${ service.icon }</span>`;
+				link.innerHTML = `<span class="pb-social-share__icon">${ iconHtml }</span><span class="pb-social-share__label">${ service.label }</span>`;
+				wrapper.appendChild( link );
+			} );
+
+			return wrapper;
 		};
 
 		const createExifOverlay = ( image, hideUnknownFields = false ) => {
@@ -322,6 +444,19 @@ document.addEventListener( 'DOMContentLoaded', () => {
 							!! clickSettings.hideUnknownExifFields
 						)
 					);
+				}
+			}
+			if (
+				settings.enableSocialSharing &&
+				clickSettings.enableLightboxSocialSharing
+			) {
+				const lightboxSocial = createSocialShare(
+					image,
+					settings.socialSharingSources,
+					'lightbox'
+				);
+				if ( lightboxSocial.children.length ) {
+					captionParts.push( lightboxSocial.outerHTML );
 				}
 			}
 			if ( captionParts.length ) {
@@ -721,6 +856,10 @@ document.addEventListener( 'DOMContentLoaded', () => {
 					? !! caption
 					: overlayContent === 'exif'
 					? true
+					: overlayContent === 'social'
+					? settings.enableSocialSharing &&
+					  normalizeSocialSources( settings.socialSharingSources )
+							.length > 0
 					: !! title );
 
 			overlayContainer.style.display = showOverlay ? '' : 'none';
@@ -772,6 +911,18 @@ document.addEventListener( 'DOMContentLoaded', () => {
 						createExifOverlay(
 							image,
 							!! hoverSettings.hideUnknownExifFields
+						)
+					);
+					return;
+				}
+
+				if ( overlayContent === 'social' ) {
+					overlayNode.innerHTML = '';
+					overlayNode.appendChild(
+						createSocialShare(
+							image,
+							settings.socialSharingSources,
+							'overlay'
 						)
 					);
 					return;

@@ -89,9 +89,16 @@ if ( $fbks_can_use_premium ) {
 		: 'add_to_cart';
 
 	$fbks_woo_hover_info = ! empty( $attributes['wooProductPriceOnHover'] );
-	$fbks_overlay_content = isset( $attributes['overlayContent'] ) && in_array( $attributes['overlayContent'], [ 'title', 'caption', 'product', 'exif' ], true )
+	$fbks_overlay_content = isset( $attributes['overlayContent'] ) && in_array( $attributes['overlayContent'], [ 'title', 'caption', 'product', 'exif', 'social' ], true )
 		? $attributes['overlayContent']
 		: ( $fbks_woo_hover_info ? 'product' : 'title' );
+	$fbks_social_sharing_enabled = ! empty( $attributes['enableSocialSharing'] );
+	$fbks_social_sources = function_exists( 'fbks_normalize_social_share_sources' )
+		? fbks_normalize_social_share_sources( $attributes['socialSharingSources'] ?? [] )
+		: [];
+	if ( 'social' === $fbks_overlay_content && ! $fbks_social_sharing_enabled ) {
+		$fbks_overlay_content = 'title';
+	}
 	$fbks_on_hover_title = ! empty( $attributes['onHoverTitle'] );
 	$fbks_hover_class_map = [
 		'blur-overlay'   => 'pb-hover-blur-overlay',
@@ -410,6 +417,7 @@ if ( is_array( $fbks_inner_blocks ) && ! empty( $fbks_inner_blocks ) ) {
 			'lightbox'         => ! empty( $fbks_image_attrs['lightbox'] ) || ! empty( $fbks_image_attrs['enableLightbox'] ),
 			'lightboxTheme'    => isset( $fbks_image_attrs['lightboxTheme'] ) ? (string) $fbks_image_attrs['lightboxTheme'] : 'inherit',
 			'lightboxContent'  => isset( $fbks_image_attrs['lightboxContent'] ) ? (string) $fbks_image_attrs['lightboxContent'] : '',
+			'enableLightboxSocialSharing' => ! empty( $fbks_image_attrs['enableLightboxSocialSharing'] ),
 				'exifCamera'      => isset( $fbks_image_attrs['exifCamera'] ) ? (string) $fbks_image_attrs['exifCamera'] : '',
 				'exifFocalLength' => isset( $fbks_image_attrs['exifFocalLength'] ) ? (string) $fbks_image_attrs['exifFocalLength'] : '',
 				'exifShutterSpeed' => isset( $fbks_image_attrs['exifShutterSpeed'] ) ? (string) $fbks_image_attrs['exifShutterSpeed'] : '',
@@ -510,6 +518,7 @@ if ( empty( $fbks_images ) && ! empty( $attributes['images'] ) && is_array( $att
 			'lightbox'         => ! empty( $fbks_image['lightbox'] ) || ! empty( $fbks_image['enableLightbox'] ),
 			'lightboxTheme'    => isset( $fbks_image['lightboxTheme'] ) ? (string) $fbks_image['lightboxTheme'] : 'inherit',
 			'lightboxContent'  => isset( $fbks_image['lightboxContent'] ) ? (string) $fbks_image['lightboxContent'] : '',
+			'enableLightboxSocialSharing' => ! empty( $fbks_image['enableLightboxSocialSharing'] ),
 				'exifCamera'      => isset( $fbks_image['exifCamera'] ) ? (string) $fbks_image['exifCamera'] : '',
 				'exifFocalLength' => isset( $fbks_image['exifFocalLength'] ) ? (string) $fbks_image['exifFocalLength'] : '',
 				'exifShutterSpeed' => isset( $fbks_image['exifShutterSpeed'] ) ? (string) $fbks_image['exifShutterSpeed'] : '',
@@ -676,6 +685,8 @@ $fbks_data_payload = [
 		'wooDefaultLinkAction'   => $fbks_woo_default_link_action,
 		'wooProductPriceOnHover' => $fbks_woo_hover_info,
 		'overlayContent'         => $fbks_overlay_content,
+		'enableSocialSharing'    => $fbks_social_sharing_enabled,
+		'socialSharingSources'   => $fbks_social_sources,
 		'hideUnknownExifFields' => $fbks_hide_unknown_exif,
 		'onHoverStyle'           => $attributes['onHoverStyle'] ?? 'blur-overlay',
 		'hoverEffect'            => sanitize_key( $attributes['hoverEffect'] ?? 'none' ),
@@ -701,6 +712,7 @@ $fbks_data_payload = [
 		'lightbox'               => ! empty( $attributes['lightbox'] ),
 		'lightboxTheme'          => $attributes['lightboxTheme'] ?? 'dark',
 		'lightboxContent'        => $attributes['lightboxContent'] ?? '',
+		'enableLightboxSocialSharing' => ! empty( $attributes['enableLightboxSocialSharing'] ),
 		'linkIconDisplay'        => $fbks_link_icon_display,
 		'onHoverTitle'           => $fbks_on_hover_title,
 		'lazyLoad'               => $fbks_lazy_load,

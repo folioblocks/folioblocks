@@ -17,18 +17,20 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		) {
 			const images = container.querySelectorAll( 'img[src]' );
 			if ( 'IntersectionObserver' in window ) {
-				const observer = new IntersectionObserver( ( entries, obs ) => {
-					entries.forEach( ( entry ) => {
-						if ( entry.isIntersecting ) {
-							const img = entry.target;
-							if ( img.dataset.src ) {
-								img.src = img.dataset.src;
-								img.removeAttribute( 'data-src' );
+				const observer = new window.IntersectionObserver(
+					( entries, obs ) => {
+						entries.forEach( ( entry ) => {
+							if ( entry.isIntersecting ) {
+								const img = entry.target;
+								if ( img.dataset.src ) {
+									img.src = img.dataset.src;
+									img.removeAttribute( 'data-src' );
+								}
+								obs.unobserve( img );
 							}
-							obs.unobserve( img );
-						}
-					} );
-				} );
+						} );
+					}
+				);
 				images.forEach( ( img ) => {
 					if ( img.dataset.src ) {
 						observer.observe( img );
@@ -55,6 +57,22 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				e.preventDefault()
 			);
 			container.dataset.rightClickDisabled = 'true';
+		}
+
+		if (
+			container.dataset.disableDragToSave === 'true' &&
+			! container.dataset.dragToSaveDisabled
+		) {
+			container.addEventListener(
+				'dragstart',
+				( e ) => {
+					if ( e.target.closest( 'img, video' ) ) {
+						e.preventDefault();
+					}
+				},
+				{ capture: true }
+			);
+			container.dataset.dragToSaveDisabled = 'true';
 		}
 	} );
 } );

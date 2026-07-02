@@ -139,7 +139,7 @@ const getOverlayContentAttributes = (content, visibility) => ({
 	showFilterCategory: content === "title-play-category",
 });
 
-// Function to support YouTube, Vimeo, Bunny Stream, and self-hosted videos.
+// Function to support iframe provider and self-hosted video previews.
 function getVideoEmbedMarkup(videoUrl, youtubeEmbedPreview) {
 	if (!videoUrl) {
 		return null;
@@ -251,7 +251,11 @@ export default function Edit({ attributes, setAttributes, context }) {
 	);
 	const videoProvider = getVideoProviderData(videoUrl).provider;
 	const isYouTubeVideo = videoProvider === "youtube";
-	const isOEmbedVideo = isYouTubeVideo || videoProvider === "vimeo";
+	const isOEmbedVideo =
+		isYouTubeVideo ||
+		videoProvider === "vimeo" ||
+		videoProvider === "dailymotion" ||
+		videoProvider === "videopress";
 	const videoEmbedPreview = useSelect(
 		(select) =>
 			isOEmbedVideo
@@ -691,7 +695,10 @@ export default function Edit({ attributes, setAttributes, context }) {
 				onChange={(val) => setAttributes({ videoUrl: val })}
 				help={
 					<>
-						{__("Supports YouTube, Vimeo, Bunny Stream, or ", "folioblocks")}
+						{__(
+							"Supports YouTube, Vimeo, Bunny Stream, Wistia, Dailymotion, VideoPress, Loom, Cloudflare Stream, or ",
+							"folioblocks",
+						)}
 						<a
 							href="#"
 							onClick={(e) => {

@@ -25,6 +25,10 @@
 		...lazyLoadBlocks,
 		'folioblocks/pb-loupe-block',
 	] );
+	const dragToSaveBlocks = new Set( [
+		...lazyLoadBlocks,
+		'folioblocks/pb-loupe-block',
+	] );
 	const legacyControlHooks = [
 		'folioBlocks.backgroundVideoBlock.disableRightClickToggle',
 		'folioBlocks.beforeAfter.disableRightClickToggle',
@@ -63,9 +67,13 @@
 						capabilities.hasRightClick ||
 						rightClickBlocks.has( block.name ) ||
 						inner.hasRightClick,
+					hasDragToSave:
+						capabilities.hasDragToSave ||
+						dragToSaveBlocks.has( block.name ) ||
+						inner.hasDragToSave,
 				};
 			},
-			{ hasLazyLoad: false, hasRightClick: false }
+			{ hasLazyLoad: false, hasRightClick: false, hasDragToSave: false }
 		);
 
 	const getContentCapabilities = ( content ) => {
@@ -77,12 +85,15 @@
 			hasRightClick: [ ...rightClickBlocks ].some( ( blockName ) =>
 				value.includes( `wp:${ blockName }` )
 			),
+			hasDragToSave: [ ...dragToSaveBlocks ].some( ( blockName ) =>
+				value.includes( `wp:${ blockName }` )
+			),
 		};
 	};
 
 	const PageMediaSettings = () => {
-		const { hasLazyLoad, hasRightClick, postId, postType } = useSelect(
-			( select ) => {
+		const { hasLazyLoad, hasRightClick, hasDragToSave, postId, postType } =
+			useSelect( ( select ) => {
 				const blockCapabilities = getCapabilities(
 					select( 'core/block-editor' ).getBlocks()
 				);
@@ -97,12 +108,13 @@
 					hasRightClick:
 						blockCapabilities.hasRightClick ||
 						contentCapabilities.hasRightClick,
+					hasDragToSave:
+						blockCapabilities.hasDragToSave ||
+						contentCapabilities.hasDragToSave,
 					postId: select( 'core/editor' ).getCurrentPostId(),
 					postType: select( 'core/editor' ).getCurrentPostType(),
 				};
-			},
-			[]
-		);
+			}, [] );
 		const [ meta, setMeta ] = useEntityProp(
 			'postType',
 			postType || 'post',
@@ -129,7 +141,7 @@
 			! PluginDocumentSettingPanel ||
 			! postId ||
 			! postType ||
-			( ! hasLazyLoad && ! hasRightClick )
+			( ! hasLazyLoad && ! hasRightClick && ! hasDragToSave )
 		) {
 			return null;
 		}
@@ -212,6 +224,22 @@
 						updateMeta( 'fbksDisableRightClick', value ),
 					help: __(
 						'Prevent right-clicking on compatible FolioBlocks media on this page.',
+						'folioblocks'
+					),
+					__nextHasNoMarginBottom: true,
+				} )
+			);
+		}
+		if ( hasDragToSave ) {
+			controls.push(
+				createElement( ToggleControl, {
+					key: 'disable-drag-to-save',
+					label: __( 'Disable Drag To Save', 'folioblocks' ),
+					checked: !! meta?.fbksDisableDragToSave,
+					onChange: ( value ) =>
+						updateMeta( 'fbksDisableDragToSave', value ),
+					help: __(
+						'Prevent visitors from dragging compatible FolioBlocks images on this page.',
 						'folioblocks'
 					),
 					__nextHasNoMarginBottom: true,

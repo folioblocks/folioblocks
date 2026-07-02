@@ -77,6 +77,37 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	document.addEventListener( 'load', scheduleGalleryWatermarkSync, true );
 	scheduleGalleryWatermarkSync();
 
+	document.body.addEventListener( 'click', ( event ) => {
+		const shareLink = event.target.closest( '.pb-social-share__link' );
+		if ( ! shareLink ) {
+			return;
+		}
+
+		event.stopPropagation();
+
+		const copyUrl = shareLink.getAttribute( 'data-pb-copy-share-url' );
+		if ( ! copyUrl ) {
+			return;
+		}
+
+		event.preventDefault();
+
+		if ( window.navigator.clipboard?.writeText ) {
+			window.navigator.clipboard.writeText( copyUrl );
+			return;
+		}
+
+		const textarea = document.createElement( 'textarea' );
+		textarea.value = copyUrl;
+		textarea.setAttribute( 'readonly', 'readonly' );
+		textarea.style.position = 'fixed';
+		textarea.style.top = '-9999px';
+		document.body.appendChild( textarea );
+		textarea.select();
+		document.execCommand( 'copy' );
+		textarea.remove();
+	} );
+
 	// Track input method for focus visibility control
 	let userUsedKeyboard = false;
 	window.addEventListener( 'keydown', ( e ) => {

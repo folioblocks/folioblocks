@@ -55,6 +55,15 @@ if ( ! in_array( $fbks_lightbox_content, [ 'none', 'title', 'caption', 'product'
 	$fbks_lightbox_content = $fbks_caption_lightbox ? 'caption' : 'none';
 }
 $fbks_caption_lightbox = 'none' !== $fbks_lightbox_content;
+$fbks_social_sharing_enabled = (bool) ( $fbks_context['folioBlocks/enableSocialSharing'] ?? ( $attributes['enableSocialSharing'] ?? false ) );
+$fbks_social_sources = function_exists( 'fbks_normalize_social_share_sources' )
+	? fbks_normalize_social_share_sources(
+		$fbks_context['folioBlocks/socialSharingSources'] ??
+		( $attributes['socialSharingSources'] ?? [] )
+	)
+	: [];
+$fbks_lightbox_social_enabled = $fbks_social_sharing_enabled && (bool) ( $fbks_click_context['folioBlocks/enableLightboxSocialSharing'] ?? ( $attributes['enableLightboxSocialSharing'] ?? false ) );
+$fbks_lightbox_social_sources = $fbks_social_sources;
 $fbks_hide_unknown_lightbox_exif = (bool) ( $fbks_click_context['folioBlocks/hideUnknownExifFields'] ?? ( $attributes['hideUnknownExifFields'] ?? false ) );
 $fbks_hide_unknown_overlay_exif = (bool) ( $fbks_hover_context['folioBlocks/hideUnknownExifFields'] ?? ( $attributes['hideUnknownExifFields'] ?? false ) );
 $fbks_title_hover = $fbks_hover_context['folioBlocks/onHoverTitle'] ?? ( isset( $attributes['showTitleOnHover'] ) ? (bool) $attributes['showTitleOnHover'] : false );
@@ -206,9 +215,13 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 	}
 	$fbks_woo_hover_info = $fbks_hover_context['folioBlocks/wooProductPriceOnHover'] ?? ( $attributes['wooProductPriceOnHover'] ?? false );
 	$fbks_overlay_content = $fbks_hover_context['folioBlocks/overlayContent'] ?? ( $attributes['overlayContent'] ?? ( $fbks_woo_hover_info ? 'product' : 'title' ) );
-	if ( ! in_array( $fbks_overlay_content, [ 'title', 'caption', 'product', 'exif' ], true ) ) {
+	if ( ! in_array( $fbks_overlay_content, [ 'title', 'caption', 'product', 'exif', 'social' ], true ) ) {
 		$fbks_overlay_content = 'title';
 	}
+	if ( 'social' === $fbks_overlay_content && ! $fbks_social_sharing_enabled ) {
+		$fbks_overlay_content = 'title';
+	}
+	$fbks_overlay_social_sources = $fbks_social_sources;
 	$fbks_enable_woo = $fbks_woo_active &&
 		'woocommerce' === $fbks_image_click_action &&
 		$fbks_click_enable_woo;
@@ -578,6 +591,16 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 						}
 					}
 				}
+				if ( $fbks_lightbox_social_enabled && function_exists( 'fbks_render_social_share_links' ) ) {
+					$fbks_lightbox_caption .= fbks_render_social_share_links(
+						$fbks_lightbox_social_sources,
+						[
+							'attachment_id' => $fbks_id,
+							'image_url'     => $fbks_full_src,
+							'variant'       => 'lightbox',
+						]
+					);
+				}
 			}
 			?>
 			<a
@@ -646,6 +669,21 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 							echo '<div class="pb-image-block-title-container">';
 							echo '<figcaption class="pb-image-block-title">';
 							echo wp_kses( $fbks_overlay_exif, fbks_get_allowed_post_html_with_svg() );
+							echo '</figcaption></div>';
+						}
+					} elseif ( 'social' === $fbks_overlay_content && function_exists( 'fbks_render_social_share_links' ) ) {
+						$fbks_overlay_social = fbks_render_social_share_links(
+							$fbks_overlay_social_sources,
+							[
+								'attachment_id' => $fbks_id,
+								'image_url'     => $fbks_full_src,
+								'variant'       => 'overlay',
+							]
+						);
+						if ( '' !== $fbks_overlay_social ) {
+							echo '<div class="pb-image-block-title-container">';
+							echo '<figcaption class="pb-image-block-title">';
+							echo wp_kses( $fbks_overlay_social, fbks_get_allowed_post_html_with_svg() );
 							echo '</figcaption></div>';
 						}
 					} elseif ( $fbks_hover_enable_woo && 'product' === $fbks_overlay_content ) {

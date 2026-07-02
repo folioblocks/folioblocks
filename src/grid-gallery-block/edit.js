@@ -780,6 +780,16 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						{ attributes, setAttributes }
 					) }
 				</PanelBody>
+				<PanelBody
+					title={ __( 'Social Media Sharing', 'folioblocks' ) }
+					initialOpen={ false }
+				>
+					{ applyFilters(
+						'folioBlocks.gridGallery.socialSharingControls',
+						imageProFeatureNotice( 'socialSharing' ),
+						{ attributes, setAttributes }
+					) }
+				</PanelBody>
 			</InspectorControls>
 			<InspectorControls group="advanced">
 				{ applyFilters(

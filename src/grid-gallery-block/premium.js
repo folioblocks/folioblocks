@@ -13,6 +13,7 @@ import { registerFilteringPremiumControls } from '../pb-helpers/filteringPremium
 import { registerListViewThumbnailEnhancements } from '../pb-helpers/listViewThumbnailEnhancements';
 import { enableGalleryTransforms } from '../pb-helpers/galleryTransforms';
 import { registerWatermarkOverlayControls } from '../pb-helpers/watermarkOverlayControls';
+import { registerSocialMediaSharingControls } from '../pb-helpers/socialSharingControls';
 import {
 	registerDisableRightClickPremiumControl,
 	registerLazyLoadPremiumControl,
@@ -58,6 +59,11 @@ registerListViewThumbnailEnhancements( {
 } );
 
 registerWatermarkOverlayControls( {
+	hookPrefix: 'folioBlocks.gridGallery',
+	namespace: 'folioblocks/grid-gallery',
+} );
+
+registerSocialMediaSharingControls( {
 	hookPrefix: 'folioBlocks.gridGallery',
 	namespace: 'folioblocks/grid-gallery',
 } );

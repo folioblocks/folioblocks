@@ -31,6 +31,7 @@ define('FBKS_LEGACY_ALL_FILTER_TOKEN', 'All');
 require_once FBKS_PLUGIN_DIR . 'includes/php/filter-helpers.php';
 require_once FBKS_PLUGIN_DIR . 'includes/php/css-values.php';
 require_once FBKS_PLUGIN_DIR . 'includes/php/i18n.php';
+require_once FBKS_PLUGIN_DIR . 'includes/php/social-sharing.php';
 
 /**
  * Ensure Safari can send the editor origin to external video embeds.
@@ -240,6 +241,7 @@ if (function_exists('fbks_fs')) {
         foreach ($post_types as $post_type) {
             register_post_meta($post_type, 'fbksLazyLoad', $meta_args);
             register_post_meta($post_type, 'fbksDisableRightClick', $meta_args);
+            register_post_meta($post_type, 'fbksDisableDragToSave', $meta_args);
         }
     }
     add_action('init', 'fbks_register_page_media_settings_meta');
@@ -281,6 +283,19 @@ if (function_exists('fbks_fs')) {
             'folioblocks/pb-video-block',
             'folioblocks/video-gallery-block',
         );
+        $drag_to_save_blocks = array(
+            'folioblocks/before-after-block',
+            'folioblocks/carousel-gallery-block',
+            'folioblocks/filmstrip-gallery-block',
+            'folioblocks/grid-gallery-block',
+            'folioblocks/justified-gallery-block',
+            'folioblocks/masonry-gallery-block',
+            'folioblocks/modular-gallery-block',
+            'folioblocks/pb-image-block',
+            'folioblocks/pb-loupe-block',
+            'folioblocks/pb-video-block',
+            'folioblocks/video-gallery-block',
+        );
 
         if (
             in_array($parsed_block['blockName'], $lazy_load_blocks, true) &&
@@ -294,6 +309,13 @@ if (function_exists('fbks_fs')) {
             metadata_exists('post', $post_id, 'fbksDisableRightClick')
         ) {
             $parsed_block['attrs']['disableRightClick'] = (bool) get_post_meta($post_id, 'fbksDisableRightClick', true);
+        }
+
+        if (
+            in_array($parsed_block['blockName'], $drag_to_save_blocks, true) &&
+            metadata_exists('post', $post_id, 'fbksDisableDragToSave')
+        ) {
+            $parsed_block['attrs']['disableDragToSave'] = (bool) get_post_meta($post_id, 'fbksDisableDragToSave', true);
         }
 
         return $parsed_block;
@@ -341,6 +363,19 @@ if (function_exists('fbks_fs')) {
             'folioblocks/pb-video-block',
             'folioblocks/video-gallery-block',
         );
+        $drag_to_save_blocks = array(
+            'folioblocks/before-after-block',
+            'folioblocks/carousel-gallery-block',
+            'folioblocks/filmstrip-gallery-block',
+            'folioblocks/grid-gallery-block',
+            'folioblocks/justified-gallery-block',
+            'folioblocks/masonry-gallery-block',
+            'folioblocks/modular-gallery-block',
+            'folioblocks/pb-image-block',
+            'folioblocks/pb-loupe-block',
+            'folioblocks/pb-video-block',
+            'folioblocks/video-gallery-block',
+        );
 
         if (
             in_array($block['blockName'], $lazy_load_blocks, true) &&
@@ -370,6 +405,22 @@ if (function_exists('fbks_fs')) {
                     $processor->set_attribute('data-disable-right-click', 'true');
                 } else {
                     $processor->remove_attribute('data-disable-right-click');
+                }
+                $block_content = $processor->get_updated_html();
+            }
+        }
+
+        if (
+            in_array($block['blockName'], $drag_to_save_blocks, true) &&
+            metadata_exists('post', $post_id, 'fbksDisableDragToSave') &&
+            class_exists('WP_HTML_Tag_Processor')
+        ) {
+            $processor = new WP_HTML_Tag_Processor($block_content);
+            if ($processor->next_tag()) {
+                if ((bool) get_post_meta($post_id, 'fbksDisableDragToSave', true)) {
+                    $processor->set_attribute('data-disable-drag-to-save', 'true');
+                } else {
+                    $processor->remove_attribute('data-disable-drag-to-save');
                 }
                 $block_content = $processor->get_updated_html();
             }

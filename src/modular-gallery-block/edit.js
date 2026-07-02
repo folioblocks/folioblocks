@@ -982,6 +982,16 @@ export default function Edit(props) {
 						{ attributes, setAttributes },
 					)}
 				</PanelBody>
+				<PanelBody
+					title={__("Social Media Sharing", "folioblocks")}
+					initialOpen={false}
+				>
+					{applyFilters(
+						"folioBlocks.modularGallery.socialSharingControls",
+						imageProFeatureNotice("socialSharing"),
+						{ attributes, setAttributes },
+					)}
+				</PanelBody>
 				{applyFilters(
 					"folioBlocks.modularGallery.lazyLoadToggle",
 					imageProFeatureNotice("protectionPerformance"),

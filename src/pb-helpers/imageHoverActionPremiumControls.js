@@ -8,6 +8,7 @@ import {
 } from '@wordpress/components';
 import { CompactTwoColorControl } from './CompactColorControl';
 import { OverlayTypographyControls } from './overlayTypographyControls';
+import { isSocialSharingEnabled } from './socialSharingControls';
 
 const OVERLAY_STYLE_OPTIONS = [
 	{ label: __( 'None', 'folioblocks' ), value: 'none' },
@@ -146,6 +147,12 @@ export const registerImageHoverActionPremiumControls = ( {
 				overlayContentOptions.push( {
 					label: __( 'Show Product Info', 'folioblocks' ),
 					value: 'product',
+				} );
+			}
+			if ( isSocialSharingEnabled( attributes, props.context || {} ) ) {
+				overlayContentOptions.push( {
+					label: __( 'Show Social Media', 'folioblocks' ),
+					value: 'social',
 				} );
 			}
 

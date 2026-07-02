@@ -87,6 +87,9 @@
 			"enum": ["none", "title", "caption", "product", "exif", "title_exif", "caption_exif", "title_caption", "title_caption_exif"],
 			"default": ""
 		},
+		"enableSocialSharing": { "type": "boolean", "default": false },
+		"socialSharingSources": { "type": "array", "default": ["facebook", "linkedin", "x", "pinterest", "copy"], "items": { "type": "string" } },
+		"enableLightboxSocialSharing": { "type": "boolean", "default": false },
 		"onHoverTitle": {
 			"type": "boolean",
 			"default": false
@@ -305,7 +308,8 @@
 					"title",
 					"caption",
 					"product",
-					"exif"
+					"exif",
+					"social"
 				],
 			"default": "title"
 		},
@@ -417,6 +421,9 @@
 		"folioBlocks/lightboxCaption": "lightboxCaption",
 		"folioBlocks/lightboxTheme": "lightboxTheme",
 		"folioBlocks/lightboxContent": "lightboxContent",
+		"folioBlocks/enableSocialSharing": "enableSocialSharing",
+		"folioBlocks/socialSharingSources": "socialSharingSources",
+		"folioBlocks/enableLightboxSocialSharing": "enableLightboxSocialSharing",
 		"folioBlocks/onHoverTitle": "onHoverTitle",
 		"folioBlocks/onHoverStyle": "onHoverStyle",
 		"folioBlocks/hoverEffect": "hoverEffect",

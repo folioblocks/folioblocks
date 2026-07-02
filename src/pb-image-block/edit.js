@@ -1034,7 +1034,7 @@ export default function Edit( {
 								applyFilters(
 									'folioBlocks.imageBlock.lightboxControls',
 									null,
-									{ attributes, setAttributes }
+									{ attributes, setAttributes, context }
 								) }
 							{ ( ! isInsideGallery ||
 								overrideGalleryClickSettings ) &&
@@ -1136,6 +1136,7 @@ export default function Edit( {
 													effectiveHoverWooActive,
 											},
 											setAttributes,
+											context,
 										}
 									) }
 							</PanelBody>
@@ -1148,6 +1149,21 @@ export default function Edit( {
 								{ applyFilters(
 									'folioBlocks.imageBlock.watermarkControls',
 									imageProFeatureNotice( 'watermarkOverlay' ),
+									{ attributes, setAttributes }
+								) }
+							</PanelBody>
+						) }
+						{ ! isInsideGallery && (
+							<PanelBody
+								title={ __(
+									'Social Media Sharing',
+									'folioblocks'
+								) }
+								initialOpen={ false }
+							>
+								{ applyFilters(
+									'folioBlocks.imageBlock.socialSharingControls',
+									imageProFeatureNotice( 'socialSharing' ),
 									{ attributes, setAttributes }
 								) }
 							</PanelBody>

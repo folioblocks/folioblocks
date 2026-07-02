@@ -79,7 +79,7 @@
 		"linkIconColor": { "type": "string", "default": "#000000" },
 		"linkIconBgColor": { "type": "string", "default": "#f9f9f9" },
 		"wooProductPriceOnHover": { "type": "boolean", "default": false },
-			"overlayContent": { "type": "string", "enum": ["title", "caption", "product", "exif"], "default": "title" },
+			"overlayContent": { "type": "string", "enum": ["title", "caption", "product", "exif", "social"], "default": "title" },
 		"wooLightboxInfoType": { "type": "string", "default": "caption" },
 		"wooLinkAction": { "type": "string", "enum": ["inherit", "product", "add_to_cart"], "default": "inherit" },
 		"overrideGalleryClickSettings": { "type": "boolean", "default": false },
@@ -101,6 +101,9 @@
 		"lightboxCaption": { "type": "boolean", "default": false },
 		"lightboxTheme": { "type": "string", "enum": ["inherit", "dark", "light"], "default": "inherit" },
 			"lightboxContent": { "type": "string", "enum": ["none", "title", "caption", "product", "exif", "title_exif", "caption_exif", "title_caption", "title_caption_exif"], "default": "" },
+		"enableSocialSharing": { "type": "boolean", "default": false },
+		"socialSharingSources": { "type": "array", "default": ["facebook", "linkedin", "x", "pinterest", "copy"], "items": { "type": "string" } },
+		"enableLightboxSocialSharing": { "type": "boolean", "default": false },
 		"hideUnknownExifFields": { "type": "boolean", "default": false }
 	},
 	"usesContext": [
@@ -111,6 +114,9 @@
 		"folioBlocks/lightboxCaption",
 		"folioBlocks/lightboxTheme",
 		"folioBlocks/lightboxContent",
+		"folioBlocks/enableSocialSharing",
+		"folioBlocks/socialSharingSources",
+		"folioBlocks/enableLightboxSocialSharing",
 		"folioBlocks/hideUnknownExifFields",
 		"folioBlocks/onHoverTitle",
 		"folioBlocks/onHoverStyle",

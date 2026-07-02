@@ -122,6 +122,19 @@
 			],
 			"default": ""
 		},
+		"enableSocialSharing": {
+			"type": "boolean",
+			"default": false
+		},
+		"socialSharingSources": {
+			"type": "array",
+			"default": ["facebook", "linkedin", "x", "pinterest", "copy"],
+			"items": { "type": "string" }
+		},
+		"enableLightboxSocialSharing": {
+			"type": "boolean",
+			"default": false
+		},
 		"hideUnknownExifFields": {
 			"type": "boolean",
 			"default": false
@@ -291,7 +304,8 @@
 					"title",
 					"caption",
 					"product",
-					"exif"
+					"exif",
+					"social"
 				],
 				"default": "title"
 			}
@@ -308,6 +322,9 @@
 		"folioBlocks/lightboxCaption": "lightboxCaption",
 		"folioBlocks/lightboxTheme": "lightboxTheme",
 		"folioBlocks/lightboxContent": "lightboxContent",
+		"folioBlocks/enableSocialSharing": "enableSocialSharing",
+		"folioBlocks/socialSharingSources": "socialSharingSources",
+		"folioBlocks/enableLightboxSocialSharing": "enableLightboxSocialSharing",
 		"folioBlocks/hideUnknownExifFields": "hideUnknownExifFields",
 		"folioBlocks/onHoverTitle": "onHoverTitle",
 		"folioBlocks/onHoverStyle": "onHoverStyle",
