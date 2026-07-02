@@ -495,10 +495,7 @@
 
 		.lightbox-caption
 			.pb-social-share--lightbox
-			.pb-social-share__link--threads,
-		.lightbox-caption
-			.pb-social-share--lightbox
-			.pb-social-share__link--mastodon {
+			.pb-social-share__link--threads {
 			--pb-social-share-glyph-size: 16.5px;
 		}
 
@@ -1029,6 +1026,7 @@
 		display: flex;
 		max-width: 100%;
 		color: currentcolor;
+		pointer-events: auto;
 	}
 
 	.pb-image-block .pb-social-share__link {
@@ -1063,8 +1061,7 @@
 		--pb-social-share-glyph-size: calc(var(--pb-social-share-base-glyph-size, 14px) * 1.14);
 	}
 
-	.pb-image-block .pb-social-share__link--threads,
-	.pb-image-block .pb-social-share__link--mastodon {
+	.pb-image-block .pb-social-share__link--threads {
 		--pb-social-share-glyph-size: calc(var(--pb-social-share-base-glyph-size, 14px) * 1.12);
 	}
 

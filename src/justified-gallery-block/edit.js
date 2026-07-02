@@ -38,6 +38,20 @@ import './editor.scss';
 
 const ALLOWED_BLOCKS = [ 'folioblocks/pb-image-block' ];
 
+const getImageBlockDimensions = ( attributes = {} ) => {
+	const selectedSize =
+		attributes.sizes?.[ attributes.imageSize ] ||
+		attributes.sizes?.large ||
+		attributes.sizes?.full ||
+		{};
+
+	return {
+		width: Number( attributes.width ) || Number( selectedSize.width ) || 0,
+		height:
+			Number( attributes.height ) || Number( selectedSize.height ) || 0,
+	};
+};
+
 const getImageClickAction = ( {
 	lightbox,
 	enableDownload,
@@ -333,8 +347,22 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			);
 			const images = Array.from( wrappers ).map( ( wrapper ) => {
 				const img = wrapper.querySelector( 'img' );
-				const width = parseInt( img.getAttribute( 'width' ) ) || 1;
-				const height = parseInt( img.getAttribute( 'height' ) ) || 1;
+				const blockAttributes =
+					innerBlocks.find(
+						( block ) => block.clientId === wrapper.dataset.block
+					)?.attributes || {};
+				const blockDimensions =
+					getImageBlockDimensions( blockAttributes );
+				const width =
+					parseInt( img?.getAttribute( 'width' ), 10 ) ||
+					blockDimensions.width ||
+					img?.naturalWidth ||
+					1;
+				const height =
+					parseInt( img?.getAttribute( 'height' ), 10 ) ||
+					blockDimensions.height ||
+					img?.naturalHeight ||
+					1;
 				return { wrapper, width, height };
 			} );
 

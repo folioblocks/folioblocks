@@ -126,7 +126,8 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	document.body.addEventListener( 'click', ( event ) => {
 		const isAddToCart = event.target.closest( '.pb-add-to-cart-icon' );
 		const isDownload = event.target.closest( '.pb-image-block-download' );
-		if ( isAddToCart || isDownload ) {
+		const isSocialShare = event.target.closest( '.pb-social-share__link' );
+		if ( isAddToCart || isDownload || isSocialShare ) {
 			return;
 		}
 

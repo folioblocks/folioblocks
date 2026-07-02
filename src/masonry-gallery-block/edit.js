@@ -309,12 +309,17 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 			.filter( ( image ) => ! existingImageIds.includes( image.id ) )
 			.map( ( image ) => {
 				const title = decodeEntities( titleMap[ image.id ] || '' );
+				const fullSize = image.sizes?.full || {};
+				const width = fullSize.width || image.width || 0;
+				const height = fullSize.height || image.height || 0;
 				return wp.blocks.createBlock( 'folioblocks/pb-image-block', {
 					id: image.id,
 					src: image.url,
 					alt: image.alt || '',
 						title,
 						sizes: image.sizes || {},
+						width,
+						height,
 						caption: image.caption || '',
 						...( getExifAttributesFromMedia(
 							mediaMap[ image.id ] || image

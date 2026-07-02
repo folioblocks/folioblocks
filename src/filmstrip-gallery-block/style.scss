@@ -490,6 +490,7 @@
 	display: flex;
 	max-width: 100%;
 	color: currentcolor;
+	pointer-events: auto;
 }
 
 .pb-filmstrip-gallery .pb-social-share__link {
@@ -524,8 +525,7 @@
 	--pb-social-share-glyph-size: calc(var(--pb-social-share-base-glyph-size, 14px) * 1.14);
 }
 
-.pb-filmstrip-gallery .pb-social-share__link--threads,
-.pb-filmstrip-gallery .pb-social-share__link--mastodon {
+.pb-filmstrip-gallery .pb-social-share__link--threads {
 	--pb-social-share-glyph-size: calc(var(--pb-social-share-base-glyph-size, 14px) * 1.12);
 }
 

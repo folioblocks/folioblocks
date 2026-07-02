@@ -36,10 +36,6 @@ function fbks_get_social_share_services()
             'label' => __('Threads', 'folioblocks'),
             'icon'  => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17.6 11.2c-.2-3.6-2.1-5.7-5.3-5.7-2.8 0-4.8 1.5-5.5 4.1l2.4.6c.4-1.6 1.4-2.4 3-2.4 1.7 0 2.7 1 2.9 2.9-.9-.1-1.8-.1-2.8 0-3.3.2-5.3 1.8-5.2 4.2.1 2.2 2 3.8 4.6 3.8 2.2 0 3.8-1 4.9-2.9.8 1.6 2.1 2.5 3.7 2.4 2.6-.1 4.1-2.5 4-6.2-.2-6.6-4.7-11-11.6-11.1C5.6.8.9 5.3.7 12c-.2 6.7 4.2 11.2 11.1 11.4 3.8.1 6.4-1 8.6-3.4l-1.7-1.7c-1.8 2-3.8 2.8-6.8 2.7-5.5-.2-8.7-3.5-8.6-9 .1-5.4 3.7-8.8 9.3-8.7 5.5.1 9 3.5 9.1 8.8.1 2.3-.6 3.6-1.8 3.7-.9.1-1.7-.7-2-2.1.1-.8.1-1.6-.3-2.5zm-5.7 5.2c-1.4 0-2.3-.7-2.4-1.7-.1-1.1 1-1.8 3-1.9.9-.1 1.8 0 2.6.2-.3 2.1-1.4 3.4-3.2 3.4z"/></svg>',
         ),
-        'mastodon'  => array(
-            'label' => __('Mastodon', 'folioblocks'),
-            'icon'  => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M23.3 7.4c-.4-2.9-3-5.2-6.1-5.6-.5-.1-2.4-.2-5.2-.2s-4.7.1-5.2.2C3.6 2.2 1.1 4.5.7 7.4.3 10.3.4 13.8.9 16.6c.5 3 2.9 5.4 6 6 .9.2 2.9.4 4.5.3 2.8-.1 4.5-.6 4.5-.6l-.1-2.1s-2 .6-4.4.5c-2.4-.1-4.9-.3-5.3-2.8-.1-.4-.1-.8-.1-1.2 0 0 2.3.6 5.2.8 1.8.1 3.5-.1 5.2-.3 3.3-.4 6.2-2.4 6.6-4.3.7-3 .6-7.3.3-9.5zm-4.1 9.8h-3.2v-7.8c0-1.7-.7-2.5-2-2.5-1.5 0-2.2 1-2.2 3v4.3H8.7V9.9c0-2-.7-3-2.2-3-1.3 0-2 .8-2 2.5v7.8H1.3V9.1c0-1.7.4-3 1.3-4 .9-.9 2-1.4 3.4-1.4 1.6 0 2.9.6 3.7 1.9l.8 1.4.8-1.4c.8-1.3 2.1-1.9 3.7-1.9 1.4 0 2.5.5 3.4 1.4.9.9 1.3 2.3 1.3 4v8.1z"/></svg>',
-        ),
         'copy'      => array(
             'label' => __('Copy Link', 'folioblocks'),
             'icon'  => '<svg viewBox="0 0 640 640" aria-hidden="true" focusable="false"><path d="M451.5 160C434.9 160 418.8 164.5 404.7 172.7C388.9 156.7 370.5 143.3 350.2 133.2C378.4 109.2 414.3 96 451.5 96C537.9 96 608 166 608 252.5C608 294 591.5 333.8 562.2 363.1L491.1 434.2C461.8 463.5 422 480 380.5 480C294.1 480 224 410 224 323.5C224 322 224 320.5 224.1 319C224.6 301.3 239.3 287.4 257 287.9C274.7 288.4 288.6 303.1 288.1 320.8C288.1 321.7 288.1 322.6 288.1 323.4C288.1 374.5 329.5 415.9 380.6 415.9C405.1 415.9 428.6 406.2 446 388.8L517.1 317.7C534.4 300.4 544.2 276.8 544.2 252.3C544.2 201.2 502.8 159.8 451.7 159.8zM307.2 237.3C305.3 236.5 303.4 235.4 301.7 234.2C289.1 227.7 274.7 224 259.6 224C235.1 224 211.6 233.7 194.2 251.1L123.1 322.2C105.8 339.5 96 363.1 96 387.6C96 438.7 137.4 480.1 188.5 480.1C205 480.1 221.1 475.7 235.2 467.5C251 483.5 269.4 496.9 289.8 507C261.6 530.9 225.8 544.2 188.5 544.2C102.1 544.2 32 474.2 32 387.7C32 346.2 48.5 306.4 77.8 277.1L148.9 206C178.2 176.7 218 160.2 259.5 160.2C346.1 160.2 416 230.8 416 317.1C416 318.4 416 319.7 416 321C415.6 338.7 400.9 352.6 383.2 352.2C365.5 351.8 351.6 337.1 352 319.4C352 318.6 352 317.9 352 317.1C352 283.4 334 253.8 307.2 237.5z"/></svg>',
@@ -54,18 +50,18 @@ function fbks_normalize_social_share_sources($sources)
         $sources = array();
     }
 
-    $normalized = array();
+    $selected = array();
     foreach ($sources as $source) {
         $source = sanitize_key($source);
-        if (isset($services[$source]) && ! in_array($source, $normalized, true)) {
-            $normalized[] = $source;
+        if (isset($services[$source]) && ! in_array($source, $selected, true)) {
+            $selected[] = $source;
         }
-        if (count($normalized) >= 5) {
+        if (count($selected) >= 5) {
             break;
         }
     }
 
-    return $normalized;
+    return array_values(array_intersect(array_keys($services), $selected));
 }
 
 function fbks_get_social_share_url($service, $share_url, $title, $image_url)
@@ -87,8 +83,6 @@ function fbks_get_social_share_url($service, $share_url, $title, $image_url)
             return 'https://www.pinterest.com/pin/create/button/?url=' . $encoded_url . '&media=' . rawurlencode($image_url) . '&description=' . $encoded_title;
         case 'threads':
             return 'https://www.threads.net/intent/post?text=' . $encoded_text;
-        case 'mastodon':
-            return 'https://mastodon.social/share?text=' . $encoded_text;
         default:
             return $share_url;
     }
@@ -160,6 +154,8 @@ function fbks_social_share_meta()
     if (empty($image[0])) {
         return;
     }
+    $twitter_image = wp_get_attachment_image_src($attachment_id, 'large');
+    $twitter_image_url = ! empty($twitter_image[0]) ? $twitter_image[0] : $image[0];
 
     $title = get_the_title() ?: get_bloginfo('name');
     $description = has_excerpt() ? get_the_excerpt() : wp_trim_words(wp_strip_all_tags(get_post_field('post_content', get_the_ID())), 28);
@@ -167,13 +163,17 @@ function fbks_social_share_meta()
 
     echo "\n" . '<meta property="og:title" content="' . esc_attr($title) . '">' . "\n";
     echo '<meta property="og:description" content="' . esc_attr($description) . '">' . "\n";
+    echo '<meta property="og:type" content="article">' . "\n";
     echo '<meta property="og:url" content="' . esc_url($share_url) . '">' . "\n";
     echo '<meta property="og:image" content="' . esc_url($image[0]) . '">' . "\n";
+    echo '<meta property="og:image:secure_url" content="' . esc_url($image[0]) . '">' . "\n";
     echo '<meta property="og:image:width" content="' . esc_attr((string) ($image[1] ?? '')) . '">' . "\n";
     echo '<meta property="og:image:height" content="' . esc_attr((string) ($image[2] ?? '')) . '">' . "\n";
     echo '<meta name="twitter:card" content="summary_large_image">' . "\n";
+    echo '<meta name="twitter:url" content="' . esc_url($share_url) . '">' . "\n";
     echo '<meta name="twitter:title" content="' . esc_attr($title) . '">' . "\n";
     echo '<meta name="twitter:description" content="' . esc_attr($description) . '">' . "\n";
-    echo '<meta name="twitter:image" content="' . esc_url($image[0]) . '">' . "\n";
+    echo '<meta name="twitter:image" content="' . esc_url($twitter_image_url) . '">' . "\n";
+    echo '<meta name="twitter:image:src" content="' . esc_url($twitter_image_url) . '">' . "\n";
 }
 add_action('wp_head', 'fbks_social_share_meta', 1);

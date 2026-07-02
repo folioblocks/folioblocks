@@ -40,11 +40,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed the sidebar and quick links from the initial watermark settings experience to give the content more room.
 - Refined Social Media Sharing controls so sharing sources are selected once in a dedicated panel, while Lightbox and Overlay Content controls only manage where sharing appears.
 - Improved Social Media Sharing editor controls, overlay icons, and lightbox icons for better spacing, consistent circular icon sizing, and clearer source selection.
+- Removed Mastodon from Social Media Sharing sources and normalized selected source order so frontend links follow the editor service order.
 
 ### Fixed
 - Fixed Modular Gallery layouts sometimes requiring an extra image move before recalculating after newly dragged images finished loading.
 - Fixed redundant Image Row editor layout application that could reuse the first row layout across other rows in large Modular Galleries.
 - Fixed nested Modular Gallery Image Rows inside Image Stacks so increasing the gallery gap preserves each image's natural aspect ratio.
+- Fixed Social Media Sharing overlay and lightbox links so they remain clickable when an image also has lightbox behavior enabled.
 
 ## [1.4.1] - 2026-07-01
 ### Fixed
