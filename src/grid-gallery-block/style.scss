@@ -15,7 +15,7 @@
 /* Grid Gallery Container */
 .pb-grid-gallery {
 	display: grid;
-	overflow: hidden;
+	overflow: visible;
 	align-items: center;
 	row-gap: 40px;
 	column-gap: 10px;

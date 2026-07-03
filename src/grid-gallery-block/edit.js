@@ -29,6 +29,7 @@ import { fbksNormalizeActiveFilterValue } from '../pb-helpers/filterConstants';
 import { getExifAttributesFromMedia } from '../pb-helpers/exifMetadata';
 import { getImageSizeOptions } from '../pb-helpers/imageSizeOptions';
 import { imageProFeatureNotice } from '../pb-helpers/imageProFeatureNotices';
+import { useProofingGalleryContext } from '../pb-helpers/useProofingGalleryContext';
 import './editor.scss';
 
 const ALLOWED_BLOCKS = [ 'folioblocks/pb-image-block' ];
@@ -313,6 +314,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 
 	const wrapperRef = useRef( null );
 	const galleryRef = useRef( null );
+	const { isInsideProofingGallery } = useProofingGalleryContext( clientId );
 	const { replaceInnerBlocks, updateBlockAttributes } =
 		useDispatch( 'core/block-editor' );
 	const [ isLoading, setIsLoading ] = useState( false );
@@ -686,110 +688,121 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						mobileColumns={ mobileColumns }
 						onChange={ ( newValues ) => setAttributes( newValues ) }
 					/>
-					{ applyFilters(
-						'folioBlocks.gridGallery.randomizeToggle',
-						imageProFeatureNotice( 'randomize' ),
-						{ attributes, setAttributes }
-					) }
-				</PanelBody>
-				<PanelBody
-					title={ __( 'Gallery Click Settings', 'folioblocks' ) }
-					initialOpen={ true }
-				>
-					<SelectControl
-						label={ __( 'Image Click Behavior', 'folioblocks' ) }
-						value={ activeImageClickAction }
-						options={ imageClickActionOptions }
-						onChange={ ( value ) =>
-							setAttributes( getImageClickAttributes( value ) )
-						}
-						__nextHasNoMarginBottom
-						__next40pxDefaultSize
-						help={ __(
-							'Choose what happens when visitors click gallery images.',
-							'folioblocks'
+					{ ! isInsideProofingGallery &&
+						applyFilters(
+							'folioBlocks.gridGallery.randomizeToggle',
+							imageProFeatureNotice( 'randomize' ),
+							{ attributes, setAttributes }
 						) }
-					/>
-					{ applyFilters(
-						'folioBlocks.gridGallery.imageClickActionNotice',
-						imageProFeatureNotice( 'clickActions' ),
-						{
-							attributes,
-							setAttributes,
-							hasWooCommerce,
-							effectiveEnableWoo,
-						}
-					) }
-						{ activeImageClickAction === 'lightbox' &&
-							applyFilters(
-								'folioBlocks.gridGallery.lightboxControls',
-								null,
-								{ attributes, setAttributes }
-							) }
-						{ activeImageClickAction === 'download' &&
-							applyFilters(
-								'folioBlocks.gridGallery.downloadControls',
-								null,
-								{ attributes, setAttributes }
-							) }
-						{ ( activeImageClickAction === 'custom_url' ||
-							activeImageClickAction === 'page_post' ) &&
-							applyFilters(
-								'folioBlocks.gridGallery.linkTargetControls',
-								null,
+				</PanelBody>
+				{ ! isInsideProofingGallery && (
+					<>
+						<PanelBody
+							title={ __( 'Gallery Click Settings', 'folioblocks' ) }
+							initialOpen={ true }
+						>
+							<SelectControl
+								label={ __( 'Image Click Behavior', 'folioblocks' ) }
+								value={ activeImageClickAction }
+								options={ imageClickActionOptions }
+								onChange={ ( value ) =>
+									setAttributes( getImageClickAttributes( value ) )
+								}
+								__nextHasNoMarginBottom
+								__next40pxDefaultSize
+								help={ __(
+									'Choose what happens when visitors click gallery images.',
+									'folioblocks'
+								) }
+							/>
+							{ applyFilters(
+								'folioBlocks.gridGallery.imageClickActionNotice',
+								imageProFeatureNotice( 'clickActions' ),
 								{
 									attributes,
 									setAttributes,
-									imageClickAction: activeImageClickAction,
+									hasWooCommerce,
+									effectiveEnableWoo,
 								}
 							) }
-						{ activeImageClickAction === 'woocommerce' &&
-							applyFilters(
-								'folioBlocks.gridGallery.wooCommerceControls',
-								null,
+							{ activeImageClickAction === 'lightbox' &&
+								applyFilters(
+									'folioBlocks.gridGallery.lightboxControls',
+									null,
+									{ attributes, setAttributes }
+								) }
+							{ activeImageClickAction === 'download' &&
+								applyFilters(
+									'folioBlocks.gridGallery.downloadControls',
+									null,
+									{ attributes, setAttributes }
+								) }
+							{ ( activeImageClickAction === 'custom_url' ||
+								activeImageClickAction === 'page_post' ) &&
+								applyFilters(
+									'folioBlocks.gridGallery.linkTargetControls',
+									null,
+									{
+										attributes,
+										setAttributes,
+										imageClickAction: activeImageClickAction,
+									}
+								) }
+							{ activeImageClickAction === 'woocommerce' &&
+								applyFilters(
+									'folioBlocks.gridGallery.wooCommerceControls',
+									null,
+									{ attributes, setAttributes }
+								) }
+						</PanelBody>
+						<PanelBody
+							title={ __( 'Gallery Hover Settings', 'folioblocks' ) }
+							initialOpen={ true }
+						>
+							{ applyFilters(
+								'folioBlocks.gridGallery.onHoverTitleToggle',
+								imageProFeatureNotice( 'hoverSettings' ),
 								{ attributes, setAttributes }
 							) }
-					</PanelBody>
-					<PanelBody
-						title={ __( 'Gallery Hover Settings', 'folioblocks' ) }
-						initialOpen={ true }
-					>
-						{ applyFilters(
-							'folioBlocks.gridGallery.onHoverTitleToggle',
-							imageProFeatureNotice( 'hoverSettings' ),
-							{ attributes, setAttributes }
-						) }
-					</PanelBody>
+						</PanelBody>
+					</>
+				) }
+				{ ! isInsideProofingGallery && (
 					<PanelBody
 						title={ __( 'Gallery Filtering Settings', 'folioblocks' ) }
 						initialOpen={ true }
-				>
-					{ applyFilters(
-						'folioBlocks.gridGallery.enableFilterToggle',
-						imageProFeatureNotice( 'filtering' ),
-						{ attributes, setAttributes }
-					) }
-				</PanelBody>
-				<PanelBody
-					title={ __( 'Watermark Overlay', 'folioblocks' ) }
-					initialOpen={ false }
-				>
-					{ applyFilters(
-						'folioBlocks.gridGallery.watermarkControls',
-						imageProFeatureNotice( 'watermarkOverlay' ),
-						{ attributes, setAttributes }
-					) }
-				</PanelBody>
-				<PanelBody
-					title={ __( 'Social Media Sharing', 'folioblocks' ) }
-					initialOpen={ false }
-				>
-					{ applyFilters(
-						'folioBlocks.gridGallery.socialSharingControls',
-						imageProFeatureNotice( 'socialSharing' ),
-						{ attributes, setAttributes }
-					) }
-				</PanelBody>
+					>
+						{ applyFilters(
+							'folioBlocks.gridGallery.enableFilterToggle',
+							imageProFeatureNotice( 'filtering' ),
+							{ attributes, setAttributes }
+						) }
+					</PanelBody>
+				) }
+				{ ! isInsideProofingGallery && (
+					<PanelBody
+						title={ __( 'Watermark Overlay', 'folioblocks' ) }
+						initialOpen={ false }
+					>
+						{ applyFilters(
+							'folioBlocks.gridGallery.watermarkControls',
+							imageProFeatureNotice( 'watermarkOverlay' ),
+							{ attributes, setAttributes }
+						) }
+					</PanelBody>
+				) }
+				{ ! isInsideProofingGallery && (
+					<PanelBody
+						title={ __( 'Social Media Sharing', 'folioblocks' ) }
+						initialOpen={ false }
+					>
+						{ applyFilters(
+							'folioBlocks.gridGallery.socialSharingControls',
+							imageProFeatureNotice( 'socialSharing' ),
+							{ attributes, setAttributes }
+						) }
+					</PanelBody>
+				) }
 			</InspectorControls>
 			<InspectorControls group="advanced">
 				{ applyFilters(

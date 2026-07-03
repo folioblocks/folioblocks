@@ -34,6 +34,7 @@ import {
 } from '../pb-helpers/galleryGap';
 import { calculateJustifiedLayout } from '../pb-helpers/justifiedLayout';
 import ResponsiveRangeControl from '../pb-helpers/ResponsiveRangeControl';
+import { useProofingGalleryContext } from '../pb-helpers/useProofingGalleryContext';
 import './editor.scss';
 
 const ALLOWED_BLOCKS = [ 'folioblocks/pb-image-block' ];
@@ -209,6 +210,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	const [ isLoading, setIsLoading ] = useState( false );
 	const { replaceInnerBlocks, updateBlockAttributes } =
 		useDispatch( 'core/block-editor' );
+	const { isInsideProofingGallery } = useProofingGalleryContext( clientId );
 
 	const innerBlocks = useSelect(
 		( select ) => select( 'core/block-editor' ).getBlocks( clientId ),
@@ -320,13 +322,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		}
 
 		let resizeTimeout;
-
-		const handleResizeEnd = () => {
-			clearTimeout( resizeTimeout );
-			resizeTimeout = setTimeout( () => {
-				requestAnimationFrame( calculateLayout );
-			}, 150 );
-		};
+		let layoutFrame;
 
 		const container = galleryRef.current;
 
@@ -341,6 +337,15 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			if ( ! containerWidth ) {
 				return;
 			}
+
+			node.querySelectorAll(
+				'.wp-block-folioblocks-pb-image-block.is-hidden'
+			).forEach( ( wrapper ) => {
+				wrapper.style.removeProperty( '--pb-width' );
+				wrapper.style.removeProperty( '--pb-height' );
+				wrapper.style.removeProperty( '--pb-margin-inline' );
+				wrapper.style.removeProperty( '--pb-margin-block' );
+			} );
 
 			const wrappers = node.querySelectorAll(
 				'.wp-block-folioblocks-pb-image-block:not(.is-hidden)'
@@ -411,17 +416,52 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			} );
 		};
 
+		const scheduleLayout = () => {
+			if ( layoutFrame ) {
+				cancelAnimationFrame( layoutFrame );
+			}
+
+			layoutFrame = requestAnimationFrame( () => {
+				calculateLayout();
+				clearTimeout( resizeTimeout );
+				resizeTimeout = setTimeout( calculateLayout, 150 );
+			} );
+		};
+
 		const resizeObserver = new ResizeObserver( () => {
-			requestAnimationFrame( calculateLayout );
-			handleResizeEnd(); // NEW: schedule final pass after resize ends
+			scheduleLayout();
 		} );
 
+		const mutationObserver = new MutationObserver( scheduleLayout );
+
 		resizeObserver.observe( container );
-		setTimeout( calculateLayout, 50 );
+		mutationObserver.observe( container, {
+			attributes: true,
+			attributeFilter: [
+				'class',
+				'data-proofing-hearted',
+				'data-proofing-flag',
+				'data-proofing-commented',
+			],
+			subtree: true,
+		} );
+		setTimeout( scheduleLayout, 50 );
+		window.addEventListener(
+			'folioblocks:proofing-filter-change',
+			scheduleLayout
+		);
 
 		return () => {
 			resizeObserver.disconnect();
+			mutationObserver.disconnect();
+			if ( layoutFrame ) {
+				cancelAnimationFrame( layoutFrame );
+			}
 			clearTimeout( resizeTimeout );
+			window.removeEventListener(
+				'folioblocks:proofing-filter-change',
+				scheduleLayout
+			);
 		};
 	}, [
 		innerBlocks,
@@ -631,16 +671,18 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 							{ attributes, setAttributes }
 					) }
 
-					{ applyFilters(
-						'folioBlocks.justifiedGallery.randomizeToggle',
-						imageProFeatureNotice( 'randomize' ),
-						{ attributes, setAttributes }
-					) }
+					{ ! isInsideProofingGallery &&
+						applyFilters(
+							'folioBlocks.justifiedGallery.randomizeToggle',
+							imageProFeatureNotice( 'randomize' ),
+							{ attributes, setAttributes }
+						) }
 				</PanelBody>
-				<PanelBody
-					title={ __( 'Gallery Click Settings', 'folioblocks' ) }
-					initialOpen={ true }
-				>
+				{ ! isInsideProofingGallery && (
+					<PanelBody
+						title={ __( 'Gallery Click Settings', 'folioblocks' ) }
+						initialOpen={ true }
+					>
 					<SelectControl
 						label={ __( 'Image Click Behavior', 'folioblocks' ) }
 						value={ activeImageClickAction }
@@ -692,6 +734,8 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 								{ attributes, setAttributes }
 							) }
 					</PanelBody>
+				) }
+				{ ! isInsideProofingGallery && (
 					<PanelBody
 						title={ __( 'Gallery Hover Settings', 'folioblocks' ) }
 						initialOpen={ true }
@@ -702,36 +746,43 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 							{ attributes, setAttributes }
 						) }
 					</PanelBody>
+				) }
+				{ ! isInsideProofingGallery && (
 					<PanelBody
 						title={ __( 'Gallery Filtering Settings', 'folioblocks' ) }
 						initialOpen={ true }
-				>
-					{ applyFilters(
-						'folioBlocks.justifiedGallery.enableFilterToggle',
-						imageProFeatureNotice( 'filtering' ),
-						{ attributes, setAttributes }
-					) }
-				</PanelBody>
-				<PanelBody
-					title={ __( 'Watermark Overlay', 'folioblocks' ) }
-					initialOpen={ false }
-				>
-					{ applyFilters(
-						'folioBlocks.justifiedGallery.watermarkControls',
-						imageProFeatureNotice( 'watermarkOverlay' ),
-						{ attributes, setAttributes }
-					) }
-				</PanelBody>
-				<PanelBody
-					title={ __( 'Social Media Sharing', 'folioblocks' ) }
-					initialOpen={ false }
-				>
-					{ applyFilters(
-						'folioBlocks.justifiedGallery.socialSharingControls',
-						imageProFeatureNotice( 'socialSharing' ),
-						{ attributes, setAttributes }
-					) }
-				</PanelBody>
+					>
+						{ applyFilters(
+							'folioBlocks.justifiedGallery.enableFilterToggle',
+							imageProFeatureNotice( 'filtering' ),
+							{ attributes, setAttributes }
+						) }
+					</PanelBody>
+				) }
+				{ ! isInsideProofingGallery && (
+					<PanelBody
+						title={ __( 'Watermark Overlay', 'folioblocks' ) }
+						initialOpen={ false }
+					>
+						{ applyFilters(
+							'folioBlocks.justifiedGallery.watermarkControls',
+							imageProFeatureNotice( 'watermarkOverlay' ),
+							{ attributes, setAttributes }
+						) }
+					</PanelBody>
+				) }
+				{ ! isInsideProofingGallery && (
+					<PanelBody
+						title={ __( 'Social Media Sharing', 'folioblocks' ) }
+						initialOpen={ false }
+					>
+						{ applyFilters(
+							'folioBlocks.justifiedGallery.socialSharingControls',
+							imageProFeatureNotice( 'socialSharing' ),
+							{ attributes, setAttributes }
+						) }
+					</PanelBody>
+				) }
 			</InspectorControls>
 			<InspectorControls group="advanced">
 				{ applyFilters(

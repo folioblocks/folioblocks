@@ -4,6 +4,37 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2026-07-03
+### Added
+- Added the initial Proofing Gallery setup flow with client email, gallery password, gallery style selection, and image upload/media library steps.
+- Added Proofing Gallery nesting support for Grid, Justified, and Masonry galleries with nested Image Blocks.
+- Added Proofing Gallery front-end password gating, with site admins able to view locked galleries without entering the password.
+- Added Proofing Gallery inspector controls for client email, gallery password, gallery style, proofing options, filter bar alignment, watermark overlay, and image styles inherited by nested images.
+- Added proofing-specific thumbnail controls for Heart, Flag, and Comment states in the editor and on the front end.
+- Added proofing-specific filtering by hearted images, commented images, and red, orange, or green flags.
+- Added front-end Proofing Gallery filter controls, thumbnail proofing controls, comment popover, flag color picker, and Save & Continue and Submit action buttons.
+- Added shared Proofing Gallery context detection so nested galleries and Image Blocks can adjust controls when used inside a Proofing Gallery.
+
+### Changed
+- Moved Proofing Gallery layout settings such as columns, gaps, row height, and resolution to the nested gallery blocks instead of duplicating them on the Proofing Gallery block.
+- Hid unsupported or duplicate nested gallery controls inside Proofing Gallery, including randomize order, gallery click settings, gallery hover settings, gallery filtering settings, social sharing, and duplicate watermark controls.
+- Hid Image Block click and hover settings when Image Blocks are nested inside a Proofing Gallery.
+- Updated nested gallery defaults inside Proofing Gallery so Grid, Masonry, and Justified galleries retain their own default layout values.
+- Moved reusable proofing filter bar and thumbnail icon styles into front-end stylesheets so they can be shared by the editor and front end.
+- Refined Proofing Gallery thumbnail icon styling with translucent inactive circles and solid white selected/hover states for clearer heart, flag, and comment visibility.
+- Updated Proofing Gallery front-end action buttons to better match the editor primary and secondary button treatment.
+- Updated Proofing Gallery watermark handling so the Proofing Gallery block owns watermark settings and syncs configured watermark values to the nested gallery.
+
+### Fixed
+- Fixed Proofing Gallery save/refresh behavior so nested gallery content persists instead of returning to the setup state.
+- Fixed Proofing Gallery full-width behavior when nested inside Group blocks, including cases where the parent Group has padding.
+- Fixed editor crashes caused by missing translation imports in Proofing Gallery work.
+- Fixed Proofing Gallery rendering so it no longer displays the temporary light blue placeholder background, border, or radius once a gallery is present.
+- Fixed Proofing Gallery drop shadows being clipped at the bottom of the gallery.
+- Fixed Proofing Gallery filtering with Justified and Masonry layouts so filtering triggers layout recalculation and avoids uneven rows or masonry gaps.
+- Fixed the flag color picker popover so it anchors to the flag icon instead of opening beneath the image.
+- Fixed Proofing Gallery watermark previews so gallery-image watermarks render in the editor when configured from the Proofing Gallery block.
+
 ## [1.5.0] - 2026-07-02
 ### Added
 - Added full Gradient Overlay support for Image Block, Video Block, image galleries, Video Gallery, and Filmstrip Gallery.

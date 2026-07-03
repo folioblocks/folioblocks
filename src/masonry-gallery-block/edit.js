@@ -33,6 +33,7 @@ import {
 	resolveLegacyGalleryGaps,
 } from '../pb-helpers/galleryGap';
 import ResponsiveRangeControl from '../pb-helpers/ResponsiveRangeControl';
+import { useProofingGalleryContext } from '../pb-helpers/useProofingGalleryContext';
 import './editor.scss';
 
 const ALLOWED_BLOCKS = [ 'folioblocks/pb-image-block' ];
@@ -215,6 +216,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 	const itemResizeObserverRef = useRef( null );
 	const { replaceInnerBlocks, updateBlockAttributes } =
 		useDispatch( 'core/block-editor' );
+	const { isInsideProofingGallery } = useProofingGalleryContext( clientId );
 
 	const innerBlocks = useSelect(
 		( select ) => select( 'core/block-editor' ).getBlocks( clientId ),
@@ -478,6 +480,10 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 		resizeObserver.observe( gallery );
 
 		window.addEventListener( 'resize', scheduleLayout );
+		window.addEventListener(
+			'folioblocks:proofing-filter-change',
+			scheduleLayout
+		);
 
 		return () => {
 			clearTimeout( fallbackTimeout );
@@ -490,6 +496,10 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 				itemResizeObserverRef.current = null;
 			}
 			window.removeEventListener( 'resize', scheduleLayout );
+			window.removeEventListener(
+				'folioblocks:proofing-filter-change',
+				scheduleLayout
+			);
 			resizeObserver.disconnect(); // ✅ Cleanup observer on unmount
 		};
 	}, [
@@ -635,16 +645,18 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 							</>,
 							{ attributes, setAttributes }
 					) }
-					{ applyFilters(
-						'folioBlocks.masonryGallery.randomizeToggle',
-						imageProFeatureNotice( 'randomize' ),
-						{ attributes, setAttributes }
-					) }
+					{ ! isInsideProofingGallery &&
+						applyFilters(
+							'folioBlocks.masonryGallery.randomizeToggle',
+							imageProFeatureNotice( 'randomize' ),
+							{ attributes, setAttributes }
+						) }
 				</PanelBody>
-				<PanelBody
-					title={ __( 'Gallery Click Settings', 'folioblocks' ) }
-					initialOpen={ true }
-				>
+				{ ! isInsideProofingGallery && (
+					<PanelBody
+						title={ __( 'Gallery Click Settings', 'folioblocks' ) }
+						initialOpen={ true }
+					>
 					<SelectControl
 						label={ __( 'Image Click Behavior', 'folioblocks' ) }
 						value={ activeImageClickAction }
@@ -696,6 +708,8 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 								{ attributes, setAttributes }
 							) }
 					</PanelBody>
+				) }
+				{ ! isInsideProofingGallery && (
 					<PanelBody
 						title={ __( 'Gallery Hover Settings', 'folioblocks' ) }
 						initialOpen={ true }
@@ -706,36 +720,43 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 							{ attributes, setAttributes }
 						) }
 					</PanelBody>
+				) }
+				{ ! isInsideProofingGallery && (
 					<PanelBody
 						title={ __( 'Gallery Filtering Settings', 'folioblocks' ) }
 						initialOpen={ true }
-				>
-					{ applyFilters(
-						'folioBlocks.masonryGallery.enableFilterToggle',
-						imageProFeatureNotice( 'filtering' ),
-						{ attributes, setAttributes }
-					) }
-				</PanelBody>
-				<PanelBody
-					title={ __( 'Watermark Overlay', 'folioblocks' ) }
-					initialOpen={ false }
-				>
-					{ applyFilters(
-						'folioBlocks.masonryGallery.watermarkControls',
-						imageProFeatureNotice( 'watermarkOverlay' ),
-						{ attributes, setAttributes }
-					) }
-				</PanelBody>
-				<PanelBody
-					title={ __( 'Social Media Sharing', 'folioblocks' ) }
-					initialOpen={ false }
-				>
-					{ applyFilters(
-						'folioBlocks.masonryGallery.socialSharingControls',
-						imageProFeatureNotice( 'socialSharing' ),
-						{ attributes, setAttributes }
-					) }
-				</PanelBody>
+					>
+						{ applyFilters(
+							'folioBlocks.masonryGallery.enableFilterToggle',
+							imageProFeatureNotice( 'filtering' ),
+							{ attributes, setAttributes }
+						) }
+					</PanelBody>
+				) }
+				{ ! isInsideProofingGallery && (
+					<PanelBody
+						title={ __( 'Watermark Overlay', 'folioblocks' ) }
+						initialOpen={ false }
+					>
+						{ applyFilters(
+							'folioBlocks.masonryGallery.watermarkControls',
+							imageProFeatureNotice( 'watermarkOverlay' ),
+							{ attributes, setAttributes }
+						) }
+					</PanelBody>
+				) }
+				{ ! isInsideProofingGallery && (
+					<PanelBody
+						title={ __( 'Social Media Sharing', 'folioblocks' ) }
+						initialOpen={ false }
+					>
+						{ applyFilters(
+							'folioBlocks.masonryGallery.socialSharingControls',
+							imageProFeatureNotice( 'socialSharing' ),
+							{ attributes, setAttributes }
+						) }
+					</PanelBody>
+				) }
 			</InspectorControls>
 			<InspectorControls group="advanced">
 				{ applyFilters(

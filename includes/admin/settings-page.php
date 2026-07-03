@@ -269,6 +269,7 @@ if (! function_exists('fbks_get_dashboard_block_versions')) {
 			'pb-loupe-block',
 			'masonry-gallery-block',
 			'modular-gallery-block',
+			'proofing-gallery-block',
 			'pb-video-block',
 			'video-gallery-block',
 		);
@@ -572,7 +573,8 @@ function fbks_render_settings_page()
 								<?php fbks_render_dashboard_block_status_badge('masonry-gallery-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
 								<a href="https://folioblocks.com/blocks/masonry-gallery-block/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Demo', 'folioblocks'); ?></a>
 							</div>
-							<div class="pb-block-item <?php if (! fbks_fs()->can_use_premium_code()) : ?>pb-pro-block<?php endif; ?>">
+							<?php if (fbks_fs()->can_use_premium_code__premium_only()) : ?>
+							<div class="pb-block-item">
 								<div class="pb-block-icon">
 									<svg viewBox="0 0 1247.24 1247.24" width="36" height="36" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
 										<g id="Layer_1-2">
@@ -588,9 +590,29 @@ function fbks_render_settings_page()
 								</div>
 								<span><?php esc_html_e('Modular Gallery', 'folioblocks'); ?></span>
 								<?php fbks_render_dashboard_block_meta('modular-gallery-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
-								<?php fbks_render_dashboard_block_status_badge('modular-gallery-block', $fbks_block_versions, $fbks_seen_block_versions, ! fbks_fs()->can_use_premium_code() ? __('PRO', 'folioblocks') : ''); ?>
+								<?php fbks_render_dashboard_block_status_badge('modular-gallery-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
 								<a href="https://folioblocks.com/blocks/modular-gallery-block/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Demo', 'folioblocks'); ?></a>
 							</div>
+							<?php if (fbks_fs()->is_plan('business')) : ?>
+							<div class="pb-block-item">
+								<div class="pb-block-icon">
+									<svg viewBox="0 0 1247.24 1247.24" width="36" height="36" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+										<g fill="none" stroke="currentColor" stroke-width="45" stroke-linecap="round" stroke-linejoin="round">
+											<path d="M415 130H176c-25.65 0-46.53 20.89-46.53 46.57V415" />
+											<path d="M832 130h238c25.65 0 46.53 20.89 46.53 46.57V415" />
+											<path d="M1117 832v238c0 25.68-20.88 46.57-46.53 46.57H832" />
+											<path d="M415 1117H176c-25.65 0-46.53-20.89-46.53-46.57V832" />
+											<path stroke-width="90" d="M365 625l175 175 345-430" />
+										</g>
+									</svg>
+								</div>
+								<span><?php esc_html_e('Proofing Gallery', 'folioblocks'); ?></span>
+								<?php fbks_render_dashboard_block_meta('proofing-gallery-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
+								<?php fbks_render_dashboard_block_status_badge('proofing-gallery-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
+								<a href="https://folioblocks.com/blocks/proofing-gallery-block/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Demo', 'folioblocks'); ?></a>
+							</div>
+							<?php endif; ?>
+							<?php endif; ?>
 							<div class="pb-block-item">
 								<div class="pb-block-icon">
 									<svg viewBox="0 0 1247.24 1247.24" width="36" height="36" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">

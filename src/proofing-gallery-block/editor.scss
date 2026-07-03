@@ -3,18 +3,162 @@
  * Edit CSS
  */
 
- .pb-block-preview {
+.pb-block-preview {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	padding: 20px;
-	border: 1px solid #ccc;
+	border: 1px solid #d0d5dd;
 	border-radius: 8px;
-	background: #3b82f6;
+	background: #1f2937;
 
 	svg {
 		width: 100px;
 		height: 100px;
 		fill: #fff;
+	}
+}
+
+.fbks-proofing-gallery {
+	position: relative;
+	box-sizing: border-box;
+	width: 100%;
+	max-width: none;
+	padding: 0;
+
+	&.is-setup {
+		padding: 0;
+	}
+
+	.components-placeholder {
+		margin-bottom: 0;
+	}
+}
+
+.fbks-proofing-inspector__password-action {
+	margin-bottom: 18px;
+}
+
+.fbks-proofing-inspector__gallery-style {
+	margin-bottom: 20px;
+}
+
+.fbks-proofing-inspector__section-label {
+	margin-bottom: 8px;
+	color: #1e1e1e;
+	font-size: 11px;
+	font-weight: 500;
+	line-height: 1.4;
+	text-transform: uppercase;
+}
+
+.fbks-proofing-gallery__setup {
+	display: grid;
+}
+
+.fbks-proofing-gallery__setup-fields {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 16px;
+	width: 100%;
+	max-width: 820px;
+	margin-top: 10px;
+}
+
+.fbks-proofing-gallery__placeholder {
+	align-items: flex-start;
+	padding: 32px;
+	border-color: #1f2937;
+	box-shadow: none;
+
+	.components-placeholder__label {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+
+		svg {
+			width: 28px;
+			height: 28px;
+			fill: currentColor;
+		}
+	}
+
+	.components-placeholder__instructions {
+		max-width: 760px;
+		margin-bottom: 12px;
+		font-size: 13px;
+		line-height: 1.5;
+	}
+}
+
+.fbks-proofing-gallery__image-step {
+	position: relative;
+}
+
+.fbks-proofing-gallery__image-back {
+	position: absolute;
+	top: 24px;
+	right: 24px;
+	z-index: 2;
+}
+
+.fbks-proofing-gallery__style-field {
+	width: 100%;
+	max-width: 420px;
+	margin-top: 10px;
+}
+
+.fbks-proofing-gallery__setup-actions {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	margin-top: 4px;
+}
+
+.fbks-proofing-gallery__inner {
+	width: 100%;
+	max-width: none;
+	min-height: 80px;
+}
+
+.fbks-proofing-gallery__actions {
+	display: flex;
+	gap: 12px;
+	justify-content: flex-end;
+	margin-top: 24px;
+}
+
+.wp-block-folioblocks-proofing-gallery-block.alignfull,
+.wp-block-folioblocks-proofing-gallery-block.alignfull .fbks-proofing-gallery,
+.wp-block-folioblocks-proofing-gallery-block.alignfull .fbks-proofing-gallery__inner,
+.wp-block-folioblocks-proofing-gallery-block.alignfull .block-editor-inner-blocks,
+.wp-block-folioblocks-proofing-gallery-block.alignfull .block-editor-block-list__layout,
+.wp-block-folioblocks-proofing-gallery-block.alignfull .wp-block-folioblocks-grid-gallery-block,
+.wp-block-folioblocks-proofing-gallery-block.alignfull .wp-block-folioblocks-justified-gallery-block,
+.wp-block-folioblocks-proofing-gallery-block.alignfull .wp-block-folioblocks-masonry-gallery-block {
+	width: 100%;
+	max-width: none;
+}
+
+.wp-block-group .wp-block-folioblocks-proofing-gallery-block.alignfull,
+.wp-block-group .wp-block-folioblocks-proofing-gallery-block[data-align="full"],
+.wp-block-group
+	> .block-editor-inner-blocks
+	> .block-editor-block-list__layout
+	> .wp-block-folioblocks-proofing-gallery-block.alignfull {
+	box-sizing: border-box;
+	width: 100%;
+	max-width: none;
+	margin-right: 0;
+	margin-left: 0;
+}
+
+@media (max-width: 782px) {
+	.fbks-proofing-gallery__setup-fields {
+		grid-template-columns: 1fr;
+	}
+
+	.fbks-proofing-gallery__placeholder {
+		padding: 24px;
 	}
 }
