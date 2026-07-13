@@ -13,6 +13,10 @@ $fbks_enable_heart     = ! isset( $attributes['enableHeart'] ) || (bool) $attrib
 $fbks_enable_flag      = ! isset( $attributes['enableFlag'] ) || (bool) $attributes['enableFlag'];
 $fbks_enable_comment   = ! isset( $attributes['enableComment'] ) || (bool) $attributes['enableComment'];
 $fbks_filter_align     = isset( $attributes['filterAlign'] ) ? sanitize_key( $attributes['filterAlign'] ) : 'center';
+$fbks_gallery_id       = wp_unique_id( 'fbks-proofing-gallery-' );
+$fbks_page_id          = get_the_ID();
+$fbks_saved_session    = function_exists( 'fbks_get_proofing_session_state' ) ? fbks_get_proofing_session_state( $fbks_gallery_key ) : [ 'status' => '', 'updatedAt' => '', 'images' => [] ];
+$fbks_track_presence   = ! current_user_can( 'manage_options' );
 
 if ( ! in_array( $fbks_filter_align, [ 'left', 'center', 'right' ], true ) ) {
 	$fbks_filter_align = 'center';
@@ -99,6 +103,19 @@ if ( ! $fbks_can_view && isset( $_POST['fbks_proofing_gallery_key'], $_POST['fbk
 	<?php if ( $fbks_can_view ) : ?>
 		<div
 			class="fbks-proofing-gallery"
+			data-wp-interactive="folioblocks/proofing-gallery"
+			data-wp-context="<?php echo esc_attr( wp_json_encode( [
+				'galleryId'    => $fbks_gallery_id,
+				'galleryKey'   => $fbks_gallery_key,
+				'clientEmail'  => $fbks_client_email,
+				'pageId'       => $fbks_page_id ? (int) $fbks_page_id : 0,
+				'restUrl'      => esc_url_raw( rest_url( 'folioblocks/v1/proofing-gallery/session' ) ),
+				'presenceUrl'  => esc_url_raw( rest_url( 'folioblocks/v1/proofing-gallery/session/presence' ) ),
+				'trackPresence' => $fbks_track_presence,
+				'savedSession' => $fbks_saved_session,
+			] ) ); ?>"
+			data-wp-init="callbacks.registerGallery"
+			data-proofing-gallery-id="<?php echo esc_attr( $fbks_gallery_id ); ?>"
 			data-enable-heart="<?php echo esc_attr( $fbks_enable_heart ? 'true' : 'false' ); ?>"
 			data-enable-flag="<?php echo esc_attr( $fbks_enable_flag ? 'true' : 'false' ); ?>"
 			data-enable-comment="<?php echo esc_attr( $fbks_enable_comment ? 'true' : 'false' ); ?>"
@@ -117,6 +134,10 @@ if ( ! $fbks_can_view && isset( $_POST['fbks_proofing_gallery_key'], $_POST['fbk
 						type="button"
 						class="<?php echo esc_attr( implode( ' ', array_filter( $fbks_filter_classes ) ) ); ?>"
 						data-proofing-filter="<?php echo esc_attr( $fbks_filter_option['value'] ); ?>"
+						data-wp-context="<?php echo esc_attr( wp_json_encode( [ 'galleryId' => $fbks_gallery_id, 'filter' => $fbks_filter_option['value'] ] ) ); ?>"
+						data-wp-on--click="actions.chooseFilter"
+						data-wp-class--is-active="state.isActiveFilter"
+						data-wp-bind--aria-pressed="state.isActiveFilter"
 						aria-pressed="<?php echo 'all' === $fbks_filter_option['value'] ? 'true' : 'false'; ?>"
 						aria-label="<?php echo esc_attr( $fbks_filter_option['label'] ); ?>"
 						title="<?php echo esc_attr( $fbks_filter_option['label'] ); ?>"
@@ -129,12 +150,23 @@ if ( ! $fbks_can_view && isset( $_POST['fbks_proofing_gallery_key'], $_POST['fbk
 				<?php echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			</div>
 			<div class="fbks-proofing-gallery__actions">
-				<button class="fbks-proofing-gallery__action-button fbks-proofing-gallery__action-button--save" type="button">
+				<button
+					class="fbks-proofing-gallery__action-button fbks-proofing-gallery__action-button--save"
+					type="button"
+					data-wp-on--click="actions.saveProgress"
+					data-wp-bind--disabled="state.isCurrentGallerySaving"
+				>
 					<?php esc_html_e( 'Save & Continue', 'folioblocks' ); ?>
 				</button>
-				<button class="fbks-proofing-gallery__action-button fbks-proofing-gallery__action-button--submit" type="button">
+				<button
+					class="fbks-proofing-gallery__action-button fbks-proofing-gallery__action-button--submit"
+					type="button"
+					data-wp-on--click="actions.submitProofing"
+					data-wp-bind--disabled="state.isCurrentGallerySaving"
+				>
 					<?php esc_html_e( 'Submit', 'folioblocks' ); ?>
 				</button>
+				<p class="fbks-proofing-gallery__status" data-wp-text="state.currentGalleryNotice" data-wp-bind--hidden="!state.currentGalleryNotice" hidden></p>
 			</div>
 		</div>
 	<?php else : ?>

@@ -24,6 +24,7 @@ import { useDispatch, useSelect } from '@wordpress/data';
 import { useEffect, useRef, useState } from '@wordpress/element';
 import { decodeEntities } from '@wordpress/html-entities';
 import { applyFilters } from '@wordpress/hooks';
+import apiFetch from '@wordpress/api-fetch';
 import { getExifAttributesFromMedia } from '../pb-helpers/exifMetadata';
 import { IconProofingGallery } from '../pb-helpers/icons';
 import { imageProFeatureNotice } from '../pb-helpers/imageProFeatureNotices';
@@ -146,12 +147,17 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	const [ setupStep, setSetupStep ] = useState( 'credentials' );
 	const [ showPassword, setShowPassword ] = useState( false );
 	const [ proofingFilter, setProofingFilter ] = useState( 'all' );
+	const [ activeSessionWarning, setActiveSessionWarning ] = useState( '' );
 	const proofingGalleryRef = useRef( null );
 	const { replaceInnerBlocks, updateBlockAttributes } =
 		useDispatch( 'core/block-editor' );
 	const innerBlocks = useSelect(
 		( select ) => select( 'core/block-editor' ).getBlocks( clientId ),
 		[ clientId ]
+	);
+	const currentPostId = useSelect(
+		( select ) => select( 'core/editor' )?.getCurrentPostId?.() || 0,
+		[]
 	);
 	const hasGallery = innerBlocks.length > 0;
 	const blockProps = useBlockProps( {
@@ -229,6 +235,42 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			);
 		};
 	}, [ clientId, hasGallery, proofingFilter ] );
+
+	useEffect( () => {
+		if ( ! currentPostId || ! hasGallery ) {
+			setActiveSessionWarning( '' );
+			return;
+		}
+
+		let isMounted = true;
+
+		apiFetch( {
+			path: `/folioblocks/v1/proofing-gallery/page-sessions?pageId=${ currentPostId }`,
+		} )
+			.then( ( response ) => {
+				if ( ! isMounted ) {
+					return;
+				}
+
+				setActiveSessionWarning(
+					response?.inProgress
+						? __(
+								'A client proofing session is in progress for this page. Avoid updating this page until the client submits their selections.',
+								'folioblocks'
+						  )
+						: ''
+				);
+			} )
+			.catch( () => {
+				if ( isMounted ) {
+					setActiveSessionWarning( '' );
+				}
+			} );
+
+		return () => {
+			isMounted = false;
+		};
+	}, [ currentPostId, hasGallery ] );
 
 	useEffect( () => {
 		const gallery = innerBlocks[ 0 ];
@@ -364,6 +406,11 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	return (
 		<>
 			<InspectorControls>
+				{ activeSessionWarning && (
+					<Notice status="warning" isDismissible={ false }>
+						{ activeSessionWarning }
+					</Notice>
+				) }
 				<PanelBody
 					title={ __( 'Proofing Gallery Settings', 'folioblocks' ) }
 					initialOpen={ true }

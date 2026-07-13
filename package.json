@@ -6,7 +6,7 @@
 	"license": "GPL-2.0-or-later",
 	"main": "build/index.js",
 	"scripts": {
-		"build": "wp-scripts build --webpack-copy-php",
+		"build": "wp-scripts build --webpack-copy-php --experimental-modules",
 		"format": "wp-scripts format",
 		"i18n:json:es": "node scripts/i18n/generate-json.mjs languages/folioblocks-es_ES.po",
 		"i18n:json:fr": "node scripts/i18n/generate-json.mjs languages/folioblocks-fr_FR.po",
@@ -23,12 +23,14 @@
 		"lint:js": "wp-scripts lint-js",
 		"packages-update": "wp-scripts packages-update",
 		"plugin-zip": "wp-scripts plugin-zip",
-		"start": "wp-scripts start --webpack-copy-php"
+		"start": "wp-scripts start --webpack-copy-php --experimental-modules"
 	},
 	"devDependencies": {
 		"@wordpress/scripts": "^32.5.0"
 	},
 	"dependencies": {
-		"@wordpress/icons": "^11.6.0"
+		"@wordpress/api-fetch": "^7.50.0",
+		"@wordpress/icons": "^11.6.0",
+		"@wordpress/interactivity": "^6.50.0"
 	}
 }

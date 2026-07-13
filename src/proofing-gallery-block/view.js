@@ -2,293 +2,628 @@
  * Proofing Gallery Block
  * View.js
  */
-document.addEventListener( 'DOMContentLoaded', () => {
-	const galleries = document.querySelectorAll( '.fbks-proofing-gallery' );
+import { getContext, getElement, store } from '@wordpress/interactivity';
 
-	const icons = {
-		heart:
-			'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.4-9.4-8.2C.7 9.8 1.2 6.2 3.8 4.4 6 2.9 8.7 3.4 10.5 5.3L12 6.9l1.5-1.6c1.8-1.9 4.5-2.4 6.7-.9 2.6 1.8 3.1 5.4 1.2 8.4C19 16.6 12 21 12 21z" /></svg>',
-		flag:
-			'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 21V4h10.6l.4 3.1h3v9H9.4L9 13.9H8V21H6z" /></svg>',
-		comment:
-			'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v10H8.7L5 18.4V5z" /></svg>',
-	};
+const createEmptyImageState = () => ( {
+	attachmentId: 0,
+	thumbnail: '',
+	title: '',
+	hearted: false,
+	flag: '',
+	comment: '',
+} );
 
-	const stopProofingClick = ( event ) => {
-		event.preventDefault();
-		event.stopPropagation();
-	};
+const ensureGalleryState = ( galleryId ) => {
+	if ( ! state.galleries[ galleryId ] ) {
+		state.galleries[ galleryId ] = {
+			activeFilter: 'all',
+			galleryKey: '',
+			clientEmail: '',
+			pageId: 0,
+			restUrl: '',
+			presenceUrl: '',
+			trackPresence: false,
+			presenceTimer: null,
+			presenceEventsBound: false,
+			isSaving: false,
+			notice: '',
+			openFlagPanel: '',
+			openCommentPanel: '',
+			savedImages: {},
+			images: {},
+		};
+	}
 
-	const createIconButton = ( className, label, icon ) => {
-		const button = document.createElement( 'button' );
-		button.type = 'button';
-		button.className = className;
-		button.setAttribute( 'aria-label', label );
-		button.innerHTML = icons[ icon ];
-		return button;
-	};
+	return state.galleries[ galleryId ];
+};
 
-	const scheduleReflow = ( gallery ) => {
-		window.requestAnimationFrame( () => {
-			if ( typeof window.pbApplyMasonryLayout === 'function' ) {
-				window.pbApplyMasonryLayout( gallery );
-			}
-			if ( typeof window.folioBlocksJustifiedLayout === 'function' ) {
-				window.folioBlocksJustifiedLayout( gallery );
-			}
-		} );
-	};
+const ensureImageState = ( galleryId, imageId ) => {
+	const gallery = ensureGalleryState( galleryId );
 
-	const applyFilter = ( gallery, filter ) => {
-		const imageBlocks = gallery.querySelectorAll(
+	if ( ! gallery.images[ imageId ] ) {
+		gallery.images[ imageId ] = createEmptyImageState();
+	}
+
+	return gallery.images[ imageId ];
+};
+
+const getCurrentGalleryId = () => {
+	const context = getContext();
+	const element = getElement().ref;
+	const galleryId =
+		context.galleryId ||
+		element?.closest( '.fbks-proofing-gallery' )?.dataset
+			?.proofingGalleryId ||
+		'';
+
+	return galleryId;
+};
+
+const getCurrentImageState = () => {
+	const context = getContext();
+	return ensureImageState( getCurrentGalleryId(), context.imageId );
+};
+
+const getCurrentGalleryState = () => {
+	return ensureGalleryState( getCurrentGalleryId() );
+};
+
+const stopProofingClick = ( event ) => {
+	event?.preventDefault();
+	event?.stopPropagation();
+};
+
+const scheduleReflow = ( gallery ) => {
+	window.requestAnimationFrame( () => {
+		if ( typeof window.pbApplyMasonryLayout === 'function' ) {
+			window.pbApplyMasonryLayout( gallery );
+		}
+		if ( typeof window.folioBlocksJustifiedLayout === 'function' ) {
+			window.folioBlocksJustifiedLayout( gallery );
+		}
+	} );
+};
+
+const getGalleryId = ( gallery ) => gallery.dataset.proofingGalleryId;
+
+const getImageId = ( imageBlock ) => imageBlock.dataset.proofingImageId;
+
+const getCurrentImageBlock = () =>
+	getElement().ref.closest( '.wp-block-folioblocks-pb-image-block' );
+
+const imageMatchesFilter = ( image, filter ) =>
+	filter === 'all' ||
+	( filter === 'hearted' && image.hearted ) ||
+	( filter === 'commented' && !! image.comment.trim() ) ||
+	( filter.startsWith( 'flag-' ) &&
+		image.flag === filter.replace( 'flag-', '' ) );
+
+const applyFilter = ( gallery ) => {
+	const galleryId = getGalleryId( gallery );
+	const filter = state.galleries[ galleryId ]?.activeFilter || 'all';
+	const imageBlocks = gallery.querySelectorAll(
+		'.wp-block-folioblocks-pb-image-block'
+	);
+
+	imageBlocks.forEach( ( imageBlock ) => {
+		const imageId = getImageId( imageBlock );
+
+		if ( ! imageId ) {
+			return;
+		}
+
+		const image = ensureImageState( galleryId, imageId );
+		imageBlock.classList.toggle(
+			'is-hidden',
+			! imageMatchesFilter( image, filter )
+		);
+	} );
+
+	scheduleReflow( gallery );
+};
+
+const refreshCurrentGallery = () => {
+	const gallery = getElement().ref.closest( '.fbks-proofing-gallery' );
+
+	if ( gallery ) {
+		applyFilter( gallery );
+	}
+};
+
+const imagesToMap = ( images = [] ) =>
+	images.reduce( ( result, image ) => {
+		if ( image?.imageId ) {
+			result[ image.imageId ] = image;
+		}
+
+		return result;
+	}, {} );
+
+const serializeGalleryImages = ( gallery ) =>
+	Array.from(
+		gallery.element?.querySelectorAll(
+			'.fbks-proofing-thumbnail-controls'
+		) || []
+	).map( ( controls ) => {
+		const imageBlock = controls.closest(
 			'.wp-block-folioblocks-pb-image-block'
 		);
+		const imageId =
+			imageBlock?.dataset.proofingImageId ||
+			controls.dataset.proofingImageId;
+		const image = gallery.images[ imageId ] || createEmptyImageState();
 
-		imageBlocks.forEach( ( imageBlock ) => {
-			const flagColor = imageBlock.dataset.proofingFlag || '';
-			const shouldShow =
-				filter === 'all' ||
-				( filter === 'hearted' &&
-					imageBlock.dataset.proofingHearted === 'true' ) ||
-				( filter === 'commented' &&
-					imageBlock.dataset.proofingCommented === 'true' ) ||
-				( filter.startsWith( 'flag-' ) &&
-					flagColor === filter.replace( 'flag-', '' ) );
+		return {
+			imageId,
+			attachmentId: Number(
+				controls.dataset.proofingAttachmentId || image.attachmentId || 0
+			),
+			thumbnail: controls.dataset.proofingThumbnail || image.thumbnail,
+			title: controls.dataset.proofingTitle || image.title,
+			hearted:
+				imageBlock?.dataset.proofingHearted === 'true' ||
+				!! image.hearted,
+			flag: imageBlock?.dataset.proofingFlag || image.flag || '',
+			comment: imageBlock?.dataset.proofingComment || image.comment || '',
+		};
+	} );
 
-			imageBlock.classList.toggle( 'is-hidden', ! shouldShow );
-		} );
+const syncImageDom = ( controlRoot, imageBlock, image ) => {
+	if ( ! controlRoot || ! imageBlock || ! image ) {
+		return;
+	}
 
-		scheduleReflow( gallery );
-	};
+	const heartButton = controlRoot.querySelector(
+		'.fbks-proofing-thumbnail-control--heart'
+	);
+	const flagButton = controlRoot.querySelector(
+		'.fbks-proofing-thumbnail-control--flag'
+	);
+	const commentButton = controlRoot.querySelector(
+		'.fbks-proofing-thumbnail-control--comment'
+	);
+	const textarea = controlRoot.querySelector(
+		'.fbks-proofing-comment-popover__field'
+	);
 
-	const getActiveFilter = ( gallery ) =>
-		gallery.querySelector(
-			'.fbks-proofing-filter-button.is-active'
-		)?.dataset.proofingFilter || 'all';
+	imageBlock.dataset.proofingHearted = image.hearted ? 'true' : 'false';
+	imageBlock.dataset.proofingFlag = image.flag || '';
+	imageBlock.dataset.proofingComment = image.comment || '';
+	imageBlock.dataset.proofingCommented = image.comment.trim()
+		? 'true'
+		: 'false';
 
-	const updateActiveFilter = ( gallery ) => {
-		applyFilter( gallery, getActiveFilter( gallery ) );
-	};
+	heartButton?.classList.toggle( 'is-active', !! image.hearted );
+	heartButton?.setAttribute(
+		'aria-pressed',
+		image.hearted ? 'true' : 'false'
+	);
 
-	const setFlagColor = ( imageBlock, flagButton, color ) => {
-		imageBlock.dataset.proofingFlag = color || '';
-		flagButton.classList.remove( 'is-red', 'is-orange', 'is-green' );
-		if ( color ) {
-			flagButton.classList.add( `is-${ color }` );
-		}
-		updateActiveFilter( imageBlock.closest( '.fbks-proofing-gallery' ) );
-	};
+	flagButton?.classList.remove( 'is-red', 'is-orange', 'is-green' );
+	if ( image.flag ) {
+		flagButton?.classList.add( `is-${ image.flag }` );
+	}
 
-	const toggleCommentPanel = ( imageBlock, commentButton ) => {
-		const existingPanel = imageBlock.querySelector(
-			'.fbks-proofing-comment-popover'
-		);
+	commentButton?.classList.toggle( 'is-active', !! image.comment.trim() );
+	if ( textarea ) {
+		textarea.value = image.comment || '';
+	}
+};
 
-		if ( existingPanel ) {
-			existingPanel.remove();
-			commentButton.classList.remove( 'is-open' );
-			return;
-		}
+const syncGalleryDom = ( galleryId ) => {
+	const gallery = ensureGalleryState( galleryId );
 
-		imageBlock
-			.querySelectorAll(
-				'.fbks-proofing-comment-popover, .fbks-proofing-flag-popover'
-			)
-			.forEach( ( panel ) => panel.remove() );
+	gallery.element
+		?.querySelectorAll( '.fbks-proofing-thumbnail-controls' )
+		.forEach( ( controlRoot ) => {
+			const imageBlock = controlRoot.closest(
+				'.wp-block-folioblocks-pb-image-block'
+			);
+			const imageId =
+				imageBlock?.dataset.proofingImageId ||
+				controlRoot.dataset.proofingImageId;
 
-		const panel = document.createElement( 'div' );
-		panel.className = 'fbks-proofing-comment-popover';
-		panel.innerHTML = `
-			<label class="fbks-proofing-comment-popover__label">
-				<span>Comment</span>
-				<textarea class="fbks-proofing-comment-popover__field" rows="3" maxlength="500"></textarea>
-			</label>
-			<div class="fbks-proofing-comment-popover__actions">
-				<button type="button" class="fbks-proofing-comment-popover__button" data-proofing-comment-action="clear">Clear</button>
-				<button type="button" class="fbks-proofing-comment-popover__button is-primary" data-proofing-comment-action="done">Done</button>
-			</div>
-		`;
-
-		const textarea = panel.querySelector( 'textarea' );
-		textarea.value = imageBlock.dataset.proofingComment || '';
-		textarea.addEventListener( 'click', stopProofingClick );
-		textarea.addEventListener( 'input', () => {
-			const value = textarea.value.trim();
-			imageBlock.dataset.proofingComment = textarea.value;
-			imageBlock.dataset.proofingCommented = value ? 'true' : 'false';
-			commentButton.classList.toggle( 'is-active', !! value );
-			updateActiveFilter( imageBlock.closest( '.fbks-proofing-gallery' ) );
-		} );
-
-		panel.addEventListener( 'click', ( event ) => {
-			stopProofingClick( event );
-			const action = event.target?.dataset?.proofingCommentAction;
-			if ( action === 'clear' ) {
-				textarea.value = '';
-				imageBlock.dataset.proofingComment = '';
-				imageBlock.dataset.proofingCommented = 'false';
-				commentButton.classList.remove( 'is-active' );
-				updateActiveFilter(
-					imageBlock.closest( '.fbks-proofing-gallery' )
-				);
-			}
-			if ( action === 'done' ) {
-				panel.remove();
-				commentButton.classList.remove( 'is-open' );
-			}
-		} );
-
-		imageBlock.querySelector( '.pb-image-block' )?.appendChild( panel );
-		commentButton.classList.add( 'is-open' );
-		textarea.focus();
-	};
-
-	const toggleFlagPanel = ( imageBlock, flagButton ) => {
-		const existingPanel = imageBlock.querySelector(
-			'.fbks-proofing-flag-popover'
-		);
-
-		if ( existingPanel ) {
-			existingPanel.remove();
-			return;
-		}
-
-		imageBlock
-			.querySelectorAll(
-				'.fbks-proofing-comment-popover, .fbks-proofing-flag-popover'
-			)
-			.forEach( ( panel ) => panel.remove() );
-
-		const panel = document.createElement( 'div' );
-		panel.className = 'fbks-proofing-flag-popover';
-		panel.innerHTML = `
-			<button type="button" class="fbks-proofing-flag-swatch is-red" data-proofing-flag-color="red" aria-label="Red Flag"></button>
-			<button type="button" class="fbks-proofing-flag-swatch is-orange" data-proofing-flag-color="orange" aria-label="Orange Flag"></button>
-			<button type="button" class="fbks-proofing-flag-swatch is-green" data-proofing-flag-color="green" aria-label="Green Flag"></button>
-			<button type="button" class="fbks-proofing-flag-clear" data-proofing-flag-color="">Clear</button>
-		`;
-
-		panel.addEventListener( 'click', ( event ) => {
-			stopProofingClick( event );
-			if ( ! Object.prototype.hasOwnProperty.call(
-				event.target.dataset,
-				'proofingFlagColor'
-			) ) {
+			if ( ! imageId ) {
 				return;
 			}
-			setFlagColor(
+
+			syncImageDom(
+				controlRoot,
 				imageBlock,
-				flagButton,
-				event.target.dataset.proofingFlagColor
+				ensureImageState( galleryId, imageId )
 			);
-			panel.remove();
+		} );
+};
+
+const sendGalleryPresence = ( galleryId, presence, useBeacon = false ) => {
+	const gallery = ensureGalleryState( galleryId );
+
+	if (
+		! gallery.trackPresence ||
+		! gallery.presenceUrl ||
+		! gallery.galleryKey
+	) {
+		return;
+	}
+
+	const payload = {
+		presence,
+		galleryId,
+		galleryKey: gallery.galleryKey,
+		clientEmail: gallery.clientEmail,
+		pageId: gallery.pageId,
+	};
+	const body = JSON.stringify( payload );
+
+	if ( useBeacon && window.navigator?.sendBeacon && window.Blob ) {
+		window.navigator.sendBeacon(
+			gallery.presenceUrl,
+			new window.Blob( [ body ], { type: 'application/json' } )
+		);
+		return;
+	}
+
+	return window
+		.fetch( gallery.presenceUrl, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body,
+		} )
+		.catch( () => {} );
+};
+
+const sendTrackedGalleriesPresence = ( presence, useBeacon = false ) => {
+	Object.keys( state.galleries ).forEach( ( galleryId ) => {
+		sendGalleryPresence( galleryId, presence, useBeacon );
+	} );
+};
+
+const bindPresenceEvents = ( galleryId ) => {
+	const gallery = ensureGalleryState( galleryId );
+
+	if ( ! gallery.trackPresence ) {
+		return;
+	}
+
+	if ( gallery.presenceTimer ) {
+		window.clearInterval( gallery.presenceTimer );
+	}
+
+	gallery.presenceTimer = window.setInterval( () => {
+		sendGalleryPresence( galleryId, 'active' );
+	}, 45000 );
+
+	if ( window.fbksProofingPresenceEventsBound ) {
+		return;
+	}
+
+	window.fbksProofingPresenceEventsBound = true;
+	window.addEventListener( 'pagehide', () => {
+		sendTrackedGalleriesPresence( 'closed', true );
+	} );
+	document.addEventListener( 'visibilitychange', () => {
+		sendTrackedGalleriesPresence(
+			document.visibilityState === 'hidden' ? 'closed' : 'active',
+			document.visibilityState === 'hidden'
+		);
+	} );
+};
+
+const persistGallery = async ( galleryId, status ) => {
+	const gallery = ensureGalleryState( galleryId );
+
+	if ( ! gallery.restUrl || ! gallery.galleryKey ) {
+		gallery.notice = 'This proofing gallery is missing save settings.';
+		return;
+	}
+
+	gallery.isSaving = true;
+	gallery.notice = '';
+
+	const images = serializeGalleryImages( gallery );
+	const localSession = {
+		status,
+		updatedAt: new Date().toISOString(),
+		images,
+	};
+
+	window.localStorage?.setItem(
+		`fbksProofingSession:${ gallery.galleryKey }`,
+		JSON.stringify( localSession )
+	);
+	gallery.savedImages = imagesToMap( images );
+	gallery.notice =
+		status === 'submitted'
+			? `Proofing selections submitted locally (${ images.length } images).`
+			: `Progress saved locally (${ images.length } images).`;
+
+	try {
+		const response = await window.fetch( gallery.restUrl, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify( {
+				status,
+				galleryId,
+				galleryKey: gallery.galleryKey,
+				clientEmail: gallery.clientEmail,
+				pageId: gallery.pageId,
+				images,
+			} ),
 		} );
 
-		imageBlock.querySelector( '.pb-image-block' )?.appendChild( panel );
-	};
-
-	const initImageBlock = ( gallery, imageBlock ) => {
-		const figure = imageBlock.querySelector( '.pb-image-block' );
-		if ( ! figure || figure.querySelector( '.fbks-proofing-thumbnail-controls' ) ) {
-			return;
+		if ( ! response.ok ) {
+			throw new Error( 'Unable to save proofing session.' );
 		}
 
-		imageBlock.dataset.proofingHearted = 'false';
-		imageBlock.dataset.proofingFlag = '';
-		imageBlock.dataset.proofingCommented = 'false';
-		imageBlock.dataset.proofingComment = '';
+		const result = await response.json();
+		gallery.savedImages = imagesToMap( result.images || [] );
+		window.localStorage?.setItem(
+			`fbksProofingSession:${ gallery.galleryKey }`,
+			JSON.stringify( {
+				status,
+				updatedAt: result.updatedAt || new Date().toISOString(),
+				images: result.images || images,
+			} )
+		);
+		gallery.notice =
+			status === 'submitted'
+				? `Proofing selections submitted (${ images.length } images).`
+				: `Progress saved (${ images.length } images). You can return later to continue.`;
+	} catch ( error ) {
+		gallery.notice = `${
+			error?.message || 'Unable to save proofing session.'
+		} Your progress was saved in this browser.`;
+	} finally {
+		gallery.isSaving = false;
+	}
+};
 
-		const controls = document.createElement( 'div' );
-		controls.className = 'fbks-proofing-thumbnail-controls';
+const { state, actions } = store( 'folioblocks/proofing-gallery', {
+	state: {
+		galleries: {},
+		get isActiveFilter() {
+			const context = getContext();
+			const activeFilter =
+				state.galleries[ context.galleryId ]?.activeFilter || 'all';
 
-		if ( gallery.dataset.enableHeart !== 'false' ) {
-			const heartButton = createIconButton(
-				'fbks-proofing-thumbnail-control fbks-proofing-thumbnail-control--heart',
-				'Like image',
-				'heart'
+			return activeFilter === context.filter;
+		},
+		get isCurrentImageHearted() {
+			return getCurrentImageState().hearted;
+		},
+		get isCurrentImageFlagRed() {
+			return getCurrentImageState().flag === 'red';
+		},
+		get isCurrentImageFlagOrange() {
+			return getCurrentImageState().flag === 'orange';
+		},
+		get isCurrentImageFlagGreen() {
+			return getCurrentImageState().flag === 'green';
+		},
+		get isCurrentImageCommented() {
+			return !! getCurrentImageState().comment.trim();
+		},
+		get isCurrentImageFlagPanelOpen() {
+			const context = getContext();
+			return getCurrentGalleryState().openFlagPanel === context.imageId;
+		},
+		get isCurrentImageCommentPanelOpen() {
+			const context = getContext();
+			return (
+				getCurrentGalleryState().openCommentPanel === context.imageId
 			);
-			heartButton.setAttribute( 'aria-pressed', 'false' );
-			heartButton.addEventListener( 'click', ( event ) => {
-				stopProofingClick( event );
-				const isLiked =
-					imageBlock.dataset.proofingHearted !== 'true';
-				imageBlock.dataset.proofingHearted = isLiked
+		},
+		get currentImageComment() {
+			return getCurrentImageState().comment;
+		},
+		get isCurrentGallerySaving() {
+			return getCurrentGalleryState().isSaving;
+		},
+		get currentGalleryNotice() {
+			return getCurrentGalleryState().notice;
+		},
+	},
+	actions: {
+		registerGallery( galleryId, galleryData = {} ) {
+			const gallery = ensureGalleryState( galleryId );
+			gallery.element =
+				galleryData.element || gallery.element || document;
+			gallery.galleryKey = galleryData.galleryKey || gallery.galleryKey;
+			gallery.clientEmail =
+				galleryData.clientEmail || gallery.clientEmail;
+			gallery.pageId = Number( galleryData.pageId || gallery.pageId );
+			gallery.restUrl = galleryData.restUrl || gallery.restUrl;
+			gallery.presenceUrl =
+				galleryData.presenceUrl || gallery.presenceUrl;
+			gallery.trackPresence =
+				galleryData.trackPresence ?? gallery.trackPresence;
+			const savedSession = galleryData.savedSession || {};
+			let savedImages = savedSession.images || [];
+
+			if ( gallery.galleryKey && savedImages.length === 0 ) {
+				try {
+					const localSession = JSON.parse(
+						window.localStorage?.getItem(
+							`fbksProofingSession:${ gallery.galleryKey }`
+						) || '{}'
+					);
+					savedImages = localSession.images || [];
+				} catch {}
+			}
+
+			gallery.savedImages = imagesToMap( savedImages );
+			Object.entries( gallery.savedImages ).forEach(
+				( [ imageId, savedImage ] ) => {
+					const image = ensureImageState( galleryId, imageId );
+					image.hearted = !! savedImage.hearted;
+					image.flag = savedImage.flag || '';
+					image.comment = savedImage.comment || '';
+				}
+			);
+			syncGalleryDom( galleryId );
+			sendGalleryPresence( galleryId, 'active' );
+			bindPresenceEvents( galleryId );
+		},
+		registerImage( galleryId, imageId, imageData = {} ) {
+			const gallery = ensureGalleryState( galleryId );
+			const image = ensureImageState( galleryId, imageId );
+			const savedImage = gallery.savedImages[ imageId ];
+			image.attachmentId = Number( imageData.attachmentId || 0 );
+			image.thumbnail = imageData.thumbnail || '';
+			image.title = imageData.title || '';
+
+			if ( savedImage ) {
+				image.hearted = !! savedImage.hearted;
+				image.flag = savedImage.flag || '';
+				image.comment = savedImage.comment || '';
+			}
+
+			if ( imageData.element ) {
+				imageData.element.dataset.proofingImageId = imageId;
+				imageData.element.dataset.proofingAttachmentId = String(
+					image.attachmentId
+				);
+				imageData.element.dataset.proofingThumbnail = image.thumbnail;
+				imageData.element.dataset.proofingTitle = image.title;
+			}
+		},
+		setFilter( galleryId, filter ) {
+			ensureGalleryState( galleryId ).activeFilter = filter || 'all';
+		},
+		chooseFilter( event ) {
+			stopProofingClick( event );
+
+			const context = getContext();
+			actions.setFilter( context.galleryId, context.filter );
+			refreshCurrentGallery();
+		},
+		toggleHeart( event ) {
+			stopProofingClick( event );
+
+			const image = getCurrentImageState();
+			const imageBlock = getCurrentImageBlock();
+			image.hearted = ! image.hearted;
+			if ( imageBlock ) {
+				imageBlock.dataset.proofingHearted = image.hearted
 					? 'true'
 					: 'false';
-				heartButton.classList.toggle( 'is-active', isLiked );
-				heartButton.setAttribute(
-					'aria-pressed',
-					isLiked ? 'true' : 'false'
-				);
-				updateActiveFilter( gallery );
-			} );
-			controls.appendChild( heartButton );
-		}
+			}
+			refreshCurrentGallery();
+		},
+		toggleFlagPanel( event ) {
+			stopProofingClick( event );
 
-		if ( gallery.dataset.enableFlag !== 'false' ) {
-			const flagButton = createIconButton(
-				'fbks-proofing-thumbnail-control fbks-proofing-thumbnail-control--flag',
-				'Set flag color',
-				'flag'
+			const context = getContext();
+			const gallery = getCurrentGalleryState();
+			gallery.openCommentPanel = '';
+			gallery.openFlagPanel =
+				gallery.openFlagPanel === context.imageId
+					? ''
+					: context.imageId;
+		},
+		setFlagFromContext( event ) {
+			stopProofingClick( event );
+
+			const color = getElement().ref.dataset.proofingFlagColor || '';
+			const imageBlock = getCurrentImageBlock();
+			getCurrentImageState().flag = color;
+			if ( imageBlock ) {
+				imageBlock.dataset.proofingFlag = color;
+			}
+			getCurrentGalleryState().openFlagPanel = '';
+			refreshCurrentGallery();
+		},
+		toggleCommentPanel( event ) {
+			stopProofingClick( event );
+
+			const context = getContext();
+			const gallery = getCurrentGalleryState();
+			gallery.openFlagPanel = '';
+			gallery.openCommentPanel =
+				gallery.openCommentPanel === context.imageId
+					? ''
+					: context.imageId;
+		},
+		setCommentFromInput( event ) {
+			const comment = event?.target?.value || '';
+			const imageBlock = getCurrentImageBlock();
+			getCurrentImageState().comment = comment;
+			if ( imageBlock ) {
+				imageBlock.dataset.proofingComment = comment;
+				imageBlock.dataset.proofingCommented = comment.trim()
+					? 'true'
+					: 'false';
+			}
+			refreshCurrentGallery();
+		},
+		clearComment( event ) {
+			stopProofingClick( event );
+
+			const imageBlock = getCurrentImageBlock();
+			getCurrentImageState().comment = '';
+			if ( imageBlock ) {
+				imageBlock.dataset.proofingComment = '';
+				imageBlock.dataset.proofingCommented = 'false';
+			}
+			refreshCurrentGallery();
+		},
+		closePanels( event ) {
+			stopProofingClick( event );
+
+			const gallery = getCurrentGalleryState();
+			gallery.openFlagPanel = '';
+			gallery.openCommentPanel = '';
+		},
+		saveProgress( event ) {
+			stopProofingClick( event );
+
+			return persistGallery( getCurrentGalleryId(), 'in_progress' );
+		},
+		submitProofing( event ) {
+			stopProofingClick( event );
+
+			return persistGallery( getCurrentGalleryId(), 'submitted' );
+		},
+	},
+	callbacks: {
+		registerGallery() {
+			const context = getContext();
+
+			actions.registerGallery( context.galleryId, {
+				element: getElement().ref,
+				galleryKey: context.galleryKey,
+				clientEmail: context.clientEmail,
+				pageId: context.pageId,
+				restUrl: context.restUrl,
+				presenceUrl: context.presenceUrl,
+				trackPresence: context.trackPresence,
+				savedSession: context.savedSession,
+			} );
+		},
+		registerImage() {
+			const context = getContext();
+			const controlRoot = getElement().ref;
+			const galleryId = getCurrentGalleryId();
+			const imageBlock = controlRoot.closest(
+				'.wp-block-folioblocks-pb-image-block'
 			);
-			flagButton.addEventListener( 'click', ( event ) => {
-				stopProofingClick( event );
-				toggleFlagPanel( imageBlock, flagButton );
-			} );
-			controls.appendChild( flagButton );
-		}
 
-		if ( gallery.dataset.enableComment !== 'false' ) {
-			const commentButton = createIconButton(
-				'fbks-proofing-thumbnail-control fbks-proofing-thumbnail-control--comment',
-				'Comment on image',
-				'comment'
-			);
-			commentButton.addEventListener( 'click', ( event ) => {
-				stopProofingClick( event );
-				toggleCommentPanel( imageBlock, commentButton );
-			} );
-			controls.appendChild( commentButton );
-		}
-
-		figure.appendChild( controls );
-	};
-
-	const initGallery = ( gallery ) => {
-		gallery
-			.querySelectorAll( '.wp-block-folioblocks-pb-image-block' )
-			.forEach( ( imageBlock ) => initImageBlock( gallery, imageBlock ) );
-
-		gallery
-			.querySelectorAll( '.fbks-proofing-filter-button' )
-			.forEach( ( button ) => {
-				button.addEventListener( 'click', ( event ) => {
-					stopProofingClick( event );
-					gallery
-						.querySelectorAll( '.fbks-proofing-filter-button' )
-						.forEach( ( filterButton ) => {
-							const isActive = filterButton === button;
-							filterButton.classList.toggle(
-								'is-active',
-								isActive
-							);
-							filterButton.setAttribute(
-								'aria-pressed',
-								isActive ? 'true' : 'false'
-							);
-						} );
-					applyFilter( gallery, button.dataset.proofingFilter );
-				} );
+			actions.registerImage( galleryId, context.imageId, {
+				attachmentId: context.attachmentId,
+				thumbnail: context.thumbnail,
+				title: context.title,
+				element: controlRoot,
 			} );
 
-		gallery
-			.querySelectorAll(
-				'.fbks-proofing-gallery__action-button--save, .fbks-proofing-gallery__action-button--submit'
-			)
-			.forEach( ( button ) => {
-				button.addEventListener( 'click', stopProofingClick );
-			} );
-	};
-
-	galleries.forEach( initGallery );
+			if ( imageBlock ) {
+				imageBlock.dataset.proofingImageId = context.imageId;
+				const image = ensureImageState( galleryId, context.imageId );
+				syncImageDom( controlRoot, imageBlock, image );
+			}
+		},
+	},
 } );

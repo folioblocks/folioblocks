@@ -159,7 +159,11 @@
 		"folioBlocks/linkIconDisplay",
 		"folioBlocks/enableWatermarking",
 		"folioBlocks/watermarkId",
-		"folioBlocks/watermarkDisplay"
+		"folioBlocks/watermarkDisplay",
+		"folioBlocks/isProofingGallery",
+		"folioBlocks/proofingEnableHeart",
+		"folioBlocks/proofingEnableFlag",
+		"folioBlocks/proofingEnableComment"
 	],
 	"textdomain": "folioblocks",
 	"editorScript": [

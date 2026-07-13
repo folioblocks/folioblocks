@@ -5,7 +5,7 @@ add_action('admin_enqueue_scripts', 'fbks_admin_styles');
 
 function fbks_admin_styles($hook)
 {
-	if (! in_array($hook, array('toplevel_page_folioblocks-settings', 'folioblocks_page_folioblocks-global-settings'), true)) {
+	if (! in_array($hook, array('toplevel_page_folioblocks-settings', 'folioblocks_page_folioblocks-global-settings', 'folioblocks_page_folioblocks-proofing-sessions'), true)) {
 		return;
 	}
 

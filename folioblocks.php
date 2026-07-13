@@ -4,7 +4,7 @@
  * Plugin Name:       FolioBlocks
  * Description:       Create fast, responsive photo and video gallery with grid, masonry, justified, modular, and carousel layouts—ideal for photographers and creatives.
  * Version:           1.5.0-alpha
- * Requires at least: 6.3
+ * Requires at least: 6.5
  * Requires PHP:      7.4
  * Author:            FolioBlocks
  * Author URI: https://folioblocks.com
@@ -472,6 +472,16 @@ if (function_exists('fbks_fs')) {
             'folioblocks-global-settings',
             'fbks_render_global_settings_page'
         );
+        if (fbks_fs()->can_use_premium_code__premium_only() && fbks_fs()->is_plan('business')) {
+            add_submenu_page(
+                'folioblocks-settings',
+                __('Proofing Sessions', 'folioblocks'),
+                __('Proofing Sessions', 'folioblocks'),
+                'manage_options',
+                'folioblocks-proofing-sessions',
+                'fbks_render_proofing_sessions_page'
+            );
+        }
         if (! fbks_fs()->can_use_premium_code__premium_only()) {
             add_submenu_page(
                 'folioblocks-settings',
@@ -506,6 +516,7 @@ if (function_exists('fbks_fs')) {
     require_once plugin_dir_path(__FILE__) . 'includes/admin/review-request.php';
     require_once plugin_dir_path(__FILE__) . 'includes/admin/settings-page.php';
     require_once plugin_dir_path(__FILE__) . 'includes/admin/global-settings.php';
+    require_once plugin_dir_path(__FILE__) . 'includes/admin/proofing-sessions.php';
     require_once plugin_dir_path(__FILE__) . 'includes/admin/system-info.php';
     require_once plugin_dir_path(__FILE__) . 'includes/admin/free-pro.php';
     // Load CSS for Admin pages
@@ -515,6 +526,7 @@ if (function_exists('fbks_fs')) {
         $admin_pages = array(
             'toplevel_page_folioblocks-settings',
             'folioblocks_page_folioblocks-global-settings',
+            'folioblocks_page_folioblocks-proofing-sessions',
             'folioblocks_page_folioblocks-free-vs-pro',
             'folioblocks_page_folioblocks-system-info',
         );
@@ -549,6 +561,8 @@ if (function_exists('fbks_fs')) {
 }
 
 if (fbks_fs()->can_use_premium_code__premium_only()) {
+    require_once plugin_dir_path(__FILE__) . 'includes/php/proofing-gallery.php';
+
     add_action('wp_enqueue_scripts', function () {
         if (! is_singular(array('post', 'page')) || ! post_password_required()) {
             return;

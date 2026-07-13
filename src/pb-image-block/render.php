@@ -28,6 +28,10 @@ $fbks_loading_attr = 'eager';
 
 $fbks_context = $block->context ?? [];
 $fbks_can_override_gallery_settings = fbks_fs()->can_use_premium_code__premium_only();
+$fbks_is_inside_proofing_gallery = $fbks_can_override_gallery_settings && ! empty( $fbks_context['folioBlocks/isProofingGallery'] );
+$fbks_proofing_enable_heart = $fbks_is_inside_proofing_gallery && ( ! isset( $fbks_context['folioBlocks/proofingEnableHeart'] ) || (bool) $fbks_context['folioBlocks/proofingEnableHeart'] );
+$fbks_proofing_enable_flag = $fbks_is_inside_proofing_gallery && ( ! isset( $fbks_context['folioBlocks/proofingEnableFlag'] ) || (bool) $fbks_context['folioBlocks/proofingEnableFlag'] );
+$fbks_proofing_enable_comment = $fbks_is_inside_proofing_gallery && ( ! isset( $fbks_context['folioBlocks/proofingEnableComment'] ) || (bool) $fbks_context['folioBlocks/proofingEnableComment'] );
 $fbks_override_gallery_click = $fbks_can_override_gallery_settings && ! empty( $attributes['overrideGalleryClickSettings'] );
 $fbks_override_gallery_hover = $fbks_can_override_gallery_settings && ! empty( $attributes['overrideGalleryHoverSettings'] );
 $fbks_click_context = $fbks_override_gallery_click ? [] : $fbks_context;
@@ -49,6 +53,36 @@ $fbks_lightbox_theme = isset( $fbks_click_context['folioBlocks/lightboxTheme'] )
 	: ( 'inherit' === $fbks_image_lightbox_theme ? $fbks_gallery_lightbox_theme : $fbks_image_lightbox_theme );
 if ( ! in_array( $fbks_lightbox_theme, [ 'dark', 'light' ], true ) ) {
 	$fbks_lightbox_theme = 'dark';
+}
+
+$fbks_proofing_icon = static function ( $icon ) {
+	if ( 'heart' === $icon ) {
+		return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.4-9.4-8.2C.7 9.8 1.2 6.2 3.8 4.4 6 2.9 8.7 3.4 10.5 5.3L12 6.9l1.5-1.6c1.8-1.9 4.5-2.4 6.7-.9 2.6 1.8 3.1 5.4 1.2 8.4C19 16.6 12 21 12 21z" /></svg>';
+	}
+
+	if ( 'flag' === $icon ) {
+		return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 21V4h10.6l.4 3.1h3v9H9.4L9 13.9H8V21H6z" /></svg>';
+	}
+
+	if ( 'comment' === $icon ) {
+		return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v10H8.7L5 18.4V5z" /></svg>';
+	}
+
+	return '';
+};
+
+$fbks_proofing_image_key = $fbks_id ? 'attachment-' . $fbks_id : 'image-' . md5( $fbks_src );
+$fbks_proofing_thumbnail = $fbks_src;
+$fbks_proofing_title     = $fbks_title;
+if ( $fbks_id ) {
+	$fbks_proofing_thumbnail_data = wp_get_attachment_image_src( $fbks_id, 'thumbnail' );
+	if ( ! empty( $fbks_proofing_thumbnail_data[0] ) ) {
+		$fbks_proofing_thumbnail = $fbks_proofing_thumbnail_data[0];
+	}
+
+	if ( '' === trim( wp_strip_all_tags( $fbks_proofing_title ) ) ) {
+		$fbks_proofing_title = get_the_title( $fbks_id );
+	}
 }
 $fbks_lightbox_content = $fbks_click_context['folioBlocks/lightboxContent'] ?? ( $attributes['lightboxContent'] ?? '' );
 if ( ! in_array( $fbks_lightbox_content, [ 'none', 'title', 'caption', 'product', 'exif', 'title_exif', 'caption_exif', 'title_caption', 'title_caption_exif' ], true ) ) {
@@ -651,6 +685,88 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 
 		<?php if ( fbks_fs()->can_use_premium_code__premium_only() && $fbks_show_gallery_watermark ) : ?>
 			<span class="pb-watermark-overlay" style="<?php echo esc_attr( $fbks_watermark_style ); ?>"<?php echo wp_kses_data( $fbks_watermark_data_attrs ); ?> aria-hidden="true"></span>
+		<?php endif; ?>
+
+		<?php if ( $fbks_is_inside_proofing_gallery && ( $fbks_proofing_enable_heart || $fbks_proofing_enable_flag || $fbks_proofing_enable_comment ) ) : ?>
+			<div
+				class="fbks-proofing-thumbnail-controls"
+				data-wp-context="<?php echo esc_attr( wp_json_encode( [
+					'imageId'      => $fbks_proofing_image_key,
+					'attachmentId' => $fbks_id,
+					'thumbnail'    => esc_url_raw( $fbks_proofing_thumbnail ),
+					'title'        => $fbks_proofing_title,
+				] ) ); ?>"
+				data-wp-init="callbacks.registerImage"
+			>
+				<?php if ( $fbks_proofing_enable_heart ) : ?>
+					<button
+						type="button"
+						class="fbks-proofing-thumbnail-control fbks-proofing-thumbnail-control--heart"
+						data-wp-on--click="actions.toggleHeart"
+						data-wp-class--is-active="state.isCurrentImageHearted"
+						data-wp-bind--aria-pressed="state.isCurrentImageHearted"
+						aria-pressed="false"
+						aria-label="<?php esc_attr_e( 'Like image', 'folioblocks' ); ?>"
+					>
+						<?php echo wp_kses( $fbks_proofing_icon( 'heart' ), fbks_get_allowed_post_html_with_svg() ); ?>
+					</button>
+				<?php endif; ?>
+
+				<?php if ( $fbks_proofing_enable_flag ) : ?>
+					<button
+						type="button"
+						class="fbks-proofing-thumbnail-control fbks-proofing-thumbnail-control--flag"
+						data-wp-on--click="actions.toggleFlagPanel"
+						data-wp-class--is-red="state.isCurrentImageFlagRed"
+						data-wp-class--is-orange="state.isCurrentImageFlagOrange"
+						data-wp-class--is-green="state.isCurrentImageFlagGreen"
+						aria-label="<?php esc_attr_e( 'Set flag color', 'folioblocks' ); ?>"
+					>
+						<?php echo wp_kses( $fbks_proofing_icon( 'flag' ), fbks_get_allowed_post_html_with_svg() ); ?>
+					</button>
+					<div class="fbks-proofing-flag-popover" data-wp-class--is-open="state.isCurrentImageFlagPanelOpen" data-wp-bind--hidden="!state.isCurrentImageFlagPanelOpen" hidden>
+						<button type="button" class="fbks-proofing-flag-swatch is-red" data-proofing-flag-color="red" data-wp-on--click="actions.setFlagFromContext" aria-label="<?php esc_attr_e( 'Red Flag', 'folioblocks' ); ?>"></button>
+						<button type="button" class="fbks-proofing-flag-swatch is-orange" data-proofing-flag-color="orange" data-wp-on--click="actions.setFlagFromContext" aria-label="<?php esc_attr_e( 'Orange Flag', 'folioblocks' ); ?>"></button>
+						<button type="button" class="fbks-proofing-flag-swatch is-green" data-proofing-flag-color="green" data-wp-on--click="actions.setFlagFromContext" aria-label="<?php esc_attr_e( 'Green Flag', 'folioblocks' ); ?>"></button>
+						<button type="button" class="fbks-proofing-flag-clear" data-proofing-flag-color="" data-wp-on--click="actions.setFlagFromContext">
+							<?php esc_html_e( 'Clear', 'folioblocks' ); ?>
+						</button>
+					</div>
+				<?php endif; ?>
+
+				<?php if ( $fbks_proofing_enable_comment ) : ?>
+					<button
+						type="button"
+						class="fbks-proofing-thumbnail-control fbks-proofing-thumbnail-control--comment"
+						data-wp-on--click="actions.toggleCommentPanel"
+						data-wp-class--is-active="state.isCurrentImageCommented"
+						data-wp-class--is-open="state.isCurrentImageCommentPanelOpen"
+						aria-label="<?php esc_attr_e( 'Comment on image', 'folioblocks' ); ?>"
+					>
+						<?php echo wp_kses( $fbks_proofing_icon( 'comment' ), fbks_get_allowed_post_html_with_svg() ); ?>
+					</button>
+					<div class="fbks-proofing-comment-popover" data-wp-class--is-open="state.isCurrentImageCommentPanelOpen" data-wp-bind--hidden="!state.isCurrentImageCommentPanelOpen" hidden>
+						<label class="fbks-proofing-comment-popover__label">
+							<span><?php esc_html_e( 'Comment', 'folioblocks' ); ?></span>
+							<textarea
+								class="fbks-proofing-comment-popover__field"
+								rows="3"
+								maxlength="500"
+								data-wp-on--input="actions.setCommentFromInput"
+								data-wp-bind--value="state.currentImageComment"
+							></textarea>
+						</label>
+						<div class="fbks-proofing-comment-popover__actions">
+							<button type="button" class="fbks-proofing-comment-popover__button" data-wp-on--click="actions.clearComment">
+								<?php esc_html_e( 'Clear', 'folioblocks' ); ?>
+							</button>
+							<button type="button" class="fbks-proofing-comment-popover__button is-primary" data-wp-on--click="actions.closePanels">
+								<?php esc_html_e( 'Done', 'folioblocks' ); ?>
+							</button>
+						</div>
+					</div>
+				<?php endif; ?>
+			</div>
 		<?php endif; ?>
 
 		<?php

@@ -99,6 +99,14 @@
 	}
 }
 
+.fbks-proofing-gallery .pb-image-block {
+	overflow: visible;
+}
+
+.fbks-proofing-gallery .pb-image-block-img {
+	border-radius: inherit;
+}
+
 .fbks-proofing-thumbnail-control--heart {
 	top: 8px;
 	left: 8px;
@@ -182,6 +190,11 @@
 	border-radius: 8px;
 	background: #fff;
 	box-shadow: 0 8px 24px rgba(15, 23, 42, 0.18);
+}
+
+.fbks-proofing-flag-popover[hidden],
+.fbks-proofing-comment-popover[hidden] {
+	display: none !important;
 }
 
 .fbks-proofing-flag-swatch {

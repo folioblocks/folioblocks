@@ -28,6 +28,7 @@
 			"margin": true,
 			"padding": true
 		},
+		"interactivity": true,
 		"customClassName": false,
 		"anchor": false,
 		"html": false
@@ -36,6 +37,10 @@
 		"preview": {
 			"type": "boolean",
 			"default": false
+		},
+		"isProofingGallery": {
+			"type": "boolean",
+			"default": true
 		},
 		"clientEmail": {
 			"type": "string",
@@ -161,7 +166,11 @@
 		"folioBlocks/lightboxTheme": "lightboxTheme",
 		"folioBlocks/enableWatermarking": "enableWatermarking",
 		"folioBlocks/watermarkId": "watermarkId",
-		"folioBlocks/watermarkDisplay": "watermarkDisplay"
+		"folioBlocks/watermarkDisplay": "watermarkDisplay",
+		"folioBlocks/isProofingGallery": "isProofingGallery",
+		"folioBlocks/proofingEnableHeart": "enableHeart",
+		"folioBlocks/proofingEnableFlag": "enableFlag",
+		"folioBlocks/proofingEnableComment": "enableComment"
 	},
 	"textdomain": "folioblocks",
 	"editorScript": [
@@ -171,8 +180,8 @@
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",
 	"render": "file:./render.php",
+	"viewScriptModule": "file:./view.js",
 	"viewScript": [
-		"file:./view.js",
 		"file:./premium-view.js"
 	]
 }
