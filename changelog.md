@@ -79,6 +79,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed nested Modular Gallery Image Rows inside Image Stacks so increasing the gallery gap preserves each image's natural aspect ratio.
 - Fixed Social Media Sharing overlay and lightbox links so they remain clickable when an image also has lightbox behavior enabled.
 
+## [1.4.2] - 2026-07-13
+### Fixed
+- Fixed Modular Gallery row alignment when Image Stacks appear beside Image Blocks.
+
 ## [1.4.1] - 2026-07-01
 ### Fixed
 - Fixed Image Block lightbox sizing so smaller source images can expand correctly in fullscreen mode while keeping watermark overlays aligned to the rendered image.

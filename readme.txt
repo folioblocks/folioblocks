@@ -2,7 +2,7 @@
 Contributors: portfolioblocks , campanellafoto
 Plugin link: https://folioblocks.com/
 Tags: gallery, image gallery, photo gallery, video gallery, lightbox, 
-Tested up to:      7.0
+Tested up to:      7.1
 Requires at least: 6.5
 Requires PHP: 7.4
 Stable tag:        1.5.0
@@ -137,6 +137,9 @@ No, the galleries will remain in place on your site. However, the **advanced lay
 * Added gradient-safe CSS sanitization for overlay backgrounds.
 * Added gradient overlay support to gallery defaults and per-image or per-video hover overrides.
 * Renamed Hover Style controls to Overlay Style for clearer editor wording.
+
+= 1.4.2 =
+* Fixed Modular Gallery row alignment when Image Stacks appear beside Image Blocks.
 
 = 1.4.0 =
 * Added responsive desktop, tablet, and mobile gap controls to Carousel, Masonry, Justified, Modular, and Video Galleries.
