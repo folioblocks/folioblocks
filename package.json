@@ -23,6 +23,7 @@
 		"lint:js": "wp-scripts lint-js",
 		"packages-update": "wp-scripts packages-update",
 		"plugin-zip": "wp-scripts plugin-zip",
+		"release:check": "node scripts/release/check-package.mjs",
 		"start": "wp-scripts start --webpack-copy-php --experimental-modules"
 	},
 	"devDependencies": {
