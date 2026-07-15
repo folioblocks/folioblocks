@@ -139,6 +139,10 @@ No, the galleries will remain in place on your site. However, the **advanced lay
 * Added Overlay Entrance controls for supported overlays, including fade and slide directions.
 * Added Overlay typography controls for Image Block and Image galleries, including theme font family plus weight and style.
 * Renamed the existing Gradient Bottom image overlay to Bottom Gradient while preserving backwards compatibility.
+* Fixed the admin review link so an expired review notice no longer shows a WordPress "link expired" error.
+
+= 1.4.4 =
+* Fixed the admin review link so an expired review notice no longer shows a WordPress "link expired" error.
 
 = 1.4.3 =
 * Fixed Grid and Masonry Gallery editor syncing so repeated autosaves cannot duplicate existing gallery images.
