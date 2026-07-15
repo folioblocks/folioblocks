@@ -81,6 +81,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed nested Modular Gallery Image Rows inside Image Stacks so increasing the gallery gap preserves each image's natural aspect ratio.
 - Fixed Social Media Sharing overlay and lightbox links so they remain clickable when an image also has lightbox behavior enabled.
 
+## [1.4.5] - 2026-07-15
+### Fixed
+- Fixed a PHP fatal error in Image Block rendering caused by missing shared CSS value sanitizers in the 1.4.4 package.
+
 ## [1.4.4] - 2026-07-15
 ### Fixed
 - Fixed the admin review link so an expired review notice no longer shows a WordPress "link expired" error.
