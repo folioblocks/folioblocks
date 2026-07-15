@@ -251,17 +251,14 @@ function fbks_handle_review_notice_action()
 		);
 	}
 
-	if (! wp_verify_nonce(isset($_GET['_wpnonce']) ? sanitize_text_field(wp_unslash($_GET['_wpnonce'])) : '', 'fbks_review_notice_action')) {
-		if ('review' === $choice) {
-			wp_redirect(FBKS_REVIEW_URL); // phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect -- Fixed WordPress.org URL.
-			exit;
-		}
+	$has_valid_nonce = wp_verify_nonce(
+		isset($_GET['_wpnonce']) ? sanitize_text_field(wp_unslash($_GET['_wpnonce'])) : '',
+		'fbks_review_notice_action'
+	);
 
-		wp_die(
-			esc_html__('The review notice link has expired. Please reload the admin page and try again.', 'folioblocks'),
-			esc_html__('Link expired', 'folioblocks'),
-			array('response' => 403)
-		);
+	if (! $has_valid_nonce && 'review' === $choice) {
+		wp_redirect(FBKS_REVIEW_URL); // phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect -- Fixed WordPress.org URL.
+		exit;
 	}
 
 	$user_id = get_current_user_id();

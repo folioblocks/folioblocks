@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed Proofing Gallery watermark previews so gallery-image watermarks render in the editor when configured from the Proofing Gallery block.
 - Fixed List View thumbnail refreshes so dragging images into Modular Gallery is less likely to disrupt the editor's List View.
 - Fixed the admin review link so an expired review notice no longer shows a WordPress "link expired" error.
+- Improved review notice actions so stale Maybe Later and I Already Did links can still dismiss the notice.
 
 ## [1.5.0] - 2026-07-02
 ### Added
@@ -84,6 +85,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.4.5] - 2026-07-15
 ### Fixed
 - Fixed a PHP fatal error in Image Block rendering caused by missing shared CSS value sanitizers in the 1.4.4 package.
+- Improved review notice actions so stale Maybe Later and I Already Did links can still dismiss the notice.
 
 ## [1.4.4] - 2026-07-15
 ### Fixed

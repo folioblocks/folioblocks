@@ -140,9 +140,11 @@ No, the galleries will remain in place on your site. However, the **advanced lay
 * Added Overlay typography controls for Image Block and Image galleries, including theme font family plus weight and style.
 * Renamed the existing Gradient Bottom image overlay to Bottom Gradient while preserving backwards compatibility.
 * Fixed the admin review link so an expired review notice no longer shows a WordPress "link expired" error.
+* Improved review notice actions so stale Maybe Later and I Already Did links can still dismiss the notice.
 
 = 1.4.5 =
 * Fixed a PHP fatal error in Image Block rendering caused by missing shared CSS value sanitizers in the 1.4.4 package.
+* Improved review notice actions so stale Maybe Later and I Already Did links can still dismiss the notice.
 
 = 1.4.4 =
 * Fixed the admin review link so an expired review notice no longer shows a WordPress "link expired" error.
