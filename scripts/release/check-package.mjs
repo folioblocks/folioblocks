@@ -1,11 +1,20 @@
 import { execFileSync, spawnSync } from 'node:child_process';
-import { existsSync, mkdtempSync, readFileSync, rmSync, statSync } from 'node:fs';
+import {
+	cpSync,
+	existsSync,
+	mkdirSync,
+	mkdtempSync,
+	readFileSync,
+	rmSync,
+	statSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 
 const root = process.cwd();
-const pluginSlug = 'folioblocks';
-const zipPath = path.join(root, `${ pluginSlug }.zip`);
+const packageRootName = 'folioblocks-pro';
+const zipFileName = `${ packageRootName }.zip`;
+const zipPath = path.join(root, zipFileName);
 const phpCandidates = [
 	process.env.PHP_BINARY,
 	'/Applications/MAMP/bin/php/php8.3.14/bin/php',
@@ -85,6 +94,14 @@ const requireDirectoryAbsent = (dir, base = root) => {
 
 	if (existsSync(fullPath)) {
 		fail(`Unexpected directory found: ${ dir }`);
+	}
+};
+
+const requireDirectory = (dir, base = root) => {
+	const fullPath = path.join(base, dir);
+
+	if (! existsSync(fullPath) || ! statSync(fullPath).isDirectory()) {
+		fail(`Missing required directory: ${ dir }`);
 	}
 };
 
@@ -171,7 +188,6 @@ const assertRequiredProjectFiles = () => {
 	[
 		'folioblocks.php',
 		'readme.txt',
-		'changelog.md',
 		'package.json',
 		'package-lock.json',
 		'build/pb-image-block/render.php',
@@ -179,6 +195,10 @@ const assertRequiredProjectFiles = () => {
 		'includes/php/css-values.php',
 		'includes/php/i18n.php',
 	].forEach((file) => requireFile(file));
+
+	[ 'build', 'includes', 'languages', 'vendor' ].forEach((dir) =>
+		requireDirectory(dir)
+	);
 };
 
 const assertBranchSpecificPackageRules = (version, packageRoot) => {
@@ -202,18 +222,22 @@ const assertZipContents = (version) => {
 	try {
 		run('unzip', [ '-q', zipPath, '-d', tempDir ]);
 
-		const packageRoot = path.join(tempDir, pluginSlug);
+		const packageRoot = path.join(tempDir, packageRootName);
 		if (! existsSync(packageRoot)) {
-			fail(`Zip does not contain expected ${ pluginSlug}/ root directory.`);
+			fail(`Zip does not contain expected ${ packageRootName}/ root directory.`);
 		}
 
 		[
 			'folioblocks.php',
 			'readme.txt',
-			'changelog.md',
 			'build/pb-image-block/render.php',
 			'includes/php/css-values.php',
+			'vendor/freemius/start.php',
 		].forEach((file) => requireFile(file, packageRoot));
+
+		if (existsSync(path.join(packageRoot, 'changelog.md'))) {
+			fail('Zip unexpectedly includes changelog.md.');
+		}
 
 		lintPhpFiles(php, packageRoot);
 		assertBranchSpecificPackageRules(version, packageRoot);
@@ -227,11 +251,41 @@ const assertZipContents = (version) => {
 	}
 };
 
+const createReleaseZip = () => {
+	const tempDir = mkdtempSync(path.join(tmpdir(), 'folioblocks-package-'));
+	const packageRoot = path.join(tempDir, packageRootName);
+	const entries = [
+		'folioblocks.php',
+		'readme.txt',
+		'build',
+		'includes',
+		'languages',
+		'vendor',
+	];
+
+	try {
+		mkdirSync(packageRoot, { recursive: true });
+
+		for (const entry of entries) {
+			cpSync(path.join(root, entry), path.join(packageRoot, entry), {
+				recursive: true,
+				errorOnExist: false,
+				force: true,
+			});
+		}
+
+		run('zip', [ '-qr', zipPath, packageRootName ], { cwd: tempDir });
+	} finally {
+		rmSync(tempDir, { recursive: true, force: true });
+	}
+};
+
 const php = findPhp();
 
 log('Removing generated build artifacts');
 rmSync(path.join(root, 'build'), { recursive: true, force: true });
 rmSync(zipPath, { force: true });
+rmSync(path.join(root, 'folioblocks.zip'), { force: true });
 
 log('Building from the current source branch');
 run('npm', [ 'run', 'build' ]);
@@ -252,7 +306,7 @@ log('Linting project PHP files');
 ].forEach((target) => lintPhpFiles(php, path.join(root, target)));
 
 log('Creating plugin zip');
-run('npm', [ 'run', 'plugin-zip' ]);
+createReleaseZip();
 
 log('Auditing zip contents');
 assertZipContents(version);
