@@ -251,6 +251,12 @@ const assertZipContents = (version) => {
 	}
 };
 
+const shouldCopyPackageEntry = (source) => {
+	const name = path.basename(source);
+
+	return name !== '.DS_Store' && name !== '__MACOSX';
+};
+
 const createReleaseZip = () => {
 	const tempDir = mkdtempSync(path.join(tmpdir(), 'folioblocks-package-'));
 	const packageRoot = path.join(tempDir, packageRootName);
@@ -270,6 +276,7 @@ const createReleaseZip = () => {
 			cpSync(path.join(root, entry), path.join(packageRoot, entry), {
 				recursive: true,
 				errorOnExist: false,
+				filter: shouldCopyPackageEntry,
 				force: true,
 			});
 		}
