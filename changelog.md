@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed Proofing Gallery filtering with Justified and Masonry layouts so filtering triggers layout recalculation and avoids uneven rows or masonry gaps.
 - Fixed the flag color picker popover so it anchors to the flag icon instead of opening beneath the image.
 - Fixed Proofing Gallery watermark previews so gallery-image watermarks render in the editor when configured from the Proofing Gallery block.
+- Fixed List View thumbnail refreshes so dragging images into Modular Gallery is less likely to disrupt the editor's List View.
 
 ## [1.5.0] - 2026-07-02
 ### Added
@@ -78,6 +79,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed redundant Image Row editor layout application that could reuse the first row layout across other rows in large Modular Galleries.
 - Fixed nested Modular Gallery Image Rows inside Image Stacks so increasing the gallery gap preserves each image's natural aspect ratio.
 - Fixed Social Media Sharing overlay and lightbox links so they remain clickable when an image also has lightbox behavior enabled.
+
+## [1.4.3] - 2026-07-15
+### Fixed
+- Fixed Grid and Masonry Gallery editor syncing so repeated autosaves cannot duplicate existing gallery images.
 
 ## [1.4.2] - 2026-07-13
 ### Fixed

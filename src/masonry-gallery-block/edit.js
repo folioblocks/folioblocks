@@ -38,6 +38,27 @@ import './editor.scss';
 
 const ALLOWED_BLOCKS = [ 'folioblocks/pb-image-block' ];
 
+const getSyncedGalleryImages = ( blocks ) =>
+	blocks.map( ( block ) => ( {
+		id: block.attributes.id,
+		src: block.attributes.src,
+		alt: block.attributes.alt,
+		title: block.attributes.title,
+		caption: block.attributes.caption,
+	} ) );
+
+const getComparableGalleryImage = ( image = {} ) => ( {
+	id: image.id || 0,
+	src: image.src || '',
+	alt: image.alt || '',
+	title: image.title || '',
+	caption: image.caption || '',
+} );
+
+const areGalleryImagesEqual = ( currentImages = [], nextImages = [] ) =>
+	JSON.stringify( currentImages.map( getComparableGalleryImage ) ) ===
+	JSON.stringify( nextImages.map( getComparableGalleryImage ) );
+
 const getImageClickAction = ( {
 	lightbox,
 	enableDownload,
@@ -290,6 +311,11 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 			.filter( ( image ) => ! existingImageIds.includes( image.id ) )
 			.map( ( image ) => image.id );
 
+		if ( newImageIds.length === 0 ) {
+			setIsLoading( false );
+			return;
+		}
+
 		// Fetch all media titles in a single API call
 		const responses = await wp.apiFetch( {
 			path: `/wp/v2/media?include=${ newImageIds.join(
@@ -297,14 +323,14 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 			) }&per_page=100`,
 		} );
 
-			const titleMap = responses.reduce( ( acc, item ) => {
-				acc[ item.id ] = item.title.rendered || '';
-				return acc;
-			}, {} );
-			const mediaMap = responses.reduce( ( acc, item ) => {
-				acc[ item.id ] = item;
-				return acc;
-			}, {} );
+		const titleMap = responses.reduce( ( acc, item ) => {
+			acc[ item.id ] = item.title.rendered || '';
+			return acc;
+		}, {} );
+		const mediaMap = responses.reduce( ( acc, item ) => {
+			acc[ item.id ] = item;
+			return acc;
+		}, {} );
 
 		// Create new blocks
 		const newBlocks = media
@@ -318,16 +344,16 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 					id: image.id,
 					src: image.url,
 					alt: image.alt || '',
-						title,
-						sizes: image.sizes || {},
-						width,
-						height,
-						caption: image.caption || '',
-						...( getExifAttributesFromMedia(
-							mediaMap[ image.id ] || image
-						) || {} ),
-					} );
+					title,
+					sizes: image.sizes || {},
+					width,
+					height,
+					caption: image.caption || '',
+					...( getExifAttributesFromMedia(
+						mediaMap[ image.id ] || image
+					) || {} ),
 				} );
+			} );
 
 		// Replace inner blocks with the newly created blocks
 		replaceInnerBlocks( clientId, [ ...currentBlocks, ...newBlocks ] );
@@ -336,16 +362,11 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 	};
 
 	useEffect( () => {
-		setAttributes( {
-			images: innerBlocks.map( ( block ) => ( {
-				id: block.attributes.id,
-				src: block.attributes.src,
-				alt: block.attributes.alt,
-				title: block.attributes.title,
-				caption: block.attributes.caption,
-			} ) ),
-		} );
-	}, [ innerBlocks, attributes.randomizeOrder, setAttributes ] );
+		const updatedImages = getSyncedGalleryImages( innerBlocks );
+		if ( ! areGalleryImagesEqual( attributes.images, updatedImages ) ) {
+			setAttributes( { images: updatedImages } );
+		}
+	}, [ attributes.images, innerBlocks, setAttributes ] );
 
 	const getColumnsForWidth = ( width ) => {
 		if ( width <= 600 ) {
@@ -627,23 +648,26 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 						onChange={ ( newValues ) => setAttributes( newValues ) }
 					/>
 					{ applyFilters(
-							'folioBlocks.masonryGallery.responsiveGapControl',
-							<>
-								<ToggleControl
-									label={ __( 'Remove Image Gap', 'folioblocks' ) }
-									checked={ !! attributes.noGap }
-									onChange={ ( noGap ) =>
-										setAttributes( { noGap } )
-									}
-									help={ __(
-										'Remove gap between images.',
-										'folioblocks'
-									) }
-									__nextHasNoMarginBottom
-								/>
-								{ imageProFeatureNotice( 'responsiveGaps' ) }
-							</>,
-							{ attributes, setAttributes }
+						'folioBlocks.masonryGallery.responsiveGapControl',
+						<>
+							<ToggleControl
+								label={ __(
+									'Remove Image Gap',
+									'folioblocks'
+								) }
+								checked={ !! attributes.noGap }
+								onChange={ ( noGap ) =>
+									setAttributes( { noGap } )
+								}
+								help={ __(
+									'Remove gap between images.',
+									'folioblocks'
+								) }
+								__nextHasNoMarginBottom
+							/>
+							{ imageProFeatureNotice( 'responsiveGaps' ) }
+						</>,
+						{ attributes, setAttributes }
 					) }
 					{ ! isInsideProofingGallery &&
 						applyFilters(
@@ -657,27 +681,35 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 						title={ __( 'Gallery Click Settings', 'folioblocks' ) }
 						initialOpen={ true }
 					>
-					<SelectControl
-						label={ __( 'Image Click Behavior', 'folioblocks' ) }
-						value={ activeImageClickAction }
-						options={ imageClickActionOptions }
-						onChange={ ( value ) =>
-							setAttributes( getImageClickAttributes( value ) )
-						}
-						__nextHasNoMarginBottom
-						__next40pxDefaultSize
-						help={ __( 'Choose what happens when visitors click gallery images.', 'folioblocks' ) }
-					/>
-					{ applyFilters(
-						'folioBlocks.masonryGallery.imageClickActionNotice',
-						imageProFeatureNotice( 'clickActions' ),
-						{
-							attributes,
-							setAttributes,
-							hasWooCommerce,
-							effectiveEnableWoo,
-						}
-					) }
+						<SelectControl
+							label={ __(
+								'Image Click Behavior',
+								'folioblocks'
+							) }
+							value={ activeImageClickAction }
+							options={ imageClickActionOptions }
+							onChange={ ( value ) =>
+								setAttributes(
+									getImageClickAttributes( value )
+								)
+							}
+							__nextHasNoMarginBottom
+							__next40pxDefaultSize
+							help={ __(
+								'Choose what happens when visitors click gallery images.',
+								'folioblocks'
+							) }
+						/>
+						{ applyFilters(
+							'folioBlocks.masonryGallery.imageClickActionNotice',
+							imageProFeatureNotice( 'clickActions' ),
+							{
+								attributes,
+								setAttributes,
+								hasWooCommerce,
+								effectiveEnableWoo,
+							}
+						) }
 						{ activeImageClickAction === 'lightbox' &&
 							applyFilters(
 								'folioBlocks.masonryGallery.lightboxControls',
@@ -723,7 +755,10 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 				) }
 				{ ! isInsideProofingGallery && (
 					<PanelBody
-						title={ __( 'Gallery Filtering Settings', 'folioblocks' ) }
+						title={ __(
+							'Gallery Filtering Settings',
+							'folioblocks'
+						) }
 						initialOpen={ true }
 					>
 						{ applyFilters(
@@ -799,7 +834,15 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 				) }
 				{ applyFilters(
 					'folioBlocks.masonryGallery.filterStyleSettings',
-					<PanelBody title={ __( 'Gallery Filtering Styles', 'folioblocks' ) } initialOpen={ true }>{ imageProFeatureNotice( 'filterStyles' ) }</PanelBody>,
+					<PanelBody
+						title={ __(
+							'Gallery Filtering Styles',
+							'folioblocks'
+						) }
+						initialOpen={ true }
+					>
+						{ imageProFeatureNotice( 'filterStyles' ) }
+					</PanelBody>,
 					{ attributes, setAttributes }
 				) }
 			</InspectorControls>

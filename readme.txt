@@ -9,17 +9,17 @@ Stable tag:        1.5.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
-Create fast, responsive photo and video galleries with grid, masonry, justified, modular, and carousel layouts—ideal for photographers and creatives.
+Create fast, responsive photo and video galleries with grid, masonry, justified, modular, carousel, filmstrip, and proofing layouts for photographers, creatives, and client-focused studios.
 
 == Description ==
 
 = Native Gallery Blocks for WordPress =
 
-FolioBlocks is a **native WordPress gallery plugin** for building responsive image galleries, video galleries, portfolio layouts, and comparison blocks directly in the **Block Editor**. It is designed for photographers, designers, artists, agencies, creative businesses, and WooCommerce stores that need flexible visual layouts without shortcodes or external gallery managers.
+FolioBlocks is a **native WordPress gallery plugin** for photographers, creatives, agencies, and visual businesses who want polished image and video galleries directly inside the **Block Editor**.
 
-Create **Grid, Masonry, Justified, Carousel, Filmstrip, Modular, and Video galleries** using familiar Gutenberg controls. FolioBlocks keeps your workflow inside WordPress while giving you tools for **lightboxes, hover overlays, gallery filtering, image downloads, WooCommerce product links, EXIF display, and content protection**.
+Create **Grid, Masonry, Justified, Carousel, Filmstrip, Modular, Video, and Proofing galleries** using familiar Gutenberg controls. Add **lightboxes, hover effects & overlays, client proofing, watermark protection, filtering, downloads, WooCommerce product links, EXIF data, and social sharing** without shortcodes or a separate gallery manager.
 
-The free version includes the core gallery and media blocks. **FolioBlocks Pro** unlocks advanced creative and commerce features, including **Modular Gallery, gallery filtering, WooCommerce integration, image downloads, lazy loading, advanced styling controls, Pro List View thumbnails**, and more.
+The free version includes the core gallery and media blocks. **FolioBlocks Pro** unlocks advanced creative and commerce features, including **Modular Gallery, gallery filtering, WooCommerce integration, image downloads, lazy loading, watermark overlays, List View thumbnails**, and more.
 
 = Included Blocks =
 
@@ -33,8 +33,9 @@ The free version includes the core gallery and media blocks. **FolioBlocks Pro**
 * **Justified Gallery Block** – Professional row-based gallery with balanced heights
 * **Masonry Gallery Block** – Pinterest-style vertical gallery layout
 * **Modular Gallery Block (Pro Only)** – Build custom, magazine-style image layouts
+* **Proofing Gallery Block (Business & Agency Plans Only)** - Let clients review images, make selections, flag favorites, and leave comments
 * **Video Block** - Display a single video with custom thumbnail, lightbox playback, captions, and optional WooCommerce linking
-* **Video Gallery Block** – Showcase YouTube, Vimeo, or self-hosted videos
+* **Video Gallery Block** – Showcase YouTube, Vimeo, Bunny.net Stream, Wistia, Dailymotion, VideoPress, Loom, Cloudflare Stream, or self-hosted videos
 
 = Core Gallery Features =
 
@@ -43,10 +44,12 @@ The free version includes the core gallery and media blocks. **FolioBlocks Pro**
 * **Caption support** and accessibility-friendly interactions
 * **Drag-and-drop image ordering**
 * **100% native Gutenberg block editing** with no shortcodes and no separate gallery manager
-* **WordPress 7.0 List View inspector support** for gallery children
 
 = Pro Features =
 
+* **Client proofing galleries** for image selections, favorites, flags, and comments
+* **Watermark overlays** for gallery images and lightbox views
+* **Social sharing controls** for lightboxes and hover overlays
 * **Block transforms** to convert galleries and supported media blocks in one click
 * **Custom image click actions** for media files, custom URLs, Page/Post links, downloads, lightbox, and WooCommerce products
 * **Per-image click and hover overrides** inside galleries
@@ -55,14 +58,14 @@ The free version includes the core gallery and media blocks. **FolioBlocks Pro**
 * **Download full-resolution images**
 * **Randomize image order**
 * **Seamless looping** for Carousel Gallery
-* **Disable right-click / content protection**
+* **Disable right-click & image dragging content protection**
 * **Lazy load images** for faster performance
-* **Hover effects, image overlays, and overlay content controls**
+* **Hover effects, gradient overlays, overlay entrances, and typography controls**
 * **EXIF metadata display** in lightboxes and hover overlays
 * **Light and Dark lightbox appearances**, fullscreen viewing, swipe navigation, and combined title, caption, and EXIF layouts
 * **Password protection controls** for Posts and Pages
 * **Responsive desktop, tablet, and mobile gallery gaps**
-* **Pro List View thumbnails** for easier gallery reordering
+* **List View thumbnails** for easier gallery reordering
 * **Advanced gallery styling controls** for borders, shadows, radius, filter bars, icons, and overlays
 
 = Why FolioBlocks? =
@@ -127,16 +130,18 @@ No, the galleries will remain in place on your site. However, the **advanced lay
 == Changelog ==
 
 = 1.5.0 =
-* Added full Gradient Overlay support for Image Block, Video Block, image galleries, Video Gallery, and Filmstrip Gallery.
-* Renamed the existing Gradient Bottom image overlay to Bottom Gradient while preserving backwards compatibility.
-* Split overlay background controls so Color Overlay uses solid colors and Gradient Overlay uses gradient backgrounds.
+* Added Proofing Gallery Block (Business & Agency Only) for image selections, favorites, flags, and comments.
+* Added Watermark overlays for gallery images and Lightbox views.
+* Added Social Media Sharing Controls for Lightboxes and Overlays.
+* Added Wistia, Dailymotion, VideoPress, Loom, and Cloudflare Stream support to Video Block and Video Gallery embeds.
+* Added full Gradient Overlay support for Image Block, Video Block, image galleries, & Video Gallery.
 * Added Hover Effect controls with Zoom In, Zoom Out, Lift, Tilt, Pop, Glare, Pan, and Desaturate effects.
-* Improved Tilt hover behavior so it responds to pointer position and visibly tilts the whole image or video surface.
 * Added Overlay Entrance controls for supported overlays, including fade and slide directions.
-* Added overlay typography controls for Image Block and image gallery overlays, including theme font family plus weight and style.
-* Added gradient-safe CSS sanitization for overlay backgrounds.
-* Added gradient overlay support to gallery defaults and per-image or per-video hover overrides.
-* Renamed Hover Style controls to Overlay Style for clearer editor wording.
+* Added Overlay typography controls for Image Block and Image galleries, including theme font family plus weight and style.
+* Renamed the existing Gradient Bottom image overlay to Bottom Gradient while preserving backwards compatibility.
+
+= 1.4.3 =
+* Fixed Grid and Masonry Gallery editor syncing so repeated autosaves cannot duplicate existing gallery images.
 
 = 1.4.2 =
 * Fixed Modular Gallery row alignment when Image Stacks appear beside Image Blocks.
