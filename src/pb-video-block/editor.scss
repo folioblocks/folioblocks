@@ -3,6 +3,24 @@
  * Editor SCSS
  **/
 
+ .pb-block-preview {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	background: #3b82f6!important;
+	color: #fff;
+
+	svg {
+		width: 100px;
+		height: 100px;
+		stroke: #fff;
+		fill: #fff;
+	}
+}
+
 // Placeholder Styles
 .pb-video-block {
 	opacity: 1 !important;

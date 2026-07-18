@@ -1,6 +1,12 @@
 import { store as blockEditorStore } from '@wordpress/block-editor';
 import { useSelect } from '@wordpress/data';
 
+const EMPTY_PROOFING_GALLERY_ATTRIBUTES = {};
+const OUTSIDE_PROOFING_GALLERY_CONTEXT = {
+	isInsideProofingGallery: false,
+	proofingGalleryAttributes: EMPTY_PROOFING_GALLERY_ATTRIBUTES,
+};
+
 export const useProofingGalleryContext = ( clientId ) =>
 	useSelect(
 		( select ) => {
@@ -13,16 +19,14 @@ export const useProofingGalleryContext = ( clientId ) =>
 			);
 
 			if ( ! proofingParentId ) {
-				return {
-					isInsideProofingGallery: false,
-					proofingGalleryAttributes: {},
-				};
+				return OUTSIDE_PROOFING_GALLERY_CONTEXT;
 			}
 
 			return {
 				isInsideProofingGallery: true,
 				proofingGalleryAttributes:
-					blockEditor.getBlock( proofingParentId )?.attributes || {},
+					blockEditor.getBlock( proofingParentId )?.attributes ||
+					EMPTY_PROOFING_GALLERY_ATTRIBUTES,
 			};
 		},
 		[ clientId ]

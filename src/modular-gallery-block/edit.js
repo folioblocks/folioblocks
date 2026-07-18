@@ -36,6 +36,7 @@ import {
 import "./editor.scss";
 
 const ALLOWED_BLOCKS = ["folioblocks/pb-image-row"];
+const PLACEHOLDER_ASPECT_RATIO = 4 / 3;
 
 const getImageClickAction = ({
 	lightbox,
@@ -152,6 +153,41 @@ const getImageAspectRatio = (img) => {
 	return width > 0 && height > 0 ? width / height : 0;
 };
 
+const getImageWrapperAspectRatio = (wrapper) => {
+	const ratio = getImageAspectRatio(wrapper?.querySelector("img"));
+	if (ratio) {
+		return ratio;
+	}
+
+	return wrapper?.querySelector(".pb-image-block")
+		? PLACEHOLDER_ASPECT_RATIO
+		: 0;
+};
+
+const isPlaceholderImageWrapper = (wrapper) =>
+	wrapper?.classList.contains("wp-block-folioblocks-pb-image-block") &&
+	!wrapper.querySelector("img") &&
+	wrapper.querySelector(".pb-image-block");
+
+const applyPlaceholderWrapperLayout = (
+	wrapper,
+	width = "100%",
+	marginRight = "0",
+) => {
+	wrapper.style.width = width;
+	wrapper.style.height = "";
+	wrapper.style.marginRight = marginRight;
+	wrapper.style.marginBottom = "";
+
+	const figure = wrapper.querySelector(".pb-image-block");
+	if (figure) {
+		figure.style.width = "100%";
+		figure.style.height = "";
+		figure.style.marginRight = "0";
+		figure.style.marginBottom = "0";
+	}
+};
+
 const getRowAspectRatio = (rowWrapper) => {
 	const row = rowWrapper?.querySelector(".pb-image-row");
 	const imageWrappers = row
@@ -161,7 +197,7 @@ const getRowAspectRatio = (rowWrapper) => {
 		: [];
 
 	return imageWrappers.reduce((total, wrapper) => {
-		const ratio = getImageAspectRatio(wrapper.querySelector("img"));
+		const ratio = getImageWrapperAspectRatio(wrapper);
 		return total + ratio;
 	}, 0);
 };
@@ -184,7 +220,7 @@ const getStackItems = (stackWrapper) => {
 	return Array.from(stack.children)
 		.map((child) => {
 			if (child.classList.contains("wp-block-folioblocks-pb-image-block")) {
-				const ratio = getImageAspectRatio(child.querySelector("img"));
+				const ratio = getImageWrapperAspectRatio(child);
 				return ratio ? { wrapper: child, type: "image", ratio } : null;
 			}
 
@@ -251,9 +287,7 @@ const applyNestedRowLayout = (rowWrapper, width, height, gap) => {
 	const imageWrappers = Array.from(row.children).filter((child) =>
 		child.classList.contains("wp-block-folioblocks-pb-image-block"),
 	);
-	const ratios = imageWrappers.map((wrapper) =>
-		getImageAspectRatio(wrapper.querySelector("img")),
-	);
+	const ratios = imageWrappers.map(getImageWrapperAspectRatio);
 	const totalRatio = ratios.reduce((total, ratio) => total + ratio, 0);
 	if (!totalRatio || ratios.some((ratio) => !ratio)) {
 		return;
@@ -490,6 +524,29 @@ export default function Edit(props) {
 			const containerWidth = row.clientWidth;
 			const gap = getGalleryGapForWidth(attributes, containerWidth);
 			const totalGaps = gap * (wrappers.length - 1);
+			const hasOnlyPlaceholders = wrappers.every(isPlaceholderImageWrapper);
+
+			if (hasOnlyPlaceholders) {
+				wrappers.forEach((wrapper, index) => {
+					const width =
+						wrappers.length > 1
+							? `calc((100% - ${totalGaps}px) / ${wrappers.length})`
+							: "100%";
+					applyPlaceholderWrapperLayout(
+						wrapper,
+						width,
+						index === wrappers.length - 1 ? "0" : `${gap}px`,
+					);
+				});
+				layouts[rowIndex] = wrappers.map((wrapper, index) => ({
+					width: wrapper.style.width,
+					height: "auto",
+					marginRight: index === wrappers.length - 1 ? "0" : `${gap}px`,
+					isPlaceholder: true,
+					isStack: false,
+				}));
+				return;
+			}
 
 			const aspectRatios = [];
 			let totalNaturalWidth = 0;
@@ -502,7 +559,7 @@ export default function Edit(props) {
 				let nestedRowGapAdjustment = 0;
 
 				if (wrapper.classList.contains("wp-block-folioblocks-pb-image-block")) {
-					ratio = getImageAspectRatio(wrapper.querySelector("img"));
+					ratio = getImageWrapperAspectRatio(wrapper);
 				} else if (
 					wrapper.classList.contains("wp-block-folioblocks-pb-image-stack")
 				) {

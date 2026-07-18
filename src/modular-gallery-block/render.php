@@ -35,6 +35,10 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
         $fbks_wrapper_args['data-disable-right-click'] = 'true';
     }
 
+    if ( ! empty( $attributes['disableDragToSave'] ) ) {
+        $fbks_wrapper_args['data-disable-drag-to-save'] = 'true';
+    }
+
     if ( ! empty( $attributes['enableDownload'] ) ) {
         $fbks_wrapper_args['data-enable-download'] = 'true';
     }

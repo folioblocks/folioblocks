@@ -185,39 +185,6 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		} );
 	}
 
-	// Helper function to wait for all images to load
-	function waitForImages( container, callback ) {
-		const images = container.querySelectorAll( 'img.pb-image-block-img' );
-		let loadedCount = 0;
-
-		if ( images.length === 0 ) {
-			callback();
-			return;
-		}
-
-		images.forEach( ( img ) => {
-			if ( img.complete ) {
-				loadedCount++;
-				if ( loadedCount === images.length ) {
-					callback();
-				}
-			} else {
-				img.addEventListener( 'load', () => {
-					loadedCount++;
-					if ( loadedCount === images.length ) {
-						callback();
-					}
-				} );
-				img.addEventListener( 'error', () => {
-					loadedCount++;
-					if ( loadedCount === images.length ) {
-						callback();
-					}
-				} );
-			}
-		} );
-	}
-
 	// Function to recalculate layout
 	function recalculateLayout( container ) {
 		if ( ! container ) {
@@ -437,6 +404,18 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		} );
 	}
 
+	function watchImageLoads( row ) {
+		row.querySelectorAll( 'img.pb-image-block-img' ).forEach( ( img ) => {
+			if ( img.complete ) {
+				return;
+			}
+
+			const reschedule = () => scheduleLayout( row );
+			img.addEventListener( 'load', reschedule, { once: true } );
+			img.addEventListener( 'error', reschedule, { once: true } );
+		} );
+	}
+
 	// Initialize layout on DOMContentLoaded and resize
 	document.querySelectorAll( '.pb-modular-gallery' ).forEach( ( gallery ) => {
 		const wrapper = gallery.closest(
@@ -472,10 +451,13 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			}
 
 			imageBlocks.forEach( ( block, index ) => {
-				setTimeout( () => {
-					block.style.opacity = 1;
-					block.style.transform = 'translateY(0)';
-				}, index * 150 );
+				setTimeout(
+					() => {
+						block.style.opacity = 1;
+						block.style.transform = 'translateY(0)';
+					},
+					Math.min( index * 25, 300 )
+				);
 			} );
 		};
 
@@ -492,22 +474,8 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		}
 
 		rows.forEach( ( row ) => {
-			waitForImages( row, () => {
-				const stacks = row.querySelectorAll( '.pb-image-stack' );
-				if ( stacks.length === 0 ) {
-					scheduleLayout( row, 0, markRowReady );
-				} else {
-					let stacksLoaded = 0;
-					stacks.forEach( ( stack ) => {
-						waitForImages( stack, () => {
-							stacksLoaded++;
-							if ( stacksLoaded === stacks.length ) {
-								scheduleLayout( row, 0, markRowReady );
-							}
-						} );
-					} );
-				}
-			} );
+			watchImageLoads( row );
+			scheduleLayout( row, 0, markRowReady );
 			window.addEventListener( 'load', () => scheduleLayout( row ) );
 			window.addEventListener( 'resize', () => scheduleLayout( row ) );
 		} );

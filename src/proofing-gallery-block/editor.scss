@@ -8,13 +8,15 @@
 	align-items: center;
 	justify-content: center;
 	padding: 20px;
-	border: 1px solid #d0d5dd;
+	border: 1px solid #ccc;
 	border-radius: 8px;
-	background: #1f2937;
+	background: #3b82f6!important;
+	color: #fff;
 
 	svg {
 		width: 100px;
 		height: 100px;
+		stroke: #fff;
 		fill: #fff;
 	}
 }
