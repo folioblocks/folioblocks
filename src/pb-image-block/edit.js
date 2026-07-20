@@ -172,6 +172,11 @@ const isWordPressVersionAtLeast = ( version, minimumVersion ) => {
 	return true;
 };
 
+const PROOFING_COMMENT_MAX_LENGTH = 1000;
+
+const truncateProofingComment = ( comment = '' ) =>
+	String( comment || '' ).slice( 0, PROOFING_COMMENT_MAX_LENGTH );
+
 const ImagePreviewControl = ( { id, selectedSrc, title, onSelectImage } ) => {
 	if ( ! selectedSrc ) {
 		return null;
@@ -247,7 +252,9 @@ const ProofingThumbnailControls = ( {
 } ) => {
 	const [ liked, setLiked ] = useState( false );
 	const [ flagColor, setFlagColor ] = useState( '' );
+	const [ comment, setComment ] = useState( '' );
 	const [ isFlagPickerOpen, setIsFlagPickerOpen ] = useState( false );
+	const [ isCommentOpen, setIsCommentOpen ] = useState( false );
 	const controlsRef = useRef( null );
 	const flagButtonRef = useRef( null );
 	const flagColors = [
@@ -255,8 +262,18 @@ const ProofingThumbnailControls = ( {
 		{ label: __( 'Orange', 'folioblocks' ), value: 'orange' },
 		{ label: __( 'Green', 'folioblocks' ), value: 'green' },
 	];
+	const enabledProofingControls = [
+		enableHeart ? 'heart' : '',
+		enableFlag ? 'flag' : '',
+		enableComment ? 'comment' : '',
+	].filter( Boolean );
+	const getProofingControlSlot = ( control ) =>
+		enabledProofingControls.indexOf( control ) + 1;
 	const stopProofingClick = ( event ) => {
 		event.preventDefault();
+		event.stopPropagation();
+	};
+	const stopProofingPanelEvent = ( event ) => {
 		event.stopPropagation();
 	};
 
@@ -271,10 +288,14 @@ const ProofingThumbnailControls = ( {
 
 		imageBlock.dataset.proofingHearted = liked ? 'true' : 'false';
 		imageBlock.dataset.proofingFlag = flagColor || '';
+		imageBlock.dataset.proofingComment = comment;
+		imageBlock.dataset.proofingCommented = comment.trim()
+			? 'true'
+			: 'false';
 		window.dispatchEvent(
 			new CustomEvent( 'folioblocks:proofing-state-change' )
 		);
-	}, [ liked, flagColor ] );
+	}, [ liked, flagColor, comment ] );
 
 	return (
 		<div className="fbks-proofing-thumbnail-controls" ref={ controlsRef }>
@@ -283,7 +304,9 @@ const ProofingThumbnailControls = ( {
 					type="button"
 					className={ `fbks-proofing-thumbnail-control fbks-proofing-thumbnail-control--heart${
 						liked ? ' is-active' : ''
-					}` }
+					} fbks-proofing-thumbnail-control--slot-${ getProofingControlSlot(
+						'heart'
+					) }` }
 					aria-pressed={ liked }
 					aria-label={ __( 'Like image', 'folioblocks' ) }
 					onClick={ ( event ) => {
@@ -303,7 +326,9 @@ const ProofingThumbnailControls = ( {
 						type="button"
 						className={ `fbks-proofing-thumbnail-control fbks-proofing-thumbnail-control--flag${
 							flagColor ? ` is-${ flagColor }` : ''
-						}` }
+						} fbks-proofing-thumbnail-control--slot-${ getProofingControlSlot(
+							'flag'
+						) }` }
 						aria-label={ __( 'Set flag color', 'folioblocks' ) }
 						onClick={ ( event ) => {
 							stopProofingClick( event );
@@ -352,16 +377,78 @@ const ProofingThumbnailControls = ( {
 				</div>
 			) }
 			{ enableComment && (
-				<button
-					type="button"
-					className="fbks-proofing-thumbnail-control fbks-proofing-thumbnail-control--comment"
-					aria-label={ __( 'Comment on image', 'folioblocks' ) }
-					onClick={ stopProofingClick }
-				>
-					<svg viewBox="0 0 24 24" aria-hidden="true">
-						<path d="M5 5h14v10H8.7L5 18.4V5z" />
-					</svg>
-				</button>
+				<>
+					<button
+						type="button"
+						className={ `fbks-proofing-thumbnail-control fbks-proofing-thumbnail-control--comment${
+							comment.trim() ? ' is-active' : ''
+						}${ isCommentOpen ? ' is-open' : '' } fbks-proofing-thumbnail-control--slot-${ getProofingControlSlot(
+							'comment'
+						) }` }
+						aria-label={ __( 'Comment on image', 'folioblocks' ) }
+						onClick={ ( event ) => {
+							stopProofingClick( event );
+							setIsFlagPickerOpen( false );
+							setIsCommentOpen( ! isCommentOpen );
+						} }
+					>
+						<svg viewBox="0 0 24 24" aria-hidden="true">
+							<path d="M5 5h14v10H8.7L5 18.4V5z" />
+						</svg>
+					</button>
+					{ isCommentOpen && (
+						<div
+							className={ `fbks-proofing-comment-popover is-open fbks-proofing-popover--slot-${ getProofingControlSlot(
+								'comment'
+							) }` }
+							onMouseDown={ stopProofingPanelEvent }
+						>
+							<div className="fbks-proofing-comment-popover__label">
+								<span>{ __( 'Comment', 'folioblocks' ) }</span>
+								<textarea
+									className="fbks-proofing-comment-popover__field"
+									rows="3"
+									maxLength={ PROOFING_COMMENT_MAX_LENGTH }
+									value={ comment }
+									aria-label={ __( 'Comment', 'folioblocks' ) }
+									onChange={ ( event ) =>
+										setComment(
+											truncateProofingComment(
+												event.target.value
+											)
+										)
+									}
+								/>
+								<span className="fbks-proofing-comment-popover__counter">
+									{ comment.length } /{ ' ' }
+									{ PROOFING_COMMENT_MAX_LENGTH }
+								</span>
+							</div>
+							<div className="fbks-proofing-comment-popover__actions">
+								<button
+									type="button"
+									className="fbks-proofing-comment-popover__button"
+									onClick={ ( event ) => {
+										stopProofingClick( event );
+										setComment( '' );
+									} }
+								>
+									{ __( 'Clear', 'folioblocks' ) }
+								</button>
+								<button
+									type="button"
+									className="fbks-proofing-comment-popover__button is-primary"
+									onClick={ ( event ) => {
+										stopProofingClick( event );
+										setIsCommentOpen( false );
+									} }
+								>
+									{ __( 'Done', 'folioblocks' ) }
+								</button>
+							</div>
+						</div>
+					) }
+				</>
 			) }
 		</div>
 	);

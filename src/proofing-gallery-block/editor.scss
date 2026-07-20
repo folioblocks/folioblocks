@@ -24,9 +24,9 @@
 .fbks-proofing-gallery {
 	position: relative;
 	box-sizing: border-box;
-	width: 100%;
 	max-width: none;
 	padding: 0;
+	--fbks-proofing-edge-gutter: clamp(16px, 3vw, 32px);
 
 	&.is-setup {
 		padding: 0;
@@ -39,6 +39,17 @@
 
 .fbks-proofing-inspector__password-action {
 	margin-bottom: 18px;
+}
+
+.fbks-proofing-inspector__divider {
+	height: 1px;
+	margin: 18px 0;
+	background: #e0e0e0;
+}
+
+.fbks-proofing-password-field.is-masked input {
+	-webkit-text-security: disc;
+	text-security: disc;
 }
 
 .fbks-proofing-inspector__gallery-style {
@@ -56,6 +67,9 @@
 
 .fbks-proofing-gallery__setup {
 	display: grid;
+	box-sizing: border-box;
+	width: 100%;
+	max-width: none;
 }
 
 .fbks-proofing-gallery__setup-fields {
@@ -69,6 +83,9 @@
 
 .fbks-proofing-gallery__placeholder {
 	align-items: flex-start;
+	box-sizing: border-box;
+	width: 100%;
+	max-width: none;
 	padding: 32px;
 	border-color: #1f2937;
 	box-shadow: none;
@@ -130,14 +147,81 @@
 	margin-top: 24px;
 }
 
-.wp-block-folioblocks-proofing-gallery-block.alignfull,
-.wp-block-folioblocks-proofing-gallery-block.alignfull .fbks-proofing-gallery,
-.wp-block-folioblocks-proofing-gallery-block.alignfull .fbks-proofing-gallery__inner,
-.wp-block-folioblocks-proofing-gallery-block.alignfull .block-editor-inner-blocks,
-.wp-block-folioblocks-proofing-gallery-block.alignfull .block-editor-block-list__layout,
-.wp-block-folioblocks-proofing-gallery-block.alignfull .wp-block-folioblocks-grid-gallery-block,
-.wp-block-folioblocks-proofing-gallery-block.alignfull .wp-block-folioblocks-justified-gallery-block,
-.wp-block-folioblocks-proofing-gallery-block.alignfull .wp-block-folioblocks-masonry-gallery-block {
+.fbks-proofing-gallery[data-align="full"] .fbks-proofing-gallery__actions,
+.fbks-proofing-gallery.alignfull .fbks-proofing-gallery__actions,
+.wp-block-folioblocks-proofing-gallery-block.alignfull
+	.fbks-proofing-gallery__actions {
+	box-sizing: border-box;
+	padding-right: var(--fbks-proofing-edge-gutter);
+	padding-left: var(--fbks-proofing-edge-gutter);
+}
+
+.editor-styles-wrapper
+	[data-type="folioblocks/proofing-gallery-block"][data-align="full"],
+.editor-styles-wrapper .fbks-proofing-gallery[data-align="full"],
+.editor-styles-wrapper .wp-block-folioblocks-proofing-gallery-block.alignfull {
+	box-sizing: border-box;
+	max-width: none !important;
+}
+
+.editor-styles-wrapper
+	[data-type="folioblocks/proofing-gallery-block"][data-align="full"]
+	> .fbks-proofing-gallery,
+.editor-styles-wrapper
+	.fbks-proofing-gallery[data-align="full"]
+	.fbks-proofing-gallery__setup,
+.editor-styles-wrapper
+	.fbks-proofing-gallery[data-align="full"]
+	.fbks-proofing-gallery__placeholder,
+.editor-styles-wrapper
+	.fbks-proofing-gallery[data-align="full"]
+	.fbks-proofing-gallery__inner,
+.editor-styles-wrapper
+	.fbks-proofing-gallery[data-align="full"]
+	.block-editor-inner-blocks,
+.editor-styles-wrapper
+	.fbks-proofing-gallery[data-align="full"]
+	.block-editor-block-list__layout,
+.editor-styles-wrapper
+	.fbks-proofing-gallery[data-align="full"]
+	[data-type^="folioblocks/"][data-type$="gallery-block"],
+.editor-styles-wrapper
+	[data-type="folioblocks/proofing-gallery-block"][data-align="full"]
+	.fbks-proofing-gallery__setup,
+.editor-styles-wrapper
+	[data-type="folioblocks/proofing-gallery-block"][data-align="full"]
+	.fbks-proofing-gallery__placeholder,
+.editor-styles-wrapper
+	[data-type="folioblocks/proofing-gallery-block"][data-align="full"]
+	.fbks-proofing-gallery__inner,
+.editor-styles-wrapper
+	[data-type="folioblocks/proofing-gallery-block"][data-align="full"]
+	.block-editor-inner-blocks,
+.editor-styles-wrapper
+	[data-type="folioblocks/proofing-gallery-block"][data-align="full"]
+	.block-editor-block-list__layout,
+.editor-styles-wrapper
+	[data-type="folioblocks/proofing-gallery-block"][data-align="full"]
+	[data-type^="folioblocks/"][data-type$="gallery-block"],
+.editor-styles-wrapper
+	.wp-block-folioblocks-proofing-gallery-block.alignfull
+	.fbks-proofing-gallery__setup,
+.editor-styles-wrapper
+	.wp-block-folioblocks-proofing-gallery-block.alignfull
+	.fbks-proofing-gallery__placeholder,
+.editor-styles-wrapper
+	.wp-block-folioblocks-proofing-gallery-block.alignfull
+	.fbks-proofing-gallery__inner,
+.editor-styles-wrapper
+	.wp-block-folioblocks-proofing-gallery-block.alignfull
+	.block-editor-inner-blocks,
+.editor-styles-wrapper
+	.wp-block-folioblocks-proofing-gallery-block.alignfull
+	.block-editor-block-list__layout,
+.editor-styles-wrapper
+	.wp-block-folioblocks-proofing-gallery-block.alignfull
+	[data-type^="folioblocks/"][data-type$="gallery-block"] {
+	box-sizing: border-box;
 	width: 100%;
 	max-width: none;
 }

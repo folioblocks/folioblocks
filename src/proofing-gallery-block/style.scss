@@ -5,6 +5,7 @@
 
 .wp-block-folioblocks-proofing-gallery-block {
 	box-sizing: border-box;
+	--fbks-proofing-edge-gutter: clamp(16px, 3vw, 32px);
 }
 
 .fbks-proofing-gallery__filter-bar {
@@ -34,6 +35,19 @@
 	&.align-right {
 		margin-right: 0;
 		margin-left: auto;
+	}
+}
+
+.wp-block-folioblocks-proofing-gallery-block.alignfull
+	.fbks-proofing-gallery__filter-bar {
+	max-width: calc(100% - (var(--fbks-proofing-edge-gutter) * 2));
+
+	&.align-left {
+		margin-left: var(--fbks-proofing-edge-gutter);
+	}
+
+	&.align-right {
+		margin-right: var(--fbks-proofing-edge-gutter);
 	}
 }
 
@@ -131,6 +145,13 @@
 	gap: 12px;
 	justify-content: flex-end;
 	margin-top: 24px;
+}
+
+.wp-block-folioblocks-proofing-gallery-block.alignfull
+	.fbks-proofing-gallery__actions {
+	box-sizing: border-box;
+	padding-right: var(--fbks-proofing-edge-gutter);
+	padding-left: var(--fbks-proofing-edge-gutter);
 }
 
 .fbks-proofing-gallery__action-button {

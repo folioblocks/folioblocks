@@ -29,6 +29,7 @@
 			"padding": true
 		},
 		"interactivity": true,
+		"multiple": false,
 		"customClassName": false,
 		"anchor": false,
 		"html": false
@@ -54,6 +55,10 @@
 			"type": "string",
 			"enum": ["grid", "justified", "masonry"],
 			"default": "grid"
+		},
+		"galleryTypeSettings": {
+			"type": "object",
+			"default": {}
 		},
 		"enableHeart": {
 			"type": "boolean",

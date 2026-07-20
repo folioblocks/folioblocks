@@ -688,6 +688,7 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 		<?php endif; ?>
 
 		<?php if ( $fbks_is_inside_proofing_gallery && ( $fbks_proofing_enable_heart || $fbks_proofing_enable_flag || $fbks_proofing_enable_comment ) ) : ?>
+			<?php $fbks_proofing_control_slot = 1; ?>
 			<div
 				class="fbks-proofing-thumbnail-controls"
 				data-wp-context="<?php echo esc_attr( wp_json_encode( [
@@ -701,7 +702,7 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 				<?php if ( $fbks_proofing_enable_heart ) : ?>
 					<button
 						type="button"
-						class="fbks-proofing-thumbnail-control fbks-proofing-thumbnail-control--heart"
+						class="fbks-proofing-thumbnail-control fbks-proofing-thumbnail-control--heart fbks-proofing-thumbnail-control--slot-<?php echo esc_attr( $fbks_proofing_control_slot ); ?>"
 						data-wp-on--click="actions.toggleHeart"
 						data-wp-class--is-active="state.isCurrentImageHearted"
 						data-wp-bind--aria-pressed="state.isCurrentImageHearted"
@@ -710,12 +711,14 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 					>
 						<?php echo wp_kses( $fbks_proofing_icon( 'heart' ), fbks_get_allowed_post_html_with_svg() ); ?>
 					</button>
+					<?php $fbks_proofing_control_slot++; ?>
 				<?php endif; ?>
 
 				<?php if ( $fbks_proofing_enable_flag ) : ?>
+					<?php $fbks_proofing_flag_slot = $fbks_proofing_control_slot; ?>
 					<button
 						type="button"
-						class="fbks-proofing-thumbnail-control fbks-proofing-thumbnail-control--flag"
+						class="fbks-proofing-thumbnail-control fbks-proofing-thumbnail-control--flag fbks-proofing-thumbnail-control--slot-<?php echo esc_attr( $fbks_proofing_flag_slot ); ?>"
 						data-wp-on--click="actions.toggleFlagPanel"
 						data-wp-class--is-red="state.isCurrentImageFlagRed"
 						data-wp-class--is-orange="state.isCurrentImageFlagOrange"
@@ -724,7 +727,7 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 					>
 						<?php echo wp_kses( $fbks_proofing_icon( 'flag' ), fbks_get_allowed_post_html_with_svg() ); ?>
 					</button>
-					<div class="fbks-proofing-flag-popover" data-wp-class--is-open="state.isCurrentImageFlagPanelOpen" data-wp-bind--hidden="!state.isCurrentImageFlagPanelOpen" hidden>
+					<div class="fbks-proofing-flag-popover fbks-proofing-popover--slot-<?php echo esc_attr( $fbks_proofing_flag_slot ); ?>" data-wp-class--is-open="state.isCurrentImageFlagPanelOpen" data-wp-bind--hidden="!state.isCurrentImageFlagPanelOpen" hidden>
 						<button type="button" class="fbks-proofing-flag-swatch is-red" data-proofing-flag-color="red" data-wp-on--click="actions.setFlagFromContext" aria-label="<?php esc_attr_e( 'Red Flag', 'folioblocks' ); ?>"></button>
 						<button type="button" class="fbks-proofing-flag-swatch is-orange" data-proofing-flag-color="orange" data-wp-on--click="actions.setFlagFromContext" aria-label="<?php esc_attr_e( 'Orange Flag', 'folioblocks' ); ?>"></button>
 						<button type="button" class="fbks-proofing-flag-swatch is-green" data-proofing-flag-color="green" data-wp-on--click="actions.setFlagFromContext" aria-label="<?php esc_attr_e( 'Green Flag', 'folioblocks' ); ?>"></button>
@@ -732,12 +735,14 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 							<?php esc_html_e( 'Clear', 'folioblocks' ); ?>
 						</button>
 					</div>
+					<?php $fbks_proofing_control_slot++; ?>
 				<?php endif; ?>
 
 				<?php if ( $fbks_proofing_enable_comment ) : ?>
+					<?php $fbks_proofing_comment_slot = $fbks_proofing_control_slot; ?>
 					<button
 						type="button"
-						class="fbks-proofing-thumbnail-control fbks-proofing-thumbnail-control--comment"
+						class="fbks-proofing-thumbnail-control fbks-proofing-thumbnail-control--comment fbks-proofing-thumbnail-control--slot-<?php echo esc_attr( $fbks_proofing_comment_slot ); ?>"
 						data-wp-on--click="actions.toggleCommentPanel"
 						data-wp-class--is-active="state.isCurrentImageCommented"
 						data-wp-class--is-open="state.isCurrentImageCommentPanelOpen"
@@ -745,16 +750,17 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 					>
 						<?php echo wp_kses( $fbks_proofing_icon( 'comment' ), fbks_get_allowed_post_html_with_svg() ); ?>
 					</button>
-					<div class="fbks-proofing-comment-popover" data-wp-class--is-open="state.isCurrentImageCommentPanelOpen" data-wp-bind--hidden="!state.isCurrentImageCommentPanelOpen" hidden>
+					<div class="fbks-proofing-comment-popover fbks-proofing-popover--slot-<?php echo esc_attr( $fbks_proofing_comment_slot ); ?>" data-wp-class--is-open="state.isCurrentImageCommentPanelOpen" data-wp-bind--hidden="!state.isCurrentImageCommentPanelOpen" hidden>
 						<label class="fbks-proofing-comment-popover__label">
 							<span><?php esc_html_e( 'Comment', 'folioblocks' ); ?></span>
 							<textarea
 								class="fbks-proofing-comment-popover__field"
 								rows="3"
-								maxlength="500"
+								maxlength="1000"
 								data-wp-on--input="actions.setCommentFromInput"
 								data-wp-bind--value="state.currentImageComment"
 							></textarea>
+							<span class="fbks-proofing-comment-popover__counter" data-wp-text="state.currentImageCommentCounter">0 / 1000</span>
 						</label>
 						<div class="fbks-proofing-comment-popover__actions">
 							<button type="button" class="fbks-proofing-comment-popover__button" data-wp-on--click="actions.clearComment">

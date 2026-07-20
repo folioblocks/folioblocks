@@ -15,7 +15,7 @@
 	"supports": {
         "align": [ "wide", "full" ],
 		"color": {
-			"background": false,
+			"background": true,
 			"gradients": false,
 			"text": false
 		},

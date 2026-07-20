@@ -76,9 +76,34 @@ const GALLERY_BLOCK_BY_STYLE = {
 	masonry: 'folioblocks/masonry-gallery-block',
 };
 
+const GALLERY_STYLE_BY_BLOCK = Object.fromEntries(
+	Object.entries( GALLERY_BLOCK_BY_STYLE ).map( ( [ style, blockName ] ) => [
+		blockName,
+		style,
+	] )
+);
+
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const getGalleryAttributesForStyle = () => ( {
+const getGalleryPasswordControlProps = ( isVisible = false ) => ( {
+	type: 'text',
+	className: [
+		'fbks-proofing-password-field',
+		isVisible ? '' : 'is-masked',
+	]
+		.filter( Boolean )
+		.join( ' ' ),
+	autoComplete: 'off',
+	autoCorrect: 'off',
+	autoCapitalize: 'off',
+	spellCheck: false,
+	name: 'fbks-proofing-client-gallery-key',
+	'data-lpignore': 'true',
+	'data-1p-ignore': 'true',
+	'data-form-type': 'other',
+} );
+
+const getProofingGalleryWorkflowAttributes = () => ( {
 	lightbox: true,
 	lightboxTheme: 'dark',
 	lightboxContent: 'none',
@@ -90,6 +115,76 @@ const getGalleryAttributesForStyle = () => ( {
 	randomizeOrder: false,
 	onHoverTitle: false,
 } );
+
+const getGalleryDefaultsForStyle = ( style, attributes ) => {
+	const sharedDefaults = {
+		resolution: attributes.resolution || 'large',
+		gap: attributes.gap ?? 10,
+		tabletGap: attributes.tabletGap ?? 10,
+		mobileGap: attributes.mobileGap ?? 10,
+		borderWidth: attributes.borderWidth ?? 0,
+		borderRadius: attributes.borderRadius ?? 0,
+		borderColor: attributes.borderColor || '#ffffff',
+		dropShadow: !! attributes.dropShadow,
+		shadowStyle: attributes.shadowStyle || '',
+		enableWatermarking: !! attributes.enableWatermarking,
+		watermarkId: attributes.watermarkId || '',
+		watermarkDisplay: attributes.watermarkDisplay || 'none',
+	};
+
+	if ( style === 'justified' ) {
+		return {
+			...sharedDefaults,
+			rowHeight: attributes.rowHeight ?? 220,
+			tabletRowHeight: attributes.tabletRowHeight ?? 190,
+			mobileRowHeight: attributes.mobileRowHeight ?? 160,
+		};
+	}
+
+	return {
+		...sharedDefaults,
+		columns: attributes.columns ?? 4,
+		tabletColumns: attributes.tabletColumns ?? 3,
+		mobileColumns: attributes.mobileColumns ?? 2,
+	};
+};
+
+const getGalleryTypeSettings = ( attributes ) =>
+	attributes.galleryTypeSettings &&
+	typeof attributes.galleryTypeSettings === 'object'
+		? attributes.galleryTypeSettings
+		: {};
+
+const getGalleryAttributesForStyle = ( style, attributes, typeSettings ) => ( {
+	...getGalleryDefaultsForStyle( style, attributes ),
+	...( typeSettings?.[ style ] || {} ),
+	...getProofingGalleryWorkflowAttributes(),
+} );
+
+const getStyleFromGalleryBlock = ( gallery ) =>
+	GALLERY_STYLE_BY_BLOCK[ gallery?.name ] || '';
+
+const serializeGallerySettings = ( gallery ) => ( {
+	...( gallery?.attributes || {} ),
+	preview: false,
+} );
+
+const getGalleryTypeSettingsWithCurrentGallery = ( attributes, gallery ) => {
+	const currentStyle = getStyleFromGalleryBlock( gallery );
+	const currentSettings = getGalleryTypeSettings( attributes );
+
+	if ( ! currentStyle || ! gallery ) {
+		return currentSettings;
+	}
+
+	return {
+		...currentSettings,
+		[ currentStyle ]: serializeGallerySettings( gallery ),
+	};
+};
+
+const isSameGalleryTypeSettings = ( first, second ) =>
+	JSON.stringify( first || {} ) === JSON.stringify( second || {} );
 
 const createImageBlocks = ( media = [] ) =>
 	media.map( ( image ) => {
@@ -141,6 +236,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		galleryPassword,
 		galleryStyle,
 		filterAlign = 'center',
+		align,
 		preview,
 	} = attributes;
 	const [ setupError, setSetupError ] = useState( '' );
@@ -162,8 +258,10 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	const hasGallery = innerBlocks.length > 0;
 	const blockProps = useBlockProps( {
 		ref: proofingGalleryRef,
+		'data-align': align || undefined,
 		className: [
 			'fbks-proofing-gallery',
+			align ? `align${ align }` : '',
 			hasGallery ? '' : 'is-setup',
 			hasGallery && proofingFilter !== 'all'
 				? `is-filter-${ proofingFilter }`
@@ -313,6 +411,32 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		updateBlockAttributes,
 	] );
 
+	useEffect( () => {
+		const gallery = innerBlocks[ 0 ];
+		if ( ! gallery ) {
+			return;
+		}
+
+		const nextTypeSettings = getGalleryTypeSettingsWithCurrentGallery(
+			attributes,
+			gallery
+		);
+
+		if (
+			! isSameGalleryTypeSettings(
+				nextTypeSettings,
+				attributes.galleryTypeSettings
+			)
+		) {
+			setAttributes( { galleryTypeSettings: nextTypeSettings } );
+		}
+	}, [
+		attributes,
+		attributes.galleryTypeSettings,
+		innerBlocks,
+		setAttributes,
+	] );
+
 	if ( preview ) {
 		return (
 			<div className="pb-block-preview">
@@ -363,9 +487,10 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		const style = galleryStyle || 'grid';
 		const galleryBlockName = GALLERY_BLOCK_BY_STYLE[ style ];
 		const imageBlocks = createImageBlocks( media || [] );
+		const typeSettings = getGalleryTypeSettings( attributes );
 		const galleryBlock = createBlock(
 			galleryBlockName,
-			getGalleryAttributesForStyle( style, attributes ),
+			getGalleryAttributesForStyle( style, attributes, typeSettings ),
 			imageBlocks
 		);
 
@@ -374,9 +499,17 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	};
 
 	const changeGalleryStyle = ( nextStyle ) => {
-		setAttributes( { galleryStyle: nextStyle } );
-
 		const gallery = innerBlocks[ 0 ];
+		const nextTypeSettings = getGalleryTypeSettingsWithCurrentGallery(
+			attributes,
+			gallery
+		);
+
+		setAttributes( {
+			galleryStyle: nextStyle,
+			galleryTypeSettings: nextTypeSettings,
+		} );
+
 		if ( ! gallery ) {
 			return;
 		}
@@ -385,7 +518,11 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		if ( gallery.name === nextBlockName ) {
 			updateBlockAttributes(
 				gallery.clientId,
-				getGalleryAttributesForStyle( nextStyle, attributes )
+				getGalleryAttributesForStyle(
+					nextStyle,
+					attributes,
+					nextTypeSettings
+				)
 			);
 			return;
 		}
@@ -395,7 +532,11 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			[
 				createBlock(
 					nextBlockName,
-					getGalleryAttributesForStyle( nextStyle, attributes ),
+					getGalleryAttributesForStyle(
+						nextStyle,
+						attributes,
+						nextTypeSettings
+					),
 					gallery.innerBlocks || []
 				),
 			],
@@ -432,11 +573,10 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					<TextControl
 						label={ __( 'Gallery Password', 'folioblocks' ) }
 						value={ galleryPassword }
-						type={ showPassword ? 'text' : 'password' }
+						{ ...getGalleryPasswordControlProps( showPassword ) }
 						onChange={ ( value ) =>
 							setAttributes( { galleryPassword: value } )
 						}
-						autoComplete="new-password"
 						__next40pxDefaultSize
 						__nextHasNoMarginBottom
 						help={ __(
@@ -455,9 +595,13 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 								: __( 'View Password', 'folioblocks' ) }
 						</Button>
 					</div>
+					<div
+						className="fbks-proofing-inspector__divider"
+						aria-hidden="true"
+					/>
 					<div className="fbks-proofing-inspector__gallery-style">
 						<SelectControl
-							label={ __( 'Gallery Style', 'folioblocks' ) }
+							label={ __( 'Gallery Type', 'folioblocks' ) }
 							value={ galleryStyle }
 							options={ GALLERY_STYLE_OPTIONS }
 							onChange={ changeGalleryStyle }
@@ -469,6 +613,10 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 							) }
 						/>
 					</div>
+					<div
+						className="fbks-proofing-inspector__divider"
+						aria-hidden="true"
+					/>
 					<div className="fbks-proofing-inspector__section-label">
 						{ __( 'Proofing Options', 'folioblocks' ) }
 					</div>
@@ -504,7 +652,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						}
 						__nextHasNoMarginBottom
 						help={ __(
-							'Show a comment icon for image-specific client notes. The comment workflow is front-end only.',
+							'Show a comment icon for image-specific client notes.',
 							'folioblocks'
 						) }
 					/>
@@ -616,13 +764,12 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 												'folioblocks'
 											) }
 											value={ galleryPassword }
-											type="password"
+											{ ...getGalleryPasswordControlProps() }
 											onChange={ ( value ) =>
 												setAttributes( {
 													galleryPassword: value,
 												} )
 											}
-											autoComplete="new-password"
 											__next40pxDefaultSize
 											__nextHasNoMarginBottom
 										/>
@@ -631,7 +778,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 									<div className="fbks-proofing-gallery__style-field">
 										<SelectControl
 											label={ __(
-												'Gallery Style',
+												'Gallery Type',
 												'folioblocks'
 											) }
 											value={ galleryStyle }

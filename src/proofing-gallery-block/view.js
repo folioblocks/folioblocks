@@ -4,6 +4,11 @@
  */
 import { getContext, getElement, store } from '@wordpress/interactivity';
 
+const PROOFING_COMMENT_MAX_LENGTH = 1000;
+
+const truncateProofingComment = ( comment = '' ) =>
+	String( comment || '' ).slice( 0, PROOFING_COMMENT_MAX_LENGTH );
+
 const createEmptyImageState = () => ( {
 	attachmentId: 0,
 	thumbnail: '',
@@ -164,7 +169,9 @@ const serializeGalleryImages = ( gallery ) =>
 				imageBlock?.dataset.proofingHearted === 'true' ||
 				!! image.hearted,
 			flag: imageBlock?.dataset.proofingFlag || image.flag || '',
-			comment: imageBlock?.dataset.proofingComment || image.comment || '',
+			comment: truncateProofingComment(
+				imageBlock?.dataset.proofingComment || image.comment || ''
+			),
 		};
 	} );
 
@@ -188,7 +195,8 @@ const syncImageDom = ( controlRoot, imageBlock, image ) => {
 
 	imageBlock.dataset.proofingHearted = image.hearted ? 'true' : 'false';
 	imageBlock.dataset.proofingFlag = image.flag || '';
-	imageBlock.dataset.proofingComment = image.comment || '';
+	image.comment = truncateProofingComment( image.comment );
+	imageBlock.dataset.proofingComment = image.comment;
 	imageBlock.dataset.proofingCommented = image.comment.trim()
 		? 'true'
 		: 'false';
@@ -420,6 +428,11 @@ const { state, actions } = store( 'folioblocks/proofing-gallery', {
 		get currentImageComment() {
 			return getCurrentImageState().comment;
 		},
+		get currentImageCommentCounter() {
+			return `${
+				getCurrentImageState().comment.length
+			} / ${ PROOFING_COMMENT_MAX_LENGTH }`;
+		},
 		get isCurrentGallerySaving() {
 			return getCurrentGalleryState().isSaving;
 		},
@@ -461,7 +474,9 @@ const { state, actions } = store( 'folioblocks/proofing-gallery', {
 					const image = ensureImageState( galleryId, imageId );
 					image.hearted = !! savedImage.hearted;
 					image.flag = savedImage.flag || '';
-					image.comment = savedImage.comment || '';
+					image.comment = truncateProofingComment(
+						savedImage.comment || ''
+					);
 				}
 			);
 			syncGalleryDom( galleryId );
@@ -479,7 +494,9 @@ const { state, actions } = store( 'folioblocks/proofing-gallery', {
 			if ( savedImage ) {
 				image.hearted = !! savedImage.hearted;
 				image.flag = savedImage.flag || '';
-				image.comment = savedImage.comment || '';
+				image.comment = truncateProofingComment(
+					savedImage.comment || ''
+				);
 			}
 
 			if ( imageData.element ) {
@@ -549,7 +566,12 @@ const { state, actions } = store( 'folioblocks/proofing-gallery', {
 					: context.imageId;
 		},
 		setCommentFromInput( event ) {
-			const comment = event?.target?.value || '';
+			const comment = truncateProofingComment(
+				event?.target?.value || ''
+			);
+			if ( event?.target && event.target.value !== comment ) {
+				event.target.value = comment;
+			}
 			const imageBlock = getCurrentImageBlock();
 			getCurrentImageState().comment = comment;
 			if ( imageBlock ) {

@@ -11,9 +11,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 const FBKS_PROOFING_SESSION_POST_TYPE = 'fbks_proof_session';
 const FBKS_PROOFING_ACTIVE_WINDOW_SECONDS = 120;
+const FBKS_PROOFING_COMMENT_MAX_LENGTH = 1000;
 
 function fbks_can_use_proofing_sessions() {
 	return function_exists( 'fbks_fs' ) && fbks_fs()->can_use_premium_code__premium_only();
+}
+
+function fbks_sanitize_proofing_comment( $comment ) {
+	$comment = sanitize_textarea_field( (string) $comment );
+
+	if ( function_exists( 'mb_substr' ) ) {
+		return mb_substr( $comment, 0, FBKS_PROOFING_COMMENT_MAX_LENGTH );
+	}
+
+	return substr( $comment, 0, FBKS_PROOFING_COMMENT_MAX_LENGTH );
 }
 
 function fbks_register_proofing_session_post_type() {
@@ -60,7 +71,7 @@ function fbks_normalize_proofing_images( $images ) {
 			'title'        => isset( $image['title'] ) ? sanitize_text_field( (string) $image['title'] ) : '',
 			'hearted'      => ! empty( $image['hearted'] ),
 			'flag'         => $flag,
-			'comment'      => isset( $image['comment'] ) ? sanitize_textarea_field( (string) $image['comment'] ) : '',
+			'comment'      => isset( $image['comment'] ) ? fbks_sanitize_proofing_comment( $image['comment'] ) : '',
 		];
 	}
 
