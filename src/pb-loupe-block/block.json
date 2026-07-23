@@ -60,6 +60,7 @@
 		"loupeTheme": {	"type": "string", "default": "light" }, 
     	"loupeBorderWidth": { "type": "number", "default": 2 },
     	"loupeBorderColor": { "type": "string", "default": "#ffffff" },
+		"lazyLoad": { "type": "boolean", "default": false },
 		"disableRightClick": { "type": "boolean", "default": false }
   	},
 	"textdomain": "folioblocks",

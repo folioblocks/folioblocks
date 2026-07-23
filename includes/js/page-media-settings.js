@@ -17,6 +17,7 @@
 		'folioblocks/masonry-gallery-block',
 		'folioblocks/modular-gallery-block',
 		'folioblocks/pb-image-block',
+		'folioblocks/pb-loupe-block',
 		'folioblocks/pb-video-block',
 		'folioblocks/video-gallery-block',
 	] );
@@ -44,6 +45,7 @@
 		'folioBlocks.justifiedGallery.disableRightClickToggle',
 		'folioBlocks.justifiedGallery.lazyLoadToggle',
 		'folioBlocks.loupeBlock.disableRightClickToggle',
+		'folioBlocks.loupeBlock.lazyLoadToggle',
 		'folioBlocks.masonryGallery.disableRightClickToggle',
 		'folioBlocks.masonryGallery.lazyLoadToggle',
 		'folioBlocks.modularGallery.disableRightClickToggle',

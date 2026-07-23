@@ -12,6 +12,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 const FBKS_PROOFING_SESSION_POST_TYPE = 'fbks_proof_session';
 const FBKS_PROOFING_ACTIVE_WINDOW_SECONDS = 120;
 const FBKS_PROOFING_COMMENT_MAX_LENGTH = 1000;
+const FBKS_PROOFING_SUBMITTED_RETENTION_DAYS = 90;
+const FBKS_PROOFING_STALE_RETENTION_DAYS = 14;
 
 function fbks_can_use_proofing_sessions() {
 	return function_exists( 'fbks_fs' ) && fbks_fs()->can_use_premium_code__premium_only();
@@ -120,6 +122,89 @@ function fbks_get_proofing_session_state( $gallery_key ) {
 		'images'    => is_array( $images ) ? fbks_normalize_proofing_images( $images ) : [],
 	];
 }
+
+function fbks_delete_proofing_session( $post_id ) {
+	$post_id = absint( $post_id );
+
+	if ( ! $post_id || FBKS_PROOFING_SESSION_POST_TYPE !== get_post_type( $post_id ) ) {
+		return false;
+	}
+
+	return (bool) wp_delete_post( $post_id, true );
+}
+
+function fbks_cleanup_stale_proofing_sessions( $limit = 50 ) {
+	$submitted_cutoff = gmdate(
+		'Y-m-d H:i:s',
+		current_time( 'timestamp' ) - ( FBKS_PROOFING_SUBMITTED_RETENTION_DAYS * DAY_IN_SECONDS )
+	);
+	$stale_cutoff     = gmdate(
+		'Y-m-d H:i:s',
+		current_time( 'timestamp' ) - ( FBKS_PROOFING_STALE_RETENTION_DAYS * DAY_IN_SECONDS )
+	);
+
+	$query = new WP_Query(
+		[
+			'post_type'              => FBKS_PROOFING_SESSION_POST_TYPE,
+			'post_status'            => [ 'private', 'draft', 'publish' ],
+			'posts_per_page'         => max( 1, absint( $limit ) ),
+			'fields'                 => 'ids',
+			'no_found_rows'          => true,
+			'update_post_meta_cache' => false,
+			'update_post_term_cache' => false,
+			'meta_query'             => [
+				'relation' => 'OR',
+				[
+					'relation' => 'AND',
+					[
+						'key'   => '_fbks_proofing_status',
+						'value' => 'submitted',
+					],
+					[
+						'key'     => '_fbks_proofing_updated_at',
+						'value'   => $submitted_cutoff,
+						'compare' => '<=',
+						'type'    => 'DATETIME',
+					],
+				],
+				[
+					'relation' => 'AND',
+					[
+						'key'     => '_fbks_proofing_status',
+						'value'   => [ 'viewing', 'in_progress' ],
+						'compare' => 'IN',
+					],
+					[
+						'key'     => '_fbks_proofing_updated_at',
+						'value'   => $stale_cutoff,
+						'compare' => '<=',
+						'type'    => 'DATETIME',
+					],
+				],
+			],
+		]
+	);
+
+	$deleted = 0;
+
+	foreach ( $query->posts as $post_id ) {
+		if ( fbks_delete_proofing_session( $post_id ) ) {
+			$deleted++;
+		}
+	}
+
+	return $deleted;
+}
+
+function fbks_schedule_proofing_session_cleanup() {
+	if ( wp_next_scheduled( 'fbks_cleanup_proofing_sessions' ) ) {
+		return;
+	}
+
+	wp_schedule_event( time() + HOUR_IN_SECONDS, 'daily', 'fbks_cleanup_proofing_sessions' );
+}
+add_action( 'init', 'fbks_schedule_proofing_session_cleanup' );
+add_action( 'fbks_cleanup_proofing_sessions', 'fbks_cleanup_stale_proofing_sessions' );
 
 function fbks_upsert_proofing_session_post( $gallery_key, $gallery_id, $client_email, $page_id ) {
 	$post_id = fbks_get_proofing_session_post_id( $gallery_key );

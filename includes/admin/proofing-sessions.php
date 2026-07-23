@@ -56,6 +56,80 @@ if (! function_exists('fbks_get_proofing_session_display_status')) {
 	}
 }
 
+if (! function_exists('fbks_get_proofing_session_delete_form')) {
+	function fbks_get_proofing_session_delete_form($session_id, $redirect_url = '')
+	{
+		$session_id = absint($session_id);
+
+		if (! $session_id) {
+			return '';
+		}
+
+		ob_start();
+		?>
+		<form class="fbks-proofing-delete-form" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" onsubmit="return window.confirm('<?php echo esc_js(__('Delete this proofing session permanently? This only deletes the saved proofing results, not the Media Library images.', 'folioblocks')); ?>');">
+			<input type="hidden" name="action" value="fbks_delete_proofing_session" />
+			<input type="hidden" name="session_id" value="<?php echo esc_attr((string) $session_id); ?>" />
+			<?php if ('' !== $redirect_url) : ?>
+				<input type="hidden" name="redirect_to" value="<?php echo esc_url($redirect_url); ?>" />
+			<?php endif; ?>
+			<?php wp_nonce_field('fbks_delete_proofing_session_' . $session_id); ?>
+			<button type="submit" class="button button-link-delete"><?php esc_html_e('Delete', 'folioblocks'); ?></button>
+		</form>
+		<?php
+		return ob_get_clean();
+	}
+}
+
+if (! function_exists('fbks_render_proofing_session_detail_actions')) {
+	function fbks_render_proofing_session_detail_actions($session_id, $back_url)
+	{
+		?>
+		<div class="fbks-proofing-detail-actions">
+			<div class="fbks-proofing-detail-actions__left">
+				<a class="button" href="<?php echo esc_url($back_url); ?>"><?php esc_html_e('Back to Sessions', 'folioblocks'); ?></a>
+			</div>
+			<div class="fbks-proofing-detail-actions__right">
+				<button type="button" class="button button-primary" onclick="window.print();"><?php esc_html_e('Save as PDF', 'folioblocks'); ?></button>
+				<?php echo fbks_get_proofing_session_delete_form($session_id, $back_url); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			</div>
+		</div>
+		<?php
+	}
+}
+
+if (! function_exists('fbks_handle_delete_proofing_session')) {
+	function fbks_handle_delete_proofing_session()
+	{
+		if (! fbks_can_manage_proofing_sessions()) {
+			wp_die(
+				esc_html__('Sorry, you are not allowed to delete proofing sessions.', 'folioblocks'),
+				esc_html__('Permission denied', 'folioblocks'),
+				array('response' => 403)
+			);
+		}
+
+		$session_id = isset($_POST['session_id']) ? absint($_POST['session_id']) : 0;
+
+		if (! $session_id || ! check_admin_referer('fbks_delete_proofing_session_' . $session_id)) {
+			wp_die(
+				esc_html__('Security check failed. Please refresh the page and try again.', 'folioblocks'),
+				esc_html__('Security check failed', 'folioblocks'),
+				array('response' => 403)
+			);
+		}
+
+		$deleted = function_exists('fbks_delete_proofing_session')
+			? fbks_delete_proofing_session($session_id)
+			: false;
+		$redirect_to = isset($_POST['redirect_to']) ? esc_url_raw(wp_unslash($_POST['redirect_to'])) : admin_url('admin.php?page=folioblocks-proofing-sessions');
+
+		wp_safe_redirect(add_query_arg('proofing_deleted', $deleted ? '1' : '0', $redirect_to));
+		exit;
+	}
+}
+add_action('admin_post_fbks_delete_proofing_session', 'fbks_handle_delete_proofing_session');
+
 if (! function_exists('fbks_render_proofing_session_status_badge')) {
 	function fbks_render_proofing_session_status_badge($session)
 	{
@@ -247,6 +321,10 @@ if (! function_exists('fbks_render_proofing_sessions_page_header')) {
 if (! function_exists('fbks_render_proofing_sessions_list')) {
 	function fbks_render_proofing_sessions_list()
 	{
+		if (function_exists('fbks_cleanup_stale_proofing_sessions')) {
+			fbks_cleanup_stale_proofing_sessions(20);
+		}
+
 		$status = isset($_GET['status']) ? sanitize_key(wp_unslash($_GET['status'])) : '';
 		$sessions = fbks_get_proofing_sessions_for_admin($status);
 		$base_url = admin_url('admin.php?page=folioblocks-proofing-sessions');
@@ -306,7 +384,10 @@ if (! function_exists('fbks_render_proofing_sessions_list')) {
 								</td>
 								<td><?php fbks_render_proofing_sessions_summary($session['counts']); ?></td>
 								<td><?php echo esc_html($session['updatedAt'] ? mysql2date(get_option('date_format') . ' ' . get_option('time_format'), $session['updatedAt']) : __('Unknown', 'folioblocks')); ?></td>
-								<td><a class="button button-primary" href="<?php echo esc_url($view_url); ?>"><?php esc_html_e('Review', 'folioblocks'); ?></a></td>
+								<td>
+									<a class="button button-primary" href="<?php echo esc_url($view_url); ?>"><?php esc_html_e('Review', 'folioblocks'); ?></a>
+									<?php echo fbks_get_proofing_session_delete_form($session['id'], $base_url); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+								</td>
 							</tr>
 						<?php endforeach; ?>
 					</tbody>
@@ -323,7 +404,7 @@ if (! function_exists('fbks_render_proofing_session_detail')) {
 		$back_url = admin_url('admin.php?page=folioblocks-proofing-sessions');
 		$page_title = fbks_get_proofing_session_page_title($session['pageId']);
 		?>
-		<p><a class="button" href="<?php echo esc_url($back_url); ?>"><?php esc_html_e('Back to Sessions', 'folioblocks'); ?></a></p>
+		<?php fbks_render_proofing_session_detail_actions($session['id'], $back_url); ?>
 
 		<div class="pb-dashboard-box">
 			<div class="fbks-proofing-detail-header">
@@ -375,9 +456,11 @@ if (! function_exists('fbks_render_proofing_session_detail')) {
 							?>
 							<tr>
 								<td class="fbks-proofing-image-cell">
-									<?php if ($image_url) : ?>
-										<img src="<?php echo esc_url($image_url); ?>" alt="" loading="lazy" />
-									<?php endif; ?>
+									<span class="fbks-proofing-image-preview">
+										<?php if ($image_url) : ?>
+											<img src="<?php echo esc_url($image_url); ?>" alt="" loading="lazy" />
+										<?php endif; ?>
+									</span>
 									<div>
 										<strong><?php echo esc_html($image['title'] ?: __('Untitled image', 'folioblocks')); ?></strong>
 										<?php if ($media_url) : ?>
@@ -406,6 +489,7 @@ if (! function_exists('fbks_render_proofing_session_detail')) {
 				</table>
 			<?php endif; ?>
 		</div>
+		<?php fbks_render_proofing_session_detail_actions($session['id'], $back_url); ?>
 		<?php
 	}
 }
@@ -436,6 +520,13 @@ if (! function_exists('fbks_render_proofing_sessions_page')) {
 		<div class="pb-wrap pb-proofing-sessions-wrap">
 			<?php fbks_render_proofing_sessions_page_header(__('Review saved and submitted client proofing selections.', 'folioblocks')); ?>
 			<?php
+			if (isset($_GET['proofing_deleted'])) {
+				$deleted = '1' === sanitize_text_field(wp_unslash($_GET['proofing_deleted']));
+				echo '<div class="notice ' . esc_attr($deleted ? 'notice-success' : 'notice-error') . ' inline"><p>';
+				echo esc_html($deleted ? __('Proofing session deleted.', 'folioblocks') : __('Proofing session could not be deleted.', 'folioblocks'));
+				echo '</p></div>';
+			}
+
 			if ($session_id && ! $session) {
 				echo '<div class="notice notice-error inline"><p>' . esc_html__('Proofing session not found.', 'folioblocks') . '</p></div>';
 				fbks_render_proofing_sessions_list();

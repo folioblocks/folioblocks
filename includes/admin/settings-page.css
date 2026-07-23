@@ -307,6 +307,30 @@
 	white-space: nowrap;
 }
 
+.fbks-proofing-delete-form,
+.fbks-proofing-detail-actions__right {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	margin: 0;
+}
+
+.fbks-proofing-session-table .fbks-proofing-delete-form {
+	margin-left: 8px;
+}
+
+.fbks-proofing-detail-actions {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	margin: 0 0 16px;
+}
+
+.fbks-proofing-detail-actions:last-child {
+	margin: 16px 0 0;
+}
+
 .fbks-proofing-status-badge,
 .fbks-proofing-flag-chip {
 	display: inline-flex;
@@ -401,14 +425,23 @@
 	min-width: 240px;
 }
 
+.fbks-proofing-image-preview {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 104px;
+	width: 104px;
+	height: 78px;
+	overflow: hidden;
+}
+
 .fbks-proofing-image-cell img {
 	display: block;
-	width: 72px;
-	height: 72px;
-	object-fit: cover;
-	border-radius: 6px;
-	background: #eef3f9;
-	border: 1px solid var(--fbks-line);
+	width: auto;
+	max-width: 96px;
+	height: auto;
+	max-height: 72px;
+	object-fit: contain;
 }
 
 .fbks-proofing-image-cell div {
@@ -1285,5 +1318,63 @@
 	.pb-latest-news .pb-news-thumb,
 	.pb-latest-news .pb-news-content {
 		width: 100%;
+	}
+}
+
+@media print {
+	#adminmenumain,
+	#wpadminbar,
+	#wpfooter,
+	.notice,
+	.update-nag,
+	.fbks-proofing-detail-actions,
+	.pb-settings-header img {
+		display: none !important;
+	}
+
+	html.wp-toolbar {
+		padding-top: 0 !important;
+	}
+
+	#wpcontent,
+	#wpbody-content {
+		margin: 0 !important;
+		padding: 0 !important;
+	}
+
+	.pb-wrap.pb-proofing-sessions-wrap {
+		max-width: none;
+		margin: 0;
+		color: #111827;
+	}
+
+	.pb-wrap.pb-proofing-sessions-wrap .pb-settings-header {
+		margin: 0 0 18px;
+		padding: 0;
+		border: 0;
+	}
+
+	.pb-wrap.pb-proofing-sessions-wrap .pb-settings-header h1 {
+		font-size: 22px;
+	}
+
+	.fbks-proofing-page-subtitle {
+		margin-bottom: 20px;
+	}
+
+	.pb-wrap.pb-proofing-sessions-wrap .pb-dashboard-box {
+		box-shadow: none;
+		border: 1px solid #d1d5db;
+		break-inside: avoid;
+		page-break-inside: avoid;
+	}
+
+	.fbks-proofing-review-table {
+		font-size: 11px;
+	}
+
+	.fbks-proofing-review-table th,
+	.fbks-proofing-review-table td {
+		border-color: #d1d5db;
 	}
 }

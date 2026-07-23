@@ -75,7 +75,7 @@ $fbks_proofing_image_key = $fbks_id ? 'attachment-' . $fbks_id : 'image-' . md5(
 $fbks_proofing_thumbnail = $fbks_src;
 $fbks_proofing_title     = $fbks_title;
 if ( $fbks_id ) {
-	$fbks_proofing_thumbnail_data = wp_get_attachment_image_src( $fbks_id, 'thumbnail' );
+	$fbks_proofing_thumbnail_data = wp_get_attachment_image_src( $fbks_id, 'medium' );
 	if ( ! empty( $fbks_proofing_thumbnail_data[0] ) ) {
 		$fbks_proofing_thumbnail = $fbks_proofing_thumbnail_data[0];
 	}

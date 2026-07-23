@@ -28,6 +28,12 @@ define('FBKS_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('FBKS_ALL_FILTER_TOKEN', 'all');
 define('FBKS_LEGACY_ALL_FILTER_TOKEN', 'All');
 
+function fbks_clear_scheduled_proofing_cleanup()
+{
+    wp_clear_scheduled_hook('fbks_cleanup_proofing_sessions');
+}
+register_deactivation_hook(__FILE__, 'fbks_clear_scheduled_proofing_cleanup');
+
 require_once FBKS_PLUGIN_DIR . 'includes/php/filter-helpers.php';
 require_once FBKS_PLUGIN_DIR . 'includes/php/css-values.php';
 require_once FBKS_PLUGIN_DIR . 'includes/php/i18n.php';
@@ -270,6 +276,7 @@ if (function_exists('fbks_fs')) {
             'folioblocks/masonry-gallery-block',
             'folioblocks/modular-gallery-block',
             'folioblocks/pb-image-block',
+            'folioblocks/pb-loupe-block',
             'folioblocks/pb-video-block',
             'folioblocks/video-gallery-block',
         );
@@ -350,6 +357,7 @@ if (function_exists('fbks_fs')) {
             'folioblocks/masonry-gallery-block',
             'folioblocks/modular-gallery-block',
             'folioblocks/pb-image-block',
+            'folioblocks/pb-loupe-block',
             'folioblocks/pb-video-block',
             'folioblocks/video-gallery-block',
         );
