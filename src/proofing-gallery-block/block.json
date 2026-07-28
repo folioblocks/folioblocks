@@ -76,6 +76,58 @@
 			"type": "string",
 			"default": "center"
 		},
+		"buttonAlign": {
+			"type": "string",
+			"default": "right"
+		},
+		"emailAdminOnSubmit": {
+			"type": "boolean"
+		},
+		"proofingTheme": {
+			"type": "string",
+			"enum": ["light", "dark"],
+			"default": "light"
+		},
+		"saveButtonTextColor": {
+			"type": "string",
+			"default": "#3858e9"
+		},
+		"saveButtonBackgroundColor": {
+			"type": "string",
+			"default": "#ffffff"
+		},
+		"submitButtonTextColor": {
+			"type": "string",
+			"default": "#ffffff"
+		},
+		"submitButtonBackgroundColor": {
+			"type": "string",
+			"default": "#3858e9"
+		},
+		"buttonBorderRadius": {
+			"type": "number",
+			"default": 2
+		},
+		"buttonBorderWidth": {
+			"type": "number",
+			"default": 1
+		},
+		"buttonPaddingVertical": {
+			"type": "number",
+			"default": 6
+		},
+		"buttonPaddingHorizontal": {
+			"type": "number",
+			"default": 12
+		},
+		"buttonFontSize": {
+			"type": "number",
+			"default": 13
+		},
+		"buttonGap": {
+			"type": "number",
+			"default": 12
+		},
 		"lightbox": {
 			"type": "boolean",
 			"default": true

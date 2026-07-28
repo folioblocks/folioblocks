@@ -9,6 +9,10 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
+if (! defined('FBKS_SOCIAL_SHARING_SETTINGS_OPTION')) {
+    define('FBKS_SOCIAL_SHARING_SETTINGS_OPTION', 'fbks_social_sharing_settings');
+}
+
 function fbks_get_social_share_services()
 {
     return array(
@@ -43,6 +47,11 @@ function fbks_get_social_share_services()
     );
 }
 
+function fbks_get_default_social_share_sources()
+{
+    return array('facebook', 'linkedin', 'x', 'pinterest', 'copy');
+}
+
 function fbks_normalize_social_share_sources($sources)
 {
     $services = fbks_get_social_share_services();
@@ -62,6 +71,34 @@ function fbks_normalize_social_share_sources($sources)
     }
 
     return array_values(array_intersect(array_keys($services), $selected));
+}
+
+function fbks_sanitize_social_sharing_settings($settings)
+{
+    $settings = is_array($settings) ? $settings : array();
+    $sources = fbks_normalize_social_share_sources($settings['sources'] ?? array());
+
+    if (empty($sources)) {
+        $sources = fbks_get_default_social_share_sources();
+    }
+
+    return array(
+        'sources' => $sources,
+    );
+}
+
+function fbks_get_social_sharing_settings()
+{
+    return fbks_sanitize_social_sharing_settings(
+        get_option(FBKS_SOCIAL_SHARING_SETTINGS_OPTION, array())
+    );
+}
+
+function fbks_get_global_social_share_sources()
+{
+    $settings = fbks_get_social_sharing_settings();
+
+    return $settings['sources'];
 }
 
 function fbks_get_social_share_url($service, $share_url, $title, $image_url)

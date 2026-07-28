@@ -10,7 +10,6 @@ import { registerImageClickStylePremiumControls } from '../pb-helpers/imageClick
 import { registerImageHoverActionPremiumControls } from '../pb-helpers/imageHoverActionPremiumControls';
 import { registerListViewThumbnailEnhancements } from '../pb-helpers/listViewThumbnailEnhancements';
 import { registerWatermarkOverlayControls } from '../pb-helpers/watermarkOverlayControls';
-import { registerSocialMediaSharingControls } from '../pb-helpers/socialSharingControls';
 import {
 	registerDisableRightClickPremiumControl,
 	registerLazyLoadPremiumControl,
@@ -22,11 +21,6 @@ registerListViewThumbnailEnhancements( {
 } );
 
 registerWatermarkOverlayControls( {
-	hookPrefix: 'folioBlocks.modularGallery',
-	namespace: 'folioblocks/modular-gallery',
-} );
-
-registerSocialMediaSharingControls( {
 	hookPrefix: 'folioBlocks.modularGallery',
 	namespace: 'folioblocks/modular-gallery',
 } );

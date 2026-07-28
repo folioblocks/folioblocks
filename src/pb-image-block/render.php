@@ -85,18 +85,19 @@ if ( $fbks_id ) {
 	}
 }
 $fbks_lightbox_content = $fbks_click_context['folioBlocks/lightboxContent'] ?? ( $attributes['lightboxContent'] ?? '' );
-if ( ! in_array( $fbks_lightbox_content, [ 'none', 'title', 'caption', 'product', 'exif', 'title_exif', 'caption_exif', 'title_caption', 'title_caption_exif' ], true ) ) {
+if ( ! in_array( $fbks_lightbox_content, [ 'none', 'title', 'caption', 'product', 'exif', 'title_exif', 'caption_exif', 'title_caption', 'title_caption_exif', 'social' ], true ) ) {
 	$fbks_lightbox_content = $fbks_caption_lightbox ? 'caption' : 'none';
 }
 $fbks_caption_lightbox = 'none' !== $fbks_lightbox_content;
-$fbks_social_sharing_enabled = (bool) ( $fbks_context['folioBlocks/enableSocialSharing'] ?? ( $attributes['enableSocialSharing'] ?? false ) );
 $fbks_social_sources = function_exists( 'fbks_normalize_social_share_sources' )
 	? fbks_normalize_social_share_sources(
-		$fbks_context['folioBlocks/socialSharingSources'] ??
-		( $attributes['socialSharingSources'] ?? [] )
+		function_exists( 'fbks_get_global_social_share_sources' )
+			? fbks_get_global_social_share_sources()
+			: ( $fbks_context['folioBlocks/socialSharingSources'] ?? ( $attributes['socialSharingSources'] ?? [] ) )
 	)
 	: [];
-$fbks_lightbox_social_enabled = $fbks_social_sharing_enabled && (bool) ( $fbks_click_context['folioBlocks/enableLightboxSocialSharing'] ?? ( $attributes['enableLightboxSocialSharing'] ?? false ) );
+$fbks_social_sharing_enabled = ! empty( $fbks_social_sources );
+$fbks_lightbox_social_enabled = $fbks_social_sharing_enabled && 'social' === $fbks_lightbox_content;
 $fbks_lightbox_social_sources = $fbks_social_sources;
 $fbks_hide_unknown_lightbox_exif = (bool) ( $fbks_click_context['folioBlocks/hideUnknownExifFields'] ?? ( $attributes['hideUnknownExifFields'] ?? false ) );
 $fbks_hide_unknown_overlay_exif = (bool) ( $fbks_hover_context['folioBlocks/hideUnknownExifFields'] ?? ( $attributes['hideUnknownExifFields'] ?? false ) );

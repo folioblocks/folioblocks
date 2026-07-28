@@ -8,7 +8,6 @@ import {
 } from '@wordpress/components';
 import { CompactTwoColorControl } from './CompactColorControl';
 import { OverlayTypographyControls } from './overlayTypographyControls';
-import { isSocialSharingEnabled } from './socialSharingControls';
 
 const OVERLAY_STYLE_OPTIONS = [
 	{ label: __( 'None', 'folioblocks' ), value: 'none' },
@@ -128,20 +127,20 @@ export const registerImageHoverActionPremiumControls = ( {
 			const overlayContent =
 				attributes.overlayContent ||
 				( attributes.wooProductPriceOnHover ? 'product' : 'title' );
-				const overlayContentOptions = [
-					{
-						label: __( 'Show Image Title', 'folioblocks' ),
-						value: 'title',
-					},
-					{
-						label: __( 'Show Image Caption', 'folioblocks' ),
-						value: 'caption',
-					},
-					{
-						label: __( 'Show EXIF Data', 'folioblocks' ),
-						value: 'exif',
-					},
-				];
+			const overlayContentOptions = [
+				{
+					label: __( 'Show Image Title', 'folioblocks' ),
+					value: 'title',
+				},
+				{
+					label: __( 'Show Image Caption', 'folioblocks' ),
+					value: 'caption',
+				},
+				{
+					label: __( 'Show EXIF Data', 'folioblocks' ),
+					value: 'exif',
+				},
+			];
 
 			if ( showProductInfoOption ) {
 				overlayContentOptions.push( {
@@ -149,12 +148,10 @@ export const registerImageHoverActionPremiumControls = ( {
 					value: 'product',
 				} );
 			}
-			if ( isSocialSharingEnabled( attributes, props.context || {} ) ) {
-				overlayContentOptions.push( {
-					label: __( 'Show Social Media', 'folioblocks' ),
-					value: 'social',
-				} );
-			}
+			overlayContentOptions.push( {
+				label: __( 'Show Social Media', 'folioblocks' ),
+				value: 'social',
+			} );
 
 			return (
 				<>

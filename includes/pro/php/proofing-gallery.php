@@ -14,9 +14,45 @@ const FBKS_PROOFING_ACTIVE_WINDOW_SECONDS = 120;
 const FBKS_PROOFING_COMMENT_MAX_LENGTH = 1000;
 const FBKS_PROOFING_SUBMITTED_RETENTION_DAYS = 90;
 const FBKS_PROOFING_STALE_RETENTION_DAYS = 14;
+const FBKS_PROOFING_SETTINGS_OPTION = 'fbks_proofing_settings';
 
 function fbks_can_use_proofing_sessions() {
 	return function_exists( 'fbks_fs' ) && fbks_fs()->can_use_premium_code__premium_only();
+}
+
+function fbks_get_proofing_settings_defaults() {
+	return [
+		'inProgressRetentionDays' => FBKS_PROOFING_STALE_RETENTION_DAYS,
+		'submittedRetentionDays'  => FBKS_PROOFING_SUBMITTED_RETENTION_DAYS,
+		'emailAdminOnSubmit'      => false,
+	];
+}
+
+function fbks_sanitize_proofing_retention_days( $value, $fallback ) {
+	if ( ! is_numeric( $value ) ) {
+		return $fallback;
+	}
+
+	return min( 3650, max( 1, absint( $value ) ) );
+}
+
+function fbks_sanitize_proofing_checkbox( $value ) {
+	return '1' === (string) $value || 1 === $value || true === $value || 'true' === $value;
+}
+
+function fbks_sanitize_proofing_settings( $settings ) {
+	$defaults = fbks_get_proofing_settings_defaults();
+	$settings = is_array( $settings ) ? wp_parse_args( $settings, $defaults ) : $defaults;
+
+	return [
+		'inProgressRetentionDays' => fbks_sanitize_proofing_retention_days( $settings['inProgressRetentionDays'], $defaults['inProgressRetentionDays'] ),
+		'submittedRetentionDays'  => fbks_sanitize_proofing_retention_days( $settings['submittedRetentionDays'], $defaults['submittedRetentionDays'] ),
+		'emailAdminOnSubmit'      => fbks_sanitize_proofing_checkbox( $settings['emailAdminOnSubmit'] ),
+	];
+}
+
+function fbks_get_proofing_settings() {
+	return fbks_sanitize_proofing_settings( get_option( FBKS_PROOFING_SETTINGS_OPTION, [] ) );
 }
 
 function fbks_sanitize_proofing_comment( $comment ) {
@@ -134,13 +170,14 @@ function fbks_delete_proofing_session( $post_id ) {
 }
 
 function fbks_cleanup_stale_proofing_sessions( $limit = 50 ) {
+	$settings = fbks_get_proofing_settings();
 	$submitted_cutoff = gmdate(
 		'Y-m-d H:i:s',
-		current_time( 'timestamp' ) - ( FBKS_PROOFING_SUBMITTED_RETENTION_DAYS * DAY_IN_SECONDS )
+		current_time( 'timestamp' ) - ( $settings['submittedRetentionDays'] * DAY_IN_SECONDS )
 	);
 	$stale_cutoff     = gmdate(
 		'Y-m-d H:i:s',
-		current_time( 'timestamp' ) - ( FBKS_PROOFING_STALE_RETENTION_DAYS * DAY_IN_SECONDS )
+		current_time( 'timestamp' ) - ( $settings['inProgressRetentionDays'] * DAY_IN_SECONDS )
 	);
 
 	$query = new WP_Query(
@@ -244,6 +281,62 @@ function fbks_upsert_proofing_session_post( $gallery_key, $gallery_id, $client_e
 	return $post_id;
 }
 
+function fbks_email_admin_proofing_session_submitted( $post_id, $client_email, $page_id, $email_admin_on_submit = null ) {
+	if ( null === $email_admin_on_submit ) {
+		$settings = fbks_get_proofing_settings();
+		$email_admin_on_submit = ! empty( $settings['emailAdminOnSubmit'] );
+	}
+
+	if ( ! $email_admin_on_submit ) {
+		return;
+	}
+
+	$admin_email = get_option( 'admin_email' );
+	if ( ! is_email( $admin_email ) ) {
+		return;
+	}
+
+	$page_title = $page_id ? get_the_title( $page_id ) : '';
+	$review_url = add_query_arg(
+		[
+			'page'       => 'folioblocks-proofing-sessions',
+			'session_id' => absint( $post_id ),
+		],
+		admin_url( 'admin.php' )
+	);
+	$subject = sprintf(
+		/* translators: %s: client email address or client label. */
+		__( 'Proofing session submitted by %s', 'folioblocks' ),
+		$client_email ?: __( 'a client', 'folioblocks' )
+	);
+	$message_lines = [
+		__( 'A proofing gallery session has been submitted.', 'folioblocks' ),
+		'',
+		sprintf(
+			/* translators: %s: client email address. */
+			__( 'Client: %s', 'folioblocks' ),
+			$client_email ?: __( 'Unknown', 'folioblocks' )
+		),
+	];
+
+	if ( '' !== $page_title ) {
+		$message_lines[] = sprintf(
+			/* translators: %s: page title. */
+			__( 'Page: %s', 'folioblocks' ),
+			$page_title
+		);
+	}
+
+	$message_lines[] = '';
+	$message_lines[] = sprintf(
+		/* translators: %s: admin review URL. */
+		__( 'Review the session: %s', 'folioblocks' ),
+		$review_url
+	);
+
+	wp_mail( $admin_email, $subject, implode( "\n", $message_lines ) );
+}
+
 function fbks_save_proofing_session( WP_REST_Request $request ) {
 	if ( ! fbks_can_use_proofing_sessions() ) {
 		return new WP_Error( 'fbks_proofing_unavailable', __( 'Proofing sessions are not available.', 'folioblocks' ), [ 'status' => 403 ] );
@@ -255,6 +348,9 @@ function fbks_save_proofing_session( WP_REST_Request $request ) {
 	$client_email = isset( $params['clientEmail'] ) ? sanitize_email( (string) $params['clientEmail'] ) : '';
 	$page_id      = isset( $params['pageId'] ) ? absint( $params['pageId'] ) : 0;
 	$status       = isset( $params['status'] ) ? sanitize_key( (string) $params['status'] ) : 'in_progress';
+	$email_admin_on_submit = array_key_exists( 'emailAdminOnSubmit', $params )
+		? fbks_sanitize_proofing_checkbox( $params['emailAdminOnSubmit'] )
+		: null;
 	$images       = fbks_normalize_proofing_images( $params['images'] ?? [] );
 
 	if ( '' === $gallery_key ) {
@@ -271,6 +367,7 @@ function fbks_save_proofing_session( WP_REST_Request $request ) {
 		return $post_id;
 	}
 
+	$previous_status = sanitize_key( (string) get_post_meta( $post_id, '_fbks_proofing_status', true ) );
 	$updated_at = current_time( 'mysql' );
 
 	update_post_meta( $post_id, '_fbks_proofing_status', $status );
@@ -278,6 +375,10 @@ function fbks_save_proofing_session( WP_REST_Request $request ) {
 	update_post_meta( $post_id, '_fbks_proofing_presence', 'active' );
 	update_post_meta( $post_id, '_fbks_proofing_last_seen_at', $updated_at );
 	update_post_meta( $post_id, '_fbks_proofing_images', $images );
+
+	if ( 'submitted' === $status && 'submitted' !== $previous_status ) {
+		fbks_email_admin_proofing_session_submitted( $post_id, $client_email, $page_id, $email_admin_on_submit );
+	}
 
 	return rest_ensure_response(
 		[

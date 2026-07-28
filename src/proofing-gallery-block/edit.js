@@ -10,12 +10,16 @@ import {
 	useInnerBlocksProps,
 } from '@wordpress/block-editor';
 import {
+	BaseControl,
 	Button,
 	Notice,
 	PanelBody,
+	RangeControl,
 	SelectControl,
 	TextControl,
 	ToggleControl,
+	__experimentalToolsPanel as ToolsPanel,
+	__experimentalToolsPanelItem as ToolsPanelItem,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from '@wordpress/components';
@@ -25,9 +29,11 @@ import { useEffect, useRef, useState } from '@wordpress/element';
 import { decodeEntities } from '@wordpress/html-entities';
 import { applyFilters } from '@wordpress/hooks';
 import apiFetch from '@wordpress/api-fetch';
+import { Icon, sidesHorizontal, sidesVertical } from '@wordpress/icons';
 import { getExifAttributesFromMedia } from '../pb-helpers/exifMetadata';
 import { IconProofingGallery } from '../pb-helpers/icons';
 import { imageProFeatureNotice } from '../pb-helpers/imageProFeatureNotices';
+import { CompactTwoColorControl } from '../pb-helpers/CompactColorControl';
 import './editor.scss';
 
 const ALLOWED_BLOCKS = [
@@ -84,16 +90,370 @@ const GALLERY_STYLE_BY_BLOCK = Object.fromEntries(
 );
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PROOFING_BUTTON_STYLE_DEFAULTS = {
+	saveButtonTextColor: '#3858e9',
+	saveButtonBackgroundColor: '#ffffff',
+	submitButtonTextColor: '#ffffff',
+	submitButtonBackgroundColor: '#3858e9',
+	buttonBorderRadius: 2,
+	buttonBorderWidth: 1,
+	buttonPaddingVertical: 6,
+	buttonPaddingHorizontal: 12,
+	buttonFontSize: 13,
+	buttonGap: 12,
+};
+
+const getGlobalProofingSettings = () =>
+	typeof window !== 'undefined'
+		? window.folioBlocksData?.proofing || {}
+		: {};
+
+const getProofingButtonStyleVars = ( attributes = {} ) => ( {
+	'--fbks-proofing-save-button-color':
+		attributes.saveButtonTextColor ||
+		PROOFING_BUTTON_STYLE_DEFAULTS.saveButtonTextColor,
+	'--fbks-proofing-save-button-bg':
+		attributes.saveButtonBackgroundColor ||
+		PROOFING_BUTTON_STYLE_DEFAULTS.saveButtonBackgroundColor,
+	'--fbks-proofing-submit-button-color':
+		attributes.submitButtonTextColor ||
+		PROOFING_BUTTON_STYLE_DEFAULTS.submitButtonTextColor,
+	'--fbks-proofing-submit-button-bg':
+		attributes.submitButtonBackgroundColor ||
+		PROOFING_BUTTON_STYLE_DEFAULTS.submitButtonBackgroundColor,
+	'--fbks-proofing-button-radius': `${
+		attributes.buttonBorderRadius ??
+		PROOFING_BUTTON_STYLE_DEFAULTS.buttonBorderRadius
+	}px`,
+	'--fbks-proofing-button-border-width': `${
+		attributes.buttonBorderWidth ??
+		PROOFING_BUTTON_STYLE_DEFAULTS.buttonBorderWidth
+	}px`,
+	'--fbks-proofing-button-padding-y': `${
+		attributes.buttonPaddingVertical ??
+		PROOFING_BUTTON_STYLE_DEFAULTS.buttonPaddingVertical
+	}px`,
+	'--fbks-proofing-button-padding-x': `${
+		attributes.buttonPaddingHorizontal ??
+		PROOFING_BUTTON_STYLE_DEFAULTS.buttonPaddingHorizontal
+	}px`,
+	'--fbks-proofing-button-font-size': `${
+		attributes.buttonFontSize ??
+		PROOFING_BUTTON_STYLE_DEFAULTS.buttonFontSize
+	}px`,
+	'--fbks-proofing-button-gap': `${
+		attributes.buttonGap ?? PROOFING_BUTTON_STYLE_DEFAULTS.buttonGap
+	}px`,
+} );
+
+const hasCustomProofingButtonValue = ( attributes, key ) =>
+	attributes[ key ] !== undefined &&
+	attributes[ key ] !== PROOFING_BUTTON_STYLE_DEFAULTS[ key ];
+
+const AlignmentControl = ( { label, help, value, onChange } ) => (
+	<ToggleGroupControl
+		__next40pxDefaultSize
+		__nextHasNoMarginBottom
+		value={ value }
+		isBlock
+		label={ label }
+		help={ help }
+		onChange={ onChange }
+	>
+		<ToggleGroupControlOption
+			label={ __( 'Left', 'folioblocks' ) }
+			value="left"
+		/>
+		<ToggleGroupControlOption
+			label={ __( 'Center', 'folioblocks' ) }
+			value="center"
+		/>
+		<ToggleGroupControlOption
+			label={ __( 'Right', 'folioblocks' ) }
+			value="right"
+		/>
+	</ToggleGroupControl>
+);
+
+const ProofingThemeControl = ( { value, onChange } ) => (
+	<ToggleGroupControl
+		__next40pxDefaultSize
+		__nextHasNoMarginBottom
+		value={ value }
+		isBlock
+		label={ __( 'Proofing UI Mode', 'folioblocks' ) }
+		help={ __(
+			'Choose light or dark styling for proofing filters, flags, and comments.',
+			'folioblocks'
+		) }
+		onChange={ onChange }
+	>
+		<ToggleGroupControlOption
+			label={ __( 'Light', 'folioblocks' ) }
+			value="light"
+		/>
+		<ToggleGroupControlOption
+			label={ __( 'Dark', 'folioblocks' ) }
+			value="dark"
+		/>
+	</ToggleGroupControl>
+);
+
+const ProofingButtonPaddingControl = ( { attributes, setAttributes } ) => (
+	<BaseControl
+		label={ __( 'Padding', 'folioblocks' ) }
+		__nextHasNoMarginBottom
+		className="fbks-proofing-button-padding-control"
+	>
+		<div className="fbks-proofing-button-padding-control__rows">
+			<div className="fbks-proofing-button-padding-control__row">
+				<Icon
+					icon={ sidesVertical }
+					className="fbks-proofing-button-padding-control__icon"
+				/>
+				<RangeControl
+					label={ __( 'Vertical Padding', 'folioblocks' ) }
+					hideLabelFromVision
+					value={
+						attributes.buttonPaddingVertical ??
+						PROOFING_BUTTON_STYLE_DEFAULTS.buttonPaddingVertical
+					}
+					onChange={ ( buttonPaddingVertical ) =>
+						setAttributes( { buttonPaddingVertical } )
+					}
+					min={ 0 }
+					max={ 24 }
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
+				/>
+			</div>
+			<div className="fbks-proofing-button-padding-control__row">
+				<Icon
+					icon={ sidesHorizontal }
+					className="fbks-proofing-button-padding-control__icon"
+				/>
+				<RangeControl
+					label={ __( 'Horizontal Padding', 'folioblocks' ) }
+					hideLabelFromVision
+					value={
+						attributes.buttonPaddingHorizontal ??
+						PROOFING_BUTTON_STYLE_DEFAULTS.buttonPaddingHorizontal
+					}
+					onChange={ ( buttonPaddingHorizontal ) =>
+						setAttributes( { buttonPaddingHorizontal } )
+					}
+					min={ 4 }
+					max={ 48 }
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
+				/>
+			</div>
+		</div>
+	</BaseControl>
+);
+
+const ProofingButtonStyleToolsPanel = ( { attributes, setAttributes } ) => {
+	const resetButtonColors = () =>
+		setAttributes( {
+			saveButtonTextColor:
+				PROOFING_BUTTON_STYLE_DEFAULTS.saveButtonTextColor,
+			saveButtonBackgroundColor:
+				PROOFING_BUTTON_STYLE_DEFAULTS.saveButtonBackgroundColor,
+			submitButtonTextColor:
+				PROOFING_BUTTON_STYLE_DEFAULTS.submitButtonTextColor,
+			submitButtonBackgroundColor:
+				PROOFING_BUTTON_STYLE_DEFAULTS.submitButtonBackgroundColor,
+		} );
+	const resetButtonShape = () =>
+		setAttributes( {
+			buttonBorderRadius:
+				PROOFING_BUTTON_STYLE_DEFAULTS.buttonBorderRadius,
+			buttonBorderWidth:
+				PROOFING_BUTTON_STYLE_DEFAULTS.buttonBorderWidth,
+		} );
+	const resetButtonSize = () =>
+		setAttributes( {
+			buttonPaddingVertical:
+				PROOFING_BUTTON_STYLE_DEFAULTS.buttonPaddingVertical,
+			buttonPaddingHorizontal:
+				PROOFING_BUTTON_STYLE_DEFAULTS.buttonPaddingHorizontal,
+			buttonFontSize: PROOFING_BUTTON_STYLE_DEFAULTS.buttonFontSize,
+			buttonGap: PROOFING_BUTTON_STYLE_DEFAULTS.buttonGap,
+		} );
+
+	return (
+		<ToolsPanel
+			label={ __( 'Save & Submit Button Styles', 'folioblocks' ) }
+			className="fbks-proofing-button-style-panel"
+			resetAll={ () =>
+				setAttributes( { ...PROOFING_BUTTON_STYLE_DEFAULTS } )
+			}
+		>
+			<ToolsPanelItem
+				label={ __( 'Colors', 'folioblocks' ) }
+				hasValue={ () =>
+					[
+						'saveButtonTextColor',
+						'saveButtonBackgroundColor',
+						'submitButtonTextColor',
+						'submitButtonBackgroundColor',
+					].some( ( key ) =>
+						hasCustomProofingButtonValue( attributes, key )
+					)
+				}
+				onDeselect={ resetButtonColors }
+				isShownByDefault
+			>
+				<div className="fbks-proofing-button-color-controls">
+					<CompactTwoColorControl
+						label={ __( 'Save Button', 'folioblocks' ) }
+						value={ {
+							first:
+								attributes.saveButtonTextColor ||
+								PROOFING_BUTTON_STYLE_DEFAULTS.saveButtonTextColor,
+							second:
+								attributes.saveButtonBackgroundColor ||
+								PROOFING_BUTTON_STYLE_DEFAULTS.saveButtonBackgroundColor,
+						} }
+						onChange={ ( next ) =>
+							setAttributes( {
+								saveButtonTextColor:
+									next?.first ||
+									PROOFING_BUTTON_STYLE_DEFAULTS.saveButtonTextColor,
+								saveButtonBackgroundColor:
+									next?.second ||
+									PROOFING_BUTTON_STYLE_DEFAULTS.saveButtonBackgroundColor,
+							} )
+						}
+						firstLabel={ __( 'Text & Border', 'folioblocks' ) }
+						secondLabel={ __( 'Background', 'folioblocks' ) }
+					/>
+					<CompactTwoColorControl
+						label={ __( 'Submit Button', 'folioblocks' ) }
+						value={ {
+							first:
+								attributes.submitButtonTextColor ||
+								PROOFING_BUTTON_STYLE_DEFAULTS.submitButtonTextColor,
+							second:
+								attributes.submitButtonBackgroundColor ||
+								PROOFING_BUTTON_STYLE_DEFAULTS.submitButtonBackgroundColor,
+						} }
+						onChange={ ( next ) =>
+							setAttributes( {
+								submitButtonTextColor:
+									next?.first ||
+									PROOFING_BUTTON_STYLE_DEFAULTS.submitButtonTextColor,
+								submitButtonBackgroundColor:
+									next?.second ||
+									PROOFING_BUTTON_STYLE_DEFAULTS.submitButtonBackgroundColor,
+							} )
+						}
+						firstLabel={ __( 'Text', 'folioblocks' ) }
+						secondLabel={ __(
+							'Background & Border',
+							'folioblocks'
+						) }
+					/>
+				</div>
+			</ToolsPanelItem>
+			<ToolsPanelItem
+				label={ __( 'Shape', 'folioblocks' ) }
+				hasValue={ () =>
+					[ 'buttonBorderRadius', 'buttonBorderWidth' ].some(
+						( key ) =>
+							hasCustomProofingButtonValue( attributes, key )
+					)
+				}
+				onDeselect={ resetButtonShape }
+				isShownByDefault
+			>
+				<RangeControl
+					label={ __( 'Border Radius', 'folioblocks' ) }
+					value={
+						attributes.buttonBorderRadius ??
+						PROOFING_BUTTON_STYLE_DEFAULTS.buttonBorderRadius
+					}
+					onChange={ ( buttonBorderRadius ) =>
+						setAttributes( { buttonBorderRadius } )
+					}
+					min={ 0 }
+					max={ 40 }
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
+				/>
+				<RangeControl
+					label={ __( 'Border Width', 'folioblocks' ) }
+					value={
+						attributes.buttonBorderWidth ??
+						PROOFING_BUTTON_STYLE_DEFAULTS.buttonBorderWidth
+					}
+					onChange={ ( buttonBorderWidth ) =>
+						setAttributes( { buttonBorderWidth } )
+					}
+					min={ 0 }
+					max={ 8 }
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
+				/>
+			</ToolsPanelItem>
+			<ToolsPanelItem
+				label={ __( 'Size & Spacing', 'folioblocks' ) }
+				hasValue={ () =>
+					[
+						'buttonPaddingVertical',
+						'buttonPaddingHorizontal',
+						'buttonFontSize',
+						'buttonGap',
+					].some( ( key ) =>
+						hasCustomProofingButtonValue( attributes, key )
+					)
+				}
+				onDeselect={ resetButtonSize }
+				isShownByDefault
+			>
+				<ProofingButtonPaddingControl
+					attributes={ attributes }
+					setAttributes={ setAttributes }
+				/>
+				<RangeControl
+					label={ __( 'Font Size', 'folioblocks' ) }
+					value={
+						attributes.buttonFontSize ??
+						PROOFING_BUTTON_STYLE_DEFAULTS.buttonFontSize
+					}
+					onChange={ ( buttonFontSize ) =>
+						setAttributes( { buttonFontSize } )
+					}
+					min={ 10 }
+					max={ 24 }
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
+				/>
+				<RangeControl
+					label={ __( 'Button Gap', 'folioblocks' ) }
+					value={
+						attributes.buttonGap ??
+						PROOFING_BUTTON_STYLE_DEFAULTS.buttonGap
+					}
+					onChange={ ( buttonGap ) =>
+						setAttributes( { buttonGap } )
+					}
+					min={ 0 }
+					max={ 40 }
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
+				/>
+			</ToolsPanelItem>
+		</ToolsPanel>
+	);
+};
 
 const getGalleryPasswordControlProps = ( isVisible = false ) => ( {
 	type: 'text',
-	className: [
-		'fbks-proofing-password-field',
-		isVisible ? '' : 'is-masked',
-	]
+	className: [ 'fbks-proofing-password-field', isVisible ? '' : 'is-masked' ]
 		.filter( Boolean )
 		.join( ' ' ),
-	autoComplete: 'off',
+	autoComplete: 'new-password',
 	autoCorrect: 'off',
 	autoCapitalize: 'off',
 	spellCheck: false,
@@ -102,6 +462,19 @@ const getGalleryPasswordControlProps = ( isVisible = false ) => ( {
 	'data-1p-ignore': 'true',
 	'data-form-type': 'other',
 } );
+
+const clientEmailControlProps = {
+	type: 'text',
+	inputMode: 'email',
+	autoComplete: 'off',
+	autoCorrect: 'off',
+	autoCapitalize: 'off',
+	spellCheck: false,
+	name: 'fbks-proofing-client-reference',
+	'data-lpignore': 'true',
+	'data-1p-ignore': 'true',
+	'data-form-type': 'other',
+};
 
 const getProofingGalleryWorkflowAttributes = () => ( {
 	lightbox: true,
@@ -236,9 +609,15 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		galleryPassword,
 		galleryStyle,
 		filterAlign = 'center',
+		buttonAlign = 'right',
+		proofingTheme = 'light',
 		align,
 		preview,
 	} = attributes;
+	const globalProofingSettings = getGlobalProofingSettings();
+	const emailAdminOnSubmit =
+		attributes.emailAdminOnSubmit ??
+		!! globalProofingSettings.emailAdminOnSubmit;
 	const [ setupError, setSetupError ] = useState( '' );
 	const [ setupStep, setSetupStep ] = useState( 'credentials' );
 	const [ showPassword, setShowPassword ] = useState( false );
@@ -259,9 +638,11 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	const blockProps = useBlockProps( {
 		ref: proofingGalleryRef,
 		'data-align': align || undefined,
+		style: getProofingButtonStyleVars( attributes ),
 		className: [
 			'fbks-proofing-gallery',
 			align ? `align${ align }` : '',
+			proofingTheme === 'dark' ? 'is-proofing-dark' : '',
 			hasGallery ? '' : 'is-setup',
 			hasGallery && proofingFilter !== 'all'
 				? `is-filter-${ proofingFilter }`
@@ -553,20 +934,20 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					</Notice>
 				) }
 				<PanelBody
-					title={ __( 'Proofing Gallery Settings', 'folioblocks' ) }
+					title={ __( 'Proofing Client Settings', 'folioblocks' ) }
 					initialOpen={ true }
 				>
 					<TextControl
 						label={ __( 'Client Email Address', 'folioblocks' ) }
 						value={ clientEmail }
-						type="email"
+						{ ...clientEmailControlProps }
 						onChange={ ( value ) =>
 							setAttributes( { clientEmail: value } )
 						}
 						__next40pxDefaultSize
 						__nextHasNoMarginBottom
 						help={ __(
-							'Used to identify the client connected to this private proofing gallery.',
+							'Used to identify the client connected to this Proofing Gallery.',
 							'folioblocks'
 						) }
 					/>
@@ -580,7 +961,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						__next40pxDefaultSize
 						__nextHasNoMarginBottom
 						help={ __(
-							'Visitors must enter this password before they can view the proofing gallery. Site admins bypass this lock.',
+							'Visitors must enter this password before they can view the Proofing Gallery.',
 							'folioblocks'
 						) }
 					/>
@@ -595,10 +976,11 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 								: __( 'View Password', 'folioblocks' ) }
 						</Button>
 					</div>
-					<div
-						className="fbks-proofing-inspector__divider"
-						aria-hidden="true"
-					/>
+				</PanelBody>
+				<PanelBody
+					title={ __( 'Proofing Gallery Settings', 'folioblocks' ) }
+					initialOpen={ true }
+				>
 					<div className="fbks-proofing-inspector__gallery-style">
 						<SelectControl
 							label={ __( 'Gallery Type', 'folioblocks' ) }
@@ -608,11 +990,22 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 							__next40pxDefaultSize
 							__nextHasNoMarginBottom
 							help={ __(
-								'Choose which inner gallery block is used for layout. Columns, gap, row height, and resolution are edited on that nested gallery.',
+								'Choose which gallery block is used for layout. Columns, gap, row height, and resolution are edited on that nested gallery.',
 								'folioblocks'
 							) }
 						/>
 					</div>
+					<AlignmentControl
+						value={ filterAlign }
+						label={ __( 'Filter Bar Alignment', 'folioblocks' ) }
+						help={ __(
+							'Set alignment of the proofing filter bar.',
+							'folioblocks'
+						) }
+						onChange={ ( value ) =>
+							setAttributes( { filterAlign: value } )
+						}
+					/>
 					<div
 						className="fbks-proofing-inspector__divider"
 						aria-hidden="true"
@@ -628,7 +1021,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						}
 						__nextHasNoMarginBottom
 						help={ __(
-							'Show a heart icon so clients can mark images they like.',
+							'Show Heart icon so clients can mark images they like.',
 							'folioblocks'
 						) }
 					/>
@@ -640,7 +1033,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						}
 						__nextHasNoMarginBottom
 						help={ __(
-							'Show a flag icon so clients can assign a red, orange, or green status to images.',
+							'Show Flag icon so clients can assign a red, orange, or green status to images.',
 							'folioblocks'
 						) }
 					/>
@@ -652,37 +1045,44 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						}
 						__nextHasNoMarginBottom
 						help={ __(
-							'Show a comment icon for image-specific client notes.',
+							'Show Comment icon for image-specific client notes.',
 							'folioblocks'
 						) }
-					/>
-					<ToggleGroupControl
-						__next40pxDefaultSize
-						__nextHasNoMarginBottom
-						value={ filterAlign }
-						isBlock
-						label={ __( 'Filter Bar Alignment', 'folioblocks' ) }
+					/>					
+				</PanelBody>
+				<PanelBody
+					title={ __( 'Proofing Save & Submit Settings', 'folioblocks' ) }
+					initialOpen={ false }
+				>
+					<AlignmentControl
+						value={ buttonAlign }
+						label={ __(
+							'Save & Submit Button Alignment',
+							'folioblocks'
+						) }
 						help={ __(
-							'Set alignment of the proofing filter bar.',
+							'Set alignment of the Save & Continue and Submit buttons.',
 							'folioblocks'
 						) }
 						onChange={ ( value ) =>
-							setAttributes( { filterAlign: value } )
+							setAttributes( { buttonAlign: value } )
 						}
-					>
-						<ToggleGroupControlOption
-							label={ __( 'Left', 'folioblocks' ) }
-							value="left"
-						/>
-						<ToggleGroupControlOption
-							label={ __( 'Center', 'folioblocks' ) }
-							value="center"
-						/>
-						<ToggleGroupControlOption
-							label={ __( 'Right', 'folioblocks' ) }
-							value="right"
-						/>
-					</ToggleGroupControl>
+					/>
+					<ToggleControl
+						label={ __(
+							'Email site admin on Submit',
+							'folioblocks'
+						) }
+						checked={ emailAdminOnSubmit }
+						onChange={ ( value ) =>
+							setAttributes( { emailAdminOnSubmit: value } )
+						}
+						__nextHasNoMarginBottom
+						help={ __(
+							'Send email to the site admin when the client has submitted the session on the Proofing Gallery.',
+							'folioblocks'
+						) }
+					/>
 				</PanelBody>
 				<PanelBody
 					title={ __( 'Watermark Overlay', 'folioblocks' ) }
@@ -694,6 +1094,23 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						{ attributes, setAttributes }
 					) }
 				</PanelBody>
+			</InspectorControls>
+			<InspectorControls group="styles">
+				<PanelBody
+					title={ __( 'Proofing Appearance', 'folioblocks' ) }
+					initialOpen={ true }
+				>
+					<ProofingThemeControl
+						value={ proofingTheme }
+						onChange={ ( value ) =>
+							setAttributes( { proofingTheme: value } )
+						}
+					/>
+				</PanelBody>
+				<ProofingButtonStyleToolsPanel
+					attributes={ attributes }
+					setAttributes={ setAttributes }
+				/>
 			</InspectorControls>
 			<div { ...blockProps }>
 				{ ! hasGallery ? (
@@ -733,7 +1150,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 								<div className="components-placeholder__instructions">
 									{ setupStep === 'credentials'
 										? __(
-												'Add the client email address and set a password for this proofing gallery.',
+												'Set the client email address and gallery password in Client Settings.',
 												'folioblocks'
 										  )
 										: __(
@@ -742,37 +1159,35 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 										  ) }
 								</div>
 								{ setupStep === 'credentials' ? (
-									<div className="fbks-proofing-gallery__setup-fields">
-										<TextControl
-											label={ __(
-												'Client Email Address',
-												'folioblocks'
-											) }
-											value={ clientEmail }
-											type="email"
-											onChange={ ( value ) =>
-												setAttributes( {
-													clientEmail: value,
-												} )
-											}
-											__next40pxDefaultSize
-											__nextHasNoMarginBottom
-										/>
-										<TextControl
-											label={ __(
-												'Gallery Password',
-												'folioblocks'
-											) }
-											value={ galleryPassword }
-											{ ...getGalleryPasswordControlProps() }
-											onChange={ ( value ) =>
-												setAttributes( {
-													galleryPassword: value,
-												} )
-											}
-											__next40pxDefaultSize
-											__nextHasNoMarginBottom
-										/>
+									<div className="fbks-proofing-gallery__setup-summary">
+										<ul>
+											<li
+												className={
+													EMAIL_PATTERN.test(
+														clientEmail.trim()
+													)
+														? 'is-complete'
+														: ''
+												}
+											>
+												{ __(
+													'Client email',
+													'folioblocks'
+												) }
+											</li>
+											<li
+												className={
+													galleryPassword.trim()
+														? 'is-complete'
+														: ''
+												}
+											>
+												{ __(
+													'Gallery password',
+													'folioblocks'
+												) }
+											</li>
+										</ul>
 									</div>
 								) : (
 									<div className="fbks-proofing-gallery__style-field">
@@ -865,13 +1280,23 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 							) ) }
 						</div>
 						<div { ...innerBlocksProps } />
-						<div className="fbks-proofing-gallery__actions">
-							<Button variant="secondary" disabled>
+						<div
+							className={ `fbks-proofing-gallery__actions align-${ buttonAlign }` }
+						>
+							<button
+								type="button"
+								className="fbks-proofing-gallery__action-button fbks-proofing-gallery__action-button--save"
+								tabIndex={ -1 }
+							>
 								{ __( 'Save & Continue', 'folioblocks' ) }
-							</Button>
-							<Button variant="primary" disabled>
+							</button>
+							<button
+								type="button"
+								className="fbks-proofing-gallery__action-button fbks-proofing-gallery__action-button--submit"
+								tabIndex={ -1 }
+							>
 								{ __( 'Submit', 'folioblocks' ) }
-							</Button>
+							</button>
 						</div>
 					</>
 				) }

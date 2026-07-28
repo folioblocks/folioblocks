@@ -36,11 +36,9 @@ import {
 	registerWatermarkOverlayControls,
 } from '../pb-helpers/watermarkOverlayControls.js';
 import {
-	LightboxSocialSharingControls,
 	SOCIAL_SHARE_SERVICES,
 	SOCIAL_SHARE_ICONS,
 	getSharedSocialSources,
-	registerSocialMediaSharingControls,
 } from '../pb-helpers/socialSharingControls.js';
 
 enableImageTransforms( 'folioblocks/pb-image-block' );
@@ -49,11 +47,6 @@ registerWatermarkOverlayControls( {
 	hookPrefix: 'folioBlocks.imageBlock',
 	namespace: 'folioblocks/pb-image-block',
 } );
-registerSocialMediaSharingControls( {
-	hookPrefix: 'folioBlocks.imageBlock',
-	namespace: 'folioblocks/pb-image-block',
-} );
-
 addFilter(
 	'folioBlocks.imageBlock.galleryOverridesEnabled',
 	'folioblocks/pb-image-block-gallery-overrides-enabled',
@@ -800,11 +793,6 @@ const LightboxContentControl = ( {
 					) }
 				/>
 			) }
-			<LightboxSocialSharingControls
-				attributes={ attributes }
-				setAttributes={ setAttributes }
-				context={ context }
-			/>
 		</>
 	);
 };

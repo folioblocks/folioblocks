@@ -335,6 +335,37 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				.replaceAll( '>', '&gt;' )
 				.replaceAll( '"', '&quot;' )
 				.replaceAll( "'", '&#039;' );
+		const applyWatermarkTriggerData = ( trigger ) => {
+			const watermark = settings.watermark || {};
+			if ( ! watermark.showLightbox || ! watermark.image ) {
+				return;
+			}
+
+			trigger.setAttribute(
+				'data-watermark-image',
+				String( watermark.image )
+			);
+			trigger.setAttribute(
+				'data-watermark-opacity',
+				String( watermark.opacity || '0.28' )
+			);
+			trigger.setAttribute(
+				'data-watermark-size',
+				String( watermark.size || '16' )
+			);
+			trigger.setAttribute(
+				'data-watermark-inset',
+				String( watermark.inset || '4' )
+			);
+			trigger.setAttribute(
+				'data-watermark-position',
+				String( watermark.position || 'bottom right' )
+			);
+			trigger.setAttribute(
+				'data-watermark-repeat',
+				String( watermark.repeat || 'no-repeat' )
+			);
+		};
 		const createLightboxExif = ( image, hideUnknownFields ) => {
 			const isUnknownValue = ( value ) => {
 				const normalizedValue = String( value || '' )
@@ -382,6 +413,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			trigger.dataset.lightboxGroup = lightboxGroup;
 			trigger.dataset.filmstripLightboxIndex = String( index );
 			trigger.dataset.src = String( image.fullSrc || image.src || '' );
+			applyWatermarkTriggerData( trigger );
 			const lightboxTheme =
 				clickSettings.lightboxTheme === 'inherit'
 					? settings.lightboxTheme
@@ -448,10 +480,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 					);
 				}
 			}
-			if (
-				settings.enableSocialSharing &&
-				clickSettings.enableLightboxSocialSharing
-			) {
+			if ( content === 'social' ) {
 				const lightboxSocial = createSocialShare(
 					image,
 					settings.socialSharingSources,
@@ -862,8 +891,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 					: overlayContent === 'exif'
 					? true
 					: overlayContent === 'social'
-					? settings.enableSocialSharing &&
-					  normalizeSocialSources( settings.socialSharingSources )
+					? normalizeSocialSources( settings.socialSharingSources )
 							.length > 0
 					: !! title );
 
@@ -905,36 +933,36 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				return;
 			}
 
-				if ( overlayContent === 'caption' && caption ) {
-					overlayNode.innerHTML = caption;
-					return;
-				}
+			if ( overlayContent === 'caption' && caption ) {
+				overlayNode.innerHTML = caption;
+				return;
+			}
 
-				if ( overlayContent === 'exif' ) {
-					overlayNode.innerHTML = '';
-					overlayNode.appendChild(
-						createExifOverlay(
-							image,
-							!! hoverSettings.hideUnknownExifFields
-						)
-					);
-					return;
-				}
+			if ( overlayContent === 'exif' ) {
+				overlayNode.innerHTML = '';
+				overlayNode.appendChild(
+					createExifOverlay(
+						image,
+						!! hoverSettings.hideUnknownExifFields
+					)
+				);
+				return;
+			}
 
-				if ( overlayContent === 'social' ) {
-					overlayNode.innerHTML = '';
-					overlayNode.appendChild(
-						createSocialShare(
-							image,
-							settings.socialSharingSources,
-							'overlay'
-						)
-					);
-					return;
-				}
+			if ( overlayContent === 'social' ) {
+				overlayNode.innerHTML = '';
+				overlayNode.appendChild(
+					createSocialShare(
+						image,
+						settings.socialSharingSources,
+						'overlay'
+					)
+				);
+				return;
+			}
 
-				overlayNode.textContent = title;
-			};
+			overlayNode.textContent = title;
+		};
 
 		const updateHoverPresentation = ( image ) => {
 			if ( ! mainMedia ) {

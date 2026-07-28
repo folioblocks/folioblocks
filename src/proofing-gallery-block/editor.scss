@@ -65,6 +65,51 @@
 	text-transform: uppercase;
 }
 
+.fbks-proofing-button-color-controls {
+	display: grid;
+	gap: 14px;
+}
+
+.fbks-proofing-button-style-panel {
+	.components-base-control {
+		margin-bottom: 16px;
+	}
+
+	.components-base-control:last-child {
+		margin-bottom: 0;
+	}
+}
+
+.fbks-proofing-button-padding-control {
+	.components-base-control__label {
+		margin-bottom: 12px;
+	}
+}
+
+.fbks-proofing-button-padding-control__rows {
+	display: grid;
+	gap: 14px;
+}
+
+.fbks-proofing-button-padding-control__row {
+	display: grid;
+	grid-template-columns: 20px minmax(0, 1fr);
+	gap: 12px;
+	align-items: center;
+
+	.components-base-control,
+	.components-range-control {
+		margin-bottom: 0;
+	}
+}
+
+.fbks-proofing-button-padding-control__icon {
+	display: block;
+	width: 20px;
+	height: 20px;
+	color: #1e1e1e;
+}
+
 .fbks-proofing-gallery__setup {
 	display: grid;
 	box-sizing: border-box;
@@ -79,6 +124,53 @@
 	width: 100%;
 	max-width: 820px;
 	margin-top: 10px;
+}
+
+.fbks-proofing-gallery__setup-summary {
+	display: grid;
+	gap: 10px;
+	width: 100%;
+	max-width: 520px;
+	margin-top: 10px;
+	color: #1e1e1e;
+	font-size: 13px;
+	line-height: 1.5;
+
+	p {
+		margin: 0;
+	}
+
+	ul {
+		display: grid;
+		gap: 6px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	li {
+		display: flex;
+		gap: 8px;
+		align-items: center;
+		margin: 0;
+		color: #757575;
+
+		&::before {
+			content: "";
+			width: 8px;
+			height: 8px;
+			border: 1px solid currentColor;
+			border-radius: 999px;
+		}
+
+		&.is-complete {
+			color: #008a20;
+
+			&::before {
+				background: currentColor;
+			}
+		}
+	}
 }
 
 .fbks-proofing-gallery__placeholder {
@@ -142,9 +234,22 @@
 
 .fbks-proofing-gallery__actions {
 	display: flex;
-	gap: 12px;
+	flex-wrap: wrap;
+	gap: var(--fbks-proofing-button-gap, 12px);
 	justify-content: flex-end;
 	margin-top: 24px;
+
+	&.align-left {
+		justify-content: flex-start;
+	}
+
+	&.align-center {
+		justify-content: center;
+	}
+
+	&.align-right {
+		justify-content: flex-end;
+	}
 }
 
 .fbks-proofing-gallery[data-align="full"] .fbks-proofing-gallery__actions,

@@ -15,7 +15,7 @@
  *
  * @package FolioBlocks
  * 
- * @fs_premium_only /languages/, /includes/css/password-form.css, /build/modular-gallery-block/, /build/pb-image-row, /build/pb-image-stack/, /build/proofing-gallery-block/, /build/background-video-block/premium-view.asset.php, /build/background-video-block/premium-view.js, /build/background-video-block/premium.asset.php, /build/background-video-block/premium.js, /build/carousel-gallery-block/premium-view.asset.php, /build/carousel-gallery-block/premium-view.js, /build/carousel-gallery-block/premium.asset.php, /build/carousel-gallery-block/premium.js, /build/filmstrip-gallery-block/premium-view.asset.php, /build/filmstrip-gallery-block/premium-view.js, /build/filmstrip-gallery-block/premium.asset.php, /build/filmstrip-gallery-block/premium.js, /build/grid-gallery-block/premium-view.asset.php, /build/grid-gallery-block/premium-view.js, /build/grid-gallery-block/premium.asset.php, /build/grid-gallery-block/premium.js, /build/justified-gallery-block/premium-view.asset.php, /build/justified-gallery-block/premium-view.js, /build/justified-gallery-block/premium.asset.php, /build/justified-gallery-block/premium.js, /build/masonry-gallery-block/premium-view.asset.php, /build/masonry-gallery-block/premium-view.js, /build/masonry-gallery-block/premium.asset.php, /build/masonry-gallery-block/premium.js, /build/modular-gallery-block/premium-view.asset.php, /build/modular-gallery-block/premium-view.js, /build/modular-gallery-block/premium.asset.php, /build/modular-gallery-block/premium.js, /build/pb-before-after-block/premium-view.asset.php, /build/pb-before-after-block/premium-view.js, /build/pb-before-after-block/premium.asset.php, /build/pb-before-after-block/premium.js, /build/pb-image-block/premium-view.asset.php, /build/pb-image-block/premium-view.js, /build/pb-image-block/premium.asset.php, /build/pb-image-block/premium.js, /build/pb-image-block/premium-view.asset.php, /build/pb-loupe-block/premium-view.js, /build/pb-loupe-block/premium.asset.php, /build/pb-loupe-block/premium.js, /build/pb-video-block/premium-view.asset.php, /build/pb-video-block/premium-view.js, /build/pb-video-block/premium.asset.php, /build/pb-video-block/premium.js, /build/video-gallery-block/premium-view.asset.php, /build/video-gallery-block/premium-view.js, /build/video-gallery-block/premium.asset.php, /build/video-gallery-block/premium.js
+ * @fs_premium_only /languages/, /includes/pro/, /build/modular-gallery-block/, /build/pb-image-row, /build/pb-image-stack/, /build/proofing-gallery-block/, /build/background-video-block/premium-view.asset.php, /build/background-video-block/premium-view.js, /build/background-video-block/premium.asset.php, /build/background-video-block/premium.js, /build/carousel-gallery-block/premium-view.asset.php, /build/carousel-gallery-block/premium-view.js, /build/carousel-gallery-block/premium.asset.php, /build/carousel-gallery-block/premium.js, /build/filmstrip-gallery-block/premium-view.asset.php, /build/filmstrip-gallery-block/premium-view.js, /build/filmstrip-gallery-block/premium.asset.php, /build/filmstrip-gallery-block/premium.js, /build/grid-gallery-block/premium-view.asset.php, /build/grid-gallery-block/premium-view.js, /build/grid-gallery-block/premium.asset.php, /build/grid-gallery-block/premium.js, /build/justified-gallery-block/premium-view.asset.php, /build/justified-gallery-block/premium-view.js, /build/justified-gallery-block/premium.asset.php, /build/justified-gallery-block/premium.js, /build/masonry-gallery-block/premium-view.asset.php, /build/masonry-gallery-block/premium-view.js, /build/masonry-gallery-block/premium.asset.php, /build/masonry-gallery-block/premium.js, /build/modular-gallery-block/premium-view.asset.php, /build/modular-gallery-block/premium-view.js, /build/modular-gallery-block/premium.asset.php, /build/modular-gallery-block/premium.js, /build/pb-before-after-block/premium-view.asset.php, /build/pb-before-after-block/premium-view.js, /build/pb-before-after-block/premium.asset.php, /build/pb-before-after-block/premium.js, /build/pb-image-block/premium-rtl.css, /build/pb-image-block/premium.css, /build/pb-image-block/premium-view.asset.php, /build/pb-image-block/premium-view.js, /build/pb-image-block/premium.asset.php, /build/pb-image-block/premium.js, /build/pb-loupe-block/premium-view.asset.php, /build/pb-loupe-block/premium-view.js, /build/pb-loupe-block/premium.asset.php, /build/pb-loupe-block/premium.js, /build/pb-video-block/premium-view.asset.php, /build/pb-video-block/premium-view.js, /build/pb-video-block/premium.asset.php, /build/pb-video-block/premium.js, /build/video-gallery-block/premium-view.asset.php, /build/video-gallery-block/premium-view.js, /build/video-gallery-block/premium.asset.php, /build/video-gallery-block/premium.js
  */
 
 if (! defined('ABSPATH')) {
@@ -34,10 +34,7 @@ function fbks_clear_scheduled_proofing_cleanup()
 }
 register_deactivation_hook(__FILE__, 'fbks_clear_scheduled_proofing_cleanup');
 
-require_once FBKS_PLUGIN_DIR . 'includes/php/filter-helpers.php';
-require_once FBKS_PLUGIN_DIR . 'includes/php/css-values.php';
 require_once FBKS_PLUGIN_DIR . 'includes/php/i18n.php';
-require_once FBKS_PLUGIN_DIR . 'includes/php/social-sharing.php';
 
 /**
  * Ensure Safari can send the editor origin to external video embeds.
@@ -145,6 +142,8 @@ if (function_exists('fbks_fs')) {
                     'isPro'          => (function_exists('fbks_fs') && fbks_fs()->can_use_premium_code()),
                     'hasWooCommerce' => $woo_active,
                     'watermarks'     => function_exists('fbks_get_watermark_settings') ? fbks_get_watermark_settings() : array('items' => array()),
+                    'socialSharing'  => function_exists('fbks_get_social_sharing_settings') ? fbks_get_social_sharing_settings() : array('sources' => array()),
+                    'proofing'       => function_exists('fbks_get_proofing_settings') ? fbks_get_proofing_settings() : array('emailAdminOnSubmit' => false),
                 ];
 
                 wp_register_script(
@@ -164,10 +163,10 @@ if (function_exists('fbks_fs')) {
                 wp_enqueue_script('folioblocks-shared-data');
 
                 if (fbks_fs()->can_use_premium_code__premium_only()) {
-                    $page_settings_path = FBKS_PLUGIN_DIR . 'includes/js/page-media-settings.js';
+                    $page_settings_path = FBKS_PLUGIN_DIR . 'includes/pro/js/page-media-settings.js';
                     wp_enqueue_script(
                         'folioblocks-page-media-settings',
-                        FBKS_PLUGIN_URL . 'includes/js/page-media-settings.js',
+                        FBKS_PLUGIN_URL . 'includes/pro/js/page-media-settings.js',
                         array('wp-components', 'wp-core-data', 'wp-data', 'wp-editor', 'wp-element', 'wp-hooks', 'wp-i18n', 'wp-plugins'),
                         file_exists($page_settings_path) ? filemtime($page_settings_path) : FBKS_VERSION,
                         true
@@ -472,14 +471,16 @@ if (function_exists('fbks_fs')) {
             'folioblocks-settings',         // SAME slug as main page
             'fbks_render_settings_page'
         );
-        add_submenu_page(
-            'folioblocks-settings',
-            __('Global Settings', 'folioblocks'),
-            __('Global Settings', 'folioblocks'),
-            'manage_options',
-            'folioblocks-global-settings',
-            'fbks_render_global_settings_page'
-        );
+        if (fbks_fs()->can_use_premium_code__premium_only()) {
+            add_submenu_page(
+                'folioblocks-settings',
+                __('Global Settings', 'folioblocks'),
+                __('Global Settings', 'folioblocks'),
+                'manage_options',
+                'folioblocks-global-settings',
+                'fbks_render_global_settings_page'
+            );
+        }
         if (fbks_fs()->can_use_premium_code__premium_only() && fbks_fs()->is_plan('business')) {
             add_submenu_page(
                 'folioblocks-settings',
@@ -523,8 +524,12 @@ if (function_exists('fbks_fs')) {
     require_once plugin_dir_path(__FILE__) . 'includes/admin/common.php';
     require_once plugin_dir_path(__FILE__) . 'includes/admin/review-request.php';
     require_once plugin_dir_path(__FILE__) . 'includes/admin/settings-page.php';
-    require_once plugin_dir_path(__FILE__) . 'includes/admin/global-settings.php';
-    require_once plugin_dir_path(__FILE__) . 'includes/admin/proofing-sessions.php';
+    if (fbks_fs()->can_use_premium_code__premium_only()) {
+        require_once plugin_dir_path(__FILE__) . 'includes/pro/admin/global-settings.php';
+    }
+    if (fbks_fs()->can_use_premium_code__premium_only() && fbks_fs()->is_plan('business')) {
+        require_once plugin_dir_path(__FILE__) . 'includes/pro/admin/proofing-sessions.php';
+    }
     require_once plugin_dir_path(__FILE__) . 'includes/admin/system-info.php';
     require_once plugin_dir_path(__FILE__) . 'includes/admin/free-pro.php';
     // Load CSS for Admin pages
@@ -564,22 +569,25 @@ if (function_exists('fbks_fs')) {
         return $links;
     }
 
-    require_once plugin_dir_path(__FILE__) . 'includes/php/exif-metadata.php';
     require_once plugin_dir_path(__FILE__) . 'includes/php/svg-allowed-html.php';
 }
 
 if (fbks_fs()->can_use_premium_code__premium_only()) {
-    require_once plugin_dir_path(__FILE__) . 'includes/php/proofing-gallery.php';
+    require_once plugin_dir_path(__FILE__) . 'includes/pro/php/filter-helpers.php';
+    require_once plugin_dir_path(__FILE__) . 'includes/pro/php/css-values.php';
+    require_once plugin_dir_path(__FILE__) . 'includes/pro/php/exif-metadata.php';
+    require_once plugin_dir_path(__FILE__) . 'includes/pro/php/social-sharing.php';
+    require_once plugin_dir_path(__FILE__) . 'includes/pro/php/proofing-gallery.php';
 
     add_action('wp_enqueue_scripts', function () {
         if (! is_singular(array('post', 'page')) || ! post_password_required()) {
             return;
         }
 
-        $style_path = FBKS_PLUGIN_DIR . 'includes/css/password-form.css';
+        $style_path = FBKS_PLUGIN_DIR . 'includes/pro/css/password-form.css';
         wp_enqueue_style(
             'folioblocks-password-form',
-            FBKS_PLUGIN_URL . 'includes/css/password-form.css',
+            FBKS_PLUGIN_URL . 'includes/pro/css/password-form.css',
             array(),
             file_exists($style_path) ? filemtime($style_path) : FBKS_VERSION
         );

@@ -6,7 +6,6 @@ import {
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from '@wordpress/components';
-import { LightboxSocialSharingControls } from './socialSharingControls';
 
 const getLightboxContent = (attributes) => {
 	if (attributes.lightboxContent) {
@@ -27,7 +26,6 @@ const LightboxContentControl = ({
 	setAttributes,
 	showProductInfoOption = false,
 	showAppearanceControl = true,
-	context = {},
 }) => {
 	const value = getLightboxContent(attributes);
 	const options = [
@@ -65,6 +63,10 @@ const LightboxContentControl = ({
 				'folioblocks'
 			),
 			value: 'title_caption_exif',
+		},
+		{
+			label: __( 'Show Social Media', 'folioblocks' ),
+			value: 'social',
 		},
 	];
 
@@ -146,11 +148,6 @@ const LightboxContentControl = ({
 						)}
 					/>
 				)}
-			<LightboxSocialSharingControls
-				attributes={attributes}
-				setAttributes={setAttributes}
-				context={context}
-			/>
 		</>
 	);
 };

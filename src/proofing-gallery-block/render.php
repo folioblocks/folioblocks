@@ -7,20 +7,55 @@
 $fbks_gallery_password = isset( $attributes['galleryPassword'] ) ? (string) $attributes['galleryPassword'] : '';
 $fbks_client_email     = isset( $attributes['clientEmail'] ) ? (string) $attributes['clientEmail'] : '';
 $fbks_gallery_key      = 'fbks-proofing-' . md5( $fbks_client_email . '|' . $fbks_gallery_password );
-$fbks_can_view         = current_user_can( 'manage_options' ) || '' === $fbks_gallery_password;
 $fbks_error            = '';
 $fbks_enable_heart     = ! isset( $attributes['enableHeart'] ) || (bool) $attributes['enableHeart'];
 $fbks_enable_flag      = ! isset( $attributes['enableFlag'] ) || (bool) $attributes['enableFlag'];
 $fbks_enable_comment   = ! isset( $attributes['enableComment'] ) || (bool) $attributes['enableComment'];
 $fbks_filter_align     = isset( $attributes['filterAlign'] ) ? sanitize_key( $attributes['filterAlign'] ) : 'center';
+$fbks_button_align     = isset( $attributes['buttonAlign'] ) ? sanitize_key( $attributes['buttonAlign'] ) : 'right';
+$fbks_proofing_theme   = isset( $attributes['proofingTheme'] ) ? sanitize_key( $attributes['proofingTheme'] ) : 'light';
 $fbks_gallery_id       = wp_unique_id( 'fbks-proofing-gallery-' );
 $fbks_page_id          = get_the_ID();
+$fbks_proofing_settings = function_exists( 'fbks_get_proofing_settings' ) ? fbks_get_proofing_settings() : [ 'emailAdminOnSubmit' => false ];
+$fbks_email_admin_on_submit = array_key_exists( 'emailAdminOnSubmit', $attributes )
+	? (bool) $attributes['emailAdminOnSubmit']
+	: ! empty( $fbks_proofing_settings['emailAdminOnSubmit'] );
+$fbks_page_password    = $fbks_page_id ? (string) get_post_field( 'post_password', $fbks_page_id ) : '';
+$fbks_page_password_unlocks_gallery = '' !== $fbks_gallery_password && $fbks_gallery_password === $fbks_page_password && ! post_password_required( $fbks_page_id );
+$fbks_can_view         = current_user_can( 'manage_options' ) || '' === $fbks_gallery_password || $fbks_page_password_unlocks_gallery;
 $fbks_saved_session    = function_exists( 'fbks_get_proofing_session_state' ) ? fbks_get_proofing_session_state( $fbks_gallery_key ) : [ 'status' => '', 'updatedAt' => '', 'images' => [] ];
 $fbks_track_presence   = ! current_user_can( 'manage_options' );
 
 if ( ! in_array( $fbks_filter_align, [ 'left', 'center', 'right' ], true ) ) {
 	$fbks_filter_align = 'center';
 }
+
+if ( ! in_array( $fbks_button_align, [ 'left', 'center', 'right' ], true ) ) {
+	$fbks_button_align = 'right';
+}
+
+if ( ! in_array( $fbks_proofing_theme, [ 'light', 'dark' ], true ) ) {
+	$fbks_proofing_theme = 'light';
+}
+
+$fbks_clamp_numeric_attribute = static function ( $key, $default, $min, $max ) use ( $attributes ) {
+	$value = isset( $attributes[ $key ] ) ? floatval( $attributes[ $key ] ) : $default;
+	return max( $min, min( $max, $value ) );
+};
+
+$fbks_proofing_button_styles = [
+	'--fbks-proofing-save-button-color:' . fbks_sanitize_css_color_value( (string) ( $attributes['saveButtonTextColor'] ?? '#3858e9' ) ),
+	'--fbks-proofing-save-button-bg:' . fbks_sanitize_css_color_value( (string) ( $attributes['saveButtonBackgroundColor'] ?? '#ffffff' ) ),
+	'--fbks-proofing-submit-button-color:' . fbks_sanitize_css_color_value( (string) ( $attributes['submitButtonTextColor'] ?? '#ffffff' ) ),
+	'--fbks-proofing-submit-button-bg:' . fbks_sanitize_css_color_value( (string) ( $attributes['submitButtonBackgroundColor'] ?? '#3858e9' ) ),
+	'--fbks-proofing-button-radius:' . esc_attr( $fbks_clamp_numeric_attribute( 'buttonBorderRadius', 2, 0, 40 ) ) . 'px',
+	'--fbks-proofing-button-border-width:' . esc_attr( $fbks_clamp_numeric_attribute( 'buttonBorderWidth', 1, 0, 8 ) ) . 'px',
+	'--fbks-proofing-button-padding-y:' . esc_attr( $fbks_clamp_numeric_attribute( 'buttonPaddingVertical', 6, 0, 24 ) ) . 'px',
+	'--fbks-proofing-button-padding-x:' . esc_attr( $fbks_clamp_numeric_attribute( 'buttonPaddingHorizontal', 12, 4, 48 ) ) . 'px',
+	'--fbks-proofing-button-font-size:' . esc_attr( $fbks_clamp_numeric_attribute( 'buttonFontSize', 13, 10, 24 ) ) . 'px',
+	'--fbks-proofing-button-gap:' . esc_attr( $fbks_clamp_numeric_attribute( 'buttonGap', 12, 0, 40 ) ) . 'px',
+];
+$fbks_proofing_button_style_attr = implode( ';', array_filter( $fbks_proofing_button_styles ) ) . ';';
 
 $fbks_proofing_icon = static function ( $icon ) {
 	if ( 'heart' === $icon ) {
@@ -98,11 +133,22 @@ if ( ! $fbks_can_view && isset( $_POST['fbks_proofing_gallery_key'], $_POST['fbk
 	}
 }
 
+if ( ! $fbks_can_view ) {
+		$fbks_password_style_path = defined( 'FBKS_PLUGIN_DIR' ) ? FBKS_PLUGIN_DIR . 'includes/pro/css/password-form.css' : '';
+		wp_enqueue_style(
+			'folioblocks-password-form',
+			defined( 'FBKS_PLUGIN_URL' ) ? FBKS_PLUGIN_URL . 'includes/pro/css/password-form.css' : '',
+			[],
+			$fbks_password_style_path && file_exists( $fbks_password_style_path ) ? filemtime( $fbks_password_style_path ) : ( defined( 'FBKS_VERSION' ) ? FBKS_VERSION : false )
+		);
+}
+
 ?>
 <div <?php echo get_block_wrapper_attributes(); ?>>
 	<?php if ( $fbks_can_view ) : ?>
 		<div
-			class="fbks-proofing-gallery"
+			class="fbks-proofing-gallery<?php echo 'dark' === $fbks_proofing_theme ? ' is-proofing-dark' : ''; ?>"
+			style="<?php echo esc_attr( $fbks_proofing_button_style_attr ); ?>"
 			data-wp-interactive="folioblocks/proofing-gallery"
 			data-wp-context="<?php echo esc_attr( wp_json_encode( [
 				'galleryId'    => $fbks_gallery_id,
@@ -112,6 +158,7 @@ if ( ! $fbks_can_view && isset( $_POST['fbks_proofing_gallery_key'], $_POST['fbk
 				'restUrl'      => esc_url_raw( rest_url( 'folioblocks/v1/proofing-gallery/session' ) ),
 				'presenceUrl'  => esc_url_raw( rest_url( 'folioblocks/v1/proofing-gallery/session/presence' ) ),
 				'trackPresence' => $fbks_track_presence,
+				'emailAdminOnSubmit' => $fbks_email_admin_on_submit,
 				'savedSession' => $fbks_saved_session,
 			] ) ); ?>"
 			data-wp-init="callbacks.registerGallery"
@@ -149,7 +196,7 @@ if ( ! $fbks_can_view && isset( $_POST['fbks_proofing_gallery_key'], $_POST['fbk
 			<div class="fbks-proofing-gallery__inner">
 				<?php echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			</div>
-			<div class="fbks-proofing-gallery__actions">
+			<div class="fbks-proofing-gallery__actions align-<?php echo esc_attr( $fbks_button_align ); ?>">
 				<button
 					class="fbks-proofing-gallery__action-button fbks-proofing-gallery__action-button--save"
 					type="button"
@@ -170,25 +217,27 @@ if ( ! $fbks_can_view && isset( $_POST['fbks_proofing_gallery_key'], $_POST['fbk
 			</div>
 		</div>
 	<?php else : ?>
-		<form class="fbks-proofing-gallery-gate" method="post">
-			<label class="fbks-proofing-gallery-gate__label">
-				<?php esc_html_e( 'Gallery Password', 'folioblocks' ); ?>
-				<input
-					class="fbks-proofing-gallery-gate__input"
-					type="password"
-					name="fbks_proofing_gallery_password"
-					autocomplete="current-password"
-					required
-				/>
-			</label>
-			<input type="hidden" name="fbks_proofing_gallery_key" value="<?php echo esc_attr( $fbks_gallery_key ); ?>" />
-			<?php wp_nonce_field( $fbks_gallery_key, 'fbks_proofing_gallery_nonce' ); ?>
+		<form class="post-password-form fbks-proofing-gallery-gate" method="post">
+			<p><?php esc_html_e( 'This content is password-protected. To view it, please enter the password below.', 'folioblocks' ); ?></p>
+			<p class="post-password-form__fields">
+				<label>
+					<?php esc_html_e( 'Password:', 'folioblocks' ); ?>
+					<input
+						type="password"
+						name="fbks_proofing_gallery_password"
+						autocomplete="current-password"
+						required
+					/>
+				</label>
+				<input type="hidden" name="fbks_proofing_gallery_key" value="<?php echo esc_attr( $fbks_gallery_key ); ?>" />
+				<?php wp_nonce_field( $fbks_gallery_key, 'fbks_proofing_gallery_nonce' ); ?>
+				<button type="submit">
+					<?php esc_html_e( 'Enter', 'folioblocks' ); ?>
+				</button>
+			</p>
 			<?php if ( $fbks_error ) : ?>
-				<p class="fbks-proofing-gallery-gate__error"><?php echo esc_html( $fbks_error ); ?></p>
+				<p class="post-password-form__error fbks-proofing-gallery-gate__error"><?php echo esc_html( $fbks_error ); ?></p>
 			<?php endif; ?>
-			<button class="fbks-proofing-gallery-gate__button" type="submit">
-				<?php esc_html_e( 'View Gallery', 'folioblocks' ); ?>
-			</button>
 		</form>
 	<?php endif; ?>
 </div>

@@ -7,6 +7,7 @@ const DISPLAY_NONE = 'none';
 const DISPLAY_GALLERY = 'gallery';
 const DISPLAY_LIGHTBOX = 'lightbox';
 const DISPLAY_BOTH = 'both';
+const WATERMARK_DEFAULT = '__default';
 
 const getWatermarkSettings = () =>
 	typeof window !== 'undefined'
@@ -21,12 +22,68 @@ export const getSavedWatermarks = () => {
 export const getSavedWatermarkById = ( watermarkId ) =>
 	getSavedWatermarks().find( ( item ) => item.id === watermarkId ) || null;
 
-const getWatermarkRenderMetrics = ( width, height, sizeRatio, insetRatio ) => {
-	const shortEdge = Math.min( width, height );
+const getDefaultWatermark = () => {
+	const settings = getWatermarkSettings();
+
+	if ( ! settings.defaultWatermarkId ) {
+		return null;
+	}
+
+	return getSavedWatermarkById( settings.defaultWatermarkId );
+};
+
+const getEffectiveWatermarkById = ( watermarkId ) =>
+	watermarkId === WATERMARK_DEFAULT
+		? getDefaultWatermark()
+		: getSavedWatermarkById( watermarkId );
+
+const getDefaultWatermarkAttributes = () => {
+	const settings = getWatermarkSettings();
+
+	if ( ! settings.enabledByDefault || ! settings.defaultWatermarkId ) {
+		return null;
+	}
+
+	const watermark = getDefaultWatermark();
+	if ( ! watermark ) {
+		return null;
+	}
 
 	return {
-		renderSize: ( shortEdge * sizeRatio ) / 100,
-		renderInset: ( shortEdge * insetRatio ) / 100,
+		enableWatermarking: true,
+		watermarkId: WATERMARK_DEFAULT,
+		watermarkDisplay: DISPLAY_GALLERY,
+	};
+};
+
+const shouldApplyDefaultWatermark = ( attributes = {} ) =>
+	! attributes.enableWatermarking &&
+	! attributes.watermarkId &&
+	( ! attributes.watermarkDisplay ||
+		attributes.watermarkDisplay === DISPLAY_NONE );
+
+const getWatermarkSizingEdge = ( width, height ) => {
+	const shortEdge = Math.min( width, height );
+	const longEdge = Math.max( width, height );
+	const aspectRatio = shortEdge > 0 ? longEdge / shortEdge : 1;
+	const squareAdjustment =
+		aspectRatio >= 1.2 ? 1 : 0.78 + ( ( aspectRatio - 1 ) / 0.2 ) * 0.22;
+
+	return shortEdge * Math.min( 1, Math.max( 0.78, squareAdjustment ) );
+};
+
+const getWatermarkRenderMetrics = (
+	width,
+	height,
+	sizeRatio,
+	insetRatio,
+	baseline
+) => {
+	const sizingEdge = baseline || getWatermarkSizingEdge( width, height );
+
+	return {
+		renderSize: ( sizingEdge * sizeRatio ) / 100,
+		renderInset: ( sizingEdge * insetRatio ) / 100,
 	};
 };
 
@@ -90,7 +147,7 @@ export const getEffectiveWatermarkState = ( {
 	const display = isInsideGallery
 		? context?.[ 'folioBlocks/watermarkDisplay' ]
 		: attributes.watermarkDisplay;
-	const watermark = getSavedWatermarkById( watermarkId );
+	const watermark = getEffectiveWatermarkById( watermarkId );
 
 	return {
 		enabled: !! enabled,
@@ -108,6 +165,7 @@ export const WatermarkOverlay = ( props = {} ) => {
 		const overlay = overlayRef.current;
 		const imageBlock = overlay?.closest( '.pb-image-block' );
 		const image = imageBlock?.querySelector( '.pb-image-block-img' );
+		const carouselGallery = imageBlock?.closest( '.pb-carousel-gallery' );
 
 		if ( ! enabled || ! watermark || ! overlay || ! image ) {
 			return undefined;
@@ -121,7 +179,8 @@ export const WatermarkOverlay = ( props = {} ) => {
 				imageRect.width,
 				imageRect.height,
 				Number.isFinite( sizeRatio ) ? sizeRatio : 16,
-				Number.isFinite( insetRatio ) ? insetRatio : 4
+				Number.isFinite( insetRatio ) ? insetRatio : 4,
+				carouselGallery ? imageRect.height : null
 			);
 
 			setRenderMetrics( {
@@ -207,6 +266,10 @@ export const WatermarkControls = ( {
 
 	return (
 		<>
+			<WatermarkDefaultAttributes
+				attributes={ attributes }
+				setAttributes={ setAttributes }
+			/>
 			<ToggleControl
 				label={ __( 'Enable Watermarking', 'folioblocks' ) }
 				help={ __(
@@ -215,8 +278,33 @@ export const WatermarkControls = ( {
 				) }
 				checked={ enableWatermarking }
 				onChange={ ( nextValue ) => {
+					if ( nextValue && ! hasSavedWatermarks ) {
+						setAttributes( {
+							enableWatermarking: false,
+							watermarkId: '',
+							watermarkDisplay: DISPLAY_NONE,
+						} );
+						return;
+					}
+
+					const defaultAttributes = nextValue
+						? getDefaultWatermarkAttributes()
+						: null;
+
 					setAttributes( {
 						enableWatermarking: nextValue,
+						...( nextValue && defaultAttributes
+							? {
+									watermarkId:
+										defaultAttributes.watermarkId,
+									watermarkDisplay:
+										attributes.watermarkDisplay &&
+										attributes.watermarkDisplay !==
+											DISPLAY_NONE
+											? attributes.watermarkDisplay
+											: defaultAttributes.watermarkDisplay,
+							  }
+							: {} ),
 						...( ! nextValue
 							? { watermarkDisplay: DISPLAY_NONE }
 							: {} ),
@@ -225,10 +313,10 @@ export const WatermarkControls = ( {
 				__nextHasNoMarginBottom
 			/>
 
-			{ enableWatermarking && ! hasSavedWatermarks && (
+			{ ! hasSavedWatermarks && (
 				<Notice status="warning" isDismissible={ false }>
 					{ __(
-						'Create and save a watermark in FolioBlocks Global Settings before enabling watermarking.',
+						'No saved watermarks are available. Create and save a watermark in FolioBlocks Global Settings before enabling watermarking.',
 						'folioblocks'
 					) }
 				</Notice>
@@ -242,10 +330,10 @@ export const WatermarkControls = ( {
 						options={ [
 							{
 								label: __(
-									'Select a watermark',
+									'Default Watermark',
 									'folioblocks'
 								),
-								value: '',
+								value: WATERMARK_DEFAULT,
 							},
 							...savedWatermarks.map( ( watermark ) => ( {
 								label: watermark.name,
@@ -285,6 +373,38 @@ export const WatermarkControls = ( {
 	);
 };
 
+export const WatermarkDefaultAttributes = ( {
+	attributes = {},
+	setAttributes,
+} ) => {
+	const didApplyDefault = useRef( false );
+
+	useEffect( () => {
+		if (
+			didApplyDefault.current ||
+			typeof setAttributes !== 'function' ||
+			! shouldApplyDefaultWatermark( attributes )
+		) {
+			return;
+		}
+
+		const defaultAttributes = getDefaultWatermarkAttributes();
+		if ( ! defaultAttributes ) {
+			return;
+		}
+
+		didApplyDefault.current = true;
+		setAttributes( defaultAttributes );
+	}, [
+		attributes.enableWatermarking,
+		attributes.watermarkDisplay,
+		attributes.watermarkId,
+		setAttributes,
+	] );
+
+	return null;
+};
+
 export const registerWatermarkOverlayControls = ( {
 	hookPrefix,
 	namespace,
@@ -293,6 +413,17 @@ export const registerWatermarkOverlayControls = ( {
 		`${ hookPrefix }.watermarkControls`,
 		`${ namespace }-watermark-controls`,
 		( defaultContent, props = {} ) => <WatermarkControls { ...props } />
+	);
+
+	addFilter(
+		`${ hookPrefix }.editorEnhancements`,
+		`${ namespace }-default-watermark-attributes`,
+		( defaultContent, props = {} ) => (
+			<>
+				{ defaultContent }
+				<WatermarkDefaultAttributes { ...props } />
+			</>
+		)
 	);
 };
 

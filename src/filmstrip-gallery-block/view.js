@@ -48,6 +48,113 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		const mainMedia = galleryRoot.querySelector(
 			'.pb-filmstrip-gallery-main-media'
 		);
+		const getWatermarkSizingEdge = ( width, height ) => {
+			const shortEdge = Math.min( width, height );
+			const longEdge = Math.max( width, height );
+			const aspectRatio = shortEdge > 0 ? longEdge / shortEdge : 1;
+			const squareAdjustment =
+				aspectRatio >= 1.2
+					? 1
+					: 0.78 + ( ( aspectRatio - 1 ) / 0.2 ) * 0.22;
+
+			return shortEdge * Math.min( 1, Math.max( 0.78, squareAdjustment ) );
+		};
+		const getWatermarkRenderMetrics = (
+			width,
+			height,
+			sizeRatio,
+			insetRatio
+		) => {
+			const sizingEdge = getWatermarkSizingEdge( width, height );
+
+			return {
+				renderSize: ( sizingEdge * sizeRatio ) / 100,
+				renderInset: ( sizingEdge * insetRatio ) / 100,
+			};
+		};
+		const getMainWatermarkOverlay = () => {
+			const watermark = settings.watermark || {};
+			if ( ! mainMedia || ! watermark.showGallery || ! watermark.image ) {
+				return null;
+			}
+
+			let overlay = mainMedia.querySelector(
+				':scope > .pb-watermark-overlay:not(.pb-watermark-overlay--lightbox)'
+			);
+			if ( ! overlay ) {
+				overlay = document.createElement( 'span' );
+				overlay.className = 'pb-watermark-overlay';
+				overlay.setAttribute( 'aria-hidden', 'true' );
+				mainMedia.appendChild( overlay );
+			}
+
+			const escapedImage = String( watermark.image ).replace(
+				/["\\]/g,
+				'\\$&'
+			);
+			overlay.style.setProperty(
+				'--pb-watermark-image',
+				`url("${ escapedImage }")`
+			);
+			overlay.style.setProperty(
+				'--pb-watermark-opacity',
+				String( watermark.opacity || '0.28' )
+			);
+			overlay.style.setProperty(
+				'--pb-watermark-size',
+				`${ watermark.size || '16' }%`
+			);
+			overlay.style.setProperty(
+				'--pb-watermark-position',
+				String( watermark.position || 'bottom right' )
+			);
+			overlay.style.setProperty(
+				'--pb-watermark-repeat',
+				String( watermark.repeat || 'no-repeat' )
+			);
+			overlay.setAttribute(
+				'data-watermark-size',
+				String( watermark.size || '16' )
+			);
+			overlay.setAttribute(
+				'data-watermark-inset',
+				String( watermark.inset || '4' )
+			);
+
+			return overlay;
+		};
+		const syncMainWatermark = () => {
+			const overlay = getMainWatermarkOverlay();
+			if ( ! overlay ) {
+				return;
+			}
+
+			const imageRect = mainImage.getBoundingClientRect();
+			const sizeRatio = Number.parseFloat(
+				overlay.getAttribute( 'data-watermark-size' ) || '16'
+			);
+			const insetRatio = Number.parseFloat(
+				overlay.getAttribute( 'data-watermark-inset' ) || '4'
+			);
+			const { renderSize, renderInset } = getWatermarkRenderMetrics(
+				imageRect.width,
+				imageRect.height,
+				Number.isFinite( sizeRatio ) ? sizeRatio : 16,
+				Number.isFinite( insetRatio ) ? insetRatio : 4
+			);
+
+			overlay.style.setProperty(
+				'--pb-watermark-render-size',
+				`${ renderSize }px`
+			);
+			overlay.style.setProperty(
+				'--pb-watermark-inset',
+				`${ renderInset }px`
+			);
+		};
+		const scheduleMainWatermarkSync = () => {
+			window.requestAnimationFrame( syncMainWatermark );
+		};
 		const syncMainMediaRatio = () => {
 			if (
 				mainMedia &&
@@ -59,8 +166,10 @@ document.addEventListener( 'DOMContentLoaded', () => {
 					String( mainImage.naturalWidth / mainImage.naturalHeight )
 				);
 			}
+			scheduleMainWatermarkSync();
 		};
 		mainImage.addEventListener( 'load', syncMainMediaRatio );
+		window.addEventListener( 'resize', scheduleMainWatermarkSync );
 		const mainImageLink = galleryRoot.querySelector(
 			'.pb-filmstrip-gallery-main-link'
 		);
@@ -333,6 +442,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			}
 
 			syncThumbState();
+			scheduleMainWatermarkSync();
 			emitImageChange( image );
 		};
 

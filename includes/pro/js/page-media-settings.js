@@ -1,13 +1,14 @@
 ( function ( wp ) {
 	const { __ } = wp.i18n;
-	const { ToggleControl } = wp.components;
-	const { createElement, Fragment } = wp.element;
+	const { TextControl, ToggleControl } = wp.components;
+	const { createElement, Fragment, useEffect, useState } = wp.element;
 	const { addFilter } = wp.hooks;
 	const { registerPlugin } = wp.plugins;
 	const { useEntityProp } = wp.coreData;
 	const { useSelect } = wp.data;
 	const { PluginDocumentSettingPanel } = wp.editor;
 
+	const proofingGalleryBlock = 'folioblocks/proofing-gallery-block';
 	const lazyLoadBlocks = new Set( [
 		'folioblocks/before-after-block',
 		'folioblocks/carousel-gallery-block',
@@ -60,6 +61,12 @@
 		( blocks || [] ).reduce(
 			( capabilities, block ) => {
 				const inner = getCapabilities( block.innerBlocks );
+				const isProofingGallery = block.name === proofingGalleryBlock;
+				const proofingGalleryPassword =
+					isProofingGallery &&
+					typeof block.attributes?.galleryPassword === 'string'
+						? block.attributes.galleryPassword
+						: inner.proofingGalleryPassword;
 				return {
 					hasLazyLoad:
 						capabilities.hasLazyLoad ||
@@ -73,14 +80,31 @@
 						capabilities.hasDragToSave ||
 						dragToSaveBlocks.has( block.name ) ||
 						inner.hasDragToSave,
+					hasProofingGallery:
+						capabilities.hasProofingGallery ||
+						isProofingGallery ||
+						inner.hasProofingGallery,
+					proofingGalleryPassword:
+						capabilities.proofingGalleryPassword ||
+						proofingGalleryPassword ||
+						'',
 				};
 			},
-			{ hasLazyLoad: false, hasRightClick: false, hasDragToSave: false }
+			{
+				hasLazyLoad: false,
+				hasRightClick: false,
+				hasDragToSave: false,
+				hasProofingGallery: false,
+				proofingGalleryPassword: '',
+			}
 		);
 
 	const getContentCapabilities = ( content ) => {
 		const value = typeof content === 'string' ? content : '';
 		return {
+			hasProofingGallery: value.includes(
+				`wp:${ proofingGalleryBlock }`
+			),
 			hasLazyLoad: [ ...lazyLoadBlocks ].some( ( blockName ) =>
 				value.includes( `wp:${ blockName }` )
 			),
@@ -94,40 +118,89 @@
 	};
 
 	const PageMediaSettings = () => {
-		const { hasLazyLoad, hasRightClick, hasDragToSave, postId, postType } =
-			useSelect( ( select ) => {
-				const blockCapabilities = getCapabilities(
-					select( 'core/block-editor' ).getBlocks()
-				);
-				const contentCapabilities = getContentCapabilities(
-					select( 'core/editor' ).getEditedPostContent()
-				);
+		const {
+			hasLazyLoad,
+			hasRightClick,
+			hasDragToSave,
+			hasProofingGallery,
+			proofingGalleryPassword,
+			postId,
+			postType,
+		} = useSelect( ( select ) => {
+			const blockCapabilities = getCapabilities(
+				select( 'core/block-editor' ).getBlocks()
+			);
+			const contentCapabilities = getContentCapabilities(
+				select( 'core/editor' ).getEditedPostContent()
+			);
 
-				return {
-					hasLazyLoad:
-						blockCapabilities.hasLazyLoad ||
-						contentCapabilities.hasLazyLoad,
-					hasRightClick:
-						blockCapabilities.hasRightClick ||
-						contentCapabilities.hasRightClick,
-					hasDragToSave:
-						blockCapabilities.hasDragToSave ||
-						contentCapabilities.hasDragToSave,
-					postId: select( 'core/editor' ).getCurrentPostId(),
-					postType: select( 'core/editor' ).getCurrentPostType(),
-				};
-			}, [] );
+			return {
+				hasLazyLoad:
+					blockCapabilities.hasLazyLoad ||
+					contentCapabilities.hasLazyLoad,
+				hasRightClick:
+					blockCapabilities.hasRightClick ||
+					contentCapabilities.hasRightClick,
+				hasDragToSave:
+					blockCapabilities.hasDragToSave ||
+					contentCapabilities.hasDragToSave,
+				hasProofingGallery:
+					blockCapabilities.hasProofingGallery ||
+					contentCapabilities.hasProofingGallery,
+				proofingGalleryPassword:
+					blockCapabilities.proofingGalleryPassword || '',
+				postId: select( 'core/editor' ).getCurrentPostId(),
+				postType: select( 'core/editor' ).getCurrentPostType(),
+			};
+		}, [] );
 		const [ meta, setMeta ] = useEntityProp(
 			'postType',
 			postType || 'post',
 			'meta',
 			postId
 		);
+		const [ password, setPassword ] = useEntityProp(
+			'postType',
+			postType || 'post',
+			'password',
+			postId
+		);
+		const [ isPasswordControlOpen, setIsPasswordControlOpen ] = useState(
+			!! password
+		);
+
+		useEffect( () => {
+			if ( password ) {
+				setIsPasswordControlOpen( true );
+			}
+		}, [ password ] );
+
+		useEffect( () => {
+			if (
+				! hasProofingGallery ||
+				! proofingGalleryPassword ||
+				password === proofingGalleryPassword
+			) {
+				return;
+			}
+
+			setPassword( proofingGalleryPassword );
+			setIsPasswordControlOpen( true );
+		}, [
+			hasProofingGallery,
+			password,
+			proofingGalleryPassword,
+			setPassword,
+		] );
+
 		if (
 			! PluginDocumentSettingPanel ||
 			! postId ||
 			! postType ||
-			( ! hasLazyLoad && ! hasRightClick && ! hasDragToSave )
+			( ! hasLazyLoad &&
+				! hasRightClick &&
+				! hasDragToSave &&
+				! hasProofingGallery )
 		) {
 			return null;
 		}
@@ -136,6 +209,69 @@
 			setMeta( { ...meta, [ key ]: !! value } );
 		};
 		const controls = [];
+
+		if ( postType === 'post' || postType === 'page' ) {
+			const isProofingPasswordManaged = hasProofingGallery;
+			let passwordHelp = __(
+				'Require a password before visitors can view the page.',
+				'folioblocks'
+			);
+			if ( isProofingPasswordManaged && proofingGalleryPassword ) {
+				passwordHelp = __(
+					'Password protection is managed by the Proofing Gallery block on this page.',
+					'folioblocks'
+				);
+			} else if ( isProofingPasswordManaged ) {
+				passwordHelp = __(
+					'Set the password in the Proofing Gallery block settings.',
+					'folioblocks'
+				);
+			} else if ( isPasswordControlOpen && ! password ) {
+				passwordHelp = __(
+					'Enter a password to protect this page.',
+					'folioblocks'
+				);
+			} else if ( password ) {
+				passwordHelp = __(
+					'Visitors must enter this password to view the page.',
+					'folioblocks'
+				);
+			}
+
+			controls.push(
+				createElement( ToggleControl, {
+					key: 'password-protection',
+					label: __( 'Password Protect Page', 'folioblocks' ),
+					checked: isProofingPasswordManaged || isPasswordControlOpen,
+					disabled: isProofingPasswordManaged,
+					onChange: ( value ) => {
+						if ( isProofingPasswordManaged ) {
+							return;
+						}
+						setIsPasswordControlOpen( value );
+						if ( ! value ) {
+							setPassword( '' );
+						}
+					},
+					help: passwordHelp,
+					__nextHasNoMarginBottom: true,
+				} )
+			);
+
+			if ( isPasswordControlOpen && ! isProofingPasswordManaged ) {
+				controls.push(
+					createElement( TextControl, {
+						key: 'page-password',
+						label: __( 'Page Password', 'folioblocks' ),
+						value: password || '',
+						onChange: setPassword,
+						autoComplete: 'new-password',
+						__nextHasNoMarginBottom: true,
+						__next40pxDefaultSize: true,
+					} )
+				);
+			}
+		}
 
 		if ( hasLazyLoad ) {
 			controls.push(

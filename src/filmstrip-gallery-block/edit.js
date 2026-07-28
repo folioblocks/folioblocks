@@ -34,6 +34,7 @@ import { getImageSizeOptions } from '../pb-helpers/imageSizeOptions';
 import { imageProFeatureNotice } from '../pb-helpers/imageProFeatureNotices';
 import { getOverlayTypographyCSS } from '../pb-helpers/overlayTypographyControls';
 import { getTiltHoverHandlers } from '../pb-helpers/tiltHoverEffect';
+import { WatermarkOverlay } from '../pb-helpers/watermarkOverlayControls';
 import './editor.scss';
 
 const ALLOWED_BLOCKS = [ 'folioblocks/pb-image-block' ];
@@ -956,6 +957,19 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 							) }
 						</div>
 					) }
+					{ activeImageSrc && (
+						<WatermarkOverlay
+							attributes={ activeImageAttributes }
+							context={ {
+								'folioBlocks/enableWatermarking':
+									attributes.enableWatermarking,
+								'folioBlocks/watermarkId': attributes.watermarkId,
+								'folioBlocks/watermarkDisplay':
+									attributes.watermarkDisplay,
+							} }
+							isInsideGallery
+						/>
+					) }
 					{ showOverlay && (
 							<div className="pb-image-block-title-container">
 								<figcaption className="pb-image-block-title">
@@ -1295,17 +1309,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						{ attributes, setAttributes }
 					) }
 				</PanelBody>
-				<PanelBody
-					title={ __( 'Social Media Sharing', 'folioblocks' ) }
-					initialOpen={ false }
-				>
-					{ applyFilters(
-						'folioBlocks.filmstripGallery.socialSharingControls',
-						imageProFeatureNotice( 'socialSharing' ),
-						{ attributes, setAttributes }
-					) }
-				</PanelBody>
-			</InspectorControls>
+				</InspectorControls>
 			<InspectorControls group="advanced">
 				{ applyFilters(
 					'folioBlocks.filmstripGallery.disableRightClickToggle',

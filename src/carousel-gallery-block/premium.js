@@ -23,7 +23,6 @@ import { registerListViewThumbnailEnhancements } from '../pb-helpers/listViewThu
 import { enableGalleryTransforms } from '../pb-helpers/galleryTransforms';
 import { registerResponsiveGapPremiumControl } from '../pb-helpers/responsiveGapPremiumControl';
 import { registerWatermarkOverlayControls } from '../pb-helpers/watermarkOverlayControls';
-import { registerSocialMediaSharingControls } from '../pb-helpers/socialSharingControls';
 import {
 	registerDisableRightClickPremiumControl,
 	registerLazyLoadPremiumControl,
@@ -46,11 +45,6 @@ registerListViewThumbnailEnhancements( {
 } );
 
 registerWatermarkOverlayControls( {
-	hookPrefix: 'folioBlocks.carouselGallery',
-	namespace: 'folioblocks/carousel-gallery',
-} );
-
-registerSocialMediaSharingControls( {
 	hookPrefix: 'folioBlocks.carouselGallery',
 	namespace: 'folioblocks/carousel-gallery',
 } );

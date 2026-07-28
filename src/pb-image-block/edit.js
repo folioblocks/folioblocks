@@ -249,6 +249,7 @@ const ProofingThumbnailControls = ( {
 	enableHeart = true,
 	enableFlag = true,
 	enableComment = true,
+	proofingTheme = 'light',
 } ) => {
 	const [ liked, setLiked ] = useState( false );
 	const [ flagColor, setFlagColor ] = useState( '' );
@@ -276,6 +277,7 @@ const ProofingThumbnailControls = ( {
 	const stopProofingPanelEvent = ( event ) => {
 		event.stopPropagation();
 	};
+	const isDarkProofingTheme = proofingTheme === 'dark';
 
 	useEffect( () => {
 		const imageBlock = controlsRef.current?.closest(
@@ -346,7 +348,13 @@ const ProofingThumbnailControls = ( {
 							onClose={ () => setIsFlagPickerOpen( false ) }
 							focusOnMount={ false }
 						>
-							<div className="fbks-proofing-flag-popover">
+							<div
+								className={ `fbks-proofing-flag-popover${
+									isDarkProofingTheme
+										? ' fbks-proofing-popover--dark'
+										: ''
+								}` }
+							>
 								{ flagColors.map( ( color ) => (
 									<button
 										type="button"
@@ -398,7 +406,11 @@ const ProofingThumbnailControls = ( {
 					</button>
 					{ isCommentOpen && (
 						<div
-							className={ `fbks-proofing-comment-popover is-open fbks-proofing-popover--slot-${ getProofingControlSlot(
+							className={ `fbks-proofing-comment-popover is-open${
+								isDarkProofingTheme
+									? ' fbks-proofing-popover--dark'
+									: ''
+							} fbks-proofing-popover--slot-${ getProofingControlSlot(
 								'comment'
 							) }` }
 							onMouseDown={ stopProofingPanelEvent }
@@ -1027,6 +1039,7 @@ export default function Edit( {
 			enableHeart={ proofingGalleryAttributes.enableHeart !== false }
 			enableFlag={ proofingGalleryAttributes.enableFlag !== false }
 			enableComment={ proofingGalleryAttributes.enableComment !== false }
+			proofingTheme={ proofingGalleryAttributes.proofingTheme || 'light' }
 		/>
 	) : null;
 
@@ -1382,22 +1395,7 @@ export default function Edit( {
 								) }
 							</PanelBody>
 						) }
-						{ ! isInsideGallery && (
-							<PanelBody
-								title={ __(
-									'Social Media Sharing',
-									'folioblocks'
-								) }
-								initialOpen={ false }
-							>
-								{ applyFilters(
-									'folioBlocks.imageBlock.socialSharingControls',
-									imageProFeatureNotice( 'socialSharing' ),
-									{ attributes, setAttributes }
-								) }
-							</PanelBody>
-						) }
-					</InspectorControls>
+						</InspectorControls>
 					{ shouldUseContentInspector && (
 						<InspectorControls group="content">
 							<PanelBody

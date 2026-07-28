@@ -153,6 +153,10 @@ if (! function_exists('fbks_get_watermark_by_id')) {
 		}
 
 		$settings = fbks_get_watermark_settings();
+		if ('__default' === $watermark_id) {
+			$watermark_id = sanitize_key($settings['defaultWatermarkId']);
+		}
+
 		foreach ($settings['items'] as $item) {
 			if ($watermark_id === $item['id'] && ! empty($item['assetUrl'])) {
 				return $item;
@@ -424,11 +428,6 @@ if (! function_exists('fbks_render_watermark_fields')) {
 						</label>
 					<?php endif; ?>
 				</div>
-				<p class="buy-button-wrapper pb-watermark-save-wrapper">
-					<button type="submit" class="button button-primary buy-button">
-						<?php esc_html_e('Save Watermark', 'folioblocks'); ?>
-					</button>
-				</p>
 				</div>
 			</div>
 		</<?php echo esc_html($card_tag); ?>>
@@ -445,20 +444,45 @@ if (! function_exists('fbks_render_global_settings_page')) {
 		if (
 			isset($_SERVER['REQUEST_METHOD']) &&
 			'POST' === strtoupper(sanitize_text_field(wp_unslash($_SERVER['REQUEST_METHOD']))) &&
-			isset($_POST['fbks_watermarks']) &&
-			is_array($_POST['fbks_watermarks'])
+			isset($_POST['fbks_watermarks'], $_POST['fbks_social_sharing'], $_POST['fbks_proofing']) &&
+			is_array($_POST['fbks_watermarks']) &&
+			is_array($_POST['fbks_social_sharing']) &&
+			is_array($_POST['fbks_proofing'])
 		) {
-			$settings = fbks_sanitize_watermark_settings(wp_unslash($_POST['fbks_watermarks']));
+			$raw_watermark_settings = wp_unslash($_POST['fbks_watermarks']);
+			$settings = fbks_sanitize_watermark_settings($raw_watermark_settings);
+			$settings['enabledByDefault'] = fbks_sanitize_watermark_checkbox($raw_watermark_settings['enabledByDefault'] ?? false);
 			update_option(FBKS_WATERMARK_SETTINGS_OPTION, $settings);
-			$notice = __('Watermark saved.', 'folioblocks');
+			if (function_exists('fbks_sanitize_social_sharing_settings')) {
+				$social_settings = fbks_sanitize_social_sharing_settings(wp_unslash($_POST['fbks_social_sharing']));
+				update_option(FBKS_SOCIAL_SHARING_SETTINGS_OPTION, $social_settings);
+			}
+			if (function_exists('fbks_sanitize_proofing_settings') && defined('FBKS_PROOFING_SETTINGS_OPTION')) {
+				$proofing_settings = fbks_sanitize_proofing_settings(wp_unslash($_POST['fbks_proofing']));
+				update_option(FBKS_PROOFING_SETTINGS_OPTION, $proofing_settings);
+			}
+			$notice = __('Global settings saved.', 'folioblocks');
 		}
 
 		$settings = fbks_get_watermark_settings();
 		$new_watermark = fbks_get_watermark_item_defaults();
+		$proofing_settings = function_exists('fbks_get_proofing_settings')
+			? fbks_get_proofing_settings()
+			: array(
+				'inProgressRetentionDays' => 14,
+				'submittedRetentionDays'  => 90,
+				'emailAdminOnSubmit'      => false,
+			);
+		$social_settings = function_exists('fbks_get_social_sharing_settings')
+			? fbks_get_social_sharing_settings()
+			: array('sources' => array());
+		$social_services = function_exists('fbks_get_social_share_services')
+			? fbks_get_social_share_services()
+			: array();
 		?>
 		<div class="pb-wrap">
 			<div class="pb-settings-header">
-				<img src="<?php echo esc_url(plugin_dir_url(__DIR__) . '/icons/pb-brand-icon.svg'); ?>" alt="<?php echo esc_attr__('FolioBlocks', 'folioblocks'); ?>" class="pb-settings-logo" />
+				<img src="<?php echo esc_url(FBKS_PLUGIN_URL . 'includes/icons/pb-brand-icon.svg'); ?>" alt="<?php echo esc_attr__('FolioBlocks', 'folioblocks'); ?>" class="pb-settings-logo" />
 				<h1><?php esc_html_e('FolioBlocks', 'folioblocks'); ?><?php if (fbks_fs()->can_use_premium_code()) : ?> <?php esc_html_e('Pro', 'folioblocks'); ?><?php endif; ?> - <?php esc_html_e('Global Settings', 'folioblocks'); ?></h1>
 			</div>
 
@@ -470,15 +494,52 @@ if (! function_exists('fbks_render_global_settings_page')) {
 
 			<div class="settings-container pb-global-settings-container">
 				<div class="settings-left">
-					<div class="pb-dashboard-box">
-						<h2><?php esc_html_e('Global Settings', 'folioblocks'); ?></h2>
-						<p>
-							<?php esc_html_e('Global Settings define site-wide defaults for FolioBlocks features. For Watermark Overlay, you can save multiple named watermarks, choose one default, and later select them from compatible blocks.', 'folioblocks'); ?>
-						</p>
-					</div>
-
 					<form method="post" action="<?php echo esc_url(admin_url('admin.php?page=folioblocks-global-settings')); ?>">
 						<?php fbks_render_admin_nonce_field('global-settings'); ?>
+
+						<div class="pb-dashboard-box pb-global-settings-panel">
+							<h2><?php esc_html_e('Social Sharing', 'folioblocks'); ?></h2>
+							<p>
+								<?php esc_html_e('Choose the social sharing sources used when Social Media is selected for lightbox or overlay content.', 'folioblocks'); ?>
+							</p>
+
+							<input type="hidden" name="fbks_social_sharing[enabled]" value="1" />
+							<div class="pb-watermark-checkboxes" data-social-share-sources data-social-share-max="5">
+								<?php foreach ($social_services as $source => $service) : ?>
+									<label>
+										<input type="checkbox" name="fbks_social_sharing[sources][]" value="<?php echo esc_attr($source); ?>" <?php checked(in_array($source, $social_settings['sources'], true)); ?> />
+										<?php echo esc_html($service['label']); ?>
+									</label>
+								<?php endforeach; ?>
+							</div>
+						</div>
+
+						<div class="pb-dashboard-box pb-global-settings-panel">
+							<h2><?php esc_html_e('Proofing Gallery', 'folioblocks'); ?></h2>
+							<p>
+								<?php esc_html_e('Control how long proofing sessions are stored and whether admins are notified when clients submit selections.', 'folioblocks'); ?>
+							</p>
+
+							<div class="pb-proofing-settings-grid">
+								<label class="pb-settings-field">
+									<span><?php esc_html_e('Saved Session Retention', 'folioblocks'); ?></span>
+									<input type="number" min="1" max="3650" step="1" name="fbks_proofing[inProgressRetentionDays]" value="<?php echo esc_attr((string) $proofing_settings['inProgressRetentionDays']); ?>" />
+									<p class="pb-settings-field-help"><?php esc_html_e('Number of days to keep viewing and saved in-progress proofing sessions.', 'folioblocks'); ?></p>
+								</label>
+
+								<label class="pb-settings-field">
+									<span><?php esc_html_e('Submitted Session Retention', 'folioblocks'); ?></span>
+									<input type="number" min="1" max="3650" step="1" name="fbks_proofing[submittedRetentionDays]" value="<?php echo esc_attr((string) $proofing_settings['submittedRetentionDays']); ?>" />
+									<p class="pb-settings-field-help"><?php esc_html_e('Number of days to keep submitted proofing sessions before cleanup.', 'folioblocks'); ?></p>
+								</label>
+							</div>
+
+							<label class="pb-settings-toggle">
+								<input type="hidden" name="fbks_proofing[emailAdminOnSubmit]" value="0" />
+								<input type="checkbox" name="fbks_proofing[emailAdminOnSubmit]" value="1" <?php checked($proofing_settings['emailAdminOnSubmit']); ?> />
+								<span><?php esc_html_e('Email site admin when a proofing session is submitted', 'folioblocks'); ?></span>
+							</label>
+						</div>
 
 						<div class="pb-dashboard-box pb-global-settings-panel">
 							<h2><?php esc_html_e('Watermarks', 'folioblocks'); ?></h2>
@@ -503,11 +564,17 @@ if (! function_exists('fbks_render_global_settings_page')) {
 									</div>
 								<?php endif; ?>
 							</div>
+
+							<div class="pb-watermark-new-item">
+								<?php fbks_render_watermark_fields($new_watermark, 'new', $settings['defaultWatermarkId'], true); ?>
+							</div>
 						</div>
 
-						<div class="pb-dashboard-box">
-							<?php fbks_render_watermark_fields($new_watermark, 'new', $settings['defaultWatermarkId'], true); ?>
-						</div>
+						<p class="buy-button-wrapper pb-global-settings-save-wrapper">
+							<button type="submit" class="button button-primary buy-button">
+								<?php esc_html_e('Save Global Settings', 'folioblocks'); ?>
+							</button>
+						</p>
 					</form>
 				</div>
 			</div>
@@ -527,6 +594,32 @@ if (! function_exists('fbks_render_global_settings_page')) {
 
 		<script>
 			(function() {
+				document.querySelectorAll('[data-social-share-sources]').forEach((container) => {
+					const maxSources = Number(container.dataset.socialShareMax || 5);
+					const checkboxes = Array.from(container.querySelectorAll('input[type="checkbox"]'));
+
+					const updateSourceAvailability = () => {
+						const checkedCount = checkboxes.filter((checkbox) => checkbox.checked).length;
+						checkboxes.forEach((checkbox) => {
+							checkbox.disabled = !checkbox.checked && checkedCount >= maxSources;
+						});
+					};
+
+					checkboxes.forEach((checkbox) => {
+						checkbox.addEventListener('change', () => {
+							const checkedCount = checkboxes.filter((item) => item.checked).length;
+
+							if (checkedCount > maxSources) {
+								checkbox.checked = false;
+							}
+
+							updateSourceAvailability();
+						});
+					});
+
+					updateSourceAvailability();
+				});
+
 				const positionLabels = <?php echo wp_json_encode(array(
 					'center'       => __('Center', 'folioblocks'),
 					'top-left'     => __('Top Left', 'folioblocks'),
@@ -547,16 +640,28 @@ if (! function_exists('fbks_render_global_settings_page')) {
 					return input && input.value !== '' ? input.value : fallback;
 				};
 
-				const getRenderSize = (sample, size) => {
+				const getWatermarkSizingEdge = (sample) => {
 					const sampleBounds = sample ? sample.getBoundingClientRect() : null;
-					const shortEdge = sampleBounds ? Math.min(sampleBounds.width, sampleBounds.height) : 0;
-					return shortEdge ? shortEdge * (Number(size) / 100) : Number(size);
+					if (!sampleBounds) {
+						return 0;
+					}
+
+					const shortEdge = Math.min(sampleBounds.width, sampleBounds.height);
+					const longEdge = Math.max(sampleBounds.width, sampleBounds.height);
+					const aspectRatio = shortEdge > 0 ? longEdge / shortEdge : 1;
+					const squareAdjustment = aspectRatio >= 1.2 ? 1 : 0.78 + ((aspectRatio - 1) / 0.2) * 0.22;
+
+					return shortEdge * Math.min(1, Math.max(0.78, squareAdjustment));
+				};
+
+				const getRenderSize = (sample, size) => {
+					const sizingEdge = getWatermarkSizingEdge(sample);
+					return sizingEdge ? sizingEdge * (Number(size) / 100) : Number(size);
 				};
 
 				const getRenderInset = (sample, inset) => {
-					const sampleBounds = sample ? sample.getBoundingClientRect() : null;
-					const shortEdge = sampleBounds ? Math.min(sampleBounds.width, sampleBounds.height) : 0;
-					return shortEdge ? shortEdge * (Number(inset) / 100) : Number(inset);
+					const sizingEdge = getWatermarkSizingEdge(sample);
+					return sizingEdge ? sizingEdge * (Number(inset) / 100) : Number(inset);
 				};
 
 				const applyPreviewSettings = (card) => {

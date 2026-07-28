@@ -7,23 +7,37 @@ import { initTiltHoverEffects } from '../pb-helpers/tiltHoverEffect';
 document.addEventListener( 'DOMContentLoaded', () => {
 	initTiltHoverEffects();
 
+	const getWatermarkSizingEdge = ( width, height ) => {
+		const shortEdge = Math.min( width, height );
+		const longEdge = Math.max( width, height );
+		const aspectRatio = shortEdge > 0 ? longEdge / shortEdge : 1;
+		const squareAdjustment =
+			aspectRatio >= 1.2
+				? 1
+				: 0.78 + ( ( aspectRatio - 1 ) / 0.2 ) * 0.22;
+
+		return shortEdge * Math.min( 1, Math.max( 0.78, squareAdjustment ) );
+	};
+
 	const getWatermarkRenderMetrics = (
 		width,
 		height,
 		sizeRatio,
-		insetRatio
+		insetRatio,
+		baseline
 	) => {
-		const shortEdge = Math.min( width, height );
+		const sizingEdge = baseline || getWatermarkSizingEdge( width, height );
 
 		return {
-			renderSize: ( shortEdge * sizeRatio ) / 100,
-			renderInset: ( shortEdge * insetRatio ) / 100,
+			renderSize: ( sizingEdge * sizeRatio ) / 100,
+			renderInset: ( sizingEdge * insetRatio ) / 100,
 		};
 	};
 
 	const syncGalleryWatermark = ( watermarkOverlay ) => {
 		const imageBlock = watermarkOverlay.closest( '.pb-image-block' );
 		const image = imageBlock?.querySelector( '.pb-image-block-img' );
+		const carouselGallery = imageBlock?.closest( '.pb-carousel-gallery' );
 
 		if ( ! image ) {
 			return;
@@ -40,7 +54,8 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			imageRect.width,
 			imageRect.height,
 			sizeRatio,
-			insetRatio
+			insetRatio,
+			carouselGallery ? imageRect.height : null
 		);
 
 		watermarkOverlay.style.setProperty(

@@ -308,7 +308,7 @@ if (! function_exists('fbks_render_proofing_sessions_page_header')) {
 	{
 		?>
 		<div class="pb-settings-header">
-			<img src="<?php echo esc_url(plugin_dir_url(__DIR__) . '/icons/pb-brand-icon.svg'); ?>" alt="<?php echo esc_attr__('FolioBlocks', 'folioblocks'); ?>" class="pb-settings-logo" />
+			<img src="<?php echo esc_url(FBKS_PLUGIN_URL . 'includes/icons/pb-brand-icon.svg'); ?>" alt="<?php echo esc_attr__('FolioBlocks', 'folioblocks'); ?>" class="pb-settings-logo" />
 			<h1><?php esc_html_e('FolioBlocks Pro - Proofing Sessions', 'folioblocks'); ?></h1>
 		</div>
 		<?php if ('' !== $subtitle) : ?>

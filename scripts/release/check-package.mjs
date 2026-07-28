@@ -191,9 +191,13 @@ const assertRequiredProjectFiles = () => {
 		'package.json',
 		'package-lock.json',
 		'build/pb-image-block/render.php',
-		'includes/php/filter-helpers.php',
-		'includes/php/css-values.php',
 		'includes/php/i18n.php',
+		'includes/php/svg-allowed-html.php',
+		'includes/pro/admin/global-settings.php',
+		'includes/pro/admin/proofing-sessions.php',
+		'includes/pro/php/filter-helpers.php',
+		'includes/pro/php/css-values.php',
+		'includes/pro/php/exif-metadata.php',
 	].forEach((file) => requireFile(file));
 
 	[ 'build', 'includes', 'languages', 'vendor' ].forEach((dir) =>
@@ -201,13 +205,53 @@ const assertRequiredProjectFiles = () => {
 	);
 };
 
+const getPremiumOnlyHeaderPaths = () => {
+	const pluginFile = readFileSync(path.join(root, 'folioblocks.php'), 'utf8');
+	const match = pluginFile.match(/@fs_premium_only\s+(.+)/);
+
+	if (! match) {
+		fail('Plugin header is missing @fs_premium_only.');
+	}
+
+	return new Set(
+		match[1]
+			.split(',')
+			.map((entry) => entry.trim())
+			.filter(Boolean)
+	);
+};
+
+const assertPremiumOnlyHeaderCoversProFiles = () => {
+	const premiumOnlyPaths = getPremiumOnlyHeaderPaths();
+	const requiredPremiumOnlyPaths = [
+		'/includes/pro/',
+		'/build/modular-gallery-block/',
+		'/build/pb-image-row',
+		'/build/pb-image-stack/',
+		'/build/proofing-gallery-block/',
+		'/build/pb-image-block/premium.css',
+		'/build/pb-image-block/premium-rtl.css',
+		'/build/pb-loupe-block/premium-view.asset.php',
+	];
+
+	const missing = requiredPremiumOnlyPaths.filter((premiumPath) => {
+		const projectPath = premiumPath.replace(/^\/+/, '').replace(/\/$/, '');
+
+		return existsSync(path.join(root, projectPath)) && ! premiumOnlyPaths.has(premiumPath);
+	});
+
+	if (missing.length) {
+		console.error(missing);
+		fail('Existing Pro-only paths are missing from @fs_premium_only.');
+	}
+};
+
 const assertBranchSpecificPackageRules = (version, packageRoot) => {
 	if (/^1\.4\./.test(version)) {
 		requireDirectoryAbsent('build/proofing-gallery-block', packageRoot);
-		requireFile('includes/php/css-values.php', packageRoot);
 
-		if (existsSync(path.join(packageRoot, 'includes/php/proofing-gallery.php'))) {
-			fail('1.4.x package unexpectedly includes includes/php/proofing-gallery.php.');
+		if (existsSync(path.join(packageRoot, 'includes/pro/php/proofing-gallery.php'))) {
+			fail('1.4.x package unexpectedly includes includes/pro/php/proofing-gallery.php.');
 		}
 	}
 };
@@ -231,7 +275,7 @@ const assertZipContents = (version) => {
 			'folioblocks.php',
 			'readme.txt',
 			'build/pb-image-block/render.php',
-			'includes/php/css-values.php',
+			'includes/pro/php/css-values.php',
 			'vendor/freemius/start.php',
 		].forEach((file) => requireFile(file, packageRoot));
 
@@ -299,6 +343,7 @@ run('npm', [ 'run', 'build' ]);
 
 log('Checking required files and version consistency');
 assertRequiredProjectFiles();
+assertPremiumOnlyHeaderCoversProFiles();
 const version = assertVersionsMatch();
 
 log('Checking copied PHP render files');

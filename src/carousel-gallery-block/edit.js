@@ -790,17 +790,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 							{ attributes, setAttributes }
 						) }
 					</PanelBody>
-					<PanelBody
-						title={ __( 'Social Media Sharing', 'folioblocks' ) }
-						initialOpen={ false }
-					>
-						{ applyFilters(
-							'folioBlocks.carouselGallery.socialSharingControls',
-							imageProFeatureNotice( 'socialSharing' ),
-							{ attributes, setAttributes }
-						) }
-					</PanelBody>
-				</InspectorControls>
+					</InspectorControls>
 			<InspectorControls group="advanced">
 				{ applyFilters(
 					'folioBlocks.carouselGallery.disableRightClickToggle',

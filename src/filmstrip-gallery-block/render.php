@@ -92,10 +92,14 @@ if ( $fbks_can_use_premium ) {
 	$fbks_overlay_content = isset( $attributes['overlayContent'] ) && in_array( $attributes['overlayContent'], [ 'title', 'caption', 'product', 'exif', 'social' ], true )
 		? $attributes['overlayContent']
 		: ( $fbks_woo_hover_info ? 'product' : 'title' );
-	$fbks_social_sharing_enabled = ! empty( $attributes['enableSocialSharing'] );
 	$fbks_social_sources = function_exists( 'fbks_normalize_social_share_sources' )
-		? fbks_normalize_social_share_sources( $attributes['socialSharingSources'] ?? [] )
+		? fbks_normalize_social_share_sources(
+			function_exists( 'fbks_get_global_social_share_sources' )
+				? fbks_get_global_social_share_sources()
+				: ( $attributes['socialSharingSources'] ?? [] )
+		)
 		: [];
+	$fbks_social_sharing_enabled = ! empty( $fbks_social_sources );
 	if ( 'social' === $fbks_overlay_content && ! $fbks_social_sharing_enabled ) {
 		$fbks_overlay_content = 'title';
 	}
@@ -663,6 +667,38 @@ if ( $fbks_can_use_premium ) {
 	}
 }
 
+$fbks_show_gallery_watermark = false;
+$fbks_show_lightbox_watermark = false;
+$fbks_watermark_style = '';
+$fbks_watermark_data_attrs = '';
+$fbks_watermark_payload = null;
+if ( $fbks_can_use_premium ) {
+	$fbks_watermark_enabled = ! empty( $attributes['enableWatermarking'] );
+	$fbks_watermark_id = sanitize_key( $attributes['watermarkId'] ?? '' );
+	$fbks_watermark_display = sanitize_key( $attributes['watermarkDisplay'] ?? 'none' );
+	if ( ! in_array( $fbks_watermark_display, [ 'none', 'gallery', 'lightbox', 'both' ], true ) ) {
+		$fbks_watermark_display = 'none';
+	}
+
+	$fbks_watermark_item = function_exists( 'fbks_get_watermark_by_id' ) ? fbks_get_watermark_by_id( $fbks_watermark_id ) : null;
+	if ( $fbks_watermark_enabled && is_array( $fbks_watermark_item ) ) {
+		$fbks_watermark_style = function_exists( 'fbks_get_watermark_overlay_style' ) ? fbks_get_watermark_overlay_style( $fbks_watermark_item ) : '';
+		$fbks_watermark_data_attrs = function_exists( 'fbks_get_watermark_overlay_data_attrs' ) ? fbks_get_watermark_overlay_data_attrs( $fbks_watermark_item ) : '';
+		$fbks_show_gallery_watermark = '' !== $fbks_watermark_style && in_array( $fbks_watermark_display, [ 'gallery', 'both' ], true );
+		$fbks_show_lightbox_watermark = '' !== $fbks_watermark_data_attrs && in_array( $fbks_watermark_display, [ 'lightbox', 'both' ], true );
+		$fbks_watermark_payload = [
+			'showGallery'  => $fbks_show_gallery_watermark,
+			'showLightbox' => $fbks_show_lightbox_watermark,
+			'image'        => (string) ( $fbks_watermark_item['assetUrl'] ?? '' ),
+			'opacity'      => (string) ( $fbks_watermark_item['opacity'] ?? '0.28' ),
+			'size'         => (string) ( $fbks_watermark_item['size'] ?? '16' ),
+			'inset'        => (string) ( $fbks_watermark_item['inset'] ?? '4' ),
+			'position'     => function_exists( 'fbks_get_watermark_css_position' ) ? fbks_get_watermark_css_position( $fbks_watermark_item['position'] ?? 'bottom-right' ) : 'bottom right',
+			'repeat'       => (string) ( $fbks_watermark_item['repeat'] ?? 'no-repeat' ),
+		];
+	}
+}
+
 $fbks_wrapper_args = [
 	'class' => 'pb-filmstrip-gallery is-' . $fbks_position . ' is-theme-' . $fbks_color_mode,
 ];
@@ -712,10 +748,11 @@ $fbks_data_payload = [
 		'lightbox'               => ! empty( $attributes['lightbox'] ),
 		'lightboxTheme'          => $attributes['lightboxTheme'] ?? 'dark',
 		'lightboxContent'        => $attributes['lightboxContent'] ?? '',
-		'enableLightboxSocialSharing' => ! empty( $attributes['enableLightboxSocialSharing'] ),
+		'enableLightboxSocialSharing' => 'social' === ( $attributes['lightboxContent'] ?? '' ),
 		'linkIconDisplay'        => $fbks_link_icon_display,
 		'onHoverTitle'           => $fbks_on_hover_title,
 		'lazyLoad'               => $fbks_lazy_load,
+		'watermark'              => $fbks_watermark_payload,
 	],
 	'images'   => $fbks_images,
 ];
@@ -949,6 +986,9 @@ if ( false === $fbks_data_json ) {
 						decoding="async"
 					/>
 					</a>
+				<?php if ( $fbks_can_use_premium && $fbks_show_gallery_watermark ) : ?>
+					<span class="pb-watermark-overlay" style="<?php echo esc_attr( $fbks_watermark_style ); ?>"<?php echo wp_kses_data( $fbks_watermark_data_attrs ); ?> aria-hidden="true"></span>
+				<?php endif; ?>
 				<div
 					class="pb-image-block-title-container"
 					<?php if ( '' === $fbks_overlay_html ) : ?>

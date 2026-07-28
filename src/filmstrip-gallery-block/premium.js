@@ -18,7 +18,6 @@ import { registerImageHoverActionPremiumControls } from '../pb-helpers/imageHove
 import { registerListViewThumbnailEnhancements } from '../pb-helpers/listViewThumbnailEnhancements';
 import { enableGalleryTransforms } from '../pb-helpers/galleryTransforms';
 import { registerWatermarkOverlayControls } from '../pb-helpers/watermarkOverlayControls';
-import { registerSocialMediaSharingControls } from '../pb-helpers/socialSharingControls';
 import {
 	registerDisableRightClickPremiumControl,
 	registerLazyLoadPremiumControl,
@@ -34,11 +33,6 @@ registerImageHoverActionPremiumControls( {
 } );
 
 registerWatermarkOverlayControls( {
-	hookPrefix: 'folioBlocks.filmstripGallery',
-	namespace: 'folioblocks/filmstrip-gallery',
-} );
-
-registerSocialMediaSharingControls( {
 	hookPrefix: 'folioBlocks.filmstripGallery',
 	namespace: 'folioblocks/filmstrip-gallery',
 } );

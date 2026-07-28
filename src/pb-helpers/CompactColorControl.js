@@ -14,6 +14,8 @@ import {
 } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
 
+const EMPTY_ARRAY = Object.freeze( [] );
+
 function useThemePalette() {
 	// WordPress can expose palettes as a combined list OR split into theme/default/custom.
 	// In some contexts `color.palette` may only contain custom colors, so we read all.
@@ -38,11 +40,11 @@ function useThemePalette() {
 
 		return {
 			// Older shape sometimes uses `settings.colors`.
-			colors: settings?.colors ?? [],
+			colors: settings?.colors ?? EMPTY_ARRAY,
 			// Newer shape can split palettes by source.
-			paletteTheme: palette?.theme ?? [],
-			paletteDefault: palette?.default ?? [],
-			paletteCustom: palette?.custom ?? [],
+			paletteTheme: palette?.theme ?? EMPTY_ARRAY,
+			paletteDefault: palette?.default ?? EMPTY_ARRAY,
+			paletteCustom: palette?.custom ?? EMPTY_ARRAY,
 			disableCustomColors: !! settings?.disableCustomColors,
 		};
 	}, [] );
@@ -105,10 +107,10 @@ function useThemeGradients() {
 		const gradients = features?.color?.gradients;
 
 		return {
-			gradients: settings?.gradients ?? [],
-			gradientsTheme: gradients?.theme ?? [],
-			gradientsDefault: gradients?.default ?? [],
-			gradientsCustom: gradients?.custom ?? [],
+			gradients: settings?.gradients ?? EMPTY_ARRAY,
+			gradientsTheme: gradients?.theme ?? EMPTY_ARRAY,
+			gradientsDefault: gradients?.default ?? EMPTY_ARRAY,
+			gradientsCustom: gradients?.custom ?? EMPTY_ARRAY,
 			disableCustomGradients: !! settings?.disableCustomGradients,
 		};
 	}, [] );
@@ -254,6 +256,7 @@ export function CompactTwoColorControl( {
 	label,
 	value,
 	onChange,
+	help,
 	firstLabel = __( 'Default', 'folioblocks' ),
 	secondLabel = __( 'Hover', 'folioblocks' ),
 	secondSupportsGradient = false,
@@ -339,6 +342,7 @@ export function CompactTwoColorControl( {
 		<BaseControl
 			id={ controlId }
 			label={ label }
+			help={ help }
 			__nextHasNoMarginBottom
 			className="pb-compact-two-color-control"
 			style={ { width: '100%' } }

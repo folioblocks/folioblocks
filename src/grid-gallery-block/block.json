@@ -45,7 +45,7 @@
 		"lightbox": { "type": "boolean", "default": false },
         "lightboxCaption": { "type": "boolean", "default": false },
 		"lightboxTheme": { "type": "string", "enum": ["dark", "light"], "default": "dark" },
-			"lightboxContent": { "type": "string", "enum": ["none", "title", "caption", "product", "exif", "title_exif", "caption_exif", "title_caption", "title_caption_exif"], "default": "" },
+			"lightboxContent": { "type": "string", "enum": ["none", "title", "caption", "product", "exif", "title_exif", "caption_exif", "title_caption", "title_caption_exif", "social"], "default": "" },
 		"enableSocialSharing": { "type": "boolean", "default": false },
 		"socialSharingSources": { "type": "array", "default": ["facebook", "linkedin", "x", "pinterest", "copy"], "items": { "type": "string" } },
 		"enableLightboxSocialSharing": { "type": "boolean", "default": false },

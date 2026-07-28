@@ -120,7 +120,8 @@
 					"title_exif",
 					"caption_exif",
 					"title_caption",
-					"title_caption_exif"
+					"title_caption_exif",
+					"social"
 			],
 			"default": ""
 		},

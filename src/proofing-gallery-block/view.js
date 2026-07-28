@@ -30,6 +30,7 @@ const ensureGalleryState = ( galleryId ) => {
 			trackPresence: false,
 			presenceTimer: null,
 			presenceEventsBound: false,
+			emailAdminOnSubmit: false,
 			isSaving: false,
 			notice: '',
 			openFlagPanel: '',
@@ -359,6 +360,7 @@ const persistGallery = async ( galleryId, status ) => {
 				galleryKey: gallery.galleryKey,
 				clientEmail: gallery.clientEmail,
 				pageId: gallery.pageId,
+				emailAdminOnSubmit: gallery.emailAdminOnSubmit,
 				images,
 			} ),
 		} );
@@ -454,6 +456,9 @@ const { state, actions } = store( 'folioblocks/proofing-gallery', {
 				galleryData.presenceUrl || gallery.presenceUrl;
 			gallery.trackPresence =
 				galleryData.trackPresence ?? gallery.trackPresence;
+			gallery.emailAdminOnSubmit =
+				galleryData.emailAdminOnSubmit ??
+				gallery.emailAdminOnSubmit;
 			const savedSession = galleryData.savedSession || {};
 			let savedImages = savedSession.images || [];
 
@@ -623,6 +628,7 @@ const { state, actions } = store( 'folioblocks/proofing-gallery', {
 				restUrl: context.restUrl,
 				presenceUrl: context.presenceUrl,
 				trackPresence: context.trackPresence,
+				emailAdminOnSubmit: context.emailAdminOnSubmit,
 				savedSession: context.savedSession,
 			} );
 		},

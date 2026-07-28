@@ -657,17 +657,19 @@ function fbks_render_settings_page()
 						<?php endif; ?>
 					</div>
 				</div>
-				<div class="pb-dashboard-box pb-global-settings-callout">
-					<h2><?php esc_html_e('Global Settings:', 'folioblocks'); ?></h2>
-					<p>
-						<?php esc_html_e('Set site-wide FolioBlocks defaults in one place. The first planned feature for this page is a dynamic Watermark Overlay with block-level overrides.', 'folioblocks'); ?>
-					</p>
-					<p class="buy-button-wrapper">
-						<a class="button button-primary buy-button" href="<?php echo esc_url(admin_url('admin.php?page=folioblocks-global-settings')); ?>">
-							<?php esc_html_e('Open Global Settings', 'folioblocks'); ?>
-						</a>
-					</p>
-				</div>
+					<?php if (fbks_fs()->can_use_premium_code__premium_only()) : ?>
+						<div class="pb-dashboard-box pb-global-settings-callout">
+							<h2><?php esc_html_e('Global Settings:', 'folioblocks'); ?></h2>
+							<p>
+								<?php esc_html_e('Set site-wide FolioBlocks defaults in one place. The first planned feature for this page is a dynamic Watermark Overlay with block-level overrides.', 'folioblocks'); ?>
+							</p>
+							<p class="buy-button-wrapper">
+								<a class="button button-primary buy-button" href="<?php echo esc_url(admin_url('admin.php?page=folioblocks-global-settings')); ?>">
+									<?php esc_html_e('Open Global Settings', 'folioblocks'); ?>
+								</a>
+							</p>
+						</div>
+					<?php endif; ?>
 				<?php if (! fbks_fs()->can_use_premium_code()) : ?>
 					<div class="pb-dashboard-box">
 						<h2><?php esc_html_e('Pro Version - Features:', 'folioblocks'); ?></h2>

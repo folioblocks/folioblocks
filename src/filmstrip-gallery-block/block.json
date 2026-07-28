@@ -84,7 +84,7 @@
 		},
 		"lightboxContent": {
 			"type": "string",
-			"enum": ["none", "title", "caption", "product", "exif", "title_exif", "caption_exif", "title_caption", "title_caption_exif"],
+			"enum": ["none", "title", "caption", "product", "exif", "title_exif", "caption_exif", "title_caption", "title_caption_exif", "social"],
 			"default": ""
 		},
 		"enableSocialSharing": { "type": "boolean", "default": false },

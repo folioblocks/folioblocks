@@ -1,6 +1,5 @@
 import { __ } from '@wordpress/i18n';
-import { CheckboxControl, ToggleControl } from '@wordpress/components';
-import { addFilter } from '@wordpress/hooks';
+import { CheckboxControl } from '@wordpress/components';
 
 export const SOCIAL_SHARE_SERVICES = [
 	{ value: 'facebook', label: __( 'Facebook', 'folioblocks' ) },
@@ -68,6 +67,14 @@ export const getSocialShareSources = ( sources, fallbackSources ) => {
 		fallbackSources || DEFAULT_SOCIAL_SHARE_SOURCES
 	);
 };
+
+export const getGlobalSocialShareSources = () =>
+	getSocialShareSources(
+		typeof window !== 'undefined'
+			? window.folioBlocksData?.socialSharing?.sources
+			: [],
+		DEFAULT_SOCIAL_SHARE_SOURCES
+	);
 
 export const SocialShareSourcesControl = ( {
 	value,
@@ -148,98 +155,6 @@ export const SocialShareSourcesControl = ( {
 	);
 };
 
-export const isSocialSharingEnabled = ( attributes = {}, context = {} ) =>
-	!! (
-		context?.[ 'folioBlocks/enableSocialSharing' ] ??
-		attributes.enableSocialSharing
-	);
+export const isSocialSharingEnabled = () => getGlobalSocialShareSources().length > 0;
 
-export const getSharedSocialSources = ( attributes = {}, context = {} ) =>
-	getSocialShareSources(
-		context?.[ 'folioBlocks/socialSharingSources' ] ||
-			attributes.socialSharingSources
-	);
-
-export const SocialMediaSharingPanelControls = ( {
-	attributes,
-	setAttributes,
-	context = {},
-} ) => {
-	const enabled = isSocialSharingEnabled( attributes, context );
-	const sources = getSharedSocialSources( attributes, context );
-
-	return (
-		<>
-			<ToggleControl
-				label={ __( 'Enable Social Media Sharing', 'folioblocks' ) }
-				checked={ enabled }
-				onChange={ ( enableSocialSharing ) =>
-					setAttributes( {
-						enableSocialSharing,
-						...( enableSocialSharing
-							? { socialSharingSources: sources }
-							: {
-									enableLightboxSocialSharing: false,
-									overlayContent:
-										attributes.overlayContent === 'social'
-											? 'title'
-											: attributes.overlayContent,
-							  } ),
-					} )
-				}
-				__nextHasNoMarginBottom
-				help={ __(
-					'Choose the sharing sources available to lightbox and overlay sharing.',
-					'folioblocks'
-				) }
-			/>
-			{ enabled && (
-				<SocialShareSourcesControl
-					value={ attributes.socialSharingSources }
-					fallbackValue={ sources }
-					onChange={ ( socialSharingSources ) =>
-						setAttributes( { socialSharingSources } )
-					}
-				/>
-			) }
-		</>
-	);
-};
-
-export const LightboxSocialSharingControls = ( {
-	attributes,
-	setAttributes,
-	context = {},
-} ) => {
-	if ( ! isSocialSharingEnabled( attributes, context ) ) {
-		return null;
-	}
-
-	return (
-		<ToggleControl
-			label={ __( 'Enable Social Media Sharing', 'folioblocks' ) }
-			checked={ !! attributes.enableLightboxSocialSharing }
-			onChange={ ( enableLightboxSocialSharing ) =>
-				setAttributes( { enableLightboxSocialSharing } )
-			}
-			__nextHasNoMarginBottom
-			help={ __(
-				'Add social sharing links beneath images in the lightbox.',
-				'folioblocks'
-			) }
-		/>
-	);
-};
-
-export const registerSocialMediaSharingControls = ( {
-	hookPrefix,
-	namespace,
-} ) => {
-	addFilter(
-		`${ hookPrefix }.socialSharingControls`,
-		`${ namespace }-social-media-sharing-controls`,
-		( defaultContent, props = {} ) => (
-			<SocialMediaSharingPanelControls { ...props } />
-		)
-	);
-};
+export const getSharedSocialSources = () => getGlobalSocialShareSources();

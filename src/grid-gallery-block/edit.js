@@ -831,19 +831,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						) }
 					</PanelBody>
 				) }
-				{ ! isInsideProofingGallery && (
-					<PanelBody
-						title={ __( 'Social Media Sharing', 'folioblocks' ) }
-						initialOpen={ false }
-					>
-						{ applyFilters(
-							'folioBlocks.gridGallery.socialSharingControls',
-							imageProFeatureNotice( 'socialSharing' ),
-							{ attributes, setAttributes }
-						) }
-					</PanelBody>
-				) }
-			</InspectorControls>
+				</InspectorControls>
 			<InspectorControls group="advanced">
 				{ applyFilters(
 					'folioBlocks.gridGallery.disableRightClickToggle',
