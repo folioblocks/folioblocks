@@ -26,6 +26,7 @@ const LightboxContentControl = ({
 	setAttributes,
 	showProductInfoOption = false,
 	showAppearanceControl = true,
+	showCounterControl = false,
 }) => {
 	const value = getLightboxContent(attributes);
 	const options = [
@@ -126,6 +127,30 @@ const LightboxContentControl = ({
 				__next40pxDefaultSize
 				help={__(
 					'Choose what appears below images in the lightbox.',
+					'folioblocks'
+				)}
+			/>
+			{showCounterControl && (
+				<ToggleControl
+					label={__('Show Image Counter', 'folioblocks')}
+					checked={!!attributes.lightboxCounter}
+					onChange={(lightboxCounter) =>
+						setAttributes({ lightboxCounter })
+					}
+					__nextHasNoMarginBottom
+					help={__(
+						'Show the current image number and total image count in gallery lightboxes.',
+						'folioblocks'
+					)}
+				/>
+			)}
+			<ToggleControl
+				label={__('Enable Lightbox Zoom', 'folioblocks')}
+				checked={!!attributes.lightboxZoom}
+				onChange={(lightboxZoom) => setAttributes({ lightboxZoom })}
+				__nextHasNoMarginBottom
+				help={__(
+					'Let visitors zoom into lightbox images.',
 					'folioblocks'
 				)}
 			/>
@@ -281,6 +306,7 @@ export const registerImageClickActionPremiumControls = ({
 	hookPrefix,
 	namespace,
 	supportsLightbox = true,
+	showCounterControl = true,
 }) => {
 	addFilter(
 		`${hookPrefix}.imageClickActionOptions`,
@@ -539,6 +565,7 @@ export const registerImageClickActionPremiumControls = ({
 					setAttributes={setAttributes}
 					showProductInfoOption={!!enableWooCommerce}
 					showAppearanceControl={supportsLightbox}
+					showCounterControl
 					context={context}
 				/>
 			);

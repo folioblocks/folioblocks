@@ -774,6 +774,18 @@ const LightboxContentControl = ( {
 					'folioblocks'
 				) }
 			/>
+			<ToggleControl
+				label={ __( 'Enable Lightbox Zoom', 'folioblocks' ) }
+				checked={ !! attributes.lightboxZoom }
+				onChange={ ( lightboxZoom ) =>
+					setAttributes( { lightboxZoom } )
+				}
+				__nextHasNoMarginBottom
+				help={ __(
+					'Let visitors zoom into this image in the lightbox.',
+					'folioblocks'
+				) }
+			/>
 			{ [
 				'exif',
 				'title_exif',

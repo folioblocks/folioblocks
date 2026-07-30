@@ -79,17 +79,49 @@
 		},
 		"lightboxTheme": {
 			"type": "string",
-			"enum": ["dark", "light"],
+			"enum": [
+				"dark",
+				"light"
+			],
 			"default": "dark"
 		},
 		"lightboxContent": {
 			"type": "string",
-			"enum": ["none", "title", "caption", "product", "exif", "title_exif", "caption_exif", "title_caption", "title_caption_exif", "social"],
+			"enum": [
+				"none",
+				"title",
+				"caption",
+				"product",
+				"exif",
+				"title_exif",
+				"caption_exif",
+				"title_caption",
+				"title_caption_exif",
+				"social"
+			],
 			"default": ""
 		},
-		"enableSocialSharing": { "type": "boolean", "default": false },
-		"socialSharingSources": { "type": "array", "default": ["facebook", "linkedin", "x", "pinterest", "copy"], "items": { "type": "string" } },
-		"enableLightboxSocialSharing": { "type": "boolean", "default": false },
+		"enableSocialSharing": {
+			"type": "boolean",
+			"default": false
+		},
+		"socialSharingSources": {
+			"type": "array",
+			"default": [
+				"facebook",
+				"linkedin",
+				"x",
+				"pinterest",
+				"copy"
+			],
+			"items": {
+				"type": "string"
+			}
+		},
+		"enableLightboxSocialSharing": {
+			"type": "boolean",
+			"default": false
+		},
 		"onHoverTitle": {
 			"type": "boolean",
 			"default": false
@@ -100,14 +132,40 @@
 				"fade-overlay",
 				"gradient-bottom",
 				"chip",
+				"chip-gradient",
 				"blur-overlay",
 				"color-overlay",
 				"gradient-overlay"
 			],
 			"default": "blur-overlay"
 		},
-		"hoverEffect": { "type": "string", "enum": ["none", "zoom-in", "zoom-out", "lift", "tilt", "pop", "glare", "pan", "desaturate"], "default": "none" },
-		"overlayEntrance": { "type": "string", "enum": ["default", "fade", "slide-up", "slide-down", "slide-left", "slide-right"], "default": "default" },
+		"hoverEffect": {
+			"type": "string",
+			"enum": [
+				"none",
+				"zoom-in",
+				"zoom-out",
+				"lift",
+				"tilt",
+				"pop",
+				"glare",
+				"pan",
+				"desaturate"
+			],
+			"default": "none"
+		},
+		"overlayEntrance": {
+			"type": "string",
+			"enum": [
+				"default",
+				"fade",
+				"slide-up",
+				"slide-down",
+				"slide-left",
+				"slide-right"
+			],
+			"default": "default"
+		},
 		"overlayBgColor": {
 			"type": "string",
 			"default": "#f9f9f9"
@@ -116,16 +174,34 @@
 			"type": "string",
 			"default": ""
 		},
-			"overlayTextColor": {
-				"type": "string",
-				"default": "#000000"
-			},
-			"overlayFontFamily": { "type": "string", "default": "" },
-			"overlayFontWeight": { "type": "string", "default": "" },
-			"overlayFontStyle": { "type": "string", "enum": ["", "normal", "italic"], "default": "" },
-			"chipOverlayBgColor": {
+		"overlayTextColor": {
+			"type": "string",
+			"default": "#000000"
+		},
+		"overlayFontFamily": {
+			"type": "string",
+			"default": ""
+		},
+		"overlayFontWeight": {
+			"type": "string",
+			"default": ""
+		},
+		"overlayFontStyle": {
+			"type": "string",
+			"enum": [
+				"",
+				"normal",
+				"italic"
+			],
+			"default": ""
+		},
+		"chipOverlayBgColor": {
 			"type": "string",
 			"default": "#f9f9f9"
+		},
+		"chipOverlayBgGradient": {
+			"type": "string",
+			"default": "linear-gradient(135deg, rgba(255,255,255,0.92) 0%, rgba(226,232,240,0.82) 100%)"
 		},
 		"chipOverlayTextColor": {
 			"type": "string",
@@ -304,13 +380,13 @@
 		},
 		"overlayContent": {
 			"type": "string",
-				"enum": [
-					"title",
-					"caption",
-					"product",
-					"exif",
-					"social"
-				],
+			"enum": [
+				"title",
+				"caption",
+				"product",
+				"exif",
+				"social"
+			],
 			"default": "title"
 		},
 		"imageClickAction": {
@@ -410,6 +486,14 @@
 				"always"
 			],
 			"default": "hover"
+		},
+		"lightboxCounter": {
+			"type": "boolean",
+			"default": false
+		},
+		"lightboxZoom": {
+			"type": "boolean",
+			"default": false
 		}
 	},
 	"usesContext": [],
@@ -435,6 +519,7 @@
 		"folioBlocks/overlayFontWeight": "overlayFontWeight",
 		"folioBlocks/overlayFontStyle": "overlayFontStyle",
 		"folioBlocks/chipOverlayBgColor": "chipOverlayBgColor",
+		"folioBlocks/chipOverlayBgGradient": "chipOverlayBgGradient",
 		"folioBlocks/chipOverlayTextColor": "chipOverlayTextColor",
 		"folioBlocks/hideUnknownExifFields": "hideUnknownExifFields",
 		"folioBlocks/enableFilter": "enableFilter",
@@ -461,7 +546,9 @@
 		"folioBlocks/linkIconDisplay": "linkIconDisplay",
 		"folioBlocks/enableWatermarking": "enableWatermarking",
 		"folioBlocks/watermarkId": "watermarkId",
-		"folioBlocks/watermarkDisplay": "watermarkDisplay"
+		"folioBlocks/watermarkDisplay": "watermarkDisplay",
+		"folioBlocks/lightboxCounter": "lightboxCounter",
+		"folioBlocks/lightboxZoom": "lightboxZoom"
 	},
 	"textdomain": "folioblocks",
 	"editorScript": [

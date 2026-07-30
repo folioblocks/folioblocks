@@ -109,6 +109,7 @@ if ( $fbks_can_use_premium ) {
 		'fade-overlay'    => 'pb-hover-fade-overlay',
 		'gradient-bottom' => 'pb-hover-gradient-bottom',
 		'chip'            => 'pb-hover-chip',
+		'chip-gradient'   => 'pb-hover-chip',
 		'color-overlay'    => 'pb-hover-color-overlay',
 		'gradient-overlay' => 'pb-hover-gradient-overlay',
 	];
@@ -153,8 +154,8 @@ if ( $fbks_can_use_premium ) {
 		$fbks_overlay_text = fbks_sanitize_css_color_value( (string) ( $attributes['overlayTextColor'] ?? '#000000' ) );
 		$fbks_hover_style .= $fbks_overlay_bg ? '--pb-overlay-bg:' . $fbks_overlay_bg . ';' : '';
 		$fbks_hover_style .= $fbks_overlay_text ? '--pb-overlay-color:' . $fbks_overlay_text . ';' : '';
-	} elseif ( 'chip' === $fbks_on_hover_style ) {
-		$fbks_chip_overlay_bg = fbks_sanitize_css_background_value( (string) ( $attributes['chipOverlayBgColor'] ?? '#f9f9f9' ) );
+	} elseif ( 'chip' === $fbks_on_hover_style || 'chip-gradient' === $fbks_on_hover_style ) {
+		$fbks_chip_overlay_bg = fbks_sanitize_css_background_value( (string) ( 'chip-gradient' === $fbks_on_hover_style ? ( $attributes['chipOverlayBgGradient'] ?? '' ) : ( $attributes['chipOverlayBgColor'] ?? '#f9f9f9' ) ) );
 		$fbks_chip_overlay_text = fbks_sanitize_css_color_value( (string) ( $attributes['chipOverlayTextColor'] ?? '#000000' ) );
 		$fbks_hover_style .= $fbks_chip_overlay_bg ? '--pb-chip-overlay-bg:' . $fbks_chip_overlay_bg . ';' : '';
 		$fbks_hover_style .= $fbks_chip_overlay_text ? '--pb-chip-overlay-color:' . $fbks_chip_overlay_text . ';' : '';
@@ -397,6 +398,7 @@ if ( is_array( $fbks_inner_blocks ) && ! empty( $fbks_inner_blocks ) ) {
 			'overlayFontWeight' => fbks_sanitize_css_font_weight_value( isset( $fbks_image_attrs['overlayFontWeight'] ) ? (string) $fbks_image_attrs['overlayFontWeight'] : '' ),
 			'overlayFontStyle'  => fbks_sanitize_css_font_style_value( isset( $fbks_image_attrs['overlayFontStyle'] ) ? (string) $fbks_image_attrs['overlayFontStyle'] : '' ),
 			'chipOverlayBgColor' => fbks_sanitize_css_background_value( isset( $fbks_image_attrs['chipOverlayBgColor'] ) ? (string) $fbks_image_attrs['chipOverlayBgColor'] : '#f9f9f9' ),
+			'chipOverlayBgGradient' => fbks_sanitize_css_background_value( isset( $fbks_image_attrs['chipOverlayBgGradient'] ) ? (string) $fbks_image_attrs['chipOverlayBgGradient'] : '' ),
 			'chipOverlayTextColor' => fbks_sanitize_css_color_value( isset( $fbks_image_attrs['chipOverlayTextColor'] ) ? (string) $fbks_image_attrs['chipOverlayTextColor'] : '#000000' ),
 			'hideUnknownExifFields' => ! empty( $fbks_image_attrs['hideUnknownExifFields'] ),
 			'enableWooCommerce' => ! empty( $fbks_image_attrs['enableWooCommerce'] ),
@@ -498,6 +500,7 @@ if ( empty( $fbks_images ) && ! empty( $attributes['images'] ) && is_array( $att
 			'overlayFontWeight' => fbks_sanitize_css_font_weight_value( isset( $fbks_image['overlayFontWeight'] ) ? (string) $fbks_image['overlayFontWeight'] : '' ),
 			'overlayFontStyle'  => fbks_sanitize_css_font_style_value( isset( $fbks_image['overlayFontStyle'] ) ? (string) $fbks_image['overlayFontStyle'] : '' ),
 			'chipOverlayBgColor' => fbks_sanitize_css_background_value( isset( $fbks_image['chipOverlayBgColor'] ) ? (string) $fbks_image['chipOverlayBgColor'] : '#f9f9f9' ),
+			'chipOverlayBgGradient' => fbks_sanitize_css_background_value( isset( $fbks_image['chipOverlayBgGradient'] ) ? (string) $fbks_image['chipOverlayBgGradient'] : '' ),
 			'chipOverlayTextColor' => fbks_sanitize_css_color_value( isset( $fbks_image['chipOverlayTextColor'] ) ? (string) $fbks_image['chipOverlayTextColor'] : '#000000' ),
 			'hideUnknownExifFields' => ! empty( $fbks_image['hideUnknownExifFields'] ),
 			'enableWooCommerce' => ! empty( $fbks_image['enableWooCommerce'] ),
@@ -623,8 +626,8 @@ if ( $fbks_can_use_premium && ! empty( $fbks_active_image['overrideGalleryHoverS
 		$fbks_overlay_text = fbks_sanitize_css_color_value( (string) ( $fbks_active_image['overlayTextColor'] ?? '#000000' ) );
 		$fbks_effective_hover_style .= $fbks_overlay_bg ? '--pb-overlay-bg:' . $fbks_overlay_bg . ';' : '';
 		$fbks_effective_hover_style .= $fbks_overlay_text ? '--pb-overlay-color:' . $fbks_overlay_text . ';' : '';
-	} elseif ( 'chip' === $fbks_effective_hover_style_key ) {
-		$fbks_chip_overlay_bg = fbks_sanitize_css_background_value( (string) ( $fbks_active_image['chipOverlayBgColor'] ?? '#f9f9f9' ) );
+	} elseif ( 'chip' === $fbks_effective_hover_style_key || 'chip-gradient' === $fbks_effective_hover_style_key ) {
+		$fbks_chip_overlay_bg = fbks_sanitize_css_background_value( (string) ( 'chip-gradient' === $fbks_effective_hover_style_key ? ( $fbks_active_image['chipOverlayBgGradient'] ?? '' ) : ( $fbks_active_image['chipOverlayBgColor'] ?? '#f9f9f9' ) ) );
 		$fbks_chip_overlay_text = fbks_sanitize_css_color_value( (string) ( $fbks_active_image['chipOverlayTextColor'] ?? '#000000' ) );
 		$fbks_effective_hover_style .= $fbks_chip_overlay_bg ? '--pb-chip-overlay-bg:' . $fbks_chip_overlay_bg . ';' : '';
 		$fbks_effective_hover_style .= $fbks_chip_overlay_text ? '--pb-chip-overlay-color:' . $fbks_chip_overlay_text . ';' : '';
@@ -734,6 +737,7 @@ $fbks_data_payload = [
 		'overlayFontWeight'      => fbks_sanitize_css_font_weight_value( (string) ( $attributes['overlayFontWeight'] ?? '' ) ),
 		'overlayFontStyle'       => fbks_sanitize_css_font_style_value( (string) ( $attributes['overlayFontStyle'] ?? '' ) ),
 		'chipOverlayBgColor'     => fbks_sanitize_css_background_value( (string) ( $attributes['chipOverlayBgColor'] ?? '#f9f9f9' ) ),
+		'chipOverlayBgGradient'  => fbks_sanitize_css_background_value( (string) ( $attributes['chipOverlayBgGradient'] ?? '' ) ),
 		'chipOverlayTextColor'   => fbks_sanitize_css_color_value( (string) ( $attributes['chipOverlayTextColor'] ?? '#000000' ) ),
 		'enableDownload'         => $fbks_enable_download,
 		'downloadOnHover'        => $fbks_download_on_hover,
@@ -748,6 +752,8 @@ $fbks_data_payload = [
 		'lightbox'               => ! empty( $attributes['lightbox'] ),
 		'lightboxTheme'          => $attributes['lightboxTheme'] ?? 'dark',
 		'lightboxContent'        => $attributes['lightboxContent'] ?? '',
+		'lightboxCounter'        => ! empty( $attributes['lightboxCounter'] ),
+		'lightboxZoom'           => ! empty( $attributes['lightboxZoom'] ),
 		'enableLightboxSocialSharing' => 'social' === ( $attributes['lightboxContent'] ?? '' ),
 		'linkIconDisplay'        => $fbks_link_icon_display,
 		'onHoverTitle'           => $fbks_on_hover_title,

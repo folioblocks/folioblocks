@@ -82,7 +82,14 @@
 		},
 		"shadowStyle": {
 			"type": "string",
-			"enum": ["", "none", "subtle", "soft", "elevated", "dramatic"],
+			"enum": [
+				"",
+				"none",
+				"subtle",
+				"soft",
+				"elevated",
+				"dramatic"
+			],
 			"default": ""
 		},
 		"lightbox": {
@@ -95,7 +102,10 @@
 		},
 		"lightboxTheme": {
 			"type": "string",
-			"enum": [ "dark", "light" ],
+			"enum": [
+				"dark",
+				"light"
+			],
 			"default": "dark"
 		},
 		"lightboxContent": {
@@ -104,13 +114,13 @@
 				"none",
 				"title",
 				"caption",
-					"product",
-					"exif",
-					"title_exif",
-					"caption_exif",
-					"title_caption",
-					"title_caption_exif",
-					"social"
+				"product",
+				"exif",
+				"title_exif",
+				"caption_exif",
+				"title_caption",
+				"title_caption_exif",
+				"social"
 			],
 			"default": ""
 		},
@@ -120,8 +130,16 @@
 		},
 		"socialSharingSources": {
 			"type": "array",
-			"default": ["facebook", "linkedin", "x", "pinterest", "copy"],
-			"items": { "type": "string" }
+			"default": [
+				"facebook",
+				"linkedin",
+				"x",
+				"pinterest",
+				"copy"
+			],
+			"items": {
+				"type": "string"
+			}
 		},
 		"enableLightboxSocialSharing": {
 			"type": "boolean",
@@ -141,14 +159,40 @@
 				"fade-overlay",
 				"gradient-bottom",
 				"chip",
+				"chip-gradient",
 				"blur-overlay",
 				"color-overlay",
 				"gradient-overlay"
 			],
 			"default": "blur-overlay"
 		},
-		"hoverEffect": { "type": "string", "enum": ["none", "zoom-in", "zoom-out", "lift", "tilt", "pop", "glare", "pan", "desaturate"], "default": "none" },
-		"overlayEntrance": { "type": "string", "enum": ["default", "fade", "slide-up", "slide-down", "slide-left", "slide-right"], "default": "default" },
+		"hoverEffect": {
+			"type": "string",
+			"enum": [
+				"none",
+				"zoom-in",
+				"zoom-out",
+				"lift",
+				"tilt",
+				"pop",
+				"glare",
+				"pan",
+				"desaturate"
+			],
+			"default": "none"
+		},
+		"overlayEntrance": {
+			"type": "string",
+			"enum": [
+				"default",
+				"fade",
+				"slide-up",
+				"slide-down",
+				"slide-left",
+				"slide-right"
+			],
+			"default": "default"
+		},
 		"overlayBgColor": {
 			"type": "string",
 			"default": "#f9f9f9"
@@ -157,22 +201,40 @@
 			"type": "string",
 			"default": ""
 		},
-			"overlayTextColor": {
-				"type": "string",
-				"default": "#000000"
-			},
-			"overlayFontFamily": { "type": "string", "default": "" },
-			"overlayFontWeight": { "type": "string", "default": "" },
-			"overlayFontStyle": { "type": "string", "enum": ["", "normal", "italic"], "default": "" },
-			"chipOverlayBgColor": {
-				"type": "string",
-				"default": "#f9f9f9"
-			},
-			"chipOverlayTextColor": {
-				"type": "string",
-				"default": "#000000"
-			},
-			"randomizeOrder": {
+		"overlayTextColor": {
+			"type": "string",
+			"default": "#000000"
+		},
+		"overlayFontFamily": {
+			"type": "string",
+			"default": ""
+		},
+		"overlayFontWeight": {
+			"type": "string",
+			"default": ""
+		},
+		"overlayFontStyle": {
+			"type": "string",
+			"enum": [
+				"",
+				"normal",
+				"italic"
+			],
+			"default": ""
+		},
+		"chipOverlayBgColor": {
+			"type": "string",
+			"default": "#f9f9f9"
+		},
+		"chipOverlayBgGradient": {
+			"type": "string",
+			"default": "linear-gradient(135deg, rgba(255,255,255,0.92) 0%, rgba(226,232,240,0.82) 100%)"
+		},
+		"chipOverlayTextColor": {
+			"type": "string",
+			"default": "#000000"
+		},
+		"randomizeOrder": {
 			"type": "boolean",
 			"default": false
 		},
@@ -323,8 +385,8 @@
 			"type": "string",
 			"enum": [
 				"caption",
-					"product",
-					"exif"
+				"product",
+				"exif"
 			],
 			"default": "caption"
 		},
@@ -458,17 +520,25 @@
 			],
 			"default": "hover"
 		},
-			"overlayContent": {
-				"type": "string",
-				"enum": [
-					"title",
-					"caption",
-					"product",
-					"exif",
-					"social"
-				],
-				"default": "title"
-			}
+		"overlayContent": {
+			"type": "string",
+			"enum": [
+				"title",
+				"caption",
+				"product",
+				"exif",
+				"social"
+			],
+			"default": "title"
+		},
+		"lightboxCounter": {
+			"type": "boolean",
+			"default": false
+		},
+		"lightboxZoom": {
+			"type": "boolean",
+			"default": false
+		}
 	},
 	"providesContext": {
 		"folioBlocks/resolution": "resolution",
@@ -489,15 +559,16 @@
 		"folioBlocks/onHoverStyle": "onHoverStyle",
 		"folioBlocks/hoverEffect": "hoverEffect",
 		"folioBlocks/overlayEntrance": "overlayEntrance",
-			"folioBlocks/overlayBgColor": "overlayBgColor",
-			"folioBlocks/overlayBgGradient": "overlayBgGradient",
-			"folioBlocks/overlayTextColor": "overlayTextColor",
-			"folioBlocks/overlayFontFamily": "overlayFontFamily",
-			"folioBlocks/overlayFontWeight": "overlayFontWeight",
-			"folioBlocks/overlayFontStyle": "overlayFontStyle",
-			"folioBlocks/chipOverlayBgColor": "chipOverlayBgColor",
-			"folioBlocks/chipOverlayTextColor": "chipOverlayTextColor",
-			"folioBlocks/enableFilter": "enableFilter",
+		"folioBlocks/overlayBgColor": "overlayBgColor",
+		"folioBlocks/overlayBgGradient": "overlayBgGradient",
+		"folioBlocks/overlayTextColor": "overlayTextColor",
+		"folioBlocks/overlayFontFamily": "overlayFontFamily",
+		"folioBlocks/overlayFontWeight": "overlayFontWeight",
+		"folioBlocks/overlayFontStyle": "overlayFontStyle",
+		"folioBlocks/chipOverlayBgColor": "chipOverlayBgColor",
+		"folioBlocks/chipOverlayBgGradient": "chipOverlayBgGradient",
+		"folioBlocks/chipOverlayTextColor": "chipOverlayTextColor",
+		"folioBlocks/enableFilter": "enableFilter",
 		"folioBlocks/filterCategories": "filterCategories",
 		"folioBlocks/activeFilter": "activeFilter",
 		"folioBlocks/enableDownload": "enableDownload",
@@ -523,7 +594,9 @@
 		"folioBlocks/enableWatermarking": "enableWatermarking",
 		"folioBlocks/watermarkId": "watermarkId",
 		"folioBlocks/watermarkDisplay": "watermarkDisplay",
-		"folioBlocks/overlayContent": "overlayContent"
+		"folioBlocks/overlayContent": "overlayContent",
+		"folioBlocks/lightboxCounter": "lightboxCounter",
+		"folioBlocks/lightboxZoom": "lightboxZoom"
 	},
 	"textdomain": "folioblocks",
 	"editorScript": [

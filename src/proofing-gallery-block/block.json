@@ -18,7 +18,10 @@
 		}
 	},
 	"supports": {
-		"align": ["wide", "full"],
+		"align": [
+			"wide",
+			"full"
+		],
 		"color": {
 			"background": true,
 			"gradients": true,
@@ -53,7 +56,11 @@
 		},
 		"galleryStyle": {
 			"type": "string",
-			"enum": ["grid", "justified", "masonry"],
+			"enum": [
+				"grid",
+				"justified",
+				"masonry"
+			],
 			"default": "grid"
 		},
 		"galleryTypeSettings": {
@@ -85,7 +92,10 @@
 		},
 		"proofingTheme": {
 			"type": "string",
-			"enum": ["light", "dark"],
+			"enum": [
+				"light",
+				"dark"
+			],
 			"default": "light"
 		},
 		"saveButtonTextColor": {
@@ -134,7 +144,10 @@
 		},
 		"lightboxTheme": {
 			"type": "string",
-			"enum": ["dark", "light"],
+			"enum": [
+				"dark",
+				"light"
+			],
 			"default": "dark"
 		},
 		"enableWatermarking": {
@@ -147,7 +160,12 @@
 		},
 		"watermarkDisplay": {
 			"type": "string",
-			"enum": ["none", "gallery", "lightbox", "both"],
+			"enum": [
+				"none",
+				"gallery",
+				"lightbox",
+				"both"
+			],
 			"default": "none"
 		},
 		"resolution": {
@@ -208,8 +226,23 @@
 		},
 		"shadowStyle": {
 			"type": "string",
-			"enum": ["", "none", "subtle", "soft", "elevated", "dramatic"],
+			"enum": [
+				"",
+				"none",
+				"subtle",
+				"soft",
+				"elevated",
+				"dramatic"
+			],
 			"default": ""
+		},
+		"lightboxCounter": {
+			"type": "boolean",
+			"default": false
+		},
+		"lightboxZoom": {
+			"type": "boolean",
+			"default": false
 		}
 	},
 	"providesContext": {
@@ -227,7 +260,9 @@
 		"folioBlocks/isProofingGallery": "isProofingGallery",
 		"folioBlocks/proofingEnableHeart": "enableHeart",
 		"folioBlocks/proofingEnableFlag": "enableFlag",
-		"folioBlocks/proofingEnableComment": "enableComment"
+		"folioBlocks/proofingEnableComment": "enableComment",
+		"folioBlocks/lightboxCounter": "lightboxCounter",
+		"folioBlocks/lightboxZoom": "lightboxZoom"
 	},
 	"textdomain": "folioblocks",
 	"editorScript": [

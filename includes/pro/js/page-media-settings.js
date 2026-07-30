@@ -9,6 +9,15 @@
 	const { PluginDocumentSettingPanel } = wp.editor;
 
 	const proofingGalleryBlock = 'folioblocks/proofing-gallery-block';
+	const passwordProtectionBlocks = new Set( [
+		'folioblocks/carousel-gallery-block',
+		'folioblocks/filmstrip-gallery-block',
+		'folioblocks/grid-gallery-block',
+		'folioblocks/justified-gallery-block',
+		'folioblocks/masonry-gallery-block',
+		'folioblocks/modular-gallery-block',
+		'folioblocks/video-gallery-block',
+	] );
 	const lazyLoadBlocks = new Set( [
 		'folioblocks/before-after-block',
 		'folioblocks/carousel-gallery-block',
@@ -80,6 +89,10 @@
 						capabilities.hasDragToSave ||
 						dragToSaveBlocks.has( block.name ) ||
 						inner.hasDragToSave,
+					hasPasswordProtection:
+						capabilities.hasPasswordProtection ||
+						passwordProtectionBlocks.has( block.name ) ||
+						inner.hasPasswordProtection,
 					hasProofingGallery:
 						capabilities.hasProofingGallery ||
 						isProofingGallery ||
@@ -94,6 +107,7 @@
 				hasLazyLoad: false,
 				hasRightClick: false,
 				hasDragToSave: false,
+				hasPasswordProtection: false,
 				hasProofingGallery: false,
 				proofingGalleryPassword: '',
 			}
@@ -114,6 +128,9 @@
 			hasDragToSave: [ ...dragToSaveBlocks ].some( ( blockName ) =>
 				value.includes( `wp:${ blockName }` )
 			),
+			hasPasswordProtection: [ ...passwordProtectionBlocks ].some(
+				( blockName ) => value.includes( `wp:${ blockName }` )
+			),
 		};
 	};
 
@@ -122,6 +139,7 @@
 			hasLazyLoad,
 			hasRightClick,
 			hasDragToSave,
+			hasPasswordProtection,
 			hasProofingGallery,
 			proofingGalleryPassword,
 			postId,
@@ -144,6 +162,9 @@
 				hasDragToSave:
 					blockCapabilities.hasDragToSave ||
 					contentCapabilities.hasDragToSave,
+				hasPasswordProtection:
+					blockCapabilities.hasPasswordProtection ||
+					contentCapabilities.hasPasswordProtection,
 				hasProofingGallery:
 					blockCapabilities.hasProofingGallery ||
 					contentCapabilities.hasProofingGallery,
@@ -200,6 +221,7 @@
 			( ! hasLazyLoad &&
 				! hasRightClick &&
 				! hasDragToSave &&
+				! hasPasswordProtection &&
 				! hasProofingGallery )
 		) {
 			return null;
@@ -210,7 +232,10 @@
 		};
 		const controls = [];
 
-		if ( postType === 'post' || postType === 'page' ) {
+		if (
+			( postType === 'post' || postType === 'page' ) &&
+			( hasPasswordProtection || hasProofingGallery )
+		) {
 			const isProofingPasswordManaged = hasProofingGallery;
 			let passwordHelp = __(
 				'Require a password before visitors can view the page.',

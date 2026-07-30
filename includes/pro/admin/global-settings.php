@@ -500,7 +500,7 @@ if (! function_exists('fbks_render_global_settings_page')) {
 						<div class="pb-dashboard-box pb-global-settings-panel">
 							<h2><?php esc_html_e('Social Sharing', 'folioblocks'); ?></h2>
 							<p>
-								<?php esc_html_e('Choose the social sharing sources used when Social Media is selected for lightbox or overlay content.', 'folioblocks'); ?>
+								<?php esc_html_e('Choose up to 5 social sharing sources used when Social Media is selected for lightbox or overlay content.', 'folioblocks'); ?>
 							</p>
 
 							<input type="hidden" name="fbks_social_sharing[enabled]" value="1" />

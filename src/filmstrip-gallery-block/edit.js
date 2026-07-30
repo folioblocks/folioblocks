@@ -551,6 +551,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		'fade-overlay': 'pb-hover-fade-overlay',
 		'gradient-bottom': 'pb-hover-gradient-bottom',
 		chip: 'pb-hover-chip',
+		'chip-gradient': 'pb-hover-chip',
 		'color-overlay': 'pb-hover-color-overlay',
 		'gradient-overlay': 'pb-hover-gradient-overlay',
 	};
@@ -597,11 +598,14 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					'--pb-overlay-color':
 						effectiveHoverAttributes.overlayTextColor || '#000000',
 			  }
-			: effectiveHoverAttributes.onHoverStyle === 'chip'
+			: effectiveHoverAttributes.onHoverStyle === 'chip' ||
+			  effectiveHoverAttributes.onHoverStyle === 'chip-gradient'
 			? {
 					'--pb-chip-overlay-bg':
-						effectiveHoverAttributes.chipOverlayBgColor ||
-						'#f9f9f9',
+						effectiveHoverAttributes.onHoverStyle === 'chip-gradient'
+							? effectiveHoverAttributes.chipOverlayBgGradient || ''
+							: effectiveHoverAttributes.chipOverlayBgColor ||
+							  '#f9f9f9',
 					'--pb-chip-overlay-color':
 						effectiveHoverAttributes.chipOverlayTextColor ||
 						'#000000',

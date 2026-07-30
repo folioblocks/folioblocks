@@ -414,6 +414,12 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			trigger.dataset.filmstripLightboxIndex = String( index );
 			trigger.dataset.src = String( image.fullSrc || image.src || '' );
 			applyWatermarkTriggerData( trigger );
+			if ( settings.lightboxCounter ) {
+				trigger.dataset.lightboxCounter = 'true';
+			}
+			if ( settings.lightboxZoom ) {
+				trigger.dataset.lightboxZoom = 'true';
+			}
 			const lightboxTheme =
 				clickSettings.lightboxTheme === 'inherit'
 					? settings.lightboxTheme
@@ -1013,6 +1019,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 					'fade-overlay': 'pb-hover-fade-overlay',
 					'gradient-bottom': 'pb-hover-gradient-bottom',
 					chip: 'pb-hover-chip',
+					'chip-gradient': 'pb-hover-chip',
 					'color-overlay': 'pb-hover-color-overlay',
 					'gradient-overlay': 'pb-hover-gradient-overlay',
 				};
@@ -1096,10 +1103,15 @@ document.addEventListener( 'DOMContentLoaded', () => {
 					'--pb-overlay-color',
 					hoverSettings.overlayTextColor || '#000000'
 				);
-			} else if ( hoverSettings.onHoverStyle === 'chip' ) {
+			} else if (
+				hoverSettings.onHoverStyle === 'chip' ||
+				hoverSettings.onHoverStyle === 'chip-gradient'
+			) {
 				mainMedia.style.setProperty(
 					'--pb-chip-overlay-bg',
-					hoverSettings.chipOverlayBgColor || '#f9f9f9'
+					hoverSettings.onHoverStyle === 'chip-gradient'
+						? hoverSettings.chipOverlayBgGradient || ''
+						: hoverSettings.chipOverlayBgColor || '#f9f9f9'
 				);
 				mainMedia.style.setProperty(
 					'--pb-chip-overlay-color',

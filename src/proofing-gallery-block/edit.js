@@ -25,7 +25,7 @@ import {
 } from '@wordpress/components';
 import { createBlock } from '@wordpress/blocks';
 import { useDispatch, useSelect } from '@wordpress/data';
-import { useEffect, useRef, useState } from '@wordpress/element';
+import { useEffect, useMemo, useRef, useState } from '@wordpress/element';
 import { decodeEntities } from '@wordpress/html-entities';
 import { applyFilters } from '@wordpress/hooks';
 import apiFetch from '@wordpress/api-fetch';
@@ -75,6 +75,17 @@ const PROOFING_FILTER_OPTIONS = [
 		icon: 'comment',
 	},
 ];
+
+const getProofingFilterOptions = ( attributes = {} ) =>
+	PROOFING_FILTER_OPTIONS.filter(
+		( option ) =>
+			option.value === 'all' ||
+			( option.value === 'hearted' && attributes.enableHeart !== false ) ||
+			( option.value.startsWith( 'flag-' ) &&
+				attributes.enableFlag !== false ) ||
+			( option.value === 'commented' &&
+				attributes.enableComment !== false )
+	);
 
 const GALLERY_BLOCK_BY_STYLE = {
 	grid: 'folioblocks/grid-gallery-block',
@@ -624,6 +635,14 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	const [ proofingFilter, setProofingFilter ] = useState( 'all' );
 	const [ activeSessionWarning, setActiveSessionWarning ] = useState( '' );
 	const proofingGalleryRef = useRef( null );
+	const proofingFilterOptions = useMemo(
+		() => getProofingFilterOptions( attributes ),
+		[
+			attributes.enableComment,
+			attributes.enableFlag,
+			attributes.enableHeart,
+		]
+	);
 	const { replaceInnerBlocks, updateBlockAttributes } =
 		useDispatch( 'core/block-editor' );
 	const innerBlocks = useSelect(
@@ -661,6 +680,22 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			renderAppender: hasGallery ? false : undefined,
 		}
 	);
+
+	useEffect( () => {
+		if (
+			! proofingFilterOptions.some(
+				( option ) => option.value === proofingFilter
+			)
+		) {
+			setProofingFilter( 'all' );
+		}
+	}, [
+		attributes.enableComment,
+		attributes.enableFlag,
+		attributes.enableHeart,
+		proofingFilter,
+		proofingFilterOptions,
+	] );
 
 	useEffect( () => {
 		const gallery = proofingGalleryRef.current;
@@ -1250,7 +1285,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 								'folioblocks'
 							) }
 						>
-							{ PROOFING_FILTER_OPTIONS.map( ( option ) => (
+							{ proofingFilterOptions.map( ( option ) => (
 								<button
 									type="button"
 									key={ option.value }

@@ -54,6 +54,8 @@ $fbks_lightbox_theme = isset( $fbks_click_context['folioBlocks/lightboxTheme'] )
 if ( ! in_array( $fbks_lightbox_theme, [ 'dark', 'light' ], true ) ) {
 	$fbks_lightbox_theme = 'dark';
 }
+$fbks_lightbox_counter = (bool) ( $fbks_click_context['folioBlocks/lightboxCounter'] ?? ( $attributes['lightboxCounter'] ?? false ) );
+$fbks_lightbox_zoom = (bool) ( $fbks_click_context['folioBlocks/lightboxZoom'] ?? ( $attributes['lightboxZoom'] ?? false ) );
 
 $fbks_proofing_icon = static function ( $icon ) {
 	if ( 'heart' === $icon ) {
@@ -293,6 +295,7 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 		'fade-overlay'    => 'pb-hover-fade-overlay',
 		'gradient-bottom' => 'pb-hover-gradient-bottom',
 		'chip'            => 'pb-hover-chip',
+		'chip-gradient'   => 'pb-hover-chip',
 		'color-overlay'    => 'pb-hover-color-overlay',
 		'gradient-overlay' => 'pb-hover-gradient-overlay',
 	];
@@ -325,6 +328,7 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 	$fbks_overlay_font_weight = $fbks_hover_context['folioBlocks/overlayFontWeight'] ?? ( $attributes['overlayFontWeight'] ?? '' );
 	$fbks_overlay_font_style = $fbks_hover_context['folioBlocks/overlayFontStyle'] ?? ( $attributes['overlayFontStyle'] ?? '' );
 	$fbks_chip_overlay_bg   = $fbks_hover_context['folioBlocks/chipOverlayBgColor'] ?? ( $attributes['chipOverlayBgColor'] ?? '' );
+	$fbks_chip_overlay_gradient = $fbks_hover_context['folioBlocks/chipOverlayBgGradient'] ?? ( $attributes['chipOverlayBgGradient'] ?? '' );
 	$fbks_chip_overlay_text = $fbks_hover_context['folioBlocks/chipOverlayTextColor'] ?? ( $attributes['chipOverlayTextColor'] ?? '' );
 	$fbks_overlay_bg = fbks_sanitize_css_color_value( $fbks_overlay_bg );
 	$fbks_overlay_gradient = fbks_sanitize_css_background_value( $fbks_overlay_gradient );
@@ -333,6 +337,7 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 	$fbks_overlay_font_weight = fbks_sanitize_css_font_weight_value( $fbks_overlay_font_weight );
 	$fbks_overlay_font_style = fbks_sanitize_css_font_style_value( $fbks_overlay_font_style );
 	$fbks_chip_overlay_bg = fbks_sanitize_css_background_value( $fbks_chip_overlay_bg );
+	$fbks_chip_overlay_gradient = fbks_sanitize_css_background_value( $fbks_chip_overlay_gradient );
 	$fbks_chip_overlay_text = fbks_sanitize_css_color_value( $fbks_chip_overlay_text );
 
 	$fbks_lazy_from_context = isset( $fbks_context['folioBlocks/lazyLoad'] ) ? (bool) $fbks_context['folioBlocks/lazyLoad'] : null;
@@ -409,9 +414,10 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 					$fbks_img_styles .= '--pb-overlay-color: ' . esc_attr( $fbks_overlay_text ) . ';';
 				}
 			}
-			if ( 'chip' === $fbks_on_hover_style ) {
-				if ( $fbks_chip_overlay_bg ) {
-					$fbks_img_styles .= '--pb-chip-overlay-bg: ' . esc_attr( $fbks_chip_overlay_bg ) . ';';
+			if ( 'chip' === $fbks_on_hover_style || 'chip-gradient' === $fbks_on_hover_style ) {
+				$fbks_effective_chip_bg = 'chip-gradient' === $fbks_on_hover_style ? $fbks_chip_overlay_gradient : $fbks_chip_overlay_bg;
+				if ( $fbks_effective_chip_bg ) {
+					$fbks_img_styles .= '--pb-chip-overlay-bg: ' . esc_attr( $fbks_effective_chip_bg ) . ';';
 				}
 				if ( $fbks_chip_overlay_text ) {
 					$fbks_img_styles .= '--pb-chip-overlay-color: ' . esc_attr( $fbks_chip_overlay_text ) . ';';
@@ -643,6 +649,12 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 				class="pb-image-block-lightbox"
 				data-src="<?php echo esc_url( $fbks_full_src ); ?>"
 				data-lightbox-theme="<?php echo esc_attr( $fbks_lightbox_theme ); ?>"
+				<?php if ( $fbks_lightbox_counter ) : ?>
+					data-lightbox-counter="true"
+				<?php endif; ?>
+				<?php if ( $fbks_lightbox_zoom ) : ?>
+					data-lightbox-zoom="true"
+				<?php endif; ?>
 				<?php if ( fbks_fs()->can_use_premium_code__premium_only() && $fbks_show_lightbox_watermark ) : ?>
 					<?php echo wp_kses_data( $fbks_watermark_data_attrs ); ?>
 				<?php endif; ?>

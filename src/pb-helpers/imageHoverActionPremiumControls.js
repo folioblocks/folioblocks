@@ -16,7 +16,11 @@ const OVERLAY_STYLE_OPTIONS = [
 		label: __( 'Bottom Gradient', 'folioblocks' ),
 		value: 'gradient-bottom',
 	},
-	{ label: __( 'Chip', 'folioblocks' ), value: 'chip' },
+	{ label: __( 'Chip Overlay', 'folioblocks' ), value: 'chip' },
+	{
+		label: __( 'Chip Gradient Overlay', 'folioblocks' ),
+		value: 'chip-gradient',
+	},
 	{ label: __( 'Blur Overlay', 'folioblocks' ), value: 'blur-overlay' },
 	{ label: __( 'Color Overlay', 'folioblocks' ), value: 'color-overlay' },
 	{ label: __( 'Gradient Overlay', 'folioblocks' ), value: 'gradient-overlay' },
@@ -84,6 +88,11 @@ const getOverlayHelp = ( value ) => {
 		case 'chip':
 			return __(
 				'Displays the overlay content in a compact chip above the image.',
+				'folioblocks'
+			);
+		case 'chip-gradient':
+			return __(
+				'Displays the overlay content in a compact chip with a gradient background.',
 				'folioblocks'
 			);
 		case 'blur-overlay':
@@ -207,7 +216,18 @@ export const registerImageHoverActionPremiumControls = ( {
 								nextAttributes.chipOverlayTextColor =
 									attributes.chipOverlayTextColor || '#000000';
 								nextAttributes.chipOverlayBgColor =
-									attributes.chipOverlayBgColor || '#f9f9f9';
+									isGradientValue( attributes.chipOverlayBgColor )
+										? '#f9f9f9'
+										: attributes.chipOverlayBgColor || '#f9f9f9';
+							}
+							if ( value === 'chip-gradient' ) {
+								nextAttributes.chipOverlayTextColor =
+									attributes.chipOverlayTextColor || '#000000';
+								nextAttributes.chipOverlayBgGradient =
+									attributes.chipOverlayBgGradient ||
+									( isGradientValue( attributes.chipOverlayBgColor )
+										? attributes.chipOverlayBgColor
+										: DEFAULT_OVERLAY_BG_GRADIENT );
 							}
 
 							setAttributes( nextAttributes );
@@ -297,16 +317,20 @@ export const registerImageHoverActionPremiumControls = ( {
 				return null;
 			}
 			const isChip = overlayStyle === 'chip';
+			const isChipGradient = overlayStyle === 'chip-gradient';
 			const isGradientOverlay = overlayStyle === 'gradient-overlay';
 			const hasColorControls =
 				overlayStyle === 'color-overlay' ||
 				overlayStyle === 'gradient-overlay' ||
-				isChip;
-			const textAttribute = isChip
+				isChip ||
+				isChipGradient;
+			const textAttribute = isChip || isChipGradient
 				? 'chipOverlayTextColor'
 				: 'overlayTextColor';
 			const bgAttribute = isGradientOverlay
 				? 'overlayBgGradient'
+				: isChipGradient
+				? 'chipOverlayBgGradient'
 				: isChip
 				? 'chipOverlayBgColor'
 				: 'overlayBgColor';
@@ -347,6 +371,8 @@ export const registerImageHoverActionPremiumControls = ( {
 								label={
 									isChip
 										? __( 'Chip Overlay', 'folioblocks' )
+										: isChipGradient
+										? __( 'Chip Gradient Overlay', 'folioblocks' )
 										: isGradientOverlay
 										? __( 'Gradient Overlay', 'folioblocks' )
 										: __( 'Color Overlay', 'folioblocks' )
@@ -357,7 +383,7 @@ export const registerImageHoverActionPremiumControls = ( {
 										( isChip ? '#000000' : '' ),
 									second:
 										attributes[ bgAttribute ] ||
-										( isGradientOverlay
+										( isGradientOverlay || isChipGradient
 											? DEFAULT_OVERLAY_BG_GRADIENT
 											: isChip
 											? '#f9f9f9'
@@ -371,8 +397,12 @@ export const registerImageHoverActionPremiumControls = ( {
 								}
 								firstLabel={ __( 'Text', 'folioblocks' ) }
 								secondLabel={ __( 'Background', 'folioblocks' ) }
-								secondSupportsGradient={ isGradientOverlay }
-								secondGradientOnly={ isGradientOverlay }
+								secondSupportsGradient={
+									isGradientOverlay || isChipGradient
+								}
+								secondGradientOnly={
+									isGradientOverlay || isChipGradient
+								}
 								secondColorLabel={ __( 'Solid', 'folioblocks' ) }
 								secondGradientLabel={ __( 'Gradient', 'folioblocks' ) }
 							/>

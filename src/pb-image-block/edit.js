@@ -645,6 +645,9 @@ export default function Edit( {
 	const chipOverlayBgColor = isInsideGallery && ! overrideGalleryHoverSettings
 		? hoverContext?.[ 'folioBlocks/chipOverlayBgColor' ] ?? ''
 		: attributes.chipOverlayBgColor ?? '';
+	const chipOverlayBgGradient = isInsideGallery && ! overrideGalleryHoverSettings
+		? hoverContext?.[ 'folioBlocks/chipOverlayBgGradient' ] ?? ''
+		: attributes.chipOverlayBgGradient ?? '';
 	const chipOverlayTextColor = isInsideGallery && ! overrideGalleryHoverSettings
 		? hoverContext?.[ 'folioBlocks/chipOverlayTextColor' ] ?? ''
 		: attributes.chipOverlayTextColor ?? '';
@@ -682,6 +685,7 @@ export default function Edit( {
 		'fade-overlay': 'pb-hover-fade-overlay',
 		'gradient-bottom': 'pb-hover-gradient-bottom',
 		chip: 'pb-hover-chip',
+		'chip-gradient': 'pb-hover-chip',
 		'color-overlay': 'pb-hover-color-overlay',
 		'gradient-overlay': 'pb-hover-gradient-overlay',
 	};
@@ -725,9 +729,13 @@ export default function Edit( {
 						? { '--pb-overlay-color': overlayTextColor }
 						: {} ),
 			  }
-			: effectiveOnHoverStyle === 'chip'
+			: effectiveOnHoverStyle === 'chip' ||
+			  effectiveOnHoverStyle === 'chip-gradient'
 			? {
-					...( chipOverlayBgColor
+					...( effectiveOnHoverStyle === 'chip-gradient' &&
+					chipOverlayBgGradient
+						? { '--pb-chip-overlay-bg': chipOverlayBgGradient }
+						: effectiveOnHoverStyle === 'chip' && chipOverlayBgColor
 						? { '--pb-chip-overlay-bg': chipOverlayBgColor }
 						: {} ),
 					...( chipOverlayTextColor

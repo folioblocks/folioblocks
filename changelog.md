@@ -4,6 +4,50 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2026-07-28
+### Added
+- Added Proofing Gallery light and dark UI modes for the filter bar, flag popovers, and comment popovers.
+- Added Proofing Gallery Save & Continue and Submit button alignment controls.
+- Added Proofing Gallery Save & Submit button style controls for text, background, border, radius, padding, font size, and button gap.
+- Added a dedicated Proofing Gallery Save & Submit Settings inspector panel.
+- Added a Proofing Gallery block-level option to email the site admin when a proofing session is submitted, with its default value inherited from Global Settings.
+- Added Global Settings controls for Proofing Gallery saved session retention, submitted session retention, and admin email notifications on proofing submission.
+- Added global Social Sharing source settings with a five-source selection limit.
+- Added default watermark behavior for new compatible blocks, including support for changing the global default watermark without updating each gallery.
+- Added Filmstrip Gallery watermark support for the editor, front-end main image, and lightbox images.
+- Added optional Lightbox image counters for gallery blocks, showing the current image position and total image count.
+- Added optional Lightbox zoom controls for Image Blocks and gallery lightboxes, including click-to-zoom, double-click zoom, cursor/trackpad panning, and a hand cursor while zoomed.
+
+### Changed
+- Split Proofing Gallery inspector controls into clearer Client Settings, Proofing Gallery Settings, Save & Submit Settings, Watermark Overlay, Proofing Appearance, and Save & Submit Button Styles areas.
+- Updated the Proofing Gallery front-end password gate to use the same password form structure, wording, and styling as the gallery/Page and Post password component.
+- Updated Proofing Gallery setup so client email and gallery password are entered from Client Settings, reducing browser password-save prompts during the setup flow.
+- Updated Proofing Gallery so the Page/Post Password Protect Page setting is enforced when a Proofing Gallery block is present, while the password itself is managed by the Proofing Gallery block.
+- Updated Proofing Gallery session cleanup to use editable Global Settings instead of fixed retention constants.
+- Updated submitted Proofing Gallery email notifications so they are sent only when a session first transitions to submitted.
+- Updated watermark sizing to use a shared square-aware formula across editor previews, front-end gallery images, Global Settings previews, and lightbox images.
+- Updated Carousel Gallery watermark sizing and inset calculations to use the carousel image height as the baseline for more consistent watermark size and placement across horizontal and vertical images.
+- Updated Global Settings so the Watermarks section is one combined panel and the redundant intro panel is removed.
+- Simplified Social Sharing controls so sources are managed globally and social sharing can be selected directly in Lightbox Content or Overlay Content controls.
+- Moved Pro-only PHP, CSS, and JavaScript files into `includes/pro/` so Free and Pro packaging boundaries are easier to maintain.
+- Moved Proofing Gallery-related styles out of the Image Block stylesheet where possible so they are not loaded unnecessarily for non-proofing galleries.
+
+### Fixed
+- Fixed Page/Post password protection controls disappearing for regular galleries after Proofing Gallery changes.
+- Fixed Proofing Gallery dark mode not applying to the flag popover in the editor.
+- Fixed Proofing Gallery front-end password gate wording and layout differences compared with other gallery password gates.
+- Fixed Proofing Gallery setup flow triggering browser password-save prompts after entering client email and password.
+- Fixed redundant Proofing Gallery setup messages in the placeholder flow.
+- Fixed Carousel Gallery images sometimes rendering at `0px` width after transforms or initialization by removing the problematic image container inline-size behavior.
+- Fixed Social Sharing settings not persisting after refresh and not reflecting changed global source selections.
+- Fixed Social Sharing controls allowing more than five selected services.
+- Fixed the default watermark setting not persisting after refresh.
+- Fixed newly enabled watermarking so compatible blocks use the current global default watermark by default.
+- Fixed square or near-square images rendering visually oversized watermarks compared with other image proportions.
+- Fixed Filmstrip Gallery watermarks not appearing in the editor, on the front-end main image, or in the lightbox.
+- Fixed watermark overlays rendering safely without broken output when a selected or default watermark is deleted.
+- Fixed the Proofing Gallery editor stylesheet warning caused by the nonstandard `text-security` CSS property.
+
 ## [1.5.0] - 2026-07-03
 ### Added
 - Added the initial Proofing Gallery setup flow with client email, gallery password, gallery style selection, and image upload/media library steps.
