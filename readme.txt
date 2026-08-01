@@ -5,7 +5,7 @@ Tags: gallery, image gallery, photo gallery, video gallery, lightbox,
 Tested up to:      7.1
 Requires at least: 6.5
 Requires PHP: 7.4
-Stable tag:        1.5.0-alpha.2
+Stable tag:        1.5.0-beta.1
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -132,15 +132,16 @@ No, the galleries will remain in place on your site. However, the **advanced lay
 = 1.5.0 =
 * Added Proofing Gallery Block (Business & Agency Only) for image selections, favorites, flags, and comments.
 * Added Watermark overlays for gallery images and Lightbox views.
-* Added Social Media Sharing Controls for Lightboxes and Overlays.
+* Added optional Lightbox Image Counter and Zoom features.
+* Added Social Media Sharing in Lightboxes and Overlays.
+* Added Disable Drag To Save feature in Page/Post settings for all galleries. 
 * Added Wistia, Dailymotion, VideoPress, Loom, and Cloudflare Stream support to Video Block and Video Gallery embeds.
 * Added full Gradient Overlay support for Image Block, Video Block, image galleries, & Video Gallery.
 * Added Hover Effect controls with Zoom In, Zoom Out, Lift, Tilt, Pop, Glare, Pan, and Desaturate effects.
 * Added Overlay Entrance controls for supported overlays, including fade and slide directions.
 * Added Overlay typography controls for Image Block and Image galleries, including theme font family plus weight and style.
-* Renamed the existing Gradient Bottom image overlay to Bottom Gradient while preserving backwards compatibility.
-* Fixed the admin review link so an expired review notice no longer shows a WordPress "link expired" error.
-* Improved review notice actions so stale Maybe Later and I Already Did links can still dismiss the notice.
+* Added support for nesting Image Rows inside of Image Stacks on Modular Gallery. 
+* Added a blue color indicator to Image Block icons when Gallery overrides are active.
 
 = 1.4.5 =
 * Fixed a PHP fatal error in Image Block rendering caused by missing shared CSS value sanitizers in the 1.4.4 package.
