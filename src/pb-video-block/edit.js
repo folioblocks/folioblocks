@@ -140,13 +140,13 @@ const getOverlayContentAttributes = (content, visibility) => ({
 });
 
 // Function to support iframe provider and self-hosted video previews.
-function getVideoEmbedMarkup(videoUrl, youtubeEmbedPreview) {
+function getVideoEmbedMarkup(videoUrl, youtubeEmbedPreview, isPro = false) {
 	if (!videoUrl) {
 		return null;
 	}
 
-	const providerData = getVideoProviderData(videoUrl);
-	const providerLabel = getVideoProviderLabel(videoUrl);
+	const providerData = getVideoProviderData(videoUrl, { isPro });
+	const providerLabel = getVideoProviderLabel(videoUrl, { isPro });
 
 	if (providerData.provider === "youtube") {
 		if (youtubeEmbedPreview?.html) {
@@ -175,7 +175,7 @@ function getVideoEmbedMarkup(videoUrl, youtubeEmbedPreview) {
 		return <Spinner />;
 	}
 
-	const iframeSrc = getVideoIframeSrc(videoUrl);
+	const iframeSrc = getVideoIframeSrc(videoUrl, { isPro });
 
 	if (iframeSrc) {
 		return (
@@ -233,13 +233,21 @@ export default function Edit({ attributes, setAttributes, context }) {
 
 	const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 	const [isLightboxOpen, setLightboxOpen] = useState(false);
+	const isPro = !!window.folioBlocksData?.isPro;
+	const isValidVideoUrl = (nextUrl) => {
+		const trimmedUrl = typeof nextUrl === "string" ? nextUrl.trim() : "";
+		if (!isValidHttpUrl(trimmedUrl)) {
+			return false;
+		}
+		return getVideoProviderData(trimmedUrl, { isPro }).provider !== "unsupported";
+	};
 	const updateVideoUrl = (nextUrl) => {
 		const trimmedUrl = typeof nextUrl === "string" ? nextUrl.trim() : "";
 		if (!trimmedUrl) {
 			setAttributes({ videoUrl: "" });
 			return true;
 		}
-		if (!isValidHttpUrl(trimmedUrl)) {
+		if (!isValidVideoUrl(trimmedUrl)) {
 			return false;
 		}
 		setAttributes({ videoUrl: trimmedUrl });
@@ -249,7 +257,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 		window.folioBlocksData?.wpVersion,
 		"7.0",
 	);
-	const videoProvider = getVideoProviderData(videoUrl).provider;
+	const videoProvider = getVideoProviderData(videoUrl, { isPro }).provider;
 	const isYouTubeVideo = videoProvider === "youtube";
 	const isOEmbedVideo =
 		isYouTubeVideo ||
@@ -692,13 +700,23 @@ export default function Edit({ attributes, setAttributes, context }) {
 			<ValidatedUrlControl
 				label={__("Video URL", "folioblocks")}
 				value={videoUrl}
-				onChange={(val) => setAttributes({ videoUrl: val })}
+				onChange={updateVideoUrl}
+				validate={isValidVideoUrl}
+				invalidHelp={__(
+					'Enter a valid YouTube, Vimeo, or self-hosted video URL. Bunny Stream, Cloudflare Stream, DailyMotion, Loom, VideoPress, and Wistia require FolioBlocks Pro.',
+					'folioblocks'
+				)}
 				help={
 					<>
-						{__(
-							"Supports YouTube, Vimeo, Bunny Stream, Wistia, Dailymotion, VideoPress, Loom, Cloudflare Stream, or ",
-							"folioblocks",
-						)}
+						{isPro
+							? __(
+								"Supports YouTube, Vimeo, Bunny Stream, Cloudflare Stream, DailyMotion, Loom, VideoPress, Wistia, or ",
+								"folioblocks",
+							)
+							: __(
+								"Supports YouTube, Vimeo, or ",
+								"folioblocks",
+							)}
 						<a
 							href="#"
 							onClick={(e) => {
@@ -1249,14 +1267,14 @@ export default function Edit({ attributes, setAttributes, context }) {
 
 							{effectiveLightboxLayout === "video-only" && (
 								<div className="pb-video-lightbox-video">
-									{getVideoEmbedMarkup(videoUrl, youtubeEmbedPreview)}
+									{getVideoEmbedMarkup(videoUrl, youtubeEmbedPreview, isPro)}
 								</div>
 							)}
 
 							{effectiveLightboxLayout === "split" && (
 								<>
 									<div className="pb-video-lightbox-video">
-										{getVideoEmbedMarkup(videoUrl, youtubeEmbedPreview)}
+										{getVideoEmbedMarkup(videoUrl, youtubeEmbedPreview, isPro)}
 									</div>
 									<div className="pb-video-lightbox-info">
 										{title && <h2 className="lightbox-title">{title}</h2>}
@@ -1274,7 +1292,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 								lightboxLayout: effectiveLightboxLayout,
 								enableWooCommerce,
 								getVideoEmbedMarkup: (url) =>
-									getVideoEmbedMarkup(url, youtubeEmbedPreview),
+									getVideoEmbedMarkup(url, youtubeEmbedPreview, isPro),
 								title,
 								description,
 								__,

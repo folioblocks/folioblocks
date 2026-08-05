@@ -26,7 +26,7 @@ if (! function_exists('fbks_get_free_pro_sections')) {
 				'title' => __('Before & After Block', 'folioblocks'),
 				'rows'  => array(
 					array('feature' => __('Set Image Resolution', 'folioblocks'), 'free' => '✅', 'pro' => '✅'),
-					array('feature' => __('Responsive Design works on Desktop, Tablet, and Mobile Ready', 'folioblocks'), 'free' => '✅', 'pro' => '✅'),
+					array('feature' => __('Responsive Design Ready: Works on Desktop, Tablet, and Mobile', 'folioblocks'), 'free' => '✅', 'pro' => '✅'),
 					array('feature' => __('Custom Slider Orientation', 'folioblocks'), 'free' => '✅', 'pro' => '✅'),
 					array('feature' => __('Custom Drag Handle Starting Position', 'folioblocks'), 'free' => '❌', 'pro' => '✅'),
 					array('feature' => __('Show Before & After Labels', 'folioblocks'), 'free' => '❌', 'pro' => '✅'),
@@ -184,7 +184,7 @@ if (! function_exists('fbks_get_free_pro_sections')) {
 				'title' => __('Loupe Block', 'folioblocks'),
 				'rows'  => array(
 					array('feature' => __('Set Image Resolution', 'folioblocks'), 'free' => '✅', 'pro' => '✅'),
-					array('feature' => __('Responsive Design works on Desktop, Tablet, and Mobile Ready', 'folioblocks'), 'free' => '✅', 'pro' => '✅'),
+					array('feature' => __('Responsive Design Ready: Works on Desktop, Tablet, and Mobile', 'folioblocks'), 'free' => '✅', 'pro' => '✅'),
 					array('feature' => __('Set Magnification Strength', 'folioblocks'), 'free' => '❌', 'pro' => '✅', 'free_unavailable' => true),
 					array('feature' => __('Set Loupe Shape', 'folioblocks'), 'free' => '❌', 'pro' => '✅', 'free_unavailable' => true),
 					array('feature' => __('Set Loupe Theme (Light & Dark)', 'folioblocks'), 'free' => '❌', 'pro' => '✅', 'free_unavailable' => true),
@@ -281,10 +281,10 @@ if (! function_exists('fbks_get_free_pro_sections')) {
 			array(
 				'title' => __('Video Block', 'folioblocks'),
 				'rows'  => array(
-					array('feature' => __('Support for Self-Hosted, YouTube, Vimeo, and Bunny Stream videos', 'folioblocks'), 'free' => '✅', 'pro' => '✅'),
-					array('feature' => __('Additional video providers: Wistia, Dailymotion, VideoPress, Loom, and Cloudflare Stream', 'folioblocks'), 'free' => '❌', 'pro' => '✅', 'free_unavailable' => true),
+					array('feature' => __('Support for Self-Hosted, YouTube, and Vimeo videos', 'folioblocks'), 'free' => '✅', 'pro' => '✅'),
+					array('feature' => __('Additional video providers: Bunny Stream, Cloudflare Stream, DailyMotion, Loom, VideoPress, and Wistia', 'folioblocks'), 'free' => '❌', 'pro' => '✅', 'free_unavailable' => true),
 					array('feature' => __('Set Thumbnail Resolution & Aspect Ratio', 'folioblocks'), 'free' => '✅', 'pro' => '✅'),
-					array('feature' => __('Responsive Design works on Desktop, Tablet, and Mobile Ready', 'folioblocks'), 'free' => '✅', 'pro' => '✅'),
+					array('feature' => __('Responsive Design Ready: Works on Desktop, Tablet, and Mobile', 'folioblocks'), 'free' => '✅', 'pro' => '✅'),
 					array('feature' => __('Block Transforms between compatible video blocks', 'folioblocks'), 'free' => '❌', 'pro' => '✅', 'free_unavailable' => true),
 					array('feature' => __('List View Thumbnails', 'folioblocks'), 'free' => '❌', 'pro' => '✅', 'free_unavailable' => true),
 					array('feature' => __('WooCommerce product linking for videos', 'folioblocks'), 'free' => '❌', 'pro' => '✅', 'free_unavailable' => true),
@@ -304,8 +304,8 @@ if (! function_exists('fbks_get_free_pro_sections')) {
 			array(
 				'title' => __('Video Gallery Block', 'folioblocks'),
 				'rows'  => array(
-					array('feature' => __('Support for Self-Hosted, YouTube, Vimeo, and Bunny Stream videos', 'folioblocks'), 'free' => '✅', 'pro' => '✅'),
-					array('feature' => __('Additional video providers: Wistia, Dailymotion, VideoPress, Loom, and Cloudflare Stream', 'folioblocks'), 'free' => '❌', 'pro' => '✅', 'free_unavailable' => true),
+					array('feature' => __('Support for Self-Hosted, YouTube, and Vimeo videos', 'folioblocks'), 'free' => '✅', 'pro' => '✅'),
+					array('feature' => __('Additional video providers: Bunny Stream, Cloudflare Stream, DailyMotion, Loom, VideoPress, and Wistia', 'folioblocks'), 'free' => '❌', 'pro' => '✅', 'free_unavailable' => true),
 					array('feature' => __('Set Thumbnail Resolution & Aspect Ratio', 'folioblocks'), 'free' => '✅', 'pro' => '✅'),
 					array('feature' => __('Responsive Design Ready: Works on Desktop, Tablet, and Mobile', 'folioblocks'), 'free' => '✅', 'pro' => '✅'),
 					array('feature' => __('Drag & Drop Video Re-Ordering', 'folioblocks'), 'free' => '✅', 'pro' => '✅'),

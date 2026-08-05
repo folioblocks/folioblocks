@@ -127,15 +127,15 @@ if (function_exists('fbks_fs')) {
             }
             fbks_fs()->add_filter('plugin_icon', 'fbks_fs_custom_icon');
 
-            // Make url available to JS for Upgrade links and WooCommerce status
-            add_action('enqueue_block_editor_assets', function () {
+            function fbks_get_shared_js_data()
+            {
                 if (! function_exists('is_plugin_active')) {
                     include_once ABSPATH . 'wp-admin/includes/plugin.php';
                 }
 
                 $woo_active = is_plugin_active('woocommerce/woocommerce.php');
 
-                $data = [
+                return [
                     'checkoutUrl'    => fbks_fs()->pricing_url(),
                     'siteUrl'        => site_url(),
                     'wpVersion'      => get_bloginfo('version'),
@@ -145,7 +145,10 @@ if (function_exists('fbks_fs')) {
                     'socialSharing'  => function_exists('fbks_get_social_sharing_settings') ? fbks_get_social_sharing_settings() : array('sources' => array()),
                     'proofing'       => function_exists('fbks_get_proofing_settings') ? fbks_get_proofing_settings() : array('emailAdminOnSubmit' => false),
                 ];
+            }
 
+            function fbks_enqueue_shared_js_data()
+            {
                 wp_register_script(
                     'folioblocks-shared-data',
                     false,                // no external src; just a container for inline data
@@ -156,11 +159,16 @@ if (function_exists('fbks_fs')) {
 
                 wp_add_inline_script(
                     'folioblocks-shared-data',
-                    'window.folioBlocksData = ' . wp_json_encode($data) . ';',
+                    'window.folioBlocksData = ' . wp_json_encode(fbks_get_shared_js_data()) . ';',
                     'before'
                 );
 
                 wp_enqueue_script('folioblocks-shared-data');
+            }
+
+            // Make url available to JS for Upgrade links, WooCommerce status, and Pro-gated view behavior.
+            add_action('enqueue_block_editor_assets', function () {
+                fbks_enqueue_shared_js_data();
 
                 if (fbks_fs()->can_use_premium_code__premium_only()) {
                     $page_settings_path = FBKS_PLUGIN_DIR . 'includes/pro/js/page-media-settings.js';
@@ -174,6 +182,7 @@ if (function_exists('fbks_fs')) {
                     wp_set_script_translations('folioblocks-page-media-settings', 'folioblocks');
                 }
             });
+            add_action('wp_enqueue_scripts', 'fbks_enqueue_shared_js_data');
         }
 
     // Add custom category for blocks.
@@ -491,7 +500,7 @@ if (function_exists('fbks_fs')) {
                 'fbks_render_proofing_sessions_page'
             );
         }
-        if (! fbks_fs()->can_use_premium_code__premium_only()) {
+        if ( fbks_fs()->can_use_premium_code__premium_only()) {
             add_submenu_page(
                 'folioblocks-settings',
                 __('Free vs Pro', 'folioblocks'),

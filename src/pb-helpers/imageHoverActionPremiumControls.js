@@ -56,6 +56,8 @@ const supportsOverlayEntrance = ( overlayStyle ) =>
 	[ 'blur-overlay', 'fade-overlay', 'color-overlay', 'gradient-overlay' ].includes(
 		overlayStyle
 	);
+const supportsOverlayTypography = ( overlayContent ) =>
+	! [ 'exif', 'social' ].includes( overlayContent );
 const isGradientValue = ( value ) =>
 	typeof value === 'string' && value.toLowerCase().includes( 'gradient(' );
 
@@ -334,6 +336,15 @@ export const registerImageHoverActionPremiumControls = ( {
 				: isChip
 				? 'chipOverlayBgColor'
 				: 'overlayBgColor';
+			const overlayContent =
+				attributes.overlayContent ||
+				( attributes.wooProductPriceOnHover ? 'product' : 'title' );
+			const hasTypographyControls =
+				supportsOverlayTypography( overlayContent );
+
+			if ( ! hasColorControls && ! hasTypographyControls ) {
+				return null;
+			}
 
 			return (
 				<ToolsPanel
@@ -408,27 +419,29 @@ export const registerImageHoverActionPremiumControls = ( {
 							/>
 						</ToolsPanelItem>
 					) }
-					<ToolsPanelItem
-						label={ __( 'Overlay Typography', 'folioblocks' ) }
-						hasValue={ () =>
-							!! attributes.overlayFontFamily ||
-							!! attributes.overlayFontWeight ||
-							!! attributes.overlayFontStyle
-						}
-						onDeselect={ () =>
-							setAttributes( {
-								overlayFontFamily: '',
-								overlayFontWeight: '',
-								overlayFontStyle: '',
-							} )
-						}
-						isShownByDefault
-					>
-						<OverlayTypographyControls
-							attributes={ attributes }
-							setAttributes={ setAttributes }
-						/>
-					</ToolsPanelItem>
+					{ hasTypographyControls && (
+						<ToolsPanelItem
+							label={ __( 'Overlay Typography', 'folioblocks' ) }
+							hasValue={ () =>
+								!! attributes.overlayFontFamily ||
+								!! attributes.overlayFontWeight ||
+								!! attributes.overlayFontStyle
+							}
+							onDeselect={ () =>
+								setAttributes( {
+									overlayFontFamily: '',
+									overlayFontWeight: '',
+									overlayFontStyle: '',
+								} )
+							}
+							isShownByDefault
+						>
+							<OverlayTypographyControls
+								attributes={ attributes }
+								setAttributes={ setAttributes }
+							/>
+						</ToolsPanelItem>
+					) }
 				</ToolsPanel>
 			);
 		}

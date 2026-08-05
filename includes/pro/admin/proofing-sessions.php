@@ -43,9 +43,11 @@ if (! function_exists('fbks_get_proofing_session_display_status')) {
 		}
 
 		if ('closed' === $presence && 'submitted' !== $status) {
+			$is_saved = 'in_progress' === $status;
+
 			return array(
-				'class' => 'is-closed',
-				'label' => 'in_progress' === $status ? __('Saved, Closed', 'folioblocks') : __('Window Closed', 'folioblocks'),
+				'class' => $is_saved ? 'is-closed is-saved-closed' : 'is-closed is-window-closed',
+				'label' => $is_saved ? __('In Progress', 'folioblocks') : __('Window Closed', 'folioblocks'),
 			);
 		}
 
@@ -202,6 +204,80 @@ if (! function_exists('fbks_backfill_proofing_image_titles')) {
 	}
 }
 
+if (! function_exists('fbks_get_proofing_attachment_filename')) {
+	function fbks_get_proofing_attachment_filename($attachment_id)
+	{
+		$attachment_id = absint($attachment_id);
+
+		if (! $attachment_id) {
+			return '';
+		}
+
+		$metadata = wp_get_attachment_metadata($attachment_id);
+
+		if (is_array($metadata) && ! empty($metadata['original_image'])) {
+			return wp_basename((string) $metadata['original_image']);
+		}
+
+		$get_existing_unscaled_filename = static function ($file_path) {
+			$file_path = (string) $file_path;
+
+			if ('' === $file_path || ! preg_match('/-scaled(\.[^.]+)$/i', $file_path)) {
+				return '';
+			}
+
+			$unscaled_path = preg_replace('/-scaled(\.[^.]+)$/i', '$1', $file_path);
+
+			return $unscaled_path && file_exists($unscaled_path) ? wp_basename($unscaled_path) : '';
+		};
+
+		$file_path = '';
+
+		if (function_exists('wp_get_original_image_path')) {
+			$file_path = wp_get_original_image_path($attachment_id);
+		}
+
+		if (! $file_path) {
+			$file_path = get_attached_file($attachment_id);
+		}
+
+		if ($file_path) {
+			$unscaled_filename = $get_existing_unscaled_filename($file_path);
+
+			if ($unscaled_filename) {
+				return $unscaled_filename;
+			}
+
+			return wp_basename($file_path);
+		}
+
+		$file_url = wp_get_attachment_url($attachment_id);
+		$file_path = $file_url ? wp_parse_url($file_url, PHP_URL_PATH) : '';
+
+		if (! $file_path) {
+			return '';
+		}
+
+		$upload_dir = wp_get_upload_dir();
+
+		if (
+			! empty($upload_dir['baseurl']) &&
+			! empty($upload_dir['basedir']) &&
+			$file_url &&
+			0 === strpos($file_url, $upload_dir['baseurl'])
+		) {
+			$local_path = $upload_dir['basedir'] . substr($file_url, strlen($upload_dir['baseurl']));
+			$unscaled_filename = $get_existing_unscaled_filename($local_path);
+
+			if ($unscaled_filename) {
+				return $unscaled_filename;
+			}
+		}
+
+		return wp_basename($file_path);
+	}
+}
+
 if (! function_exists('fbks_get_proofing_session_admin_data')) {
 	function fbks_get_proofing_session_admin_data($post_id)
 	{
@@ -274,16 +350,17 @@ if (! function_exists('fbks_get_proofing_sessions_for_admin')) {
 			$sessions,
 			static function ($session) use ($status) {
 				$display_status = fbks_get_proofing_session_display_status($session);
+				$status_classes = preg_split('/\s+/', (string) $display_status['class'], -1, PREG_SPLIT_NO_EMPTY);
 
 				if ('viewing' === $status) {
-					return in_array($display_status['class'], array('is-active', 'is-viewing'), true);
+					return (bool) array_intersect($status_classes, array('is-active', 'is-viewing'));
 				}
 
 				if ('in_progress' === $status) {
-					return in_array($display_status['class'], array('is-in_progress', 'is-closed'), true);
+					return (bool) array_intersect($status_classes, array('is-in_progress', 'is-closed'));
 				}
 
-				return 'is-submitted' === $display_status['class'];
+				return in_array('is-submitted', $status_classes, true);
 			}
 		));
 	}
@@ -384,7 +461,7 @@ if (! function_exists('fbks_render_proofing_sessions_list')) {
 								</td>
 								<td><?php fbks_render_proofing_sessions_summary($session['counts']); ?></td>
 								<td><?php echo esc_html($session['updatedAt'] ? mysql2date(get_option('date_format') . ' ' . get_option('time_format'), $session['updatedAt']) : __('Unknown', 'folioblocks')); ?></td>
-								<td>
+								<td class="fbks-proofing-session-actions">
 									<a class="button button-primary" href="<?php echo esc_url($view_url); ?>"><?php esc_html_e('Review', 'folioblocks'); ?></a>
 									<?php echo fbks_get_proofing_session_delete_form($session['id'], $base_url); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 								</td>
@@ -452,6 +529,7 @@ if (! function_exists('fbks_render_proofing_session_detail')) {
 							<?php
 							$attachment_id = ! empty($image['attachmentId']) ? absint($image['attachmentId']) : 0;
 							$image_url = ! empty($image['thumbnail']) ? esc_url($image['thumbnail']) : '';
+							$filename = fbks_get_proofing_attachment_filename($attachment_id);
 							$media_url = $attachment_id ? get_edit_post_link($attachment_id) : '';
 							?>
 							<tr>
@@ -463,6 +541,9 @@ if (! function_exists('fbks_render_proofing_session_detail')) {
 									</span>
 									<div>
 										<strong><?php echo esc_html($image['title'] ?: __('Untitled image', 'folioblocks')); ?></strong>
+										<?php if ($filename) : ?>
+											<span class="fbks-proofing-image-filename"><?php echo esc_html($filename); ?></span>
+										<?php endif; ?>
 										<?php if ($media_url) : ?>
 											<a href="<?php echo esc_url($media_url); ?>"><?php esc_html_e('Open Media', 'folioblocks'); ?></a>
 										<?php endif; ?>

@@ -4,6 +4,10 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2026-08-04
+### Changed
+- Refinements to the Proofing Session page. 
+
 ## [1.5.0] - 2026-07-28
 ### Added
 - Added Proofing Gallery light and dark UI modes for the filter bar, flag popovers, and comment popovers.
@@ -99,7 +103,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added live watermark previews with aspect-ratio preview buttons and a larger modal preview.
 - Added Pro Watermark Overlay controls for Image Block and image gallery blocks, with editor previews and frontend rendering on gallery images, lightbox images, or both.
 - Added a Pro page-level Disable Drag To Save control for compatible FolioBlocks media.
-- Added Wistia, Dailymotion, VideoPress, Loom, and Cloudflare Stream support to Video Block and Video Gallery embeds.
+- Added Pro support for Bunny Stream, Cloudflare Stream, DailyMotion, Loom, VideoPress, and Wistia to Video Block and Video Gallery embeds.
 - Added Social Media Sharing controls for Image Block and image gallery lightboxes and hover overlays.
 - Added a FolioBlocks blue editor icon cue with tooltip for Image Blocks that have per-image gallery overrides enabled.
 

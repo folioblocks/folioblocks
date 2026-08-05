@@ -300,6 +300,13 @@
 	white-space: nowrap;
 }
 
+.fbks-proofing-session-actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+}
+
 .fbks-proofing-delete-form,
 .fbks-proofing-detail-actions__right {
 	display: inline-flex;
@@ -309,7 +316,7 @@
 }
 
 .fbks-proofing-session-table .fbks-proofing-delete-form {
-	margin-left: 8px;
+	margin-left: 0;
 }
 
 .fbks-proofing-detail-actions {
@@ -345,20 +352,31 @@
 }
 
 .fbks-proofing-status-badge.is-active {
-	background: #00a32a;
-	color: #fff;
+	background: #f0b849;
+	color: #1d2327;
 }
 
 .fbks-proofing-status-badge.is-in_progress {
 	background: #f0b849;
+	color: #1d2327;
 }
 
 .fbks-proofing-status-badge.is-viewing {
-	background: #72aee6;
-	color: #0a4b78;
+	background: #f0b849;
+	color: #1d2327;
 }
 
 .fbks-proofing-status-badge.is-closed {
+	background: #dcdcde;
+	color: #1d2327;
+}
+
+.fbks-proofing-status-badge.is-saved-closed {
+	background: #f6e2a0;
+	color: #1d2327;
+}
+
+.fbks-proofing-status-badge.is-window-closed {
 	background: #dcdcde;
 	color: #1d2327;
 }
@@ -440,6 +458,14 @@
 .fbks-proofing-image-cell div {
 	display: grid;
 	gap: 4px;
+}
+
+.fbks-proofing-image-filename {
+	color: var(--fbks-muted);
+	font-family: Consolas, Monaco, monospace;
+	font-size: 12px;
+	line-height: 1.4;
+	overflow-wrap: anywhere;
 }
 
 .fbks-proofing-image-cell a {

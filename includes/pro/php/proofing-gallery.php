@@ -561,7 +561,7 @@ function fbks_register_proofing_session_rest_routes() {
 }
 add_action( 'rest_api_init', 'fbks_register_proofing_session_rest_routes' );
 
-function fbks_get_in_progress_proofing_sessions_by_page_ids( $page_ids ) {
+function fbks_get_proofing_sessions_by_page_ids( $page_ids ) {
 	global $wpdb;
 
 	$page_ids = array_values( array_filter( array_map( 'absint', (array) $page_ids ) ) );
@@ -600,7 +600,7 @@ function fbks_get_in_progress_proofing_sessions_by_page_ids( $page_ids ) {
 			AND last_seen_meta.meta_key = '_fbks_proofing_last_seen_at'
 		WHERE p.post_type = %s
 			AND p.post_status NOT IN ( 'trash', 'auto-draft' )
-			AND status_meta.meta_value IN ( 'viewing', 'in_progress' )
+			AND status_meta.meta_value IN ( 'viewing', 'in_progress', 'submitted' )
 			AND page_meta.meta_value IN ( {$placeholders} )
 		ORDER BY p.ID DESC",
 		array_merge( [ FBKS_PROOFING_SESSION_POST_TYPE ], $page_ids )
@@ -629,6 +629,10 @@ function fbks_get_in_progress_proofing_sessions_by_page_ids( $page_ids ) {
 	return $sessions;
 }
 
+function fbks_get_in_progress_proofing_sessions_by_page_ids( $page_ids ) {
+	return fbks_get_proofing_sessions_by_page_ids( $page_ids );
+}
+
 function fbks_prime_proofing_sessions_for_admin_list( $posts ) {
 	if ( ! is_admin() || ! fbks_can_use_proofing_sessions() ) {
 		return $posts;
@@ -640,7 +644,7 @@ function fbks_prime_proofing_sessions_for_admin_list( $posts ) {
 		return $posts;
 	}
 
-	$GLOBALS['fbks_admin_list_proofing_sessions'] = fbks_get_in_progress_proofing_sessions_by_page_ids(
+	$GLOBALS['fbks_admin_list_proofing_sessions'] = fbks_get_proofing_sessions_by_page_ids(
 		wp_list_pluck( $posts, 'ID' )
 	);
 
@@ -676,7 +680,7 @@ function fbks_render_proofing_session_admin_column( $column_name, $post_id ) {
 	$sessions = $GLOBALS['fbks_admin_list_proofing_sessions'][ $post_id ] ?? null;
 
 	if ( null === $sessions ) {
-		$sessions = fbks_get_in_progress_proofing_sessions_by_page_ids( [ $post_id ] )[ $post_id ] ?? [];
+		$sessions = fbks_get_proofing_sessions_by_page_ids( [ $post_id ] )[ $post_id ] ?? [];
 	}
 
 	if ( empty( $sessions ) ) {
@@ -688,22 +692,31 @@ function fbks_render_proofing_session_admin_column( $column_name, $post_id ) {
 	$client_email = $session['clientEmail'] ?: __( 'Client', 'folioblocks' );
 	$updated_at   = $session['updatedAt'] ? mysql2date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $session['updatedAt'] ) : '';
 	$last_seen_ts = ! empty( $session['lastSeenAt'] ) ? strtotime( $session['lastSeenAt'] ) : 0;
-	$is_active    = 'active' === $session['presence'] && $last_seen_ts && ( time() - $last_seen_ts ) <= FBKS_PROOFING_ACTIVE_WINDOW_SECONDS;
+	$is_active    = 'submitted' !== $session['status'] && 'active' === $session['presence'] && $last_seen_ts && ( time() - $last_seen_ts ) <= FBKS_PROOFING_ACTIVE_WINDOW_SECONDS;
 	$badge_class  = 'fbks-proofing-admin-badge';
 	$badge_label  = __( 'In session', 'folioblocks' );
+	$badge_title  = __( 'A proofing session is active or unfinished. Avoid updating this page until the client submits their selections.', 'folioblocks' );
 
 	if ( $is_active ) {
 		$badge_class .= ' is-active';
 		$badge_label  = __( 'Viewing Now', 'folioblocks' );
+	} elseif ( 'submitted' === $session['status'] ) {
+		$badge_class .= ' is-submitted';
+		$badge_label  = __( 'Submitted', 'folioblocks' );
+		$badge_title  = __( 'The client has submitted this proofing session.', 'folioblocks' );
 	} elseif ( 'closed' === $session['presence'] ) {
-		$badge_class .= ' is-closed';
-		$badge_label  = 'in_progress' === $session['status'] ? __( 'Saved, closed', 'folioblocks' ) : __( 'Window closed', 'folioblocks' );
+		$is_saved     = 'in_progress' === $session['status'];
+		$badge_class .= $is_saved ? ' is-closed is-saved-closed' : ' is-closed is-window-closed';
+		$badge_label  = $is_saved ? __( 'In Progress', 'folioblocks' ) : __( 'Window Closed', 'folioblocks' );
 	} elseif ( 'viewing' === $session['status'] ) {
-		$badge_class .= ' is-idle';
-		$badge_label  = __( 'Recently viewed', 'folioblocks' );
+		$badge_class .= ' is-viewing';
+		$badge_label  = __( 'Viewing', 'folioblocks' );
+	} elseif ( 'in_progress' === $session['status'] ) {
+		$badge_class .= ' is-in_progress';
+		$badge_label  = __( 'In Progress', 'folioblocks' );
 	}
 
-	echo '<span class="' . esc_attr( $badge_class ) . '" title="' . esc_attr__( 'A proofing session is active or unfinished. Avoid updating this page until the client submits their selections.', 'folioblocks' ) . '">';
+	echo '<span class="' . esc_attr( $badge_class ) . '" title="' . esc_attr( $badge_title ) . '">';
 	echo esc_html( $badge_label );
 	echo '</span>';
 	echo '<span class="fbks-proofing-admin-meta">';
@@ -748,12 +761,32 @@ function fbks_render_proofing_session_admin_column_styles() {
 		}
 
 		.fbks-proofing-admin-badge.is-active {
+			background: #f0b849;
+			color: #1d2327;
+		}
+
+		.fbks-proofing-admin-badge.is-viewing,
+		.fbks-proofing-admin-badge.is-in_progress {
+			background: #f0b849;
+			color: #1d2327;
+		}
+
+		.fbks-proofing-admin-badge.is-submitted {
 			background: #00a32a;
 			color: #fff;
 		}
 
-		.fbks-proofing-admin-badge.is-closed,
-		.fbks-proofing-admin-badge.is-idle {
+		.fbks-proofing-admin-badge.is-closed {
+			background: #dcdcde;
+			color: #1d2327;
+		}
+
+		.fbks-proofing-admin-badge.is-saved-closed {
+			background: #f6e2a0;
+			color: #1d2327;
+		}
+
+		.fbks-proofing-admin-badge.is-window-closed {
 			background: #dcdcde;
 			color: #1d2327;
 		}

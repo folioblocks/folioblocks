@@ -382,7 +382,7 @@ if (! function_exists('fbks_render_watermark_fields')) {
 						<button type="button" class="button pb-watermark-remove-media"><?php esc_html_e('Remove', 'folioblocks'); ?></button>
 					</div>
 					<p class="pb-settings-field-help">
-						<?php esc_html_e('Use a transparent PNG or WebP where possible. WordPress accepts the image formats allowed by your Media Library; SVG uploads are not supported by default unless your site explicitly enables them.', 'folioblocks'); ?>
+						<?php esc_html_e('Use a transparent PNG or WebP where possible. Accepts the image formats allowed by your WordPress Media Library; SVG uploads are not supported by default unless your site explicitly enables them.', 'folioblocks'); ?>
 					</p>
 				</div>
 

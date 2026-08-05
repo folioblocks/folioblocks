@@ -5,17 +5,64 @@
  * - YouTube
  * - Vimeo
  * - Bunny.net Stream (embed/play URLs)
- * - Wistia
- * - Dailymotion
- * - VideoPress
- * - Loom
  * - Cloudflare Stream
+ * - DailyMotion
+ * - Loom
+ * - VideoPress
+ * - Wistia
  */
 import { isValidHttpUrl } from './urlValidation';
 
 const YOUTUBE_ID_FALLBACK = /^[a-zA-Z0-9_-]+$/;
 const VIMEO_ID_FALLBACK = /^\d+$/;
 const EMBED_ID_FALLBACK = /^[a-zA-Z0-9_-]+$/;
+const PREMIUM_IFRAME_PROVIDERS = [
+	'bunny',
+	'wistia',
+	'dailymotion',
+	'videopress',
+	'loom',
+	'cloudflare',
+];
+
+const PROVIDER_LABELS = {
+	self: 'Video',
+	youtube: 'YouTube',
+	vimeo: 'Vimeo',
+	bunny: 'Bunny Stream',
+	cloudflare: 'Cloudflare Stream',
+	dailymotion: 'DailyMotion',
+	loom: 'Loom',
+	videopress: 'VideoPress',
+	wistia: 'Wistia',
+	unsupported: 'Video',
+};
+
+export const isPremiumVideoProvider = ( provider ) =>
+	PREMIUM_IFRAME_PROVIDERS.includes( provider );
+
+const canUsePremiumVideoProviders = ( { isPro } = {} ) => {
+	if ( typeof isPro === 'boolean' ) {
+		return isPro;
+	}
+
+	return !! globalThis?.folioBlocksData?.isPro;
+};
+
+const maybeGatePremiumProvider = ( data, options = {} ) => {
+	if (
+		! isPremiumVideoProvider( data.provider ) ||
+		canUsePremiumVideoProviders( options )
+	) {
+		return data;
+	}
+
+	return {
+		provider: 'unsupported',
+		unsupportedProvider: data.provider,
+		parsedUrl: data.parsedUrl,
+	};
+};
 
 const tryParseUrl = ( rawUrl ) => {
 	if ( ! rawUrl || typeof rawUrl !== 'string' ) {
@@ -205,7 +252,7 @@ const copySearchParams = ( sourceUrl, targetUrl ) => {
 	} );
 };
 
-export const getVideoProviderData = ( videoUrl ) => {
+export const getVideoProviderData = ( videoUrl, options = {} ) => {
 	const parsedUrl = tryParseUrl( videoUrl );
 	if ( ! parsedUrl ) {
 		return { provider: 'self', parsedUrl: null };
@@ -238,26 +285,32 @@ export const getVideoProviderData = ( videoUrl ) => {
 	) {
 		const ids = getBunnyStreamIds( parsedUrl );
 		if ( ids?.libraryId && ids?.videoId ) {
-			return {
+			return maybeGatePremiumProvider( {
 				provider: 'bunny',
 				libraryId: ids.libraryId,
 				videoId: ids.videoId,
 				parsedUrl,
-			};
+			}, options );
 		}
 	}
 
 	if ( host.includes( 'wistia.com' ) || host.includes( 'wistia.net' ) ) {
 		const videoId = getWistiaId( parsedUrl );
 		if ( videoId && EMBED_ID_FALLBACK.test( videoId ) ) {
-			return { provider: 'wistia', videoId, parsedUrl };
+			return maybeGatePremiumProvider(
+				{ provider: 'wistia', videoId, parsedUrl },
+				options
+			);
 		}
 	}
 
 	if ( host.includes( 'dailymotion.com' ) || host.includes( 'dai.ly' ) ) {
 		const videoId = getDailymotionId( parsedUrl );
 		if ( videoId && EMBED_ID_FALLBACK.test( videoId ) ) {
-			return { provider: 'dailymotion', videoId, parsedUrl };
+			return maybeGatePremiumProvider(
+				{ provider: 'dailymotion', videoId, parsedUrl },
+				options
+			);
 		}
 	}
 
@@ -267,14 +320,20 @@ export const getVideoProviderData = ( videoUrl ) => {
 	) {
 		const videoId = getVideoPressId( parsedUrl );
 		if ( videoId && EMBED_ID_FALLBACK.test( videoId ) ) {
-			return { provider: 'videopress', videoId, parsedUrl };
+			return maybeGatePremiumProvider(
+				{ provider: 'videopress', videoId, parsedUrl },
+				options
+			);
 		}
 	}
 
 	if ( host.includes( 'loom.com' ) ) {
 		const videoId = getLoomId( parsedUrl );
 		if ( videoId && EMBED_ID_FALLBACK.test( videoId ) ) {
-			return { provider: 'loom', videoId, parsedUrl };
+			return maybeGatePremiumProvider(
+				{ provider: 'loom', videoId, parsedUrl },
+				options
+			);
 		}
 	}
 
@@ -284,47 +343,32 @@ export const getVideoProviderData = ( videoUrl ) => {
 	) {
 		const videoId = getCloudflareStreamId( parsedUrl );
 		if ( videoId && EMBED_ID_FALLBACK.test( videoId ) ) {
-			return { provider: 'cloudflare', videoId, parsedUrl };
+			return maybeGatePremiumProvider(
+				{ provider: 'cloudflare', videoId, parsedUrl },
+				options
+			);
 		}
 	}
 
 	return { provider: 'self', parsedUrl };
 };
 
-export const getVideoProviderLabel = ( videoUrl ) => {
-	const { provider } = getVideoProviderData( videoUrl );
-	if ( provider === 'youtube' ) {
-		return 'YouTube';
-	}
-	if ( provider === 'vimeo' ) {
-		return 'Vimeo';
-	}
-	if ( provider === 'bunny' ) {
-		return 'Bunny Stream';
-	}
-	if ( provider === 'wistia' ) {
-		return 'Wistia';
-	}
-	if ( provider === 'dailymotion' ) {
-		return 'Dailymotion';
-	}
-	if ( provider === 'videopress' ) {
-		return 'VideoPress';
-	}
-	if ( provider === 'loom' ) {
-		return 'Loom';
-	}
-	if ( provider === 'cloudflare' ) {
-		return 'Cloudflare Stream';
-	}
-	return 'Video';
+export const getVideoProviderLabel = ( videoUrl, options = {} ) => {
+	const { provider, unsupportedProvider } = getVideoProviderData(
+		videoUrl,
+		options
+	);
+	return (
+		PROVIDER_LABELS[ unsupportedProvider || provider ] ||
+		PROVIDER_LABELS.self
+	);
 };
 
 export const getVideoIframeSrc = (
 	videoUrl,
-	{ autoplay = false, preferNoCookie = false } = {}
+	{ autoplay = false, preferNoCookie = false, isPro } = {}
 ) => {
-	const data = getVideoProviderData( videoUrl );
+	const data = getVideoProviderData( videoUrl, { isPro } );
 
 	if ( data.provider === 'youtube' ) {
 		const base = preferNoCookie

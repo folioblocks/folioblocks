@@ -37,6 +37,7 @@ import {
 import { isValidHttpUrl } from "../pb-helpers/urlValidation";
 import ProFeatureNotice from "../pb-helpers/ProFeatureNotice";
 import { resolveGalleryGaps } from "../pb-helpers/galleryGap";
+import { getVideoProviderData } from "../pb-helpers/videoProviders";
 import "./editor.scss";
 
 const getOverlayContent = (titleVisibility, playButtonVisibility, showCategory) => {
@@ -141,9 +142,14 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 	// Local state for filter input field
 
 	const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+	const isPro = !!window.folioBlocksData?.isPro;
 	const validateVideoUrl = (url) => {
 		const trimmedUrl = typeof url === "string" ? url.trim() : "";
 		if (isValidHttpUrl(trimmedUrl)) {
+			const providerData = getVideoProviderData(trimmedUrl, { isPro });
+			if (providerData.provider === "unsupported") {
+				return "";
+			}
 			return trimmedUrl;
 		}
 		return "";
@@ -332,7 +338,6 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 	);
 
 	if (innerBlocks.length === 0) {
-		const isPro = !!window.folioBlocksData?.isPro;
 		return (
 			<div {...blockProps}>
 				<MediaPlaceholder

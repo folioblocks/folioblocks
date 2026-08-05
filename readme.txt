@@ -35,7 +35,7 @@ The free version includes the core gallery and media blocks. **FolioBlocks Pro**
 * **Modular Gallery Block (Pro Only)** – Build custom, magazine-style image layouts
 * **Proofing Gallery Block (Business & Agency Plans Only)** - Let clients review images, make selections, flag favorites, and leave comments
 * **Video Block** - Display a single video with custom thumbnail, lightbox playback, captions, and optional WooCommerce linking
-* **Video Gallery Block** – Showcase YouTube, Vimeo, Bunny.net Stream, Wistia, Dailymotion, VideoPress, Loom, Cloudflare Stream, or self-hosted videos
+* **Video Gallery Block** – Showcase YouTube, Vimeo, or self-hosted videos, with Pro support for Bunny.net Stream, Cloudflare Stream, DailyMotion, Loom, VideoPress, and Wistia
 
 = Core Gallery Features =
 
@@ -135,7 +135,7 @@ No, the galleries will remain in place on your site. However, the **advanced lay
 * Added optional Lightbox Image Counter and Zoom features.
 * Added Social Media Sharing in Lightboxes and Overlays.
 * Added Disable Drag To Save feature in Page/Post settings for all galleries. 
-* Added Wistia, Dailymotion, VideoPress, Loom, and Cloudflare Stream support to Video Block and Video Gallery embeds.
+* Added Pro support for Bunny Stream, Cloudflare Stream, DailyMotion, Loom, VideoPress, and Wistia to Video Block and Video Gallery embeds.
 * Added full Gradient Overlay support for Image Block, Video Block, image galleries, & Video Gallery.
 * Added Hover Effect controls with Zoom In, Zoom Out, Lift, Tilt, Pop, Glare, Pan, and Desaturate effects.
 * Added Overlay Entrance controls for supported overlays, including fade and slide directions.
