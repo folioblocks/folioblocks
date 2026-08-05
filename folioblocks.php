@@ -500,7 +500,7 @@ if (function_exists('fbks_fs')) {
                 'fbks_render_proofing_sessions_page'
             );
         }
-        if ( fbks_fs()->can_use_premium_code__premium_only()) {
+        if (! fbks_fs()->can_use_premium_code__premium_only()) {
             add_submenu_page(
                 'folioblocks-settings',
                 __('Free vs Pro', 'folioblocks'),
