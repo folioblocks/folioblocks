@@ -7,9 +7,9 @@ if (! function_exists('fbks_can_manage_proofing_sessions')) {
 	function fbks_can_manage_proofing_sessions()
 	{
 		return current_user_can('manage_options') &&
-			function_exists('fbks_fs') &&
-			fbks_fs()->can_use_premium_code__premium_only() &&
-			fbks_fs()->is_plan('business');
+				function_exists('fbks_fs') &&
+				fbks_fs()->can_use_premium_code__premium_only() &&
+				(fbks_fs()->is_plan('business') || fbks_fs()->is_plan('agency'));
 	}
 }
 

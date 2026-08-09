@@ -140,7 +140,7 @@ const getOverlayContentAttributes = (content, visibility) => ({
 });
 
 // Function to support iframe provider and self-hosted video previews.
-function getVideoEmbedMarkup(videoUrl, youtubeEmbedPreview, isPro = false) {
+function getVideoEmbedMarkup(videoUrl, videoEmbedPreview, isPro = false) {
 	if (!videoUrl) {
 		return null;
 	}
@@ -148,26 +148,37 @@ function getVideoEmbedMarkup(videoUrl, youtubeEmbedPreview, isPro = false) {
 	const providerData = getVideoProviderData(videoUrl, { isPro });
 	const providerLabel = getVideoProviderLabel(videoUrl, { isPro });
 
-	if (providerData.provider === "youtube") {
-		if (youtubeEmbedPreview?.html) {
+	if (
+		providerData.provider === "youtube" ||
+		providerData.provider === "dailymotion"
+	) {
+		if (videoEmbedPreview?.html) {
 			return (
 				<SandBox
 					allowSameOrigin
-					html={youtubeEmbedPreview.html}
-					scripts={youtubeEmbedPreview.scripts}
+					html={videoEmbedPreview.html}
+					scripts={videoEmbedPreview.scripts}
 					title={`${providerLabel} Video`}
 					type="video wp-has-aspect-ratio"
 				/>
 			);
 		}
 
-		if (youtubeEmbedPreview === false) {
-			return (
-				<Notice status="warning" isDismissible={false}>
-					{__(
+		if (videoEmbedPreview === false) {
+			const message =
+				providerData.provider === "dailymotion"
+					? __(
+						"DailyMotion could not be previewed in the editor. The video will still play on the published page.",
+						"folioblocks",
+					)
+					: __(
 						"YouTube could not be previewed in the editor. The video will still play on the published page.",
 						"folioblocks",
-					)}
+					);
+
+			return (
+				<Notice status="warning" isDismissible={false}>
+					{message}
 				</Notice>
 			);
 		}
@@ -271,7 +282,6 @@ export default function Edit({ attributes, setAttributes, context }) {
 				: undefined,
 		[isOEmbedVideo, videoUrl],
 	);
-	const youtubeEmbedPreview = isYouTubeVideo ? videoEmbedPreview : undefined;
 
 	useEffect(() => {
 		const width = Number(videoEmbedPreview?.width) || 0;
@@ -1267,14 +1277,14 @@ export default function Edit({ attributes, setAttributes, context }) {
 
 							{effectiveLightboxLayout === "video-only" && (
 								<div className="pb-video-lightbox-video">
-									{getVideoEmbedMarkup(videoUrl, youtubeEmbedPreview, isPro)}
+									{getVideoEmbedMarkup(videoUrl, videoEmbedPreview, isPro)}
 								</div>
 							)}
 
 							{effectiveLightboxLayout === "split" && (
 								<>
 									<div className="pb-video-lightbox-video">
-										{getVideoEmbedMarkup(videoUrl, youtubeEmbedPreview, isPro)}
+										{getVideoEmbedMarkup(videoUrl, videoEmbedPreview, isPro)}
 									</div>
 									<div className="pb-video-lightbox-info">
 										{title && <h2 className="lightbox-title">{title}</h2>}
@@ -1292,7 +1302,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 								lightboxLayout: effectiveLightboxLayout,
 								enableWooCommerce,
 								getVideoEmbedMarkup: (url) =>
-									getVideoEmbedMarkup(url, youtubeEmbedPreview, isPro),
+									getVideoEmbedMarkup(url, videoEmbedPreview, isPro),
 								title,
 								description,
 								__,

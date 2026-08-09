@@ -952,6 +952,21 @@
 	box-shadow: 0 16px 28px rgba(15, 23, 42, 0.2), 0 0 0 1px rgba(39, 102, 236, 0.22);
 }
 
+.pb-block-item.is-unavailable {
+	background:
+		linear-gradient(180deg, rgba(148, 163, 184, 0.18), rgba(100, 116, 139, 0.05)),
+		linear-gradient(180deg, #334155, #1f2937);
+	border-color: rgba(148, 163, 184, 0.24);
+	box-shadow: none;
+	opacity: 0.72;
+}
+
+.pb-block-item.is-unavailable:hover {
+	transform: none;
+	border-color: rgba(148, 163, 184, 0.34);
+	box-shadow: none;
+}
+
 .pb-pro-block:hover {
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.07) !important;
 	transform: none;
@@ -965,6 +980,11 @@
 	border-radius: 8px;
 	background: linear-gradient(135deg, #2766ec, #3b82f6);
 	box-shadow: 0 8px 18px rgba(39, 102, 236, 0.24), inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+.pb-block-item.is-unavailable .pb-block-icon {
+	background: linear-gradient(135deg, #64748b, #475569);
+	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
 }
 
 .pb-block-item svg {
@@ -1016,6 +1036,12 @@
 .pb-block-item a:hover {
 	color: #fff;
 	text-decoration: none;
+}
+
+.pb-block-item .pb-upgrade-link {
+	color: #fff;
+	text-decoration: underline;
+	text-underline-offset: 2px;
 }
 
 .pb-pro-badge {

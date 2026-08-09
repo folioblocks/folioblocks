@@ -186,6 +186,11 @@ const getDailymotionId = ( parsedUrl ) => {
 		return cleanDailymotionId( parts[ 0 ] );
 	}
 
+	const byQuery = cleanDailymotionId( parsedUrl.searchParams.get( 'video' ) );
+	if ( byQuery ) {
+		return byQuery;
+	}
+
 	const markerIndex = parts.findIndex( ( part ) =>
 		[ 'embed', 'video' ].includes( part )
 	);
@@ -428,12 +433,13 @@ export const getVideoIframeSrc = (
 	}
 
 	if ( data.provider === 'dailymotion' ) {
-		const embedUrl = new URL(
-			`https://www.dailymotion.com/embed/video/${ data.videoId }`
-		);
+		const embedUrl = new URL( 'https://geo.dailymotion.com/player.html' );
 		copySearchParams( data.parsedUrl, embedUrl );
+		embedUrl.searchParams.set( 'video', data.videoId );
 		if ( autoplay ) {
 			embedUrl.searchParams.set( 'autoplay', '1' );
+		} else {
+			embedUrl.searchParams.delete( 'autoplay' );
 		}
 		return embedUrl.toString();
 	}

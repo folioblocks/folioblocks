@@ -3,7 +3,7 @@
 /**
  * Plugin Name:       FolioBlocks
  * Description:       Create fast, responsive photo and video gallery with grid, masonry, justified, modular, and carousel layouts—ideal for photographers and creatives.
- * Version:           1.5.0-beta.2
+ * Version:           1.5.0-beta.3
  * Requires at least: 6.5
  * Requires PHP:      7.4
  * Author:            FolioBlocks
@@ -22,7 +22,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FBKS_VERSION', '1.5.0-beta.2');
+define('FBKS_VERSION', '1.5.0-beta.3');
 define('FBKS_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('FBKS_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('FBKS_ALL_FILTER_TOKEN', 'all');
@@ -225,7 +225,7 @@ if (function_exists('fbks_fs')) {
 
         if (fbks_fs()->can_use_premium_code()) {
             $block_directories[] = __DIR__ . '/build/modular-gallery-block';
-            if (fbks_fs()->is_plan('business')) {
+            if (fbks_fs()->is_plan('business') || fbks_fs()->is_plan('agency')) {
                 $block_directories[] = __DIR__ . '/build/proofing-gallery-block';
             }
             $block_directories[] = __DIR__ . '/build/pb-image-row';
@@ -490,7 +490,7 @@ if (function_exists('fbks_fs')) {
                 'fbks_render_global_settings_page'
             );
         }
-        if (fbks_fs()->can_use_premium_code__premium_only() && fbks_fs()->is_plan('business')) {
+        if (fbks_fs()->can_use_premium_code__premium_only() && (fbks_fs()->is_plan('business') || fbks_fs()->is_plan('agency'))) {
             add_submenu_page(
                 'folioblocks-settings',
                 __('Proofing Sessions', 'folioblocks'),
@@ -536,7 +536,7 @@ if (function_exists('fbks_fs')) {
     if (fbks_fs()->can_use_premium_code__premium_only()) {
         require_once plugin_dir_path(__FILE__) . 'includes/pro/admin/global-settings.php';
     }
-    if (fbks_fs()->can_use_premium_code__premium_only() && fbks_fs()->is_plan('business')) {
+    if (fbks_fs()->can_use_premium_code__premium_only() && (fbks_fs()->is_plan('business') || fbks_fs()->is_plan('agency'))) {
         require_once plugin_dir_path(__FILE__) . 'includes/pro/admin/proofing-sessions.php';
     }
     require_once plugin_dir_path(__FILE__) . 'includes/admin/system-info.php';

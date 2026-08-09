@@ -42,6 +42,8 @@ $fbks_overlay_entrance_class = '';
 $fbks_hover_style = '';
 $fbks_hide_unknown_exif = ! empty( $attributes['hideUnknownExifFields'] );
 $fbks_woo_active = false;
+$fbks_social_sources = [];
+$fbks_social_sharing_enabled = false;
 $fbks_is_custom_icon_color = static function ( $fbks_value, $fbks_default ) {
 	if ( ! is_string( $fbks_value ) || '' === trim( $fbks_value ) ) {
 		return false;
@@ -54,6 +56,31 @@ $fbks_enable_fullscreen = $fbks_can_use_premium && ! empty( $attributes['enableF
 $fbks_image_click_action = '';
 $fbks_image_click_target = 'icon';
 $fbks_link_icon_display = 'hover';
+$fbks_premium_css_color = static function ( $fbks_value, $fbks_fallback = '' ) use ( $fbks_can_use_premium ) {
+	return $fbks_can_use_premium && function_exists( 'fbks_sanitize_css_color_value' )
+		? fbks_sanitize_css_color_value( (string) $fbks_value )
+		: $fbks_fallback;
+};
+$fbks_premium_css_background = static function ( $fbks_value, $fbks_fallback = '' ) use ( $fbks_can_use_premium ) {
+	return $fbks_can_use_premium && function_exists( 'fbks_sanitize_css_background_value' )
+		? fbks_sanitize_css_background_value( (string) $fbks_value )
+		: $fbks_fallback;
+};
+$fbks_premium_css_font_family = static function ( $fbks_value ) use ( $fbks_can_use_premium ) {
+	return $fbks_can_use_premium && function_exists( 'fbks_sanitize_css_font_family_value' )
+		? fbks_sanitize_css_font_family_value( (string) $fbks_value )
+		: '';
+};
+$fbks_premium_css_font_weight = static function ( $fbks_value ) use ( $fbks_can_use_premium ) {
+	return $fbks_can_use_premium && function_exists( 'fbks_sanitize_css_font_weight_value' )
+		? fbks_sanitize_css_font_weight_value( (string) $fbks_value )
+		: '';
+};
+$fbks_premium_css_font_style = static function ( $fbks_value ) use ( $fbks_can_use_premium ) {
+	return $fbks_can_use_premium && function_exists( 'fbks_sanitize_css_font_style_value' )
+		? fbks_sanitize_css_font_style_value( (string) $fbks_value )
+		: '';
+};
 
 if ( $fbks_can_use_premium ) {
 	$fbks_image_click_action = sanitize_key( $attributes['imageClickAction'] ?? '' );
@@ -391,15 +418,15 @@ if ( is_array( $fbks_inner_blocks ) && ! empty( $fbks_inner_blocks ) ) {
 			'hoverEffect'      => isset( $fbks_image_attrs['hoverEffect'] ) ? sanitize_key( $fbks_image_attrs['hoverEffect'] ) : 'none',
 			'overlayEntrance'  => isset( $fbks_image_attrs['overlayEntrance'] ) ? sanitize_key( $fbks_image_attrs['overlayEntrance'] ) : 'default',
 			'overlayContent'   => isset( $fbks_image_attrs['overlayContent'] ) ? (string) $fbks_image_attrs['overlayContent'] : 'title',
-			'overlayBgColor'    => fbks_sanitize_css_color_value( isset( $fbks_image_attrs['overlayBgColor'] ) ? (string) $fbks_image_attrs['overlayBgColor'] : '#f9f9f9' ),
-			'overlayBgGradient' => fbks_sanitize_css_background_value( isset( $fbks_image_attrs['overlayBgGradient'] ) ? (string) $fbks_image_attrs['overlayBgGradient'] : '' ),
-			'overlayTextColor' => fbks_sanitize_css_color_value( isset( $fbks_image_attrs['overlayTextColor'] ) ? (string) $fbks_image_attrs['overlayTextColor'] : '#000000' ),
-			'overlayFontFamily' => fbks_sanitize_css_font_family_value( isset( $fbks_image_attrs['overlayFontFamily'] ) ? (string) $fbks_image_attrs['overlayFontFamily'] : '' ),
-			'overlayFontWeight' => fbks_sanitize_css_font_weight_value( isset( $fbks_image_attrs['overlayFontWeight'] ) ? (string) $fbks_image_attrs['overlayFontWeight'] : '' ),
-			'overlayFontStyle'  => fbks_sanitize_css_font_style_value( isset( $fbks_image_attrs['overlayFontStyle'] ) ? (string) $fbks_image_attrs['overlayFontStyle'] : '' ),
-			'chipOverlayBgColor' => fbks_sanitize_css_background_value( isset( $fbks_image_attrs['chipOverlayBgColor'] ) ? (string) $fbks_image_attrs['chipOverlayBgColor'] : '#f9f9f9' ),
-			'chipOverlayBgGradient' => fbks_sanitize_css_background_value( isset( $fbks_image_attrs['chipOverlayBgGradient'] ) ? (string) $fbks_image_attrs['chipOverlayBgGradient'] : '' ),
-			'chipOverlayTextColor' => fbks_sanitize_css_color_value( isset( $fbks_image_attrs['chipOverlayTextColor'] ) ? (string) $fbks_image_attrs['chipOverlayTextColor'] : '#000000' ),
+			'overlayBgColor'    => $fbks_premium_css_color( $fbks_image_attrs['overlayBgColor'] ?? '#f9f9f9', '#f9f9f9' ),
+			'overlayBgGradient' => $fbks_premium_css_background( $fbks_image_attrs['overlayBgGradient'] ?? '' ),
+			'overlayTextColor' => $fbks_premium_css_color( $fbks_image_attrs['overlayTextColor'] ?? '#000000', '#000000' ),
+			'overlayFontFamily' => $fbks_premium_css_font_family( $fbks_image_attrs['overlayFontFamily'] ?? '' ),
+			'overlayFontWeight' => $fbks_premium_css_font_weight( $fbks_image_attrs['overlayFontWeight'] ?? '' ),
+			'overlayFontStyle'  => $fbks_premium_css_font_style( $fbks_image_attrs['overlayFontStyle'] ?? '' ),
+			'chipOverlayBgColor' => $fbks_premium_css_background( $fbks_image_attrs['chipOverlayBgColor'] ?? '#f9f9f9', '#f9f9f9' ),
+			'chipOverlayBgGradient' => $fbks_premium_css_background( $fbks_image_attrs['chipOverlayBgGradient'] ?? '' ),
+			'chipOverlayTextColor' => $fbks_premium_css_color( $fbks_image_attrs['chipOverlayTextColor'] ?? '#000000', '#000000' ),
 			'hideUnknownExifFields' => ! empty( $fbks_image_attrs['hideUnknownExifFields'] ),
 			'enableWooCommerce' => ! empty( $fbks_image_attrs['enableWooCommerce'] ),
 			'imageClickAction' => isset( $fbks_image_attrs['imageClickAction'] ) ? (string) $fbks_image_attrs['imageClickAction'] : '',
@@ -493,15 +520,15 @@ if ( empty( $fbks_images ) && ! empty( $attributes['images'] ) && is_array( $att
 			'hoverEffect'      => isset( $fbks_image['hoverEffect'] ) ? sanitize_key( $fbks_image['hoverEffect'] ) : 'none',
 			'overlayEntrance'  => isset( $fbks_image['overlayEntrance'] ) ? sanitize_key( $fbks_image['overlayEntrance'] ) : 'default',
 			'overlayContent'   => isset( $fbks_image['overlayContent'] ) ? (string) $fbks_image['overlayContent'] : 'title',
-			'overlayBgColor'    => fbks_sanitize_css_color_value( isset( $fbks_image['overlayBgColor'] ) ? (string) $fbks_image['overlayBgColor'] : '#f9f9f9' ),
-			'overlayBgGradient' => fbks_sanitize_css_background_value( isset( $fbks_image['overlayBgGradient'] ) ? (string) $fbks_image['overlayBgGradient'] : '' ),
-			'overlayTextColor' => fbks_sanitize_css_color_value( isset( $fbks_image['overlayTextColor'] ) ? (string) $fbks_image['overlayTextColor'] : '#000000' ),
-			'overlayFontFamily' => fbks_sanitize_css_font_family_value( isset( $fbks_image['overlayFontFamily'] ) ? (string) $fbks_image['overlayFontFamily'] : '' ),
-			'overlayFontWeight' => fbks_sanitize_css_font_weight_value( isset( $fbks_image['overlayFontWeight'] ) ? (string) $fbks_image['overlayFontWeight'] : '' ),
-			'overlayFontStyle'  => fbks_sanitize_css_font_style_value( isset( $fbks_image['overlayFontStyle'] ) ? (string) $fbks_image['overlayFontStyle'] : '' ),
-			'chipOverlayBgColor' => fbks_sanitize_css_background_value( isset( $fbks_image['chipOverlayBgColor'] ) ? (string) $fbks_image['chipOverlayBgColor'] : '#f9f9f9' ),
-			'chipOverlayBgGradient' => fbks_sanitize_css_background_value( isset( $fbks_image['chipOverlayBgGradient'] ) ? (string) $fbks_image['chipOverlayBgGradient'] : '' ),
-			'chipOverlayTextColor' => fbks_sanitize_css_color_value( isset( $fbks_image['chipOverlayTextColor'] ) ? (string) $fbks_image['chipOverlayTextColor'] : '#000000' ),
+			'overlayBgColor'    => $fbks_premium_css_color( $fbks_image['overlayBgColor'] ?? '#f9f9f9', '#f9f9f9' ),
+			'overlayBgGradient' => $fbks_premium_css_background( $fbks_image['overlayBgGradient'] ?? '' ),
+			'overlayTextColor' => $fbks_premium_css_color( $fbks_image['overlayTextColor'] ?? '#000000', '#000000' ),
+			'overlayFontFamily' => $fbks_premium_css_font_family( $fbks_image['overlayFontFamily'] ?? '' ),
+			'overlayFontWeight' => $fbks_premium_css_font_weight( $fbks_image['overlayFontWeight'] ?? '' ),
+			'overlayFontStyle'  => $fbks_premium_css_font_style( $fbks_image['overlayFontStyle'] ?? '' ),
+			'chipOverlayBgColor' => $fbks_premium_css_background( $fbks_image['chipOverlayBgColor'] ?? '#f9f9f9', '#f9f9f9' ),
+			'chipOverlayBgGradient' => $fbks_premium_css_background( $fbks_image['chipOverlayBgGradient'] ?? '' ),
+			'chipOverlayTextColor' => $fbks_premium_css_color( $fbks_image['chipOverlayTextColor'] ?? '#000000', '#000000' ),
 			'hideUnknownExifFields' => ! empty( $fbks_image['hideUnknownExifFields'] ),
 			'enableWooCommerce' => ! empty( $fbks_image['enableWooCommerce'] ),
 			'imageClickAction' => isset( $fbks_image['imageClickAction'] ) ? (string) $fbks_image['imageClickAction'] : '',
@@ -730,15 +757,15 @@ $fbks_data_payload = [
 		'onHoverStyle'           => $attributes['onHoverStyle'] ?? 'blur-overlay',
 		'hoverEffect'            => sanitize_key( $attributes['hoverEffect'] ?? 'none' ),
 		'overlayEntrance'        => sanitize_key( $attributes['overlayEntrance'] ?? 'default' ),
-		'overlayBgColor'         => fbks_sanitize_css_color_value( (string) ( $attributes['overlayBgColor'] ?? '#f9f9f9' ) ),
-		'overlayBgGradient'      => fbks_sanitize_css_background_value( (string) ( $attributes['overlayBgGradient'] ?? '' ) ),
-		'overlayTextColor'       => fbks_sanitize_css_color_value( (string) ( $attributes['overlayTextColor'] ?? '#000000' ) ),
-		'overlayFontFamily'      => fbks_sanitize_css_font_family_value( (string) ( $attributes['overlayFontFamily'] ?? '' ) ),
-		'overlayFontWeight'      => fbks_sanitize_css_font_weight_value( (string) ( $attributes['overlayFontWeight'] ?? '' ) ),
-		'overlayFontStyle'       => fbks_sanitize_css_font_style_value( (string) ( $attributes['overlayFontStyle'] ?? '' ) ),
-		'chipOverlayBgColor'     => fbks_sanitize_css_background_value( (string) ( $attributes['chipOverlayBgColor'] ?? '#f9f9f9' ) ),
-		'chipOverlayBgGradient'  => fbks_sanitize_css_background_value( (string) ( $attributes['chipOverlayBgGradient'] ?? '' ) ),
-		'chipOverlayTextColor'   => fbks_sanitize_css_color_value( (string) ( $attributes['chipOverlayTextColor'] ?? '#000000' ) ),
+		'overlayBgColor'         => $fbks_premium_css_color( $attributes['overlayBgColor'] ?? '#f9f9f9', '#f9f9f9' ),
+		'overlayBgGradient'      => $fbks_premium_css_background( $attributes['overlayBgGradient'] ?? '' ),
+		'overlayTextColor'       => $fbks_premium_css_color( $attributes['overlayTextColor'] ?? '#000000', '#000000' ),
+		'overlayFontFamily'      => $fbks_premium_css_font_family( $attributes['overlayFontFamily'] ?? '' ),
+		'overlayFontWeight'      => $fbks_premium_css_font_weight( $attributes['overlayFontWeight'] ?? '' ),
+		'overlayFontStyle'       => $fbks_premium_css_font_style( $attributes['overlayFontStyle'] ?? '' ),
+		'chipOverlayBgColor'     => $fbks_premium_css_background( $attributes['chipOverlayBgColor'] ?? '#f9f9f9', '#f9f9f9' ),
+		'chipOverlayBgGradient'  => $fbks_premium_css_background( $attributes['chipOverlayBgGradient'] ?? '' ),
+		'chipOverlayTextColor'   => $fbks_premium_css_color( $attributes['chipOverlayTextColor'] ?? '#000000', '#000000' ),
 		'enableDownload'         => $fbks_enable_download,
 		'downloadOnHover'        => $fbks_download_on_hover,
 		'downloadIconColor'      => $attributes['downloadIconColor'] ?? '',

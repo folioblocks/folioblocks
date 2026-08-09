@@ -17,7 +17,9 @@ const FBKS_PROOFING_STALE_RETENTION_DAYS = 14;
 const FBKS_PROOFING_SETTINGS_OPTION = 'fbks_proofing_settings';
 
 function fbks_can_use_proofing_sessions() {
-	return function_exists( 'fbks_fs' ) && fbks_fs()->can_use_premium_code__premium_only();
+	return function_exists( 'fbks_fs' ) &&
+		fbks_fs()->can_use_premium_code__premium_only() &&
+		( fbks_fs()->is_plan( 'business' ) || fbks_fs()->is_plan( 'agency' ) );
 }
 
 function fbks_get_proofing_settings_defaults() {

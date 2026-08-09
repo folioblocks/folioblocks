@@ -45,10 +45,14 @@ $fbks_play_visibility = esc_attr($fbks_hover_context['folioBlocks/playButtonVisi
 $fbks_title_visibility = esc_attr($fbks_hover_context['folioBlocks/titleVisibility'] ?? ($attributes['titleVisibility'] ?? 'always'));
 $fbks_show_filter_category = ! empty($fbks_context['folioBlocks/enableFilter'] ?? false)
 	&& ! empty($fbks_hover_context['folioBlocks/showFilterCategory'] ?? ($attributes['showFilterCategory'] ?? false));
+$fbks_combined_visibility = ('hidden' === $fbks_title_visibility && 'hidden' !== $fbks_play_visibility)
+	? $fbks_play_visibility
+	: $fbks_title_visibility;
 $fbks_overlay_style = 'default';
 $fbks_overlay_bg_color = '';
 $fbks_overlay_text_color = '';
 $fbks_has_color_overlay = false;
+$fbks_has_gradient_overlay = false;
 $fbks_has_blur_overlay = false;
 $fbks_hover_effect_class = '';
 $fbks_overlay_entrance_class = '';

@@ -3,7 +3,10 @@
  * View JS – Optimized Lightbox (fast provider playback)
  */
 
-import { getVideoIframeSrc } from '../pb-helpers/videoProviders';
+import {
+	getVideoIframeSrc,
+	getVideoProviderData,
+} from '../pb-helpers/videoProviders';
 import { initTiltHoverEffects } from '../pb-helpers/tiltHoverEffect';
 
 let userUsedKeyboard = false;
@@ -91,8 +94,15 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			 */
 		function setVideoSource( videoUrl ) {
 				videoContainer.classList.remove( 'has-local-video' );
+				const { provider } = getVideoProviderData( videoUrl );
+				iframe.setAttribute(
+					'allow',
+					provider === 'dailymotion'
+						? 'autoplay; encrypted-media; fullscreen; picture-in-picture; web-share'
+						: 'autoplay; encrypted-media; fullscreen; picture-in-picture'
+				);
 				const iframeSrc = getVideoIframeSrc( videoUrl, {
-					autoplay: true,
+					autoplay: provider !== 'dailymotion',
 				} );
 
 				if ( iframeSrc ) {
