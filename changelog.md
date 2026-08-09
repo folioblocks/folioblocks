@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.5.0] - 2026-08-05
 ### Fixed
+- Fixed bug where EXIF data with Unknown fields hidden was not centered in Lightbox view. 
 - Fixed bug in Filmstrip Gallery that caused a fatal error on free version of 1.5.0
 - Fixed bug in Video Block that caused undefined variable error on free version of 1.5.0
 
