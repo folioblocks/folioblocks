@@ -11,31 +11,31 @@ import { OverlayTypographyControls } from './overlayTypographyControls';
 
 const OVERLAY_STYLE_OPTIONS = [
 	{ label: __( 'None', 'folioblocks' ), value: 'none' },
-	{ label: __( 'Fade Overlay', 'folioblocks' ), value: 'fade-overlay' },
+	{ label: __( 'Blur Overlay', 'folioblocks' ), value: 'blur-overlay' },
 	{
-		label: __( 'Bottom Gradient', 'folioblocks' ),
+		label: __( 'Bottom Gradient Overlay', 'folioblocks' ),
 		value: 'gradient-bottom',
 	},
-	{ label: __( 'Chip Overlay', 'folioblocks' ), value: 'chip' },
 	{
 		label: __( 'Chip Gradient Overlay', 'folioblocks' ),
 		value: 'chip-gradient',
 	},
-	{ label: __( 'Blur Overlay', 'folioblocks' ), value: 'blur-overlay' },
+	{ label: __( 'Chip Overlay', 'folioblocks' ), value: 'chip' },
 	{ label: __( 'Color Overlay', 'folioblocks' ), value: 'color-overlay' },
+	{ label: __( 'Fade Overlay', 'folioblocks' ), value: 'fade-overlay' },
 	{ label: __( 'Gradient Overlay', 'folioblocks' ), value: 'gradient-overlay' },
 ];
 
 const HOVER_EFFECT_OPTIONS = [
 	{ label: __( 'None', 'folioblocks' ), value: 'none' },
+	{ label: __( 'Desaturate', 'folioblocks' ), value: 'desaturate' },
+	{ label: __( 'Glare', 'folioblocks' ), value: 'glare' },
+	{ label: __( 'Lift', 'folioblocks' ), value: 'lift' },
+	{ label: __( 'Pan', 'folioblocks' ), value: 'pan' },
+	{ label: __( 'Pop', 'folioblocks' ), value: 'pop' },
+	{ label: __( 'Tilt', 'folioblocks' ), value: 'tilt' },
 	{ label: __( 'Zoom In', 'folioblocks' ), value: 'zoom-in' },
 	{ label: __( 'Zoom Out', 'folioblocks' ), value: 'zoom-out' },
-	{ label: __( 'Lift', 'folioblocks' ), value: 'lift' },
-	{ label: __( 'Tilt', 'folioblocks' ), value: 'tilt' },
-	{ label: __( 'Pop', 'folioblocks' ), value: 'pop' },
-	{ label: __( 'Glare', 'folioblocks' ), value: 'glare' },
-	{ label: __( 'Pan', 'folioblocks' ), value: 'pan' },
-	{ label: __( 'Desaturate', 'folioblocks' ), value: 'desaturate' },
 ];
 
 const OVERLAY_ENTRANCE_OPTIONS = [

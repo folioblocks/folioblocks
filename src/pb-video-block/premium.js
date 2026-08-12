@@ -32,14 +32,14 @@ const isGradientValue = (value) =>
 	typeof value === 'string' && value.toLowerCase().includes('gradient(');
 const HOVER_EFFECT_OPTIONS = [
 	{ label: __('None', 'folioblocks'), value: 'none' },
+	{ label: __('Desaturate', 'folioblocks'), value: 'desaturate' },
+	{ label: __('Glare', 'folioblocks'), value: 'glare' },
+	{ label: __('Lift', 'folioblocks'), value: 'lift' },
+	{ label: __('Pan', 'folioblocks'), value: 'pan' },
+	{ label: __('Pop', 'folioblocks'), value: 'pop' },
+	{ label: __('Tilt', 'folioblocks'), value: 'tilt' },
 	{ label: __('Zoom In', 'folioblocks'), value: 'zoom-in' },
 	{ label: __('Zoom Out', 'folioblocks'), value: 'zoom-out' },
-	{ label: __('Lift', 'folioblocks'), value: 'lift' },
-	{ label: __('Tilt', 'folioblocks'), value: 'tilt' },
-	{ label: __('Pop', 'folioblocks'), value: 'pop' },
-	{ label: __('Glare', 'folioblocks'), value: 'glare' },
-	{ label: __('Pan', 'folioblocks'), value: 'pan' },
-	{ label: __('Desaturate', 'folioblocks'), value: 'desaturate' },
 ];
 const OVERLAY_ENTRANCE_OPTIONS = [
 	{ label: __('Default', 'folioblocks'), value: 'default' },

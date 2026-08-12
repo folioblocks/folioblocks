@@ -1,5 +1,5 @@
 {
-  "translation-revision-date": "2026-06-24T05:34:48.686Z",
+  "translation-revision-date": "2026-08-12T09:45:42.737Z",
   "generator": "FolioBlocks custom i18n tooling",
   "domain": "messages",
   "locale_data": {
@@ -225,9 +225,6 @@
       "Change the shape of the Loupe.": [
         "Cambia la forma de la Loupe."
       ],
-      "Chip": [
-        "Etiqueta"
-      ],
       "Chip Overlay": [
         "Superposición de etiqueta"
       ],
@@ -438,9 +435,6 @@
       "Displays the overlay content over a subtle gradient at the bottom of the image.": [
         "Muestra el contenido de superposición sobre un degradado sutil en la parte inferior de la imagen."
       ],
-      "Displays the overlay content over custom overlay colors set in Styles panel.": [
-        "Muestra el contenido de superposición sobre los colores personalizados definidos en el panel Estilos."
-      ],
       "Download Icon": [
         "Icono de descarga"
       ],
@@ -527,6 +521,9 @@
       ],
       "Enter a valid URL beginning with http:// or https://.": [
         "Introduzca una URL válida que comience con http:// o https://."
+      ],
+      "Facebook": [
+        "Facebook"
       ],
       "Fade Overlay": [
         "Superposición con fundido"
@@ -621,9 +618,6 @@
       "Get FolioBlocks Pro": [
         "Obtenga FolioBlocks Pro"
       ],
-      "Gradient Bottom": [
-        "Degradado inferior"
-      ],
       "Grid Gallery": [
         "Galeria de cuadricula"
       ],
@@ -650,9 +644,6 @@
       ],
       "Hover": [
         "Al pasar el cursor"
-      ],
-      "Hover Style": [
-        "Estilo hover"
       ],
       "ISO": [
         "ISO"
@@ -758,6 +749,9 @@
       ],
       "Light": [
         "Claro"
+      ],
+      "Lightbox": [
+        "Lightbox"
       ],
       "Lightbox Appearance": [
         "Apariencia de la caja de luz"
@@ -1227,9 +1221,6 @@
       "Square": [
         "Cuadrado"
       ],
-      "Stack all images vertically on mobile devices.": [
-        "Apila todas las imágenes verticalmente en dispositivos móviles."
-      ],
       "Start typing to search for products in your WooCommerce store. Click a result to link it.": [
         "Empieza a escribir para buscar productos en tu tienda WooCommerce. Haz clic en un resultado para enlazarlo."
       ],
@@ -1238,9 +1229,6 @@
       ],
       "Subtle": [
         "Sutil"
-      ],
-      "Supports YouTube, Vimeo, Bunny Stream, or ": [
-        "Admite YouTube, Vimeo, Bunny Stream o "
       ],
       "Swap Position": [
         "Intercambiar posición"
