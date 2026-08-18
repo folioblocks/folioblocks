@@ -569,6 +569,28 @@ if (function_exists('fbks_fs')) {
             array(),
             file_exists($style_path) ? filemtime($style_path) : FBKS_VERSION
         );
+
+        if ('toplevel_page_folioblocks-settings' === $hook) {
+            $script_path = plugin_dir_path(__FILE__) . 'includes/admin/settings-page.js';
+
+            wp_enqueue_script(
+                'folioblocks-settings-js',
+                plugin_dir_url(__FILE__) . 'includes/admin/settings-page.js',
+                array(),
+                file_exists($script_path) ? filemtime($script_path) : FBKS_VERSION,
+                true
+            );
+
+            wp_add_inline_script(
+                'folioblocks-settings-js',
+                'window.folioBlocksDashboardNews = ' . wp_json_encode(array(
+                    'ajaxUrl'   => admin_url('admin-ajax.php'),
+                    'nonce'     => wp_create_nonce('fbks_dashboard_news'),
+                    'emptyText' => __('No news items found right now. Please check back later.', 'folioblocks'),
+                )) . ';',
+                'before'
+            );
+        }
     }
     add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'fbks_plugin_action_links');
     function fbks_plugin_action_links($links)

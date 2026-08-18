@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: FolioBlocks 1.5.0-beta.3\n"
+"Project-Id-Version: FolioBlocks 1.5.0\n"
 "Report-Msgid-Bugs-To: https://folioblocks.com\n"
-"POT-Creation-Date: 2026-08-12 09:45:42+0000\n"
+"POT-Creation-Date: 2026-08-12 13:59:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -130,7 +130,7 @@ msgstr "Ajouter des vidéos"
 msgid "Add Watermark"
 msgstr ""
 
-#: includes/admin/free-pro.php:285 includes/admin/free-pro.php:308 includes/admin/settings-page.php:695
+#: includes/admin/free-pro.php:285 includes/admin/free-pro.php:308 includes/admin/settings-page.php:825
 msgid "Additional video providers: Bunny Stream, Cloudflare Stream, DailyMotion, Loom, VideoPress, and Wistia"
 msgstr ""
 
@@ -178,19 +178,19 @@ msgstr "Actions de clic avancées"
 msgid "Advanced Comparison Controls"
 msgstr "Contrôles de comparaison avancés"
 
-#: includes/admin/settings-page.php:681
+#: includes/admin/settings-page.php:811
 msgid "Advanced gallery layouts and playback: carousel autoplay/loop controls and filmstrip fullscreen/autoplay"
 msgstr ""
 
-#: includes/admin/settings-page.php:684
+#: includes/admin/settings-page.php:814
 msgid "Advanced image and video click actions: lightbox, downloads, WooCommerce products, media files, custom URLs, and pages/posts"
 msgstr ""
 
-#: includes/admin/settings-page.php:685
+#: includes/admin/settings-page.php:815
 msgid "Advanced lightbox controls: light/dark themes, fullscreen, image counter, zoom, captions, EXIF, product info, and social sharing"
 msgstr ""
 
-#: includes/admin/settings-page.php:692
+#: includes/admin/settings-page.php:822
 msgid "Advanced styling: borders, rounded corners, drop shadows, icon colors, overlay colors, typography, and control styling"
 msgstr ""
 
@@ -218,7 +218,7 @@ msgstr "Tous"
 msgid "All Images"
 msgstr ""
 
-#: includes/admin/settings-page.php:406
+#: includes/admin/settings-page.php:536
 msgid "All of the blocks and galleries work entirely from the block editor. There are no external settings pages for any of the blocks, you work entirely from the block editor."
 msgstr "Tous les blocs et toutes les galeries fonctionnent entièrement depuis l'éditeur de blocs. Il n'existe aucune page de réglages externe pour les blocs ; tout se fait directement dans l'éditeur de blocs."
 
@@ -298,7 +298,7 @@ msgstr "Lecture automatique de la galerie"
 msgid "Autoplay Speed (seconds)"
 msgstr "Vitesse de lecture automatique (secondes)"
 
-#: includes/admin/settings-page.php:417
+#: includes/admin/settings-page.php:547
 msgid "Available Blocks:"
 msgstr "Blocs disponibles :"
 
@@ -318,7 +318,7 @@ msgstr "Arrière-plan"
 msgid "Background & Border"
 msgstr ""
 
-#: includes/admin/free-pro.php:11 includes/admin/settings-page.php:428 src/background-video-block/block.json:6
+#: includes/admin/free-pro.php:11 includes/admin/settings-page.php:558 src/background-video-block/block.json:6
 msgid "Background Video Block"
 msgstr "Bloc video d'arriere-plan"
 
@@ -330,7 +330,7 @@ msgstr "Styles de superposition de la vidéo d'arrière-plan"
 msgid "Before"
 msgstr "Avant"
 
-#: includes/admin/free-pro.php:26 includes/admin/settings-page.php:447 src/pb-before-after-block/block.json:6 src/pb-before-after-block/edit.js:39
+#: includes/admin/free-pro.php:26 includes/admin/settings-page.php:577 src/pb-before-after-block/block.json:6 src/pb-before-after-block/edit.js:39
 msgid "Before & After Block"
 msgstr "Bloc avant/apres"
 
@@ -406,7 +406,7 @@ msgstr ""
 msgid "Bottom Right"
 msgstr ""
 
-#: includes/admin/settings-page.php:624
+#: includes/admin/settings-page.php:754
 msgid "BUSINESS/AGENCY"
 msgstr ""
 
@@ -422,7 +422,7 @@ msgstr "Modèle de l’appareil"
 msgid "Carousel Control Styles"
 msgstr "Styles des contrôles de Carousel"
 
-#: includes/admin/settings-page.php:466 src/carousel-gallery-block/block.json:6 src/carousel-gallery-block/edit.js:850
+#: includes/admin/settings-page.php:596 src/carousel-gallery-block/block.json:6 src/carousel-gallery-block/edit.js:850
 msgid "Carousel Gallery"
 msgstr "Galerie carrousel"
 
@@ -474,7 +474,7 @@ msgstr "Changer la miniature"
 msgid "Change Video"
 msgstr "Changer la vidéo"
 
-#: includes/admin/settings-page.php:849
+#: includes/admin/settings-page.php:862
 msgid "Changelog:"
 msgstr "Journal des modifications :"
 
@@ -822,7 +822,7 @@ msgstr "Personnalisez la poignée du curseur et la couleur de la ligne."
 msgid "Dark"
 msgstr "Sombre"
 
-#: folioblocks.php:477 folioblocks.php:478 includes/admin/settings-page.php:394
+#: folioblocks.php:477 folioblocks.php:478 includes/admin/settings-page.php:524
 msgid "Dashboard"
 msgstr "Tableau de bord"
 
@@ -862,7 +862,7 @@ msgstr ""
 msgid "Delete this watermark"
 msgstr ""
 
-#: includes/admin/settings-page.php:431 includes/admin/settings-page.php:450 includes/admin/settings-page.php:469 includes/admin/settings-page.php:489 includes/admin/settings-page.php:510 includes/admin/settings-page.php:523 includes/admin/settings-page.php:543 includes/admin/settings-page.php:556 includes/admin/settings-page.php:577 includes/admin/settings-page.php:602 includes/admin/settings-page.php:628 includes/admin/settings-page.php:643 includes/admin/settings-page.php:667
+#: includes/admin/settings-page.php:561 includes/admin/settings-page.php:580 includes/admin/settings-page.php:599 includes/admin/settings-page.php:619 includes/admin/settings-page.php:640 includes/admin/settings-page.php:653 includes/admin/settings-page.php:673 includes/admin/settings-page.php:686 includes/admin/settings-page.php:707 includes/admin/settings-page.php:732 includes/admin/settings-page.php:758 includes/admin/settings-page.php:773 includes/admin/settings-page.php:797
 msgid "Demo"
 msgstr "Démo"
 
@@ -1190,7 +1190,7 @@ msgstr "DONNÉES EXIF"
 msgid "EXIF Metadata"
 msgstr "Métadonnées EXIF"
 
-#: includes/admin/settings-page.php:693
+#: includes/admin/settings-page.php:823
 msgid "EXIF metadata support in overlays/lightboxes plus media-library metadata sync"
 msgstr ""
 
@@ -1234,7 +1234,7 @@ msgstr "Retour"
 msgid "Filmstrip Color Mode"
 msgstr "Mode couleur de la pellicule"
 
-#: includes/admin/settings-page.php:486 src/filmstrip-gallery-block/block.json:6 src/filmstrip-gallery-block/edit.js:750
+#: includes/admin/settings-page.php:616 src/filmstrip-gallery-block/block.json:6 src/filmstrip-gallery-block/edit.js:750
 msgid "Filmstrip Gallery"
 msgstr "Galerie pellicule"
 
@@ -1294,7 +1294,7 @@ msgstr "Point focal X (gauche - droite)"
 msgid "Focal Point Y (Up - Down)"
 msgstr "Point focal Y (haut - bas)"
 
-#: folioblocks.php:193 folioblocks.php:467 folioblocks.php:468 includes/admin/free-pro.php:366 includes/admin/free-pro.php:367 includes/admin/settings-page.php:393 includes/admin/settings-page.php:394 includes/admin/system-info.php:262 includes/admin/system-info.php:264 includes/pro/admin/global-settings.php:485 includes/pro/admin/global-settings.php:486 includes/pro/admin/proofing-sessions.php:388
+#: folioblocks.php:193 folioblocks.php:467 folioblocks.php:468 includes/admin/free-pro.php:366 includes/admin/free-pro.php:367 includes/admin/settings-page.php:523 includes/admin/settings-page.php:524 includes/admin/system-info.php:262 includes/admin/system-info.php:264 includes/pro/admin/global-settings.php:485 includes/pro/admin/global-settings.php:486 includes/pro/admin/proofing-sessions.php:388
 msgid "FolioBlocks"
 msgstr "FolioBlocks"
 
@@ -1302,7 +1302,7 @@ msgstr "FolioBlocks"
 msgid "FolioBlocks image metadata fallbacks."
 msgstr "Valeurs de secours des métadonnées d’image FolioBlocks."
 
-#: includes/admin/settings-page.php:413
+#: includes/admin/settings-page.php:543
 msgid "FolioBlocks is a paid premium plugin. This free version available in the WordPress plugin repository is only meant to give you a taste of what the full version can do."
 msgstr "FolioBlocks est une extension premium payante. Cette version gratuite disponible dans le répertoire des extensions WordPress est uniquement destinée à vous donner un aperçu de ce que peut faire la version complète."
 
@@ -1330,7 +1330,7 @@ msgstr "Taille de police"
 msgid "Free"
 msgstr "Gratuit"
 
-#: folioblocks.php:506 folioblocks.php:507 includes/admin/free-pro.php:367 includes/admin/settings-page.php:705
+#: folioblocks.php:506 folioblocks.php:507 includes/admin/free-pro.php:367 includes/admin/settings-page.php:835
 msgid "Free vs Pro"
 msgstr "Gratuit vs Pro"
 
@@ -1410,7 +1410,7 @@ msgstr "Styles de galerie"
 msgid "Gallery thumbnail"
 msgstr "Miniature de galerie"
 
-#: includes/admin/settings-page.php:680
+#: includes/admin/settings-page.php:810
 msgid "Gallery transforms and List View thumbnails for faster gallery building"
 msgstr ""
 
@@ -1442,7 +1442,7 @@ msgstr ""
 msgid "Global Settings"
 msgstr ""
 
-#: includes/admin/settings-page.php:690
+#: includes/admin/settings-page.php:820
 msgid "Global Settings for reusable watermarks, social sharing sources, and proofing behavior"
 msgstr ""
 
@@ -1474,7 +1474,7 @@ msgstr "grille"
 msgid "Grid"
 msgstr ""
 
-#: includes/admin/settings-page.php:507 src/grid-gallery-block/block.json:6 src/grid-gallery-block/edit.js:900
+#: includes/admin/settings-page.php:637 src/grid-gallery-block/block.json:6 src/grid-gallery-block/edit.js:900
 msgid "Grid Gallery"
 msgstr "Galerie grille"
 
@@ -1538,7 +1538,7 @@ msgstr "Survol"
 msgid "Hover Effect"
 msgstr ""
 
-#: includes/admin/settings-page.php:686
+#: includes/admin/settings-page.php:816
 msgid "Hover effects and overlays: zoom, lift, tilt, pop, glare, pan, desaturate, blur, gradient, color, chip, and entrance animations"
 msgstr ""
 
@@ -1578,7 +1578,7 @@ msgstr "Icône"
 msgid "Image"
 msgstr "Image"
 
-#: includes/admin/free-pro.php:128 includes/admin/settings-page.php:520 src/pb-image-block/block.json:6
+#: includes/admin/free-pro.php:128 includes/admin/settings-page.php:650 src/pb-image-block/block.json:6
 msgid "Image Block"
 msgstr "Bloc image"
 
@@ -1718,7 +1718,7 @@ msgstr ""
 msgid "Justified"
 msgstr ""
 
-#: includes/admin/settings-page.php:540 src/justified-gallery-block/block.json:6 src/justified-gallery-block/edit.js:831
+#: includes/admin/settings-page.php:670 src/justified-gallery-block/block.json:6 src/justified-gallery-block/edit.js:831
 msgid "Justified Gallery"
 msgstr "Galerie justifiee"
 
@@ -1770,7 +1770,7 @@ msgstr "Grand"
 msgid "Last updated: %s"
 msgstr ""
 
-#: includes/admin/settings-page.php:803
+#: includes/admin/settings-page.php:842
 msgid "Latest News From FolioBlocks Website:"
 msgstr "Dernieres actualites du site web de FolioBlocks :"
 
@@ -1918,6 +1918,10 @@ msgstr ""
 msgid "List View Thumbnails"
 msgstr "Miniatures en vue liste"
 
+#: includes/admin/settings-page.php:845
+msgid "Loading latest news..."
+msgstr ""
+
 #: src/background-video-block/edit.js:772
 msgid "Loop"
 msgstr "Boucle"
@@ -1938,7 +1942,7 @@ msgstr "Boucler la video"
 msgid "Loupe Appearance"
 msgstr "Apparence de la loupe"
 
-#: includes/admin/free-pro.php:184 includes/admin/settings-page.php:553 src/pb-loupe-block/block.json:6 src/pb-loupe-block/edit.js:153
+#: includes/admin/free-pro.php:184 includes/admin/settings-page.php:683 src/pb-loupe-block/block.json:6 src/pb-loupe-block/edit.js:153
 msgid "Loupe Block"
 msgstr "Bloc loupe"
 
@@ -1974,7 +1978,7 @@ msgstr "Résolution de l'image principale"
 msgid "Masonry"
 msgstr ""
 
-#: includes/admin/settings-page.php:574 src/masonry-gallery-block/block.json:6 src/masonry-gallery-block/edit.js:853
+#: includes/admin/settings-page.php:704 src/masonry-gallery-block/block.json:6 src/masonry-gallery-block/edit.js:853
 msgid "Masonry Gallery"
 msgstr "Galerie masonry"
 
@@ -1998,7 +2002,7 @@ msgstr "Peut-être plus tard"
 msgid "Media Protection"
 msgstr "Protection des médias"
 
-#: includes/admin/settings-page.php:691
+#: includes/admin/settings-page.php:821
 msgid "Media protection and performance controls: lazy load, disable right-click, disable drag-to-save, and password protection support"
 msgstr ""
 
@@ -2030,7 +2034,7 @@ msgstr ""
 msgid "Mobile"
 msgstr "Mobile"
 
-#: includes/admin/settings-page.php:593 src/modular-gallery-block/block.json:6
+#: includes/admin/settings-page.php:723 src/modular-gallery-block/block.json:6
 msgid "Modular Gallery"
 msgstr "Galerie modulaire"
 
@@ -2042,7 +2046,7 @@ msgstr ""
 msgid "Multi-keyword Gallery Filtering: With custom typography and filter bar styles"
 msgstr ""
 
-#: includes/admin/settings-page.php:683
+#: includes/admin/settings-page.php:813
 msgid "Multi-keyword image and video gallery filtering with custom filter bar styles"
 msgstr ""
 
@@ -2074,7 +2078,7 @@ msgstr "Diapositive suivante"
 msgid "Next thumbnail"
 msgstr "Miniature suivante"
 
-#: includes/admin/settings-page.php:885
+#: includes/admin/settings-page.php:898
 msgid "No changelog found in readme.txt."
 msgstr "Aucun changelog trouvé dans readme.txt."
 
@@ -2086,7 +2090,7 @@ msgstr "Aucune image selectionnee."
 msgid "No image selections were saved for this session."
 msgstr ""
 
-#: includes/admin/settings-page.php:831
+#: folioblocks.php:589 includes/admin/settings-page.php:366
 msgid "No news items found right now. Please check back later."
 msgstr "Aucune actualité trouvée pour le moment. Revenez plus tard."
 
@@ -2334,7 +2338,7 @@ msgstr "Mettre en pause la lecture automatique au survol de l'image principale."
 msgid "Pause on Hover"
 msgstr "Mettre en pause au survol"
 
-#: includes/admin/settings-page.php:687
+#: includes/admin/settings-page.php:817
 msgid "Per-image and per-video overrides for click behavior and hover styling"
 msgstr ""
 
@@ -2458,11 +2462,11 @@ msgstr "Miniature précédente"
 msgid "Private Client Proofing Gallerries"
 msgstr ""
 
-#: includes/admin/settings-page.php:394 includes/admin/system-info.php:266 includes/pro/admin/global-settings.php:486
+#: includes/admin/settings-page.php:524 includes/admin/system-info.php:266 includes/pro/admin/global-settings.php:486
 msgid "Pro"
 msgstr "Pro"
 
-#: includes/admin/settings-page.php:598
+#: includes/admin/settings-page.php:728
 msgid "PRO"
 msgstr "PRO"
 
@@ -2478,15 +2482,15 @@ msgstr ""
 msgid "Pro - Single"
 msgstr ""
 
-#: includes/admin/settings-page.php:676
+#: includes/admin/settings-page.php:806
 msgid "Pro unlocks FolioBlocks' advanced gallery, commerce, proofing, styling, protection, and workflow features, including additional Pro-only blocks and deeper controls across image and video blocks."
 msgstr ""
 
-#: includes/admin/settings-page.php:674
+#: includes/admin/settings-page.php:804
 msgid "Pro Version - Features:"
 msgstr "Version Pro - fonctionnalités :"
 
-#: includes/admin/settings-page.php:679
+#: includes/admin/settings-page.php:809
 msgid "Pro-only blocks: Modular Gallery and Proofing Gallery on Business/Agency plans"
 msgstr ""
 
@@ -2510,7 +2514,7 @@ msgstr ""
 msgid "Proofing filters"
 msgstr ""
 
-#: includes/admin/settings-page.php:619 includes/pro/admin/global-settings.php:518 src/proofing-gallery-block/block.json:6 src/proofing-gallery-block/edit.js:1165 src/proofing-gallery-block/edit.js:1183
+#: includes/admin/settings-page.php:749 includes/pro/admin/global-settings.php:518 src/proofing-gallery-block/block.json:6 src/proofing-gallery-block/edit.js:1165 src/proofing-gallery-block/edit.js:1183
 msgid "Proofing Gallery"
 msgstr ""
 
@@ -2578,7 +2582,7 @@ msgstr ""
 msgid "Proofing UI Mode"
 msgstr ""
 
-#: includes/admin/settings-page.php:694
+#: includes/admin/settings-page.php:824
 msgid "Proofing workflow on Business/Agency: private client galleries, hearts, color flags, comments, filters, save/continue, submit, email notifications, admin session reports, and PDF export"
 msgstr ""
 
@@ -2590,11 +2594,11 @@ msgstr "Protection et performances"
 msgid "Provides a slider to compare two images side-by-side or top-to-bottom."
 msgstr "Fournit un curseur pour comparer deux images côte à côte ou de haut en bas."
 
-#: includes/admin/settings-page.php:698
+#: includes/admin/settings-page.php:828
 msgid "Purchase a license for FolioBlocks today and enjoy the best gallery plugin for modern WordPress and the block editor."
 msgstr "Achetez une licence FolioBlocks dès aujourd'hui et profitez du meilleur plugin de galerie pour WordPress moderne et l'éditeur de blocs."
 
-#: includes/admin/free-pro.php:415 includes/admin/settings-page.php:845 includes/admin/system-info.php:297
+#: includes/admin/free-pro.php:415 includes/admin/settings-page.php:858 includes/admin/system-info.php:297
 msgid "Quick Links:"
 msgstr "Liens rapides :"
 
@@ -2626,7 +2630,7 @@ msgstr "Donnez-nous une note"
 msgid "Read stored EXIF metadata."
 msgstr "Lire les métadonnées EXIF ​​​​stockées."
 
-#: includes/admin/settings-page.php:893
+#: includes/admin/settings-page.php:906
 msgid "readme.txt file not found at %s"
 msgstr "Fichier readme.txt introuvable a %s"
 
@@ -2710,7 +2714,7 @@ msgstr "Lacunes de la galerie réactive"
 msgid "Responsive Gap Controls (Desktop/Tablet/Mobile)"
 msgstr "Contrôles d'écart réactifs (ordinateur de bureau/tablette/mobile)"
 
-#: includes/admin/settings-page.php:682
+#: includes/admin/settings-page.php:812
 msgid "Responsive Pro controls for gaps, sizing, focal points, and per-device layout tuning"
 msgstr ""
 
@@ -3042,7 +3046,7 @@ msgstr "Définissez le ratio de la miniature vidéo."
 msgid "Sets the default WooCommerce product action for this gallery. Individual images can override this setting."
 msgstr "Définit l’action produit WooCommerce par défaut pour cette galerie. Les images individuelles peuvent remplacer ce réglage."
 
-#: folioblocks.php:576
+#: folioblocks.php:598
 msgid "Settings"
 msgstr "Reglages"
 
@@ -3322,11 +3326,11 @@ msgstr "Texte"
 msgid "Text & Border"
 msgstr ""
 
-#: includes/admin/settings-page.php:410
+#: includes/admin/settings-page.php:540
 msgid "Thank you for downloading FolioBlocks. FolioBlocks is a WordPress plugin purpose-built for the block editor and full site editor, giving you the tools to create beautiful photo and video galleries with ease directly in your posts or pages."
 msgstr "Merci d'avoir téléchargé FolioBlocks. FolioBlocks est une extension WordPress conçue spécialement pour l'éditeur de blocs et l'éditeur de site, qui vous donne les outils pour créer facilement de magnifiques galeries photo et vidéo directement dans vos articles ou pages."
 
-#: includes/admin/settings-page.php:403
+#: includes/admin/settings-page.php:533
 msgid "Thank you for purchasing FolioBlocks Pro. FolioBlocks is a WordPress plugin purpose-built for the block editor and full site editor, giving you the tools to create beautiful photo and video galleries with ease directly in your posts or pages."
 msgstr "Merci d'avoir acheté FolioBlocks Pro. FolioBlocks est une extension WordPress conçue spécialement pour l'éditeur de blocs et l'éditeur de site, qui vous donne les outils pour créer facilement de magnifiques galeries photo et vidéo directement dans vos articles ou pages."
 
@@ -3434,15 +3438,15 @@ msgstr ""
 msgid "Updated"
 msgstr ""
 
-#: includes/admin/settings-page.php:371
+#: includes/admin/settings-page.php:501
 msgid "UPDATED"
 msgstr "MIS À JOUR"
 
-#: includes/admin/settings-page.php:369
+#: includes/admin/settings-page.php:499
 msgid "Updated in v%s"
 msgstr "Mis à jour en v%s"
 
-#: includes/admin/settings-page.php:604 includes/admin/settings-page.php:630
+#: includes/admin/settings-page.php:734 includes/admin/settings-page.php:760
 msgid "Upgrade"
 msgstr ""
 
@@ -3450,7 +3454,7 @@ msgstr ""
 msgid "Upgrade to Pro to unlock all of these features."
 msgstr "Passez a Pro pour debloquer toutes ces fonctionnalites."
 
-#: includes/admin/free-pro.php:409 includes/admin/settings-page.php:702
+#: includes/admin/free-pro.php:409 includes/admin/settings-page.php:832
 msgid "Upgrade Today"
 msgstr "Passez à niveau aujourd'hui"
 
@@ -3522,11 +3526,11 @@ msgstr ""
 msgid "Uses fonts from your theme’s Global Styles."
 msgstr "Utilise les polices des Styles globaux de votre thème."
 
-#: includes/admin/settings-page.php:311
+#: includes/admin/settings-page.php:441
 msgid "v%s"
 msgstr "v%s"
 
-#: includes/admin/settings-page.php:867
+#: includes/admin/settings-page.php:880
 msgid "Version"
 msgstr "Version"
 
@@ -3558,7 +3562,7 @@ msgstr "Vidéo + infos"
 msgid "Video + Product Info"
 msgstr "Vidéo + infos produit"
 
-#: includes/admin/free-pro.php:282 includes/admin/settings-page.php:640 src/pb-video-block/block.json:6
+#: includes/admin/free-pro.php:282 includes/admin/settings-page.php:770 src/pb-video-block/block.json:6
 msgid "Video Block"
 msgstr "Bloc video"
 
@@ -3578,7 +3582,7 @@ msgstr "Paramètres de clic vidéo"
 msgid "Video Content"
 msgstr "Contenu vidéo"
 
-#: includes/admin/settings-page.php:664 src/video-gallery-block/block.json:6 src/video-gallery-block/edit.js:346
+#: includes/admin/settings-page.php:794 src/video-gallery-block/block.json:6 src/video-gallery-block/edit.js:346
 msgid "Video Gallery"
 msgstr "Galerie video"
 
@@ -3646,11 +3650,11 @@ msgstr "URL de la vidéo"
 msgid "Video: %1$s"
 msgstr "Vidéo : %1$s"
 
-#: includes/admin/settings-page.php:837
+#: includes/admin/settings-page.php:850
 msgid "View all news"
 msgstr "Voir toutes les actualités"
 
-#: includes/admin/settings-page.php:901
+#: includes/admin/settings-page.php:914
 msgid "View Full Changelog"
 msgstr "Voir le journal des modifications complet"
 
@@ -3702,7 +3706,7 @@ msgstr ""
 msgid "Watermark Overlay"
 msgstr ""
 
-#: includes/admin/settings-page.php:689
+#: includes/admin/settings-page.php:819
 msgid "Watermark overlays for gallery images and lightbox images, managed from Global Settings"
 msgstr ""
 
@@ -3726,7 +3730,7 @@ msgstr ""
 msgid "Website"
 msgstr "Site web"
 
-#: includes/admin/settings-page.php:400
+#: includes/admin/settings-page.php:530
 msgid "Welcome to FolioBlocks:"
 msgstr "Bienvenue dans FolioBlocks :"
 
@@ -3742,7 +3746,7 @@ msgstr ""
 msgid "WooCommerce Integration"
 msgstr "Intégration WooCommerce"
 
-#: includes/admin/settings-page.php:688
+#: includes/admin/settings-page.php:818
 msgid "WooCommerce integration for image galleries, Image Block, Video Block, and Video Gallery"
 msgstr ""
 
@@ -3760,6 +3764,10 @@ msgstr ""
 
 #: includes/pro/admin/proofing-sessions.php:558
 msgid "Yes"
+msgstr ""
+
+#: includes/admin/settings-page.php:377
+msgid "You are not allowed to load FolioBlocks news."
 msgstr ""
 
 #: src/pb-helpers/socialSharingControls.js:152
