@@ -3,9 +3,40 @@
  * Helper file for galleries
  * @param clientId
  */
+import { __ } from '@wordpress/i18n';
+
 const LIST_VIEW_CONTENT_SELECTOR = '.block-editor-list-view__content';
+const OVERRIDE_ICON_COLOR = '#3b82f6';
+const OVERRIDE_TOOLTIP = __( 'Image has per-image overrides', 'folioblocks' );
+const THUMBNAIL_PASS_DELAY = 120;
+const DRAG_SETTLE_DELAY = 250;
+const RETRY_DELAY = 300;
 const observedListViews = new WeakSet();
 let queuedThumbnailPass = null;
+let queuedThumbnailClientId;
+
+const isBlockDragInProgress = () => {
+	const blockEditor = wp.data.select( 'core/block-editor' );
+
+	return !! (
+		blockEditor.isDraggingBlocks?.() ||
+		blockEditor.__unstableIsDraggingBlocks?.() ||
+		blockEditor.isDraggingBlock?.() ||
+		blockEditor.__unstableIsDraggingBlock?.()
+	);
+};
+
+const getQueuedClientId = ( clientId ) => {
+	if ( clientId === null || queuedThumbnailClientId === null ) {
+		return null;
+	}
+
+	if ( typeof queuedThumbnailClientId === 'undefined' ) {
+		return clientId;
+	}
+
+	return queuedThumbnailClientId === clientId ? clientId : null;
+};
 
 const getAllBlocksRecursive = ( clientId ) => {
 	const blocks = wp.data.select( 'core/block-editor' ).getBlocks( clientId );
@@ -58,15 +89,22 @@ const runThumbnailPass = ( clientId = null ) => {
 	applyThumbnails( clientId );
 };
 
-const queueThumbnailPass = ( clientId = null ) => {
+const queueThumbnailPass = (
+	clientId = null,
+	delay = THUMBNAIL_PASS_DELAY
+) => {
+	queuedThumbnailClientId = getQueuedClientId( clientId );
+
 	if ( queuedThumbnailPass ) {
 		window.clearTimeout( queuedThumbnailPass );
 	}
 
 	queuedThumbnailPass = window.setTimeout( () => {
+		const nextClientId = queuedThumbnailClientId;
 		queuedThumbnailPass = null;
-		runThumbnailPass( clientId );
-	}, 50 );
+		queuedThumbnailClientId = undefined;
+		runThumbnailPass( nextClientId );
+	}, delay );
 };
 
 const getListItemsForBlock = ( block ) => {
@@ -83,6 +121,56 @@ const getThumbnailSrc = ( block ) => {
 	}
 
 	return '';
+};
+
+const hasPerImageOverrides = ( block ) =>
+	block.name === 'folioblocks/pb-image-block' &&
+	!! (
+		block.attributes?.overrideGalleryClickSettings ||
+		block.attributes?.overrideGalleryHoverSettings
+	);
+
+const getListItemIconNodes = ( listItem ) =>
+	listItem.querySelectorAll(
+		[
+			'.block-editor-block-icon',
+			'.block-editor-list-view-block-select-button__icon',
+			'.block-editor-list-view-block-select-button svg',
+		].join( ',' )
+	);
+
+const applyOverrideCue = ( listItem, isActive ) => {
+	const selectButton = listItem.querySelector(
+		'.block-editor-list-view-block-select-button'
+	);
+	const tooltipTarget = selectButton || listItem;
+	const iconNodes = getListItemIconNodes( listItem );
+
+	if ( isActive ) {
+		listItem.dataset.pbPerImageOverrides = 'true';
+		tooltipTarget.title = OVERRIDE_TOOLTIP;
+		tooltipTarget.dataset.pbOverrideTooltip = 'true';
+
+		iconNodes.forEach( ( iconNode ) => {
+			iconNode.style.color = OVERRIDE_ICON_COLOR;
+			iconNode.style.fill = 'currentColor';
+			iconNode.style.stroke = 'currentColor';
+		} );
+		return;
+	}
+
+	delete listItem.dataset.pbPerImageOverrides;
+
+	if ( tooltipTarget.dataset.pbOverrideTooltip === 'true' ) {
+		tooltipTarget.removeAttribute( 'title' );
+		delete tooltipTarget.dataset.pbOverrideTooltip;
+	}
+
+	iconNodes.forEach( ( iconNode ) => {
+		iconNode.style.removeProperty( 'color' );
+		iconNode.style.removeProperty( 'fill' );
+		iconNode.style.removeProperty( 'stroke' );
+	} );
 };
 
 // Wait for List View to appear, then initialize observer
@@ -120,15 +208,21 @@ if ( ! window.folioBlocksThumbnailsInitialized ) {
 }
 
 export const applyThumbnails = ( clientId = null, retries = 10 ) => {
-	const delay = 300;
 	let allApplied = true;
+
+	if ( isBlockDragInProgress() ) {
+		queueThumbnailPass( clientId, DRAG_SETTLE_DELAY );
+		return;
+	}
 
 	const blocks = getBlocksForThumbnails( clientId );
 
 	blocks.forEach( ( block ) => {
 		const thumbnailSrc = getThumbnailSrc( block );
+		const shouldApplyOverrideCue =
+			block.name === 'folioblocks/pb-image-block';
 
-		if ( ! thumbnailSrc ) {
+		if ( ! thumbnailSrc && ! shouldApplyOverrideCue ) {
 			return;
 		}
 
@@ -139,6 +233,12 @@ export const applyThumbnails = ( clientId = null, retries = 10 ) => {
 		}
 
 		listItems.forEach( ( listItem ) => {
+			applyOverrideCue( listItem, hasPerImageOverrides( block ) );
+
+			if ( ! thumbnailSrc ) {
+				return;
+			}
+
 			let thumbnailContainer = listItem.querySelector(
 				'.block-editor-list-view-block-select-button__image'
 			);
@@ -185,6 +285,6 @@ export const applyThumbnails = ( clientId = null, retries = 10 ) => {
 	if ( ! allApplied && retries > 0 ) {
 		setTimeout( () => {
 			applyThumbnails( clientId, retries - 1 );
-		}, delay );
+		}, RETRY_DELAY );
 	}
 };

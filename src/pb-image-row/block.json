@@ -9,24 +9,18 @@
 	"description": "Groups images into a single row, scaling them to fill the full width without cropping.",
 	"example": {},
 	"textdomain": "folioblocks",
-	"parent": [ "folioblocks/modular-gallery-block" ],
-	"allowedBlocks": [ 
-		"folioblocks/pb-image-block",
-		"folioblocks/pb-image-stack"
-	],
+	"parent": ["folioblocks/modular-gallery-block", "folioblocks/pb-image-stack"],
+	"allowedBlocks": ["folioblocks/pb-image-block", "folioblocks/pb-image-stack"],
 	"supports": {
 		"inserter": false,
 		"anchor": false,
 		"ariaLabel": true,
 		"html": false
-    },
-	"providesContext": {
-        "folioBlocks/stackImageheight": "stackImageheight"
 	},
-	"usesContext": [ 
-		"folioBlocks/noGap",
-		"folioBlocks/layoutVersion"
-	],
+	"providesContext": {
+		"folioBlocks/stackImageheight": "stackImageheight"
+	},
+	"usesContext": ["folioBlocks/noGap", "folioBlocks/layoutVersion"],
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",

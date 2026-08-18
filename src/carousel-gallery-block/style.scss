@@ -68,7 +68,8 @@
 
 .pb-carousel-gallery .pb-image-block.pb-hover-blur-overlay .pb-image-block-title,
 .pb-carousel-gallery .pb-image-block.pb-hover-fade-overlay .pb-image-block-title,
-.pb-carousel-gallery .pb-image-block.pb-hover-color-overlay .pb-image-block-title {
+.pb-carousel-gallery .pb-image-block.pb-hover-color-overlay .pb-image-block-title,
+.pb-carousel-gallery .pb-image-block.pb-hover-gradient-overlay .pb-image-block-title {
 	font-size: clamp(1rem, 3.5cqi, 1.75rem);
 	line-height: 1.35;
 }

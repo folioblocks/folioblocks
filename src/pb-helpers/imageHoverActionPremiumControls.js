@@ -7,18 +7,59 @@ import {
 	__experimentalToolsPanelItem as ToolsPanelItem,
 } from '@wordpress/components';
 import { CompactTwoColorControl } from './CompactColorControl';
+import { OverlayTypographyControls } from './overlayTypographyControls';
 
 const OVERLAY_STYLE_OPTIONS = [
 	{ label: __( 'None', 'folioblocks' ), value: 'none' },
-	{ label: __( 'Fade Overlay', 'folioblocks' ), value: 'fade-overlay' },
+	{ label: __( 'Blur Overlay', 'folioblocks' ), value: 'blur-overlay' },
 	{
-		label: __( 'Gradient Bottom', 'folioblocks' ),
+		label: __( 'Bottom Gradient Overlay', 'folioblocks' ),
 		value: 'gradient-bottom',
 	},
-	{ label: __( 'Chip', 'folioblocks' ), value: 'chip' },
-	{ label: __( 'Blur Overlay', 'folioblocks' ), value: 'blur-overlay' },
+	{
+		label: __( 'Chip Gradient Overlay', 'folioblocks' ),
+		value: 'chip-gradient',
+	},
+	{ label: __( 'Chip Overlay', 'folioblocks' ), value: 'chip' },
 	{ label: __( 'Color Overlay', 'folioblocks' ), value: 'color-overlay' },
+	{ label: __( 'Fade Overlay', 'folioblocks' ), value: 'fade-overlay' },
+	{ label: __( 'Gradient Overlay', 'folioblocks' ), value: 'gradient-overlay' },
 ];
+
+const HOVER_EFFECT_OPTIONS = [
+	{ label: __( 'None', 'folioblocks' ), value: 'none' },
+	{ label: __( 'Desaturate', 'folioblocks' ), value: 'desaturate' },
+	{ label: __( 'Glare', 'folioblocks' ), value: 'glare' },
+	{ label: __( 'Lift', 'folioblocks' ), value: 'lift' },
+	{ label: __( 'Pan', 'folioblocks' ), value: 'pan' },
+	{ label: __( 'Pop', 'folioblocks' ), value: 'pop' },
+	{ label: __( 'Tilt', 'folioblocks' ), value: 'tilt' },
+	{ label: __( 'Zoom In', 'folioblocks' ), value: 'zoom-in' },
+	{ label: __( 'Zoom Out', 'folioblocks' ), value: 'zoom-out' },
+];
+
+const OVERLAY_ENTRANCE_OPTIONS = [
+	{ label: __( 'Default', 'folioblocks' ), value: 'default' },
+	{ label: __( 'Fade', 'folioblocks' ), value: 'fade' },
+	{ label: __( 'Slide Up', 'folioblocks' ), value: 'slide-up' },
+	{ label: __( 'Slide Down', 'folioblocks' ), value: 'slide-down' },
+	{ label: __( 'Slide Left', 'folioblocks' ), value: 'slide-left' },
+	{ label: __( 'Slide Right', 'folioblocks' ), value: 'slide-right' },
+];
+
+const DEFAULT_OVERLAY_BG_GRADIENT =
+	'linear-gradient(135deg, rgba(255,255,255,0.92) 0%, rgba(226,232,240,0.82) 100%)';
+const getHoverEffect = ( attributes ) => attributes.hoverEffect || 'none';
+const getOverlayEntrance = ( attributes ) =>
+	attributes.overlayEntrance || 'default';
+const supportsOverlayEntrance = ( overlayStyle ) =>
+	[ 'blur-overlay', 'fade-overlay', 'color-overlay', 'gradient-overlay' ].includes(
+		overlayStyle
+	);
+const supportsOverlayTypography = ( overlayContent ) =>
+	! [ 'exif', 'social' ].includes( overlayContent );
+const isGradientValue = ( value ) =>
+	typeof value === 'string' && value.toLowerCase().includes( 'gradient(' );
 
 const getOverlayStyle = ( attributes ) => {
 	const overlayEnabled = !! (
@@ -51,6 +92,11 @@ const getOverlayHelp = ( value ) => {
 				'Displays the overlay content in a compact chip above the image.',
 				'folioblocks'
 			);
+		case 'chip-gradient':
+			return __(
+				'Displays the overlay content in a compact chip with a gradient background.',
+				'folioblocks'
+			);
 		case 'blur-overlay':
 			return __(
 				'Adds a soft blur overlay behind the title or product info.',
@@ -58,7 +104,12 @@ const getOverlayHelp = ( value ) => {
 			);
 		case 'color-overlay':
 			return __(
-				'Displays the overlay content over custom overlay colors set in Styles panel.',
+				'Displays the overlay content over a solid background color set in Styles panel.',
+				'folioblocks'
+			);
+		case 'gradient-overlay':
+			return __(
+				'Displays the overlay content over a gradient background set in Styles panel.',
 				'folioblocks'
 			);
 		case 'none':
@@ -87,20 +138,20 @@ export const registerImageHoverActionPremiumControls = ( {
 			const overlayContent =
 				attributes.overlayContent ||
 				( attributes.wooProductPriceOnHover ? 'product' : 'title' );
-				const overlayContentOptions = [
-					{
-						label: __( 'Show Image Title', 'folioblocks' ),
-						value: 'title',
-					},
-					{
-						label: __( 'Show Image Caption', 'folioblocks' ),
-						value: 'caption',
-					},
-					{
-						label: __( 'Show EXIF Data', 'folioblocks' ),
-						value: 'exif',
-					},
-				];
+			const overlayContentOptions = [
+				{
+					label: __( 'Show Image Title', 'folioblocks' ),
+					value: 'title',
+				},
+				{
+					label: __( 'Show Image Caption', 'folioblocks' ),
+					value: 'caption',
+				},
+				{
+					label: __( 'Show EXIF Data', 'folioblocks' ),
+					value: 'exif',
+				},
+			];
 
 			if ( showProductInfoOption ) {
 				overlayContentOptions.push( {
@@ -108,11 +159,30 @@ export const registerImageHoverActionPremiumControls = ( {
 					value: 'product',
 				} );
 			}
+			overlayContentOptions.push( {
+				label: __( 'Show Social Media', 'folioblocks' ),
+				value: 'social',
+			} );
 
 			return (
 				<>
 					<SelectControl
-						label={ __( 'Hover Style', 'folioblocks' ) }
+						label={ __( 'Hover Effect', 'folioblocks' ) }
+						value={ getHoverEffect( attributes ) }
+						options={ HOVER_EFFECT_OPTIONS }
+						onChange={ ( hoverEffect ) =>
+							setAttributes( { hoverEffect } )
+						}
+						__nextHasNoMarginBottom
+						__next40pxDefaultSize
+						help={ __(
+							'Choose how the image itself moves or changes on hover.',
+							'folioblocks'
+						) }
+					/>
+
+					<SelectControl
+						label={ __( 'Overlay Style', 'folioblocks' ) }
 						value={ overlayStyle }
 						options={ OVERLAY_STYLE_OPTIONS }
 						onChange={ ( value ) => {
@@ -126,18 +196,41 @@ export const registerImageHoverActionPremiumControls = ( {
 							if ( enabled ) {
 								nextAttributes.onHoverStyle = value;
 							}
-								if ( value === 'color-overlay' ) {
-									nextAttributes.overlayTextColor =
-										attributes.overlayTextColor || '#000000';
-									nextAttributes.overlayBgColor =
-										attributes.overlayBgColor || '#f9f9f9';
-								}
-								if ( value === 'chip' ) {
-									nextAttributes.chipOverlayTextColor =
-										attributes.chipOverlayTextColor || '#000000';
-									nextAttributes.chipOverlayBgColor =
-										attributes.chipOverlayBgColor || '#f9f9f9';
-								}
+							if ( value === 'color-overlay' ) {
+								nextAttributes.overlayTextColor =
+									attributes.overlayTextColor || '#000000';
+								nextAttributes.overlayBgColor = isGradientValue(
+									attributes.overlayBgColor
+								)
+									? '#f9f9f9'
+									: attributes.overlayBgColor || '#f9f9f9';
+							}
+							if ( value === 'gradient-overlay' ) {
+								nextAttributes.overlayTextColor =
+									attributes.overlayTextColor || '#000000';
+								nextAttributes.overlayBgGradient =
+									attributes.overlayBgGradient ||
+									( isGradientValue( attributes.overlayBgColor )
+										? attributes.overlayBgColor
+										: DEFAULT_OVERLAY_BG_GRADIENT );
+							}
+							if ( value === 'chip' ) {
+								nextAttributes.chipOverlayTextColor =
+									attributes.chipOverlayTextColor || '#000000';
+								nextAttributes.chipOverlayBgColor =
+									isGradientValue( attributes.chipOverlayBgColor )
+										? '#f9f9f9'
+										: attributes.chipOverlayBgColor || '#f9f9f9';
+							}
+							if ( value === 'chip-gradient' ) {
+								nextAttributes.chipOverlayTextColor =
+									attributes.chipOverlayTextColor || '#000000';
+								nextAttributes.chipOverlayBgGradient =
+									attributes.chipOverlayBgGradient ||
+									( isGradientValue( attributes.chipOverlayBgColor )
+										? attributes.chipOverlayBgColor
+										: DEFAULT_OVERLAY_BG_GRADIENT );
+							}
 
 							setAttributes( nextAttributes );
 						} }
@@ -145,6 +238,23 @@ export const registerImageHoverActionPremiumControls = ( {
 						__next40pxDefaultSize
 						help={ getOverlayHelp( overlayStyle ) }
 					/>
+
+					{ supportsOverlayEntrance( overlayStyle ) && (
+						<SelectControl
+							label={ __( 'Overlay Entrance', 'folioblocks' ) }
+							value={ getOverlayEntrance( attributes ) }
+							options={ OVERLAY_ENTRANCE_OPTIONS }
+							onChange={ ( overlayEntrance ) =>
+								setAttributes( { overlayEntrance } )
+							}
+							__nextHasNoMarginBottom
+							__next40pxDefaultSize
+							help={ __(
+								'Choose how the overlay enters the image.',
+								'folioblocks'
+							) }
+						/>
+					) }
 
 					{ overlayStyle !== 'none' && (
 						<>
@@ -204,31 +314,56 @@ export const registerImageHoverActionPremiumControls = ( {
 		( defaultContent, props ) => {
 			const { attributes, setAttributes } = props;
 
-				const overlayStyle = getOverlayStyle( attributes );
-				if (
-					overlayStyle !== 'color-overlay' &&
-					overlayStyle !== 'chip'
-				) {
-					return null;
-				}
-				const isChip = overlayStyle === 'chip';
-				const textAttribute = isChip
-					? 'chipOverlayTextColor'
-					: 'overlayTextColor';
-				const bgAttribute = isChip
-					? 'chipOverlayBgColor'
-					: 'overlayBgColor';
+			const overlayStyle = getOverlayStyle( attributes );
+			if ( overlayStyle === 'none' ) {
+				return null;
+			}
+			const isChip = overlayStyle === 'chip';
+			const isChipGradient = overlayStyle === 'chip-gradient';
+			const isGradientOverlay = overlayStyle === 'gradient-overlay';
+			const hasColorControls =
+				overlayStyle === 'color-overlay' ||
+				overlayStyle === 'gradient-overlay' ||
+				isChip ||
+				isChipGradient;
+			const textAttribute = isChip || isChipGradient
+				? 'chipOverlayTextColor'
+				: 'overlayTextColor';
+			const bgAttribute = isGradientOverlay
+				? 'overlayBgGradient'
+				: isChipGradient
+				? 'chipOverlayBgGradient'
+				: isChip
+				? 'chipOverlayBgColor'
+				: 'overlayBgColor';
+			const overlayContent =
+				attributes.overlayContent ||
+				( attributes.wooProductPriceOnHover ? 'product' : 'title' );
+			const hasTypographyControls =
+				supportsOverlayTypography( overlayContent );
 
-				return (
-					<ToolsPanel
-						label={ stylePanelLabel }
-						resetAll={ () =>
-							setAttributes( {
-								[ bgAttribute ]: '',
-								[ textAttribute ]: '',
-							} )
-						}
-					>
+			if ( ! hasColorControls && ! hasTypographyControls ) {
+				return null;
+			}
+
+			return (
+				<ToolsPanel
+					label={ stylePanelLabel }
+					resetAll={ () =>
+						setAttributes( {
+							...( hasColorControls
+								? {
+										[ bgAttribute ]: '',
+										[ textAttribute ]: '',
+								  }
+								: {} ),
+							overlayFontFamily: '',
+							overlayFontWeight: '',
+							overlayFontStyle: '',
+						} )
+					}
+				>
+					{ hasColorControls && (
 						<ToolsPanelItem
 							label={ __( 'Overlay Colors', 'folioblocks' ) }
 							hasValue={ () =>
@@ -247,6 +382,10 @@ export const registerImageHoverActionPremiumControls = ( {
 								label={
 									isChip
 										? __( 'Chip Overlay', 'folioblocks' )
+										: isChipGradient
+										? __( 'Chip Gradient Overlay', 'folioblocks' )
+										: isGradientOverlay
+										? __( 'Gradient Overlay', 'folioblocks' )
 										: __( 'Color Overlay', 'folioblocks' )
 								}
 								value={ {
@@ -255,7 +394,11 @@ export const registerImageHoverActionPremiumControls = ( {
 										( isChip ? '#000000' : '' ),
 									second:
 										attributes[ bgAttribute ] ||
-										( isChip ? '#f9f9f9' : '' ),
+										( isGradientOverlay || isChipGradient
+											? DEFAULT_OVERLAY_BG_GRADIENT
+											: isChip
+											? '#f9f9f9'
+											: '' ),
 								} }
 								onChange={ ( next ) =>
 									setAttributes( {
@@ -263,10 +406,42 @@ export const registerImageHoverActionPremiumControls = ( {
 										[ bgAttribute ]: next?.second || '',
 									} )
 								}
-							firstLabel={ __( 'Text', 'folioblocks' ) }
-							secondLabel={ __( 'Background', 'folioblocks' ) }
-						/>
-					</ToolsPanelItem>
+								firstLabel={ __( 'Text', 'folioblocks' ) }
+								secondLabel={ __( 'Background', 'folioblocks' ) }
+								secondSupportsGradient={
+									isGradientOverlay || isChipGradient
+								}
+								secondGradientOnly={
+									isGradientOverlay || isChipGradient
+								}
+								secondColorLabel={ __( 'Solid', 'folioblocks' ) }
+								secondGradientLabel={ __( 'Gradient', 'folioblocks' ) }
+							/>
+						</ToolsPanelItem>
+					) }
+					{ hasTypographyControls && (
+						<ToolsPanelItem
+							label={ __( 'Overlay Typography', 'folioblocks' ) }
+							hasValue={ () =>
+								!! attributes.overlayFontFamily ||
+								!! attributes.overlayFontWeight ||
+								!! attributes.overlayFontStyle
+							}
+							onDeselect={ () =>
+								setAttributes( {
+									overlayFontFamily: '',
+									overlayFontWeight: '',
+									overlayFontStyle: '',
+								} )
+							}
+							isShownByDefault
+						>
+							<OverlayTypographyControls
+								attributes={ attributes }
+								setAttributes={ setAttributes }
+							/>
+						</ToolsPanelItem>
+					) }
 				</ToolsPanel>
 			);
 		}

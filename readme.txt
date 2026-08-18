@@ -2,109 +2,124 @@
 Contributors: portfolioblocks , campanellafoto
 Plugin link: https://folioblocks.com/
 Tags: gallery, image gallery, photo gallery, video gallery, lightbox, 
-Tested up to:      7.0
-Requires at least: 6.3
+Tested up to:      7.1
+Requires at least: 6.5
 Requires PHP: 7.4
-Stable tag:        1.4.0
+Stable tag:        1.5.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
-Create fast, responsive photo and video galleries with grid, masonry, justified, modular, and carousel layouts—ideal for photographers and creatives.
+Create fast, responsive photo and video galleries with grid, masonry, justified, modular, carousel, filmstrip, and proofing layouts for photographers, creatives, and client-focused studios.
 
 == Description ==
 
-FolioBlocks is a native WordPress gallery plugin for building responsive image galleries, video galleries, portfolio layouts, and comparison blocks directly in the Block Editor. It is designed for photographers, designers, artists, agencies, creative businesses, and WooCommerce stores that need flexible visual layouts without shortcodes or external gallery managers.
+= Native Gallery Blocks for WordPress =
 
-Create Grid, Masonry, Justified, Carousel, Filmstrip, Modular, and Video galleries using familiar Gutenberg controls. FolioBlocks keeps your workflow inside WordPress while giving you tools for lightboxes, hover overlays, gallery filtering, image downloads, WooCommerce product links, EXIF display, and content protection.
+FolioBlocks is a **native WordPress gallery plugin** for photographers, creatives, agencies, and visual businesses who want polished image and video galleries directly inside the **Block Editor**.
 
-The free version includes the core gallery and media blocks. FolioBlocks Pro unlocks advanced creative and commerce features, including Modular Gallery, gallery filtering, WooCommerce integration, image downloads, lazy loading, advanced styling controls, Pro List View thumbnails, and more.
+Create **Grid, Masonry, Justified, Carousel, Filmstrip, Modular, Video, and Proofing galleries** using familiar Gutenberg controls. Add **lightboxes, hover effects & overlays, private client proofing, watermark protection, filtering, downloads, WooCommerce product links, EXIF data, and social sharing** without shortcodes or a separate gallery manager.
 
-Included blocks: 
-* Background Video Block - Add an autoplaying, responsive background video with overlay content on top
-* Before & After Block – Compare two images with an interactive slider
-* Loupe Block - Highlight fine details with an elegant magnifying zoom effect
-* Carousel Gallery Block – Smooth, swipe-friendly horizontal image slider
-* Filmstrip Gallery Block – Scroll through large images with thumbnail navigation below
-* Grid Gallery Block – Classic evenly-spaced grid layout
-* Image Block - Display a single image with lightbox, hover overlay, optional downloads, and WooCommerce linking
-* Justified Gallery Block – Professional row-based gallery with balanced heights
-* Masonry Gallery Block – Pinterest-style vertical gallery layout
-* Modular Gallery Block (Pro Only) – Build custom, magazine-style image layouts
-* Video Block - Display a single video with custom thumbnail, lightbox playback, captions, and optional WooCommerce linking
-* Video Gallery Block – Showcase YouTube, Vimeo, or self-hosted videos
+The free version includes the core gallery and media blocks. **FolioBlocks Pro** unlocks advanced creative, client, and commerce features, including **Modular Gallery, private Proofing galleries, gallery filtering, WooCommerce integration, image downloads, lazy loading, watermark overlays, List View thumbnails**, and more.
 
-Core gallery features include:
-* Fully responsive layouts for desktop, tablet, and mobile
-* Built-in lightbox support
-* Caption support and accessibility-friendly interactions
-* Drag-and-drop image ordering
-* 100% native Gutenberg block editing (no shortcodes, no separate gallery manager)
-* WordPress 7.0 List View inspector support for gallery children
+= Included Blocks =
 
-Pro features include:
-* Block transforms to convert galleries and supported media blocks in one click
-* Custom image click actions for media files, custom URLs, Page/Post links, downloads, lightbox, and WooCommerce products
-* Per-image click and hover overrides inside galleries
-* Gallery image filtering with per-image category assignment
-* WooCommerce product integration for images and videos
-* Download full-resolution images
-* Randomize image order
-* Seamless looping for Carousel Gallery
-* Disable right-click / content protection
-* Lazy load images for faster performance
-* Hover effects, image overlays, and overlay content controls
-* EXIF metadata display in lightboxes and hover overlays
-* Light and Dark lightbox appearances, fullscreen viewing, swipe navigation, and combined title, caption, and EXIF layouts
-* Password protection controls for Posts and Pages
-* Responsive desktop, tablet, and mobile gallery gaps
-* Pro List View thumbnails for easier gallery reordering
-* Advanced gallery styling controls for borders, shadows, radius, filter bars, icons, and overlays
+* **Background Video Block** - Add an autoplaying, responsive background video with overlay content on top
+* **Before & After Block** – Compare two images with an interactive slider
+* **Loupe Block** - Highlight fine details with an elegant magnifying zoom effect
+* **Carousel Gallery Block** – Smooth, swipe-friendly horizontal image slider
+* **Filmstrip Gallery Block** – Scroll through large images with thumbnail navigation below
+* **Grid Gallery Block** – Classic evenly-spaced grid layout
+* **Image Block** - Display a single image with lightbox, hover overlay, optional downloads, and WooCommerce linking
+* **Justified Gallery Block** – Professional row-based gallery with balanced heights
+* **Masonry Gallery Block** – Pinterest-style vertical gallery layout
+* **Modular Gallery Block (Pro Only)** – Build custom, magazine-style image layouts with support for nested rows and image stacks
+* **Proofing Gallery Block (Business & Agency Plans Only)** - Let clients review private galleries, save progress, submit selections, flag favorites, and leave comments
+* **Video Block** - Display a single video with custom thumbnail, lightbox playback, captions, and optional WooCommerce linking
+* **Video Gallery Block** – Showcase YouTube, Vimeo, or self-hosted videos, with Pro support for Bunny.net Stream, Cloudflare Stream, DailyMotion, Loom, VideoPress, and Wistia
 
-Why FolioBlocks?
+= Core Gallery Features =
 
-FolioBlocks is built for users who want fast, native, block-based galleries without the complexity of third-party gallery builders or shortcode-based plugins. If you want a clean way to display photography, client work, products, portfolios, or case studies, FolioBlocks gives you those tools directly inside the editor.
+* **Fully responsive layouts** for desktop, tablet, and mobile
+* **Built-in lightbox support**
+* **Caption support** and accessibility-friendly interactions
+* **Drag-and-drop image ordering**
+* **100% native Gutenberg block editing** with no shortcodes and no separate gallery manager
+
+= Pro Features =
+
+* **Private client proofing galleries** with password protection, Grid, Justified, and Masonry layouts, Save & Continue, final submission, and admin session reports
+* **Watermark overlays** for gallery images and lightbox views
+* **Social sharing controls** for lightboxes and hover overlays
+* **Lightbox image counters and zoom controls** with cursor or trackpad panning
+* **Advanced Pro video provider support** for Bunny.net Stream, Cloudflare Stream, DailyMotion, Loom, VideoPress, and Wistia
+* **Block transforms** to convert galleries and supported media blocks in one click
+* **Custom image click actions** for media files, custom URLs, Page/Post links, downloads, lightbox, and WooCommerce products
+* **Per-image click and hover overrides** inside galleries
+* **Gallery image filtering** with per-image category assignment
+* **WooCommerce product integration** for images and videos
+* **Download full-resolution images**
+* **Randomize image order**
+* **Seamless looping** for Carousel Gallery
+* **Disable right-click & image dragging content protection**
+* **Lazy load images** for faster performance
+* **Hover effects, gradient overlays, overlay entrances, and typography controls**
+* **EXIF metadata display** in lightboxes and hover overlays
+* **Light and Dark lightbox appearances**, fullscreen viewing, swipe navigation, image counters, zoom, and combined title, caption, and EXIF layouts
+* **Proofing workflow tools** including hearts, color flags, comments, proofing filters, admin status badges, PDF-friendly reports, and optional admin email notifications
+* **Password protection controls** for Posts and Pages
+* **Responsive desktop, tablet, and mobile gallery gaps**
+* **List View thumbnails** for easier gallery reordering
+* **Advanced gallery styling controls** for borders, shadows, radius, filter bars, icons, and overlays
+
+= Why FolioBlocks? =
+
+FolioBlocks is built for users who want **fast, native, block-based galleries** without the complexity of third-party gallery builders or shortcode-based plugins. If you want a clean way to display **photography, client work, products, portfolios, or case studies**, FolioBlocks gives you those tools directly inside the editor.
 
 == Installation ==
 
-The easiest way to install FolioBlocks is by visiting your **Plugins > Add New** menu. Search for "FolioBlocks" and install the first result you see there.
+= Install from WordPress =
+
+The easiest way to install FolioBlocks is by visiting your **Plugins > Add New** menu. Search for **"FolioBlocks"** and install the first result you see there.
+
+= Install from a ZIP File =
 
 To install with the zip file downloaded from this page:
 
-1. Login to your WordPress dashboard
+1. Log in to your WordPress dashboard
 2. Visit the **Plugins > Add New** menu
 3. Click the **Upload Plugin** button at the top
-4. In the upload form that appears, click the **Choose file** button and select the **portfolio-blocks.zip** file you downloaded here
+4. In the upload form that appears, click the **Choose file** button and select the **folioblocks.zip** file you downloaded here
 5. Click the **Install Now** button
 6. Once the page reloads, click the blue **Activate** link
 
 == Frequently Asked Questions ==
 
 = What is FolioBlocks? =
-FolioBlocks is a collection of modern, responsive gallery and media blocks built specifically for the WordPress Block Editor (Gutenberg). You can create image and video galleries with advanced layouts like Grid, Masonry, Justified, Carousel, and more — all directly in the editor.
+FolioBlocks is a collection of **modern, responsive gallery and media blocks** built specifically for the WordPress Block Editor (Gutenberg). You can create image and video galleries with advanced layouts like **Grid, Masonry, Justified, Carousel**, and more — all directly in the editor.
 
 = Does FolioBlocks work with any WordPress theme? =
-Yes. FolioBlocks is designed to work with all modern WordPress themes. For best results, we recommend using a block theme that supports Full Site Editing.
+Yes. FolioBlocks is designed to work with **all modern WordPress themes**. For best results, we recommend using a block theme that supports **Full Site Editing**.
 
 = What’s the difference between the free and Pro versions? =
-The free version includes all the core blocks with the exception of the Modular Gallery. The Pro version includes the Modular Gallery block and unlocks additional premium features across all blocks such as Gallery Filtering, WooCommerce integration, Image Downloads, Randomize Image Order, Lightbox Captions, Right-Click Disable, Lazy Load, and more.
+The free version includes all the core blocks with the exception of the **Modular Gallery** and **Proofing Gallery**. The Pro version includes Modular Gallery and unlocks additional premium features across supported blocks, including **Gallery Filtering, WooCommerce integration, Image Downloads, Randomize Image Order, Lightbox Captions, Lightbox Zoom, Image Counters, Watermark Overlays, Social Sharing, Right-Click Disable, Disable Drag To Save, Lazy Load**, and more. The Proofing Gallery is available on Business and Agency plans.
 
 = Can I use FolioBlocks with page builders like Elementor or Divi? =
-FolioBlocks is built specifically for the WordPress Block Editor (Gutenberg). It will not work inside Elementor, Divi, or other third-party page builders.
+FolioBlocks is built specifically for the **WordPress Block Editor (Gutenberg)**. It will not work inside Elementor, Divi, or other third-party page builders.
 
 = Will FolioBlocks slow down my website? =
-No. FolioBlocks is optimized for performance and loads only the scripts and styles needed for each block. The Pro version also includes Lazy Load support to further improve loading speed.
+No. FolioBlocks is **optimized for performance** and loads only the scripts and styles needed for each block. The Pro version also includes **Lazy Load** support to further improve loading speed.
 
 = Can I upgrade from the free version to Pro? =
-Yes. You can install the free version from the WordPress plugin directory, and upgrade to Pro at any time. Your galleries will continue to work — you’ll simply unlock unlimited images and additional features.
+Yes. You can install the free version from the WordPress plugin directory, and upgrade to Pro at any time. Your galleries will continue to work — you’ll simply unlock **unlimited images and additional features**.
 
 = Do you offer support? =
-Yes. Free users can post support requests on the WordPress.org plugin forum. Pro users receive priority email support directly from the developer.
+Yes. Free users can post support requests on the **WordPress.org plugin forum**. Pro users receive **priority email support** directly from the developer.
 
 = Can I use FolioBlocks on client websites? =
-Absolutely. FolioBlocks is built with agencies and freelancers in mind. The Pro version offers licensing for single sites, 5 sites, or unlimited client projects depending on your plan.
+Absolutely. FolioBlocks is built with **agencies and freelancers** in mind. The Pro version offers licensing for single sites, 5 sites, or unlimited client projects depending on your plan.
 
 = Will my galleries stop working if I deactivate the plugin? =
-No, the galleries will remain in place on your site. However, the advanced layouts and features are powered by FolioBlocks, so deactivating the plugin will remove those.
+No, the galleries will remain in place on your site. However, the **advanced layouts and features** are powered by FolioBlocks, so deactivating the plugin will remove those.
 
 == Screenshots ==
 
@@ -116,6 +131,33 @@ No, the galleries will remain in place on your site. However, the advanced layou
 6. Video Gallery block populated with images
 
 == Changelog ==
+
+= 1.5.0 =
+* Added Proofing Gallery Block (Business & Agency Only) for image selections, favorites, flags, and comments.
+* Added Watermark overlays for gallery images and Lightbox views.
+* Added optional Lightbox Image Counter and Zoom features.
+* Added Social Media Sharing in Lightboxes and Overlays.
+* Added Disable Drag To Save feature in Page/Post settings for all galleries. 
+* Added Pro support for Bunny Stream, Cloudflare Stream, DailyMotion, Loom, VideoPress, and Wistia to Video Block and Video Gallery embeds.
+* Added full Gradient Overlay support for Image Block, Video Block, image galleries, & Video Gallery.
+* Added Hover Effect controls with Zoom In, Zoom Out, Lift, Tilt, Pop, Glare, Pan, and Desaturate effects.
+* Added Overlay Entrance controls for supported overlays, including fade and slide directions.
+* Added Overlay typography controls for Image Block and Image galleries, including theme font family plus weight and style.
+* Added support for nesting Image Rows inside of Image Stacks on Modular Gallery. 
+* Added a blue color indicator to Image Block icons when Gallery overrides are active.
+
+= 1.4.5 =
+* Fixed a PHP fatal error in Image Block rendering caused by missing shared CSS value sanitizers in the 1.4.4 package.
+* Improved review notice actions so stale Maybe Later and I Already Did links can still dismiss the notice.
+
+= 1.4.4 =
+* Fixed the admin review link so an expired review notice no longer shows a WordPress "link expired" error.
+
+= 1.4.3 =
+* Fixed Grid and Masonry Gallery editor syncing so repeated autosaves cannot duplicate existing gallery images.
+
+= 1.4.2 =
+* Fixed Modular Gallery row alignment when Image Stacks appear beside Image Blocks.
 
 = 1.4.0 =
 * Added responsive desktop, tablet, and mobile gap controls to Carousel, Masonry, Justified, Modular, and Video Galleries.

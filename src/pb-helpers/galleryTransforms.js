@@ -448,15 +448,34 @@ const isSupportedVideoEmbed = ( attributes = {} ) => {
 	const providerSlug = ( attributes.providerNameSlug || '' ).toLowerCase();
 	const providerName = ( attributes.providerName || '' ).toLowerCase();
 	const url = ( attributes.url || '' ).toLowerCase();
+	const providers = [
+		'youtube',
+		'vimeo',
+		'dailymotion',
+		'videopress',
+		'wistia',
+		'loom',
+		'cloudflare',
+	];
+	const urlPatterns = [
+		'youtube.com',
+		'youtu.be',
+		'vimeo.com',
+		'dailymotion.com',
+		'dai.ly',
+		'videopress.com',
+		'video.wordpress.com',
+		'wistia.com',
+		'wistia.net',
+		'loom.com',
+		'videodelivery.net',
+		'cloudflarestream.com',
+	];
 
 	return (
-		providerSlug === 'youtube' ||
-		providerSlug === 'vimeo' ||
-		providerName === 'youtube' ||
-		providerName === 'vimeo' ||
-		url.includes( 'youtube.com' ) ||
-		url.includes( 'youtu.be' ) ||
-		url.includes( 'vimeo.com' )
+		providers.includes( providerSlug ) ||
+		providers.includes( providerName ) ||
+		urlPatterns.some( ( pattern ) => url.includes( pattern ) )
 	);
 };
 

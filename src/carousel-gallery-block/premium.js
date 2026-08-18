@@ -22,6 +22,7 @@ import { registerImageHoverActionPremiumControls } from '../pb-helpers/imageHove
 import { registerListViewThumbnailEnhancements } from '../pb-helpers/listViewThumbnailEnhancements';
 import { enableGalleryTransforms } from '../pb-helpers/galleryTransforms';
 import { registerResponsiveGapPremiumControl } from '../pb-helpers/responsiveGapPremiumControl';
+import { registerWatermarkOverlayControls } from '../pb-helpers/watermarkOverlayControls';
 import {
 	registerDisableRightClickPremiumControl,
 	registerLazyLoadPremiumControl,
@@ -39,6 +40,11 @@ const DEFAULT_CONTROLS_BACKGROUND_COLOR = 'rgba(0, 0, 0, 0.5)';
 const DEFAULT_CONTROLS_ICON_COLOR = '#ffffff';
 
 registerListViewThumbnailEnhancements( {
+	hookPrefix: 'folioBlocks.carouselGallery',
+	namespace: 'folioblocks/carousel-gallery',
+} );
+
+registerWatermarkOverlayControls( {
 	hookPrefix: 'folioBlocks.carouselGallery',
 	namespace: 'folioblocks/carousel-gallery',
 } );

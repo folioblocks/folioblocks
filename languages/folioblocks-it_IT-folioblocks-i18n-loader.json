@@ -1,5 +1,5 @@
 {
-  "translation-revision-date": "2026-06-24T05:34:48.533Z",
+  "translation-revision-date": "2026-08-12T13:59:18.824Z",
   "generator": "FolioBlocks custom i18n tooling",
   "domain": "messages",
   "locale_data": {
@@ -225,9 +225,6 @@
       "Change the shape of the Loupe.": [
         "Cambia la forma della Loupe."
       ],
-      "Chip": [
-        "Etichetta"
-      ],
       "Chip Overlay": [
         "Overlay etichetta"
       ],
@@ -438,9 +435,6 @@
       "Displays the overlay content over a subtle gradient at the bottom of the image.": [
         "Mostra il contenuto dell’overlay sopra una sfumatura delicata nella parte inferiore dell’immagine."
       ],
-      "Displays the overlay content over custom overlay colors set in Styles panel.": [
-        "Mostra il contenuto dell’overlay sopra i colori personalizzati impostati nel pannello Stili."
-      ],
       "Download Icon": [
         "Icona di download"
       ],
@@ -527,6 +521,9 @@
       ],
       "Enter a valid URL beginning with http:// or https://.": [
         "Inserisci un URL valido che inizi con http:// o https://."
+      ],
+      "Facebook": [
+        "Facebook"
       ],
       "Fade Overlay": [
         "Overlay in dissolvenza"
@@ -621,9 +618,6 @@
       "Get FolioBlocks Pro": [
         "Ottieni FolioBlocks Pro"
       ],
-      "Gradient Bottom": [
-        "Sfumatura inferiore"
-      ],
       "Grid Gallery": [
         "Galleria griglia"
       ],
@@ -650,9 +644,6 @@
       ],
       "Hover": [
         "Al passaggio del mouse"
-      ],
-      "Hover Style": [
-        "Stile hover"
       ],
       "ISO": [
         "ISO"
@@ -758,6 +749,9 @@
       ],
       "Light": [
         "Chiaro"
+      ],
+      "Lightbox": [
+        "Lightbox"
       ],
       "Lightbox Appearance": [
         "Aspetto della scatola luminosa"
@@ -1227,9 +1221,6 @@
       "Square": [
         "Quadrato"
       ],
-      "Stack all images vertically on mobile devices.": [
-        "Impila tutte le immagini verticalmente sui dispositivi mobili."
-      ],
       "Start typing to search for products in your WooCommerce store. Click a result to link it.": [
         "Inizia a digitare per cercare prodotti nel tuo negozio WooCommerce. Fai clic su un risultato per collegarlo."
       ],
@@ -1238,9 +1229,6 @@
       ],
       "Subtle": [
         "Impercettibile"
-      ],
-      "Supports YouTube, Vimeo, Bunny Stream, or ": [
-        "Supporta YouTube, Vimeo, Bunny Stream o "
       ],
       "Swap Position": [
         "Scambia posizione"

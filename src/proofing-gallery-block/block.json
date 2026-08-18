@@ -1,0 +1,279 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "folioblocks/proofing-gallery-block",
+	"version": "1.0",
+	"title": "Proofing Gallery",
+	"category": "folioblocks",
+	"allowedBlocks": [
+		"folioblocks/grid-gallery-block",
+		"folioblocks/justified-gallery-block",
+		"folioblocks/masonry-gallery-block"
+	],
+	"icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1247.24 1247.24\"><g fill=\"none\" stroke=\"currentColor\" stroke-width=\"45\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M415 130H176c-25.65 0-46.53 20.89-46.53 46.57V415\"/><path d=\"M832 130h238c25.65 0 46.53 20.89 46.53 46.57V415\"/><path d=\"M1117 832v238c0 25.68-20.88 46.57-46.53 46.57H832\"/><path d=\"M415 1117H176c-25.65 0-46.53-20.89-46.53-46.57V832\"/><path stroke-width=\"90\" d=\"M365 625l175 175 345-430\"/></g></svg>",
+	"description": "Let clients select, approve, and comment on images in a private proofing gallery.",
+	"example": {
+		"attributes": {
+			"preview": true
+		}
+	},
+	"supports": {
+		"align": [
+			"wide",
+			"full"
+		],
+		"color": {
+			"background": true,
+			"gradients": true,
+			"text": false
+		},
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
+		"interactivity": true,
+		"multiple": false,
+		"customClassName": false,
+		"anchor": false,
+		"html": false
+	},
+	"attributes": {
+		"preview": {
+			"type": "boolean",
+			"default": false
+		},
+		"isProofingGallery": {
+			"type": "boolean",
+			"default": true
+		},
+		"clientEmail": {
+			"type": "string",
+			"default": ""
+		},
+		"galleryPassword": {
+			"type": "string",
+			"default": ""
+		},
+		"galleryStyle": {
+			"type": "string",
+			"enum": [
+				"grid",
+				"justified",
+				"masonry"
+			],
+			"default": "grid"
+		},
+		"galleryTypeSettings": {
+			"type": "object",
+			"default": {}
+		},
+		"enableHeart": {
+			"type": "boolean",
+			"default": true
+		},
+		"enableFlag": {
+			"type": "boolean",
+			"default": true
+		},
+		"enableComment": {
+			"type": "boolean",
+			"default": true
+		},
+		"filterAlign": {
+			"type": "string",
+			"default": "center"
+		},
+		"buttonAlign": {
+			"type": "string",
+			"default": "right"
+		},
+		"emailAdminOnSubmit": {
+			"type": "boolean"
+		},
+		"proofingTheme": {
+			"type": "string",
+			"enum": [
+				"light",
+				"dark"
+			],
+			"default": "light"
+		},
+		"saveButtonTextColor": {
+			"type": "string",
+			"default": "#3858e9"
+		},
+		"saveButtonBackgroundColor": {
+			"type": "string",
+			"default": "#ffffff"
+		},
+		"submitButtonTextColor": {
+			"type": "string",
+			"default": "#ffffff"
+		},
+		"submitButtonBackgroundColor": {
+			"type": "string",
+			"default": "#3858e9"
+		},
+		"buttonBorderRadius": {
+			"type": "number",
+			"default": 2
+		},
+		"buttonBorderWidth": {
+			"type": "number",
+			"default": 1
+		},
+		"buttonPaddingVertical": {
+			"type": "number",
+			"default": 6
+		},
+		"buttonPaddingHorizontal": {
+			"type": "number",
+			"default": 12
+		},
+		"buttonFontSize": {
+			"type": "number",
+			"default": 13
+		},
+		"buttonGap": {
+			"type": "number",
+			"default": 12
+		},
+		"lightbox": {
+			"type": "boolean",
+			"default": true
+		},
+		"lightboxTheme": {
+			"type": "string",
+			"enum": [
+				"dark",
+				"light"
+			],
+			"default": "dark"
+		},
+		"enableWatermarking": {
+			"type": "boolean",
+			"default": false
+		},
+		"watermarkId": {
+			"type": "string",
+			"default": ""
+		},
+		"watermarkDisplay": {
+			"type": "string",
+			"enum": [
+				"none",
+				"gallery",
+				"lightbox",
+				"both"
+			],
+			"default": "none"
+		},
+		"resolution": {
+			"type": "string",
+			"default": "large"
+		},
+		"columns": {
+			"type": "number",
+			"default": 4
+		},
+		"tabletColumns": {
+			"type": "number",
+			"default": 3
+		},
+		"mobileColumns": {
+			"type": "number",
+			"default": 2
+		},
+		"rowHeight": {
+			"type": "number",
+			"default": 220
+		},
+		"tabletRowHeight": {
+			"type": "number",
+			"default": 190
+		},
+		"mobileRowHeight": {
+			"type": "number",
+			"default": 160
+		},
+		"gap": {
+			"type": "number",
+			"default": 10
+		},
+		"tabletGap": {
+			"type": "number",
+			"default": 10
+		},
+		"mobileGap": {
+			"type": "number",
+			"default": 10
+		},
+		"borderWidth": {
+			"type": "number",
+			"default": 0
+		},
+		"borderRadius": {
+			"type": "number",
+			"default": 0
+		},
+		"borderColor": {
+			"type": "string",
+			"default": "#ffffff"
+		},
+		"dropShadow": {
+			"type": "boolean",
+			"default": false
+		},
+		"shadowStyle": {
+			"type": "string",
+			"enum": [
+				"",
+				"none",
+				"subtle",
+				"soft",
+				"elevated",
+				"dramatic"
+			],
+			"default": ""
+		},
+		"lightboxCounter": {
+			"type": "boolean",
+			"default": false
+		},
+		"lightboxZoom": {
+			"type": "boolean",
+			"default": false
+		}
+	},
+	"providesContext": {
+		"folioBlocks/resolution": "resolution",
+		"folioBlocks/borderColor": "borderColor",
+		"folioBlocks/borderWidth": "borderWidth",
+		"folioBlocks/borderRadius": "borderRadius",
+		"folioBlocks/dropShadow": "dropShadow",
+		"folioBlocks/shadowStyle": "shadowStyle",
+		"folioBlocks/lightbox": "lightbox",
+		"folioBlocks/lightboxTheme": "lightboxTheme",
+		"folioBlocks/enableWatermarking": "enableWatermarking",
+		"folioBlocks/watermarkId": "watermarkId",
+		"folioBlocks/watermarkDisplay": "watermarkDisplay",
+		"folioBlocks/isProofingGallery": "isProofingGallery",
+		"folioBlocks/proofingEnableHeart": "enableHeart",
+		"folioBlocks/proofingEnableFlag": "enableFlag",
+		"folioBlocks/proofingEnableComment": "enableComment",
+		"folioBlocks/lightboxCounter": "lightboxCounter",
+		"folioBlocks/lightboxZoom": "lightboxZoom"
+	},
+	"textdomain": "folioblocks",
+	"editorScript": [
+		"file:./index.js",
+		"file:./premium.js"
+	],
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"viewScriptModule": "file:./view.js",
+	"viewScript": [
+		"file:./premium-view.js"
+	]
+}

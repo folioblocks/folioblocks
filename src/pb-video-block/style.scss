@@ -6,6 +6,9 @@
 .pb-video-block {
 	--pb-video-overlay-bg: rgba(0, 0, 0, 0.35);
 	--pb-video-overlay-text: #fff;
+	--pb-video-hover-duration: 0.35s;
+	--pb-tilt-x: 0deg;
+	--pb-tilt-y: 0deg;
 
 	position: relative;
 	width: 100%;
@@ -122,7 +125,8 @@
 		pointer-events: none;
 	}
 
-	&.has-color-overlay {
+	&.has-color-overlay,
+	&.has-gradient-overlay {
 
 		.video-title-overlay,
 		.video-category-overlay,
@@ -134,6 +138,10 @@
 		.video-play-button svg {
 			text-shadow: none;
 		}
+	}
+
+	&.has-gradient-overlay {
+		--pb-video-overlay-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(226, 232, 240, 0.82) 100%);
 	}
 
 	.video-title-overlay,
@@ -224,6 +232,149 @@
 	background: rgba(0, 0, 0, 0.65);
 	backdrop-filter: blur(6px);
 	-webkit-backdrop-filter: blur(6px);
+}
+
+.pb-video-block.pb-overlay-enter-fade .video-overlay .overlay-content {
+	transform: none;
+}
+
+.pb-video-block.pb-overlay-enter-slide-up .video-overlay .overlay-content {
+	transform: translateY(100%);
+}
+
+.pb-video-block.pb-overlay-enter-slide-down .video-overlay .overlay-content {
+	transform: translateY(-100%);
+}
+
+.pb-video-block.pb-overlay-enter-slide-left .video-overlay .overlay-content {
+	transform: translateX(100%);
+}
+
+.pb-video-block.pb-overlay-enter-slide-right .video-overlay .overlay-content {
+	transform: translateX(-100%);
+}
+
+.pb-video-block.pb-overlay-enter-fade.has-overlay-always .video-overlay .overlay-content,
+.pb-video-block.pb-overlay-enter-fade.has-overlay-hover:hover .video-overlay .overlay-content,
+.pb-video-block.pb-overlay-enter-slide-up.has-overlay-always .video-overlay .overlay-content,
+.pb-video-block.pb-overlay-enter-slide-up.has-overlay-hover:hover .video-overlay .overlay-content,
+.pb-video-block.pb-overlay-enter-slide-down.has-overlay-always .video-overlay .overlay-content,
+.pb-video-block.pb-overlay-enter-slide-down.has-overlay-hover:hover .video-overlay .overlay-content,
+.pb-video-block.pb-overlay-enter-slide-left.has-overlay-always .video-overlay .overlay-content,
+.pb-video-block.pb-overlay-enter-slide-left.has-overlay-hover:hover .video-overlay .overlay-content,
+.pb-video-block.pb-overlay-enter-slide-right.has-overlay-always .video-overlay .overlay-content,
+.pb-video-block.pb-overlay-enter-slide-right.has-overlay-hover:hover .video-overlay .overlay-content {
+	opacity: 1;
+	transform: none;
+}
+
+.pb-video-block.pb-effect-zoom-in .pb-video-block-img,
+.pb-video-block.pb-effect-zoom-out .pb-video-block-img,
+.pb-video-block.pb-effect-pan .pb-video-block-img,
+.pb-video-block.pb-effect-desaturate .pb-video-block-img {
+	transition:
+		transform var(--pb-video-hover-duration) ease,
+		filter var(--pb-video-hover-duration) ease;
+	will-change: transform;
+}
+
+.pb-video-block.pb-effect-zoom-in:hover .pb-video-block-img {
+	transform: scale(1.065);
+}
+
+.pb-video-block.pb-effect-zoom-out .pb-video-block-img {
+	transform: scale(1.065);
+}
+
+.pb-video-block.pb-effect-zoom-out:hover .pb-video-block-img {
+	transform: scale(1);
+}
+
+.pb-video-block.pb-effect-lift,
+.pb-video-block.pb-effect-tilt,
+.pb-video-block.pb-effect-pop {
+	transition:
+		transform var(--pb-video-hover-duration) ease,
+		box-shadow var(--pb-video-hover-duration) ease;
+	transform-style: preserve-3d;
+	will-change: transform;
+}
+
+.pb-video-block.pb-effect-lift:hover {
+	transform: translateY(-4px) !important;
+	box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+}
+
+.pb-video-block.pb-effect-tilt:hover {
+	transform:
+		perspective(900px)
+		rotateX(var(--pb-tilt-x, 0deg))
+		rotateY(var(--pb-tilt-y, 0deg))
+		scale(1.035) !important;
+	box-shadow: 0 14px 30px rgba(0, 0, 0, 0.18);
+}
+
+.pb-video-block.pb-effect-pop:hover {
+	transform: scale(1.035) !important;
+	box-shadow: 0 10px 22px rgba(0, 0, 0, 0.16);
+}
+
+.pb-video-block.pb-effect-glare::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: 3;
+	pointer-events: none;
+	background: linear-gradient(
+		115deg,
+		transparent 0%,
+		transparent 36%,
+		rgba(255, 255, 255, 0.5) 48%,
+		transparent 62%,
+		transparent 100%
+	);
+	opacity: 0;
+	transform: translateX(-120%);
+	transition:
+		opacity var(--pb-video-hover-duration) ease,
+		transform 0.55s ease;
+}
+
+.pb-video-block.pb-effect-glare:hover::after {
+	opacity: 1;
+	transform: translateX(120%);
+}
+
+.pb-video-block.pb-effect-pan .pb-video-block-img {
+	transform: scale(1.08) translateX(-2%);
+}
+
+.pb-video-block.pb-effect-pan:hover .pb-video-block-img {
+	transform: scale(1.08) translateX(2%);
+}
+
+.pb-video-block.pb-effect-desaturate .pb-video-block-img {
+	filter: saturate(1);
+}
+
+.pb-video-block.pb-effect-desaturate:hover .pb-video-block-img {
+	filter: saturate(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	.pb-video-block.pb-effect-zoom-in .pb-video-block-img,
+	.pb-video-block.pb-effect-zoom-out .pb-video-block-img,
+	.pb-video-block.pb-effect-pan .pb-video-block-img,
+	.pb-video-block.pb-effect-desaturate .pb-video-block-img,
+	.pb-video-block.pb-effect-lift,
+	.pb-video-block.pb-effect-tilt,
+	.pb-video-block.pb-effect-pop,
+	.pb-video-block.pb-effect-glare::after {
+		transition: none !important;
+		transform: none !important;
+		animation: none !important;
+	}
 }
 
 // WooCommerce Add to Cart Button Styles

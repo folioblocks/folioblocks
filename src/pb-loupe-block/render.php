@@ -4,6 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 $fbks_resolution  = $attributes['resolution'] ?? 'large';
 $fbks_shape       = $attributes['loupeShape'] ?? 'circle';
 $fbks_theme       = $attributes['loupeTheme'] ?? 'light';
+$fbks_lazy_load   = ! empty( $attributes['lazyLoad'] );
 
 $fbks_wrapper_attrs = [
     'data-resolution' => esc_attr( $fbks_resolution ),
@@ -35,6 +36,8 @@ $fbks_allowed_wrapper_attrs = [
                 src="<?php echo esc_url( $attributes['url'] ); ?>"
                 alt="<?php echo esc_attr( $attributes['alt'] ?? '' ); ?>"
                 class="pb-loupe-image"
+                loading="<?php echo $fbks_lazy_load ? 'lazy' : 'eager'; ?>"
+                decoding="async"
             />
             <div class="pb-loupe-lens"></div>
         </div>

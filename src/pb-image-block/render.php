@@ -28,6 +28,10 @@ $fbks_loading_attr = 'eager';
 
 $fbks_context = $block->context ?? [];
 $fbks_can_override_gallery_settings = fbks_fs()->can_use_premium_code__premium_only();
+$fbks_is_inside_proofing_gallery = $fbks_can_override_gallery_settings && ! empty( $fbks_context['folioBlocks/isProofingGallery'] );
+$fbks_proofing_enable_heart = $fbks_is_inside_proofing_gallery && ( ! isset( $fbks_context['folioBlocks/proofingEnableHeart'] ) || (bool) $fbks_context['folioBlocks/proofingEnableHeart'] );
+$fbks_proofing_enable_flag = $fbks_is_inside_proofing_gallery && ( ! isset( $fbks_context['folioBlocks/proofingEnableFlag'] ) || (bool) $fbks_context['folioBlocks/proofingEnableFlag'] );
+$fbks_proofing_enable_comment = $fbks_is_inside_proofing_gallery && ( ! isset( $fbks_context['folioBlocks/proofingEnableComment'] ) || (bool) $fbks_context['folioBlocks/proofingEnableComment'] );
 $fbks_override_gallery_click = $fbks_can_override_gallery_settings && ! empty( $attributes['overrideGalleryClickSettings'] );
 $fbks_override_gallery_hover = $fbks_can_override_gallery_settings && ! empty( $attributes['overrideGalleryHoverSettings'] );
 $fbks_click_context = $fbks_override_gallery_click ? [] : $fbks_context;
@@ -50,11 +54,53 @@ $fbks_lightbox_theme = isset( $fbks_click_context['folioBlocks/lightboxTheme'] )
 if ( ! in_array( $fbks_lightbox_theme, [ 'dark', 'light' ], true ) ) {
 	$fbks_lightbox_theme = 'dark';
 }
+$fbks_lightbox_counter = (bool) ( $fbks_click_context['folioBlocks/lightboxCounter'] ?? ( $attributes['lightboxCounter'] ?? false ) );
+$fbks_lightbox_zoom = (bool) ( $fbks_click_context['folioBlocks/lightboxZoom'] ?? ( $attributes['lightboxZoom'] ?? false ) );
+
+$fbks_proofing_icon = static function ( $icon ) {
+	if ( 'heart' === $icon ) {
+		return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.4-9.4-8.2C.7 9.8 1.2 6.2 3.8 4.4 6 2.9 8.7 3.4 10.5 5.3L12 6.9l1.5-1.6c1.8-1.9 4.5-2.4 6.7-.9 2.6 1.8 3.1 5.4 1.2 8.4C19 16.6 12 21 12 21z" /></svg>';
+	}
+
+	if ( 'flag' === $icon ) {
+		return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 21V4h10.6l.4 3.1h3v9H9.4L9 13.9H8V21H6z" /></svg>';
+	}
+
+	if ( 'comment' === $icon ) {
+		return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v10H8.7L5 18.4V5z" /></svg>';
+	}
+
+	return '';
+};
+
+$fbks_proofing_image_key = $fbks_id ? 'attachment-' . $fbks_id : 'image-' . md5( $fbks_src );
+$fbks_proofing_thumbnail = $fbks_src;
+$fbks_proofing_title     = $fbks_title;
+if ( $fbks_id ) {
+	$fbks_proofing_thumbnail_data = wp_get_attachment_image_src( $fbks_id, 'medium' );
+	if ( ! empty( $fbks_proofing_thumbnail_data[0] ) ) {
+		$fbks_proofing_thumbnail = $fbks_proofing_thumbnail_data[0];
+	}
+
+	if ( '' === trim( wp_strip_all_tags( $fbks_proofing_title ) ) ) {
+		$fbks_proofing_title = get_the_title( $fbks_id );
+	}
+}
 $fbks_lightbox_content = $fbks_click_context['folioBlocks/lightboxContent'] ?? ( $attributes['lightboxContent'] ?? '' );
-if ( ! in_array( $fbks_lightbox_content, [ 'none', 'title', 'caption', 'product', 'exif', 'title_exif', 'caption_exif', 'title_caption', 'title_caption_exif' ], true ) ) {
+if ( ! in_array( $fbks_lightbox_content, [ 'none', 'title', 'caption', 'product', 'exif', 'title_exif', 'caption_exif', 'title_caption', 'title_caption_exif', 'social' ], true ) ) {
 	$fbks_lightbox_content = $fbks_caption_lightbox ? 'caption' : 'none';
 }
 $fbks_caption_lightbox = 'none' !== $fbks_lightbox_content;
+$fbks_social_sources = function_exists( 'fbks_normalize_social_share_sources' )
+	? fbks_normalize_social_share_sources(
+		function_exists( 'fbks_get_global_social_share_sources' )
+			? fbks_get_global_social_share_sources()
+			: ( $fbks_context['folioBlocks/socialSharingSources'] ?? ( $attributes['socialSharingSources'] ?? [] ) )
+	)
+	: [];
+$fbks_social_sharing_enabled = ! empty( $fbks_social_sources );
+$fbks_lightbox_social_enabled = $fbks_social_sharing_enabled && 'social' === $fbks_lightbox_content;
+$fbks_lightbox_social_sources = $fbks_social_sources;
 $fbks_hide_unknown_lightbox_exif = (bool) ( $fbks_click_context['folioBlocks/hideUnknownExifFields'] ?? ( $attributes['hideUnknownExifFields'] ?? false ) );
 $fbks_hide_unknown_overlay_exif = (bool) ( $fbks_hover_context['folioBlocks/hideUnknownExifFields'] ?? ( $attributes['hideUnknownExifFields'] ?? false ) );
 $fbks_title_hover = $fbks_hover_context['folioBlocks/onHoverTitle'] ?? ( isset( $attributes['showTitleOnHover'] ) ? (bool) $attributes['showTitleOnHover'] : false );
@@ -206,9 +252,13 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 	}
 	$fbks_woo_hover_info = $fbks_hover_context['folioBlocks/wooProductPriceOnHover'] ?? ( $attributes['wooProductPriceOnHover'] ?? false );
 	$fbks_overlay_content = $fbks_hover_context['folioBlocks/overlayContent'] ?? ( $attributes['overlayContent'] ?? ( $fbks_woo_hover_info ? 'product' : 'title' ) );
-	if ( ! in_array( $fbks_overlay_content, [ 'title', 'caption', 'product', 'exif' ], true ) ) {
+	if ( ! in_array( $fbks_overlay_content, [ 'title', 'caption', 'product', 'exif', 'social' ], true ) ) {
 		$fbks_overlay_content = 'title';
 	}
+	if ( 'social' === $fbks_overlay_content && ! $fbks_social_sharing_enabled ) {
+		$fbks_overlay_content = 'title';
+	}
+	$fbks_overlay_social_sources = $fbks_social_sources;
 	$fbks_enable_woo = $fbks_woo_active &&
 		'woocommerce' === $fbks_image_click_action &&
 		$fbks_click_enable_woo;
@@ -245,13 +295,50 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 		'fade-overlay'    => 'pb-hover-fade-overlay',
 		'gradient-bottom' => 'pb-hover-gradient-bottom',
 		'chip'            => 'pb-hover-chip',
-		'color-overlay'   => 'pb-hover-color-overlay',
+		'chip-gradient'   => 'pb-hover-chip',
+		'color-overlay'    => 'pb-hover-color-overlay',
+		'gradient-overlay' => 'pb-hover-gradient-overlay',
 	];
 	$fbks_hover_variant_class = $fbks_hover_class_map[ $fbks_on_hover_style ] ?? 'pb-hover-fade-overlay';
+	$fbks_hover_effect = sanitize_key( $fbks_hover_context['folioBlocks/hoverEffect'] ?? ( $attributes['hoverEffect'] ?? 'none' ) );
+	$fbks_hover_effect_class_map = [
+		'zoom-in'    => 'pb-effect-zoom-in',
+		'zoom-out'   => 'pb-effect-zoom-out',
+		'lift'       => 'pb-effect-lift',
+		'tilt'       => 'pb-effect-tilt',
+		'pop'        => 'pb-effect-pop',
+		'glare'      => 'pb-effect-glare',
+		'pan'        => 'pb-effect-pan',
+		'desaturate' => 'pb-effect-desaturate',
+	];
+	$fbks_hover_effect_class = $fbks_hover_effect_class_map[ $fbks_hover_effect ] ?? '';
+	$fbks_overlay_entrance = sanitize_key( $fbks_hover_context['folioBlocks/overlayEntrance'] ?? ( $attributes['overlayEntrance'] ?? 'default' ) );
+	$fbks_overlay_entrance_class_map = [
+		'fade'        => 'pb-overlay-enter-fade',
+		'slide-up'    => 'pb-overlay-enter-slide-up',
+		'slide-down'  => 'pb-overlay-enter-slide-down',
+		'slide-left'  => 'pb-overlay-enter-slide-left',
+		'slide-right' => 'pb-overlay-enter-slide-right',
+	];
+	$fbks_overlay_entrance_class = $fbks_overlay_entrance_class_map[ $fbks_overlay_entrance ] ?? '';
 	$fbks_overlay_bg   = $fbks_hover_context['folioBlocks/overlayBgColor'] ?? ( $attributes['overlayBgColor'] ?? '' );
+	$fbks_overlay_gradient = $fbks_hover_context['folioBlocks/overlayBgGradient'] ?? ( $attributes['overlayBgGradient'] ?? '' );
 	$fbks_overlay_text = $fbks_hover_context['folioBlocks/overlayTextColor'] ?? ( $attributes['overlayTextColor'] ?? '' );
+	$fbks_overlay_font_family = $fbks_hover_context['folioBlocks/overlayFontFamily'] ?? ( $attributes['overlayFontFamily'] ?? '' );
+	$fbks_overlay_font_weight = $fbks_hover_context['folioBlocks/overlayFontWeight'] ?? ( $attributes['overlayFontWeight'] ?? '' );
+	$fbks_overlay_font_style = $fbks_hover_context['folioBlocks/overlayFontStyle'] ?? ( $attributes['overlayFontStyle'] ?? '' );
 	$fbks_chip_overlay_bg   = $fbks_hover_context['folioBlocks/chipOverlayBgColor'] ?? ( $attributes['chipOverlayBgColor'] ?? '' );
+	$fbks_chip_overlay_gradient = $fbks_hover_context['folioBlocks/chipOverlayBgGradient'] ?? ( $attributes['chipOverlayBgGradient'] ?? '' );
 	$fbks_chip_overlay_text = $fbks_hover_context['folioBlocks/chipOverlayTextColor'] ?? ( $attributes['chipOverlayTextColor'] ?? '' );
+	$fbks_overlay_bg = fbks_sanitize_css_color_value( $fbks_overlay_bg );
+	$fbks_overlay_gradient = fbks_sanitize_css_background_value( $fbks_overlay_gradient );
+	$fbks_overlay_text = fbks_sanitize_css_color_value( $fbks_overlay_text );
+	$fbks_overlay_font_family = fbks_sanitize_css_font_family_value( $fbks_overlay_font_family );
+	$fbks_overlay_font_weight = fbks_sanitize_css_font_weight_value( $fbks_overlay_font_weight );
+	$fbks_overlay_font_style = fbks_sanitize_css_font_style_value( $fbks_overlay_font_style );
+	$fbks_chip_overlay_bg = fbks_sanitize_css_background_value( $fbks_chip_overlay_bg );
+	$fbks_chip_overlay_gradient = fbks_sanitize_css_background_value( $fbks_chip_overlay_gradient );
+	$fbks_chip_overlay_text = fbks_sanitize_css_color_value( $fbks_chip_overlay_text );
 
 	$fbks_lazy_from_context = isset( $fbks_context['folioBlocks/lazyLoad'] ) ? (bool) $fbks_context['folioBlocks/lazyLoad'] : null;
     $fbks_lazy_from_attr    = isset( $attributes['lazyLoad'] ) ? (bool) $attributes['lazyLoad'] : null;
@@ -302,6 +389,15 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 		if ( $fbks_border_radius > 0 ) {
 			$fbks_img_styles .= '--pb-border-radius: ' . esc_attr( $fbks_border_radius ) . 'px;';
 		}
+			if ( $fbks_overlay_font_family ) {
+				$fbks_img_styles .= '--pb-overlay-font-family: ' . esc_attr( $fbks_overlay_font_family ) . ';';
+			}
+			if ( $fbks_overlay_font_weight ) {
+				$fbks_img_styles .= '--pb-overlay-font-weight: ' . esc_attr( $fbks_overlay_font_weight ) . ';';
+			}
+			if ( $fbks_overlay_font_style ) {
+				$fbks_img_styles .= '--pb-overlay-font-style: ' . esc_attr( $fbks_overlay_font_style ) . ';';
+			}
 			if ( 'color-overlay' === $fbks_on_hover_style ) {
 				if ( $fbks_overlay_bg ) {
 					$fbks_img_styles .= '--pb-overlay-bg: ' . esc_attr( $fbks_overlay_bg ) . ';';
@@ -310,9 +406,18 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 					$fbks_img_styles .= '--pb-overlay-color: ' . esc_attr( $fbks_overlay_text ) . ';';
 				}
 			}
-			if ( 'chip' === $fbks_on_hover_style ) {
-				if ( $fbks_chip_overlay_bg ) {
-					$fbks_img_styles .= '--pb-chip-overlay-bg: ' . esc_attr( $fbks_chip_overlay_bg ) . ';';
+			if ( 'gradient-overlay' === $fbks_on_hover_style ) {
+				if ( $fbks_overlay_gradient ) {
+					$fbks_img_styles .= '--pb-overlay-bg: ' . esc_attr( $fbks_overlay_gradient ) . ';';
+				}
+				if ( $fbks_overlay_text ) {
+					$fbks_img_styles .= '--pb-overlay-color: ' . esc_attr( $fbks_overlay_text ) . ';';
+				}
+			}
+			if ( 'chip' === $fbks_on_hover_style || 'chip-gradient' === $fbks_on_hover_style ) {
+				$fbks_effective_chip_bg = 'chip-gradient' === $fbks_on_hover_style ? $fbks_chip_overlay_gradient : $fbks_chip_overlay_bg;
+				if ( $fbks_effective_chip_bg ) {
+					$fbks_img_styles .= '--pb-chip-overlay-bg: ' . esc_attr( $fbks_effective_chip_bg ) . ';';
 				}
 				if ( $fbks_chip_overlay_text ) {
 					$fbks_img_styles .= '--pb-chip-overlay-color: ' . esc_attr( $fbks_chip_overlay_text ) . ';';
@@ -327,6 +432,36 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 		$fbks_context['folioBlocks/disableRightClick'] ??
 		( $attributes['disableRightClick'] ?? false )
 	);
+}
+
+$fbks_show_gallery_watermark = false;
+$fbks_show_lightbox_watermark = false;
+$fbks_watermark_style = '';
+$fbks_watermark_data_attrs = '';
+if ( fbks_fs()->can_use_premium_code__premium_only() ) {
+	$fbks_watermark_enabled = (bool) (
+		$fbks_context['folioBlocks/enableWatermarking'] ??
+		( $attributes['enableWatermarking'] ?? false )
+	);
+	$fbks_watermark_id = sanitize_key(
+		$fbks_context['folioBlocks/watermarkId'] ??
+		( $attributes['watermarkId'] ?? '' )
+	);
+	$fbks_watermark_display = sanitize_key(
+		$fbks_context['folioBlocks/watermarkDisplay'] ??
+		( $attributes['watermarkDisplay'] ?? 'none' )
+	);
+	if ( ! in_array( $fbks_watermark_display, [ 'none', 'gallery', 'lightbox', 'both' ], true ) ) {
+		$fbks_watermark_display = 'none';
+	}
+
+	$fbks_watermark_item = function_exists( 'fbks_get_watermark_by_id' ) ? fbks_get_watermark_by_id( $fbks_watermark_id ) : null;
+	if ( $fbks_watermark_enabled && is_array( $fbks_watermark_item ) ) {
+		$fbks_watermark_style = function_exists( 'fbks_get_watermark_overlay_style' ) ? fbks_get_watermark_overlay_style( $fbks_watermark_item ) : '';
+		$fbks_watermark_data_attrs = function_exists( 'fbks_get_watermark_overlay_data_attrs' ) ? fbks_get_watermark_overlay_data_attrs( $fbks_watermark_item ) : '';
+		$fbks_show_gallery_watermark = '' !== $fbks_watermark_style && in_array( $fbks_watermark_display, [ 'gallery', 'both' ], true );
+		$fbks_show_lightbox_watermark = '' !== $fbks_watermark_data_attrs && in_array( $fbks_watermark_display, [ 'lightbox', 'both' ], true );
+	}
 }
 
 $fbks_wrapper_attributes_args = [];
@@ -451,6 +586,8 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 	<figure
 		class="pb-image-block
       <?php if ( fbks_fs()->can_use_premium_code__premium_only() && $fbks_title_hover ) { echo ' title-hover ' . esc_attr( $fbks_hover_variant_class ); } ?>
+      <?php if ( fbks_fs()->can_use_premium_code__premium_only() && $fbks_title_hover && $fbks_overlay_entrance_class ) { echo ' ' . esc_attr( $fbks_overlay_entrance_class ); } ?>
+      <?php if ( fbks_fs()->can_use_premium_code__premium_only() && $fbks_hover_effect_class ) { echo ' ' . esc_attr( $fbks_hover_effect_class ); } ?>
       <?php if ( fbks_fs()->can_use_premium_code__premium_only() ) { echo esc_attr( $fbks_shadow_class ); } ?>"
 		<?php if ( fbks_fs()->can_use_premium_code__premium_only() && ! empty( $fbks_img_styles ) ) : ?>
 			style="<?php echo esc_attr( $fbks_img_styles ); ?>"
@@ -495,6 +632,16 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 						}
 					}
 				}
+				if ( $fbks_lightbox_social_enabled && function_exists( 'fbks_render_social_share_links' ) ) {
+					$fbks_lightbox_caption .= fbks_render_social_share_links(
+						$fbks_lightbox_social_sources,
+						[
+							'attachment_id' => $fbks_id,
+							'image_url'     => $fbks_full_src,
+							'variant'       => 'lightbox',
+						]
+					);
+				}
 			}
 			?>
 			<a
@@ -502,6 +649,15 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 				class="pb-image-block-lightbox"
 				data-src="<?php echo esc_url( $fbks_full_src ); ?>"
 				data-lightbox-theme="<?php echo esc_attr( $fbks_lightbox_theme ); ?>"
+				<?php if ( $fbks_lightbox_counter ) : ?>
+					data-lightbox-counter="true"
+				<?php endif; ?>
+				<?php if ( $fbks_lightbox_zoom ) : ?>
+					data-lightbox-zoom="true"
+				<?php endif; ?>
+				<?php if ( fbks_fs()->can_use_premium_code__premium_only() && $fbks_show_lightbox_watermark ) : ?>
+					<?php echo wp_kses_data( $fbks_watermark_data_attrs ); ?>
+				<?php endif; ?>
 				<?php if ( ! empty( $fbks_lightbox_caption ) ) : ?>
 					data-caption="<?php echo esc_attr( $fbks_lightbox_caption ); ?>"
 				<?php endif; ?>
@@ -540,6 +696,98 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 			?>
 		<?php endif; ?>
 
+		<?php if ( fbks_fs()->can_use_premium_code__premium_only() && $fbks_show_gallery_watermark ) : ?>
+			<span class="pb-watermark-overlay" style="<?php echo esc_attr( $fbks_watermark_style ); ?>"<?php echo wp_kses_data( $fbks_watermark_data_attrs ); ?> aria-hidden="true"></span>
+		<?php endif; ?>
+
+		<?php if ( $fbks_is_inside_proofing_gallery && ( $fbks_proofing_enable_heart || $fbks_proofing_enable_flag || $fbks_proofing_enable_comment ) ) : ?>
+			<?php $fbks_proofing_control_slot = 1; ?>
+			<div
+				class="fbks-proofing-thumbnail-controls"
+				data-wp-context="<?php echo esc_attr( wp_json_encode( [
+					'imageId'      => $fbks_proofing_image_key,
+					'attachmentId' => $fbks_id,
+					'thumbnail'    => esc_url_raw( $fbks_proofing_thumbnail ),
+					'title'        => $fbks_proofing_title,
+				] ) ); ?>"
+				data-wp-init="callbacks.registerImage"
+			>
+				<?php if ( $fbks_proofing_enable_heart ) : ?>
+					<button
+						type="button"
+						class="fbks-proofing-thumbnail-control fbks-proofing-thumbnail-control--heart fbks-proofing-thumbnail-control--slot-<?php echo esc_attr( $fbks_proofing_control_slot ); ?>"
+						data-wp-on--click="actions.toggleHeart"
+						data-wp-class--is-active="state.isCurrentImageHearted"
+						data-wp-bind--aria-pressed="state.isCurrentImageHearted"
+						aria-pressed="false"
+						aria-label="<?php esc_attr_e( 'Like image', 'folioblocks' ); ?>"
+					>
+						<?php echo wp_kses( $fbks_proofing_icon( 'heart' ), fbks_get_allowed_post_html_with_svg() ); ?>
+					</button>
+					<?php $fbks_proofing_control_slot++; ?>
+				<?php endif; ?>
+
+				<?php if ( $fbks_proofing_enable_flag ) : ?>
+					<?php $fbks_proofing_flag_slot = $fbks_proofing_control_slot; ?>
+					<button
+						type="button"
+						class="fbks-proofing-thumbnail-control fbks-proofing-thumbnail-control--flag fbks-proofing-thumbnail-control--slot-<?php echo esc_attr( $fbks_proofing_flag_slot ); ?>"
+						data-wp-on--click="actions.toggleFlagPanel"
+						data-wp-class--is-red="state.isCurrentImageFlagRed"
+						data-wp-class--is-orange="state.isCurrentImageFlagOrange"
+						data-wp-class--is-green="state.isCurrentImageFlagGreen"
+						aria-label="<?php esc_attr_e( 'Set flag color', 'folioblocks' ); ?>"
+					>
+						<?php echo wp_kses( $fbks_proofing_icon( 'flag' ), fbks_get_allowed_post_html_with_svg() ); ?>
+					</button>
+					<div class="fbks-proofing-flag-popover fbks-proofing-popover--slot-<?php echo esc_attr( $fbks_proofing_flag_slot ); ?>" data-wp-class--is-open="state.isCurrentImageFlagPanelOpen" data-wp-bind--hidden="!state.isCurrentImageFlagPanelOpen" hidden>
+						<button type="button" class="fbks-proofing-flag-swatch is-red" data-proofing-flag-color="red" data-wp-on--click="actions.setFlagFromContext" aria-label="<?php esc_attr_e( 'Red Flag', 'folioblocks' ); ?>"></button>
+						<button type="button" class="fbks-proofing-flag-swatch is-orange" data-proofing-flag-color="orange" data-wp-on--click="actions.setFlagFromContext" aria-label="<?php esc_attr_e( 'Orange Flag', 'folioblocks' ); ?>"></button>
+						<button type="button" class="fbks-proofing-flag-swatch is-green" data-proofing-flag-color="green" data-wp-on--click="actions.setFlagFromContext" aria-label="<?php esc_attr_e( 'Green Flag', 'folioblocks' ); ?>"></button>
+						<button type="button" class="fbks-proofing-flag-clear" data-proofing-flag-color="" data-wp-on--click="actions.setFlagFromContext">
+							<?php esc_html_e( 'Clear', 'folioblocks' ); ?>
+						</button>
+					</div>
+					<?php $fbks_proofing_control_slot++; ?>
+				<?php endif; ?>
+
+				<?php if ( $fbks_proofing_enable_comment ) : ?>
+					<?php $fbks_proofing_comment_slot = $fbks_proofing_control_slot; ?>
+					<button
+						type="button"
+						class="fbks-proofing-thumbnail-control fbks-proofing-thumbnail-control--comment fbks-proofing-thumbnail-control--slot-<?php echo esc_attr( $fbks_proofing_comment_slot ); ?>"
+						data-wp-on--click="actions.toggleCommentPanel"
+						data-wp-class--is-active="state.isCurrentImageCommented"
+						data-wp-class--is-open="state.isCurrentImageCommentPanelOpen"
+						aria-label="<?php esc_attr_e( 'Comment on image', 'folioblocks' ); ?>"
+					>
+						<?php echo wp_kses( $fbks_proofing_icon( 'comment' ), fbks_get_allowed_post_html_with_svg() ); ?>
+					</button>
+					<div class="fbks-proofing-comment-popover fbks-proofing-popover--slot-<?php echo esc_attr( $fbks_proofing_comment_slot ); ?>" data-wp-class--is-open="state.isCurrentImageCommentPanelOpen" data-wp-bind--hidden="!state.isCurrentImageCommentPanelOpen" hidden>
+						<label class="fbks-proofing-comment-popover__label">
+							<span><?php esc_html_e( 'Comment', 'folioblocks' ); ?></span>
+							<textarea
+								class="fbks-proofing-comment-popover__field"
+								rows="3"
+								maxlength="1000"
+								data-wp-on--input="actions.setCommentFromInput"
+								data-wp-bind--value="state.currentImageComment"
+							></textarea>
+							<span class="fbks-proofing-comment-popover__counter" data-wp-text="state.currentImageCommentCounter">0 / 1000</span>
+						</label>
+						<div class="fbks-proofing-comment-popover__actions">
+							<button type="button" class="fbks-proofing-comment-popover__button" data-wp-on--click="actions.clearComment">
+								<?php esc_html_e( 'Clear', 'folioblocks' ); ?>
+							</button>
+							<button type="button" class="fbks-proofing-comment-popover__button is-primary" data-wp-on--click="actions.closePanels">
+								<?php esc_html_e( 'Done', 'folioblocks' ); ?>
+							</button>
+						</div>
+					</div>
+				<?php endif; ?>
+			</div>
+		<?php endif; ?>
+
 		<?php
 			// Handle title/product overlay display (Pro only)
 			if ( fbks_fs()->can_use_premium_code__premium_only() && $fbks_title_hover ) {
@@ -556,6 +804,21 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 							echo '<div class="pb-image-block-title-container">';
 							echo '<figcaption class="pb-image-block-title">';
 							echo wp_kses( $fbks_overlay_exif, fbks_get_allowed_post_html_with_svg() );
+							echo '</figcaption></div>';
+						}
+					} elseif ( 'social' === $fbks_overlay_content && function_exists( 'fbks_render_social_share_links' ) ) {
+						$fbks_overlay_social = fbks_render_social_share_links(
+							$fbks_overlay_social_sources,
+							[
+								'attachment_id' => $fbks_id,
+								'image_url'     => $fbks_full_src,
+								'variant'       => 'overlay',
+							]
+						);
+						if ( '' !== $fbks_overlay_social ) {
+							echo '<div class="pb-image-block-title-container">';
+							echo '<figcaption class="pb-image-block-title">';
+							echo wp_kses( $fbks_overlay_social, fbks_get_allowed_post_html_with_svg() );
 							echo '</figcaption></div>';
 						}
 					} elseif ( $fbks_hover_enable_woo && 'product' === $fbks_overlay_content ) {

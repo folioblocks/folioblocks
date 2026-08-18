@@ -26,12 +26,17 @@ $fbks_gap_styles .= '--pb-gallery-gap-mobile:' . $fbks_mobile_gap . 'px;';
 ?>
 <?php
 $fbks_wrapper_args = [
-    'style' => $fbks_gap_styles,
+	'class' => 'is-loading',
+	'style' => $fbks_gap_styles,
 ];
 
 if ( fbks_fs()->can_use_premium_code__premium_only() ) {
     if ( ! empty( $attributes['disableRightClick'] ) ) {
         $fbks_wrapper_args['data-disable-right-click'] = 'true';
+    }
+
+    if ( ! empty( $attributes['disableDragToSave'] ) ) {
+        $fbks_wrapper_args['data-disable-drag-to-save'] = 'true';
     }
 
     if ( ! empty( $attributes['enableDownload'] ) ) {

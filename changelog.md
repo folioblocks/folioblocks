@@ -4,7 +4,161 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.4.0] - Unreleased
+## [1.5.0] - 2026-08-05
+### Fixed
+- Fixed bug where EXIF data with Unknown fields hidden was not centered in Lightbox view. 
+- Fixed bug in Filmstrip Gallery that caused a fatal error on free version of 1.5.0
+- Fixed bug in Video Block that caused undefined variable error on free version of 1.5.0
+
+## [1.5.0] - 2026-08-04
+### Changed
+- Refinements to the Proofing Session page. 
+
+## [1.5.0] - 2026-07-28
+### Added
+- Added Proofing Gallery light and dark UI modes for the filter bar, flag popovers, and comment popovers.
+- Added Proofing Gallery Save & Continue and Submit button alignment controls.
+- Added Proofing Gallery Save & Submit button style controls for text, background, border, radius, padding, font size, and button gap.
+- Added a dedicated Proofing Gallery Save & Submit Settings inspector panel.
+- Added a Proofing Gallery block-level option to email the site admin when a proofing session is submitted, with its default value inherited from Global Settings.
+- Added Global Settings controls for Proofing Gallery saved session retention, submitted session retention, and admin email notifications on proofing submission.
+- Added global Social Sharing source settings with a five-source selection limit.
+- Added default watermark behavior for new compatible blocks, including support for changing the global default watermark without updating each gallery.
+- Added Filmstrip Gallery watermark support for the editor, front-end main image, and lightbox images.
+- Added optional Lightbox image counters for gallery blocks, showing the current image position and total image count.
+- Added optional Lightbox zoom controls for Image Blocks and gallery lightboxes, including click-to-zoom, double-click zoom, cursor/trackpad panning, and a hand cursor while zoomed.
+
+### Changed
+- Split Proofing Gallery inspector controls into clearer Client Settings, Proofing Gallery Settings, Save & Submit Settings, Watermark Overlay, Proofing Appearance, and Save & Submit Button Styles areas.
+- Updated the Proofing Gallery front-end password gate to use the same password form structure, wording, and styling as the gallery/Page and Post password component.
+- Updated Proofing Gallery setup so client email and gallery password are entered from Client Settings, reducing browser password-save prompts during the setup flow.
+- Updated Proofing Gallery so the Page/Post Password Protect Page setting is enforced when a Proofing Gallery block is present, while the password itself is managed by the Proofing Gallery block.
+- Updated Proofing Gallery session cleanup to use editable Global Settings instead of fixed retention constants.
+- Updated submitted Proofing Gallery email notifications so they are sent only when a session first transitions to submitted.
+- Updated watermark sizing to use a shared square-aware formula across editor previews, front-end gallery images, Global Settings previews, and lightbox images.
+- Updated Carousel Gallery watermark sizing and inset calculations to use the carousel image height as the baseline for more consistent watermark size and placement across horizontal and vertical images.
+- Updated Global Settings so the Watermarks section is one combined panel and the redundant intro panel is removed.
+- Simplified Social Sharing controls so sources are managed globally and social sharing can be selected directly in Lightbox Content or Overlay Content controls.
+- Moved Pro-only PHP, CSS, and JavaScript files into `includes/pro/` so Free and Pro packaging boundaries are easier to maintain.
+- Moved Proofing Gallery-related styles out of the Image Block stylesheet where possible so they are not loaded unnecessarily for non-proofing galleries.
+
+### Fixed
+- Fixed Page/Post password protection controls disappearing for regular galleries after Proofing Gallery changes.
+- Fixed Proofing Gallery dark mode not applying to the flag popover in the editor.
+- Fixed Proofing Gallery front-end password gate wording and layout differences compared with other gallery password gates.
+- Fixed Proofing Gallery setup flow triggering browser password-save prompts after entering client email and password.
+- Fixed redundant Proofing Gallery setup messages in the placeholder flow.
+- Fixed Carousel Gallery images sometimes rendering at `0px` width after transforms or initialization by removing the problematic image container inline-size behavior.
+- Fixed Social Sharing settings not persisting after refresh and not reflecting changed global source selections.
+- Fixed Social Sharing controls allowing more than five selected services.
+- Fixed the default watermark setting not persisting after refresh.
+- Fixed newly enabled watermarking so compatible blocks use the current global default watermark by default.
+- Fixed square or near-square images rendering visually oversized watermarks compared with other image proportions.
+- Fixed Filmstrip Gallery watermarks not appearing in the editor, on the front-end main image, or in the lightbox.
+- Fixed watermark overlays rendering safely without broken output when a selected or default watermark is deleted.
+- Fixed the Proofing Gallery editor stylesheet warning caused by the nonstandard `text-security` CSS property.
+
+## [1.5.0] - 2026-07-03
+### Added
+- Added the initial Proofing Gallery setup flow with client email, gallery password, gallery style selection, and image upload/media library steps.
+- Added Proofing Gallery nesting support for Grid, Justified, and Masonry galleries with nested Image Blocks.
+- Added Proofing Gallery front-end password gating, with site admins able to view locked galleries without entering the password.
+- Added Proofing Gallery inspector controls for client email, gallery password, gallery style, proofing options, filter bar alignment, watermark overlay, and image styles inherited by nested images.
+- Added proofing-specific thumbnail controls for Heart, Flag, and Comment states in the editor and on the front end.
+- Added proofing-specific filtering by hearted images, commented images, and red, orange, or green flags.
+- Added front-end Proofing Gallery filter controls, thumbnail proofing controls, comment popover, flag color picker, and Save & Continue and Submit action buttons.
+- Added shared Proofing Gallery context detection so nested galleries and Image Blocks can adjust controls when used inside a Proofing Gallery.
+
+### Changed
+- Moved Proofing Gallery layout settings such as columns, gaps, row height, and resolution to the nested gallery blocks instead of duplicating them on the Proofing Gallery block.
+- Hid unsupported or duplicate nested gallery controls inside Proofing Gallery, including randomize order, gallery click settings, gallery hover settings, gallery filtering settings, social sharing, and duplicate watermark controls.
+- Hid Image Block click and hover settings when Image Blocks are nested inside a Proofing Gallery.
+- Updated nested gallery defaults inside Proofing Gallery so Grid, Masonry, and Justified galleries retain their own default layout values.
+- Moved reusable proofing filter bar and thumbnail icon styles into front-end stylesheets so they can be shared by the editor and front end.
+- Refined Proofing Gallery thumbnail icon styling with translucent inactive circles and solid white selected/hover states for clearer heart, flag, and comment visibility.
+- Updated Proofing Gallery front-end action buttons to better match the editor primary and secondary button treatment.
+- Updated Proofing Gallery watermark handling so the Proofing Gallery block owns watermark settings and syncs configured watermark values to the nested gallery.
+
+### Fixed
+- Fixed Proofing Gallery save/refresh behavior so nested gallery content persists instead of returning to the setup state.
+- Fixed Proofing Gallery full-width behavior when nested inside Group blocks, including cases where the parent Group has padding.
+- Fixed editor crashes caused by missing translation imports in Proofing Gallery work.
+- Fixed Proofing Gallery rendering so it no longer displays the temporary light blue placeholder background, border, or radius once a gallery is present.
+- Fixed Proofing Gallery drop shadows being clipped at the bottom of the gallery.
+- Fixed Proofing Gallery filtering with Justified and Masonry layouts so filtering triggers layout recalculation and avoids uneven rows or masonry gaps.
+- Fixed the flag color picker popover so it anchors to the flag icon instead of opening beneath the image.
+- Fixed Proofing Gallery watermark previews so gallery-image watermarks render in the editor when configured from the Proofing Gallery block.
+- Fixed List View thumbnail refreshes so dragging images into Modular Gallery is less likely to disrupt the editor's List View.
+- Fixed the admin review link so an expired review notice no longer shows a WordPress "link expired" error.
+- Improved review notice actions so stale Maybe Later and I Already Did links can still dismiss the notice.
+
+## [1.5.0] - 2026-07-02
+### Added
+- Added full Gradient Overlay support for Image Block, Video Block, image galleries, Video Gallery, and Filmstrip Gallery.
+- Added a dedicated Gradient Overlay style for full-cover gradient backgrounds while preserving the existing Bottom Gradient image overlay behavior.
+- Added Hover Effect controls with Zoom In, Zoom Out, Lift, Tilt, Pop, Glare, Pan, and Desaturate effects.
+- Added pointer-aware Tilt hover behavior so image and video surfaces tilt based on cursor position.
+- Added Overlay Entrance controls for supported overlays, including fade and slide directions.
+- Added overlay typography controls for Image Block and image gallery overlays, including theme font family plus weight and style.
+- Added gradient overlay support to gallery defaults and per-image or per-video hover overrides.
+- Added gradient-safe CSS background sanitization for overlay backgrounds.
+- Added support for Image Rows inside Modular Gallery Image Stacks.
+- Added an Image Stack toolbar button for inserting a nested Image Row.
+- Added an initial FolioBlocks Global Settings page with saved watermark management.
+- Added multiple named saved watermarks with upload/select image controls, default watermark selection, and compact editable saved watermark rows.
+- Added live watermark previews with aspect-ratio preview buttons and a larger modal preview.
+- Added Pro Watermark Overlay controls for Image Block and image gallery blocks, with editor previews and frontend rendering on gallery images, lightbox images, or both.
+- Added a Pro page-level Disable Drag To Save control for compatible FolioBlocks media.
+- Added Pro support for Bunny Stream, Cloudflare Stream, DailyMotion, Loom, VideoPress, and Wistia to Video Block and Video Gallery embeds.
+- Added Social Media Sharing controls for Image Block and image gallery lightboxes and hover overlays.
+- Added a FolioBlocks blue editor icon cue with tooltip for Image Blocks that have per-image gallery overrides enabled.
+
+### Changed
+- Renamed Gradient Bottom to Bottom Gradient in the editor while preserving the existing `gradient-bottom` saved value for backwards compatibility.
+- Renamed Hover Style controls to Overlay Style for clearer editor wording.
+- Split overlay background controls so Color Overlay uses solid colors and Gradient Overlay uses gradient backgrounds.
+- Updated Video Block and Video Gallery overlays to use separate Color Overlay and Gradient Overlay styles.
+- Improved Tilt, Pop, Glare, and related hover effects so they apply consistently across image and video blocks.
+- Updated Modular Gallery Image Rows and Image Stacks so empty placeholder Image Blocks are removed automatically when a populated Image Block is dragged in.
+- Improved Modular Gallery editor layout recalculation after dragging images into large galleries.
+- Simplified saved watermark settings to focus on image, opacity, size, inset, position, and repeat controls.
+- Updated watermark preview inset handling so the inset is calculated from the preview short edge and applied equally on all sides.
+- Updated watermark overlay layering so watermarks sit above images while remaining beneath hover overlays, links, cart, download, and lightbox controls.
+- Updated watermark overlay sizing to use one shared short-edge formula across dashboard previews, editor overlays, frontend gallery images, and lightbox images.
+- Removed the sidebar and quick links from the initial watermark settings experience to give the content more room.
+- Refined Social Media Sharing controls so sharing sources are selected once in a dedicated panel, while Lightbox and Overlay Content controls only manage where sharing appears.
+- Improved Social Media Sharing editor controls, overlay icons, and lightbox icons for better spacing, consistent circular icon sizing, and clearer source selection.
+- Removed Mastodon from Social Media Sharing sources and normalized selected source order so frontend links follow the editor service order.
+
+### Fixed
+- Fixed Modular Gallery layouts sometimes requiring an extra image move before recalculating after newly dragged images finished loading.
+- Fixed redundant Image Row editor layout application that could reuse the first row layout across other rows in large Modular Galleries.
+- Fixed nested Modular Gallery Image Rows inside Image Stacks so increasing the gallery gap preserves each image's natural aspect ratio.
+- Fixed Social Media Sharing overlay and lightbox links so they remain clickable when an image also has lightbox behavior enabled.
+
+## [1.4.5] - 2026-07-15
+### Fixed
+- Fixed a PHP fatal error in Image Block rendering caused by missing shared CSS value sanitizers in the 1.4.4 package.
+- Improved review notice actions so stale Maybe Later and I Already Did links can still dismiss the notice.
+
+## [1.4.4] - 2026-07-15
+### Fixed
+- Fixed the admin review link so an expired review notice no longer shows a WordPress "link expired" error.
+
+## [1.4.3] - 2026-07-15
+### Fixed
+- Fixed Grid and Masonry Gallery editor syncing so repeated autosaves cannot duplicate existing gallery images.
+
+## [1.4.2] - 2026-07-13
+### Fixed
+- Fixed Modular Gallery row alignment when Image Stacks appear beside Image Blocks.
+
+## [1.4.1] - 2026-07-01
+### Fixed
+- Fixed Image Block lightbox sizing so smaller source images can expand correctly in fullscreen mode while keeping watermark overlays aligned to the rendered image.
+- Fixed a bug in Modular Gallery where gallery images could flash on screen before gallery styles had properlly loaded. 
+
+## [1.4.0] - 2026-06-25
 ### Added
 - Added responsive desktop, tablet, and mobile gap controls to Masonry, Justified, Modular, and Video Galleries.
 - Added a fullscreen control to Video Block and Video Gallery lightboxes that expands the playing video.

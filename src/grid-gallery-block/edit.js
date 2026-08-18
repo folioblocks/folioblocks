@@ -29,9 +29,35 @@ import { fbksNormalizeActiveFilterValue } from '../pb-helpers/filterConstants';
 import { getExifAttributesFromMedia } from '../pb-helpers/exifMetadata';
 import { getImageSizeOptions } from '../pb-helpers/imageSizeOptions';
 import { imageProFeatureNotice } from '../pb-helpers/imageProFeatureNotices';
+import { useProofingGalleryContext } from '../pb-helpers/useProofingGalleryContext';
 import './editor.scss';
 
 const ALLOWED_BLOCKS = [ 'folioblocks/pb-image-block' ];
+
+const getSyncedGalleryImages = ( blocks ) =>
+	blocks.map( ( block ) => ( {
+		id: block.attributes.id,
+		src: block.attributes.src,
+		alt: block.attributes.alt,
+		title: block.attributes.title,
+		caption: block.attributes.caption,
+		width: block.attributes.width,
+		height: block.attributes.height,
+	} ) );
+
+const getComparableGalleryImage = ( image = {} ) => ( {
+	id: image.id || 0,
+	src: image.src || '',
+	alt: image.alt || '',
+	title: image.title || '',
+	caption: image.caption || '',
+	width: image.width || 0,
+	height: image.height || 0,
+} );
+
+const areGalleryImagesEqual = ( currentImages = [], nextImages = [] ) =>
+	JSON.stringify( currentImages.map( getComparableGalleryImage ) ) ===
+	JSON.stringify( nextImages.map( getComparableGalleryImage ) );
 
 const getImageClickAction = ( {
 	lightbox,
@@ -313,6 +339,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 
 	const wrapperRef = useRef( null );
 	const galleryRef = useRef( null );
+	const { isInsideProofingGallery } = useProofingGalleryContext( clientId );
 	const { replaceInnerBlocks, updateBlockAttributes } =
 		useDispatch( 'core/block-editor' );
 	const [ isLoading, setIsLoading ] = useState( false );
@@ -392,20 +419,14 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 
 	// Keep attributes.images up to date with innerBlocks
 	useEffect( () => {
-		const updatedImages = innerBlocks.map( ( block ) => ( {
-			id: block.attributes.id,
-			src: block.attributes.src,
-			alt: block.attributes.alt,
-			title: block.attributes.title,
-			caption: block.attributes.caption,
-			width: block.attributes.width,
-			height: block.attributes.height,
-		} ) );
-		setAttributes( { images: updatedImages } );
+		const updatedImages = getSyncedGalleryImages( innerBlocks );
+		if ( ! areGalleryImagesEqual( attributes.images, updatedImages ) ) {
+			setAttributes( { images: updatedImages } );
+		}
 		applyGridLayoutWhenImagesLoaded( galleryRef, wrapperRef, {
 			columns,
 		} );
-	}, [ innerBlocks ] );
+	}, [ attributes.images, columns, innerBlocks, setAttributes ] );
 
 	// Recalculate layout when border/columns/innerBlocks change
 	useEffect( () => {
@@ -556,50 +577,56 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		const existingImageIds = currentBlocks.map(
 			( block ) => block.attributes.id
 		);
+		const newMedia = media.filter(
+			( image ) => ! existingImageIds.includes( image.id )
+		);
 
-			// Fetch titles in a single batch for performance
-			const imageIds = media.map( ( image ) => image.id );
-			const titleMap = {};
-			const mediaMap = {};
-			try {
-				const responses = await wp.apiFetch( {
+		if ( newMedia.length === 0 ) {
+			setIsLoading( false );
+			return;
+		}
+
+		// Fetch titles in a single batch for performance
+		const imageIds = newMedia.map( ( image ) => image.id );
+		const titleMap = {};
+		const mediaMap = {};
+		try {
+			const responses = await wp.apiFetch( {
 				path: `/wp/v2/media?include=${ imageIds.join(
 					','
 				) }&per_page=100`,
 			} );
 
-				responses.forEach( ( item ) => {
-					mediaMap[ item.id ] = item;
-					titleMap[ item.id ] = decodeEntities(
-						item.title?.rendered || ''
-					);
+			responses.forEach( ( item ) => {
+				mediaMap[ item.id ] = item;
+				titleMap[ item.id ] = decodeEntities(
+					item.title?.rendered || ''
+				);
 			} );
 		} catch ( error ) {
 			console.error( 'Failed to fetch image titles:', error );
 		}
 
 		// Create new blocks
-		const newBlocks = media
-			.filter( ( image ) => ! existingImageIds.includes( image.id ) )
-			.map( ( image ) => {
-				const fullSize = image.sizes?.full || {};
-				const width = fullSize.width || image.width || 0;
-				const height = fullSize.height || image.height || 0;
+		const newBlocks = newMedia.map( ( image ) => {
+			const fullSize = image.sizes?.full || {};
+			const width = fullSize.width || image.width || 0;
+			const height = fullSize.height || image.height || 0;
 
-				return wp.blocks.createBlock( 'folioblocks/pb-image-block', {
-					id: image.id,
-					src: image.url,
-					alt: image.alt || '',
-					title: titleMap[ image.id ] || image.title || '',
-					width,
-						height,
-						sizes: image.sizes || {},
-						caption: image.caption || '',
-						...( getExifAttributesFromMedia(
-							mediaMap[ image.id ] || image
-						) || {} ),
-					} );
-				} );
+			return wp.blocks.createBlock( 'folioblocks/pb-image-block', {
+				id: image.id,
+				src: image.url,
+				alt: image.alt || '',
+				title: titleMap[ image.id ] || image.title || '',
+				width,
+				height,
+				sizes: image.sizes || {},
+				caption: image.caption || '',
+				...( getExifAttributesFromMedia(
+					mediaMap[ image.id ] || image
+				) || {} ),
+			} );
+		} );
 
 		// Replace inner blocks
 		replaceInnerBlocks( clientId, [ ...currentBlocks, ...newBlocks ] );
@@ -686,91 +713,125 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						mobileColumns={ mobileColumns }
 						onChange={ ( newValues ) => setAttributes( newValues ) }
 					/>
-					{ applyFilters(
-						'folioBlocks.gridGallery.randomizeToggle',
-						imageProFeatureNotice( 'randomize' ),
-						{ attributes, setAttributes }
-					) }
-				</PanelBody>
-				<PanelBody
-					title={ __( 'Gallery Click Settings', 'folioblocks' ) }
-					initialOpen={ true }
-				>
-					<SelectControl
-						label={ __( 'Image Click Behavior', 'folioblocks' ) }
-						value={ activeImageClickAction }
-						options={ imageClickActionOptions }
-						onChange={ ( value ) =>
-							setAttributes( getImageClickAttributes( value ) )
-						}
-						__nextHasNoMarginBottom
-						__next40pxDefaultSize
-						help={ __(
-							'Choose what happens when visitors click gallery images.',
-							'folioblocks'
+					{ ! isInsideProofingGallery &&
+						applyFilters(
+							'folioBlocks.gridGallery.randomizeToggle',
+							imageProFeatureNotice( 'randomize' ),
+							{ attributes, setAttributes }
 						) }
-					/>
-					{ applyFilters(
-						'folioBlocks.gridGallery.imageClickActionNotice',
-						imageProFeatureNotice( 'clickActions' ),
-						{
-							attributes,
-							setAttributes,
-							hasWooCommerce,
-							effectiveEnableWoo,
-						}
-					) }
-						{ activeImageClickAction === 'lightbox' &&
-							applyFilters(
-								'folioBlocks.gridGallery.lightboxControls',
-								null,
-								{ attributes, setAttributes }
+				</PanelBody>
+				{ ! isInsideProofingGallery && (
+					<>
+						<PanelBody
+							title={ __(
+								'Gallery Click Settings',
+								'folioblocks'
 							) }
-						{ activeImageClickAction === 'download' &&
-							applyFilters(
-								'folioBlocks.gridGallery.downloadControls',
-								null,
-								{ attributes, setAttributes }
-							) }
-						{ ( activeImageClickAction === 'custom_url' ||
-							activeImageClickAction === 'page_post' ) &&
-							applyFilters(
-								'folioBlocks.gridGallery.linkTargetControls',
-								null,
+							initialOpen={ true }
+						>
+							<SelectControl
+								label={ __(
+									'Image Click Behavior',
+									'folioblocks'
+								) }
+								value={ activeImageClickAction }
+								options={ imageClickActionOptions }
+								onChange={ ( value ) =>
+									setAttributes(
+										getImageClickAttributes( value )
+									)
+								}
+								__nextHasNoMarginBottom
+								__next40pxDefaultSize
+								help={ __(
+									'Choose what happens when visitors click gallery images.',
+									'folioblocks'
+								) }
+							/>
+							{ applyFilters(
+								'folioBlocks.gridGallery.imageClickActionNotice',
+								imageProFeatureNotice( 'clickActions' ),
 								{
 									attributes,
 									setAttributes,
-									imageClickAction: activeImageClickAction,
+									hasWooCommerce,
+									effectiveEnableWoo,
 								}
 							) }
-						{ activeImageClickAction === 'woocommerce' &&
-							applyFilters(
-								'folioBlocks.gridGallery.wooCommerceControls',
-								null,
+							{ activeImageClickAction === 'lightbox' &&
+								applyFilters(
+									'folioBlocks.gridGallery.lightboxControls',
+									null,
+									{ attributes, setAttributes }
+								) }
+							{ activeImageClickAction === 'download' &&
+								applyFilters(
+									'folioBlocks.gridGallery.downloadControls',
+									null,
+									{ attributes, setAttributes }
+								) }
+							{ ( activeImageClickAction === 'custom_url' ||
+								activeImageClickAction === 'page_post' ) &&
+								applyFilters(
+									'folioBlocks.gridGallery.linkTargetControls',
+									null,
+									{
+										attributes,
+										setAttributes,
+										imageClickAction:
+											activeImageClickAction,
+									}
+								) }
+							{ activeImageClickAction === 'woocommerce' &&
+								applyFilters(
+									'folioBlocks.gridGallery.wooCommerceControls',
+									null,
+									{ attributes, setAttributes }
+								) }
+						</PanelBody>
+						<PanelBody
+							title={ __(
+								'Gallery Hover Settings',
+								'folioblocks'
+							) }
+							initialOpen={ true }
+						>
+							{ applyFilters(
+								'folioBlocks.gridGallery.onHoverTitleToggle',
+								imageProFeatureNotice( 'hoverSettings' ),
 								{ attributes, setAttributes }
 							) }
-					</PanelBody>
+						</PanelBody>
+					</>
+				) }
+				{ ! isInsideProofingGallery && (
 					<PanelBody
-						title={ __( 'Gallery Hover Settings', 'folioblocks' ) }
+						title={ __(
+							'Gallery Filtering Settings',
+							'folioblocks'
+						) }
 						initialOpen={ true }
 					>
 						{ applyFilters(
-							'folioBlocks.gridGallery.onHoverTitleToggle',
-							imageProFeatureNotice( 'hoverSettings' ),
+							'folioBlocks.gridGallery.enableFilterToggle',
+							imageProFeatureNotice( 'filtering' ),
 							{ attributes, setAttributes }
 						) }
 					</PanelBody>
+				) }
+				{ ! isInsideProofingGallery && (
 					<PanelBody
-						title={ __( 'Gallery Filtering Settings', 'folioblocks' ) }
-						initialOpen={ true }
-				>
-					{ applyFilters(
-						'folioBlocks.gridGallery.enableFilterToggle',
-						imageProFeatureNotice( 'filtering' ),
-						{ attributes, setAttributes }
-					) }
-				</PanelBody>
-			</InspectorControls>
+						title={ __( 'Watermark Overlay', 'folioblocks' ) }
+						initialOpen={ false }
+					>
+						{ applyFilters(
+							'folioBlocks.gridGallery.watermarkControls',
+							imageProFeatureNotice( 'watermarkOverlay' ),
+							{ attributes, setAttributes }
+						) }
+					</PanelBody>
+				) }
+				</InspectorControls>
 			<InspectorControls group="advanced">
 				{ applyFilters(
 					'folioBlocks.gridGallery.disableRightClickToggle',
@@ -795,11 +856,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					) }
 				</PanelBody>
 				{ applyFilters(
-					'folioBlocks.gridGallery.filterStyleSettings',
-					<PanelBody title={ __( 'Gallery Filtering Styles', 'folioblocks' ) } initialOpen={ true }>{ imageProFeatureNotice( 'filterStyles' ) }</PanelBody>,
-					{ attributes, setAttributes }
-				) }
-				{ applyFilters(
 					'folioBlocks.gridGallery.iconStyleControls',
 					null,
 					{
@@ -814,6 +870,19 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						attributes,
 						setAttributes,
 					}
+				) }
+				{ applyFilters(
+					'folioBlocks.gridGallery.filterStyleSettings',
+					<PanelBody
+						title={ __(
+							'Gallery Filtering Styles',
+							'folioblocks'
+						) }
+						initialOpen={ true }
+					>
+						{ imageProFeatureNotice( 'filterStyles' ) }
+					</PanelBody>,
+					{ attributes, setAttributes }
 				) }
 			</InspectorControls>
 

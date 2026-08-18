@@ -8,6 +8,16 @@
 	const { useSelect } = wp.data;
 	const { PluginDocumentSettingPanel } = wp.editor;
 
+	const proofingGalleryBlock = 'folioblocks/proofing-gallery-block';
+	const passwordProtectionBlocks = new Set( [
+		'folioblocks/carousel-gallery-block',
+		'folioblocks/filmstrip-gallery-block',
+		'folioblocks/grid-gallery-block',
+		'folioblocks/justified-gallery-block',
+		'folioblocks/masonry-gallery-block',
+		'folioblocks/modular-gallery-block',
+		'folioblocks/video-gallery-block',
+	] );
 	const lazyLoadBlocks = new Set( [
 		'folioblocks/before-after-block',
 		'folioblocks/carousel-gallery-block',
@@ -17,11 +27,16 @@
 		'folioblocks/masonry-gallery-block',
 		'folioblocks/modular-gallery-block',
 		'folioblocks/pb-image-block',
+		'folioblocks/pb-loupe-block',
 		'folioblocks/pb-video-block',
 		'folioblocks/video-gallery-block',
 	] );
 	const rightClickBlocks = new Set( [
 		'folioblocks/background-video-block',
+		...lazyLoadBlocks,
+		'folioblocks/pb-loupe-block',
+	] );
+	const dragToSaveBlocks = new Set( [
 		...lazyLoadBlocks,
 		'folioblocks/pb-loupe-block',
 	] );
@@ -40,6 +55,7 @@
 		'folioBlocks.justifiedGallery.disableRightClickToggle',
 		'folioBlocks.justifiedGallery.lazyLoadToggle',
 		'folioBlocks.loupeBlock.disableRightClickToggle',
+		'folioBlocks.loupeBlock.lazyLoadToggle',
 		'folioBlocks.masonryGallery.disableRightClickToggle',
 		'folioBlocks.masonryGallery.lazyLoadToggle',
 		'folioBlocks.modularGallery.disableRightClickToggle',
@@ -54,6 +70,12 @@
 		( blocks || [] ).reduce(
 			( capabilities, block ) => {
 				const inner = getCapabilities( block.innerBlocks );
+				const isProofingGallery = block.name === proofingGalleryBlock;
+				const proofingGalleryPassword =
+					isProofingGallery &&
+					typeof block.attributes?.galleryPassword === 'string'
+						? block.attributes.galleryPassword
+						: inner.proofingGalleryPassword;
 				return {
 					hasLazyLoad:
 						capabilities.hasLazyLoad ||
@@ -63,46 +85,95 @@
 						capabilities.hasRightClick ||
 						rightClickBlocks.has( block.name ) ||
 						inner.hasRightClick,
+					hasDragToSave:
+						capabilities.hasDragToSave ||
+						dragToSaveBlocks.has( block.name ) ||
+						inner.hasDragToSave,
+					hasPasswordProtection:
+						capabilities.hasPasswordProtection ||
+						passwordProtectionBlocks.has( block.name ) ||
+						inner.hasPasswordProtection,
+					hasProofingGallery:
+						capabilities.hasProofingGallery ||
+						isProofingGallery ||
+						inner.hasProofingGallery,
+					proofingGalleryPassword:
+						capabilities.proofingGalleryPassword ||
+						proofingGalleryPassword ||
+						'',
 				};
 			},
-			{ hasLazyLoad: false, hasRightClick: false }
+			{
+				hasLazyLoad: false,
+				hasRightClick: false,
+				hasDragToSave: false,
+				hasPasswordProtection: false,
+				hasProofingGallery: false,
+				proofingGalleryPassword: '',
+			}
 		);
 
 	const getContentCapabilities = ( content ) => {
 		const value = typeof content === 'string' ? content : '';
 		return {
+			hasProofingGallery: value.includes(
+				`wp:${ proofingGalleryBlock }`
+			),
 			hasLazyLoad: [ ...lazyLoadBlocks ].some( ( blockName ) =>
 				value.includes( `wp:${ blockName }` )
 			),
 			hasRightClick: [ ...rightClickBlocks ].some( ( blockName ) =>
 				value.includes( `wp:${ blockName }` )
 			),
+			hasDragToSave: [ ...dragToSaveBlocks ].some( ( blockName ) =>
+				value.includes( `wp:${ blockName }` )
+			),
+			hasPasswordProtection: [ ...passwordProtectionBlocks ].some(
+				( blockName ) => value.includes( `wp:${ blockName }` )
+			),
 		};
 	};
 
 	const PageMediaSettings = () => {
-		const { hasLazyLoad, hasRightClick, postId, postType } = useSelect(
-			( select ) => {
-				const blockCapabilities = getCapabilities(
-					select( 'core/block-editor' ).getBlocks()
-				);
-				const contentCapabilities = getContentCapabilities(
-					select( 'core/editor' ).getEditedPostContent()
-				);
+		const {
+			hasLazyLoad,
+			hasRightClick,
+			hasDragToSave,
+			hasPasswordProtection,
+			hasProofingGallery,
+			proofingGalleryPassword,
+			postId,
+			postType,
+		} = useSelect( ( select ) => {
+			const blockCapabilities = getCapabilities(
+				select( 'core/block-editor' ).getBlocks()
+			);
+			const contentCapabilities = getContentCapabilities(
+				select( 'core/editor' ).getEditedPostContent()
+			);
 
-				return {
-					hasLazyLoad:
-						blockCapabilities.hasLazyLoad ||
-						contentCapabilities.hasLazyLoad,
-					hasRightClick:
-						blockCapabilities.hasRightClick ||
-						contentCapabilities.hasRightClick,
-					postId: select( 'core/editor' ).getCurrentPostId(),
-					postType: select( 'core/editor' ).getCurrentPostType(),
-				};
-			},
-			[]
-		);
+			return {
+				hasLazyLoad:
+					blockCapabilities.hasLazyLoad ||
+					contentCapabilities.hasLazyLoad,
+				hasRightClick:
+					blockCapabilities.hasRightClick ||
+					contentCapabilities.hasRightClick,
+				hasDragToSave:
+					blockCapabilities.hasDragToSave ||
+					contentCapabilities.hasDragToSave,
+				hasPasswordProtection:
+					blockCapabilities.hasPasswordProtection ||
+					contentCapabilities.hasPasswordProtection,
+				hasProofingGallery:
+					blockCapabilities.hasProofingGallery ||
+					contentCapabilities.hasProofingGallery,
+				proofingGalleryPassword:
+					blockCapabilities.proofingGalleryPassword || '',
+				postId: select( 'core/editor' ).getCurrentPostId(),
+				postType: select( 'core/editor' ).getCurrentPostType(),
+			};
+		}, [] );
 		const [ meta, setMeta ] = useEntityProp(
 			'postType',
 			postType || 'post',
@@ -125,11 +196,33 @@
 			}
 		}, [ password ] );
 
+		useEffect( () => {
+			if (
+				! hasProofingGallery ||
+				! proofingGalleryPassword ||
+				password === proofingGalleryPassword
+			) {
+				return;
+			}
+
+			setPassword( proofingGalleryPassword );
+			setIsPasswordControlOpen( true );
+		}, [
+			hasProofingGallery,
+			password,
+			proofingGalleryPassword,
+			setPassword,
+		] );
+
 		if (
 			! PluginDocumentSettingPanel ||
 			! postId ||
 			! postType ||
-			( ! hasLazyLoad && ! hasRightClick )
+			( ! hasLazyLoad &&
+				! hasRightClick &&
+				! hasDragToSave &&
+				! hasPasswordProtection &&
+				! hasProofingGallery )
 		) {
 			return null;
 		}
@@ -139,12 +232,26 @@
 		};
 		const controls = [];
 
-		if ( postType === 'post' || postType === 'page' ) {
+		if (
+			( postType === 'post' || postType === 'page' ) &&
+			( hasPasswordProtection || hasProofingGallery )
+		) {
+			const isProofingPasswordManaged = hasProofingGallery;
 			let passwordHelp = __(
 				'Require a password before visitors can view the page.',
 				'folioblocks'
 			);
-			if ( isPasswordControlOpen && ! password ) {
+			if ( isProofingPasswordManaged && proofingGalleryPassword ) {
+				passwordHelp = __(
+					'Password protection is managed by the Proofing Gallery block on this page.',
+					'folioblocks'
+				);
+			} else if ( isProofingPasswordManaged ) {
+				passwordHelp = __(
+					'Set the password in the Proofing Gallery block settings.',
+					'folioblocks'
+				);
+			} else if ( isPasswordControlOpen && ! password ) {
 				passwordHelp = __(
 					'Enter a password to protect this page.',
 					'folioblocks'
@@ -160,8 +267,12 @@
 				createElement( ToggleControl, {
 					key: 'password-protection',
 					label: __( 'Password Protect Page', 'folioblocks' ),
-					checked: isPasswordControlOpen,
+					checked: isProofingPasswordManaged || isPasswordControlOpen,
+					disabled: isProofingPasswordManaged,
 					onChange: ( value ) => {
+						if ( isProofingPasswordManaged ) {
+							return;
+						}
 						setIsPasswordControlOpen( value );
 						if ( ! value ) {
 							setPassword( '' );
@@ -172,7 +283,7 @@
 				} )
 			);
 
-			if ( isPasswordControlOpen ) {
+			if ( isPasswordControlOpen && ! isProofingPasswordManaged ) {
 				controls.push(
 					createElement( TextControl, {
 						key: 'page-password',
@@ -212,6 +323,22 @@
 						updateMeta( 'fbksDisableRightClick', value ),
 					help: __(
 						'Prevent right-clicking on compatible FolioBlocks media on this page.',
+						'folioblocks'
+					),
+					__nextHasNoMarginBottom: true,
+				} )
+			);
+		}
+		if ( hasDragToSave ) {
+			controls.push(
+				createElement( ToggleControl, {
+					key: 'disable-drag-to-save',
+					label: __( 'Disable Drag To Save', 'folioblocks' ),
+					checked: !! meta?.fbksDisableDragToSave,
+					onChange: ( value ) =>
+						updateMeta( 'fbksDisableDragToSave', value ),
+					help: __(
+						'Prevent visitors from dragging compatible FolioBlocks images on this page.',
 						'folioblocks'
 					),
 					__nextHasNoMarginBottom: true,

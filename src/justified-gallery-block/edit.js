@@ -34,9 +34,24 @@ import {
 } from '../pb-helpers/galleryGap';
 import { calculateJustifiedLayout } from '../pb-helpers/justifiedLayout';
 import ResponsiveRangeControl from '../pb-helpers/ResponsiveRangeControl';
+import { useProofingGalleryContext } from '../pb-helpers/useProofingGalleryContext';
 import './editor.scss';
 
 const ALLOWED_BLOCKS = [ 'folioblocks/pb-image-block' ];
+
+const getImageBlockDimensions = ( attributes = {} ) => {
+	const selectedSize =
+		attributes.sizes?.[ attributes.imageSize ] ||
+		attributes.sizes?.large ||
+		attributes.sizes?.full ||
+		{};
+
+	return {
+		width: Number( attributes.width ) || Number( selectedSize.width ) || 0,
+		height:
+			Number( attributes.height ) || Number( selectedSize.height ) || 0,
+	};
+};
 
 const getImageClickAction = ( {
 	lightbox,
@@ -195,6 +210,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	const [ isLoading, setIsLoading ] = useState( false );
 	const { replaceInnerBlocks, updateBlockAttributes } =
 		useDispatch( 'core/block-editor' );
+	const { isInsideProofingGallery } = useProofingGalleryContext( clientId );
 
 	const innerBlocks = useSelect(
 		( select ) => select( 'core/block-editor' ).getBlocks( clientId ),
@@ -306,13 +322,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		}
 
 		let resizeTimeout;
-
-		const handleResizeEnd = () => {
-			clearTimeout( resizeTimeout );
-			resizeTimeout = setTimeout( () => {
-				requestAnimationFrame( calculateLayout );
-			}, 150 );
-		};
+		let layoutFrame;
 
 		const container = galleryRef.current;
 
@@ -328,13 +338,36 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				return;
 			}
 
+			node.querySelectorAll(
+				'.wp-block-folioblocks-pb-image-block.is-hidden'
+			).forEach( ( wrapper ) => {
+				wrapper.style.removeProperty( '--pb-width' );
+				wrapper.style.removeProperty( '--pb-height' );
+				wrapper.style.removeProperty( '--pb-margin-inline' );
+				wrapper.style.removeProperty( '--pb-margin-block' );
+			} );
+
 			const wrappers = node.querySelectorAll(
 				'.wp-block-folioblocks-pb-image-block:not(.is-hidden)'
 			);
 			const images = Array.from( wrappers ).map( ( wrapper ) => {
 				const img = wrapper.querySelector( 'img' );
-				const width = parseInt( img.getAttribute( 'width' ) ) || 1;
-				const height = parseInt( img.getAttribute( 'height' ) ) || 1;
+				const blockAttributes =
+					innerBlocks.find(
+						( block ) => block.clientId === wrapper.dataset.block
+					)?.attributes || {};
+				const blockDimensions =
+					getImageBlockDimensions( blockAttributes );
+				const width =
+					parseInt( img?.getAttribute( 'width' ), 10 ) ||
+					blockDimensions.width ||
+					img?.naturalWidth ||
+					1;
+				const height =
+					parseInt( img?.getAttribute( 'height' ), 10 ) ||
+					blockDimensions.height ||
+					img?.naturalHeight ||
+					1;
 				return { wrapper, width, height };
 			} );
 
@@ -383,17 +416,52 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			} );
 		};
 
+		const scheduleLayout = () => {
+			if ( layoutFrame ) {
+				cancelAnimationFrame( layoutFrame );
+			}
+
+			layoutFrame = requestAnimationFrame( () => {
+				calculateLayout();
+				clearTimeout( resizeTimeout );
+				resizeTimeout = setTimeout( calculateLayout, 150 );
+			} );
+		};
+
 		const resizeObserver = new ResizeObserver( () => {
-			requestAnimationFrame( calculateLayout );
-			handleResizeEnd(); // NEW: schedule final pass after resize ends
+			scheduleLayout();
 		} );
 
+		const mutationObserver = new MutationObserver( scheduleLayout );
+
 		resizeObserver.observe( container );
-		setTimeout( calculateLayout, 50 );
+		mutationObserver.observe( container, {
+			attributes: true,
+			attributeFilter: [
+				'class',
+				'data-proofing-hearted',
+				'data-proofing-flag',
+				'data-proofing-commented',
+			],
+			subtree: true,
+		} );
+		setTimeout( scheduleLayout, 50 );
+		window.addEventListener(
+			'folioblocks:proofing-filter-change',
+			scheduleLayout
+		);
 
 		return () => {
 			resizeObserver.disconnect();
+			mutationObserver.disconnect();
+			if ( layoutFrame ) {
+				cancelAnimationFrame( layoutFrame );
+			}
 			clearTimeout( resizeTimeout );
+			window.removeEventListener(
+				'folioblocks:proofing-filter-change',
+				scheduleLayout
+			);
 		};
 	}, [
 		innerBlocks,
@@ -603,16 +671,18 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 							{ attributes, setAttributes }
 					) }
 
-					{ applyFilters(
-						'folioBlocks.justifiedGallery.randomizeToggle',
-						imageProFeatureNotice( 'randomize' ),
-						{ attributes, setAttributes }
-					) }
+					{ ! isInsideProofingGallery &&
+						applyFilters(
+							'folioBlocks.justifiedGallery.randomizeToggle',
+							imageProFeatureNotice( 'randomize' ),
+							{ attributes, setAttributes }
+						) }
 				</PanelBody>
-				<PanelBody
-					title={ __( 'Gallery Click Settings', 'folioblocks' ) }
-					initialOpen={ true }
-				>
+				{ ! isInsideProofingGallery && (
+					<PanelBody
+						title={ __( 'Gallery Click Settings', 'folioblocks' ) }
+						initialOpen={ true }
+					>
 					<SelectControl
 						label={ __( 'Image Click Behavior', 'folioblocks' ) }
 						value={ activeImageClickAction }
@@ -664,6 +734,8 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 								{ attributes, setAttributes }
 							) }
 					</PanelBody>
+				) }
+				{ ! isInsideProofingGallery && (
 					<PanelBody
 						title={ __( 'Gallery Hover Settings', 'folioblocks' ) }
 						initialOpen={ true }
@@ -674,17 +746,32 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 							{ attributes, setAttributes }
 						) }
 					</PanelBody>
+				) }
+				{ ! isInsideProofingGallery && (
 					<PanelBody
 						title={ __( 'Gallery Filtering Settings', 'folioblocks' ) }
 						initialOpen={ true }
-				>
-					{ applyFilters(
-						'folioBlocks.justifiedGallery.enableFilterToggle',
-						imageProFeatureNotice( 'filtering' ),
-						{ attributes, setAttributes }
-					) }
-				</PanelBody>
-			</InspectorControls>
+					>
+						{ applyFilters(
+							'folioBlocks.justifiedGallery.enableFilterToggle',
+							imageProFeatureNotice( 'filtering' ),
+							{ attributes, setAttributes }
+						) }
+					</PanelBody>
+				) }
+				{ ! isInsideProofingGallery && (
+					<PanelBody
+						title={ __( 'Watermark Overlay', 'folioblocks' ) }
+						initialOpen={ false }
+					>
+						{ applyFilters(
+							'folioBlocks.justifiedGallery.watermarkControls',
+							imageProFeatureNotice( 'watermarkOverlay' ),
+							{ attributes, setAttributes }
+						) }
+					</PanelBody>
+				) }
+				</InspectorControls>
 			<InspectorControls group="advanced">
 				{ applyFilters(
 					'folioBlocks.justifiedGallery.disableRightClickToggle',
@@ -709,11 +796,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					) }
 				</PanelBody>
 				{ applyFilters(
-					'folioBlocks.justifiedGallery.filterStyleSettings',
-					<PanelBody title={ __( 'Gallery Filtering Styles', 'folioblocks' ) } initialOpen={ true }>{ imageProFeatureNotice( 'filterStyles' ) }</PanelBody>,
-					{ attributes, setAttributes }
-				) }
-				{ applyFilters(
 					'folioBlocks.justifiedGallery.iconStyleControls',
 					null,
 					{
@@ -728,6 +810,11 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						attributes,
 						setAttributes,
 					}
+				) }
+				{ applyFilters(
+					'folioBlocks.justifiedGallery.filterStyleSettings',
+					<PanelBody title={ __( 'Gallery Filtering Styles', 'folioblocks' ) } initialOpen={ true }>{ imageProFeatureNotice( 'filterStyles' ) }</PanelBody>,
+					{ attributes, setAttributes }
 				) }
 			</InspectorControls>
 

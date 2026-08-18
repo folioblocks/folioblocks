@@ -110,6 +110,25 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		} );
 	}
 
+	// Disable drag-to-save for protected FolioBlocks media.
+	const disableDragToSave = document.querySelector(
+		'[data-disable-drag-to-save="true"]'
+	);
+	if ( disableDragToSave ) {
+		document.addEventListener(
+			'dragstart',
+			( e ) => {
+				const protectedMedia = e.target.closest(
+					'[data-disable-drag-to-save="true"] img, [data-disable-drag-to-save="true"] video, .pb-video-lightbox img, .pb-video-lightbox video'
+				);
+				if ( protectedMedia ) {
+					e.preventDefault();
+				}
+			},
+			{ capture: true }
+		);
+	}
+
 	// WooCommerce Icon Logic (Add to Cart / View Product)
 	document.addEventListener(
 		'click',
@@ -143,7 +162,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 					const url = new URL( window.location.href );
 					url.searchParams.set( 'add-to-cart', String( productId ) );
 					window.location.href = url.toString();
-				} catch ( err ) {
+				} catch {
 					const sep = window.location.href.includes( '?' )
 						? '&'
 						: '?';
@@ -193,7 +212,10 @@ document.addEventListener( 'DOMContentLoaded', () => {
 						return;
 					}
 
-					if ( data?.fragments && typeof data.fragments === 'object' ) {
+					if (
+						data?.fragments &&
+						typeof data.fragments === 'object'
+					) {
 						Object.keys( data.fragments ).forEach( ( selector ) => {
 							const html = data.fragments[ selector ];
 							if ( ! html ) {
@@ -205,7 +227,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 							}
 							try {
 								el.outerHTML = html;
-							} catch ( err ) {
+							} catch {
 								// Ignore fragment update failures.
 							}
 						} );

@@ -12,6 +12,7 @@ import { registerImageHoverActionPremiumControls } from '../pb-helpers/imageHove
 import { registerFilteringPremiumControls } from '../pb-helpers/filteringPremiumControls';
 import { registerListViewThumbnailEnhancements } from '../pb-helpers/listViewThumbnailEnhancements';
 import { enableGalleryTransforms } from '../pb-helpers/galleryTransforms';
+import { registerWatermarkOverlayControls } from '../pb-helpers/watermarkOverlayControls';
 import {
 	registerDisableRightClickPremiumControl,
 	registerLazyLoadPremiumControl,
@@ -52,6 +53,11 @@ registerLazyLoadPremiumControl( {
 } );
 
 registerListViewThumbnailEnhancements( {
+	hookPrefix: 'folioBlocks.gridGallery',
+	namespace: 'folioblocks/grid-gallery',
+} );
+
+registerWatermarkOverlayControls( {
 	hookPrefix: 'folioBlocks.gridGallery',
 	namespace: 'folioblocks/grid-gallery',
 } );

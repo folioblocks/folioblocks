@@ -37,9 +37,13 @@ $fbks_cart_icon_style = '';
 $fbks_link_icon_style = '';
 $fbks_overlay_content = 'title';
 $fbks_hover_variant_class = '';
+$fbks_hover_effect_class = '';
+$fbks_overlay_entrance_class = '';
 $fbks_hover_style = '';
 $fbks_hide_unknown_exif = ! empty( $attributes['hideUnknownExifFields'] );
 $fbks_woo_active = false;
+$fbks_social_sources = [];
+$fbks_social_sharing_enabled = false;
 $fbks_is_custom_icon_color = static function ( $fbks_value, $fbks_default ) {
 	if ( ! is_string( $fbks_value ) || '' === trim( $fbks_value ) ) {
 		return false;
@@ -52,6 +56,31 @@ $fbks_enable_fullscreen = $fbks_can_use_premium && ! empty( $attributes['enableF
 $fbks_image_click_action = '';
 $fbks_image_click_target = 'icon';
 $fbks_link_icon_display = 'hover';
+$fbks_premium_css_color = static function ( $fbks_value, $fbks_fallback = '' ) use ( $fbks_can_use_premium ) {
+	return $fbks_can_use_premium && function_exists( 'fbks_sanitize_css_color_value' )
+		? fbks_sanitize_css_color_value( (string) $fbks_value )
+		: $fbks_fallback;
+};
+$fbks_premium_css_background = static function ( $fbks_value, $fbks_fallback = '' ) use ( $fbks_can_use_premium ) {
+	return $fbks_can_use_premium && function_exists( 'fbks_sanitize_css_background_value' )
+		? fbks_sanitize_css_background_value( (string) $fbks_value )
+		: $fbks_fallback;
+};
+$fbks_premium_css_font_family = static function ( $fbks_value ) use ( $fbks_can_use_premium ) {
+	return $fbks_can_use_premium && function_exists( 'fbks_sanitize_css_font_family_value' )
+		? fbks_sanitize_css_font_family_value( (string) $fbks_value )
+		: '';
+};
+$fbks_premium_css_font_weight = static function ( $fbks_value ) use ( $fbks_can_use_premium ) {
+	return $fbks_can_use_premium && function_exists( 'fbks_sanitize_css_font_weight_value' )
+		? fbks_sanitize_css_font_weight_value( (string) $fbks_value )
+		: '';
+};
+$fbks_premium_css_font_style = static function ( $fbks_value ) use ( $fbks_can_use_premium ) {
+	return $fbks_can_use_premium && function_exists( 'fbks_sanitize_css_font_style_value' )
+		? fbks_sanitize_css_font_style_value( (string) $fbks_value )
+		: '';
+};
 
 if ( $fbks_can_use_premium ) {
 	$fbks_image_click_action = sanitize_key( $attributes['imageClickAction'] ?? '' );
@@ -87,27 +116,76 @@ if ( $fbks_can_use_premium ) {
 		: 'add_to_cart';
 
 	$fbks_woo_hover_info = ! empty( $attributes['wooProductPriceOnHover'] );
-	$fbks_overlay_content = isset( $attributes['overlayContent'] ) && in_array( $attributes['overlayContent'], [ 'title', 'caption', 'product', 'exif' ], true )
+	$fbks_overlay_content = isset( $attributes['overlayContent'] ) && in_array( $attributes['overlayContent'], [ 'title', 'caption', 'product', 'exif', 'social' ], true )
 		? $attributes['overlayContent']
 		: ( $fbks_woo_hover_info ? 'product' : 'title' );
+	$fbks_social_sources = function_exists( 'fbks_normalize_social_share_sources' )
+		? fbks_normalize_social_share_sources(
+			function_exists( 'fbks_get_global_social_share_sources' )
+				? fbks_get_global_social_share_sources()
+				: ( $attributes['socialSharingSources'] ?? [] )
+		)
+		: [];
+	$fbks_social_sharing_enabled = ! empty( $fbks_social_sources );
+	if ( 'social' === $fbks_overlay_content && ! $fbks_social_sharing_enabled ) {
+		$fbks_overlay_content = 'title';
+	}
 	$fbks_on_hover_title = ! empty( $attributes['onHoverTitle'] );
 	$fbks_hover_class_map = [
 		'blur-overlay'   => 'pb-hover-blur-overlay',
-		'fade-overlay'   => 'pb-hover-fade-overlay',
+		'fade-overlay'    => 'pb-hover-fade-overlay',
 		'gradient-bottom' => 'pb-hover-gradient-bottom',
 		'chip'            => 'pb-hover-chip',
-		'color-overlay'   => 'pb-hover-color-overlay',
+		'chip-gradient'   => 'pb-hover-chip',
+		'color-overlay'    => 'pb-hover-color-overlay',
+		'gradient-overlay' => 'pb-hover-gradient-overlay',
 	];
 	$fbks_on_hover_style = isset( $attributes['onHoverStyle'] ) && isset( $fbks_hover_class_map[ $attributes['onHoverStyle'] ] )
 		? $attributes['onHoverStyle']
 		: 'blur-overlay';
 	$fbks_hover_variant_class = $fbks_hover_class_map[ $fbks_on_hover_style ];
+	$fbks_hover_effect = sanitize_key( $attributes['hoverEffect'] ?? 'none' );
+	$fbks_hover_effect_class_map = [
+		'zoom-in'    => 'pb-effect-zoom-in',
+		'zoom-out'   => 'pb-effect-zoom-out',
+		'lift'       => 'pb-effect-lift',
+		'tilt'       => 'pb-effect-tilt',
+		'pop'        => 'pb-effect-pop',
+		'glare'      => 'pb-effect-glare',
+		'pan'        => 'pb-effect-pan',
+		'desaturate' => 'pb-effect-desaturate',
+	];
+	$fbks_hover_effect_class = $fbks_hover_effect_class_map[ $fbks_hover_effect ] ?? '';
+	$fbks_overlay_entrance = sanitize_key( $attributes['overlayEntrance'] ?? 'default' );
+	$fbks_overlay_entrance_class_map = [
+		'fade'        => 'pb-overlay-enter-fade',
+		'slide-up'    => 'pb-overlay-enter-slide-up',
+		'slide-down'  => 'pb-overlay-enter-slide-down',
+		'slide-left'  => 'pb-overlay-enter-slide-left',
+		'slide-right' => 'pb-overlay-enter-slide-right',
+	];
+	$fbks_overlay_entrance_class = $fbks_overlay_entrance_class_map[ $fbks_overlay_entrance ] ?? '';
+	$fbks_overlay_font_family = fbks_sanitize_css_font_family_value( (string) ( $attributes['overlayFontFamily'] ?? '' ) );
+	$fbks_overlay_font_weight = fbks_sanitize_css_font_weight_value( (string) ( $attributes['overlayFontWeight'] ?? '' ) );
+	$fbks_overlay_font_style = fbks_sanitize_css_font_style_value( (string) ( $attributes['overlayFontStyle'] ?? '' ) );
+	$fbks_hover_style .= $fbks_overlay_font_family ? '--pb-overlay-font-family:' . $fbks_overlay_font_family . ';' : '';
+	$fbks_hover_style .= $fbks_overlay_font_weight ? '--pb-overlay-font-weight:' . $fbks_overlay_font_weight . ';' : '';
+	$fbks_hover_style .= $fbks_overlay_font_style ? '--pb-overlay-font-style:' . $fbks_overlay_font_style . ';' : '';
 	if ( 'color-overlay' === $fbks_on_hover_style ) {
-		$fbks_hover_style .= '--pb-overlay-bg:' . (string) ( $attributes['overlayBgColor'] ?? '#f9f9f9' ) . ';';
-		$fbks_hover_style .= '--pb-overlay-color:' . (string) ( $attributes['overlayTextColor'] ?? '#000000' ) . ';';
-	} elseif ( 'chip' === $fbks_on_hover_style ) {
-		$fbks_hover_style .= '--pb-chip-overlay-bg:' . (string) ( $attributes['chipOverlayBgColor'] ?? '#f9f9f9' ) . ';';
-		$fbks_hover_style .= '--pb-chip-overlay-color:' . (string) ( $attributes['chipOverlayTextColor'] ?? '#000000' ) . ';';
+		$fbks_overlay_bg = fbks_sanitize_css_color_value( (string) ( $attributes['overlayBgColor'] ?? '#f9f9f9' ) );
+		$fbks_overlay_text = fbks_sanitize_css_color_value( (string) ( $attributes['overlayTextColor'] ?? '#000000' ) );
+		$fbks_hover_style .= $fbks_overlay_bg ? '--pb-overlay-bg:' . $fbks_overlay_bg . ';' : '';
+		$fbks_hover_style .= $fbks_overlay_text ? '--pb-overlay-color:' . $fbks_overlay_text . ';' : '';
+	} elseif ( 'gradient-overlay' === $fbks_on_hover_style ) {
+		$fbks_overlay_bg = fbks_sanitize_css_background_value( (string) ( $attributes['overlayBgGradient'] ?? '' ) );
+		$fbks_overlay_text = fbks_sanitize_css_color_value( (string) ( $attributes['overlayTextColor'] ?? '#000000' ) );
+		$fbks_hover_style .= $fbks_overlay_bg ? '--pb-overlay-bg:' . $fbks_overlay_bg . ';' : '';
+		$fbks_hover_style .= $fbks_overlay_text ? '--pb-overlay-color:' . $fbks_overlay_text . ';' : '';
+	} elseif ( 'chip' === $fbks_on_hover_style || 'chip-gradient' === $fbks_on_hover_style ) {
+		$fbks_chip_overlay_bg = fbks_sanitize_css_background_value( (string) ( 'chip-gradient' === $fbks_on_hover_style ? ( $attributes['chipOverlayBgGradient'] ?? '' ) : ( $attributes['chipOverlayBgColor'] ?? '#f9f9f9' ) ) );
+		$fbks_chip_overlay_text = fbks_sanitize_css_color_value( (string) ( $attributes['chipOverlayTextColor'] ?? '#000000' ) );
+		$fbks_hover_style .= $fbks_chip_overlay_bg ? '--pb-chip-overlay-bg:' . $fbks_chip_overlay_bg . ';' : '';
+		$fbks_hover_style .= $fbks_chip_overlay_text ? '--pb-chip-overlay-color:' . $fbks_chip_overlay_text . ';' : '';
 	}
 	$fbks_lazy_load = ! empty( $attributes['lazyLoad'] );
 	$fbks_disable_right_click = ! empty( $attributes['disableRightClick'] );
@@ -337,11 +415,18 @@ if ( is_array( $fbks_inner_blocks ) && ! empty( $fbks_inner_blocks ) ) {
 			'overrideGalleryHoverSettings' => ! empty( $fbks_image_attrs['overrideGalleryHoverSettings'] ),
 			'onHoverTitle'     => ! empty( $fbks_image_attrs['showTitleOnHover'] ) || ! empty( $fbks_image_attrs['hoverTitle'] ) || ! empty( $fbks_image_attrs['onHoverTitle'] ),
 			'onHoverStyle'     => isset( $fbks_image_attrs['onHoverStyle'] ) ? (string) $fbks_image_attrs['onHoverStyle'] : 'blur-overlay',
+			'hoverEffect'      => isset( $fbks_image_attrs['hoverEffect'] ) ? sanitize_key( $fbks_image_attrs['hoverEffect'] ) : 'none',
+			'overlayEntrance'  => isset( $fbks_image_attrs['overlayEntrance'] ) ? sanitize_key( $fbks_image_attrs['overlayEntrance'] ) : 'default',
 			'overlayContent'   => isset( $fbks_image_attrs['overlayContent'] ) ? (string) $fbks_image_attrs['overlayContent'] : 'title',
-			'overlayBgColor'   => isset( $fbks_image_attrs['overlayBgColor'] ) ? (string) $fbks_image_attrs['overlayBgColor'] : '#f9f9f9',
-			'overlayTextColor' => isset( $fbks_image_attrs['overlayTextColor'] ) ? (string) $fbks_image_attrs['overlayTextColor'] : '#000000',
-			'chipOverlayBgColor' => isset( $fbks_image_attrs['chipOverlayBgColor'] ) ? (string) $fbks_image_attrs['chipOverlayBgColor'] : '#f9f9f9',
-			'chipOverlayTextColor' => isset( $fbks_image_attrs['chipOverlayTextColor'] ) ? (string) $fbks_image_attrs['chipOverlayTextColor'] : '#000000',
+			'overlayBgColor'    => $fbks_premium_css_color( $fbks_image_attrs['overlayBgColor'] ?? '#f9f9f9', '#f9f9f9' ),
+			'overlayBgGradient' => $fbks_premium_css_background( $fbks_image_attrs['overlayBgGradient'] ?? '' ),
+			'overlayTextColor' => $fbks_premium_css_color( $fbks_image_attrs['overlayTextColor'] ?? '#000000', '#000000' ),
+			'overlayFontFamily' => $fbks_premium_css_font_family( $fbks_image_attrs['overlayFontFamily'] ?? '' ),
+			'overlayFontWeight' => $fbks_premium_css_font_weight( $fbks_image_attrs['overlayFontWeight'] ?? '' ),
+			'overlayFontStyle'  => $fbks_premium_css_font_style( $fbks_image_attrs['overlayFontStyle'] ?? '' ),
+			'chipOverlayBgColor' => $fbks_premium_css_background( $fbks_image_attrs['chipOverlayBgColor'] ?? '#f9f9f9', '#f9f9f9' ),
+			'chipOverlayBgGradient' => $fbks_premium_css_background( $fbks_image_attrs['chipOverlayBgGradient'] ?? '' ),
+			'chipOverlayTextColor' => $fbks_premium_css_color( $fbks_image_attrs['chipOverlayTextColor'] ?? '#000000', '#000000' ),
 			'hideUnknownExifFields' => ! empty( $fbks_image_attrs['hideUnknownExifFields'] ),
 			'enableWooCommerce' => ! empty( $fbks_image_attrs['enableWooCommerce'] ),
 			'imageClickAction' => isset( $fbks_image_attrs['imageClickAction'] ) ? (string) $fbks_image_attrs['imageClickAction'] : '',
@@ -365,6 +450,7 @@ if ( is_array( $fbks_inner_blocks ) && ! empty( $fbks_inner_blocks ) ) {
 			'lightbox'         => ! empty( $fbks_image_attrs['lightbox'] ) || ! empty( $fbks_image_attrs['enableLightbox'] ),
 			'lightboxTheme'    => isset( $fbks_image_attrs['lightboxTheme'] ) ? (string) $fbks_image_attrs['lightboxTheme'] : 'inherit',
 			'lightboxContent'  => isset( $fbks_image_attrs['lightboxContent'] ) ? (string) $fbks_image_attrs['lightboxContent'] : '',
+			'enableLightboxSocialSharing' => ! empty( $fbks_image_attrs['enableLightboxSocialSharing'] ),
 				'exifCamera'      => isset( $fbks_image_attrs['exifCamera'] ) ? (string) $fbks_image_attrs['exifCamera'] : '',
 				'exifFocalLength' => isset( $fbks_image_attrs['exifFocalLength'] ) ? (string) $fbks_image_attrs['exifFocalLength'] : '',
 				'exifShutterSpeed' => isset( $fbks_image_attrs['exifShutterSpeed'] ) ? (string) $fbks_image_attrs['exifShutterSpeed'] : '',
@@ -431,11 +517,18 @@ if ( empty( $fbks_images ) && ! empty( $attributes['images'] ) && is_array( $att
 			'overrideGalleryHoverSettings' => ! empty( $fbks_image['overrideGalleryHoverSettings'] ),
 			'onHoverTitle'     => ! empty( $fbks_image['showTitleOnHover'] ) || ! empty( $fbks_image['hoverTitle'] ) || ! empty( $fbks_image['onHoverTitle'] ),
 			'onHoverStyle'     => isset( $fbks_image['onHoverStyle'] ) ? (string) $fbks_image['onHoverStyle'] : 'blur-overlay',
+			'hoverEffect'      => isset( $fbks_image['hoverEffect'] ) ? sanitize_key( $fbks_image['hoverEffect'] ) : 'none',
+			'overlayEntrance'  => isset( $fbks_image['overlayEntrance'] ) ? sanitize_key( $fbks_image['overlayEntrance'] ) : 'default',
 			'overlayContent'   => isset( $fbks_image['overlayContent'] ) ? (string) $fbks_image['overlayContent'] : 'title',
-			'overlayBgColor'   => isset( $fbks_image['overlayBgColor'] ) ? (string) $fbks_image['overlayBgColor'] : '#f9f9f9',
-			'overlayTextColor' => isset( $fbks_image['overlayTextColor'] ) ? (string) $fbks_image['overlayTextColor'] : '#000000',
-			'chipOverlayBgColor' => isset( $fbks_image['chipOverlayBgColor'] ) ? (string) $fbks_image['chipOverlayBgColor'] : '#f9f9f9',
-			'chipOverlayTextColor' => isset( $fbks_image['chipOverlayTextColor'] ) ? (string) $fbks_image['chipOverlayTextColor'] : '#000000',
+			'overlayBgColor'    => $fbks_premium_css_color( $fbks_image['overlayBgColor'] ?? '#f9f9f9', '#f9f9f9' ),
+			'overlayBgGradient' => $fbks_premium_css_background( $fbks_image['overlayBgGradient'] ?? '' ),
+			'overlayTextColor' => $fbks_premium_css_color( $fbks_image['overlayTextColor'] ?? '#000000', '#000000' ),
+			'overlayFontFamily' => $fbks_premium_css_font_family( $fbks_image['overlayFontFamily'] ?? '' ),
+			'overlayFontWeight' => $fbks_premium_css_font_weight( $fbks_image['overlayFontWeight'] ?? '' ),
+			'overlayFontStyle'  => $fbks_premium_css_font_style( $fbks_image['overlayFontStyle'] ?? '' ),
+			'chipOverlayBgColor' => $fbks_premium_css_background( $fbks_image['chipOverlayBgColor'] ?? '#f9f9f9', '#f9f9f9' ),
+			'chipOverlayBgGradient' => $fbks_premium_css_background( $fbks_image['chipOverlayBgGradient'] ?? '' ),
+			'chipOverlayTextColor' => $fbks_premium_css_color( $fbks_image['chipOverlayTextColor'] ?? '#000000', '#000000' ),
 			'hideUnknownExifFields' => ! empty( $fbks_image['hideUnknownExifFields'] ),
 			'enableWooCommerce' => ! empty( $fbks_image['enableWooCommerce'] ),
 			'imageClickAction' => isset( $fbks_image['imageClickAction'] ) ? (string) $fbks_image['imageClickAction'] : '',
@@ -459,6 +552,7 @@ if ( empty( $fbks_images ) && ! empty( $attributes['images'] ) && is_array( $att
 			'lightbox'         => ! empty( $fbks_image['lightbox'] ) || ! empty( $fbks_image['enableLightbox'] ),
 			'lightboxTheme'    => isset( $fbks_image['lightboxTheme'] ) ? (string) $fbks_image['lightboxTheme'] : 'inherit',
 			'lightboxContent'  => isset( $fbks_image['lightboxContent'] ) ? (string) $fbks_image['lightboxContent'] : '',
+			'enableLightboxSocialSharing' => ! empty( $fbks_image['enableLightboxSocialSharing'] ),
 				'exifCamera'      => isset( $fbks_image['exifCamera'] ) ? (string) $fbks_image['exifCamera'] : '',
 				'exifFocalLength' => isset( $fbks_image['exifFocalLength'] ) ? (string) $fbks_image['exifFocalLength'] : '',
 				'exifShutterSpeed' => isset( $fbks_image['exifShutterSpeed'] ) ? (string) $fbks_image['exifShutterSpeed'] : '',
@@ -524,6 +618,8 @@ if ( $fbks_can_use_premium && ! empty( $fbks_active_image['overrideGalleryClickS
 $fbks_effective_on_hover_title = $fbks_on_hover_title;
 $fbks_effective_overlay_content = $fbks_overlay_content;
 $fbks_effective_hover_variant_class = $fbks_hover_variant_class;
+$fbks_effective_hover_effect_class = $fbks_hover_effect_class;
+$fbks_effective_overlay_entrance_class = $fbks_overlay_entrance_class;
 $fbks_effective_hover_style = $fbks_hover_style;
 $fbks_effective_hide_unknown_exif = $fbks_hide_unknown_exif;
 $fbks_effective_hover_woo = $fbks_enable_woo;
@@ -532,17 +628,36 @@ if ( $fbks_can_use_premium && ! empty( $fbks_active_image['overrideGalleryHoverS
 	$fbks_effective_overlay_content = isset( $fbks_active_image['overlayContent'] ) ? (string) $fbks_active_image['overlayContent'] : 'title';
 	$fbks_effective_hover_style_key = isset( $fbks_active_image['onHoverStyle'] ) ? (string) $fbks_active_image['onHoverStyle'] : 'blur-overlay';
 	$fbks_effective_hover_variant_class = $fbks_hover_class_map[ $fbks_effective_hover_style_key ] ?? 'pb-hover-blur-overlay';
+	$fbks_effective_hover_effect_key = isset( $fbks_active_image['hoverEffect'] ) ? sanitize_key( $fbks_active_image['hoverEffect'] ) : 'none';
+	$fbks_effective_hover_effect_class = $fbks_hover_effect_class_map[ $fbks_effective_hover_effect_key ] ?? '';
+	$fbks_effective_overlay_entrance_key = isset( $fbks_active_image['overlayEntrance'] ) ? sanitize_key( $fbks_active_image['overlayEntrance'] ) : 'default';
+	$fbks_effective_overlay_entrance_class = $fbks_overlay_entrance_class_map[ $fbks_effective_overlay_entrance_key ] ?? '';
 	$fbks_effective_hide_unknown_exif = ! empty( $fbks_active_image['hideUnknownExifFields'] );
 	$fbks_effective_hover_woo = $fbks_woo_active &&
 		! empty( $fbks_active_image['enableWooCommerce'] ) &&
 		( '' === (string) ( $fbks_active_image['imageClickAction'] ?? '' ) || 'woocommerce' === (string) $fbks_active_image['imageClickAction'] );
 	$fbks_effective_hover_style = '';
+	$fbks_overlay_font_family = fbks_sanitize_css_font_family_value( (string) ( $fbks_active_image['overlayFontFamily'] ?? '' ) );
+	$fbks_overlay_font_weight = fbks_sanitize_css_font_weight_value( (string) ( $fbks_active_image['overlayFontWeight'] ?? '' ) );
+	$fbks_overlay_font_style = fbks_sanitize_css_font_style_value( (string) ( $fbks_active_image['overlayFontStyle'] ?? '' ) );
+	$fbks_effective_hover_style .= $fbks_overlay_font_family ? '--pb-overlay-font-family:' . $fbks_overlay_font_family . ';' : '';
+	$fbks_effective_hover_style .= $fbks_overlay_font_weight ? '--pb-overlay-font-weight:' . $fbks_overlay_font_weight . ';' : '';
+	$fbks_effective_hover_style .= $fbks_overlay_font_style ? '--pb-overlay-font-style:' . $fbks_overlay_font_style . ';' : '';
 	if ( 'color-overlay' === $fbks_effective_hover_style_key ) {
-		$fbks_effective_hover_style .= '--pb-overlay-bg:' . (string) ( $fbks_active_image['overlayBgColor'] ?? '#f9f9f9' ) . ';';
-		$fbks_effective_hover_style .= '--pb-overlay-color:' . (string) ( $fbks_active_image['overlayTextColor'] ?? '#000000' ) . ';';
-	} elseif ( 'chip' === $fbks_effective_hover_style_key ) {
-		$fbks_effective_hover_style .= '--pb-chip-overlay-bg:' . (string) ( $fbks_active_image['chipOverlayBgColor'] ?? '#f9f9f9' ) . ';';
-		$fbks_effective_hover_style .= '--pb-chip-overlay-color:' . (string) ( $fbks_active_image['chipOverlayTextColor'] ?? '#000000' ) . ';';
+		$fbks_overlay_bg = fbks_sanitize_css_color_value( (string) ( $fbks_active_image['overlayBgColor'] ?? '#f9f9f9' ) );
+		$fbks_overlay_text = fbks_sanitize_css_color_value( (string) ( $fbks_active_image['overlayTextColor'] ?? '#000000' ) );
+		$fbks_effective_hover_style .= $fbks_overlay_bg ? '--pb-overlay-bg:' . $fbks_overlay_bg . ';' : '';
+		$fbks_effective_hover_style .= $fbks_overlay_text ? '--pb-overlay-color:' . $fbks_overlay_text . ';' : '';
+	} elseif ( 'gradient-overlay' === $fbks_effective_hover_style_key ) {
+		$fbks_overlay_bg = fbks_sanitize_css_background_value( (string) ( $fbks_active_image['overlayBgGradient'] ?? '' ) );
+		$fbks_overlay_text = fbks_sanitize_css_color_value( (string) ( $fbks_active_image['overlayTextColor'] ?? '#000000' ) );
+		$fbks_effective_hover_style .= $fbks_overlay_bg ? '--pb-overlay-bg:' . $fbks_overlay_bg . ';' : '';
+		$fbks_effective_hover_style .= $fbks_overlay_text ? '--pb-overlay-color:' . $fbks_overlay_text . ';' : '';
+	} elseif ( 'chip' === $fbks_effective_hover_style_key || 'chip-gradient' === $fbks_effective_hover_style_key ) {
+		$fbks_chip_overlay_bg = fbks_sanitize_css_background_value( (string) ( 'chip-gradient' === $fbks_effective_hover_style_key ? ( $fbks_active_image['chipOverlayBgGradient'] ?? '' ) : ( $fbks_active_image['chipOverlayBgColor'] ?? '#f9f9f9' ) ) );
+		$fbks_chip_overlay_text = fbks_sanitize_css_color_value( (string) ( $fbks_active_image['chipOverlayTextColor'] ?? '#000000' ) );
+		$fbks_effective_hover_style .= $fbks_chip_overlay_bg ? '--pb-chip-overlay-bg:' . $fbks_chip_overlay_bg . ';' : '';
+		$fbks_effective_hover_style .= $fbks_chip_overlay_text ? '--pb-chip-overlay-color:' . $fbks_chip_overlay_text . ';' : '';
 	}
 }
 if ( 'product' === $fbks_effective_overlay_content && ! $fbks_effective_hover_woo ) {
@@ -582,6 +697,38 @@ if ( $fbks_can_use_premium ) {
 	}
 }
 
+$fbks_show_gallery_watermark = false;
+$fbks_show_lightbox_watermark = false;
+$fbks_watermark_style = '';
+$fbks_watermark_data_attrs = '';
+$fbks_watermark_payload = null;
+if ( $fbks_can_use_premium ) {
+	$fbks_watermark_enabled = ! empty( $attributes['enableWatermarking'] );
+	$fbks_watermark_id = sanitize_key( $attributes['watermarkId'] ?? '' );
+	$fbks_watermark_display = sanitize_key( $attributes['watermarkDisplay'] ?? 'none' );
+	if ( ! in_array( $fbks_watermark_display, [ 'none', 'gallery', 'lightbox', 'both' ], true ) ) {
+		$fbks_watermark_display = 'none';
+	}
+
+	$fbks_watermark_item = function_exists( 'fbks_get_watermark_by_id' ) ? fbks_get_watermark_by_id( $fbks_watermark_id ) : null;
+	if ( $fbks_watermark_enabled && is_array( $fbks_watermark_item ) ) {
+		$fbks_watermark_style = function_exists( 'fbks_get_watermark_overlay_style' ) ? fbks_get_watermark_overlay_style( $fbks_watermark_item ) : '';
+		$fbks_watermark_data_attrs = function_exists( 'fbks_get_watermark_overlay_data_attrs' ) ? fbks_get_watermark_overlay_data_attrs( $fbks_watermark_item ) : '';
+		$fbks_show_gallery_watermark = '' !== $fbks_watermark_style && in_array( $fbks_watermark_display, [ 'gallery', 'both' ], true );
+		$fbks_show_lightbox_watermark = '' !== $fbks_watermark_data_attrs && in_array( $fbks_watermark_display, [ 'lightbox', 'both' ], true );
+		$fbks_watermark_payload = [
+			'showGallery'  => $fbks_show_gallery_watermark,
+			'showLightbox' => $fbks_show_lightbox_watermark,
+			'image'        => (string) ( $fbks_watermark_item['assetUrl'] ?? '' ),
+			'opacity'      => (string) ( $fbks_watermark_item['opacity'] ?? '0.28' ),
+			'size'         => (string) ( $fbks_watermark_item['size'] ?? '16' ),
+			'inset'        => (string) ( $fbks_watermark_item['inset'] ?? '4' ),
+			'position'     => function_exists( 'fbks_get_watermark_css_position' ) ? fbks_get_watermark_css_position( $fbks_watermark_item['position'] ?? 'bottom-right' ) : 'bottom right',
+			'repeat'       => (string) ( $fbks_watermark_item['repeat'] ?? 'no-repeat' ),
+		];
+	}
+}
+
 $fbks_wrapper_args = [
 	'class' => 'pb-filmstrip-gallery is-' . $fbks_position . ' is-theme-' . $fbks_color_mode,
 ];
@@ -604,12 +751,21 @@ $fbks_data_payload = [
 		'wooDefaultLinkAction'   => $fbks_woo_default_link_action,
 		'wooProductPriceOnHover' => $fbks_woo_hover_info,
 		'overlayContent'         => $fbks_overlay_content,
+		'enableSocialSharing'    => $fbks_social_sharing_enabled,
+		'socialSharingSources'   => $fbks_social_sources,
 		'hideUnknownExifFields' => $fbks_hide_unknown_exif,
 		'onHoverStyle'           => $attributes['onHoverStyle'] ?? 'blur-overlay',
-		'overlayBgColor'         => $attributes['overlayBgColor'] ?? '#f9f9f9',
-		'overlayTextColor'       => $attributes['overlayTextColor'] ?? '#000000',
-		'chipOverlayBgColor'     => $attributes['chipOverlayBgColor'] ?? '#f9f9f9',
-		'chipOverlayTextColor'   => $attributes['chipOverlayTextColor'] ?? '#000000',
+		'hoverEffect'            => sanitize_key( $attributes['hoverEffect'] ?? 'none' ),
+		'overlayEntrance'        => sanitize_key( $attributes['overlayEntrance'] ?? 'default' ),
+		'overlayBgColor'         => $fbks_premium_css_color( $attributes['overlayBgColor'] ?? '#f9f9f9', '#f9f9f9' ),
+		'overlayBgGradient'      => $fbks_premium_css_background( $attributes['overlayBgGradient'] ?? '' ),
+		'overlayTextColor'       => $fbks_premium_css_color( $attributes['overlayTextColor'] ?? '#000000', '#000000' ),
+		'overlayFontFamily'      => $fbks_premium_css_font_family( $attributes['overlayFontFamily'] ?? '' ),
+		'overlayFontWeight'      => $fbks_premium_css_font_weight( $attributes['overlayFontWeight'] ?? '' ),
+		'overlayFontStyle'       => $fbks_premium_css_font_style( $attributes['overlayFontStyle'] ?? '' ),
+		'chipOverlayBgColor'     => $fbks_premium_css_background( $attributes['chipOverlayBgColor'] ?? '#f9f9f9', '#f9f9f9' ),
+		'chipOverlayBgGradient'  => $fbks_premium_css_background( $attributes['chipOverlayBgGradient'] ?? '' ),
+		'chipOverlayTextColor'   => $fbks_premium_css_color( $attributes['chipOverlayTextColor'] ?? '#000000', '#000000' ),
 		'enableDownload'         => $fbks_enable_download,
 		'downloadOnHover'        => $fbks_download_on_hover,
 		'downloadIconColor'      => $attributes['downloadIconColor'] ?? '',
@@ -623,9 +779,13 @@ $fbks_data_payload = [
 		'lightbox'               => ! empty( $attributes['lightbox'] ),
 		'lightboxTheme'          => $attributes['lightboxTheme'] ?? 'dark',
 		'lightboxContent'        => $attributes['lightboxContent'] ?? '',
+		'lightboxCounter'        => ! empty( $attributes['lightboxCounter'] ),
+		'lightboxZoom'           => ! empty( $attributes['lightboxZoom'] ),
+		'enableLightboxSocialSharing' => 'social' === ( $attributes['lightboxContent'] ?? '' ),
 		'linkIconDisplay'        => $fbks_link_icon_display,
 		'onHoverTitle'           => $fbks_on_hover_title,
 		'lazyLoad'               => $fbks_lazy_load,
+		'watermark'              => $fbks_watermark_payload,
 	],
 	'images'   => $fbks_images,
 ];
@@ -708,7 +868,7 @@ if ( false === $fbks_data_json ) {
 				<?php endif; ?>
 
 				<?php $fbks_active_image_ratio = ! empty( $fbks_active_image['width'] ) && ! empty( $fbks_active_image['height'] ) ? (float) $fbks_active_image['width'] / (float) $fbks_active_image['height'] : 1; ?>
-				<div class="pb-filmstrip-gallery-main-media pb-image-block <?php echo esc_attr( $fbks_effective_on_hover_title ? $fbks_effective_hover_variant_class : '' ); ?>" style="--pb-filmstrip-image-ratio: <?php echo esc_attr( $fbks_active_image_ratio ); ?>;<?php echo esc_attr( $fbks_effective_hover_style ); ?>">
+				<div class="pb-filmstrip-gallery-main-media pb-image-block <?php echo esc_attr( $fbks_effective_on_hover_title ? $fbks_effective_hover_variant_class : '' ); ?> <?php echo esc_attr( $fbks_effective_on_hover_title ? $fbks_effective_overlay_entrance_class : '' ); ?> <?php echo esc_attr( $fbks_effective_hover_effect_class ); ?>" style="--pb-filmstrip-image-ratio: <?php echo esc_attr( $fbks_active_image_ratio ); ?>;<?php echo esc_attr( $fbks_effective_hover_style ); ?>">
 				<?php if ( $fbks_can_use_premium ) : ?>
 					<?php
 					$fbks_active_product_id = (int) ( $fbks_active_image['wooProductId'] ?? 0 );
@@ -859,6 +1019,9 @@ if ( false === $fbks_data_json ) {
 						decoding="async"
 					/>
 					</a>
+				<?php if ( $fbks_can_use_premium && $fbks_show_gallery_watermark ) : ?>
+					<span class="pb-watermark-overlay" style="<?php echo esc_attr( $fbks_watermark_style ); ?>"<?php echo wp_kses_data( $fbks_watermark_data_attrs ); ?> aria-hidden="true"></span>
+				<?php endif; ?>
 				<div
 					class="pb-image-block-title-container"
 					<?php if ( '' === $fbks_overlay_html ) : ?>

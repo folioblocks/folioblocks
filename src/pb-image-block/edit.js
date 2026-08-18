@@ -16,12 +16,13 @@ import {
 	ToggleControl,
 	TextareaControl,
 	TextControl,
+	Popover,
 	ToolbarGroup,
 	ToolbarButton,
 	Button,
 	SelectControl,
 } from '@wordpress/components';
-import { useRef, useEffect } from '@wordpress/element';
+import { useRef, useEffect, useState } from '@wordpress/element';
 import { stack } from '@wordpress/icons';
 import { applyFilters } from '@wordpress/hooks';
 import { IconImageBlock } from '../pb-helpers/icons';
@@ -37,6 +38,9 @@ import {
 import { getImageSizeOptions } from '../pb-helpers/imageSizeOptions';
 import { imageProFeatureNotice } from '../pb-helpers/imageProFeatureNotices';
 import { getShadowStyleClass } from '../pb-helpers/ImageStyleControl';
+import { getOverlayTypographyCSS } from '../pb-helpers/overlayTypographyControls';
+import { getTiltHoverHandlers } from '../pb-helpers/tiltHoverEffect';
+import { useProofingGalleryContext } from '../pb-helpers/useProofingGalleryContext';
 import './editor.scss';
 
 const getImageClickAction = ( {
@@ -168,6 +172,11 @@ const isWordPressVersionAtLeast = ( version, minimumVersion ) => {
 	return true;
 };
 
+const PROOFING_COMMENT_MAX_LENGTH = 1000;
+
+const truncateProofingComment = ( comment = '' ) =>
+	String( comment || '' ).slice( 0, PROOFING_COMMENT_MAX_LENGTH );
+
 const ImagePreviewControl = ( { id, selectedSrc, title, onSelectImage } ) => {
 	if ( ! selectedSrc ) {
 		return null;
@@ -236,6 +245,227 @@ const ImageMetadataControls = ( {
 	</>
 );
 
+const ProofingThumbnailControls = ( {
+	enableHeart = true,
+	enableFlag = true,
+	enableComment = true,
+	proofingTheme = 'light',
+} ) => {
+	const [ liked, setLiked ] = useState( false );
+	const [ flagColor, setFlagColor ] = useState( '' );
+	const [ comment, setComment ] = useState( '' );
+	const [ isFlagPickerOpen, setIsFlagPickerOpen ] = useState( false );
+	const [ isCommentOpen, setIsCommentOpen ] = useState( false );
+	const controlsRef = useRef( null );
+	const flagButtonRef = useRef( null );
+	const flagColors = [
+		{ label: __( 'Red', 'folioblocks' ), value: 'red' },
+		{ label: __( 'Orange', 'folioblocks' ), value: 'orange' },
+		{ label: __( 'Green', 'folioblocks' ), value: 'green' },
+	];
+	const enabledProofingControls = [
+		enableHeart ? 'heart' : '',
+		enableFlag ? 'flag' : '',
+		enableComment ? 'comment' : '',
+	].filter( Boolean );
+	const getProofingControlSlot = ( control ) =>
+		enabledProofingControls.indexOf( control ) + 1;
+	const stopProofingClick = ( event ) => {
+		event.preventDefault();
+		event.stopPropagation();
+	};
+	const stopProofingPanelEvent = ( event ) => {
+		event.stopPropagation();
+	};
+	const isDarkProofingTheme = proofingTheme === 'dark';
+
+	useEffect( () => {
+		const imageBlock = controlsRef.current?.closest(
+			'.wp-block-folioblocks-pb-image-block'
+		);
+
+		if ( ! imageBlock ) {
+			return;
+		}
+
+		imageBlock.dataset.proofingHearted = liked ? 'true' : 'false';
+		imageBlock.dataset.proofingFlag = flagColor || '';
+		imageBlock.dataset.proofingComment = comment;
+		imageBlock.dataset.proofingCommented = comment.trim()
+			? 'true'
+			: 'false';
+		window.dispatchEvent(
+			new CustomEvent( 'folioblocks:proofing-state-change' )
+		);
+	}, [ liked, flagColor, comment ] );
+
+	return (
+		<div className="fbks-proofing-thumbnail-controls" ref={ controlsRef }>
+			{ enableHeart && (
+				<button
+					type="button"
+					className={ `fbks-proofing-thumbnail-control fbks-proofing-thumbnail-control--heart${
+						liked ? ' is-active' : ''
+					} fbks-proofing-thumbnail-control--slot-${ getProofingControlSlot(
+						'heart'
+					) }` }
+					aria-pressed={ liked }
+					aria-label={ __( 'Like image', 'folioblocks' ) }
+					onClick={ ( event ) => {
+						stopProofingClick( event );
+						setLiked( ! liked );
+					} }
+				>
+					<svg viewBox="0 0 24 24" aria-hidden="true">
+						<path d="M12 21s-7-4.4-9.4-8.2C.7 9.8 1.2 6.2 3.8 4.4 6 2.9 8.7 3.4 10.5 5.3L12 6.9l1.5-1.6c1.8-1.9 4.5-2.4 6.7-.9 2.6 1.8 3.1 5.4 1.2 8.4C19 16.6 12 21 12 21z" />
+					</svg>
+				</button>
+			) }
+			{ enableFlag && (
+				<div className="fbks-proofing-thumbnail-flag-wrap">
+					<button
+						ref={ flagButtonRef }
+						type="button"
+						className={ `fbks-proofing-thumbnail-control fbks-proofing-thumbnail-control--flag${
+							flagColor ? ` is-${ flagColor }` : ''
+						} fbks-proofing-thumbnail-control--slot-${ getProofingControlSlot(
+							'flag'
+						) }` }
+						aria-label={ __( 'Set flag color', 'folioblocks' ) }
+						onClick={ ( event ) => {
+							stopProofingClick( event );
+							setIsFlagPickerOpen( ! isFlagPickerOpen );
+						} }
+					>
+						<svg viewBox="0 0 24 24" aria-hidden="true">
+							<path d="M6 21V4h10.6l.4 3.1h3v9H9.4L9 13.9H8V21H6z" />
+						</svg>
+					</button>
+					{ isFlagPickerOpen && (
+						<Popover
+							anchor={ flagButtonRef.current }
+							position="bottom right"
+							onClose={ () => setIsFlagPickerOpen( false ) }
+							focusOnMount={ false }
+						>
+							<div
+								className={ `fbks-proofing-flag-popover${
+									isDarkProofingTheme
+										? ' fbks-proofing-popover--dark'
+										: ''
+								}` }
+							>
+								{ flagColors.map( ( color ) => (
+									<button
+										type="button"
+										key={ color.value }
+										className={ `fbks-proofing-flag-swatch is-${ color.value }` }
+										aria-label={ color.label }
+										onClick={ ( event ) => {
+											stopProofingClick( event );
+											setFlagColor( color.value );
+											setIsFlagPickerOpen( false );
+										} }
+									/>
+								) ) }
+								<button
+									type="button"
+									className="fbks-proofing-flag-clear"
+									onClick={ ( event ) => {
+										stopProofingClick( event );
+										setFlagColor( '' );
+										setIsFlagPickerOpen( false );
+									} }
+								>
+									{ __( 'Clear', 'folioblocks' ) }
+								</button>
+							</div>
+						</Popover>
+					) }
+				</div>
+			) }
+			{ enableComment && (
+				<>
+					<button
+						type="button"
+						className={ `fbks-proofing-thumbnail-control fbks-proofing-thumbnail-control--comment${
+							comment.trim() ? ' is-active' : ''
+						}${ isCommentOpen ? ' is-open' : '' } fbks-proofing-thumbnail-control--slot-${ getProofingControlSlot(
+							'comment'
+						) }` }
+						aria-label={ __( 'Comment on image', 'folioblocks' ) }
+						onClick={ ( event ) => {
+							stopProofingClick( event );
+							setIsFlagPickerOpen( false );
+							setIsCommentOpen( ! isCommentOpen );
+						} }
+					>
+						<svg viewBox="0 0 24 24" aria-hidden="true">
+							<path d="M5 5h14v10H8.7L5 18.4V5z" />
+						</svg>
+					</button>
+					{ isCommentOpen && (
+						<div
+							className={ `fbks-proofing-comment-popover is-open${
+								isDarkProofingTheme
+									? ' fbks-proofing-popover--dark'
+									: ''
+							} fbks-proofing-popover--slot-${ getProofingControlSlot(
+								'comment'
+							) }` }
+							onMouseDown={ stopProofingPanelEvent }
+						>
+							<div className="fbks-proofing-comment-popover__label">
+								<span>{ __( 'Comment', 'folioblocks' ) }</span>
+								<textarea
+									className="fbks-proofing-comment-popover__field"
+									rows="3"
+									maxLength={ PROOFING_COMMENT_MAX_LENGTH }
+									value={ comment }
+									aria-label={ __( 'Comment', 'folioblocks' ) }
+									onChange={ ( event ) =>
+										setComment(
+											truncateProofingComment(
+												event.target.value
+											)
+										)
+									}
+								/>
+								<span className="fbks-proofing-comment-popover__counter">
+									{ comment.length } /{ ' ' }
+									{ PROOFING_COMMENT_MAX_LENGTH }
+								</span>
+							</div>
+							<div className="fbks-proofing-comment-popover__actions">
+								<button
+									type="button"
+									className="fbks-proofing-comment-popover__button"
+									onClick={ ( event ) => {
+										stopProofingClick( event );
+										setComment( '' );
+									} }
+								>
+									{ __( 'Clear', 'folioblocks' ) }
+								</button>
+								<button
+									type="button"
+									className="fbks-proofing-comment-popover__button is-primary"
+									onClick={ ( event ) => {
+										stopProofingClick( event );
+										setIsCommentOpen( false );
+									} }
+								>
+									{ __( 'Done', 'folioblocks' ) }
+								</button>
+							</div>
+						</div>
+					) }
+				</>
+			) }
+		</div>
+	);
+};
+
 export default function Edit( {
 	attributes,
 	setAttributes,
@@ -288,6 +518,10 @@ export default function Edit( {
 		[ id, shouldUseContentInspector, hasStoredExif ]
 	);
 	const imageSizeOptions = getImageSizeOptions( availableImageSizes, __ );
+	const {
+		isInsideProofingGallery,
+		proofingGalleryAttributes,
+	} = useProofingGalleryContext( clientId );
 
 	// Block Preview Image
 	if ( preview ) {
@@ -393,12 +627,27 @@ export default function Edit( {
 	const overlayBgColor = isInsideGallery && ! overrideGalleryHoverSettings
 		? hoverContext?.[ 'folioBlocks/overlayBgColor' ] ?? ''
 		: attributes.overlayBgColor ?? '';
+	const overlayBgGradient = isInsideGallery && ! overrideGalleryHoverSettings
+		? hoverContext?.[ 'folioBlocks/overlayBgGradient' ] ?? ''
+		: attributes.overlayBgGradient ?? '';
 	const overlayTextColor = isInsideGallery && ! overrideGalleryHoverSettings
 		? hoverContext?.[ 'folioBlocks/overlayTextColor' ] ?? ''
 		: attributes.overlayTextColor ?? '';
+	const overlayFontFamily = isInsideGallery && ! overrideGalleryHoverSettings
+		? hoverContext?.[ 'folioBlocks/overlayFontFamily' ] ?? ''
+		: attributes.overlayFontFamily ?? '';
+	const overlayFontWeight = isInsideGallery && ! overrideGalleryHoverSettings
+		? hoverContext?.[ 'folioBlocks/overlayFontWeight' ] ?? ''
+		: attributes.overlayFontWeight ?? '';
+	const overlayFontStyle = isInsideGallery && ! overrideGalleryHoverSettings
+		? hoverContext?.[ 'folioBlocks/overlayFontStyle' ] ?? ''
+		: attributes.overlayFontStyle ?? '';
 	const chipOverlayBgColor = isInsideGallery && ! overrideGalleryHoverSettings
 		? hoverContext?.[ 'folioBlocks/chipOverlayBgColor' ] ?? ''
 		: attributes.chipOverlayBgColor ?? '';
+	const chipOverlayBgGradient = isInsideGallery && ! overrideGalleryHoverSettings
+		? hoverContext?.[ 'folioBlocks/chipOverlayBgGradient' ] ?? ''
+		: attributes.chipOverlayBgGradient ?? '';
 	const chipOverlayTextColor = isInsideGallery && ! overrideGalleryHoverSettings
 		? hoverContext?.[ 'folioBlocks/chipOverlayTextColor' ] ?? ''
 		: attributes.chipOverlayTextColor ?? '';
@@ -408,6 +657,14 @@ export default function Edit( {
 		  attributes.hoverTitle ??
 		  attributes.onHoverTitle ??
 		  false;
+	const effectiveHoverEffect =
+		( isInsideGallery && ! overrideGalleryHoverSettings
+			? hoverContext?.[ 'folioBlocks/hoverEffect' ]
+			: attributes.hoverEffect ) || 'none';
+	const effectiveOverlayEntrance =
+		( isInsideGallery && ! overrideGalleryHoverSettings
+			? hoverContext?.[ 'folioBlocks/overlayEntrance' ]
+			: attributes.overlayEntrance ) || 'default';
 	const configuredOverlayContent =
 		hoverContext?.[ 'folioBlocks/overlayContent' ] ??
 		attributes.overlayContent ??
@@ -428,23 +685,57 @@ export default function Edit( {
 		'fade-overlay': 'pb-hover-fade-overlay',
 		'gradient-bottom': 'pb-hover-gradient-bottom',
 		chip: 'pb-hover-chip',
+		'chip-gradient': 'pb-hover-chip',
 		'color-overlay': 'pb-hover-color-overlay',
+		'gradient-overlay': 'pb-hover-gradient-overlay',
 	};
 	const hoverVariantClass =
 		hoverClassMap[ effectiveOnHoverStyle ] || 'pb-hover-fade-overlay';
+	const hoverEffectClassMap = {
+		'zoom-in': 'pb-effect-zoom-in',
+		'zoom-out': 'pb-effect-zoom-out',
+		lift: 'pb-effect-lift',
+		tilt: 'pb-effect-tilt',
+		pop: 'pb-effect-pop',
+		glare: 'pb-effect-glare',
+		pan: 'pb-effect-pan',
+		desaturate: 'pb-effect-desaturate',
+	};
+	const hoverEffectClass = hoverEffectClassMap[ effectiveHoverEffect ] || '';
+	const tiltHoverHandlers =
+		effectiveHoverEffect === 'tilt' ? getTiltHoverHandlers() : {};
+	const overlayEntranceClassMap = {
+		fade: 'pb-overlay-enter-fade',
+		'slide-up': 'pb-overlay-enter-slide-up',
+		'slide-down': 'pb-overlay-enter-slide-down',
+		'slide-left': 'pb-overlay-enter-slide-left',
+		'slide-right': 'pb-overlay-enter-slide-right',
+	};
+	const overlayEntranceClass =
+		overlayEntranceClassMap[ effectiveOverlayEntrance ] || '';
 	const overlayStyleVars =
-		effectiveOnHoverStyle === 'color-overlay'
+		effectiveOnHoverStyle === 'color-overlay' ||
+		effectiveOnHoverStyle === 'gradient-overlay'
 			? {
-					...( overlayBgColor
+					...( effectiveOnHoverStyle === 'gradient-overlay' &&
+					overlayBgGradient
+						? { '--pb-overlay-bg': overlayBgGradient }
+						: {} ),
+					...( effectiveOnHoverStyle === 'color-overlay' &&
+					overlayBgColor
 						? { '--pb-overlay-bg': overlayBgColor }
 						: {} ),
 					...( overlayTextColor
 						? { '--pb-overlay-color': overlayTextColor }
 						: {} ),
 			  }
-			: effectiveOnHoverStyle === 'chip'
+			: effectiveOnHoverStyle === 'chip' ||
+			  effectiveOnHoverStyle === 'chip-gradient'
 			? {
-					...( chipOverlayBgColor
+					...( effectiveOnHoverStyle === 'chip-gradient' &&
+					chipOverlayBgGradient
+						? { '--pb-chip-overlay-bg': chipOverlayBgGradient }
+						: effectiveOnHoverStyle === 'chip' && chipOverlayBgColor
 						? { '--pb-chip-overlay-bg': chipOverlayBgColor }
 						: {} ),
 					...( chipOverlayTextColor
@@ -452,6 +743,11 @@ export default function Edit( {
 						: {} ),
 			  }
 			: {};
+	const overlayTypographyVars = getOverlayTypographyCSS( {
+		overlayFontFamily,
+		overlayFontWeight,
+		overlayFontStyle,
+	} );
 
 	const effectiveDownloadEnabled =
 		isInsideGallery && ! overrideGalleryClickSettings
@@ -574,11 +870,12 @@ export default function Edit( {
 	// Show panel if (A) we're standalone (so Download + Woo controls can render)
 	// OR (B) Woo is effectively active (so the product link control can render)
 	const showImageClickPanel =
-		! isInsideGallery ||
-		galleryOverridesEnabled ||
-		!! effectiveWooActive ||
-		contextImageClickAction === 'custom_url' ||
-		contextImageClickAction === 'page_post';
+		! isInsideProofingGallery &&
+		( ! isInsideGallery ||
+			galleryOverridesEnabled ||
+			!! effectiveWooActive ||
+			contextImageClickAction === 'custom_url' ||
+			contextImageClickAction === 'page_post' );
 
 	// Migrate legacy keys to new ones (non-destructive, only when new keys are undefined)
 	useEffect( () => {
@@ -617,7 +914,11 @@ export default function Edit( {
 	const blockProps = useBlockProps( {
 		className: isHidden ? 'is-hidden' : undefined,
 	} );
-	const baseFigureStyle = { ...imageStyle, ...overlayStyleVars };
+	const baseFigureStyle = {
+		...imageStyle,
+		...overlayStyleVars,
+		...overlayTypographyVars,
+	};
 	const figureStyle = context[ 'folioBlocks/inCarousel' ]
 		? { ...baseFigureStyle, height: `${ displayHeight }px` }
 		: baseFigureStyle;
@@ -741,6 +1042,14 @@ export default function Edit( {
 		( clickContext?.[ 'folioBlocks/wooCartIconDisplay' ] ||
 			attributes.wooCartIconDisplay ||
 			'hover' ) !== 'none';
+	const proofingControls = isInsideProofingGallery ? (
+		<ProofingThumbnailControls
+			enableHeart={ proofingGalleryAttributes.enableHeart !== false }
+			enableFlag={ proofingGalleryAttributes.enableFlag !== false }
+			enableComment={ proofingGalleryAttributes.enableComment !== false }
+			proofingTheme={ proofingGalleryAttributes.proofingTheme || 'light' }
+		/>
+	) : null;
 
 	return (
 		<>
@@ -974,7 +1283,7 @@ export default function Edit( {
 								applyFilters(
 									'folioBlocks.imageBlock.lightboxControls',
 									null,
-									{ attributes, setAttributes }
+									{ attributes, setAttributes, context }
 								) }
 							{ ( ! isInsideGallery ||
 								overrideGalleryClickSettings ) &&
@@ -1038,7 +1347,8 @@ export default function Edit( {
 									isInsideGallery,
 								}
 							) }
-						{ ( ! isInsideGallery || galleryOverridesEnabled ) && (
+						{ ! isInsideProofingGallery &&
+							( ! isInsideGallery || galleryOverridesEnabled ) && (
 							<PanelBody
 								title={ __( 'Image Hover Settings', 'folioblocks' ) }
 								initialOpen={ true }
@@ -1076,11 +1386,24 @@ export default function Edit( {
 													effectiveHoverWooActive,
 											},
 											setAttributes,
+											context,
 										}
 									) }
 							</PanelBody>
 						) }
-					</InspectorControls>
+						{ ! isInsideGallery && (
+							<PanelBody
+								title={ __( 'Watermark Overlay', 'folioblocks' ) }
+								initialOpen={ false }
+							>
+								{ applyFilters(
+									'folioBlocks.imageBlock.watermarkControls',
+									imageProFeatureNotice( 'watermarkOverlay' ),
+									{ attributes, setAttributes }
+								) }
+							</PanelBody>
+						) }
+						</InspectorControls>
 					{ shouldUseContentInspector && (
 						<InspectorControls group="content">
 							<PanelBody
@@ -1158,9 +1481,12 @@ export default function Edit( {
 				<div className="pb-image-block-wrapper">
 					<div { ...blockProps }>
 						<figure
+							{ ...tiltHoverHandlers }
 							className={ [
 								'pb-image-block',
 								overlayEnabled ? hoverVariantClass : '',
+								overlayEnabled ? overlayEntranceClass : '',
+								hoverEffectClass,
 								shadowStyleClass,
 								shouldShowDownloadIcon ? 'has-download' : '',
 							]
@@ -1190,6 +1516,16 @@ export default function Edit( {
 										height={ height }
 										className="pb-image-block-img"
 									/>
+									{ proofingControls }
+									{ applyFilters(
+										'folioBlocks.imageBlock.watermarkOverlay',
+										null,
+										{
+											attributes,
+											context,
+											isInsideGallery,
+										}
+									) }
 										{ effectiveHoverTitle &&
 											hasHoverOverlayContent && (
 											<div className="pb-image-block-title-container">
@@ -1287,9 +1623,12 @@ export default function Edit( {
 			) : (
 				<div { ...blockProps }>
 					<figure
+						{ ...tiltHoverHandlers }
 						className={ [
 							'pb-image-block',
 							overlayEnabled ? hoverVariantClass : '',
+							overlayEnabled ? overlayEntranceClass : '',
+							hoverEffectClass,
 							shadowStyleClass,
 							shouldShowDownloadIcon ? 'has-download' : '',
 						]
@@ -1316,6 +1655,16 @@ export default function Edit( {
 									height={ height }
 									className="pb-image-block-img"
 								/>
+								{ proofingControls }
+								{ applyFilters(
+									'folioBlocks.imageBlock.watermarkOverlay',
+									null,
+									{
+										attributes,
+										context,
+										isInsideGallery,
+									}
+								) }
 									{ effectiveHoverTitle &&
 										hasHoverOverlayContent && (
 										<div className="pb-image-block-title-container">

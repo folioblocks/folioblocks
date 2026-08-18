@@ -75,6 +75,19 @@ const presets = {
 		],
 		campaign: "gallery-filtering",
 	},
+	watermarkOverlay: {
+		title: __("Watermark Overlay", "folioblocks"),
+		description: __(
+			"Apply saved watermark overlays to gallery images and lightbox previews.",
+			"folioblocks",
+		),
+		features: [
+			__("Choose from saved watermarks.", "folioblocks"),
+			__("Display watermarks on gallery images, lightbox images, or both.", "folioblocks"),
+			__("Keep watermark styling managed globally.", "folioblocks"),
+		],
+		campaign: "watermark-overlay",
+	},
 	protectionPerformance: {
 		title: __("Protection and Performance", "folioblocks"),
 		description: __(

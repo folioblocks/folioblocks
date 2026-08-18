@@ -61,6 +61,8 @@ function fbks_get_allowed_post_html_with_svg()
                 ? array_merge($allowed_html[$tag], $attributes)
                 : $attributes;
         }
+
+        $allowed_html['a']['data-pb-copy-share-url'] = true;
     }
 
     return $allowed_html;

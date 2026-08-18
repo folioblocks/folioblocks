@@ -1,22 +1,6 @@
 <?php
 if (! defined('ABSPATH')) exit; // Exit if accessed directly.
 
-add_action('admin_enqueue_scripts', 'fbks_admin_styles');
-
-function fbks_admin_styles($hook)
-{
-	if ($hook !== 'toplevel_page_folioblocks-settings') {
-		return;
-	}
-
-	wp_enqueue_style(
-		'folioblocks-admin',
-		plugin_dir_url(__FILE__) . 'settings-page.css',
-		array(),
-		filemtime(plugin_dir_path(__FILE__) . 'settings-page.css')
-	);
-}
-
 if (! function_exists('fbks_news_url_looks_like_image')) {
 	function fbks_news_url_looks_like_image($url)
 	{
@@ -135,6 +119,272 @@ if (! function_exists('fbks_extract_news_item_image')) {
 	}
 }
 
+if (! function_exists('fbks_trim_news_excerpt')) {
+	function fbks_trim_news_excerpt($excerpt_html, $word_limit = 25)
+	{
+		$excerpt = trim(wp_specialchars_decode(wp_strip_all_tags($excerpt_html), ENT_QUOTES));
+		if ('' === $excerpt) {
+			return '';
+		}
+
+		return wp_trim_words($excerpt, $word_limit, '…');
+	}
+}
+
+if (! function_exists('fbks_get_rest_featured_image')) {
+	function fbks_get_rest_featured_image($media_id)
+	{
+		$media_id = absint($media_id);
+		if (0 === $media_id) {
+			return '';
+		}
+
+		$endpoint = add_query_arg(
+			array(
+				'_fields' => 'source_url,media_details.sizes',
+			),
+			'https://folioblocks.com/wp-json/wp/v2/media/' . $media_id
+		);
+
+		$response = wp_remote_get(
+			$endpoint,
+			array(
+				'timeout' => 8,
+			)
+		);
+
+		if (is_wp_error($response) || 200 !== wp_remote_retrieve_response_code($response)) {
+			return '';
+		}
+
+		$media = json_decode(wp_remote_retrieve_body($response), true);
+		if (! is_array($media)) {
+			return '';
+		}
+
+		$sizes = isset($media['media_details']['sizes']) && is_array($media['media_details']['sizes'])
+			? $media['media_details']['sizes']
+			: array();
+
+		foreach (array('medium_large', 'large', 'medium', 'full') as $size) {
+			if (! empty($sizes[$size]['source_url']) && fbks_news_url_looks_like_image($sizes[$size]['source_url'])) {
+				return esc_url($sizes[$size]['source_url']);
+			}
+		}
+
+		if (! empty($media['source_url']) && fbks_news_url_looks_like_image($media['source_url'])) {
+			return esc_url($media['source_url']);
+		}
+
+		return '';
+	}
+}
+
+if (! function_exists('fbks_get_dashboard_news_from_rest')) {
+	function fbks_get_dashboard_news_from_rest()
+	{
+		$endpoint = add_query_arg(
+			array(
+				'per_page' => 5,
+				'_fields'  => 'link,date,title.rendered,excerpt.rendered,featured_media',
+			),
+			'https://folioblocks.com/wp-json/wp/v2/posts'
+		);
+
+		$response = wp_remote_get(
+			$endpoint,
+			array(
+				'timeout' => 8,
+			)
+		);
+
+		if (is_wp_error($response) || 200 !== wp_remote_retrieve_response_code($response)) {
+			return array();
+		}
+
+		$posts = json_decode(wp_remote_retrieve_body($response), true);
+		if (! is_array($posts)) {
+			return array();
+		}
+
+		$news_items = array();
+
+		foreach ($posts as $post) {
+			if (! is_array($post)) {
+				continue;
+			}
+
+			$title        = isset($post['title']['rendered']) ? $post['title']['rendered'] : '';
+			$link         = isset($post['link']) ? $post['link'] : '';
+			$date         = isset($post['date']) ? strtotime($post['date']) : false;
+			$excerpt_html = isset($post['excerpt']['rendered']) ? $post['excerpt']['rendered'] : '';
+			$title        = trim(wp_specialchars_decode(wp_strip_all_tags($title), ENT_QUOTES));
+			$excerpt      = fbks_trim_news_excerpt($excerpt_html);
+			$image        = ! empty($post['featured_media']) ? fbks_get_rest_featured_image($post['featured_media']) : '';
+
+			if ('' === $title || '' === $link) {
+				continue;
+			}
+
+			$news_items[] = array(
+				'title' => $title,
+				'link'  => esc_url($link),
+				'date'  => $date ? date_i18n(get_option('date_format'), $date) : '',
+				'desc'  => $excerpt,
+				'image' => $image,
+			);
+		}
+
+		return $news_items;
+	}
+}
+
+if (! function_exists('fbks_get_dashboard_news_items')) {
+	function fbks_get_dashboard_news_items()
+	{
+		if (! function_exists('fetch_feed')) {
+			require_once ABSPATH . WPINC . '/feed.php';
+		}
+
+		$port_news_cached = get_transient('folioblocks_news_safe_cache_v2');
+		$port_rss_items = array();
+		$port_has_items = false;
+		$port_cache_requires_refresh = false;
+
+		if ($port_news_cached !== false && is_array($port_news_cached)) {
+			foreach ($port_news_cached as $cache_index => $cached_item) {
+				if (
+					! empty($cached_item['image']) &&
+					! fbks_news_url_looks_like_image($cached_item['image'])
+				) {
+					$port_news_cached[$cache_index]['image'] = '';
+					$port_cache_requires_refresh = true;
+				}
+			}
+		}
+
+		if (
+			$port_news_cached !== false &&
+			is_array($port_news_cached) &&
+			! $port_cache_requires_refresh
+		) {
+			return $port_news_cached;
+		}
+
+		$port_sanitized = fbks_get_dashboard_news_from_rest();
+
+		if (! empty($port_sanitized)) {
+			set_transient('folioblocks_news_safe_cache_v2', $port_sanitized, 6 * HOUR_IN_SECONDS);
+			return $port_sanitized;
+		}
+
+		$port_rss = fetch_feed('https://folioblocks.com/feed/');
+
+		if (! is_wp_error($port_rss)) {
+			$port_maxitems  = $port_rss->get_item_quantity(5);
+			$port_items_raw = $port_rss->get_items(0, $port_maxitems);
+
+			if ($port_maxitems > 0) {
+				$port_sanitized = array();
+
+				foreach ($port_items_raw as $item) {
+					$port_title = wp_kses($item->get_title(), array());
+					$port_link  = esc_url($item->get_permalink());
+					$port_date  = date_i18n(get_option('date_format'), (int) $item->get_date('U'));
+
+					$port_desc_raw = $item->get_description();
+					if (empty($port_desc_raw) && method_exists($item, 'get_content')) {
+						$port_desc_raw = $item->get_content();
+					}
+
+					$port_sanitized[] = array(
+						'title' => $port_title,
+						'link'  => $port_link,
+						'date'  => $port_date,
+						'desc'  => fbks_trim_news_excerpt($port_desc_raw),
+						'image' => fbks_extract_news_item_image($item, $port_desc_raw),
+					);
+				}
+
+				set_transient('folioblocks_news_safe_cache_v2', $port_sanitized, 6 * HOUR_IN_SECONDS);
+				return $port_sanitized;
+			}
+		}
+
+		if ($port_news_cached !== false && is_array($port_news_cached)) {
+			return $port_news_cached;
+		}
+
+		set_transient('folioblocks_news_safe_cache_v2', array(), 15 * MINUTE_IN_SECONDS);
+		return $port_rss_items;
+	}
+}
+
+if (! function_exists('fbks_render_dashboard_news_items')) {
+	function fbks_render_dashboard_news_items($news_items)
+	{
+		ob_start();
+
+		if (! empty($news_items)) {
+			foreach ($news_items as $item) {
+				$port_title = isset($item['title']) ? esc_html($item['title']) : '';
+				$port_link  = isset($item['link']) ? esc_url($item['link']) : '';
+				$port_date  = isset($item['date']) ? esc_html($item['date']) : '';
+				$port_desc  = isset($item['desc']) ? esc_html($item['desc']) : '';
+				$port_image = ! empty($item['image']) ? esc_url($item['image']) : '';
+
+				if ('' === $port_title || '' === $port_link) {
+					continue;
+				}
+				?>
+				<li class="pb-news-item">
+					<?php if (! empty($port_image)) : ?>
+						<a href="<?php echo esc_url($port_link); ?>" class="pb-news-thumb" target="_blank" rel="noopener noreferrer"><img src="<?php echo esc_url($port_image); ?>" alt=""></a>
+					<?php endif; ?>
+					<div class="pb-news-content">
+						<a href="<?php echo esc_url($port_link); ?>" target="_blank" rel="noopener noreferrer">
+							<?php echo esc_html($port_title); ?>
+						</a>
+						<?php if (! empty($port_date)) : ?>
+							<div class="pb-news-meta"><?php echo esc_html($port_date); ?></div>
+						<?php endif; ?>
+						<?php if (! empty($port_desc)) : ?>
+							<div class="pb-news-excerpt"><?php echo esc_html($port_desc); ?></div>
+						<?php endif; ?>
+					</div>
+				</li>
+				<?php
+			}
+		}
+
+		$output = trim(ob_get_clean());
+
+		if ('' !== $output) {
+			return $output;
+		}
+
+		return '<li class="pb-news-item--empty">' . esc_html__('No news items found right now. Please check back later.', 'folioblocks') . '</li>';
+	}
+}
+
+if (! function_exists('fbks_ajax_dashboard_news')) {
+	function fbks_ajax_dashboard_news()
+	{
+		check_ajax_referer('fbks_dashboard_news', 'nonce');
+
+		if (! current_user_can('manage_options')) {
+			wp_send_json_error(array(
+				'message' => __('You are not allowed to load FolioBlocks news.', 'folioblocks'),
+			), 403);
+		}
+
+		wp_send_json_success(array(
+			'html' => fbks_render_dashboard_news_items(fbks_get_dashboard_news_items()),
+		));
+	}
+}
+add_action('wp_ajax_fbks_dashboard_news', 'fbks_ajax_dashboard_news');
+
 if (! function_exists('fbks_get_dashboard_block_versions')) {
 	function fbks_get_dashboard_block_versions()
 	{
@@ -149,6 +399,7 @@ if (! function_exists('fbks_get_dashboard_block_versions')) {
 			'pb-loupe-block',
 			'masonry-gallery-block',
 			'modular-gallery-block',
+			'proofing-gallery-block',
 			'pb-video-block',
 			'video-gallery-block',
 		);
@@ -177,13 +428,13 @@ if (! function_exists('fbks_get_dashboard_block_versions')) {
 }
 
 if (! function_exists('fbks_render_dashboard_block_meta')) {
-	function fbks_render_dashboard_block_meta($block_directory, $block_versions, $seen_block_versions)
+	function fbks_render_dashboard_block_meta($block_directory, $block_versions, $seen_block_versions, $fallback_version = '')
 	{
-		if (empty($block_versions[$block_directory])) {
+		$current_version = ! empty($block_versions[$block_directory]) ? $block_versions[$block_directory] : $fallback_version;
+
+		if ('' === $current_version) {
 			return;
 		}
-
-		$current_version = $block_versions[$block_directory];
 
 		echo '<span class="pb-block-version">' . esc_html(sprintf(
 			/* translators: %s: block version number. */
@@ -258,6 +509,9 @@ function fbks_render_settings_page()
 	fbks_require_admin_nonce_for_post('settings');
 	$fbks_block_versions      = fbks_get_dashboard_block_versions();
 	$fbks_seen_block_versions = get_user_meta(get_current_user_id(), 'fbks_seen_block_versions', true);
+	$fbks_can_use_premium     = fbks_fs()->can_use_premium_code();
+	$fbks_can_use_proofing    = $fbks_can_use_premium && (fbks_fs()->is_plan('business') || fbks_fs()->is_plan('agency'));
+	$fbks_pro_block_version   = defined('FBKS_VERSION') ? preg_replace('/^(\d+\.\d+).*$/', '$1', FBKS_VERSION) : '';
 
 	if (! is_array($fbks_seen_block_versions)) {
 		$fbks_seen_block_versions = array();
@@ -452,7 +706,7 @@ function fbks_render_settings_page()
 								<?php fbks_render_dashboard_block_status_badge('masonry-gallery-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
 								<a href="https://folioblocks.com/blocks/masonry-gallery-block/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Demo', 'folioblocks'); ?></a>
 							</div>
-							<div class="pb-block-item <?php if (! fbks_fs()->can_use_premium_code()) : ?>pb-pro-block<?php endif; ?>">
+							<div class="pb-block-item<?php echo $fbks_can_use_premium ? '' : ' is-unavailable'; ?>">
 								<div class="pb-block-icon">
 									<svg viewBox="0 0 1247.24 1247.24" width="36" height="36" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
 										<g id="Layer_1-2">
@@ -467,9 +721,44 @@ function fbks_render_settings_page()
 									</svg>
 								</div>
 								<span><?php esc_html_e('Modular Gallery', 'folioblocks'); ?></span>
-								<?php fbks_render_dashboard_block_meta('modular-gallery-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
-								<?php fbks_render_dashboard_block_status_badge('modular-gallery-block', $fbks_block_versions, $fbks_seen_block_versions, ! fbks_fs()->can_use_premium_code() ? __('PRO', 'folioblocks') : ''); ?>
-								<a href="https://folioblocks.com/blocks/modular-gallery-block/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Demo', 'folioblocks'); ?></a>
+								<?php if ($fbks_can_use_premium) : ?>
+									<?php fbks_render_dashboard_block_meta('modular-gallery-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
+									<?php fbks_render_dashboard_block_status_badge('modular-gallery-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
+								<?php else : ?>
+									<span class="pb-pro-badge"><?php esc_html_e('PRO', 'folioblocks'); ?></span>
+									<?php fbks_render_dashboard_block_meta('modular-gallery-block', $fbks_block_versions, $fbks_seen_block_versions, $fbks_pro_block_version); ?>
+								<?php endif; ?>
+								<?php if ($fbks_can_use_premium) : ?>
+									<a href="https://folioblocks.com/blocks/modular-gallery-block/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Demo', 'folioblocks'); ?></a>
+								<?php else : ?>
+									<a class="pb-upgrade-link" href="<?php echo esc_url(admin_url('admin.php?page=folioblocks-settings-pricing')); ?>"><?php esc_html_e('Upgrade', 'folioblocks'); ?></a>
+								<?php endif; ?>
+							</div>
+							<div class="pb-block-item<?php echo $fbks_can_use_proofing ? '' : ' is-unavailable'; ?>">
+								<div class="pb-block-icon">
+									<svg viewBox="0 0 1247.24 1247.24" width="36" height="36" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+										<g fill="none" stroke="currentColor" stroke-width="45" stroke-linecap="round" stroke-linejoin="round">
+											<path d="M415 130H176c-25.65 0-46.53 20.89-46.53 46.57V415" />
+											<path d="M832 130h238c25.65 0 46.53 20.89 46.53 46.57V415" />
+											<path d="M1117 832v238c0 25.68-20.88 46.57-46.53 46.57H832" />
+											<path d="M415 1117H176c-25.65 0-46.53-20.89-46.53-46.57V832" />
+											<path stroke-width="90" d="M365 625l175 175 345-430" />
+										</g>
+									</svg>
+								</div>
+								<span><?php esc_html_e('Proofing Gallery', 'folioblocks'); ?></span>
+								<?php if ($fbks_can_use_proofing) : ?>
+									<?php fbks_render_dashboard_block_meta('proofing-gallery-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
+									<?php fbks_render_dashboard_block_status_badge('proofing-gallery-block', $fbks_block_versions, $fbks_seen_block_versions); ?>
+								<?php else : ?>
+									<span class="pb-pro-badge"><?php esc_html_e('BUSINESS/AGENCY', 'folioblocks'); ?></span>
+									<?php fbks_render_dashboard_block_meta('proofing-gallery-block', $fbks_block_versions, $fbks_seen_block_versions, $fbks_pro_block_version); ?>
+								<?php endif; ?>
+								<?php if ($fbks_can_use_proofing) : ?>
+									<a href="https://folioblocks.com/blocks/proofing-gallery-block/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Demo', 'folioblocks'); ?></a>
+								<?php else : ?>
+									<a class="pb-upgrade-link" href="<?php echo esc_url(admin_url('admin.php?page=folioblocks-settings-pricing')); ?>"><?php esc_html_e('Upgrade', 'folioblocks'); ?></a>
+								<?php endif; ?>
 							</div>
 							<div class="pb-block-item">
 								<div class="pb-block-icon">
@@ -508,31 +797,32 @@ function fbks_render_settings_page()
 								<a href="https://folioblocks.com/blocks/video-gallery-block/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Demo', 'folioblocks'); ?></a>
 							</div>
 						</div>
-						<?php if (! fbks_fs()->can_use_premium_code()) : ?>
-							<p>
-								<?php esc_html_e('Blocks on the free version are limited to only having controls for dealing with responsive design and a simple Lightbox.', 'folioblocks'); ?>
-							</p>
-						<?php endif; ?>
-					</div>
+						</div>
 				</div>
 				<?php if (! fbks_fs()->can_use_premium_code()) : ?>
 					<div class="pb-dashboard-box">
 						<h2><?php esc_html_e('Pro Version - Features:', 'folioblocks'); ?></h2>
 						<p>
-							<?php esc_html_e('The Pro version includes all the blocks from the free version plus Modular Gallery and unlocks all the features:', 'folioblocks'); ?>
+							<?php esc_html_e('Pro unlocks FolioBlocks\' advanced gallery, commerce, proofing, styling, protection, and workflow features, including additional Pro-only blocks and deeper controls across image and video blocks.', 'folioblocks'); ?>
 						</p>
 						<ul class="features">
-							<li><?php esc_html_e('Filterable image and video galleries', 'folioblocks'); ?></li>
-							<li><?php esc_html_e('WooCommerce integration', 'folioblocks'); ?></li>
-							<li><?php esc_html_e('Add border width, border radius, and border color to images', 'folioblocks'); ?></li>
-							<li><?php esc_html_e('Add drop shadow to images', 'folioblocks'); ?></li>
-							<li><?php esc_html_e('Image lightbox', 'folioblocks'); ?></li>
-							<li><?php esc_html_e('Show captions in image lightbox', 'folioblocks'); ?></li>
-							<li><?php esc_html_e('Show image title on hover', 'folioblocks'); ?></li>
-							<li><?php esc_html_e('Option to enable image downloads', 'folioblocks'); ?></li>
-							<li><?php esc_html_e('Randomize image order', 'folioblocks'); ?></li>
-							<li><?php esc_html_e('Right-click prevention', 'folioblocks'); ?></li>
-							<li><?php esc_html_e('Lazy load galleries', 'folioblocks'); ?></li>
+							<li><?php esc_html_e('Pro-only blocks: Modular Gallery and Proofing Gallery on Business/Agency plans', 'folioblocks'); ?></li>
+							<li><?php esc_html_e('Gallery transforms and List View thumbnails for faster gallery building', 'folioblocks'); ?></li>
+							<li><?php esc_html_e('Advanced gallery layouts and playback: carousel autoplay/loop controls and filmstrip fullscreen/autoplay', 'folioblocks'); ?></li>
+							<li><?php esc_html_e('Responsive Pro controls for gaps, sizing, focal points, and per-device layout tuning', 'folioblocks'); ?></li>
+							<li><?php esc_html_e('Multi-keyword image and video gallery filtering with custom filter bar styles', 'folioblocks'); ?></li>
+							<li><?php esc_html_e('Advanced image and video click actions: lightbox, downloads, WooCommerce products, media files, custom URLs, and pages/posts', 'folioblocks'); ?></li>
+							<li><?php esc_html_e('Advanced lightbox controls: light/dark themes, fullscreen, image counter, zoom, captions, EXIF, product info, and social sharing', 'folioblocks'); ?></li>
+							<li><?php esc_html_e('Hover effects and overlays: zoom, lift, tilt, pop, glare, pan, desaturate, blur, gradient, color, chip, and entrance animations', 'folioblocks'); ?></li>
+							<li><?php esc_html_e('Per-image and per-video overrides for click behavior and hover styling', 'folioblocks'); ?></li>
+							<li><?php esc_html_e('WooCommerce integration for image galleries, Image Block, Video Block, and Video Gallery', 'folioblocks'); ?></li>
+							<li><?php esc_html_e('Watermark overlays for gallery images and lightbox images, managed from Global Settings', 'folioblocks'); ?></li>
+							<li><?php esc_html_e('Global Settings for reusable watermarks, social sharing sources, and proofing behavior', 'folioblocks'); ?></li>
+							<li><?php esc_html_e('Media protection and performance controls: lazy load, disable right-click, disable drag-to-save, and password protection support', 'folioblocks'); ?></li>
+							<li><?php esc_html_e('Advanced styling: borders, rounded corners, drop shadows, icon colors, overlay colors, typography, and control styling', 'folioblocks'); ?></li>
+							<li><?php esc_html_e('EXIF metadata support in overlays/lightboxes plus media-library metadata sync', 'folioblocks'); ?></li>
+							<li><?php esc_html_e('Proofing workflow on Business/Agency: private client galleries, hearts, color flags, comments, filters, save/continue, submit, email notifications, admin session reports, and PDF export', 'folioblocks'); ?></li>
+							<li><?php esc_html_e('Additional video providers: Bunny Stream, Cloudflare Stream, DailyMotion, Loom, VideoPress, and Wistia', 'folioblocks'); ?></li>
 						</ul>
 						<p>
 							<?php esc_html_e('Purchase a license for FolioBlocks today and enjoy the best gallery plugin for modern WordPress and the block editor.', 'folioblocks'); ?>
@@ -549,126 +839,11 @@ function fbks_render_settings_page()
 				<?php endif; ?>
 
 				<div class="pb-dashboard-box">
-					<?php
-					// --- Latest News from folioblocks.com ---
-					// Load WordPress feed functions
-					if (! function_exists('fetch_feed')) {
-						require_once ABSPATH . WPINC . '/feed.php';
-					}
-
-					// Try loading cached simplified feed data
-					$port_news_cached = get_transient('folioblocks_news_safe_cache');
-					$port_rss_items = array();
-					$port_has_items = false;
-					$port_cache_requires_refresh = false;
-
-					if ($port_news_cached !== false && is_array($port_news_cached)) {
-						foreach ($port_news_cached as $cache_index => $cached_item) {
-							if (
-								! empty($cached_item['image']) &&
-								! fbks_news_url_looks_like_image($cached_item['image'])
-							) {
-								$port_news_cached[$cache_index]['image'] = '';
-								$port_cache_requires_refresh = true;
-							}
-						}
-					}
-
-					if (
-						$port_news_cached !== false &&
-						is_array($port_news_cached) &&
-						! $port_cache_requires_refresh
-					) {
-						// Use cached array
-						$port_rss_items = $port_news_cached;
-						$port_has_items = ! empty($port_rss_items);
-					} else {
-						// Fetch fresh feed from site
-						$port_rss = fetch_feed('https://folioblocks.com/feed/');
-
-						if (! is_wp_error($port_rss)) {
-							$port_maxitems  = $port_rss->get_item_quantity(5);
-							$port_items_raw = $port_rss->get_items(0, $port_maxitems);
-
-							if ($port_maxitems > 0) {
-								$port_sanitized = array();
-
-								foreach ($port_items_raw as $item) {
-									$port_title = wp_kses($item->get_title(), array());
-									$port_link  = esc_url($item->get_permalink());
-									$port_date  = date_i18n(get_option('date_format'), (int) $item->get_date('U'));
-
-									// Build excerpt
-									$port_desc_raw = $item->get_description();
-									if (empty($port_desc_raw) && method_exists($item, 'get_content')) {
-										$port_desc_raw = $item->get_content();
-									}
-									$port_desc_stripped = wp_strip_all_tags($port_desc_raw);
-									$port_words = explode(' ', $port_desc_stripped);
-									if (count($port_words) > 25) {
-										$port_words = array_slice($port_words, 0, 25);
-										$port_desc  = implode(' ', $port_words) . '…';
-									} else {
-										$port_desc = $port_desc_stripped;
-									}
-
-									$port_image = fbks_extract_news_item_image($item, $port_desc_raw);
-
-									$port_sanitized[] = array(
-										'title' => $port_title,
-										'link'  => $port_link,
-										'date'  => $port_date,
-										'desc'  => $port_desc,
-										'image' => $port_image,
-									);
-								}
-
-								// Save sanitized array for 6 hours
-								set_transient('folioblocks_news_safe_cache', $port_sanitized, 6 * HOUR_IN_SECONDS);
-
-								$port_rss_items = $port_sanitized;
-								$port_has_items = true;
-							}
-						}
-
-						if (! $port_has_items && $port_news_cached !== false && is_array($port_news_cached)) {
-							$port_rss_items = $port_news_cached;
-							$port_has_items = ! empty($port_rss_items);
-						}
-					}
-					?>
-
 					<h2><?php esc_html_e('Latest News From FolioBlocks Website:', 'folioblocks'); ?></h2>
-					<ul class="pb-latest-news">
-						<?php if ($port_has_items) : ?>
-							<?php foreach ($port_rss_items as $item) :
-								// Cached simplified news item
-								$port_title = esc_html($item['title']);
-								$port_link  = esc_url($item['link']);
-								$port_date  = esc_html($item['date']);
-								$port_desc  = esc_html($item['desc']);
-								$port_image = ! empty($item['image']) ? esc_url($item['image']) : '';
-							?>
-								<li class="pb-news-item">
-									<?php if (! empty($port_image)) : ?>
-										<a href="<?php echo esc_url($port_link); ?>" class="pb-news-thumb" target="_blank" rel="noopener noreferrer"><img src="<?php echo esc_url($port_image); ?>" alt=""></a>
-									<?php endif; ?>
-									<div class="pb-news-content">
-										<a href="<?php echo esc_url($port_link); ?>" target="_blank" rel="noopener noreferrer">
-											<?php echo esc_html($port_title); ?>
-										</a>
-										<div class="pb-news-meta"><?php echo esc_html($port_date); ?></div>
-										<?php if (! empty($port_desc)) : ?>
-											<div class="pb-news-excerpt"><?php echo esc_html($port_desc); ?></div>
-										<?php endif; ?>
-									</div>
-								</li>
-							<?php endforeach; ?>
-						<?php else : ?>
-							<li class="pb-news-item--empty">
-								<?php esc_html_e('No news items found right now. Please check back later.', 'folioblocks'); ?>
-							</li>
-						<?php endif; ?>
+					<ul class="pb-latest-news" data-fbks-dashboard-news>
+						<li class="pb-news-item--empty">
+							<?php esc_html_e('Loading latest news...', 'folioblocks'); ?>
+						</li>
 					</ul>
 					<p class="pb-news-view-all">
 						<a href="https://folioblocks.com/news/" target="_blank" rel="noopener noreferrer">

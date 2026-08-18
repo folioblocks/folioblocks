@@ -31,9 +31,22 @@ import '../pb-helpers/applyThumbnails';
 import { registerImageClickStylePremiumControls } from '../pb-helpers/imageClickStylePremiumControls.js';
 import { enableImageTransforms } from '../pb-helpers/galleryTransforms';
 import { registerImageHoverActionPremiumControls } from '../pb-helpers/imageHoverActionPremiumControls.js';
+import {
+	registerImageBlockWatermarkOverlay,
+	registerWatermarkOverlayControls,
+} from '../pb-helpers/watermarkOverlayControls.js';
+import {
+	SOCIAL_SHARE_SERVICES,
+	SOCIAL_SHARE_ICONS,
+	getSharedSocialSources,
+} from '../pb-helpers/socialSharingControls.js';
 
 enableImageTransforms( 'folioblocks/pb-image-block' );
-
+registerImageBlockWatermarkOverlay();
+registerWatermarkOverlayControls( {
+	hookPrefix: 'folioBlocks.imageBlock',
+	namespace: 'folioblocks/pb-image-block',
+} );
 addFilter(
 	'folioBlocks.imageBlock.galleryOverridesEnabled',
 	'folioblocks/pb-image-block-gallery-overrides-enabled',
@@ -249,6 +262,36 @@ const OverlayExifContent = ( { attributes, hideUnknownExifFields = false } ) => 
 						) }
 					</span>
 					<span className="pb-hover-exif__value">{ field.value }</span>
+				</span>
+			) ) }
+		</div>
+	);
+};
+
+const OverlaySocialContent = ( { attributes, context = {} } ) => {
+	const sources = getSharedSocialSources( attributes, context );
+	const serviceMap = SOCIAL_SHARE_SERVICES.reduce( ( acc, service ) => {
+		acc[ service.value ] = service.label;
+		return acc;
+	}, {} );
+
+	return (
+		<div className="pb-social-share pb-social-share--overlay">
+			{ sources.map( ( source ) => (
+				<span
+					className={ `pb-social-share__link pb-social-share__link--${ source }` }
+					key={ source }
+				>
+					<span
+						className="pb-social-share__icon"
+						aria-hidden="true"
+						dangerouslySetInnerHTML={ {
+							__html: SOCIAL_SHARE_ICONS[ source ] || '',
+						} }
+					/>
+					<span className="pb-social-share__label">
+						{ serviceMap[ source ] || source }
+					</span>
 				</span>
 			) ) }
 		</div>
@@ -608,6 +651,7 @@ const LinkTargetControls = ( {
 						<LightboxContentControl
 							attributes={ attributes }
 							setAttributes={ setAttributes }
+							context={ props.context || {} }
 						/>
 					) }
 				</>
@@ -634,6 +678,7 @@ const LightboxContentControl = ( {
 	attributes,
 	setAttributes,
 	showProductInfoOption = false,
+	context = {},
 } ) => {
 	const value = getLightboxContent( attributes );
 	const canInheritGalleryTheme = !! attributes.overrideGalleryClickSettings;
@@ -726,6 +771,18 @@ const LightboxContentControl = ( {
 				__next40pxDefaultSize
 				help={ __(
 					'Choose what appears below images in the lightbox.',
+					'folioblocks'
+				) }
+			/>
+			<ToggleControl
+				label={ __( 'Enable Lightbox Zoom', 'folioblocks' ) }
+				checked={ !! attributes.lightboxZoom }
+				onChange={ ( lightboxZoom ) =>
+					setAttributes( { lightboxZoom } )
+				}
+				__nextHasNoMarginBottom
+				help={ __(
+					'Let visitors zoom into this image in the lightbox.',
 					'folioblocks'
 				) }
 			/>
@@ -1161,7 +1218,7 @@ addFilter(
 	'folioBlocks.imageBlock.lightboxControls',
 	'folioblocks/pb-image-block-premium-lightbox',
 		( defaultContent, props ) => {
-		const { attributes, setAttributes } = props;
+		const { attributes, setAttributes, context } = props;
 		const { enableWooCommerce } = attributes;
 
 		return (
@@ -1169,6 +1226,7 @@ addFilter(
 				attributes={ attributes }
 				setAttributes={ setAttributes }
 				showProductInfoOption={ !! enableWooCommerce }
+				context={ context || {} }
 			/>
 		);
 	}
@@ -1624,6 +1682,15 @@ addFilter(
 							attributes.hideUnknownExifFields ??
 							false
 						}
+					/>
+				) : null;
+			}
+
+			if ( overlayContent === 'social' ) {
+				return showTitle ? (
+					<OverlaySocialContent
+						attributes={ attributes }
+						context={ context }
 					/>
 				) : null;
 			}

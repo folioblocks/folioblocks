@@ -5,11 +5,64 @@
  * - YouTube
  * - Vimeo
  * - Bunny.net Stream (embed/play URLs)
+ * - Cloudflare Stream
+ * - DailyMotion
+ * - Loom
+ * - VideoPress
+ * - Wistia
  */
 import { isValidHttpUrl } from './urlValidation';
 
 const YOUTUBE_ID_FALLBACK = /^[a-zA-Z0-9_-]+$/;
 const VIMEO_ID_FALLBACK = /^\d+$/;
+const EMBED_ID_FALLBACK = /^[a-zA-Z0-9_-]+$/;
+const PREMIUM_IFRAME_PROVIDERS = [
+	'bunny',
+	'wistia',
+	'dailymotion',
+	'videopress',
+	'loom',
+	'cloudflare',
+];
+
+const PROVIDER_LABELS = {
+	self: 'Video',
+	youtube: 'YouTube',
+	vimeo: 'Vimeo',
+	bunny: 'Bunny Stream',
+	cloudflare: 'Cloudflare Stream',
+	dailymotion: 'DailyMotion',
+	loom: 'Loom',
+	videopress: 'VideoPress',
+	wistia: 'Wistia',
+	unsupported: 'Video',
+};
+
+export const isPremiumVideoProvider = ( provider ) =>
+	PREMIUM_IFRAME_PROVIDERS.includes( provider );
+
+const canUsePremiumVideoProviders = ( { isPro } = {} ) => {
+	if ( typeof isPro === 'boolean' ) {
+		return isPro;
+	}
+
+	return !! globalThis?.folioBlocksData?.isPro;
+};
+
+const maybeGatePremiumProvider = ( data, options = {} ) => {
+	if (
+		! isPremiumVideoProvider( data.provider ) ||
+		canUsePremiumVideoProviders( options )
+	) {
+		return data;
+	}
+
+	return {
+		provider: 'unsupported',
+		unsupportedProvider: data.provider,
+		parsedUrl: data.parsedUrl,
+	};
+};
 
 const tryParseUrl = ( rawUrl ) => {
 	if ( ! rawUrl || typeof rawUrl !== 'string' ) {
@@ -26,7 +79,7 @@ const tryParseUrl = ( rawUrl ) => {
 			return null;
 		}
 		return parsed;
-	} catch ( error ) {
+	} catch {
 		return null;
 	}
 };
@@ -37,6 +90,8 @@ const cleanId = ( id ) => {
 	}
 	return String( id ).trim().split( /[?#&]/ )[ 0 ];
 };
+
+const cleanDailymotionId = ( id ) => cleanId( id ).split( '_' )[ 0 ];
 
 const getPathParts = ( parsedUrl ) =>
 	( parsedUrl?.pathname || '' )
@@ -69,9 +124,9 @@ const getYouTubeId = ( parsedUrl ) => {
 
 const getVimeoId = ( parsedUrl ) => {
 	const parts = getPathParts( parsedUrl );
-	const numericPart = [ ...parts ].reverse().find( ( part ) =>
-		VIMEO_ID_FALLBACK.test( part )
-	);
+	const numericPart = [ ...parts ]
+		.reverse()
+		.find( ( part ) => VIMEO_ID_FALLBACK.test( part ) );
 	return cleanId( numericPart );
 };
 
@@ -82,7 +137,9 @@ const getVimeoHash = ( parsedUrl, videoId ) => {
 	}
 
 	const parts = getPathParts( parsedUrl );
-	const videoIndex = parts.findIndex( ( part ) => cleanId( part ) === videoId );
+	const videoIndex = parts.findIndex(
+		( part ) => cleanId( part ) === videoId
+	);
 	const pathHash = cleanId( parts[ videoIndex + 1 ] );
 
 	return pathHash && ! VIMEO_ID_FALLBACK.test( pathHash ) ? pathHash : '';
@@ -94,7 +151,11 @@ const getBunnyStreamIds = ( parsedUrl ) => {
 		[ 'embed', 'play' ].includes( part )
 	);
 
-	if ( markerIndex === -1 || ! parts[ markerIndex + 1 ] || ! parts[ markerIndex + 2 ] ) {
+	if (
+		markerIndex === -1 ||
+		! parts[ markerIndex + 1 ] ||
+		! parts[ markerIndex + 2 ]
+	) {
 		return null;
 	}
 
@@ -104,7 +165,99 @@ const getBunnyStreamIds = ( parsedUrl ) => {
 	};
 };
 
-export const getVideoProviderData = ( videoUrl ) => {
+const getWistiaId = ( parsedUrl ) => {
+	const parts = getPathParts( parsedUrl );
+	const markerIndex = parts.findIndex( ( part ) =>
+		[ 'medias', 'iframe' ].includes( part )
+	);
+
+	if ( markerIndex !== -1 && parts[ markerIndex + 1 ] ) {
+		return cleanId( parts[ markerIndex + 1 ] );
+	}
+
+	return '';
+};
+
+const getDailymotionId = ( parsedUrl ) => {
+	const host = ( parsedUrl.hostname || '' ).toLowerCase();
+	const parts = getPathParts( parsedUrl );
+
+	if ( host.includes( 'dai.ly' ) ) {
+		return cleanDailymotionId( parts[ 0 ] );
+	}
+
+	const byQuery = cleanDailymotionId( parsedUrl.searchParams.get( 'video' ) );
+	if ( byQuery ) {
+		return byQuery;
+	}
+
+	const markerIndex = parts.findIndex( ( part ) =>
+		[ 'embed', 'video' ].includes( part )
+	);
+
+	if ( markerIndex !== -1 && parts[ markerIndex + 1 ] ) {
+		return cleanDailymotionId( parts[ markerIndex + 1 ] );
+	}
+
+	return '';
+};
+
+const getVideoPressId = ( parsedUrl ) => {
+	const parts = getPathParts( parsedUrl );
+	const markerIndex = parts.findIndex( ( part ) =>
+		[ 'embed', 'v' ].includes( part )
+	);
+
+	if ( markerIndex !== -1 && parts[ markerIndex + 1 ] ) {
+		return cleanId( parts[ markerIndex + 1 ] );
+	}
+
+	return cleanId( parts[ 0 ] );
+};
+
+const getLoomId = ( parsedUrl ) => {
+	const parts = getPathParts( parsedUrl );
+	const markerIndex = parts.findIndex( ( part ) =>
+		[ 'embed', 'share' ].includes( part )
+	);
+
+	if ( markerIndex !== -1 && parts[ markerIndex + 1 ] ) {
+		return cleanId( parts[ markerIndex + 1 ] );
+	}
+
+	return '';
+};
+
+const getCloudflareStreamId = ( parsedUrl ) => {
+	const parts = getPathParts( parsedUrl );
+	const host = ( parsedUrl.hostname || '' ).toLowerCase();
+
+	if ( host.includes( 'iframe.videodelivery.net' ) ) {
+		return cleanId( parts[ 0 ] );
+	}
+
+	const markerIndex = parts.findIndex( ( part ) =>
+		[ 'embed', 'iframe', 'watch' ].includes( part )
+	);
+
+	if ( markerIndex !== -1 ) {
+		return cleanId( parts[ markerIndex + 1 ] || parts[ markerIndex - 1 ] );
+	}
+
+	return cleanId( parts[ 0 ] );
+};
+
+const copySearchParams = ( sourceUrl, targetUrl ) => {
+	if ( ! sourceUrl ) {
+		return;
+	}
+
+	sourceUrl.searchParams.forEach( ( value, key ) => {
+		targetUrl.searchParams.set( key, value );
+	} );
+};
+
+export const getVideoProviderData = ( videoUrl, options = {} ) => {
 	const parsedUrl = tryParseUrl( videoUrl );
 	if ( ! parsedUrl ) {
 		return { provider: 'self', parsedUrl: null };
@@ -131,40 +284,96 @@ export const getVideoProviderData = ( videoUrl ) => {
 		}
 	}
 
-	if ( host.includes( 'mediadelivery.net' ) || host.includes( 'video.bunnycdn.com' ) ) {
+	if (
+		host.includes( 'mediadelivery.net' ) ||
+		host.includes( 'video.bunnycdn.com' )
+	) {
 		const ids = getBunnyStreamIds( parsedUrl );
 		if ( ids?.libraryId && ids?.videoId ) {
-			return {
+			return maybeGatePremiumProvider( {
 				provider: 'bunny',
 				libraryId: ids.libraryId,
 				videoId: ids.videoId,
 				parsedUrl,
-			};
+			}, options );
+		}
+	}
+
+	if ( host.includes( 'wistia.com' ) || host.includes( 'wistia.net' ) ) {
+		const videoId = getWistiaId( parsedUrl );
+		if ( videoId && EMBED_ID_FALLBACK.test( videoId ) ) {
+			return maybeGatePremiumProvider(
+				{ provider: 'wistia', videoId, parsedUrl },
+				options
+			);
+		}
+	}
+
+	if ( host.includes( 'dailymotion.com' ) || host.includes( 'dai.ly' ) ) {
+		const videoId = getDailymotionId( parsedUrl );
+		if ( videoId && EMBED_ID_FALLBACK.test( videoId ) ) {
+			return maybeGatePremiumProvider(
+				{ provider: 'dailymotion', videoId, parsedUrl },
+				options
+			);
+		}
+	}
+
+	if (
+		host.includes( 'videopress.com' ) ||
+		host.includes( 'video.wordpress.com' )
+	) {
+		const videoId = getVideoPressId( parsedUrl );
+		if ( videoId && EMBED_ID_FALLBACK.test( videoId ) ) {
+			return maybeGatePremiumProvider(
+				{ provider: 'videopress', videoId, parsedUrl },
+				options
+			);
+		}
+	}
+
+	if ( host.includes( 'loom.com' ) ) {
+		const videoId = getLoomId( parsedUrl );
+		if ( videoId && EMBED_ID_FALLBACK.test( videoId ) ) {
+			return maybeGatePremiumProvider(
+				{ provider: 'loom', videoId, parsedUrl },
+				options
+			);
+		}
+	}
+
+	if (
+		host.includes( 'videodelivery.net' ) ||
+		host.includes( 'cloudflarestream.com' )
+	) {
+		const videoId = getCloudflareStreamId( parsedUrl );
+		if ( videoId && EMBED_ID_FALLBACK.test( videoId ) ) {
+			return maybeGatePremiumProvider(
+				{ provider: 'cloudflare', videoId, parsedUrl },
+				options
+			);
 		}
 	}
 
 	return { provider: 'self', parsedUrl };
 };
 
-export const getVideoProviderLabel = ( videoUrl ) => {
-	const { provider } = getVideoProviderData( videoUrl );
-	if ( provider === 'youtube' ) {
-		return 'YouTube';
-	}
-	if ( provider === 'vimeo' ) {
-		return 'Vimeo';
-	}
-	if ( provider === 'bunny' ) {
-		return 'Bunny Stream';
-	}
-	return 'Video';
+export const getVideoProviderLabel = ( videoUrl, options = {} ) => {
+	const { provider, unsupportedProvider } = getVideoProviderData(
+		videoUrl,
+		options
+	);
+	return (
+		PROVIDER_LABELS[ unsupportedProvider || provider ] ||
+		PROVIDER_LABELS.self
+	);
 };
 
 export const getVideoIframeSrc = (
 	videoUrl,
-	{ autoplay = false, preferNoCookie = false } = {}
+	{ autoplay = false, preferNoCookie = false, isPro } = {}
 ) => {
-	const data = getVideoProviderData( videoUrl );
+	const data = getVideoProviderData( videoUrl, { isPro } );
 
 	if ( data.provider === 'youtube' ) {
 		const base = preferNoCookie
@@ -203,16 +412,68 @@ export const getVideoIframeSrc = (
 			`https://iframe.mediadelivery.net/embed/${ data.libraryId }/${ data.videoId }`
 		);
 
-		if ( data.parsedUrl ) {
-			data.parsedUrl.searchParams.forEach( ( value, key ) => {
-				embedUrl.searchParams.set( key, value );
-			} );
-		}
+		copySearchParams( data.parsedUrl, embedUrl );
 
 		if ( autoplay ) {
 			embedUrl.searchParams.set( 'autoplay', 'true' );
 		}
 
+		return embedUrl.toString();
+	}
+
+	if ( data.provider === 'wistia' ) {
+		const embedUrl = new URL(
+			`https://fast.wistia.net/embed/iframe/${ data.videoId }`
+		);
+		copySearchParams( data.parsedUrl, embedUrl );
+		if ( autoplay ) {
+			embedUrl.searchParams.set( 'autoPlay', 'true' );
+		}
+		return embedUrl.toString();
+	}
+
+	if ( data.provider === 'dailymotion' ) {
+		const embedUrl = new URL( 'https://geo.dailymotion.com/player.html' );
+		copySearchParams( data.parsedUrl, embedUrl );
+		embedUrl.searchParams.set( 'video', data.videoId );
+		if ( autoplay ) {
+			embedUrl.searchParams.set( 'autoplay', '1' );
+		} else {
+			embedUrl.searchParams.delete( 'autoplay' );
+		}
+		return embedUrl.toString();
+	}
+
+	if ( data.provider === 'videopress' ) {
+		const embedUrl = new URL(
+			`https://videopress.com/embed/${ data.videoId }`
+		);
+		copySearchParams( data.parsedUrl, embedUrl );
+		if ( autoplay ) {
+			embedUrl.searchParams.set( 'autoplay', '1' );
+		}
+		return embedUrl.toString();
+	}
+
+	if ( data.provider === 'loom' ) {
+		const embedUrl = new URL(
+			`https://www.loom.com/embed/${ data.videoId }`
+		);
+		copySearchParams( data.parsedUrl, embedUrl );
+		if ( autoplay ) {
+			embedUrl.searchParams.set( 'autoplay', '1' );
+		}
+		return embedUrl.toString();
+	}
+
+	if ( data.provider === 'cloudflare' ) {
+		const embedUrl = new URL(
+			`https://iframe.videodelivery.net/${ data.videoId }`
+		);
+		copySearchParams( data.parsedUrl, embedUrl );
+		if ( autoplay ) {
+			embedUrl.searchParams.set( 'autoplay', 'true' );
+		}
 		return embedUrl.toString();
 	}
 

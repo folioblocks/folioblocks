@@ -44,6 +44,7 @@ import {
 	FBKS_ALL_FILTER_TOKEN,
 	fbksNormalizeActiveFilterValue,
 } from "../pb-helpers/filterConstants";
+import { getTiltHoverHandlers } from "../pb-helpers/tiltHoverEffect";
 import "./editor.scss";
 
 const ASPECT_RATIOS = {
@@ -138,35 +139,46 @@ const getOverlayContentAttributes = (content, visibility) => ({
 	showFilterCategory: content === "title-play-category",
 });
 
-// Function to support YouTube, Vimeo, Bunny Stream, and self-hosted videos.
-function getVideoEmbedMarkup(videoUrl, youtubeEmbedPreview) {
+// Function to support iframe provider and self-hosted video previews.
+function getVideoEmbedMarkup(videoUrl, videoEmbedPreview, isPro = false) {
 	if (!videoUrl) {
 		return null;
 	}
 
-	const providerData = getVideoProviderData(videoUrl);
-	const providerLabel = getVideoProviderLabel(videoUrl);
+	const providerData = getVideoProviderData(videoUrl, { isPro });
+	const providerLabel = getVideoProviderLabel(videoUrl, { isPro });
 
-	if (providerData.provider === "youtube") {
-		if (youtubeEmbedPreview?.html) {
+	if (
+		providerData.provider === "youtube" ||
+		providerData.provider === "dailymotion"
+	) {
+		if (videoEmbedPreview?.html) {
 			return (
 				<SandBox
 					allowSameOrigin
-					html={youtubeEmbedPreview.html}
-					scripts={youtubeEmbedPreview.scripts}
+					html={videoEmbedPreview.html}
+					scripts={videoEmbedPreview.scripts}
 					title={`${providerLabel} Video`}
 					type="video wp-has-aspect-ratio"
 				/>
 			);
 		}
 
-		if (youtubeEmbedPreview === false) {
-			return (
-				<Notice status="warning" isDismissible={false}>
-					{__(
+		if (videoEmbedPreview === false) {
+			const message =
+				providerData.provider === "dailymotion"
+					? __(
+						"DailyMotion could not be previewed in the editor. The video will still play on the published page.",
+						"folioblocks",
+					)
+					: __(
 						"YouTube could not be previewed in the editor. The video will still play on the published page.",
 						"folioblocks",
-					)}
+					);
+
+			return (
+				<Notice status="warning" isDismissible={false}>
+					{message}
 				</Notice>
 			);
 		}
@@ -174,7 +186,7 @@ function getVideoEmbedMarkup(videoUrl, youtubeEmbedPreview) {
 		return <Spinner />;
 	}
 
-	const iframeSrc = getVideoIframeSrc(videoUrl);
+	const iframeSrc = getVideoIframeSrc(videoUrl, { isPro });
 
 	if (iframeSrc) {
 		return (
@@ -209,6 +221,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 		overrideGalleryHoverSettings,
 		overlayStyle,
 		overlayBgColor,
+		overlayBgGradient,
 		overlayTextColor,
 		filterCategory,
 		filterCategories,
@@ -231,13 +244,21 @@ export default function Edit({ attributes, setAttributes, context }) {
 
 	const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 	const [isLightboxOpen, setLightboxOpen] = useState(false);
+	const isPro = !!window.folioBlocksData?.isPro;
+	const isValidVideoUrl = (nextUrl) => {
+		const trimmedUrl = typeof nextUrl === "string" ? nextUrl.trim() : "";
+		if (!isValidHttpUrl(trimmedUrl)) {
+			return false;
+		}
+		return getVideoProviderData(trimmedUrl, { isPro }).provider !== "unsupported";
+	};
 	const updateVideoUrl = (nextUrl) => {
 		const trimmedUrl = typeof nextUrl === "string" ? nextUrl.trim() : "";
 		if (!trimmedUrl) {
 			setAttributes({ videoUrl: "" });
 			return true;
 		}
-		if (!isValidHttpUrl(trimmedUrl)) {
+		if (!isValidVideoUrl(trimmedUrl)) {
 			return false;
 		}
 		setAttributes({ videoUrl: trimmedUrl });
@@ -247,9 +268,13 @@ export default function Edit({ attributes, setAttributes, context }) {
 		window.folioBlocksData?.wpVersion,
 		"7.0",
 	);
-	const videoProvider = getVideoProviderData(videoUrl).provider;
+	const videoProvider = getVideoProviderData(videoUrl, { isPro }).provider;
 	const isYouTubeVideo = videoProvider === "youtube";
-	const isOEmbedVideo = isYouTubeVideo || videoProvider === "vimeo";
+	const isOEmbedVideo =
+		isYouTubeVideo ||
+		videoProvider === "vimeo" ||
+		videoProvider === "dailymotion" ||
+		videoProvider === "videopress";
 	const videoEmbedPreview = useSelect(
 		(select) =>
 			isOEmbedVideo
@@ -257,7 +282,6 @@ export default function Edit({ attributes, setAttributes, context }) {
 				: undefined,
 		[isOEmbedVideo, videoUrl],
 	);
-	const youtubeEmbedPreview = isYouTubeVideo ? videoEmbedPreview : undefined;
 
 	useEffect(() => {
 		const width = Number(videoEmbedPreview?.width) || 0;
@@ -342,7 +366,10 @@ export default function Edit({ attributes, setAttributes, context }) {
 	const inheritedTitleVisibility = context?.["folioBlocks/titleVisibility"];
 	const inheritedShowFilterCategory = context?.["folioBlocks/showFilterCategory"];
 	const inheritedOverlayStyle = context?.["folioBlocks/overlayStyle"];
+	const inheritedHoverEffect = context?.["folioBlocks/hoverEffect"];
+	const inheritedOverlayEntrance = context?.["folioBlocks/overlayEntrance"];
 	const inheritedOverlayBgColor = context?.["folioBlocks/overlayBgColor"];
+	const inheritedOverlayBgGradient = context?.["folioBlocks/overlayBgGradient"];
 	const inheritedOverlayTextColor = context?.["folioBlocks/overlayTextColor"];
 	const inheritedThumbnailSize = context?.["folioBlocks/thumbnailSize"];
 
@@ -460,10 +487,22 @@ export default function Edit({ attributes, setAttributes, context }) {
 		(overridesGalleryHover ? undefined : inheritedOverlayStyle) ??
 		overlayStyle ??
 		"default";
+	const effectiveHoverEffect =
+		(overridesGalleryHover ? undefined : inheritedHoverEffect) ??
+		attributes.hoverEffect ??
+		"none";
+	const effectiveOverlayEntrance =
+		(overridesGalleryHover ? undefined : inheritedOverlayEntrance) ??
+		attributes.overlayEntrance ??
+		"default";
 	const effectiveOverlayBgColor =
 		(overridesGalleryHover ? undefined : inheritedOverlayBgColor) ||
 		overlayBgColor ||
 		"#f9f9f9";
+	const effectiveOverlayBgGradient =
+		(overridesGalleryHover ? undefined : inheritedOverlayBgGradient) ||
+		overlayBgGradient ||
+		"linear-gradient(135deg, rgba(255,255,255,0.92) 0%, rgba(226,232,240,0.82) 100%)";
 	const effectiveOverlayTextColor =
 		(overridesGalleryHover ? undefined : inheritedOverlayTextColor) ||
 		overlayTextColor ||
@@ -497,12 +536,38 @@ export default function Edit({ attributes, setAttributes, context }) {
 		effectivePlayButtonVisibility === "onHover" ||
 		effectiveTitleVisibility === "onHover";
 	const isColorOverlay = effectiveOverlayStyle === "color";
+	const isGradientOverlay = effectiveOverlayStyle === "gradient";
 	const isBlurOverlay = effectiveOverlayStyle === "blur";
+	const hoverEffectClassMap = {
+		"zoom-in": "pb-effect-zoom-in",
+		"zoom-out": "pb-effect-zoom-out",
+		lift: "pb-effect-lift",
+		tilt: "pb-effect-tilt",
+		pop: "pb-effect-pop",
+		glare: "pb-effect-glare",
+		pan: "pb-effect-pan",
+		desaturate: "pb-effect-desaturate",
+	};
+	const hoverEffectClass = hoverEffectClassMap[effectiveHoverEffect] || "";
+	const tiltHoverHandlers =
+		effectiveHoverEffect === "tilt" ? getTiltHoverHandlers() : {};
+	const overlayEntranceClassMap = {
+		fade: "pb-overlay-enter-fade",
+		"slide-up": "pb-overlay-enter-slide-up",
+		"slide-down": "pb-overlay-enter-slide-down",
+		"slide-left": "pb-overlay-enter-slide-left",
+		"slide-right": "pb-overlay-enter-slide-right",
+	};
+	const overlayEntranceClass =
+		overlayEntranceClassMap[effectiveOverlayEntrance] || "";
 	const overlayStyleVars = {
 		...(isColorOverlay && effectiveOverlayBgColor
 			? { "--pb-video-overlay-bg": effectiveOverlayBgColor }
 			: {}),
-		...(isColorOverlay && effectiveOverlayTextColor
+		...(isGradientOverlay && effectiveOverlayBgGradient
+			? { "--pb-video-overlay-bg": effectiveOverlayBgGradient }
+			: {}),
+		...((isColorOverlay || isGradientOverlay) && effectiveOverlayTextColor
 			? { "--pb-video-overlay-text": effectiveOverlayTextColor }
 			: {}),
 	};
@@ -645,10 +710,23 @@ export default function Edit({ attributes, setAttributes, context }) {
 			<ValidatedUrlControl
 				label={__("Video URL", "folioblocks")}
 				value={videoUrl}
-				onChange={(val) => setAttributes({ videoUrl: val })}
+				onChange={updateVideoUrl}
+				validate={isValidVideoUrl}
+				invalidHelp={__(
+					'Enter a valid YouTube, Vimeo, or self-hosted video URL. Bunny Stream, Cloudflare Stream, DailyMotion, Loom, VideoPress, and Wistia require FolioBlocks Pro.',
+					'folioblocks'
+				)}
 				help={
 					<>
-						{__("Supports YouTube, Vimeo, Bunny Stream, or ", "folioblocks")}
+						{isPro
+							? __(
+								"Supports YouTube, Vimeo, Bunny Stream, Cloudflare Stream, DailyMotion, Loom, VideoPress, Wistia, or ",
+								"folioblocks",
+							)
+							: __(
+								"Supports YouTube, Vimeo, or ",
+								"folioblocks",
+							)}
 						<a
 							href="#"
 							onClick={(e) => {
@@ -1104,9 +1182,11 @@ export default function Edit({ attributes, setAttributes, context }) {
 					/>
 				) : (
 					<div
+						{...tiltHoverHandlers}
 						className={`pb-video-block ${ASPECT_RATIOS[effectiveAspectRatio]}${showOverlayAlways ? " has-overlay-always" : ""
 							}${showOverlayOnHover ? " has-overlay-hover" : ""}${isColorOverlay ? " has-color-overlay" : ""
-							}${isBlurOverlay ? " has-blur-overlay" : ""}${shadowStyleClass ? ` ${shadowStyleClass}` : ""
+							}${isGradientOverlay ? " has-gradient-overlay" : ""
+							}${isBlurOverlay ? " has-blur-overlay" : ""}${overlayEntranceClass ? ` ${overlayEntranceClass}` : ""}${hoverEffectClass ? ` ${hoverEffectClass}` : ""}${shadowStyleClass ? ` ${shadowStyleClass}` : ""
 							}`}
 						style={{
 							"--pb-border-width": `${effectiveBorderWidth}px`,
@@ -1197,14 +1277,14 @@ export default function Edit({ attributes, setAttributes, context }) {
 
 							{effectiveLightboxLayout === "video-only" && (
 								<div className="pb-video-lightbox-video">
-									{getVideoEmbedMarkup(videoUrl, youtubeEmbedPreview)}
+									{getVideoEmbedMarkup(videoUrl, videoEmbedPreview, isPro)}
 								</div>
 							)}
 
 							{effectiveLightboxLayout === "split" && (
 								<>
 									<div className="pb-video-lightbox-video">
-										{getVideoEmbedMarkup(videoUrl, youtubeEmbedPreview)}
+										{getVideoEmbedMarkup(videoUrl, videoEmbedPreview, isPro)}
 									</div>
 									<div className="pb-video-lightbox-info">
 										{title && <h2 className="lightbox-title">{title}</h2>}
@@ -1222,7 +1302,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 								lightboxLayout: effectiveLightboxLayout,
 								enableWooCommerce,
 								getVideoEmbedMarkup: (url) =>
-									getVideoEmbedMarkup(url, youtubeEmbedPreview),
+									getVideoEmbedMarkup(url, videoEmbedPreview, isPro),
 								title,
 								description,
 								__,

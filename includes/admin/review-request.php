@@ -177,7 +177,7 @@ function fbks_get_review_notice_message()
 		__('%1$sIf FolioBlocks has helped you create better galleries, would you mind leaving a review? Your feedback helps other photographers and potential users find the plugin and supports its continued development.%2$s%1$s%3$s &nbsp;&middot;&nbsp; %4$s &nbsp;&middot;&nbsp; %5$s%2$s', 'folioblocks'),
 		'<p>',
 		'</p>',
-		'<a href="' . esc_url(fbks_get_review_action_url('review')) . '" target="_blank" rel="noopener noreferrer"><strong>' . esc_html__('Rate FolioBlocks', 'folioblocks') . '</strong></a>',
+		'<a href="' . esc_url(FBKS_REVIEW_URL) . '" target="_blank" rel="noopener noreferrer"><strong>' . esc_html__('Rate FolioBlocks', 'folioblocks') . '</strong></a>',
 		'<a href="' . esc_url(fbks_get_review_action_url('later')) . '">' . esc_html__('Maybe later', 'folioblocks') . '</a>',
 		'<a href="' . esc_url(fbks_get_review_action_url('already')) . '">' . esc_html__('I already did', 'folioblocks') . '</a>'
 	);
@@ -242,8 +242,6 @@ function fbks_handle_review_notice_action()
 		);
 	}
 
-	check_admin_referer('fbks_review_notice_action');
-
 	$choice = isset($_GET['choice']) ? sanitize_key(wp_unslash($_GET['choice'])) : '';
 	if (! in_array($choice, array('review', 'later', 'already'), true)) {
 		wp_die(
@@ -251,6 +249,16 @@ function fbks_handle_review_notice_action()
 			esc_html__('Invalid request', 'folioblocks'),
 			array('response' => 400)
 		);
+	}
+
+	$has_valid_nonce = wp_verify_nonce(
+		isset($_GET['_wpnonce']) ? sanitize_text_field(wp_unslash($_GET['_wpnonce'])) : '',
+		'fbks_review_notice_action'
+	);
+
+	if (! $has_valid_nonce && 'review' === $choice) {
+		wp_redirect(FBKS_REVIEW_URL); // phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect -- Fixed WordPress.org URL.
+		exit;
 	}
 
 	$user_id = get_current_user_id();
