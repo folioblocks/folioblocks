@@ -356,6 +356,17 @@ if (! function_exists('fbks_render_free_pro_cell')) {
 	}
 }
 
+if (! function_exists('fbks_render_free_pro_plan_header')) {
+	function fbks_render_free_pro_plan_header($label, $short_label)
+	{
+		printf(
+			'<th><span class="pb-comparison-plan-label">%1$s</span><span class="pb-comparison-plan-label-short" aria-hidden="true">%2$s</span></th>',
+			esc_html($label),
+			esc_html($short_label)
+		);
+	}
+}
+
 if (! function_exists('fbks_render_free_pro_page')) {
 	function fbks_render_free_pro_page()
 	{
@@ -379,9 +390,9 @@ if (! function_exists('fbks_render_free_pro_page')) {
 									<tr>
 										<th><?php echo esc_html($section['title']); ?></th>
 										<th><?php esc_html_e('Free', 'folioblocks'); ?></th>
-										<th><?php esc_html_e('Pro - Single', 'folioblocks'); ?></th>
-										<th><?php esc_html_e('Pro - Business', 'folioblocks'); ?></th>
-										<th><?php esc_html_e('Pro - Agency', 'folioblocks'); ?></th>
+										<?php fbks_render_free_pro_plan_header(__('Pro - Single', 'folioblocks'), __('Single', 'folioblocks')); ?>
+										<?php fbks_render_free_pro_plan_header(__('Pro - Business', 'folioblocks'), __('Business', 'folioblocks')); ?>
+										<?php fbks_render_free_pro_plan_header(__('Pro - Agency', 'folioblocks'), __('Agency', 'folioblocks')); ?>
 									</tr>
 								</thead>
 								<tbody>

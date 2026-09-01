@@ -30,8 +30,13 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			return galleryEl;
 		}
 
-		return galleryEl.closest(
-			'.wp-block-folioblocks-masonry-gallery-block'
+		return (
+			galleryEl.closest(
+				'.wp-block-folioblocks-masonry-gallery-block'
+			) ||
+			galleryEl.querySelector(
+				'.wp-block-folioblocks-masonry-gallery-block'
+			)
 		);
 	};
 
@@ -77,19 +82,47 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			const columnWidth = Math.round(
 				( innerGallery.offsetWidth - gap * ( columns - 1 ) ) / columns
 			);
+			const wrappers = innerGallery.querySelectorAll(
+				'.pb-image-block-wrapper'
+			);
+			const layoutSelector = wrappers.length
+				? '.pb-image-block-wrapper'
+				: '.wp-block-folioblocks-pb-image-block';
 
 			innerGallery
-				.querySelectorAll( '.wp-block-folioblocks-pb-image-block' )
+				.querySelectorAll( layoutSelector )
 				.forEach( ( item ) => {
 					item.style.position = '';
 					item.style.top = '';
 					item.style.left = '';
 					item.style.width = '';
+
+					if ( item.classList.contains( 'pb-image-block-wrapper' ) ) {
+						const imageBlock = item.querySelector(
+							'.wp-block-folioblocks-pb-image-block'
+						);
+						item.classList.toggle(
+							'is-hidden',
+							!! imageBlock?.classList.contains( 'is-hidden' )
+						);
+					}
 				} );
 
-			const items = innerGallery.querySelectorAll(
-				'.wp-block-folioblocks-pb-image-block:not(.is-hidden)'
-			);
+			const items = Array.from(
+				innerGallery.querySelectorAll(
+					`${ layoutSelector }:not(.is-hidden)`
+				)
+			).filter( ( item ) => {
+				const imageBlock = item.classList.contains(
+					'wp-block-folioblocks-pb-image-block'
+				)
+					? item
+					: item.querySelector(
+							'.wp-block-folioblocks-pb-image-block'
+					  );
+
+				return ! imageBlock?.classList.contains( 'is-hidden' );
+			} );
 
 			items.forEach( ( item ) => {
 				const minCol = columnHeights.indexOf(
@@ -175,10 +208,18 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		}
 
 		window.addEventListener( 'resize', applyCustomMasonryLayout );
+		window.addEventListener(
+			'folioblocks:proofing-filter-change',
+			applyCustomMasonryLayout
+		);
 
 		window.addEventListener( 'pagehide', () => {
 			clearTimeout( fallbackTimeout );
 			window.removeEventListener( 'resize', applyCustomMasonryLayout );
+			window.removeEventListener(
+				'folioblocks:proofing-filter-change',
+				applyCustomMasonryLayout
+			);
 			resizeObserver?.disconnect();
 			observer?.disconnect();
 		} );

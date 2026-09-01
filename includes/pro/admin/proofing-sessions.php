@@ -295,6 +295,7 @@ if (! function_exists('fbks_get_proofing_session_admin_data')) {
 
 		return array(
 			'id'          => $post_id,
+			'galleryKey'  => sanitize_text_field((string) get_post_meta($post_id, '_fbks_proofing_gallery_key', true)),
 			'status'      => sanitize_key((string) get_post_meta($post_id, '_fbks_proofing_status', true)),
 			'presence'    => sanitize_key((string) get_post_meta($post_id, '_fbks_proofing_presence', true)),
 			'clientEmail' => sanitize_email((string) get_post_meta($post_id, '_fbks_proofing_client_email', true)),
@@ -304,6 +305,7 @@ if (! function_exists('fbks_get_proofing_session_admin_data')) {
 			'lastSeenAt'  => sanitize_text_field((string) get_post_meta($post_id, '_fbks_proofing_last_seen_at', true)),
 			'images'      => $images,
 			'counts'      => fbks_get_proofing_session_counts($images),
+			'isCurrent'   => function_exists('fbks_is_proofing_session_current_for_page') ? fbks_is_proofing_session_current_for_page($post_id) : true,
 		);
 	}
 }
@@ -317,9 +319,31 @@ if (! function_exists('fbks_get_proofing_session_page_title')) {
 			return __('Unknown page', 'folioblocks');
 		}
 
-		$title = get_the_title($page_id);
+		$title = get_post_field('post_title', $page_id);
 
 		return '' !== $title ? $title : __('Untitled page', 'folioblocks');
+	}
+}
+
+if (! function_exists('fbks_render_proofing_session_page_reference')) {
+	function fbks_render_proofing_session_page_reference($session)
+	{
+		$page_id = isset($session['pageId']) ? absint($session['pageId']) : 0;
+		$page_title = fbks_get_proofing_session_page_title($page_id);
+		$is_current = ! empty($session['isCurrent']);
+
+		if ($page_id && $is_current) {
+			echo '<a href="' . esc_url(get_edit_post_link($page_id)) . '">' . esc_html($page_title) . '</a>';
+			return;
+		}
+
+		echo esc_html($page_title);
+
+		if ($page_id && ! $is_current) {
+			echo '<br /><span class="fbks-proofing-session-meta">';
+			echo esc_html__('Detached from current page content', 'folioblocks');
+			echo '</span>';
+		}
 	}
 }
 
@@ -445,25 +469,22 @@ if (! function_exists('fbks_render_proofing_sessions_list')) {
 								),
 								$base_url
 							);
-							$page_title = fbks_get_proofing_session_page_title($session['pageId']);
 							?>
 							<tr>
-								<td>
+								<td data-label="<?php esc_attr_e('Status', 'folioblocks'); ?>">
 									<?php fbks_render_proofing_session_status_badge($session); ?>
 								</td>
-								<td><?php echo esc_html($session['clientEmail'] ?: __('Client', 'folioblocks')); ?></td>
-								<td>
-									<?php if ($session['pageId']) : ?>
-										<a href="<?php echo esc_url(get_edit_post_link($session['pageId'])); ?>"><?php echo esc_html($page_title); ?></a>
-									<?php else : ?>
-										<?php echo esc_html($page_title); ?>
-									<?php endif; ?>
+								<td data-label="<?php esc_attr_e('Client', 'folioblocks'); ?>"><?php echo esc_html($session['clientEmail'] ?: __('Client', 'folioblocks')); ?></td>
+								<td data-label="<?php esc_attr_e('Page', 'folioblocks'); ?>">
+									<?php fbks_render_proofing_session_page_reference($session); ?>
 								</td>
-								<td><?php fbks_render_proofing_sessions_summary($session['counts']); ?></td>
-								<td><?php echo esc_html($session['updatedAt'] ? mysql2date(get_option('date_format') . ' ' . get_option('time_format'), $session['updatedAt']) : __('Unknown', 'folioblocks')); ?></td>
-								<td class="fbks-proofing-session-actions">
-									<a class="button button-primary" href="<?php echo esc_url($view_url); ?>"><?php esc_html_e('Review', 'folioblocks'); ?></a>
-									<?php echo fbks_get_proofing_session_delete_form($session['id'], $base_url); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+								<td data-label="<?php esc_attr_e('Selections', 'folioblocks'); ?>"><?php fbks_render_proofing_sessions_summary($session['counts']); ?></td>
+								<td data-label="<?php esc_attr_e('Updated', 'folioblocks'); ?>"><?php echo esc_html($session['updatedAt'] ? mysql2date(get_option('date_format') . ' ' . get_option('time_format'), $session['updatedAt']) : __('Unknown', 'folioblocks')); ?></td>
+								<td class="fbks-proofing-session-actions" data-label="<?php esc_attr_e('Actions', 'folioblocks'); ?>">
+									<span class="fbks-proofing-session-action-buttons">
+										<a class="button button-primary" href="<?php echo esc_url($view_url); ?>"><?php esc_html_e('Review', 'folioblocks'); ?></a>
+										<?php echo fbks_get_proofing_session_delete_form($session['id'], $base_url); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+									</span>
 								</td>
 							</tr>
 						<?php endforeach; ?>
@@ -479,7 +500,6 @@ if (! function_exists('fbks_render_proofing_session_detail')) {
 	function fbks_render_proofing_session_detail($session)
 	{
 		$back_url = admin_url('admin.php?page=folioblocks-proofing-sessions');
-		$page_title = fbks_get_proofing_session_page_title($session['pageId']);
 		?>
 		<?php fbks_render_proofing_session_detail_actions($session['id'], $back_url); ?>
 
@@ -489,11 +509,7 @@ if (! function_exists('fbks_render_proofing_session_detail')) {
 					<h2><?php echo esc_html($session['clientEmail'] ?: __('Proofing Session', 'folioblocks')); ?></h2>
 					<p>
 						<?php fbks_render_proofing_session_status_badge($session); ?>
-						<?php if ($session['pageId']) : ?>
-							<a href="<?php echo esc_url(get_edit_post_link($session['pageId'])); ?>"><?php echo esc_html($page_title); ?></a>
-						<?php else : ?>
-							<?php echo esc_html($page_title); ?>
-						<?php endif; ?>
+						<?php fbks_render_proofing_session_page_reference($session); ?>
 					</p>
 					<p class="fbks-proofing-session-meta">
 						<?php
@@ -533,7 +549,7 @@ if (! function_exists('fbks_render_proofing_session_detail')) {
 							$media_url = $attachment_id ? get_edit_post_link($attachment_id) : '';
 							?>
 							<tr>
-								<td class="fbks-proofing-image-cell">
+								<td class="fbks-proofing-image-cell" data-label="<?php esc_attr_e('Image', 'folioblocks'); ?>">
 									<span class="fbks-proofing-image-preview">
 										<?php if ($image_url) : ?>
 											<img src="<?php echo esc_url($image_url); ?>" alt="" loading="lazy" />
@@ -549,21 +565,21 @@ if (! function_exists('fbks_render_proofing_session_detail')) {
 										<?php endif; ?>
 									</div>
 								</td>
-								<td>
+								<td data-label="<?php esc_attr_e('Image ID', 'folioblocks'); ?>">
 									<code><?php echo esc_html($image['imageId']); ?></code>
 									<?php if ($attachment_id) : ?>
 										<br /><span class="fbks-proofing-session-meta"><?php echo esc_html(sprintf(__('Attachment #%d', 'folioblocks'), $attachment_id)); ?></span>
 									<?php endif; ?>
 								</td>
-								<td><?php echo ! empty($image['hearted']) ? esc_html__('Yes', 'folioblocks') : '&mdash;'; ?></td>
-								<td>
+								<td data-label="<?php esc_attr_e('Heart', 'folioblocks'); ?>"><?php echo ! empty($image['hearted']) ? esc_html__('Yes', 'folioblocks') : '&mdash;'; ?></td>
+								<td data-label="<?php esc_attr_e('Flag', 'folioblocks'); ?>">
 									<?php if (! empty($image['flag'])) : ?>
 										<span class="fbks-proofing-flag-chip is-<?php echo esc_attr($image['flag']); ?>"><?php echo esc_html(ucfirst($image['flag'])); ?></span>
 									<?php else : ?>
 										&mdash;
 									<?php endif; ?>
 								</td>
-								<td><?php echo ! empty($image['comment']) ? nl2br(esc_html($image['comment'])) : '&mdash;'; ?></td>
+								<td data-label="<?php esc_attr_e('Comment', 'folioblocks'); ?>"><?php echo ! empty($image['comment']) ? nl2br(esc_html($image['comment'])) : '&mdash;'; ?></td>
 							</tr>
 						<?php endforeach; ?>
 					</tbody>

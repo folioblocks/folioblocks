@@ -6,7 +6,9 @@
 
 $fbks_gallery_password = isset( $attributes['galleryPassword'] ) ? (string) $attributes['galleryPassword'] : '';
 $fbks_client_email     = isset( $attributes['clientEmail'] ) ? (string) $attributes['clientEmail'] : '';
-$fbks_gallery_key      = 'fbks-proofing-' . md5( $fbks_client_email . '|' . $fbks_gallery_password );
+$fbks_gallery_key      = function_exists( 'fbks_get_proofing_gallery_key' )
+	? fbks_get_proofing_gallery_key( $fbks_client_email, $fbks_gallery_password )
+	: 'fbks-proofing-' . md5( $fbks_client_email . '|' . $fbks_gallery_password );
 $fbks_error            = '';
 $fbks_enable_heart     = ! isset( $attributes['enableHeart'] ) || (bool) $attributes['enableHeart'];
 $fbks_enable_flag      = ! isset( $attributes['enableFlag'] ) || (bool) $attributes['enableFlag'];

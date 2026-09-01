@@ -4,6 +4,20 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.1] - 2026-08-31
+### Fixed
+- Fixed Global Settings Watermarks rows on mobile so saved watermark Edit buttons stay right-aligned when there is enough horizontal space.
+- Fixed Proofing Gallery filtering with Masonry galleries on the front end so visible images reflow into gaps left by hidden filtered images.
+- Fixed stale Proofing Gallery statuses in the Posts and Pages admin lists after a proofing gallery is removed or replaced.
+- Fixed Proofing Sessions admin reporting so historical sessions detached from the current page content are clearly marked instead of being presented as current page reports.
+
+## [1.5.1] - 2026-08-20
+### Added
+- New Proofing Gallery admin bar component that displays status of Proofing Galleries in real time.
+
+### Fixed
+- Fixed mobile styling on Proofing Sessions page and Proofing Reports.
+
 ## [1.5.0] - 2026-08-05
 ### Fixed
 - Fixed bug where EXIF data with Unknown fields hidden was not centered in Lightbox view. 

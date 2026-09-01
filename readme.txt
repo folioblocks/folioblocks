@@ -5,7 +5,7 @@ Tags: gallery, image gallery, photo gallery, video gallery, lightbox,
 Tested up to:      7.1
 Requires at least: 6.5
 Requires PHP: 7.4
-Stable tag:        1.5.0
+Stable tag:        1.5.1
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -131,6 +131,14 @@ No, the galleries will remain in place on your site. However, the **advanced lay
 6. Video Gallery block populated with images
 
 == Changelog ==
+
+= 1.5.1 =
+* Added: New Proofing Gallery admin bar component that displays status of Proofing Galleries in real time.
+* Fixed: Global Settings Watermarks rows on mobile now keep saved watermark Edit buttons right-aligned when space allows.
+* Fixed: Proofing Gallery Masonry filtering now reflows visible images on the front end instead of leaving gaps from hidden images.
+* Fixed: Posts and Pages admin lists no longer show stale Proofing Gallery statuses after a proofing gallery is removed or replaced.
+* Fixed: Proofing Sessions now marks historical reports as detached when the original gallery no longer matches the current page content.
+* Fixed: Fixed mobile styling on Proofing Sessions page and Proofing Reports.
 
 = 1.5.0 =
 * Added Proofing Gallery Block (Business & Agency Only) for image selections, favorites, flags, and comments.

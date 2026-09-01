@@ -231,6 +231,10 @@
 			setMeta( { ...meta, [ key ]: !! value } );
 		};
 		const controls = [];
+		const panelTitle =
+			postType === 'post'
+				? __( 'FolioBlocks Post Settings', 'folioblocks' )
+				: __( 'FolioBlocks Page Settings', 'folioblocks' );
 
 		if (
 			( postType === 'post' || postType === 'page' ) &&
@@ -241,11 +245,23 @@
 				'Require a password before visitors can view the page.',
 				'folioblocks'
 			);
+			if ( postType === 'post' ) {
+				passwordHelp = __(
+					'Require a password before visitors can view the post.',
+					'folioblocks'
+				);
+			}
 			if ( isProofingPasswordManaged && proofingGalleryPassword ) {
 				passwordHelp = __(
 					'Password protection is managed by the Proofing Gallery block on this page.',
 					'folioblocks'
 				);
+				if ( postType === 'post' ) {
+					passwordHelp = __(
+						'Password protection is managed by the Proofing Gallery block on this post.',
+						'folioblocks'
+					);
+				}
 			} else if ( isProofingPasswordManaged ) {
 				passwordHelp = __(
 					'Set the password in the Proofing Gallery block settings.',
@@ -256,17 +272,32 @@
 					'Enter a password to protect this page.',
 					'folioblocks'
 				);
+				if ( postType === 'post' ) {
+					passwordHelp = __(
+						'Enter a password to protect this post.',
+						'folioblocks'
+					);
+				}
 			} else if ( password ) {
 				passwordHelp = __(
 					'Visitors must enter this password to view the page.',
 					'folioblocks'
 				);
+				if ( postType === 'post' ) {
+					passwordHelp = __(
+						'Visitors must enter this password to view the post.',
+						'folioblocks'
+					);
+				}
 			}
 
 			controls.push(
 				createElement( ToggleControl, {
 					key: 'password-protection',
-					label: __( 'Password Protect Page', 'folioblocks' ),
+					label:
+						postType === 'post'
+							? __( 'Password Protect Post', 'folioblocks' )
+							: __( 'Password Protect Page', 'folioblocks' ),
 					checked: isProofingPasswordManaged || isPasswordControlOpen,
 					disabled: isProofingPasswordManaged,
 					onChange: ( value ) => {
@@ -287,7 +318,10 @@
 				controls.push(
 					createElement( TextControl, {
 						key: 'page-password',
-						label: __( 'Page Password', 'folioblocks' ),
+						label:
+							postType === 'post'
+								? __( 'Post Password', 'folioblocks' )
+								: __( 'Page Password', 'folioblocks' ),
 						value: password || '',
 						onChange: setPassword,
 						autoComplete: 'new-password',
@@ -350,7 +384,7 @@
 			PluginDocumentSettingPanel,
 			{
 				name: 'folioblocks-page-media-settings',
-				title: __( 'FolioBlocks Page Settings', 'folioblocks' ),
+				title: panelTitle,
 			},
 			createElement(
 				'div',

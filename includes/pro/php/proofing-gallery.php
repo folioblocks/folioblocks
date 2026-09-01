@@ -27,6 +27,7 @@ function fbks_get_proofing_settings_defaults() {
 		'inProgressRetentionDays' => FBKS_PROOFING_STALE_RETENTION_DAYS,
 		'submittedRetentionDays'  => FBKS_PROOFING_SUBMITTED_RETENTION_DAYS,
 		'emailAdminOnSubmit'      => false,
+		'showAdminBar'            => true,
 	];
 }
 
@@ -50,6 +51,7 @@ function fbks_sanitize_proofing_settings( $settings ) {
 		'inProgressRetentionDays' => fbks_sanitize_proofing_retention_days( $settings['inProgressRetentionDays'], $defaults['inProgressRetentionDays'] ),
 		'submittedRetentionDays'  => fbks_sanitize_proofing_retention_days( $settings['submittedRetentionDays'], $defaults['submittedRetentionDays'] ),
 		'emailAdminOnSubmit'      => fbks_sanitize_proofing_checkbox( $settings['emailAdminOnSubmit'] ),
+		'showAdminBar'            => fbks_sanitize_proofing_checkbox( $settings['showAdminBar'] ),
 	];
 }
 
@@ -65,6 +67,177 @@ function fbks_sanitize_proofing_comment( $comment ) {
 	}
 
 	return substr( $comment, 0, FBKS_PROOFING_COMMENT_MAX_LENGTH );
+}
+
+function fbks_get_proofing_gallery_key( $client_email, $gallery_password ) {
+	return 'fbks-proofing-' . md5( (string) $client_email . '|' . (string) $gallery_password );
+}
+
+function fbks_collect_proofing_gallery_keys_from_blocks( $blocks ) {
+	$gallery_keys = [];
+
+	foreach ( (array) $blocks as $block ) {
+		if ( ! is_array( $block ) ) {
+			continue;
+		}
+
+		if ( 'folioblocks/proofing-gallery-block' === ( $block['blockName'] ?? '' ) ) {
+			$attributes     = is_array( $block['attrs'] ?? null ) ? $block['attrs'] : [];
+			$gallery_keys[] = fbks_get_proofing_gallery_key(
+				$attributes['clientEmail'] ?? '',
+				$attributes['galleryPassword'] ?? ''
+			);
+		}
+
+		if ( ! empty( $block['innerBlocks'] ) ) {
+			$gallery_keys = array_merge(
+				$gallery_keys,
+				fbks_collect_proofing_gallery_keys_from_blocks( $block['innerBlocks'] )
+			);
+		}
+	}
+
+	return array_values( array_unique( array_filter( $gallery_keys ) ) );
+}
+
+function fbks_collect_proofing_image_ids_from_blocks( $blocks ) {
+	$image_ids = [];
+
+	foreach ( (array) $blocks as $block ) {
+		if ( ! is_array( $block ) ) {
+			continue;
+		}
+
+		if ( 'folioblocks/pb-image-block' === ( $block['blockName'] ?? '' ) ) {
+			$attributes = is_array( $block['attrs'] ?? null ) ? $block['attrs'] : [];
+			$image_id   = ! empty( $attributes['id'] )
+				? 'attachment-' . absint( $attributes['id'] )
+				: '';
+
+			if ( '' === $image_id && ! empty( $attributes['src'] ) ) {
+				$image_id = 'image-' . md5( (string) $attributes['src'] );
+			}
+
+			if ( '' !== $image_id ) {
+				$image_ids[] = $image_id;
+			}
+		}
+
+		if ( ! empty( $block['innerBlocks'] ) ) {
+			$image_ids = array_merge(
+				$image_ids,
+				fbks_collect_proofing_image_ids_from_blocks( $block['innerBlocks'] )
+			);
+		}
+	}
+
+	return array_values( array_unique( array_filter( $image_ids ) ) );
+}
+
+function fbks_collect_proofing_galleries_from_blocks( $blocks ) {
+	$galleries = [];
+
+	foreach ( (array) $blocks as $block ) {
+		if ( ! is_array( $block ) ) {
+			continue;
+		}
+
+		if ( 'folioblocks/proofing-gallery-block' === ( $block['blockName'] ?? '' ) ) {
+			$attributes = is_array( $block['attrs'] ?? null ) ? $block['attrs'] : [];
+			$gallery_key = fbks_get_proofing_gallery_key(
+				$attributes['clientEmail'] ?? '',
+				$attributes['galleryPassword'] ?? ''
+			);
+
+			$galleries[] = [
+				'galleryKey' => $gallery_key,
+				'imageIds'   => fbks_collect_proofing_image_ids_from_blocks( $block['innerBlocks'] ?? [] ),
+			];
+		}
+
+		if ( ! empty( $block['innerBlocks'] ) ) {
+			$galleries = array_merge(
+				$galleries,
+				fbks_collect_proofing_galleries_from_blocks( $block['innerBlocks'] )
+			);
+		}
+	}
+
+	return $galleries;
+}
+
+function fbks_get_current_proofing_galleries_for_page( $page_id ) {
+	$page_id = absint( $page_id );
+
+	if ( ! $page_id ) {
+		return [];
+	}
+
+	$content = (string) get_post_field( 'post_content', $page_id );
+
+	if ( '' === $content || ! has_blocks( $content ) ) {
+		return [];
+	}
+
+	return fbks_collect_proofing_galleries_from_blocks( parse_blocks( $content ) );
+}
+
+function fbks_get_current_proofing_gallery_keys_for_page( $page_id ) {
+	return array_values(
+		array_unique(
+			array_filter(
+				wp_list_pluck( fbks_get_current_proofing_galleries_for_page( $page_id ), 'galleryKey' )
+			)
+		)
+	);
+}
+
+function fbks_is_proofing_session_current_for_page( $session_id, $page_id = 0 ) {
+	$session_id = absint( $session_id );
+
+	if ( ! $session_id || FBKS_PROOFING_SESSION_POST_TYPE !== get_post_type( $session_id ) ) {
+		return false;
+	}
+
+	$page_id     = $page_id ? absint( $page_id ) : absint( get_post_meta( $session_id, '_fbks_proofing_page_id', true ) );
+	$gallery_key = sanitize_text_field( (string) get_post_meta( $session_id, '_fbks_proofing_gallery_key', true ) );
+
+	if ( ! $page_id || '' === $gallery_key ) {
+		return false;
+	}
+
+	$current_galleries = fbks_get_current_proofing_galleries_for_page( $page_id );
+	$images            = get_post_meta( $session_id, '_fbks_proofing_images', true );
+	$session_image_ids = [];
+
+	if ( is_array( $images ) ) {
+		foreach ( fbks_normalize_proofing_images( $images ) as $image ) {
+			if ( ! empty( $image['imageId'] ) ) {
+				$session_image_ids[] = (string) $image['imageId'];
+			}
+		}
+	}
+
+	sort( $session_image_ids );
+
+	foreach ( $current_galleries as $gallery ) {
+		if ( $gallery_key !== ( $gallery['galleryKey'] ?? '' ) ) {
+			continue;
+		}
+
+		if ( empty( $session_image_ids ) ) {
+			return true;
+		}
+
+		$current_image_ids = array_map( 'strval', $gallery['imageIds'] ?? [] );
+		sort( $current_image_ids );
+
+		if ( $session_image_ids === $current_image_ids ) {
+			return true;
+		}
+	}
+
+	return false;
 }
 
 function fbks_register_proofing_session_post_type() {
@@ -563,7 +736,7 @@ function fbks_register_proofing_session_rest_routes() {
 }
 add_action( 'rest_api_init', 'fbks_register_proofing_session_rest_routes' );
 
-function fbks_get_proofing_sessions_by_page_ids( $page_ids ) {
+function fbks_get_proofing_sessions_by_page_ids( $page_ids, $current_only = false ) {
 	global $wpdb;
 
 	$page_ids = array_values( array_filter( array_map( 'absint', (array) $page_ids ) ) );
@@ -576,6 +749,7 @@ function fbks_get_proofing_sessions_by_page_ids( $page_ids ) {
 	$query        = $wpdb->prepare(
 		"SELECT page_meta.meta_value AS page_id,
 			p.ID AS session_id,
+			gallery_key_meta.meta_value AS gallery_key,
 			email_meta.meta_value AS client_email,
 			updated_meta.meta_value AS updated_at,
 			presence_meta.meta_value AS presence,
@@ -588,6 +762,9 @@ function fbks_get_proofing_sessions_by_page_ids( $page_ids ) {
 		INNER JOIN {$wpdb->postmeta} page_meta
 			ON p.ID = page_meta.post_id
 			AND page_meta.meta_key = '_fbks_proofing_page_id'
+		INNER JOIN {$wpdb->postmeta} gallery_key_meta
+			ON p.ID = gallery_key_meta.post_id
+			AND gallery_key_meta.meta_key = '_fbks_proofing_gallery_key'
 		LEFT JOIN {$wpdb->postmeta} email_meta
 			ON p.ID = email_meta.post_id
 			AND email_meta.meta_key = '_fbks_proofing_client_email'
@@ -612,7 +789,12 @@ function fbks_get_proofing_sessions_by_page_ids( $page_ids ) {
 	$sessions = [];
 
 	foreach ( $rows as $row ) {
-		$page_id = absint( $row['page_id'] );
+		$page_id     = absint( $row['page_id'] );
+		$gallery_key = sanitize_text_field( (string) $row['gallery_key'] );
+
+		if ( $current_only && ! fbks_is_proofing_session_current_for_page( absint( $row['session_id'] ), $page_id ) ) {
+			continue;
+		}
 
 		if ( ! isset( $sessions[ $page_id ] ) ) {
 			$sessions[ $page_id ] = [];
@@ -620,6 +802,7 @@ function fbks_get_proofing_sessions_by_page_ids( $page_ids ) {
 
 		$sessions[ $page_id ][] = [
 			'id'          => absint( $row['session_id'] ),
+			'galleryKey'  => $gallery_key,
 			'status'      => sanitize_key( (string) $row['status'] ),
 			'presence'    => sanitize_key( (string) $row['presence'] ),
 			'clientEmail' => sanitize_email( (string) $row['client_email'] ),
@@ -632,7 +815,7 @@ function fbks_get_proofing_sessions_by_page_ids( $page_ids ) {
 }
 
 function fbks_get_in_progress_proofing_sessions_by_page_ids( $page_ids ) {
-	return fbks_get_proofing_sessions_by_page_ids( $page_ids );
+	return fbks_get_proofing_sessions_by_page_ids( $page_ids, true );
 }
 
 function fbks_prime_proofing_sessions_for_admin_list( $posts ) {
@@ -647,7 +830,8 @@ function fbks_prime_proofing_sessions_for_admin_list( $posts ) {
 	}
 
 	$GLOBALS['fbks_admin_list_proofing_sessions'] = fbks_get_proofing_sessions_by_page_ids(
-		wp_list_pluck( $posts, 'ID' )
+		wp_list_pluck( $posts, 'ID' ),
+		true
 	);
 
 	return $posts;
@@ -682,7 +866,7 @@ function fbks_render_proofing_session_admin_column( $column_name, $post_id ) {
 	$sessions = $GLOBALS['fbks_admin_list_proofing_sessions'][ $post_id ] ?? null;
 
 	if ( null === $sessions ) {
-		$sessions = fbks_get_proofing_sessions_by_page_ids( [ $post_id ] )[ $post_id ] ?? [];
+		$sessions = fbks_get_proofing_sessions_by_page_ids( [ $post_id ], true )[ $post_id ] ?? [];
 	}
 
 	if ( empty( $sessions ) ) {

@@ -472,6 +472,7 @@ if (! function_exists('fbks_render_global_settings_page')) {
 				'inProgressRetentionDays' => 14,
 				'submittedRetentionDays'  => 90,
 				'emailAdminOnSubmit'      => false,
+				'showAdminBar'            => true,
 			);
 		$social_settings = function_exists('fbks_get_social_sharing_settings')
 			? fbks_get_social_sharing_settings()
@@ -537,7 +538,19 @@ if (! function_exists('fbks_render_global_settings_page')) {
 							<label class="pb-settings-toggle">
 								<input type="hidden" name="fbks_proofing[emailAdminOnSubmit]" value="0" />
 								<input type="checkbox" name="fbks_proofing[emailAdminOnSubmit]" value="1" <?php checked($proofing_settings['emailAdminOnSubmit']); ?> />
-								<span><?php esc_html_e('Email site admin when a proofing session is submitted', 'folioblocks'); ?></span>
+								<span class="pb-settings-toggle-copy">
+									<span><?php esc_html_e('Email admin when session is submitted', 'folioblocks'); ?></span>
+									<span class="pb-settings-field-help"><?php esc_html_e('Send an email to the site admin account when a Proofing Session is submitted.', 'folioblocks'); ?></span>
+								</span>
+							</label>
+
+							<label class="pb-settings-toggle">
+								<input type="hidden" name="fbks_proofing[showAdminBar]" value="0" />
+								<input type="checkbox" name="fbks_proofing[showAdminBar]" value="1" <?php checked($proofing_settings['showAdminBar']); ?> />
+								<span class="pb-settings-toggle-copy">
+									<span><?php esc_html_e('Show Proofing Status Component in the Admin bar', 'folioblocks'); ?></span>
+									<span class="pb-settings-field-help"><?php esc_html_e("Display the Proofing Gallery Block's status component in the Admin bar and see in real time when clients are interacting the proofing galleries.", 'folioblocks'); ?></span>
+								</span>
 							</label>
 						</div>
 
