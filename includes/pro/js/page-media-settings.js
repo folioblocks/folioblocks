@@ -1,7 +1,7 @@
 ( function ( wp ) {
 	const { __ } = wp.i18n;
 	const { TextControl, ToggleControl } = wp.components;
-	const { createElement, Fragment, useEffect, useState } = wp.element;
+	const { createElement, Fragment, useEffect, useRef, useState } = wp.element;
 	const { addFilter } = wp.hooks;
 	const { registerPlugin } = wp.plugins;
 	const { useEntityProp } = wp.coreData;
@@ -40,6 +40,13 @@
 		...lazyLoadBlocks,
 		'folioblocks/pb-loupe-block',
 	] );
+	const getPageMediaDefaults = () => ( {
+		lazyLoad: !! window.folioBlocksData?.pageMediaDefaults?.lazyLoad,
+		disableRightClick:
+			!! window.folioBlocksData?.pageMediaDefaults?.disableRightClick,
+		disableDragToSave:
+			!! window.folioBlocksData?.pageMediaDefaults?.disableDragToSave,
+	} );
 	const legacyControlHooks = [
 		'folioBlocks.backgroundVideoBlock.disableRightClickToggle',
 		'folioBlocks.beforeAfter.disableRightClickToggle',
@@ -114,7 +121,12 @@
 		);
 
 	const getContentCapabilities = ( content ) => {
-		const value = typeof content === 'string' ? content : '';
+		let value = '';
+		if ( typeof content === 'string' ) {
+			value = content;
+		} else if ( typeof content?.raw === 'string' ) {
+			value = content.raw;
+		}
 		return {
 			hasProofingGallery: value.includes(
 				`wp:${ proofingGalleryBlock }`
@@ -142,14 +154,21 @@
 			hasPasswordProtection,
 			hasProofingGallery,
 			proofingGalleryPassword,
+			hasSavedCompatibleMedia,
+			isCurrentPostLoaded,
 			postId,
 			postType,
 		} = useSelect( ( select ) => {
+			const editor = select( 'core/editor' );
 			const blockCapabilities = getCapabilities(
 				select( 'core/block-editor' ).getBlocks()
 			);
 			const contentCapabilities = getContentCapabilities(
-				select( 'core/editor' ).getEditedPostContent()
+				editor.getEditedPostContent()
+			);
+			const currentPost = editor.getCurrentPost();
+			const savedContentCapabilities = getContentCapabilities(
+				currentPost?.content
 			);
 
 			return {
@@ -170,8 +189,13 @@
 					contentCapabilities.hasProofingGallery,
 				proofingGalleryPassword:
 					blockCapabilities.proofingGalleryPassword || '',
-				postId: select( 'core/editor' ).getCurrentPostId(),
-				postType: select( 'core/editor' ).getCurrentPostType(),
+				hasSavedCompatibleMedia:
+					savedContentCapabilities.hasLazyLoad ||
+					savedContentCapabilities.hasRightClick ||
+					savedContentCapabilities.hasDragToSave,
+				isCurrentPostLoaded: !! currentPost,
+				postId: editor.getCurrentPostId(),
+				postType: editor.getCurrentPostType(),
 			};
 		}, [] );
 		const [ meta, setMeta ] = useEntityProp(
@@ -189,6 +213,38 @@
 		const [ isPasswordControlOpen, setIsPasswordControlOpen ] = useState(
 			!! password
 		);
+		const didInitializeDefaults = useRef( false );
+		const hasCompatibleMedia =
+			hasLazyLoad || hasRightClick || hasDragToSave;
+
+		useEffect( () => {
+			if (
+				didInitializeDefaults.current ||
+				! isCurrentPostLoaded ||
+				hasSavedCompatibleMedia ||
+				! hasCompatibleMedia ||
+				! meta ||
+				meta.fbksPageMediaDefaultsInitialized
+			) {
+				return;
+			}
+
+			const defaults = getPageMediaDefaults();
+			didInitializeDefaults.current = true;
+			setMeta( {
+				...meta,
+				fbksLazyLoad: defaults.lazyLoad,
+				fbksDisableRightClick: defaults.disableRightClick,
+				fbksDisableDragToSave: defaults.disableDragToSave,
+				fbksPageMediaDefaultsInitialized: true,
+			} );
+		}, [
+			hasCompatibleMedia,
+			hasSavedCompatibleMedia,
+			isCurrentPostLoaded,
+			meta,
+			setMeta,
+		] );
 
 		useEffect( () => {
 			if ( password ) {
@@ -228,7 +284,11 @@
 		}
 
 		const updateMeta = ( key, value ) => {
-			setMeta( { ...meta, [ key ]: !! value } );
+			setMeta( {
+				...meta,
+				[ key ]: !! value,
+				fbksPageMediaDefaultsInitialized: true,
+			} );
 		};
 		const controls = [];
 		const panelTitle =

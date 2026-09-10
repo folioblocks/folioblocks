@@ -7,6 +7,42 @@ if (! defined('FBKS_WATERMARK_SETTINGS_OPTION')) {
 	define('FBKS_WATERMARK_SETTINGS_OPTION', 'fbks_watermark_settings');
 }
 
+if (! defined('FBKS_PAGE_MEDIA_DEFAULTS_OPTION')) {
+	define('FBKS_PAGE_MEDIA_DEFAULTS_OPTION', 'fbks_page_media_defaults');
+}
+
+if (! function_exists('fbks_get_page_media_defaults')) {
+	function fbks_get_page_media_defaults()
+	{
+		$defaults = array(
+			'lazyLoad'          => false,
+			'disableRightClick' => false,
+			'disableDragToSave' => false,
+		);
+		$settings = get_option(FBKS_PAGE_MEDIA_DEFAULTS_OPTION, array());
+		$settings = is_array($settings) ? wp_parse_args($settings, $defaults) : $defaults;
+
+		return array(
+			'lazyLoad'          => ! empty($settings['lazyLoad']),
+			'disableRightClick' => ! empty($settings['disableRightClick']),
+			'disableDragToSave' => ! empty($settings['disableDragToSave']),
+		);
+	}
+}
+
+if (! function_exists('fbks_sanitize_page_media_defaults')) {
+	function fbks_sanitize_page_media_defaults($settings)
+	{
+		$settings = is_array($settings) ? $settings : array();
+
+		return array(
+			'lazyLoad'          => fbks_sanitize_watermark_checkbox($settings['lazyLoad'] ?? false),
+			'disableRightClick' => fbks_sanitize_watermark_checkbox($settings['disableRightClick'] ?? false),
+			'disableDragToSave' => fbks_sanitize_watermark_checkbox($settings['disableDragToSave'] ?? false),
+		);
+	}
+}
+
 if (! function_exists('fbks_get_watermark_item_defaults')) {
 	function fbks_get_watermark_item_defaults()
 	{
@@ -444,10 +480,11 @@ if (! function_exists('fbks_render_global_settings_page')) {
 		if (
 			isset($_SERVER['REQUEST_METHOD']) &&
 			'POST' === strtoupper(sanitize_text_field(wp_unslash($_SERVER['REQUEST_METHOD']))) &&
-			isset($_POST['fbks_watermarks'], $_POST['fbks_social_sharing'], $_POST['fbks_proofing']) &&
+			isset($_POST['fbks_watermarks'], $_POST['fbks_social_sharing'], $_POST['fbks_proofing'], $_POST['fbks_page_media_defaults']) &&
 			is_array($_POST['fbks_watermarks']) &&
 			is_array($_POST['fbks_social_sharing']) &&
-			is_array($_POST['fbks_proofing'])
+			is_array($_POST['fbks_proofing']) &&
+			is_array($_POST['fbks_page_media_defaults'])
 		) {
 			$raw_watermark_settings = wp_unslash($_POST['fbks_watermarks']);
 			$settings = fbks_sanitize_watermark_settings($raw_watermark_settings);
@@ -461,6 +498,8 @@ if (! function_exists('fbks_render_global_settings_page')) {
 				$proofing_settings = fbks_sanitize_proofing_settings(wp_unslash($_POST['fbks_proofing']));
 				update_option(FBKS_PROOFING_SETTINGS_OPTION, $proofing_settings);
 			}
+			$page_media_defaults = fbks_sanitize_page_media_defaults(wp_unslash($_POST['fbks_page_media_defaults']));
+			update_option(FBKS_PAGE_MEDIA_DEFAULTS_OPTION, $page_media_defaults);
 			$notice = __('Global settings saved.', 'folioblocks');
 		}
 
@@ -480,6 +519,7 @@ if (! function_exists('fbks_render_global_settings_page')) {
 		$social_services = function_exists('fbks_get_social_share_services')
 			? fbks_get_social_share_services()
 			: array();
+		$page_media_defaults = fbks_get_page_media_defaults();
 		?>
 		<div class="pb-wrap">
 			<div class="pb-settings-header">
@@ -497,6 +537,40 @@ if (! function_exists('fbks_render_global_settings_page')) {
 				<div class="settings-left">
 					<form method="post" action="<?php echo esc_url(admin_url('admin.php?page=folioblocks-global-settings')); ?>">
 						<?php fbks_render_admin_nonce_field('global-settings'); ?>
+
+						<div class="pb-dashboard-box pb-global-settings-panel">
+							<h2><?php esc_html_e('Page/Post Defaults', 'folioblocks'); ?></h2>
+							<p>
+								<?php esc_html_e('Set the starting Page/Post Settings used when compatible FolioBlocks content is first added. These defaults can be overridden on each page or post and do not change existing FolioBlocks content.', 'folioblocks'); ?>
+							</p>
+
+							<label class="pb-settings-toggle">
+								<input type="hidden" name="fbks_page_media_defaults[lazyLoad]" value="0" />
+								<input type="checkbox" name="fbks_page_media_defaults[lazyLoad]" value="1" <?php checked($page_media_defaults['lazyLoad']); ?> />
+								<span class="pb-settings-toggle-copy">
+									<span><?php esc_html_e('Enable Lazy Load of Images', 'folioblocks'); ?></span>
+									<span class="pb-settings-field-help"><?php esc_html_e('Lazy load compatible FolioBlocks images and thumbnails by default.', 'folioblocks'); ?></span>
+								</span>
+							</label>
+
+							<label class="pb-settings-toggle">
+								<input type="hidden" name="fbks_page_media_defaults[disableRightClick]" value="0" />
+								<input type="checkbox" name="fbks_page_media_defaults[disableRightClick]" value="1" <?php checked($page_media_defaults['disableRightClick']); ?> />
+								<span class="pb-settings-toggle-copy">
+									<span><?php esc_html_e('Disable Right-Click on Page/Post', 'folioblocks'); ?></span>
+									<span class="pb-settings-field-help"><?php esc_html_e('Prevent right-clicking on compatible FolioBlocks media by default.', 'folioblocks'); ?></span>
+								</span>
+							</label>
+
+							<label class="pb-settings-toggle">
+								<input type="hidden" name="fbks_page_media_defaults[disableDragToSave]" value="0" />
+								<input type="checkbox" name="fbks_page_media_defaults[disableDragToSave]" value="1" <?php checked($page_media_defaults['disableDragToSave']); ?> />
+								<span class="pb-settings-toggle-copy">
+									<span><?php esc_html_e('Disable Drag To Save', 'folioblocks'); ?></span>
+									<span class="pb-settings-field-help"><?php esc_html_e('Prevent dragging compatible FolioBlocks images by default.', 'folioblocks'); ?></span>
+								</span>
+							</label>
+						</div>
 
 						<div class="pb-dashboard-box pb-global-settings-panel">
 							<h2><?php esc_html_e('Social Sharing', 'folioblocks'); ?></h2>

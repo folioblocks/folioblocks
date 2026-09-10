@@ -35,7 +35,7 @@ The free version includes the core gallery and media blocks. **FolioBlocks Pro**
 * **Modular Gallery Block (Pro Only)** – Build custom, magazine-style image layouts with support for nested rows and image stacks
 * **Proofing Gallery Block (Business & Agency Plans Only)** - Let clients review private galleries, save progress, submit selections, flag favorites, and leave comments
 * **Video Block** - Display a single video with custom thumbnail, lightbox playback, captions, and optional WooCommerce linking
-* **Video Gallery Block** – Showcase YouTube, Vimeo, or self-hosted videos, with Pro support for Bunny.net Stream, Cloudflare Stream, DailyMotion, Loom, VideoPress, and Wistia
+* **Video Gallery Block** – Showcase YouTube, Vimeo, or self-hosted videos, with Pro support for Bunny.net Stream, Cloudflare Stream, DailyMotion, Livid, Loom, VideoPress, and Wistia
 
 = Core Gallery Features =
 
@@ -51,7 +51,8 @@ The free version includes the core gallery and media blocks. **FolioBlocks Pro**
 * **Watermark overlays** for gallery images and lightbox views
 * **Social sharing controls** for lightboxes and hover overlays
 * **Lightbox image counters and zoom controls** with cursor or trackpad panning
-* **Advanced Pro video provider support** for Bunny.net Stream, Cloudflare Stream, DailyMotion, Loom, VideoPress, and Wistia
+* **Advanced Pro video provider support** for Bunny.net Stream, Cloudflare Stream, DailyMotion, Livid, Loom, VideoPress, and Wistia
+* **Global Page/Post media defaults** for lazy loading, right-click protection, and drag-to-save protection on newly added compatible FolioBlocks content, with per-Page/Post overrides
 * **Block transforms** to convert galleries and supported media blocks in one click
 * **Custom image click actions** for media files, custom URLs, Page/Post links, downloads, lightbox, and WooCommerce products
 * **Per-image click and hover overrides** inside galleries
@@ -134,6 +135,8 @@ No, the galleries will remain in place on your site. However, the **advanced lay
 
 = 1.5.1 =
 * Added: New Proofing Gallery admin bar component that displays status of Proofing Galleries in real time.
+* Added: Page/Post Settings defaults in Global Settings for lazy loading, right-click protection, and drag-to-save protection on newly added compatible FolioBlocks content, with per-Page/Post overrides.
+* Added: FolioBlocks Pro support for Livid watch and embed URLs in the Video Block and Video Gallery.
 * Fixed: Global Settings Watermarks rows on mobile now keep saved watermark Edit buttons right-aligned when space allows.
 * Fixed: Proofing Gallery Masonry filtering now reflows visible images on the front end instead of leaving gaps from hidden images.
 * Fixed: Posts and Pages admin lists no longer show stale Proofing Gallery statuses after a proofing gallery is removed or replaced.

@@ -822,7 +822,7 @@ function fbks_render_settings_page()
 							<li><?php esc_html_e('Advanced styling: borders, rounded corners, drop shadows, icon colors, overlay colors, typography, and control styling', 'folioblocks'); ?></li>
 							<li><?php esc_html_e('EXIF metadata support in overlays/lightboxes plus media-library metadata sync', 'folioblocks'); ?></li>
 							<li><?php esc_html_e('Proofing workflow on Business/Agency: private client galleries, hearts, color flags, comments, filters, save/continue, submit, email notifications, admin session reports, and PDF export', 'folioblocks'); ?></li>
-							<li><?php esc_html_e('Additional video providers: Bunny Stream, Cloudflare Stream, DailyMotion, Loom, VideoPress, and Wistia', 'folioblocks'); ?></li>
+							<li><?php esc_html_e('Additional video providers: Bunny Stream, Cloudflare Stream, DailyMotion, Livid, Loom, VideoPress, and Wistia', 'folioblocks'); ?></li>
 						</ul>
 						<p>
 							<?php esc_html_e('Purchase a license for FolioBlocks today and enjoy the best gallery plugin for modern WordPress and the block editor.', 'folioblocks'); ?>

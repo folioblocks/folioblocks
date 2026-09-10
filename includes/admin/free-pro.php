@@ -282,7 +282,7 @@ if (! function_exists('fbks_get_free_pro_sections')) {
 				'title' => __('Video Block', 'folioblocks'),
 				'rows'  => array(
 					array('feature' => __('Support for Self-Hosted, YouTube, and Vimeo videos', 'folioblocks'), 'free' => '✅', 'pro' => '✅'),
-					array('feature' => __('Additional video providers: Bunny Stream, Cloudflare Stream, DailyMotion, Loom, VideoPress, and Wistia', 'folioblocks'), 'free' => '❌', 'pro' => '✅', 'free_unavailable' => true),
+					array('feature' => __('Additional video providers: Bunny Stream, Cloudflare Stream, DailyMotion, Livid, Loom, VideoPress, and Wistia', 'folioblocks'), 'free' => '❌', 'pro' => '✅', 'free_unavailable' => true),
 					array('feature' => __('Set Thumbnail Resolution & Aspect Ratio', 'folioblocks'), 'free' => '✅', 'pro' => '✅'),
 					array('feature' => __('Responsive Design Ready: Works on Desktop, Tablet, and Mobile', 'folioblocks'), 'free' => '✅', 'pro' => '✅'),
 					array('feature' => __('Block Transforms between compatible video blocks', 'folioblocks'), 'free' => '❌', 'pro' => '✅', 'free_unavailable' => true),
@@ -305,7 +305,7 @@ if (! function_exists('fbks_get_free_pro_sections')) {
 				'title' => __('Video Gallery Block', 'folioblocks'),
 				'rows'  => array(
 					array('feature' => __('Support for Self-Hosted, YouTube, and Vimeo videos', 'folioblocks'), 'free' => '✅', 'pro' => '✅'),
-					array('feature' => __('Additional video providers: Bunny Stream, Cloudflare Stream, DailyMotion, Loom, VideoPress, and Wistia', 'folioblocks'), 'free' => '❌', 'pro' => '✅', 'free_unavailable' => true),
+					array('feature' => __('Additional video providers: Bunny Stream, Cloudflare Stream, DailyMotion, Livid, Loom, VideoPress, and Wistia', 'folioblocks'), 'free' => '❌', 'pro' => '✅', 'free_unavailable' => true),
 					array('feature' => __('Set Thumbnail Resolution & Aspect Ratio', 'folioblocks'), 'free' => '✅', 'pro' => '✅'),
 					array('feature' => __('Responsive Design Ready: Works on Desktop, Tablet, and Mobile', 'folioblocks'), 'free' => '✅', 'pro' => '✅'),
 					array('feature' => __('Drag & Drop Video Re-Ordering', 'folioblocks'), 'free' => '✅', 'pro' => '✅'),

@@ -7,6 +7,7 @@
  * - Bunny.net Stream (embed/play URLs)
  * - Cloudflare Stream
  * - DailyMotion
+ * - Livid
  * - Loom
  * - VideoPress
  * - Wistia
@@ -20,6 +21,7 @@ const PREMIUM_IFRAME_PROVIDERS = [
 	'bunny',
 	'wistia',
 	'dailymotion',
+	'livid',
 	'videopress',
 	'loom',
 	'cloudflare',
@@ -32,6 +34,7 @@ const PROVIDER_LABELS = {
 	bunny: 'Bunny Stream',
 	cloudflare: 'Cloudflare Stream',
 	dailymotion: 'DailyMotion',
+	livid: 'Livid',
 	loom: 'Loom',
 	videopress: 'VideoPress',
 	wistia: 'Wistia',
@@ -228,6 +231,19 @@ const getLoomId = ( parsedUrl ) => {
 	return '';
 };
 
+const getLividId = ( parsedUrl ) => {
+	const parts = getPathParts( parsedUrl );
+	const markerIndex = parts.findIndex( ( part ) =>
+		[ 'embed', 'watch' ].includes( part )
+	);
+
+	if ( markerIndex !== -1 && parts[ markerIndex + 1 ] ) {
+		return cleanId( parts[ markerIndex + 1 ] );
+	}
+
+	return '';
+};
+
 const getCloudflareStreamId = ( parsedUrl ) => {
 	const parts = getPathParts( parsedUrl );
 	const host = ( parsedUrl.hostname || '' ).toLowerCase();
@@ -314,6 +330,20 @@ export const getVideoProviderData = ( videoUrl, options = {} ) => {
 		if ( videoId && EMBED_ID_FALLBACK.test( videoId ) ) {
 			return maybeGatePremiumProvider(
 				{ provider: 'dailymotion', videoId, parsedUrl },
+				options
+			);
+		}
+	}
+
+	if ( host === 'livid.com' || host === 'www.livid.com' ) {
+		const videoId = getLividId( parsedUrl );
+		if ( videoId && EMBED_ID_FALLBACK.test( videoId ) ) {
+			return maybeGatePremiumProvider(
+				{
+					provider: 'livid',
+					videoId,
+					parsedUrl,
+				},
 				options
 			);
 		}
@@ -451,6 +481,18 @@ export const getVideoIframeSrc = (
 		copySearchParams( data.parsedUrl, embedUrl );
 		if ( autoplay ) {
 			embedUrl.searchParams.set( 'autoplay', '1' );
+		}
+		return embedUrl.toString();
+	}
+
+	if ( data.provider === 'livid' ) {
+		const embedUrl = new URL( `https://livid.com/embed/${ data.videoId }` );
+		copySearchParams( data.parsedUrl, embedUrl );
+		if ( autoplay ) {
+			embedUrl.searchParams.set( 'autoplay', 'true' );
+		}
+		if ( data.parsedUrl?.hash ) {
+			embedUrl.hash = data.parsedUrl.hash;
 		}
 		return embedUrl.toString();
 	}

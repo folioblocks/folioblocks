@@ -144,6 +144,11 @@ if (function_exists('fbks_fs')) {
                     'watermarks'     => function_exists('fbks_get_watermark_settings') ? fbks_get_watermark_settings() : array('items' => array()),
                     'socialSharing'  => function_exists('fbks_get_social_sharing_settings') ? fbks_get_social_sharing_settings() : array('sources' => array()),
                     'proofing'       => function_exists('fbks_get_proofing_settings') ? fbks_get_proofing_settings() : array('emailAdminOnSubmit' => false),
+                    'pageMediaDefaults' => function_exists('fbks_get_page_media_defaults') ? fbks_get_page_media_defaults() : array(
+                        'lazyLoad'          => false,
+                        'disableRightClick' => false,
+                        'disableDragToSave' => false,
+                    ),
                 ];
             }
 
@@ -260,6 +265,7 @@ if (function_exists('fbks_fs')) {
             register_post_meta($post_type, 'fbksLazyLoad', $meta_args);
             register_post_meta($post_type, 'fbksDisableRightClick', $meta_args);
             register_post_meta($post_type, 'fbksDisableDragToSave', $meta_args);
+            register_post_meta($post_type, 'fbksPageMediaDefaultsInitialized', $meta_args);
         }
     }
     add_action('init', 'fbks_register_page_media_settings_meta');

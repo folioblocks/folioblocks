@@ -274,6 +274,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 		isYouTubeVideo ||
 		videoProvider === "vimeo" ||
 		videoProvider === "dailymotion" ||
+		videoProvider === "livid" ||
 		videoProvider === "videopress";
 	const videoEmbedPreview = useSelect(
 		(select) =>
@@ -713,14 +714,14 @@ export default function Edit({ attributes, setAttributes, context }) {
 				onChange={updateVideoUrl}
 				validate={isValidVideoUrl}
 				invalidHelp={__(
-					'Enter a valid YouTube, Vimeo, or self-hosted video URL. Bunny Stream, Cloudflare Stream, DailyMotion, Loom, VideoPress, and Wistia require FolioBlocks Pro.',
+					'Enter a valid YouTube, Vimeo, or self-hosted video URL. Bunny Stream, Cloudflare Stream, DailyMotion, Livid, Loom, VideoPress, and Wistia require FolioBlocks Pro.',
 					'folioblocks'
 				)}
 				help={
 					<>
 						{isPro
 							? __(
-								"Supports YouTube, Vimeo, Bunny Stream, Cloudflare Stream, DailyMotion, Loom, VideoPress, Wistia, or ",
+								"Supports YouTube, Vimeo, Bunny Stream, Cloudflare Stream, DailyMotion, Livid, Loom, VideoPress, Wistia, or ",
 								"folioblocks",
 							)
 							: __(

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FolioBlocks 1.5.1\n"
 "Report-Msgid-Bugs-To: https://folioblocks.com\n"
-"POT-Creation-Date: 2026-08-12 13:59:14+0000\n"
+"POT-Creation-Date: 2026-09-10 06:46:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -18,7 +18,7 @@ msgstr ""
 msgid "%1$sIf FolioBlocks has helped you create better galleries, would you mind leaving a review? Your feedback helps other photographers and potential users find the plugin and supports its continued development.%2$s%1$s%3$s &nbsp;&middot;&nbsp; %4$s &nbsp;&middot;&nbsp; %5$s%2$s"
 msgstr ""
 
-#: includes/pro/php/proofing-gallery.php:312
+#: includes/pro/php/proofing-gallery.php:485
 msgid "a client"
 msgstr ""
 
@@ -30,15 +30,15 @@ msgstr ""
 msgid "A container block capable of displaying a background video (Self-Hosted or Vimeo)."
 msgstr ""
 
-#: includes/pro/php/proofing-gallery.php:315
+#: includes/pro/php/proofing-gallery.php:488
 msgid "A proofing gallery session has been submitted."
 msgstr ""
 
-#: includes/pro/php/proofing-gallery.php:700
+#: includes/pro/php/proofing-gallery.php:884
 msgid "A proofing session is active or unfinished. Avoid updating this page until the client submits their selections."
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:436
+#: includes/pro/admin/proofing-sessions.php:460 includes/pro/admin/proofing-sessions.php:483
 msgid "Actions"
 msgstr ""
 
@@ -90,7 +90,7 @@ msgstr ""
 msgid "Add Images"
 msgstr ""
 
-#: src/pb-video-block/edit.js:1051 src/video-gallery-block/edit.js:660
+#: src/pb-video-block/edit.js:1052 src/video-gallery-block/edit.js:660
 msgid "Add product and cart actions."
 msgstr ""
 
@@ -118,7 +118,7 @@ msgstr ""
 msgid "Add to Image Stack"
 msgstr ""
 
-#: src/pb-video-block/edit.js:1176
+#: src/pb-video-block/edit.js:1177
 msgid "Add Video"
 msgstr ""
 
@@ -126,12 +126,12 @@ msgstr ""
 msgid "Add Videos"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:360
+#: includes/pro/admin/global-settings.php:396
 msgid "Add Watermark"
 msgstr ""
 
 #: includes/admin/free-pro.php:285 includes/admin/free-pro.php:308 includes/admin/settings-page.php:825
-msgid "Additional video providers: Bunny Stream, Cloudflare Stream, DailyMotion, Loom, VideoPress, and Wistia"
+msgid "Additional video providers: Bunny Stream, Cloudflare Stream, DailyMotion, Livid, Loom, VideoPress, and Wistia"
 msgstr ""
 
 #: src/pb-helpers/imageHoverActionPremiumControls.js:101
@@ -206,15 +206,19 @@ msgstr ""
 msgid "After Image"
 msgstr ""
 
+#: includes/admin/free-pro.php:395
+msgid "Agency"
+msgstr ""
+
 #: includes/admin/free-pro.php:270
 msgid "Alignment & Style Controls for Save & Continue and Submit buttons"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:409 includes/pro/php/filter-helpers.php:38 src/pb-helpers/filteringPremiumControls.js:226
+#: includes/pro/admin/proofing-sessions.php:433 includes/pro/php/filter-helpers.php:38 src/pb-helpers/filteringPremiumControls.js:226
 msgid "All"
 msgstr ""
 
-#: src/proofing-gallery-block/edit.js:52 src/proofing-gallery-block/render.php:78
+#: src/proofing-gallery-block/edit.js:52 src/proofing-gallery-block/render.php:80
 msgid "All Images"
 msgstr ""
 
@@ -230,7 +234,7 @@ msgstr ""
 msgid "Always"
 msgstr ""
 
-#: src/pb-video-block/edit.js:1007 src/video-gallery-block/edit.js:605
+#: src/pb-video-block/edit.js:1008 src/video-gallery-block/edit.js:605
 msgid "Always Display Overlay"
 msgstr ""
 
@@ -262,7 +266,7 @@ msgstr ""
 msgid "Assign multiple categories to videos."
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:555
+#: includes/pro/admin/proofing-sessions.php:571
 msgid "Attachment #%d"
 msgstr ""
 
@@ -398,12 +402,16 @@ msgstr ""
 msgid "Bottom Gradient Overlay"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:234 includes/pro/admin/global-settings.php:627
+#: includes/pro/admin/global-settings.php:270 includes/pro/admin/global-settings.php:714
 msgid "Bottom Left"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:235 includes/pro/admin/global-settings.php:628
+#: includes/pro/admin/global-settings.php:271 includes/pro/admin/global-settings.php:715
 msgid "Bottom Right"
+msgstr ""
+
+#: includes/admin/free-pro.php:394
+msgid "Business"
 msgstr ""
 
 #: includes/admin/settings-page.php:754
@@ -446,7 +454,7 @@ msgstr ""
 msgid "Carousel Styles"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:231 includes/pro/admin/global-settings.php:624 src/carousel-gallery-block/premium.js:154 src/pb-before-after-block/premium.js:75 src/pb-before-after-block/premium.js:92 src/pb-helpers/filteringPremiumControls.js:168 src/proofing-gallery-block/edit.js:179
+#: includes/pro/admin/global-settings.php:267 includes/pro/admin/global-settings.php:711 src/carousel-gallery-block/premium.js:154 src/pb-before-after-block/premium.js:75 src/pb-before-after-block/premium.js:92 src/pb-helpers/filteringPremiumControls.js:168 src/proofing-gallery-block/edit.js:179
 msgid "Center"
 msgstr ""
 
@@ -466,11 +474,11 @@ msgstr ""
 msgid "Change the shape of the Loupe."
 msgstr ""
 
-#: src/pb-video-block/edit.js:702 src/pb-video-block/edit.js:802 src/pb-video-block/edit.js:806
+#: src/pb-video-block/edit.js:703 src/pb-video-block/edit.js:803 src/pb-video-block/edit.js:807
 msgid "Change Thumbnail"
 msgstr ""
 
-#: src/pb-video-block/edit.js:782 src/pb-video-block/edit.js:786
+#: src/pb-video-block/edit.js:783 src/pb-video-block/edit.js:787
 msgid "Change Video"
 msgstr ""
 
@@ -494,7 +502,7 @@ msgstr ""
 msgid "Choose a drop shadow style for the %s."
 msgstr ""
 
-#: src/pb-video-block/edit.js:902 src/video-gallery-block/edit.js:522
+#: src/pb-video-block/edit.js:903 src/video-gallery-block/edit.js:522
 msgid "Choose a light or dark appearance."
 msgstr ""
 
@@ -514,7 +522,7 @@ msgstr ""
 msgid "Choose gradient, blur, color, or chip hover styles."
 msgstr ""
 
-#: src/pb-video-block/edit.js:952 src/video-gallery-block/edit.js:554
+#: src/pb-video-block/edit.js:953 src/video-gallery-block/edit.js:554
 msgid "Choose gradient, blur, or color hover styles."
 msgstr ""
 
@@ -558,7 +566,7 @@ msgstr ""
 msgid "Choose the hover overlay style."
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:503
+#: includes/pro/admin/global-settings.php:578
 msgid "Choose up to 5 social sharing sources used when Social Media is selected for lightbox or overlay content."
 msgstr ""
 
@@ -646,7 +654,11 @@ msgstr ""
 msgid "Clear"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:432 includes/pro/admin/proofing-sessions.php:454 includes/pro/php/proofing-gallery.php:694
+#: includes/pro/admin/proofing-admin-bar.php:266
+msgid "Clear Submitted Sessions"
+msgstr ""
+
+#: includes/pro/admin/proofing-admin-bar.php:254 includes/pro/admin/proofing-sessions.php:456 includes/pro/admin/proofing-sessions.php:477 includes/pro/php/proofing-gallery.php:878
 msgid "Client"
 msgstr ""
 
@@ -662,15 +674,15 @@ msgstr ""
 msgid "Client Proofing Tools: Hearts, Color Flags, and Image Comments"
 msgstr ""
 
-#: includes/pro/php/proofing-gallery.php:319
+#: includes/pro/php/proofing-gallery.php:492
 msgid "Client: %s"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:585 src/pb-video-block/render.php:341
+#: includes/pro/admin/global-settings.php:672 src/pb-video-block/render.php:341
 msgid "Close"
 msgstr ""
 
-#: src/pb-video-block/edit.js:1273
+#: src/pb-video-block/edit.js:1274
 msgid "Close lightbox"
 msgstr ""
 
@@ -698,7 +710,7 @@ msgstr ""
 msgid "Columns"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:524 src/pb-image-block/edit.js:419 src/pb-image-block/edit.js:425 src/pb-image-block/render.php:768
+#: includes/pro/admin/proofing-sessions.php:540 includes/pro/admin/proofing-sessions.php:582 src/pb-image-block/edit.js:419 src/pb-image-block/edit.js:425 src/pb-image-block/render.php:768
 msgid "Comment"
 msgstr ""
 
@@ -706,19 +718,19 @@ msgstr ""
 msgid "Comment on image"
 msgstr ""
 
-#: src/proofing-gallery-block/edit.js:73 src/proofing-gallery-block/render.php:115
+#: src/proofing-gallery-block/edit.js:73 src/proofing-gallery-block/render.php:117
 msgid "Commented"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:377
+#: includes/pro/admin/proofing-sessions.php:401
 msgid "Comments"
 msgstr ""
 
-#: includes/admin/free-pro.php:373
+#: includes/admin/free-pro.php:384
 msgid "Compare Features"
 msgstr ""
 
-#: includes/admin/free-pro.php:374
+#: includes/admin/free-pro.php:385
 msgid "Compare the features to find the best option for your website."
 msgstr ""
 
@@ -730,7 +742,7 @@ msgstr ""
 msgid "Control filter-bar typography."
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:520
+#: includes/pro/admin/global-settings.php:595
 msgid "Control how long proofing sessions are stored and whether admins are notified when clients submit selections."
 msgstr ""
 
@@ -802,7 +814,7 @@ msgstr ""
 msgid "Customize filter-bar typography and colors."
 msgstr ""
 
-#: src/pb-video-block/edit.js:953 src/video-gallery-block/edit.js:555
+#: src/pb-video-block/edit.js:954 src/video-gallery-block/edit.js:555
 msgid "Customize overlay and play-button colors."
 msgstr ""
 
@@ -810,7 +822,7 @@ msgstr ""
 msgid "Customize overlay colors."
 msgstr ""
 
-#: src/pb-video-block/edit.js:904 src/video-gallery-block/edit.js:524
+#: src/pb-video-block/edit.js:905 src/video-gallery-block/edit.js:524
 msgid "Customize the information shown in the lightbox."
 msgstr ""
 
@@ -822,7 +834,7 @@ msgstr ""
 msgid "Dark"
 msgstr ""
 
-#: folioblocks.php:477 folioblocks.php:478 includes/admin/settings-page.php:524
+#: folioblocks.php:483 folioblocks.php:484 includes/admin/settings-page.php:524
 msgid "Dashboard"
 msgstr ""
 
@@ -846,7 +858,7 @@ msgstr ""
 msgid "Default Product Link Behavior"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:364 src/pb-helpers/watermarkOverlayControls.js:332
+#: includes/pro/admin/global-settings.php:400 src/pb-helpers/watermarkOverlayControls.js:332
 msgid "Default Watermark"
 msgstr ""
 
@@ -858,7 +870,7 @@ msgstr ""
 msgid "Delete this proofing session permanently? This only deletes the saved proofing results, not the Media Library images."
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:427
+#: includes/pro/admin/global-settings.php:463
 msgid "Delete this watermark"
 msgstr ""
 
@@ -870,7 +882,7 @@ msgstr ""
 msgid "Desaturate"
 msgstr ""
 
-#: src/pb-video-block/edit.js:765
+#: src/pb-video-block/edit.js:766
 msgid "Description"
 msgstr ""
 
@@ -878,7 +890,11 @@ msgstr ""
 msgid "Desktop"
 msgstr ""
 
-#: includes/pro/js/page-media-settings.js:336
+#: includes/pro/admin/proofing-sessions.php:344
+msgid "Detached from current page content"
+msgstr ""
+
+#: includes/pro/admin/global-settings.php:569 includes/pro/js/page-media-settings.js:430
 msgid "Disable Drag To Save"
 msgstr ""
 
@@ -894,12 +910,16 @@ msgstr ""
 msgid "Disable right-click on compatible FolioBlocks media."
 msgstr ""
 
-#: src/pb-helpers/imageProFeatureNotices.js:98 src/pb-helpers/specialistProFeatureNotices.js:74 src/pb-video-block/edit.js:1098 src/video-gallery-block/edit.js:679
+#: src/pb-helpers/imageProFeatureNotices.js:98 src/pb-helpers/specialistProFeatureNotices.js:74 src/pb-video-block/edit.js:1099 src/video-gallery-block/edit.js:679
 msgid "Disable right-click on displayed media."
 msgstr ""
 
-#: includes/pro/js/page-media-settings.js:320 src/background-video-block/premium.js:82 src/pb-before-after-block/premium.js:190 src/pb-loupe-block/premium.js:77 src/video-gallery-block/premium.js:183
+#: includes/pro/js/page-media-settings.js:414 src/background-video-block/premium.js:82 src/pb-before-after-block/premium.js:190 src/pb-loupe-block/premium.js:77 src/video-gallery-block/premium.js:183
 msgid "Disable Right-Click on Page"
+msgstr ""
+
+#: includes/pro/admin/global-settings.php:560
+msgid "Disable Right-Click on Page/Post"
 msgstr ""
 
 #: includes/admin/free-pro.php:18
@@ -938,11 +958,15 @@ msgstr ""
 msgid "Display Link Target Icon"
 msgstr ""
 
-#: src/pb-video-block/edit.js:1052 src/video-gallery-block/edit.js:661
+#: src/pb-video-block/edit.js:1053 src/video-gallery-block/edit.js:661
 msgid "Display product information with videos."
 msgstr ""
 
-#: src/pb-video-block/edit.js:903
+#: includes/pro/admin/global-settings.php:626
+msgid "Display the Proofing Gallery Block's status component in the Admin bar and see in real time when clients are interacting the proofing galleries."
+msgstr ""
+
+#: src/pb-video-block/edit.js:904
 msgid "Display the video title and description."
 msgstr ""
 
@@ -1038,7 +1062,7 @@ msgstr ""
 msgid "Drop Shadow Effects on Video Thumbnails (Subtle, Soft, Elevated, & Dramatic)"
 msgstr ""
 
-#: src/pb-video-block/edit.js:1037 src/video-gallery-block/edit.js:646
+#: src/pb-video-block/edit.js:1038 src/video-gallery-block/edit.js:646
 msgid "E-Commerce Settings"
 msgstr ""
 
@@ -1046,7 +1070,7 @@ msgstr ""
 msgid "E-Commerce Styles"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:338
+#: includes/pro/admin/global-settings.php:374
 msgid "Edit"
 msgstr ""
 
@@ -1066,12 +1090,12 @@ msgstr ""
 msgid "Elevated"
 msgstr ""
 
-#: src/proofing-gallery-block/edit.js:1107
-msgid "Email site admin on Submit"
+#: includes/pro/admin/global-settings.php:616
+msgid "Email admin when session is submitted"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:540
-msgid "Email site admin when a proofing session is submitted"
+#: src/proofing-gallery-block/edit.js:1107
+msgid "Email site admin on Submit"
 msgstr ""
 
 #: src/carousel-gallery-block/premium.js:61 src/filmstrip-gallery-block/premium.js:170
@@ -1114,7 +1138,7 @@ msgstr ""
 msgid "Enable image filtering with categories."
 msgstr ""
 
-#: includes/pro/js/page-media-settings.js:305 src/pb-before-after-block/premium.js:212 src/pb-video-block/premium.js:709 src/video-gallery-block/premium.js:200
+#: includes/pro/admin/global-settings.php:551 includes/pro/js/page-media-settings.js:399 src/pb-before-after-block/premium.js:212 src/pb-video-block/premium.js:709 src/video-gallery-block/premium.js:200
 msgid "Enable Lazy Load of Images"
 msgstr ""
 
@@ -1122,7 +1146,7 @@ msgstr ""
 msgid "Enable Lightbox"
 msgstr ""
 
-#: includes/admin/free-pro.php:294 includes/admin/free-pro.php:320 src/pb-video-block/edit.js:915 src/video-gallery-block/edit.js:531
+#: includes/admin/free-pro.php:294 includes/admin/free-pro.php:320 src/pb-video-block/edit.js:916 src/video-gallery-block/edit.js:531
 msgid "Enable Lightbox in Editor"
 msgstr ""
 
@@ -1130,7 +1154,7 @@ msgstr ""
 msgid "Enable Lightbox Zoom"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:553
+#: includes/pro/admin/global-settings.php:640
 msgid "Enable the default watermark for new compatible blocks"
 msgstr ""
 
@@ -1162,12 +1186,16 @@ msgstr ""
 msgid "Enjoying FolioBlocks?"
 msgstr ""
 
-#: src/proofing-gallery-block/render.php:235
+#: src/proofing-gallery-block/render.php:237
 msgid "Enter"
 msgstr ""
 
-#: includes/pro/js/page-media-settings.js:255
+#: includes/pro/js/page-media-settings.js:331
 msgid "Enter a password to protect this page."
+msgstr ""
+
+#: includes/pro/js/page-media-settings.js:336
+msgid "Enter a password to protect this post."
 msgstr ""
 
 #: src/proofing-gallery-block/edit.js:866
@@ -1178,8 +1206,8 @@ msgstr ""
 msgid "Enter a valid URL beginning with http:// or https://."
 msgstr ""
 
-#: src/pb-video-block/edit.js:715
-msgid "Enter a valid YouTube, Vimeo, or self-hosted video URL. Bunny Stream, Cloudflare Stream, DailyMotion, Loom, VideoPress, and Wistia require FolioBlocks Pro."
+#: src/pb-video-block/edit.js:716
+msgid "Enter a valid YouTube, Vimeo, or self-hosted video URL. Bunny Stream, Cloudflare Stream, DailyMotion, Livid, Loom, VideoPress, and Wistia require FolioBlocks Pro."
 msgstr ""
 
 #: src/pb-image-block/premium.js:347
@@ -1274,11 +1302,11 @@ msgstr ""
 msgid "Filter Proofing Galleries by selected liked images, commented images, and/or flag colors"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:523
+#: includes/pro/admin/proofing-sessions.php:539 includes/pro/admin/proofing-sessions.php:575
 msgid "Flag"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:376
+#: includes/pro/admin/proofing-sessions.php:400
 msgid "Flagged"
 msgstr ""
 
@@ -1294,7 +1322,7 @@ msgstr ""
 msgid "Focal Point Y (Up - Down)"
 msgstr ""
 
-#: folioblocks.php:193 folioblocks.php:467 folioblocks.php:468 includes/admin/free-pro.php:366 includes/admin/free-pro.php:367 includes/admin/settings-page.php:523 includes/admin/settings-page.php:524 includes/admin/system-info.php:262 includes/admin/system-info.php:264 includes/pro/admin/global-settings.php:485 includes/pro/admin/global-settings.php:486 includes/pro/admin/proofing-sessions.php:388
+#: folioblocks.php:198 folioblocks.php:473 folioblocks.php:474 includes/admin/free-pro.php:377 includes/admin/free-pro.php:378 includes/admin/settings-page.php:523 includes/admin/settings-page.php:524 includes/admin/system-info.php:262 includes/admin/system-info.php:264 includes/pro/admin/global-settings.php:526 includes/pro/admin/global-settings.php:527 includes/pro/admin/proofing-sessions.php:412
 msgid "FolioBlocks"
 msgstr ""
 
@@ -1310,11 +1338,15 @@ msgstr ""
 msgid "Folioblocks loading"
 msgstr ""
 
-#: includes/pro/js/page-media-settings.js:353
+#: includes/pro/js/page-media-settings.js:297
 msgid "FolioBlocks Page Settings"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:389
+#: includes/pro/js/page-media-settings.js:296
+msgid "FolioBlocks Post Settings"
+msgstr ""
+
+#: includes/pro/admin/proofing-sessions.php:413
 msgid "FolioBlocks Pro - Proofing Sessions"
 msgstr ""
 
@@ -1326,11 +1358,11 @@ msgstr ""
 msgid "Font Size"
 msgstr ""
 
-#: includes/admin/free-pro.php:381
+#: includes/admin/free-pro.php:392
 msgid "Free"
 msgstr ""
 
-#: folioblocks.php:506 folioblocks.php:507 includes/admin/free-pro.php:367 includes/admin/settings-page.php:835
+#: folioblocks.php:512 folioblocks.php:513 includes/admin/free-pro.php:378 includes/admin/settings-page.php:835
 msgid "Free vs Pro"
 msgstr ""
 
@@ -1438,7 +1470,7 @@ msgstr ""
 msgid "Glare"
 msgstr ""
 
-#: folioblocks.php:486 folioblocks.php:487 includes/pro/admin/global-settings.php:486
+#: folioblocks.php:492 folioblocks.php:493 includes/pro/admin/global-settings.php:527
 msgid "Global Settings"
 msgstr ""
 
@@ -1446,7 +1478,7 @@ msgstr ""
 msgid "Global Settings for reusable watermarks, social sharing sources, and proofing behavior"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:464
+#: includes/pro/admin/global-settings.php:503
 msgid "Global settings saved."
 msgstr ""
 
@@ -1462,7 +1494,7 @@ msgstr ""
 msgid "Green"
 msgstr ""
 
-#: src/pb-image-block/render.php:746 src/proofing-gallery-block/edit.js:67 src/proofing-gallery-block/render.php:106
+#: src/pb-image-block/render.php:746 src/proofing-gallery-block/edit.js:67 src/proofing-gallery-block/render.php:108
 msgid "Green Flag"
 msgstr ""
 
@@ -1490,11 +1522,11 @@ msgstr ""
 msgid "Groups images into a single row, scaling them to fill the full width without cropping."
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:522
+#: includes/pro/admin/proofing-sessions.php:538 includes/pro/admin/proofing-sessions.php:574
 msgid "Heart"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:375 src/proofing-gallery-block/edit.js:53 src/proofing-gallery-block/render.php:86
+#: includes/pro/admin/proofing-sessions.php:399 src/proofing-gallery-block/edit.js:53 src/proofing-gallery-block/render.php:88
 msgid "Hearted"
 msgstr ""
 
@@ -1574,7 +1606,7 @@ msgstr ""
 msgid "Icon"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:520 src/pb-helpers/ImageStyleControl.js:31
+#: includes/pro/admin/proofing-sessions.php:536 includes/pro/admin/proofing-sessions.php:552 src/pb-helpers/ImageStyleControl.js:31
 msgid "Image"
 msgstr ""
 
@@ -1630,7 +1662,7 @@ msgstr ""
 msgid "Image Hover Styles"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:521
+#: includes/pro/admin/proofing-sessions.php:537 includes/pro/admin/proofing-sessions.php:568
 msgid "Image ID"
 msgstr ""
 
@@ -1658,7 +1690,7 @@ msgstr ""
 msgid "Image Title"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:374
+#: includes/pro/admin/proofing-sessions.php:398
 msgid "Images"
 msgstr ""
 
@@ -1674,11 +1706,11 @@ msgstr ""
 msgid "img"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:21 includes/pro/admin/proofing-sessions.php:50 includes/pro/admin/proofing-sessions.php:411 includes/pro/php/proofing-gallery.php:712 includes/pro/php/proofing-gallery.php:718
+#: includes/pro/admin/proofing-sessions.php:21 includes/pro/admin/proofing-sessions.php:50 includes/pro/admin/proofing-sessions.php:435 includes/pro/php/proofing-gallery.php:896 includes/pro/php/proofing-gallery.php:902
 msgid "In Progress"
 msgstr ""
 
-#: includes/pro/php/proofing-gallery.php:699
+#: includes/pro/php/proofing-gallery.php:883
 msgid "In session"
 msgstr ""
 
@@ -1694,7 +1726,7 @@ msgstr ""
 msgid "Inherit Gallery"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:401
+#: includes/pro/admin/global-settings.php:437
 msgid "Inset (% of short edge)"
 msgstr ""
 
@@ -1754,11 +1786,11 @@ msgstr ""
 msgid "Label Text Color"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:268
+#: includes/pro/admin/global-settings.php:304
 msgid "Landscape 3:2"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:263
+#: includes/pro/admin/global-settings.php:299
 msgid "Landscape 4:3"
 msgstr ""
 
@@ -1766,7 +1798,7 @@ msgstr ""
 msgid "Large"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:502
+#: includes/pro/admin/proofing-sessions.php:518
 msgid "Last updated: %s"
 msgstr ""
 
@@ -1774,7 +1806,11 @@ msgstr ""
 msgid "Latest News From FolioBlocks Website:"
 msgstr ""
 
-#: includes/pro/js/page-media-settings.js:308
+#: includes/pro/admin/global-settings.php:552
+msgid "Lazy load compatible FolioBlocks images and thumbnails by default."
+msgstr ""
+
+#: includes/pro/js/page-media-settings.js:402
 msgid "Lazy load compatible FolioBlocks images and thumbnails on this page."
 msgstr ""
 
@@ -1786,7 +1822,7 @@ msgstr ""
 msgid "Lazy-load gallery images."
 msgstr ""
 
-#: src/pb-video-block/edit.js:1099 src/video-gallery-block/edit.js:680
+#: src/pb-video-block/edit.js:1100 src/video-gallery-block/edit.js:680
 msgid "Lazy-load videos and thumbnails."
 msgstr ""
 
@@ -1898,7 +1934,7 @@ msgstr ""
 msgid "Link to media files, custom URLs, Pages, or Posts."
 msgstr ""
 
-#: src/pb-video-block/edit.js:1050 src/video-gallery-block/edit.js:659
+#: src/pb-video-block/edit.js:1051 src/video-gallery-block/edit.js:659
 msgid "Link videos to WooCommerce products."
 msgstr ""
 
@@ -2022,11 +2058,11 @@ msgstr ""
 msgid "Metadata Synchronization: Sync Image Metadata back to the WordPress Media Library"
 msgstr ""
 
-#: includes/pro/php/proofing-gallery.php:468
+#: includes/pro/php/proofing-gallery.php:641
 msgid "Missing page ID."
 msgstr ""
 
-#: includes/pro/php/proofing-gallery.php:359 includes/pro/php/proofing-gallery.php:408
+#: includes/pro/php/proofing-gallery.php:532 includes/pro/php/proofing-gallery.php:581
 msgid "Missing proofing gallery key."
 msgstr ""
 
@@ -2058,7 +2094,7 @@ msgstr ""
 msgid "Multiple Layout Options"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:373
+#: includes/pro/admin/global-settings.php:409
 msgid "Name"
 msgstr ""
 
@@ -2078,6 +2114,10 @@ msgstr ""
 msgid "Next thumbnail"
 msgstr ""
 
+#: includes/pro/admin/proofing-admin-bar.php:247
+msgid "No active proofing sessions"
+msgstr ""
+
 #: includes/admin/settings-page.php:898
 msgid "No changelog found in readme.txt."
 msgstr ""
@@ -2086,15 +2126,15 @@ msgstr ""
 msgid "No image selected."
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:515
+#: includes/pro/admin/proofing-sessions.php:531
 msgid "No image selections were saved for this session."
 msgstr ""
 
-#: folioblocks.php:589 includes/admin/settings-page.php:366
+#: folioblocks.php:596 includes/admin/settings-page.php:366
 msgid "No news items found right now. Please check back later."
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:426
+#: includes/pro/admin/proofing-sessions.php:450
 msgid "No proofing sessions found yet."
 msgstr ""
 
@@ -2102,7 +2142,7 @@ msgstr ""
 msgid "No saved watermarks are available. Create and save a watermark in FolioBlocks Global Settings before enabling watermarking."
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:563
+#: includes/pro/admin/global-settings.php:650
 msgid "No saved watermarks yet. Add your first watermark below."
 msgstr ""
 
@@ -2110,19 +2150,19 @@ msgstr ""
 msgid "No theme fonts found. Add font families in theme.json or Global Styles."
 msgstr ""
 
-#: src/pb-video-block/edit.js:1156
+#: src/pb-video-block/edit.js:1157
 msgid "No Thumbnail Selected"
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:598 src/filmstrip-gallery-block/edit.js:703 src/grid-gallery-block/edit.js:553 src/justified-gallery-block/edit.js:562 src/masonry-gallery-block/edit.js:561 src/modular-gallery-block/edit.js:880 src/pb-helpers/CompactColorControl.js:227 src/pb-helpers/ImageStyleControl.js:93 src/pb-helpers/imageClickActionPremiumControls.js:34 src/pb-helpers/imageClickActionPremiumControls.js:254 src/pb-helpers/imageClickActionPremiumControls.js:507 src/pb-helpers/imageHoverActionPremiumControls.js:13 src/pb-helpers/imageHoverActionPremiumControls.js:30 src/pb-helpers/watermarkOverlayControls.js:245 src/pb-image-block/edit.js:1012 src/pb-image-block/premium.js:610 src/pb-image-block/premium.js:690 src/pb-image-block/premium.js:1267 src/pb-video-block/edit.js:970 src/pb-video-block/premium.js:34 src/video-gallery-block/edit.js:572 src/video-gallery-block/premium.js:28
+#: src/carousel-gallery-block/edit.js:598 src/filmstrip-gallery-block/edit.js:703 src/grid-gallery-block/edit.js:553 src/justified-gallery-block/edit.js:562 src/masonry-gallery-block/edit.js:561 src/modular-gallery-block/edit.js:880 src/pb-helpers/CompactColorControl.js:227 src/pb-helpers/ImageStyleControl.js:93 src/pb-helpers/imageClickActionPremiumControls.js:34 src/pb-helpers/imageClickActionPremiumControls.js:254 src/pb-helpers/imageClickActionPremiumControls.js:507 src/pb-helpers/imageHoverActionPremiumControls.js:13 src/pb-helpers/imageHoverActionPremiumControls.js:30 src/pb-helpers/watermarkOverlayControls.js:245 src/pb-image-block/edit.js:1012 src/pb-image-block/premium.js:610 src/pb-image-block/premium.js:690 src/pb-image-block/premium.js:1267 src/pb-video-block/edit.js:971 src/pb-video-block/premium.js:34 src/video-gallery-block/edit.js:572 src/video-gallery-block/premium.js:28
 msgid "None"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:533
+#: includes/pro/admin/global-settings.php:608
 msgid "Number of days to keep submitted proofing sessions before cleanup."
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:527
+#: includes/pro/admin/global-settings.php:602
 msgid "Number of days to keep viewing and saved in-progress proofing sessions."
 msgstr ""
 
@@ -2134,11 +2174,11 @@ msgstr ""
 msgid "On Hover"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:391
+#: includes/pro/admin/global-settings.php:427
 msgid "Opacity"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:696
+#: includes/pro/admin/global-settings.php:783
 msgid "Opacity:"
 msgstr ""
 
@@ -2166,7 +2206,7 @@ msgstr ""
 msgid "Open in new tab"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:351
+#: includes/pro/admin/global-settings.php:387
 msgid "Open larger watermark preview"
 msgstr ""
 
@@ -2174,7 +2214,7 @@ msgstr ""
 msgid "Open Link"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:548
+#: includes/pro/admin/proofing-sessions.php:564
 msgid "Open Media"
 msgstr ""
 
@@ -2198,7 +2238,7 @@ msgstr ""
 msgid "Orange"
 msgstr ""
 
-#: src/pb-image-block/render.php:745 src/proofing-gallery-block/edit.js:61 src/proofing-gallery-block/render.php:100
+#: src/pb-image-block/render.php:745 src/proofing-gallery-block/edit.js:61 src/proofing-gallery-block/render.php:102
 msgid "Orange Flag"
 msgstr ""
 
@@ -2214,7 +2254,7 @@ msgstr ""
 msgid "Overlay Colors"
 msgstr ""
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:262 src/pb-video-block/edit.js:961 src/video-gallery-block/edit.js:563
+#: src/pb-helpers/imageHoverActionPremiumControls.js:262 src/pb-video-block/edit.js:962 src/video-gallery-block/edit.js:563
 msgid "Overlay Content"
 msgstr ""
 
@@ -2250,11 +2290,11 @@ msgstr ""
 msgid "Override gallery click settings."
 msgstr ""
 
-#: src/pb-image-block/edit.js:1358 src/pb-video-block/edit.js:931
+#: src/pb-image-block/edit.js:1358 src/pb-video-block/edit.js:932
 msgid "Override Gallery Hover Settings"
 msgstr ""
 
-#: src/pb-video-block/edit.js:954
+#: src/pb-video-block/edit.js:955
 msgid "Override gallery hover settings for individual videos."
 msgstr ""
 
@@ -2278,11 +2318,11 @@ msgstr ""
 msgid "Padding"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:433
+#: includes/pro/admin/proofing-sessions.php:457 includes/pro/admin/proofing-sessions.php:478
 msgid "Page"
 msgstr ""
 
-#: includes/pro/js/page-media-settings.js:290
+#: includes/pro/js/page-media-settings.js:384
 msgid "Page Password"
 msgstr ""
 
@@ -2302,27 +2342,39 @@ msgstr ""
 msgid "Page-level Password Protection support"
 msgstr ""
 
-#: includes/pro/php/proofing-gallery.php:327
+#: includes/pro/php/proofing-gallery.php:500
 msgid "Page: %s"
+msgstr ""
+
+#: includes/pro/admin/global-settings.php:542
+msgid "Page/Post Defaults"
 msgstr ""
 
 #: src/pb-helpers/imageHoverActionPremiumControls.js:34 src/pb-video-block/premium.js:38 src/video-gallery-block/premium.js:32
 msgid "Pan"
 msgstr ""
 
-#: includes/pro/js/page-media-settings.js:269
+#: includes/pro/js/page-media-settings.js:360
 msgid "Password Protect Page"
+msgstr ""
+
+#: includes/pro/js/page-media-settings.js:359
+msgid "Password Protect Post"
 msgstr ""
 
 #: includes/admin/free-pro.php:263
 msgid "Password Protection by default for security & privacy"
 msgstr ""
 
-#: includes/pro/js/page-media-settings.js:245
+#: includes/pro/js/page-media-settings.js:315
 msgid "Password protection is managed by the Proofing Gallery block on this page."
 msgstr ""
 
-#: src/proofing-gallery-block/render.php:224
+#: includes/pro/js/page-media-settings.js:320
+msgid "Password protection is managed by the Proofing Gallery block on this post."
+msgstr ""
+
+#: src/proofing-gallery-block/render.php:226
 msgid "Password:"
 msgstr ""
 
@@ -2354,7 +2406,7 @@ msgstr ""
 msgid "Per-Video Gallery Hover Setting Overrides"
 msgstr ""
 
-#: includes/admin/common.php:56 includes/admin/review-request.php:240 includes/pro/admin/proofing-sessions.php:109 includes/pro/admin/proofing-sessions.php:584
+#: includes/admin/common.php:56 includes/admin/review-request.php:240 includes/pro/admin/proofing-sessions.php:109 includes/pro/admin/proofing-sessions.php:600
 msgid "Permission denied"
 msgstr ""
 
@@ -2378,7 +2430,7 @@ msgstr ""
 msgid "Play autoplay"
 msgstr ""
 
-#: src/pb-video-block/edit.js:974 src/video-gallery-block/edit.js:576
+#: src/pb-video-block/edit.js:975 src/video-gallery-block/edit.js:576
 msgid "Play Button"
 msgstr ""
 
@@ -2406,35 +2458,47 @@ msgstr ""
 msgid "Pop"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:253
+#: includes/pro/admin/global-settings.php:289
 msgid "Portrait 2:3"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:258
+#: includes/pro/admin/global-settings.php:294
 msgid "Portrait 3:4"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:406
+#: includes/pro/admin/global-settings.php:442
 msgid "Position"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:696
+#: includes/pro/admin/global-settings.php:783
 msgid "Position:"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:331
+#: includes/pro/admin/global-settings.php:367
 msgid "Position: %1$s · Opacity: %2$s"
+msgstr ""
+
+#: includes/pro/js/page-media-settings.js:383
+msgid "Post Password"
 msgstr ""
 
 #: src/background-video-block/edit.js:795
 msgid "Poster Image"
 msgstr ""
 
-#: includes/pro/js/page-media-settings.js:324
+#: includes/pro/admin/global-settings.php:570
+msgid "Prevent dragging compatible FolioBlocks images by default."
+msgstr ""
+
+#: includes/pro/admin/global-settings.php:561
+msgid "Prevent right-clicking on compatible FolioBlocks media by default."
+msgstr ""
+
+#: includes/pro/js/page-media-settings.js:418
 msgid "Prevent right-clicking on compatible FolioBlocks media on this page."
 msgstr ""
 
-#: includes/pro/js/page-media-settings.js:340
+#: includes/pro/js/page-media-settings.js:434
 msgid "Prevent visitors from dragging compatible FolioBlocks images on this page."
 msgstr ""
 
@@ -2442,7 +2506,7 @@ msgstr ""
 msgid "Prevents visitors from right-clicking."
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:344
+#: includes/pro/admin/global-settings.php:380
 msgid "Preview aspect ratio"
 msgstr ""
 
@@ -2462,7 +2526,7 @@ msgstr ""
 msgid "Private Client Proofing Gallerries"
 msgstr ""
 
-#: includes/admin/settings-page.php:524 includes/admin/system-info.php:266 includes/pro/admin/global-settings.php:486
+#: includes/admin/settings-page.php:524 includes/admin/system-info.php:266 includes/pro/admin/global-settings.php:527
 msgid "Pro"
 msgstr ""
 
@@ -2470,15 +2534,15 @@ msgstr ""
 msgid "PRO"
 msgstr ""
 
-#: includes/admin/free-pro.php:384
+#: includes/admin/free-pro.php:395
 msgid "Pro - Agency"
 msgstr ""
 
-#: includes/admin/free-pro.php:383
+#: includes/admin/free-pro.php:394
 msgid "Pro - Business"
 msgstr ""
 
-#: includes/admin/free-pro.php:382
+#: includes/admin/free-pro.php:393
 msgid "Pro - Single"
 msgstr ""
 
@@ -2498,7 +2562,7 @@ msgstr ""
 msgid "Product Link Behavior"
 msgstr ""
 
-#: includes/pro/php/proofing-gallery.php:668
+#: includes/pro/admin/proofing-admin-bar.php:232 includes/pro/php/proofing-gallery.php:852
 msgid "Proofing"
 msgstr ""
 
@@ -2510,11 +2574,11 @@ msgstr ""
 msgid "Proofing Client Settings"
 msgstr ""
 
-#: src/proofing-gallery-block/edit.js:1283 src/proofing-gallery-block/render.php:170
+#: src/proofing-gallery-block/edit.js:1283 src/proofing-gallery-block/render.php:172
 msgid "Proofing filters"
 msgstr ""
 
-#: includes/admin/settings-page.php:749 includes/pro/admin/global-settings.php:518 src/proofing-gallery-block/block.json:6 src/proofing-gallery-block/edit.js:1165 src/proofing-gallery-block/edit.js:1183
+#: includes/admin/settings-page.php:749 includes/pro/admin/global-settings.php:593 src/proofing-gallery-block/block.json:6 src/proofing-gallery-block/edit.js:1165 src/proofing-gallery-block/edit.js:1183
 msgid "Proofing Gallery"
 msgstr ""
 
@@ -2534,43 +2598,43 @@ msgstr ""
 msgid "Proofing Save & Submit Settings"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:489 includes/pro/php/proofing-gallery.php:76
+#: includes/pro/admin/proofing-sessions.php:509 includes/pro/php/proofing-gallery.php:249
 msgid "Proofing Session"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:607
+#: includes/pro/admin/proofing-sessions.php:623
 msgid "Proofing session could not be deleted."
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:607
+#: includes/pro/admin/proofing-sessions.php:623
 msgid "Proofing session deleted."
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:415
+#: includes/pro/admin/proofing-sessions.php:439
 msgid "Proofing session filters"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:612
+#: includes/pro/admin/proofing-sessions.php:628
 msgid "Proofing session not found."
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:592
+#: includes/pro/admin/proofing-sessions.php:608
 msgid "Proofing session storage is not available."
 msgstr ""
 
-#: includes/pro/php/proofing-gallery.php:311
+#: includes/pro/php/proofing-gallery.php:484
 msgid "Proofing session submitted by %s"
 msgstr ""
 
-#: includes/pro/php/proofing-gallery.php:252
+#: includes/pro/php/proofing-gallery.php:425
 msgid "Proofing Session: %s"
 msgstr ""
 
-#: folioblocks.php:496 folioblocks.php:497 includes/pro/admin/proofing-sessions.php:424 includes/pro/php/proofing-gallery.php:75
+#: folioblocks.php:502 folioblocks.php:503 includes/pro/admin/proofing-sessions.php:448 includes/pro/php/proofing-gallery.php:248
 msgid "Proofing Sessions"
 msgstr ""
 
-#: includes/pro/php/proofing-gallery.php:344 includes/pro/php/proofing-gallery.php:397
+#: includes/pro/php/proofing-gallery.php:517 includes/pro/php/proofing-gallery.php:570
 msgid "Proofing sessions are not available."
 msgstr ""
 
@@ -2586,7 +2650,7 @@ msgstr ""
 msgid "Proofing workflow on Business/Agency: private client galleries, hearts, color flags, comments, filters, save/continue, submit, email notifications, admin session reports, and PDF export"
 msgstr ""
 
-#: src/pb-helpers/imageProFeatureNotices.js:92 src/pb-helpers/specialistProFeatureNotices.js:68 src/pb-video-block/edit.js:1092 src/video-gallery-block/edit.js:673
+#: src/pb-helpers/imageProFeatureNotices.js:92 src/pb-helpers/specialistProFeatureNotices.js:68 src/pb-video-block/edit.js:1093 src/video-gallery-block/edit.js:673
 msgid "Protection and Performance"
 msgstr ""
 
@@ -2598,7 +2662,7 @@ msgstr ""
 msgid "Purchase a license for FolioBlocks today and enjoy the best gallery plugin for modern WordPress and the block editor."
 msgstr ""
 
-#: includes/admin/free-pro.php:415 includes/admin/settings-page.php:858 includes/admin/system-info.php:297
+#: includes/admin/free-pro.php:426 includes/admin/settings-page.php:858 includes/admin/system-info.php:297
 msgid "Quick Links:"
 msgstr ""
 
@@ -2642,7 +2706,7 @@ msgstr ""
 msgid "Red"
 msgstr ""
 
-#: src/pb-image-block/render.php:744 src/proofing-gallery-block/edit.js:55 src/proofing-gallery-block/render.php:94
+#: src/pb-image-block/render.php:744 src/proofing-gallery-block/edit.js:55 src/proofing-gallery-block/render.php:96
 msgid "Red Flag"
 msgstr ""
 
@@ -2650,7 +2714,7 @@ msgstr ""
 msgid "Regular"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:382 src/background-video-block/edit.js:727 src/background-video-block/edit.js:840
+#: includes/pro/admin/global-settings.php:418 src/background-video-block/edit.js:727 src/background-video-block/edit.js:840
 msgid "Remove"
 msgstr ""
 
@@ -2670,7 +2734,7 @@ msgstr ""
 msgid "Remove Product"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:415
+#: includes/pro/admin/global-settings.php:451
 msgid "Repeat"
 msgstr ""
 
@@ -2690,8 +2754,12 @@ msgstr ""
 msgid "Replace Video"
 msgstr ""
 
-#: includes/pro/js/page-media-settings.js:240
+#: includes/pro/js/page-media-settings.js:304
 msgid "Require a password before visitors can view the page."
+msgstr ""
+
+#: includes/pro/js/page-media-settings.js:309
+msgid "Require a password before visitors can view the post."
 msgstr ""
 
 #: src/carousel-gallery-block/edit.js:648 src/grid-gallery-block/edit.js:687 src/justified-gallery-block/edit.js:613 src/masonry-gallery-block/edit.js:612 src/pb-before-after-block/edit.js:286 src/pb-image-block/edit.js:1153 src/pb-loupe-block/edit.js:238
@@ -2722,15 +2790,15 @@ msgstr ""
 msgid "Return to the first slide after reaching the end."
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:465
+#: includes/pro/admin/proofing-admin-bar.php:258 includes/pro/admin/proofing-sessions.php:485
 msgid "Review"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:602
+#: includes/pro/admin/proofing-sessions.php:618
 msgid "Review saved and submitted client proofing selections."
 msgstr ""
 
-#: includes/pro/php/proofing-gallery.php:335
+#: includes/pro/php/proofing-gallery.php:508
 msgid "Review the session: %s"
 msgstr ""
 
@@ -2742,7 +2810,7 @@ msgstr ""
 msgid "Row Height"
 msgstr ""
 
-#: src/proofing-gallery-block/edit.js:1326 src/proofing-gallery-block/render.php:206
+#: src/proofing-gallery-block/edit.js:1326 src/proofing-gallery-block/render.php:208
 msgid "Save & Continue"
 msgstr ""
 
@@ -2766,15 +2834,15 @@ msgstr ""
 msgid "Save Button"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:547
+#: includes/pro/admin/global-settings.php:634
 msgid "Save each watermark with a name that will appear in block editor select controls. One saved watermark can be marked as the default. Gallery blocks will decide where the watermark appears."
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:575
+#: includes/pro/admin/global-settings.php:662
 msgid "Save Global Settings"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:525
+#: includes/pro/admin/global-settings.php:600
 msgid "Saved Session Retention"
 msgstr ""
 
@@ -2794,7 +2862,7 @@ msgstr ""
 msgid "Security check failed. Please refresh the page and try again."
 msgstr ""
 
-#: src/pb-video-block/edit.js:659
+#: src/pb-video-block/edit.js:660
 msgid "Select a video"
 msgstr ""
 
@@ -2826,7 +2894,7 @@ msgstr ""
 msgid "Select one or more categories for this video."
 msgstr ""
 
-#: src/pb-video-block/edit.js:813 src/pb-video-block/edit.js:818 src/video-gallery-block/edit.js:397 src/video-gallery-block/edit.js:402
+#: src/pb-video-block/edit.js:814 src/pb-video-block/edit.js:819 src/video-gallery-block/edit.js:397 src/video-gallery-block/edit.js:402
 msgid "Select or Insert Video"
 msgstr ""
 
@@ -2842,7 +2910,7 @@ msgstr ""
 msgid "Select the size of the source image."
 msgstr ""
 
-#: src/pb-video-block/edit.js:1166
+#: src/pb-video-block/edit.js:1167
 msgid "Select Thumbnail"
 msgstr ""
 
@@ -2854,7 +2922,7 @@ msgstr ""
 msgid "Selected gallery image"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:434
+#: includes/pro/admin/proofing-sessions.php:458 includes/pro/admin/proofing-sessions.php:481
 msgid "Selections"
 msgstr ""
 
@@ -2862,12 +2930,16 @@ msgstr ""
 msgid "Self-Hosted"
 msgstr ""
 
-#: src/pb-video-block/edit.js:737
+#: src/pb-video-block/edit.js:738
 msgid "self-hosted videos"
 msgstr ""
 
 #: src/pb-helpers/overlayTypographyControls.js:49
 msgid "Semi Bold"
+msgstr ""
+
+#: includes/pro/admin/global-settings.php:617
+msgid "Send an email to the site admin account when a Proofing Session is submitted."
 msgstr ""
 
 #: src/proofing-gallery-block/edit.js:1116
@@ -3006,7 +3078,7 @@ msgstr ""
 msgid "Set the horizontal alignment of carousel controls."
 msgstr ""
 
-#: includes/pro/js/page-media-settings.js:250
+#: includes/pro/js/page-media-settings.js:326
 msgid "Set the password in the Proofing Gallery block settings."
 msgstr ""
 
@@ -3026,6 +3098,10 @@ msgstr ""
 msgid "Set the space between video thumbnails."
 msgstr ""
 
+#: includes/pro/admin/global-settings.php:544
+msgid "Set the starting Page/Post Settings used when compatible FolioBlocks content is first added. These defaults can be overridden on each page or post and do not change existing FolioBlocks content."
+msgstr ""
+
 #: src/video-gallery-block/edit.js:499
 msgid "Set thumbnail aspect ratio."
 msgstr ""
@@ -3038,7 +3114,7 @@ msgstr ""
 msgid "Set thumbnail resolution."
 msgstr ""
 
-#: src/pb-video-block/edit.js:873
+#: src/pb-video-block/edit.js:874
 msgid "Set video Thumbnail aspect ratio."
 msgstr ""
 
@@ -3046,7 +3122,7 @@ msgstr ""
 msgid "Sets the default WooCommerce product action for this gallery. Individual images can override this setting."
 msgstr ""
 
-#: folioblocks.php:598
+#: folioblocks.php:605
 msgid "Settings"
 msgstr ""
 
@@ -3118,6 +3194,10 @@ msgstr ""
 msgid "Show Product Info"
 msgstr ""
 
+#: includes/pro/admin/global-settings.php:625
+msgid "Show Proofing Status Component in the Admin bar"
+msgstr ""
+
 #: src/pb-helpers/imageClickActionPremiumControls.js:69 src/pb-helpers/imageHoverActionPremiumControls.js:163
 msgid "Show Social Media"
 msgstr ""
@@ -3134,11 +3214,11 @@ msgstr ""
 msgid "Shutter Speed"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:417
+#: includes/admin/free-pro.php:393 includes/pro/admin/global-settings.php:453
 msgid "Single"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:396
+#: includes/pro/admin/global-settings.php:432
 msgid "Size (% of short edge)"
 msgstr ""
 
@@ -3190,7 +3270,7 @@ msgstr ""
 msgid "Slider Orientation"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:501
+#: includes/pro/admin/global-settings.php:576
 msgid "Social Sharing"
 msgstr ""
 
@@ -3202,7 +3282,7 @@ msgstr ""
 msgid "Solid"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:583
+#: includes/pro/admin/proofing-sessions.php:599
 msgid "Sorry, you are not allowed to access proofing sessions."
 msgstr ""
 
@@ -3218,7 +3298,7 @@ msgstr ""
 msgid "Sorry, you are not allowed to perform this action."
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:248 src/pb-loupe-block/premium.js:32
+#: includes/pro/admin/global-settings.php:284 src/pb-loupe-block/premium.js:32
 msgid "Square"
 msgstr ""
 
@@ -3234,11 +3314,11 @@ msgstr ""
 msgid "Start typing to search for products in your WooCommerce store. Click a result to link it."
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:431
+#: includes/pro/admin/proofing-sessions.php:455 includes/pro/admin/proofing-sessions.php:474
 msgid "Status"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:374
+#: includes/pro/admin/global-settings.php:410
 msgid "Studio White Logo"
 msgstr ""
 
@@ -3246,7 +3326,7 @@ msgstr ""
 msgid "Style the active filtering category."
 msgstr ""
 
-#: src/proofing-gallery-block/edit.js:1333 src/proofing-gallery-block/render.php:214
+#: src/proofing-gallery-block/edit.js:1333 src/proofing-gallery-block/render.php:216
 msgid "Submit"
 msgstr ""
 
@@ -3254,7 +3334,7 @@ msgstr ""
 msgid "Submit Button"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:22 includes/pro/admin/proofing-sessions.php:410 includes/pro/php/proofing-gallery.php:707
+#: includes/pro/admin/proofing-sessions.php:22 includes/pro/admin/proofing-sessions.php:434 includes/pro/php/proofing-gallery.php:891
 msgid "Submitted"
 msgstr ""
 
@@ -3262,11 +3342,11 @@ msgstr ""
 msgid "Submitted Proofing session reports availble in Admin Dashboard"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:513
+#: includes/pro/admin/proofing-sessions.php:529
 msgid "Submitted Selections"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:531
+#: includes/pro/admin/global-settings.php:606
 msgid "Submitted Session Retention"
 msgstr ""
 
@@ -3306,11 +3386,11 @@ msgstr ""
 msgid "Syncing…"
 msgstr ""
 
-#: folioblocks.php:526
+#: folioblocks.php:532
 msgid "System Info"
 msgstr ""
 
-#: folioblocks.php:525 includes/admin/system-info.php:268
+#: folioblocks.php:531 includes/admin/system-info.php:268
 msgid "System Information"
 msgstr ""
 
@@ -3334,11 +3414,11 @@ msgstr ""
 msgid "Thank you for purchasing FolioBlocks Pro. FolioBlocks is a WordPress plugin purpose-built for the block editor and full site editor, giving you the tools to create beautiful photo and video galleries with ease directly in your posts or pages."
 msgstr ""
 
-#: includes/pro/php/proofing-gallery.php:708
+#: includes/pro/php/proofing-gallery.php:892
 msgid "The client has submitted this proofing session."
 msgstr ""
 
-#: src/proofing-gallery-block/render.php:131
+#: src/proofing-gallery-block/render.php:133
 msgid "The gallery password is incorrect."
 msgstr ""
 
@@ -3350,7 +3430,7 @@ msgstr ""
 msgid "Thin"
 msgstr ""
 
-#: src/proofing-gallery-block/render.php:221
+#: src/proofing-gallery-block/render.php:223
 msgid "This content is password-protected. To view it, please enter the password below."
 msgstr ""
 
@@ -3362,7 +3442,7 @@ msgstr ""
 msgid "Thumbnail"
 msgstr ""
 
-#: src/pb-video-block/edit.js:866 src/video-gallery-block/edit.js:488
+#: src/pb-video-block/edit.js:867 src/video-gallery-block/edit.js:488
 msgid "Thumbnail Aspect Ratio"
 msgstr ""
 
@@ -3374,11 +3454,11 @@ msgstr ""
 msgid "Thumbnail Position"
 msgstr ""
 
-#: src/pb-video-block/edit.js:854 src/video-gallery-block/edit.js:479
+#: src/pb-video-block/edit.js:855 src/video-gallery-block/edit.js:479
 msgid "Thumbnail Resolution"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:418
+#: includes/pro/admin/global-settings.php:454
 msgid "Tiled"
 msgstr ""
 
@@ -3402,11 +3482,11 @@ msgstr ""
 msgid "Top"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:232 includes/pro/admin/global-settings.php:625
+#: includes/pro/admin/global-settings.php:268 includes/pro/admin/global-settings.php:712
 msgid "Top Left"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:233 includes/pro/admin/global-settings.php:626
+#: includes/pro/admin/global-settings.php:269 includes/pro/admin/global-settings.php:713
 msgid "Top Right"
 msgstr ""
 
@@ -3414,27 +3494,27 @@ msgstr ""
 msgid "Typography"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:25 includes/pro/admin/proofing-sessions.php:463 includes/pro/admin/proofing-sessions.php:503 includes/pro/php/proofing-gallery.php:320 src/filmstrip-gallery-block/edit.js:55 src/filmstrip-gallery-block/render.php:260 src/pb-image-block/edit.js:504 src/pb-image-block/premium.js:236 src/pb-image-block/premium.js:302 src/pb-image-block/render.php:498 src/pb-image-block/render.php:548
+#: includes/pro/admin/proofing-admin-bar.php:36 includes/pro/admin/proofing-sessions.php:25 includes/pro/admin/proofing-sessions.php:482 includes/pro/admin/proofing-sessions.php:519 includes/pro/php/proofing-gallery.php:493 src/filmstrip-gallery-block/edit.js:55 src/filmstrip-gallery-block/render.php:260 src/pb-image-block/edit.js:504 src/pb-image-block/premium.js:236 src/pb-image-block/premium.js:302 src/pb-image-block/render.php:498 src/pb-image-block/render.php:548
 msgid "Unknown"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:317
+#: includes/pro/admin/proofing-sessions.php:319
 msgid "Unknown page"
 msgstr ""
 
-#: includes/admin/free-pro.php:405
+#: includes/admin/free-pro.php:416
 msgid "Unlock Pro"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:543
+#: includes/pro/admin/proofing-sessions.php:559
 msgid "Untitled image"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:322
+#: includes/pro/admin/proofing-sessions.php:324
 msgid "Untitled page"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:435
+#: includes/pro/admin/proofing-sessions.php:459 includes/pro/admin/proofing-sessions.php:482
 msgid "Updated"
 msgstr ""
 
@@ -3450,15 +3530,15 @@ msgstr ""
 msgid "Upgrade"
 msgstr ""
 
-#: includes/admin/free-pro.php:406
+#: includes/admin/free-pro.php:417
 msgid "Upgrade to Pro to unlock all of these features."
 msgstr ""
 
-#: includes/admin/free-pro.php:409 includes/admin/settings-page.php:832
+#: includes/admin/free-pro.php:420 includes/admin/settings-page.php:832
 msgid "Upgrade Today"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:381
+#: includes/pro/admin/global-settings.php:417
 msgid "Upload / Select Image"
 msgstr ""
 
@@ -3486,7 +3566,7 @@ msgstr ""
 msgid "Upload or select images to create a Masonry Gallery."
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:785
+#: includes/pro/admin/global-settings.php:872
 msgid "Upload or Select Watermark Image"
 msgstr ""
 
@@ -3494,7 +3574,7 @@ msgstr ""
 msgid "Use a light or dark loupe frame."
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:385
+#: includes/pro/admin/global-settings.php:421
 msgid "Use a transparent PNG or WebP where possible. Accepts the image formats allowed by your WordPress Media Library; SVG uploads are not supported by default unless your site explicitly enables them."
 msgstr ""
 
@@ -3506,11 +3586,11 @@ msgstr ""
 msgid "Use hover behavior configured specifically for this image."
 msgstr ""
 
-#: src/pb-video-block/edit.js:662
+#: src/pb-video-block/edit.js:663
 msgid "Use this video"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:786
+#: includes/pro/admin/global-settings.php:873
 msgid "Use Watermark"
 msgstr ""
 
@@ -3550,7 +3630,7 @@ msgstr ""
 msgid "video"
 msgstr ""
 
-#: src/pb-video-block/edit.js:1124 src/video-gallery-block/edit.js:196 src/video-gallery-block/edit.js:362 src/video-gallery-block/edit.js:415 src/video-gallery-block/edit.js:434 src/video-gallery-block/premium.js:436
+#: src/pb-video-block/edit.js:1125 src/video-gallery-block/edit.js:196 src/video-gallery-block/edit.js:362 src/video-gallery-block/edit.js:415 src/video-gallery-block/edit.js:434 src/video-gallery-block/premium.js:436
 msgid "Video"
 msgstr ""
 
@@ -3566,19 +3646,19 @@ msgstr ""
 msgid "Video Block"
 msgstr ""
 
-#: src/pb-video-block/edit.js:847
+#: src/pb-video-block/edit.js:848
 msgid "Video Block Settings"
 msgstr ""
 
-#: src/pb-video-block/edit.js:1118
+#: src/pb-video-block/edit.js:1119
 msgid "Video Block Styles"
 msgstr ""
 
-#: src/pb-video-block/edit.js:885
+#: src/pb-video-block/edit.js:886
 msgid "Video Click Settings"
 msgstr ""
 
-#: src/pb-video-block/edit.js:1075
+#: src/pb-video-block/edit.js:1076
 msgid "Video Content"
 msgstr ""
 
@@ -3598,7 +3678,7 @@ msgstr ""
 msgid "Video Gallery Settings"
 msgstr ""
 
-#: src/pb-video-block/edit.js:926 src/pb-video-block/edit.js:946
+#: src/pb-video-block/edit.js:927 src/pb-video-block/edit.js:947
 msgid "Video Hover Settings"
 msgstr ""
 
@@ -3606,7 +3686,7 @@ msgstr ""
 msgid "Video lightbox"
 msgstr ""
 
-#: src/pb-video-block/edit.js:896 src/video-gallery-block/edit.js:516
+#: src/pb-video-block/edit.js:897 src/video-gallery-block/edit.js:516
 msgid "Video Lightbox"
 msgstr ""
 
@@ -3634,15 +3714,15 @@ msgstr ""
 msgid "Video Thumbnail Styles"
 msgstr ""
 
-#: src/pb-video-block/edit.js:749 src/pb-video-block/edit.js:978 src/video-gallery-block/edit.js:580
+#: src/pb-video-block/edit.js:750 src/pb-video-block/edit.js:979 src/video-gallery-block/edit.js:580
 msgid "Video Title"
 msgstr ""
 
-#: src/pb-video-block/edit.js:982 src/video-gallery-block/edit.js:584
+#: src/pb-video-block/edit.js:983 src/video-gallery-block/edit.js:584
 msgid "Video Title + Play Button"
 msgstr ""
 
-#: src/pb-video-block/edit.js:711
+#: src/pb-video-block/edit.js:712
 msgid "Video URL"
 msgstr ""
 
@@ -3652,6 +3732,10 @@ msgstr ""
 
 #: includes/admin/settings-page.php:850
 msgid "View all news"
+msgstr ""
+
+#: includes/pro/admin/proofing-admin-bar.php:264
+msgid "View all Sessions"
 msgstr ""
 
 #: includes/admin/settings-page.php:914
@@ -3666,11 +3750,11 @@ msgstr ""
 msgid "View Product"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:20 includes/pro/admin/proofing-sessions.php:412 includes/pro/php/proofing-gallery.php:715
+#: includes/pro/admin/proofing-sessions.php:20 includes/pro/admin/proofing-sessions.php:436 includes/pro/php/proofing-gallery.php:899
 msgid "Viewing"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:41 includes/pro/php/proofing-gallery.php:704
+#: includes/pro/admin/proofing-sessions.php:41 includes/pro/php/proofing-gallery.php:888
 msgid "Viewing Now"
 msgstr ""
 
@@ -3690,15 +3774,19 @@ msgstr ""
 msgid "Visitors must enter this password before they can view the Proofing Gallery."
 msgstr ""
 
-#: includes/pro/js/page-media-settings.js:260
+#: includes/pro/js/page-media-settings.js:342
 msgid "Visitors must enter this password to view the page."
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:78 includes/pro/admin/global-settings.php:691 src/pb-helpers/watermarkOverlayControls.js:328
+#: includes/pro/js/page-media-settings.js:347
+msgid "Visitors must enter this password to view the post."
+msgstr ""
+
+#: includes/pro/admin/global-settings.php:114 includes/pro/admin/global-settings.php:778 src/pb-helpers/watermarkOverlayControls.js:328
 msgid "Watermark"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:378
+#: includes/pro/admin/global-settings.php:414
 msgid "Watermark Image"
 msgstr ""
 
@@ -3718,11 +3806,11 @@ msgstr ""
 msgid "Watermark Overlays: Display custom watermarks on images"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:584
+#: includes/pro/admin/global-settings.php:671
 msgid "Watermark Preview"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:545
+#: includes/pro/admin/global-settings.php:632
 msgid "Watermarks"
 msgstr ""
 
@@ -3734,15 +3822,15 @@ msgstr ""
 msgid "Welcome to FolioBlocks:"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:273
+#: includes/pro/admin/global-settings.php:309
 msgid "Wide 16:9"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:50 includes/pro/php/proofing-gallery.php:712
+#: includes/pro/admin/proofing-sessions.php:50 includes/pro/php/proofing-gallery.php:896
 msgid "Window Closed"
 msgstr ""
 
-#: src/pb-video-block/edit.js:1044 src/video-gallery-block/edit.js:653
+#: src/pb-video-block/edit.js:1045 src/video-gallery-block/edit.js:653
 msgid "WooCommerce Integration"
 msgstr ""
 
@@ -3762,7 +3850,7 @@ msgstr ""
 msgid "X"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:558
+#: includes/pro/admin/proofing-sessions.php:574
 msgid "Yes"
 msgstr ""
 
@@ -3774,7 +3862,7 @@ msgstr ""
 msgid "You can select up to 5 sources."
 msgstr ""
 
-#: includes/pro/php/proofing-gallery.php:472
+#: includes/pro/php/proofing-gallery.php:645
 msgid "You cannot view proofing sessions for this page."
 msgstr ""
 
