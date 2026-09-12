@@ -378,6 +378,10 @@ if (! function_exists('fbks_ajax_dashboard_news')) {
 			), 403);
 		}
 
+		if (! empty($_POST['refresh'])) {
+			delete_transient('folioblocks_news_safe_cache_v2');
+		}
+
 		wp_send_json_success(array(
 			'html' => fbks_render_dashboard_news_items(fbks_get_dashboard_news_items()),
 		));
@@ -530,10 +534,10 @@ function fbks_render_settings_page()
 					<h2><?php esc_html_e('Welcome to FolioBlocks:', 'folioblocks'); ?></h2>
 					<?php if (fbks_fs()->can_use_premium_code()) : ?>
 						<p>
-							<?php esc_html_e('Thank you for purchasing FolioBlocks Pro. FolioBlocks is a WordPress plugin purpose-built for the block editor and full site editor, giving you the tools to create beautiful photo and video galleries with ease directly in your posts or pages.', 'folioblocks'); ?>
+							<?php esc_html_e('Thank you for purchasing FolioBlocks Pro. FolioBlocks is purpose-built for the WordPress block editor and Site Editor, giving you the tools to create beautiful photo and video galleries directly in your pages, posts, and templates.', 'folioblocks'); ?>
 						</p>
 						<p>
-							<?php esc_html_e('All of the blocks and galleries work entirely from the block editor. There are no external settings pages for any of the blocks, you work entirely from the block editor.', 'folioblocks'); ?>
+							<?php esc_html_e('Create and customize individual blocks and galleries in the block editor, then use Global Settings to manage reusable defaults and site-wide FolioBlocks features. Settings inherited from Global Settings can still be overridden where supported on individual pages, posts, and blocks.', 'folioblocks'); ?>
 						</p>
 					<?php else : ?>
 						<p>
@@ -839,8 +843,13 @@ function fbks_render_settings_page()
 				<?php endif; ?>
 
 				<div class="pb-dashboard-box">
-					<h2><?php esc_html_e('Latest News From FolioBlocks Website:', 'folioblocks'); ?></h2>
-					<ul class="pb-latest-news" data-fbks-dashboard-news>
+					<div class="pb-news-heading">
+						<h2><?php esc_html_e('Latest News From FolioBlocks Website:', 'folioblocks'); ?></h2>
+						<button type="button" class="pb-news-refresh" data-fbks-dashboard-news-refresh aria-label="<?php echo esc_attr__('Refresh latest news', 'folioblocks'); ?>" title="<?php echo esc_attr__('Refresh latest news', 'folioblocks'); ?>">
+							<span class="dashicons dashicons-update" aria-hidden="true"></span>
+						</button>
+					</div>
+					<ul class="pb-latest-news" data-fbks-dashboard-news aria-live="polite">
 						<li class="pb-news-item--empty">
 							<?php esc_html_e('Loading latest news...', 'folioblocks'); ?>
 						</li>

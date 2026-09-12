@@ -203,6 +203,386 @@ if (! function_exists('fbks_get_watermark_by_id')) {
 	}
 }
 
+if (! function_exists('fbks_ajax_save_global_settings_section')) {
+	function fbks_ajax_save_global_settings_section()
+	{
+		check_ajax_referer(fbks_get_admin_nonce_action('global-settings'), 'nonce');
+
+		if (! current_user_can('manage_options')) {
+			wp_send_json_error(
+				array('message' => __('Sorry, you are not allowed to update these settings.', 'folioblocks')),
+				403
+			);
+		}
+
+		$section = isset($_POST['section']) ? sanitize_key(wp_unslash($_POST['section'])) : '';
+		$operation = isset($_POST['operation']) ? sanitize_key(wp_unslash($_POST['operation'])) : 'save';
+
+		switch ($section) {
+			case 'page_media_defaults':
+				$raw_settings = isset($_POST['fbks_page_media_defaults']) && is_array($_POST['fbks_page_media_defaults'])
+					? wp_unslash($_POST['fbks_page_media_defaults'])
+					: array();
+				update_option(FBKS_PAGE_MEDIA_DEFAULTS_OPTION, fbks_sanitize_page_media_defaults($raw_settings));
+				break;
+
+			case 'media_metadata':
+				if (! function_exists('fbks_sanitize_media_metadata_settings') || ! defined('FBKS_MEDIA_METADATA_SETTINGS_OPTION')) {
+					wp_send_json_error(array('message' => __('Media Metadata settings are unavailable.', 'folioblocks')), 500);
+				}
+				$raw_settings = isset($_POST['fbks_media_metadata']) && is_array($_POST['fbks_media_metadata'])
+					? wp_unslash($_POST['fbks_media_metadata'])
+					: array();
+				update_option(FBKS_MEDIA_METADATA_SETTINGS_OPTION, fbks_sanitize_media_metadata_settings($raw_settings));
+				break;
+
+			case 'social_sharing':
+				if (! function_exists('fbks_sanitize_social_sharing_settings') || ! defined('FBKS_SOCIAL_SHARING_SETTINGS_OPTION')) {
+					wp_send_json_error(array('message' => __('Social Sharing settings are unavailable.', 'folioblocks')), 500);
+				}
+				$raw_settings = isset($_POST['fbks_social_sharing']) && is_array($_POST['fbks_social_sharing'])
+					? wp_unslash($_POST['fbks_social_sharing'])
+					: array();
+				update_option(FBKS_SOCIAL_SHARING_SETTINGS_OPTION, fbks_sanitize_social_sharing_settings($raw_settings));
+				break;
+
+			case 'proofing':
+				if (! function_exists('fbks_sanitize_proofing_settings') || ! defined('FBKS_PROOFING_SETTINGS_OPTION')) {
+					wp_send_json_error(array('message' => __('Proofing Gallery settings are unavailable.', 'folioblocks')), 500);
+				}
+				$raw_settings = isset($_POST['fbks_proofing']) && is_array($_POST['fbks_proofing'])
+					? wp_unslash($_POST['fbks_proofing'])
+					: array();
+				update_option(FBKS_PROOFING_SETTINGS_OPTION, fbks_sanitize_proofing_settings($raw_settings));
+				break;
+
+			case 'watermarks':
+				$raw_settings = isset($_POST['fbks_watermarks']) && is_array($_POST['fbks_watermarks'])
+					? wp_unslash($_POST['fbks_watermarks'])
+					: array();
+
+				if ('create_watermark' === $operation) {
+					$raw_item = isset($raw_settings['items']['new']) && is_array($raw_settings['items']['new'])
+						? $raw_settings['items']['new']
+						: array();
+					$new_item = fbks_sanitize_watermark_item($raw_item);
+
+					if (! is_array($new_item) || empty($new_item['assetUrl'])) {
+						wp_send_json_error(
+							array('message' => __('Select a watermark image before saving.', 'folioblocks')),
+							400
+						);
+					}
+
+					$settings = fbks_get_watermark_settings();
+					$item_was_replaced = false;
+					foreach ($settings['items'] as $index => $item) {
+						if ($item['id'] === $new_item['id']) {
+							$settings['items'][$index] = $new_item;
+							$item_was_replaced = true;
+							break;
+						}
+					}
+					if (! $item_was_replaced) {
+						$settings['items'][] = $new_item;
+					}
+					if (empty($settings['defaultWatermarkId'])) {
+						$settings['defaultWatermarkId'] = $new_item['id'];
+					}
+					update_option(FBKS_WATERMARK_SETTINGS_OPTION, fbks_sanitize_watermark_settings($settings));
+
+					wp_send_json_success(array(
+						'message'     => __('Watermark saved.', 'folioblocks'),
+						'watermarkId' => $new_item['id'],
+					));
+				}
+
+				update_option(FBKS_WATERMARK_SETTINGS_OPTION, fbks_sanitize_watermark_settings($raw_settings));
+				break;
+
+			default:
+				wp_send_json_error(array('message' => __('Unknown settings section.', 'folioblocks')), 400);
+		}
+
+		wp_send_json_success(array('message' => __('Saved', 'folioblocks')));
+	}
+}
+add_action('wp_ajax_fbks_save_global_settings_section', 'fbks_ajax_save_global_settings_section');
+
+if (! defined('FBKS_MEDIA_METADATA_SCAN_USER_META')) {
+	define('FBKS_MEDIA_METADATA_SCAN_USER_META', '_fbks_media_metadata_scan_state');
+}
+
+if (! defined('FBKS_MEDIA_METADATA_SCAN_BATCH_SIZE')) {
+	define('FBKS_MEDIA_METADATA_SCAN_BATCH_SIZE', 20);
+}
+
+if (! function_exists('fbks_get_media_metadata_scan_state_defaults')) {
+	function fbks_get_media_metadata_scan_state_defaults()
+	{
+		return array(
+			'status'    => 'idle',
+			'lastId'    => 0,
+			'total'     => 0,
+			'processed' => 0,
+			'imported'  => 0,
+			'skipped'   => 0,
+			'failed'    => 0,
+			'startedAt' => '',
+			'updatedAt' => '',
+			'lastCompletedAt' => '',
+		);
+	}
+}
+
+if (! function_exists('fbks_normalize_media_metadata_scan_state')) {
+	function fbks_normalize_media_metadata_scan_state($state)
+	{
+		$state = is_array($state) ? wp_parse_args($state, fbks_get_media_metadata_scan_state_defaults()) : fbks_get_media_metadata_scan_state_defaults();
+		$status = sanitize_key($state['status']);
+
+		if (! in_array($status, array('idle', 'running', 'complete'), true)) {
+			$status = 'idle';
+		}
+
+		return array(
+			'status'    => $status,
+			'lastId'    => absint($state['lastId']),
+			'total'     => absint($state['total']),
+			'processed' => absint($state['processed']),
+			'imported'  => absint($state['imported']),
+			'skipped'   => absint($state['skipped']),
+			'failed'    => absint($state['failed']),
+			'startedAt' => sanitize_text_field($state['startedAt']),
+			'updatedAt' => sanitize_text_field($state['updatedAt']),
+			'lastCompletedAt' => sanitize_text_field($state['lastCompletedAt']),
+		);
+	}
+}
+
+if (! function_exists('fbks_get_media_metadata_last_scanned_label')) {
+	function fbks_get_media_metadata_last_scanned_label($state)
+	{
+		$state = fbks_normalize_media_metadata_scan_state($state);
+		$completed_at = $state['lastCompletedAt'];
+		if ('' === $completed_at && 'complete' === $state['status']) {
+			$completed_at = $state['updatedAt'];
+		}
+		$timestamp = $completed_at ? strtotime($completed_at) : false;
+
+		return false !== $timestamp
+			? wp_date(get_option('date_format') . ' ' . get_option('time_format'), $timestamp)
+			: '';
+	}
+}
+
+if (! function_exists('fbks_get_media_metadata_scan_state')) {
+	function fbks_get_media_metadata_scan_state($user_id)
+	{
+		return fbks_normalize_media_metadata_scan_state(
+			get_user_meta(absint($user_id), FBKS_MEDIA_METADATA_SCAN_USER_META, true)
+		);
+	}
+}
+
+if (! function_exists('fbks_save_media_metadata_scan_state')) {
+	function fbks_save_media_metadata_scan_state($user_id, $state)
+	{
+		$state = fbks_normalize_media_metadata_scan_state($state);
+		$state['updatedAt'] = gmdate('c');
+		update_user_meta(absint($user_id), FBKS_MEDIA_METADATA_SCAN_USER_META, $state);
+
+		return $state;
+	}
+}
+
+if (! function_exists('fbks_get_media_metadata_scan_message')) {
+	function fbks_get_media_metadata_scan_message($state)
+	{
+		$state = fbks_normalize_media_metadata_scan_state($state);
+
+		if ('running' === $state['status']) {
+			return sprintf(
+				/* translators: 1: processed image count, 2: total image count */
+				__('Scanned %1$d of %2$d JPEG images.', 'folioblocks'),
+				$state['processed'],
+				$state['total']
+			);
+		}
+
+		if ('complete' === $state['status']) {
+			if (0 === $state['total']) {
+				return __('No existing JPEG images were found.', 'folioblocks');
+			}
+
+			return sprintf(
+				/* translators: 1: imported count, 2: skipped count, 3: failed count */
+				__('Scan complete: %1$d imported, %2$d already scanned, %3$d failed.', 'folioblocks'),
+				$state['imported'],
+				$state['skipped'],
+				$state['failed']
+			);
+		}
+
+		return __('Scan JPEG images already in the Media Library without changing image files or existing Library edits.', 'folioblocks');
+	}
+}
+
+if (! function_exists('fbks_prepare_media_metadata_scan_response')) {
+	function fbks_prepare_media_metadata_scan_response($state)
+	{
+		$state = fbks_normalize_media_metadata_scan_state($state);
+		$state['message'] = fbks_get_media_metadata_scan_message($state);
+		$state['lastScanned'] = fbks_get_media_metadata_last_scanned_label($state);
+
+		return $state;
+	}
+}
+
+if (! function_exists('fbks_count_existing_jpeg_attachments')) {
+	function fbks_count_existing_jpeg_attachments()
+	{
+		$query = new WP_Query(array(
+			'post_type'              => 'attachment',
+			'post_status'            => 'inherit',
+			'post_mime_type'         => 'image/jpeg',
+			'fields'                 => 'ids',
+			'posts_per_page'         => 1,
+			'no_found_rows'          => false,
+			'update_post_meta_cache' => false,
+			'update_post_term_cache' => false,
+		));
+
+		return absint($query->found_posts);
+	}
+}
+
+if (! function_exists('fbks_get_existing_jpeg_attachment_batch')) {
+	function fbks_get_existing_jpeg_attachment_batch($after_attachment_id)
+	{
+		$after_attachment_id = absint($after_attachment_id);
+		$where_filter = function ($where) use ($after_attachment_id) {
+			global $wpdb;
+
+			return $where . $wpdb->prepare(" AND {$wpdb->posts}.ID > %d", $after_attachment_id);
+		};
+
+		add_filter('posts_where', $where_filter);
+		$query = new WP_Query(array(
+			'post_type'              => 'attachment',
+			'post_status'            => 'inherit',
+			'post_mime_type'         => 'image/jpeg',
+			'fields'                 => 'ids',
+			'posts_per_page'         => FBKS_MEDIA_METADATA_SCAN_BATCH_SIZE,
+			'orderby'                => 'ID',
+			'order'                  => 'ASC',
+			'no_found_rows'          => true,
+			'suppress_filters'       => false,
+			'update_post_meta_cache' => false,
+			'update_post_term_cache' => false,
+		));
+		remove_filter('posts_where', $where_filter);
+
+		return array_map('absint', $query->posts);
+	}
+}
+
+if (! function_exists('fbks_process_media_metadata_scan_batch')) {
+	function fbks_process_media_metadata_scan_batch($state)
+	{
+		$state = fbks_normalize_media_metadata_scan_state($state);
+		$attachment_ids = fbks_get_existing_jpeg_attachment_batch($state['lastId']);
+
+		foreach ($attachment_ids as $attachment_id) {
+			$state['lastId'] = max($state['lastId'], $attachment_id);
+			$state['processed']++;
+			$existing = get_post_meta($attachment_id, FBKS_MEDIA_METADATA_META_KEY, true);
+
+			if (
+				is_array($existing) &&
+				isset($existing['version']) &&
+				absint($existing['version']) >= FBKS_MEDIA_METADATA_SCHEMA_VERSION
+			) {
+				$state['skipped']++;
+				continue;
+			}
+
+			$result = fbks_import_attachment_media_metadata($attachment_id, true);
+			if (is_wp_error($result)) {
+				$state['failed']++;
+			} else {
+				$state['imported']++;
+			}
+		}
+
+		if (count($attachment_ids) < FBKS_MEDIA_METADATA_SCAN_BATCH_SIZE) {
+			$state['status'] = 'complete';
+			$state['lastCompletedAt'] = gmdate('c');
+		}
+
+		return $state;
+	}
+}
+
+if (! function_exists('fbks_ajax_scan_existing_media_metadata')) {
+	function fbks_ajax_scan_existing_media_metadata()
+	{
+		check_ajax_referer(fbks_get_admin_nonce_action('global-settings'), 'nonce');
+
+		if (! current_user_can('manage_options')) {
+			wp_send_json_error(
+				array('message' => __('Sorry, you are not allowed to scan the Media Library.', 'folioblocks')),
+				403
+			);
+		}
+
+		$operation = isset($_POST['operation']) ? sanitize_key(wp_unslash($_POST['operation'])) : 'status';
+		$user_id = get_current_user_id();
+		$state = fbks_get_media_metadata_scan_state($user_id);
+
+		if ('status' === $operation) {
+			wp_send_json_success(fbks_prepare_media_metadata_scan_response($state));
+		}
+
+		if ('start' === $operation) {
+			$settings = fbks_get_media_metadata_settings();
+			if (! $settings['importExif'] && ! $settings['importRatings'] && ! $settings['importColorClasses']) {
+				wp_send_json_error(
+					array('message' => __('Enable at least one metadata import option before scanning existing media.', 'folioblocks')),
+					400
+				);
+			}
+
+			$last_completed_at = $state['lastCompletedAt'];
+			if ('' === $last_completed_at && 'complete' === $state['status']) {
+				$last_completed_at = $state['updatedAt'];
+			}
+			$state = fbks_get_media_metadata_scan_state_defaults();
+			$state['lastCompletedAt'] = $last_completed_at;
+			$state['status'] = 'running';
+			$state['total'] = fbks_count_existing_jpeg_attachments();
+			$state['startedAt'] = gmdate('c');
+			if (0 === $state['total']) {
+				$state['status'] = 'complete';
+				$state['lastCompletedAt'] = gmdate('c');
+			}
+			$state = fbks_save_media_metadata_scan_state($user_id, $state);
+
+			wp_send_json_success(fbks_prepare_media_metadata_scan_response($state));
+		}
+
+		if ('batch' !== $operation || 'running' !== $state['status']) {
+			wp_send_json_error(array('message' => __('There is no Media Library scan to resume.', 'folioblocks')), 400);
+		}
+
+		$state = fbks_process_media_metadata_scan_batch($state);
+		$state = fbks_save_media_metadata_scan_state($user_id, $state);
+
+		wp_send_json_success(fbks_prepare_media_metadata_scan_response($state));
+	}
+}
+add_action('wp_ajax_fbks_scan_existing_media_metadata', 'fbks_ajax_scan_existing_media_metadata');
+
 if (! function_exists('fbks_get_watermark_css_position')) {
 	function fbks_get_watermark_css_position($position)
 	{
@@ -464,6 +844,14 @@ if (! function_exists('fbks_render_watermark_fields')) {
 						</label>
 					<?php endif; ?>
 				</div>
+				<?php if ($is_new) : ?>
+					<div class="pb-watermark-new-save">
+						<span class="pb-watermark-new-save__status" data-new-watermark-status aria-live="polite"></span>
+						<button type="button" class="button button-primary" data-save-new-watermark>
+							<?php esc_html_e('Save Watermark', 'folioblocks'); ?>
+						</button>
+					</div>
+				<?php endif; ?>
 				</div>
 			</div>
 		</<?php echo esc_html($card_tag); ?>>
@@ -480,11 +868,12 @@ if (! function_exists('fbks_render_global_settings_page')) {
 		if (
 			isset($_SERVER['REQUEST_METHOD']) &&
 			'POST' === strtoupper(sanitize_text_field(wp_unslash($_SERVER['REQUEST_METHOD']))) &&
-			isset($_POST['fbks_watermarks'], $_POST['fbks_social_sharing'], $_POST['fbks_proofing'], $_POST['fbks_page_media_defaults']) &&
+			isset($_POST['fbks_watermarks'], $_POST['fbks_social_sharing'], $_POST['fbks_proofing'], $_POST['fbks_page_media_defaults'], $_POST['fbks_media_metadata']) &&
 			is_array($_POST['fbks_watermarks']) &&
 			is_array($_POST['fbks_social_sharing']) &&
 			is_array($_POST['fbks_proofing']) &&
-			is_array($_POST['fbks_page_media_defaults'])
+			is_array($_POST['fbks_page_media_defaults']) &&
+			is_array($_POST['fbks_media_metadata'])
 		) {
 			$raw_watermark_settings = wp_unslash($_POST['fbks_watermarks']);
 			$settings = fbks_sanitize_watermark_settings($raw_watermark_settings);
@@ -500,11 +889,17 @@ if (! function_exists('fbks_render_global_settings_page')) {
 			}
 			$page_media_defaults = fbks_sanitize_page_media_defaults(wp_unslash($_POST['fbks_page_media_defaults']));
 			update_option(FBKS_PAGE_MEDIA_DEFAULTS_OPTION, $page_media_defaults);
+			if (function_exists('fbks_sanitize_media_metadata_settings') && defined('FBKS_MEDIA_METADATA_SETTINGS_OPTION')) {
+				$media_metadata_settings = fbks_sanitize_media_metadata_settings(wp_unslash($_POST['fbks_media_metadata']));
+				update_option(FBKS_MEDIA_METADATA_SETTINGS_OPTION, $media_metadata_settings);
+			}
 			$notice = __('Global settings saved.', 'folioblocks');
 		}
 
 		$settings = fbks_get_watermark_settings();
+		$has_saved_watermarks = ! empty($settings['items']);
 		$new_watermark = fbks_get_watermark_item_defaults();
+		$new_watermark['id'] = sanitize_key(wp_generate_uuid4());
 		$proofing_settings = function_exists('fbks_get_proofing_settings')
 			? fbks_get_proofing_settings()
 			: array(
@@ -520,6 +915,22 @@ if (! function_exists('fbks_render_global_settings_page')) {
 			? fbks_get_social_share_services()
 			: array();
 		$page_media_defaults = fbks_get_page_media_defaults();
+		$media_metadata_settings = function_exists('fbks_get_media_metadata_settings')
+			? fbks_get_media_metadata_settings()
+			: array();
+		$media_metadata_presets = function_exists('fbks_get_media_metadata_palette_presets')
+			? fbks_get_media_metadata_palette_presets()
+			: array();
+		$media_metadata_roles = function_exists('get_editable_roles') ? get_editable_roles() : wp_roles()->roles;
+		unset($media_metadata_roles['customer'], $media_metadata_roles['shop_manager']);
+		$media_metadata_scan_state = fbks_get_media_metadata_scan_state(get_current_user_id());
+		$media_metadata_page_scan_state = $media_metadata_scan_state;
+		if ('complete' === $media_metadata_page_scan_state['status']) {
+			$media_metadata_page_scan_state['status'] = 'idle';
+		}
+		$media_metadata_page_scan_state = fbks_prepare_media_metadata_scan_response($media_metadata_page_scan_state);
+		$media_metadata_last_scanned = fbks_get_media_metadata_last_scanned_label($media_metadata_scan_state);
+		$media_metadata_page_scan_state['lastScanned'] = $media_metadata_last_scanned;
 		?>
 		<div class="pb-wrap">
 			<div class="pb-settings-header">
@@ -533,16 +944,27 @@ if (! function_exists('fbks_render_global_settings_page')) {
 				</div>
 			<?php endif; ?>
 
+			<p class="pb-global-settings-intro">
+				<?php esc_html_e('Configure the default behavior of FolioBlocks across your website. Open a section to view its settings—changes are saved automatically as you make them.', 'folioblocks'); ?>
+			</p>
+
 			<div class="settings-container pb-global-settings-container">
 				<div class="settings-left">
-					<form method="post" action="<?php echo esc_url(admin_url('admin.php?page=folioblocks-global-settings')); ?>">
+					<form class="pb-global-settings-form" method="post" action="<?php echo esc_url(admin_url('admin.php?page=folioblocks-global-settings')); ?>">
 						<?php fbks_render_admin_nonce_field('global-settings'); ?>
 
-						<div class="pb-dashboard-box pb-global-settings-panel">
-							<h2><?php esc_html_e('Page/Post Defaults', 'folioblocks'); ?></h2>
-							<p>
-								<?php esc_html_e('Set the starting Page/Post Settings used when compatible FolioBlocks content is first added. These defaults can be overridden on each page or post and do not change existing FolioBlocks content.', 'folioblocks'); ?>
-							</p>
+						<details class="pb-dashboard-box pb-global-settings-panel" data-settings-section="page_media_defaults">
+							<summary class="pb-global-settings-panel__summary">
+								<span class="pb-global-settings-panel__heading">
+									<span class="pb-global-settings-panel__title"><?php esc_html_e('Page/Post Defaults', 'folioblocks'); ?></span>
+									<span class="pb-global-settings-panel__description"><?php esc_html_e('Set the starting Page/Post Settings for newly added compatible FolioBlocks content.', 'folioblocks'); ?></span>
+								</span>
+								<span class="pb-global-settings-panel__status" data-autosave-status aria-live="polite"></span>
+							</summary>
+							<div class="pb-global-settings-panel__content">
+								<p>
+									<?php esc_html_e('These defaults can be overridden on each page or post and do not change existing FolioBlocks content.', 'folioblocks'); ?>
+								</p>
 
 							<label class="pb-settings-toggle">
 								<input type="hidden" name="fbks_page_media_defaults[lazyLoad]" value="0" />
@@ -570,13 +992,226 @@ if (! function_exists('fbks_render_global_settings_page')) {
 									<span class="pb-settings-field-help"><?php esc_html_e('Prevent dragging compatible FolioBlocks images by default.', 'folioblocks'); ?></span>
 								</span>
 							</label>
-						</div>
+							</div>
+						</details>
 
-						<div class="pb-dashboard-box pb-global-settings-panel">
-							<h2><?php esc_html_e('Social Sharing', 'folioblocks'); ?></h2>
-							<p>
-								<?php esc_html_e('Choose up to 5 social sharing sources used when Social Media is selected for lightbox or overlay content.', 'folioblocks'); ?>
-							</p>
+						<details class="pb-dashboard-box pb-global-settings-panel" data-settings-section="media_metadata" data-media-metadata-settings>
+							<summary class="pb-global-settings-panel__summary">
+								<span class="pb-global-settings-panel__heading">
+									<span class="pb-global-settings-panel__title"><?php esc_html_e('Media Metadata', 'folioblocks'); ?></span>
+									<span class="pb-global-settings-panel__description"><?php esc_html_e('Import, display, and manage ratings and color classes used throughout FolioBlocks.', 'folioblocks'); ?></span>
+								</span>
+								<span class="pb-global-settings-panel__status" data-autosave-status aria-live="polite"></span>
+							</summary>
+							<div class="pb-global-settings-panel__content">
+								<p>
+									<?php esc_html_e('Embedded values remain unchanged for provenance. These settings control future imports and how the separate editable Media Library values will be presented.', 'folioblocks'); ?>
+								</p>
+
+								<section class="pb-media-metadata-group" aria-labelledby="pb-media-metadata-import-heading">
+									<h3 id="pb-media-metadata-import-heading"><?php esc_html_e('Metadata Import', 'folioblocks'); ?></h3>
+									<p class="pb-settings-field-help"><?php esc_html_e('Import options apply to future uploads and rescans. Turning one off does not delete metadata already stored.', 'folioblocks'); ?></p>
+
+									<div class="pb-media-metadata-import-layout">
+										<div class="pb-media-metadata-import-options">
+											<label class="pb-settings-toggle">
+												<input type="hidden" name="fbks_media_metadata[importExif]" value="0" />
+												<input type="checkbox" name="fbks_media_metadata[importExif]" value="1" <?php checked(! empty($media_metadata_settings['importExif'])); ?> />
+												<span class="pb-settings-toggle-copy">
+													<span><?php esc_html_e('Import EXIF Data', 'folioblocks'); ?></span>
+													<span class="pb-settings-field-help"><?php esc_html_e('Allow FolioBlocks Media Library tools to retain supported camera and exposure fields.', 'folioblocks'); ?></span>
+												</span>
+											</label>
+
+											<label class="pb-settings-toggle">
+												<input type="hidden" name="fbks_media_metadata[importRatings]" value="0" />
+												<input type="checkbox" name="fbks_media_metadata[importRatings]" value="1" <?php checked(! empty($media_metadata_settings['importRatings'])); ?> />
+												<span class="pb-settings-toggle-copy">
+													<span><?php esc_html_e('Import Star Ratings', 'folioblocks'); ?></span>
+													<span class="pb-settings-field-help"><?php esc_html_e('Read supported embedded one-to-five-star ratings when JPEG images are imported.', 'folioblocks'); ?></span>
+												</span>
+											</label>
+
+											<label class="pb-settings-toggle">
+												<input type="hidden" name="fbks_media_metadata[importColorClasses]" value="0" />
+												<input type="checkbox" name="fbks_media_metadata[importColorClasses]" value="1" <?php checked(! empty($media_metadata_settings['importColorClasses'])); ?> />
+												<span class="pb-settings-toggle-copy">
+											<span><?php esc_html_e('Import Color Classes', 'folioblocks'); ?></span>
+													<span class="pb-settings-field-help"><?php esc_html_e('Read supported numeric color classes, XMP labels, and Photo Mechanic tagged state.', 'folioblocks'); ?></span>
+												</span>
+											</label>
+										</div>
+
+										<div class="pb-media-metadata-scan-column">
+											<div class="pb-media-metadata-scan" data-media-metadata-scan>
+												<div class="pb-media-metadata-scan__action">
+													<button type="button" class="button button-secondary" data-media-metadata-scan-button>
+														<?php echo esc_html('running' === $media_metadata_page_scan_state['status'] ? __('Resume Scan', 'folioblocks') : __('Scan Existing Media', 'folioblocks')); ?>
+													</button>
+													<span class="pb-media-metadata-scan__status" data-media-metadata-scan-status aria-live="polite">
+														<?php echo esc_html($media_metadata_page_scan_state['message']); ?>
+													</span>
+												</div>
+												<progress class="pb-media-metadata-scan__progress" max="<?php echo esc_attr((string) max(1, $media_metadata_page_scan_state['total'])); ?>" value="<?php echo esc_attr((string) min($media_metadata_page_scan_state['processed'], max(1, $media_metadata_page_scan_state['total']))); ?>" data-media-metadata-scan-progress <?php echo 'running' === $media_metadata_page_scan_state['status'] && $media_metadata_page_scan_state['total'] > 0 ? '' : 'hidden'; ?>></progress>
+											</div>
+											<p class="pb-media-metadata-last-scan" data-media-metadata-last-scan <?php echo '' === $media_metadata_last_scanned ? 'hidden' : ''; ?>>
+												<strong><?php esc_html_e('Last Scanned:', 'folioblocks'); ?></strong>
+												<span data-media-metadata-last-scan-value><?php echo esc_html($media_metadata_last_scanned); ?></span>
+											</p>
+										</div>
+									</div>
+								</section>
+
+								<section class="pb-media-metadata-group" aria-labelledby="pb-media-library-heading">
+									<h3 id="pb-media-library-heading"><?php esc_html_e('Media Library', 'folioblocks'); ?></h3>
+
+									<label class="pb-settings-toggle">
+										<input type="hidden" name="fbks_media_metadata[showInMediaLibrary]" value="0" />
+										<input type="checkbox" name="fbks_media_metadata[showInMediaLibrary]" value="1" <?php checked(! empty($media_metadata_settings['showInMediaLibrary'])); ?> data-media-metadata-show />
+										<span class="pb-settings-toggle-copy">
+											<span><?php esc_html_e('Show FolioBlocks Metadata', 'folioblocks'); ?></span>
+										<span class="pb-settings-field-help"><?php esc_html_e('Show ratings, color classes, and supported EXIF data in attachment details.', 'folioblocks'); ?></span>
+										</span>
+									</label>
+
+									<fieldset class="pb-media-metadata-types" data-media-metadata-types>
+										<legend><?php esc_html_e('Metadata to Show', 'folioblocks'); ?></legend>
+										<input type="hidden" name="fbks_media_metadata[visibleMetadata][]" value="" />
+										<?php
+										$media_metadata_type_labels = array(
+											'exif'    => __('EXIF Data', 'folioblocks'),
+											'ratings' => __('Ratings', 'folioblocks'),
+											'colors'  => __('Color Classes', 'folioblocks'),
+										);
+										foreach ($media_metadata_type_labels as $type_key => $type_label) :
+											?>
+											<label>
+												<input type="checkbox" name="fbks_media_metadata[visibleMetadata][]" value="<?php echo esc_attr($type_key); ?>" <?php checked(in_array($type_key, $media_metadata_settings['visibleMetadata'], true)); ?> />
+												<?php echo esc_html($type_label); ?>
+											</label>
+										<?php endforeach; ?>
+									</fieldset>
+
+									<label class="pb-settings-toggle">
+										<input type="hidden" name="fbks_media_metadata[allowEditing]" value="0" />
+										<input type="checkbox" name="fbks_media_metadata[allowEditing]" value="1" <?php checked(! empty($media_metadata_settings['allowEditing'])); ?> data-media-metadata-editing />
+										<span class="pb-settings-toggle-copy">
+											<span><?php esc_html_e('Allow Metadata Editing', 'folioblocks'); ?></span>
+											<span class="pb-settings-field-help"><?php esc_html_e('Permit selected roles to edit Media Library values without rewriting the original image file.', 'folioblocks'); ?></span>
+										</span>
+									</label>
+
+									<div class="pb-media-metadata-role-grid">
+										<fieldset class="pb-media-metadata-roles" data-media-metadata-view-roles>
+											<legend><?php esc_html_e('Who Can View Metadata', 'folioblocks'); ?></legend>
+											<input type="hidden" name="fbks_media_metadata[viewRoles][]" value="" />
+											<?php foreach ($media_metadata_roles as $role_key => $role) : ?>
+												<label>
+													<input type="checkbox" name="fbks_media_metadata[viewRoles][]" value="<?php echo esc_attr($role_key); ?>" <?php checked(in_array($role_key, $media_metadata_settings['viewRoles'], true)); ?> <?php disabled('administrator' === $role_key); ?> />
+													<?php echo esc_html(translate_user_role($role['name'])); ?>
+												</label>
+											<?php endforeach; ?>
+										</fieldset>
+
+										<fieldset class="pb-media-metadata-roles" data-media-metadata-edit-roles>
+											<legend><?php esc_html_e('Who Can Edit Metadata', 'folioblocks'); ?></legend>
+											<input type="hidden" name="fbks_media_metadata[editRoles][]" value="" />
+											<?php foreach ($media_metadata_roles as $role_key => $role) : ?>
+												<label>
+													<input type="checkbox" name="fbks_media_metadata[editRoles][]" value="<?php echo esc_attr($role_key); ?>" <?php checked(in_array($role_key, $media_metadata_settings['editRoles'], true)); ?> <?php disabled('administrator' === $role_key); ?> />
+													<?php echo esc_html(translate_user_role($role['name'])); ?>
+												</label>
+											<?php endforeach; ?>
+										</fieldset>
+									</div>
+									<p class="pb-settings-field-help"><?php esc_html_e('Administrators always retain access. Attachment permissions are checked in addition to the selected role.', 'folioblocks'); ?></p>
+								</section>
+
+								<section class="pb-media-metadata-group" aria-labelledby="pb-star-ratings-heading">
+									<h3 id="pb-star-ratings-heading"><?php esc_html_e('Star Ratings', 'folioblocks'); ?></h3>
+
+									<label class="pb-settings-toggle">
+										<input type="hidden" name="fbks_media_metadata[enableStarRatings]" value="0" />
+										<input type="checkbox" name="fbks_media_metadata[enableStarRatings]" value="1" <?php checked(! empty($media_metadata_settings['enableStarRatings'])); ?> />
+										<span class="pb-settings-toggle-copy">
+											<span><?php esc_html_e('Enable Star Ratings', 'folioblocks'); ?></span>
+											<span class="pb-settings-field-help"><?php esc_html_e('Make Media Ratings available to compatible FolioBlocks tools and blocks.', 'folioblocks'); ?></span>
+										</span>
+									</label>
+
+									<label class="pb-settings-field pb-media-metadata-short-field">
+										<span><?php esc_html_e('Unrated Label', 'folioblocks'); ?></span>
+										<input type="text" name="fbks_media_metadata[unratedLabel]" value="<?php echo esc_attr($media_metadata_settings['unratedLabel']); ?>" />
+									</label>
+								</section>
+
+								<section class="pb-media-metadata-group" aria-labelledby="pb-color-classes-heading">
+									<h3 id="pb-color-classes-heading"><?php esc_html_e('Color Classes', 'folioblocks'); ?></h3>
+
+									<label class="pb-settings-toggle">
+										<input type="hidden" name="fbks_media_metadata[enableColorClasses]" value="0" />
+										<input type="checkbox" name="fbks_media_metadata[enableColorClasses]" value="1" <?php checked(! empty($media_metadata_settings['enableColorClasses'])); ?> data-media-metadata-colors />
+										<span class="pb-settings-toggle-copy">
+											<span><?php esc_html_e('Enable Color Classes', 'folioblocks'); ?></span>
+											<span class="pb-settings-field-help"><?php esc_html_e('Make Media Color Classes available to compatible FolioBlocks tools and blocks.', 'folioblocks'); ?></span>
+										</span>
+									</label>
+
+									<div data-media-metadata-color-options>
+										<label class="pb-settings-field pb-media-metadata-short-field">
+											<span><?php esc_html_e('Palette Preset', 'folioblocks'); ?></span>
+											<select name="fbks_media_metadata[palettePreset]" data-media-metadata-preset>
+												<?php foreach ($media_metadata_presets as $preset_key => $preset) : ?>
+													<option value="<?php echo esc_attr($preset_key); ?>" <?php selected($media_metadata_settings['palettePreset'], $preset_key); ?>><?php echo esc_html($preset['label']); ?></option>
+												<?php endforeach; ?>
+											</select>
+											<span class="pb-settings-field-help"><?php esc_html_e('Choosing a preset copies its mapping below. Editing a row changes the selection to Custom.', 'folioblocks'); ?></span>
+										</label>
+
+										<div class="pb-media-metadata-palette">
+											<div class="pb-media-metadata-palette__header" aria-hidden="true">
+												<span><?php esc_html_e('Value', 'folioblocks'); ?></span>
+												<span><?php esc_html_e('Enabled', 'folioblocks'); ?></span>
+												<span><?php esc_html_e('Color', 'folioblocks'); ?></span>
+												<span><?php esc_html_e('Label', 'folioblocks'); ?></span>
+											</div>
+											<?php foreach ($media_metadata_settings['palette'] as $value => $item) : ?>
+												<div class="pb-media-metadata-palette__row" data-media-metadata-palette-row="<?php echo esc_attr((string) $value); ?>">
+													<strong class="pb-media-metadata-palette__value"><?php echo esc_html((string) $value); ?></strong>
+													<label class="pb-media-metadata-palette__enabled">
+														<span class="screen-reader-text"><?php printf(esc_html__('Enable color class %d', 'folioblocks'), esc_html((string) $value)); ?></span>
+														<input type="hidden" name="fbks_media_metadata[palette][<?php echo esc_attr((string) $value); ?>][enabled]" value="0" />
+														<input type="checkbox" name="fbks_media_metadata[palette][<?php echo esc_attr((string) $value); ?>][enabled]" value="1" <?php checked(! empty($item['enabled'])); ?> data-palette-field />
+													</label>
+													<label class="pb-media-metadata-palette__color">
+														<span class="screen-reader-text"><?php printf(esc_html__('Color for class %d', 'folioblocks'), esc_html((string) $value)); ?></span>
+														<input type="color" name="fbks_media_metadata[palette][<?php echo esc_attr((string) $value); ?>][color]" value="<?php echo esc_attr($item['color']); ?>" data-palette-field />
+													</label>
+													<label class="pb-media-metadata-palette__label">
+														<span class="screen-reader-text"><?php printf(esc_html__('Label for class %d', 'folioblocks'), esc_html((string) $value)); ?></span>
+														<input type="text" name="fbks_media_metadata[palette][<?php echo esc_attr((string) $value); ?>][label]" value="<?php echo esc_attr($item['label']); ?>" data-palette-field />
+													</label>
+												</div>
+											<?php endforeach; ?>
+										</div>
+										<p class="pb-settings-field-help"><?php esc_html_e('The values 1–8 never move. Changing a color or label only changes how that stored number appears in FolioBlocks.', 'folioblocks'); ?></p>
+									</div>
+								</section>
+							</div>
+						</details>
+
+						<details class="pb-dashboard-box pb-global-settings-panel" data-settings-section="social_sharing">
+							<summary class="pb-global-settings-panel__summary">
+								<span class="pb-global-settings-panel__heading">
+									<span class="pb-global-settings-panel__title"><?php esc_html_e('Social Sharing', 'folioblocks'); ?></span>
+									<span class="pb-global-settings-panel__description"><?php esc_html_e('Choose the social networks available in lightbox and overlay sharing controls.', 'folioblocks'); ?></span>
+								</span>
+								<span class="pb-global-settings-panel__status" data-autosave-status aria-live="polite"></span>
+							</summary>
+							<div class="pb-global-settings-panel__content">
+								<p>
+									<?php esc_html_e('Choose up to 5 social sharing sources used when Social Media is selected for lightbox or overlay content.', 'folioblocks'); ?>
+								</p>
 
 							<input type="hidden" name="fbks_social_sharing[enabled]" value="1" />
 							<div class="pb-watermark-checkboxes" data-social-share-sources data-social-share-max="5">
@@ -587,13 +1222,21 @@ if (! function_exists('fbks_render_global_settings_page')) {
 									</label>
 								<?php endforeach; ?>
 							</div>
-						</div>
+							</div>
+						</details>
 
-						<div class="pb-dashboard-box pb-global-settings-panel">
-							<h2><?php esc_html_e('Proofing Gallery', 'folioblocks'); ?></h2>
-							<p>
-								<?php esc_html_e('Control how long proofing sessions are stored and whether admins are notified when clients submit selections.', 'folioblocks'); ?>
-							</p>
+						<details class="pb-dashboard-box pb-global-settings-panel" data-settings-section="proofing">
+							<summary class="pb-global-settings-panel__summary">
+								<span class="pb-global-settings-panel__heading">
+									<span class="pb-global-settings-panel__title"><?php esc_html_e('Proofing Sessions', 'folioblocks'); ?></span>
+									<span class="pb-global-settings-panel__description"><?php esc_html_e('Manage proofing retention, notifications, and the admin bar activity indicator.', 'folioblocks'); ?></span>
+								</span>
+								<span class="pb-global-settings-panel__status" data-autosave-status aria-live="polite"></span>
+							</summary>
+							<div class="pb-global-settings-panel__content">
+								<p>
+									<?php esc_html_e('Control how long proofing sessions are stored and whether admins are notified when clients submit selections.', 'folioblocks'); ?>
+								</p>
 
 							<div class="pb-proofing-settings-grid">
 								<label class="pb-settings-field">
@@ -626,13 +1269,21 @@ if (! function_exists('fbks_render_global_settings_page')) {
 									<span class="pb-settings-field-help"><?php esc_html_e("Display the Proofing Gallery Block's status component in the Admin bar and see in real time when clients are interacting the proofing galleries.", 'folioblocks'); ?></span>
 								</span>
 							</label>
-						</div>
+							</div>
+						</details>
 
-						<div class="pb-dashboard-box pb-global-settings-panel">
-							<h2><?php esc_html_e('Watermarks', 'folioblocks'); ?></h2>
-							<p>
-								<?php esc_html_e('Save each watermark with a name that will appear in block editor select controls. One saved watermark can be marked as the default. Gallery blocks will decide where the watermark appears.', 'folioblocks'); ?>
-							</p>
+						<details class="pb-dashboard-box pb-global-settings-panel" data-settings-section="watermarks">
+							<summary class="pb-global-settings-panel__summary">
+								<span class="pb-global-settings-panel__heading">
+									<span class="pb-global-settings-panel__title"><?php esc_html_e('Watermarks', 'folioblocks'); ?></span>
+									<span class="pb-global-settings-panel__description"><?php esc_html_e('Create reusable watermarks and choose the default for new compatible blocks.', 'folioblocks'); ?></span>
+								</span>
+								<span class="pb-global-settings-panel__status" data-autosave-status aria-live="polite"></span>
+							</summary>
+							<div class="pb-global-settings-panel__content">
+								<p>
+									<?php esc_html_e('Save each watermark with a name that will appear in block editor select controls. One saved watermark can be marked as the default. Gallery blocks will decide where the watermark appears.', 'folioblocks'); ?>
+								</p>
 
 							<label class="pb-settings-toggle">
 								<input type="hidden" name="fbks_watermarks[enabledByDefault]" value="0" />
@@ -652,12 +1303,21 @@ if (! function_exists('fbks_render_global_settings_page')) {
 								<?php endif; ?>
 							</div>
 
-							<div class="pb-watermark-new-item">
+							<?php if ($has_saved_watermarks) : ?>
+								<div class="pb-watermark-new-action" data-watermark-new-action>
+									<button type="button" class="button button-secondary" data-watermark-show-new>
+										<?php esc_html_e('Add New Watermark', 'folioblocks'); ?>
+									</button>
+								</div>
+							<?php endif; ?>
+
+							<div class="pb-watermark-new-item" data-watermark-new-item data-autosave-ignore<?php if ($has_saved_watermarks) : ?> hidden<?php endif; ?>>
 								<?php fbks_render_watermark_fields($new_watermark, 'new', $settings['defaultWatermarkId'], true); ?>
 							</div>
-						</div>
+							</div>
+						</details>
 
-						<p class="buy-button-wrapper pb-global-settings-save-wrapper">
+						<p class="buy-button-wrapper pb-global-settings-save-wrapper" data-global-save-fallback>
 							<button type="submit" class="button button-primary buy-button">
 								<?php esc_html_e('Save Global Settings', 'folioblocks'); ?>
 							</button>
@@ -847,6 +1507,29 @@ if (! function_exists('fbks_render_global_settings_page')) {
 					setAspect(card, '1 / 1');
 				});
 
+				const showNewWatermarkButton = document.querySelector('[data-watermark-show-new]');
+				const newWatermarkAction = document.querySelector('[data-watermark-new-action]');
+				const newWatermarkItem = document.querySelector('[data-watermark-new-item]');
+
+				if (showNewWatermarkButton && newWatermarkItem) {
+					showNewWatermarkButton.addEventListener('click', () => {
+						newWatermarkItem.hidden = false;
+						if (newWatermarkAction) {
+							newWatermarkAction.hidden = true;
+						}
+
+						const newWatermarkCard = newWatermarkItem.querySelector('[data-watermark-card]');
+						if (newWatermarkCard) {
+							applyPreviewSettings(newWatermarkCard);
+						}
+
+						const nameInput = newWatermarkItem.querySelector('[data-watermark-name]');
+						if (nameInput) {
+							nameInput.focus();
+						}
+					});
+				}
+
 				window.addEventListener('resize', () => {
 					document.querySelectorAll('[data-watermark-card]').forEach(applyPreviewSettings);
 				});
@@ -884,6 +1567,7 @@ if (! function_exists('fbks_render_global_settings_page')) {
 
 							if (assetId) {
 								assetId.value = attachment.id || '';
+								assetId.dispatchEvent(new Event('change', { bubbles: true }));
 							}
 							if (assetUrl) {
 								assetUrl.value = url;
@@ -910,6 +1594,7 @@ if (! function_exists('fbks_render_global_settings_page')) {
 
 						if (assetId) {
 							assetId.value = '';
+							assetId.dispatchEvent(new Event('change', { bubbles: true }));
 						}
 						if (assetUrl) {
 							assetUrl.value = '';

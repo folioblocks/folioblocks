@@ -135,7 +135,7 @@ if (function_exists('fbks_fs')) {
 
                 $woo_active = is_plugin_active('woocommerce/woocommerce.php');
 
-                return [
+                $shared_data = [
                     'checkoutUrl'    => fbks_fs()->pricing_url(),
                     'siteUrl'        => site_url(),
                     'wpVersion'      => get_bloginfo('version'),
@@ -150,6 +150,14 @@ if (function_exists('fbks_fs')) {
                         'disableDragToSave' => false,
                     ),
                 ];
+
+                if (fbks_fs()->can_use_premium_code__premium_only()) {
+                    $shared_data['mediaMetadata'] = function_exists('fbks_get_media_metadata_settings')
+                        ? fbks_get_media_metadata_settings()
+                        : array();
+                }
+
+                return $shared_data;
             }
 
             function fbks_enqueue_shared_js_data()
@@ -564,8 +572,54 @@ if (function_exists('fbks_fs')) {
             return;
         }
 
-        if ('folioblocks_page_folioblocks-global-settings' === $hook) {
+        if (fbks_fs()->can_use_premium_code__premium_only() && 'folioblocks_page_folioblocks-global-settings' === $hook) {
             wp_enqueue_media();
+			$media_metadata_scan_state = function_exists('fbks_get_media_metadata_scan_state')
+				? fbks_get_media_metadata_scan_state(get_current_user_id())
+				: array('status' => 'idle');
+			$media_metadata_last_scanned = function_exists('fbks_get_media_metadata_last_scanned_label')
+				? fbks_get_media_metadata_last_scanned_label($media_metadata_scan_state)
+				: '';
+			if (isset($media_metadata_scan_state['status']) && 'complete' === $media_metadata_scan_state['status']) {
+				$media_metadata_scan_state['status'] = 'idle';
+			}
+			$media_metadata_scan_state = function_exists('fbks_prepare_media_metadata_scan_response')
+				? fbks_prepare_media_metadata_scan_response($media_metadata_scan_state)
+				: $media_metadata_scan_state;
+			$media_metadata_scan_state['lastScanned'] = $media_metadata_last_scanned;
+
+            $global_settings_script_path = plugin_dir_path(__FILE__) . 'includes/pro/js/global-settings.js';
+            wp_enqueue_script(
+                'folioblocks-global-settings-js',
+                plugin_dir_url(__FILE__) . 'includes/pro/js/global-settings.js',
+                array(),
+                file_exists($global_settings_script_path) ? filemtime($global_settings_script_path) : FBKS_VERSION,
+                true
+            );
+            wp_add_inline_script(
+                'folioblocks-global-settings-js',
+                'window.folioBlocksGlobalSettingsAutosave = ' . wp_json_encode(array(
+                    'ajaxUrl'             => admin_url('admin-ajax.php'),
+                    'nonce'               => wp_create_nonce(fbks_get_admin_nonce_action('global-settings')),
+                    'openPanelsStorageKey' => 'folioblocks_global_settings_open_panels_' . get_current_blog_id() . '_' . get_current_user_id(),
+                    'savingText'          => __('Saving…', 'folioblocks'),
+                    'savedText'           => __('Saved', 'folioblocks'),
+                    'errorText'           => __('Could not save. Please try again.', 'folioblocks'),
+                    'savingWatermarkText' => __('Saving watermark…', 'folioblocks'),
+                    'watermarkSavedText'  => __('Watermark saved.', 'folioblocks'),
+                    'deleteConfirmText'   => __('Delete this watermark? This change will be saved immediately.', 'folioblocks'),
+					'scanExistingText'   => __('Scan Existing Media', 'folioblocks'),
+					'resumeScanText'     => __('Resume Scan', 'folioblocks'),
+					'scanAgainText'      => __('Scan Again', 'folioblocks'),
+					'scanningText'       => __('Scanning…', 'folioblocks'),
+					'scanErrorText'      => __('The Media Library scan could not continue. Please try again.', 'folioblocks'),
+					'mediaMetadataScanState' => $media_metadata_scan_state,
+					'mediaMetadataPalettes' => function_exists('fbks_get_media_metadata_palette_presets')
+						? fbks_get_media_metadata_palette_presets()
+						: array(),
+                )) . ';',
+                'before'
+            );
         }
 
         $style_path = plugin_dir_path(__FILE__) . 'includes/admin/settings-page.css';
@@ -614,6 +668,10 @@ if (fbks_fs()->can_use_premium_code__premium_only()) {
     require_once plugin_dir_path(__FILE__) . 'includes/pro/php/filter-helpers.php';
     require_once plugin_dir_path(__FILE__) . 'includes/pro/php/css-values.php';
     require_once plugin_dir_path(__FILE__) . 'includes/pro/php/exif-metadata.php';
+    require_once plugin_dir_path(__FILE__) . 'includes/pro/php/media-metadata.php';
+    if (is_admin()) {
+        require_once plugin_dir_path(__FILE__) . 'includes/pro/admin/media-metadata.php';
+    }
     require_once plugin_dir_path(__FILE__) . 'includes/pro/php/social-sharing.php';
     require_once plugin_dir_path(__FILE__) . 'includes/pro/php/proofing-gallery.php';
 

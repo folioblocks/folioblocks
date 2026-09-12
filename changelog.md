@@ -4,6 +4,19 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0] - 2026-09-11
+### Changed
+- Rebuilt the Global Settings page with a responsive two-column layout of collapsed, expandable section cards. Expanded cards span the full settings area and remember their open state for each user and site in the current browser.
+- Added per-section Global Settings autosaving with visible save status and sequential requests, while retaining the original form submission as a no-JavaScript fallback.
+- Simplified Watermark settings by showing the new-watermark editor immediately for empty libraries and placing it behind an Add New Watermark action when saved watermarks already exist.
+- Added an explicit Save Watermark action for new watermark drafts; existing watermark changes continue to autosave.
+- Added a manual refresh control to the FolioBlocks dashboard news feed.
+- Added a shared media-classification foundation that extracts and stores embedded JPEG/XMP ratings, Photo Mechanic color classes, labels, and supported EXIF data separately from editable Media Library values.
+- Added autosaved Media Metadata Global Settings for upload imports, Media Library visibility and editing roles, star ratings, and editable Capture One, Custom, Getty, Lightroom & Bridge, and Photo Mechanic color-class palettes.
+- Added automatic metadata importing for new JPEG uploads and a resumable, batched Scan Existing Media action for existing Media Library images without modifying image files or overwriting editable Library values.
+- Added Media Library attachment fields for viewing and editing Media Ratings, palette-derived Media Color Classes, and camera EXIF details alongside their read-only embedded originals, with compact section reset actions and Global Settings visibility and role controls.
+- Added authenticated, read-only WordPress REST API exposure for stored FolioBlocks attachment metadata.
+
 ## [1.5.1] - 2026-08-31
 ### Added
 - Added Page/Post Settings defaults to Global Settings for lazy loading, right-click protection, and drag-to-save protection. These defaults apply when compatible FolioBlocks content is first added and remain overridable per Page/Post without changing existing published content.
