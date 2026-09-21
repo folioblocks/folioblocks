@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Simplified Watermark settings by showing the new-watermark editor immediately for empty libraries and placing it behind an Add New Watermark action when saved watermarks already exist.
 - Added an explicit Save Watermark action for new watermark drafts; existing watermark changes continue to autosave.
 - Added a manual refresh control to the FolioBlocks dashboard news feed.
+- Refreshed the dashboard block grid with smaller neutral cards, compact version and demo metadata, and removed the transient Updated badge system.
 - Added a shared media-classification foundation that extracts and stores embedded JPEG/XMP ratings, Photo Mechanic color classes, labels, and supported EXIF data separately from editable Media Library values.
 - Added autosaved Media Metadata Global Settings for upload imports, Media Library visibility and editing roles, star ratings, and editable Capture One, Custom, Getty, Lightroom & Bridge, and Photo Mechanic color-class palettes.
 - Added automatic metadata importing for new JPEG uploads and a resumable, batched Scan Existing Media action for existing Media Library images without modifying image files or overwriting editable Library values.

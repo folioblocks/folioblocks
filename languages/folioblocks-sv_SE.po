@@ -14,6 +14,14 @@ msgstr ""
 "X-Generator: FolioBlocks custom i18n tooling\n"
 "X-Domain: folioblocks\n"
 
+#: includes/admin/settings-page.php:713
+msgid "* Modular Gallery Block available in Pro, Business, or Agency plans. Proofing Gallery Block available in Business & Agency plans."
+msgstr "* Modulärt galleriblock är tillgängligt i planerna Pro, Business eller Agency. Korrekturgalleriblock är tillgängligt i planerna Business och Agency."
+
+#: includes/admin/settings-page.php:715
+msgid "* Proofing Gallery Block available in Business & Agency plans."
+msgstr "* Korrekturgalleriblock är tillgängligt i planerna Business och Agency."
+
 #: includes/admin/review-request.php:177
 msgid "%1$sIf FolioBlocks has helped you create better galleries, would you mind leaving a review? Your feedback helps other photographers and potential users find the plugin and supports its continued development.%2$s%1$s%3$s &nbsp;&middot;&nbsp; %4$s &nbsp;&middot;&nbsp; %5$s%2$s"
 msgstr "%1$sOm FolioBlocks har hjälpt dig att skapa bättre gallerier, skulle du ha något emot att lämna en recension? Din feedback hjälper andra fotografer och potentiella användare att hitta plugin-programmet och stödjer dess fortsatta utveckling.%2$s%1$s%3$s  ·  %4$s  ·  %5$s%2$s"
@@ -404,10 +412,6 @@ msgstr ""
 
 #: includes/pro/admin/global-settings.php:235 includes/pro/admin/global-settings.php:628
 msgid "Bottom Right"
-msgstr ""
-
-#: includes/admin/settings-page.php:754
-msgid "BUSINESS/AGENCY"
 msgstr ""
 
 #: src/proofing-gallery-block/edit.js:444
@@ -2038,6 +2042,10 @@ msgstr "Mobil"
 msgid "Modular Gallery"
 msgstr "Modulart galleri"
 
+#: includes/admin/settings-page.php:653
+msgid "Modular Gallery Block"
+msgstr "Modulart galleriblock"
+
 #: includes/admin/free-pro.php:230
 msgid "Modular Gallery Block (Pro Only - All Plans)"
 msgstr ""
@@ -2466,10 +2474,6 @@ msgstr ""
 msgid "Pro"
 msgstr "Pro"
 
-#: includes/admin/settings-page.php:728
-msgid "PRO"
-msgstr "PRO"
-
 #: includes/admin/free-pro.php:384
 msgid "Pro - Agency"
 msgstr ""
@@ -2517,6 +2521,10 @@ msgstr ""
 #: includes/admin/settings-page.php:749 includes/pro/admin/global-settings.php:518 src/proofing-gallery-block/block.json:6 src/proofing-gallery-block/edit.js:1165 src/proofing-gallery-block/edit.js:1183
 msgid "Proofing Gallery"
 msgstr ""
+
+#: includes/admin/settings-page.php:678
+msgid "Proofing Gallery Block"
+msgstr "Korrekturgalleriblock"
 
 #: includes/admin/free-pro.php:257
 msgid "Proofing Gallery Block (Pro Only - Business & Agency Plans)"
@@ -3437,14 +3445,6 @@ msgstr ""
 #: includes/pro/admin/proofing-sessions.php:435
 msgid "Updated"
 msgstr ""
-
-#: includes/admin/settings-page.php:501
-msgid "UPDATED"
-msgstr "UPPDATERAD"
-
-#: includes/admin/settings-page.php:499
-msgid "Updated in v%s"
-msgstr "Uppdaterad i v%s"
 
 #: includes/admin/settings-page.php:734 includes/admin/settings-page.php:760
 msgid "Upgrade"

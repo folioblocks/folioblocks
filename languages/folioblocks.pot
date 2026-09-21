@@ -14,6 +14,14 @@ msgstr ""
 "X-Generator: FolioBlocks custom i18n tooling\n"
 "X-Domain: folioblocks\n"
 
+#: includes/admin/settings-page.php:713
+msgid "* Modular Gallery Block available in Pro, Business, or Agency plans. Proofing Gallery Block available in Business & Agency plans."
+msgstr ""
+
+#: includes/admin/settings-page.php:715
+msgid "* Proofing Gallery Block available in Business & Agency plans."
+msgstr ""
+
 #: includes/pro/admin/media-metadata.php:111
 msgid "(disabled)"
 msgstr ""
@@ -456,10 +464,6 @@ msgstr ""
 
 #: includes/admin/free-pro.php:394
 msgid "Business"
-msgstr ""
-
-#: includes/admin/settings-page.php:758
-msgid "BUSINESS/AGENCY"
 msgstr ""
 
 #: src/proofing-gallery-block/edit.js:444
@@ -2326,6 +2330,10 @@ msgstr ""
 msgid "Modular Gallery"
 msgstr ""
 
+#: includes/admin/settings-page.php:653
+msgid "Modular Gallery Block"
+msgstr ""
+
 #: includes/admin/free-pro.php:230
 msgid "Modular Gallery Block (Pro Only - All Plans)"
 msgstr ""
@@ -2814,10 +2822,6 @@ msgstr ""
 msgid "Pro"
 msgstr ""
 
-#: includes/admin/settings-page.php:732
-msgid "PRO"
-msgstr ""
-
 #: includes/admin/free-pro.php:395
 msgid "Pro - Agency"
 msgstr ""
@@ -2864,6 +2868,10 @@ msgstr ""
 
 #: includes/admin/settings-page.php:753 src/proofing-gallery-block/block.json:6 src/proofing-gallery-block/edit.js:1165 src/proofing-gallery-block/edit.js:1183
 msgid "Proofing Gallery"
+msgstr ""
+
+#: includes/admin/settings-page.php:678
+msgid "Proofing Gallery Block"
 msgstr ""
 
 #: includes/admin/free-pro.php:257
@@ -4000,14 +4008,6 @@ msgstr ""
 
 #: includes/pro/admin/proofing-sessions.php:459 includes/pro/admin/proofing-sessions.php:482
 msgid "Updated"
-msgstr ""
-
-#: includes/admin/settings-page.php:505
-msgid "UPDATED"
-msgstr ""
-
-#: includes/admin/settings-page.php:503
-msgid "Updated in v%s"
 msgstr ""
 
 #: includes/admin/settings-page.php:738 includes/admin/settings-page.php:764
