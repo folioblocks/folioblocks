@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added Media Library attachment fields for viewing and editing Media Ratings, palette-derived Media Color Classes, and camera EXIF details alongside their read-only embedded originals, with compact section reset actions and Global Settings visibility and role controls.
 - Added authenticated, read-only WordPress REST API exposure for stored FolioBlocks attachment metadata.
 
+## [1.5.2] - 2026-10-07
+### Updated 
+- Minor bug fixes and improvements
+
 ## [1.5.1] - 2026-08-31
 ### Added
 - Added Page/Post Settings defaults to Global Settings for lazy loading, right-click protection, and drag-to-save protection. These defaults apply when compatible FolioBlocks content is first added and remain overridable per Page/Post without changing existing published content.

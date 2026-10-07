@@ -133,6 +133,9 @@ No, the galleries will remain in place on your site. However, the **advanced lay
 
 == Changelog ==
 
+= 1.5.2 =
+* Minor bug fixes and improvements
+
 = 1.5.1 =
 * Added: New Proofing Gallery admin bar component that displays status of Proofing Galleries in real time.
 * Added: Page/Post Settings defaults in Global Settings for lazy loading, right-click protection, and drag-to-save protection on newly added compatible FolioBlocks content, with per-Page/Post overrides.
