@@ -2,10 +2,10 @@
 Contributors: portfolioblocks , campanellafoto
 Plugin link: https://folioblocks.com/
 Tags: gallery, image gallery, photo gallery, video gallery, lightbox, 
-Tested up to:      7.1
+Tested up to:      7.1.3
 Requires at least: 6.5
 Requires PHP: 7.4
-Stable tag:        1.5.1
+Stable tag:        1.5.2
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -132,6 +132,9 @@ No, the galleries will remain in place on your site. However, the **advanced lay
 6. Video Gallery block populated with images
 
 == Changelog ==
+
+= 1.5.2 =
+* Minor bug fixes & improvements
 
 = 1.5.1 =
 * Added: New Proofing Gallery admin bar component that displays status of Proofing Galleries in real time.

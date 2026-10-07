@@ -4,6 +4,10 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.1] - 2026-10-07
+### Updated 
+- Minor bug fixes and improvements
+
 ## [1.5.1] - 2026-08-31
 ### Added
 - Added Page/Post Settings defaults to Global Settings for lazy loading, right-click protection, and drag-to-save protection. These defaults apply when compatible FolioBlocks content is first added and remain overridable per Page/Post without changing existing published content.

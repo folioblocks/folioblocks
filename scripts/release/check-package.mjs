@@ -5,6 +5,7 @@ import {
 	mkdirSync,
 	mkdtempSync,
 	readFileSync,
+	readdirSync,
 	rmSync,
 	statSync,
 } from 'node:fs';
@@ -15,10 +16,17 @@ const root = process.cwd();
 const packageRootName = 'folioblocks-pro';
 const zipFileName = `${ packageRootName }.zip`;
 const zipPath = path.join(root, zipFileName);
+const mampPhpRoot = '/Applications/MAMP/bin/php';
+const mampPhpCandidates = existsSync(mampPhpRoot)
+	? readdirSync(mampPhpRoot)
+		.filter((name) => /^php\d+\.\d+\.\d+$/.test(name))
+		.sort((a, b) => b.localeCompare(a, 'en', { numeric: true }))
+		.map((name) => path.join(mampPhpRoot, name, 'bin', 'php'))
+	: [];
 const phpCandidates = [
 	process.env.PHP_BINARY,
-	'/Applications/MAMP/bin/php/php8.3.14/bin/php',
 	'php',
+	...mampPhpCandidates,
 ].filter(Boolean);
 
 const log = (message) => {
@@ -63,7 +71,7 @@ const findPhp = () => {
 		}
 	}
 
-	fail('Could not find a PHP binary for syntax checks.');
+	fail('Could not find a PHP binary for syntax checks. Set PHP_BINARY to the full path of your PHP executable.');
 };
 
 const readJson = (file) => JSON.parse(readFileSync(path.join(root, file), 'utf8'));
@@ -332,6 +340,7 @@ const createReleaseZip = () => {
 };
 
 const php = findPhp();
+log(`Using PHP: ${ php }`);
 
 log('Removing generated build artifacts');
 rmSync(path.join(root, 'build'), { recursive: true, force: true });
