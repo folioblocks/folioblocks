@@ -2,7 +2,11 @@
  * PB Image Block
  * Premium View JS
  */
-document.addEventListener( 'DOMContentLoaded', () => {
+import { getElement, store } from '@wordpress/interactivity';
+import { createFrontendScope } from '../pb-helpers/frontendScope';
+
+const initializeRuntime = () => {
+	const scope = createFrontendScope();
 	const getFullscreenElement = () =>
 		document.fullscreenElement || document.webkitFullscreenElement;
 	const fullscreenIcon =
@@ -74,7 +78,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		}
 	};
 
-	document.addEventListener( 'pbImageLightboxRendered', ( event ) => {
+	scope.listen( document, 'pbImageLightboxRendered', ( event ) => {
 		const { wrapper } = event.detail || {};
 		if (
 			! wrapper ||
@@ -98,7 +102,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		syncLightboxFullscreenButton();
 	} );
 
-	document.addEventListener( 'keydown', ( event ) => {
+	scope.listen( document, 'keydown', ( event ) => {
 		if (
 			event.key.toLowerCase() !== 'f' ||
 			event.metaKey ||
@@ -123,145 +127,42 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		fullscreenButton.click();
 	} );
 
-	document.addEventListener( 'pbImageLightboxClosing', ( event ) => {
+	scope.listen( document, 'pbImageLightboxClosing', ( event ) => {
 		exitLightboxFullscreen( event.detail?.wrapper );
 	} );
-	document.addEventListener(
-		'fullscreenchange',
-		syncLightboxFullscreenButton
-	);
-	document.addEventListener(
+	scope.listen( document, 'fullscreenchange', syncLightboxFullscreenButton );
+	scope.listen(
+		document,
 		'webkitfullscreenchange',
 		syncLightboxFullscreenButton
 	);
 
-	// Add Disable -Right-Click
-	document.addEventListener(
-		'contextmenu',
-		( e ) => {
-			const el = e.target.closest( '[data-disable-right-click]' );
-			if ( el ) {
-				e.preventDefault();
+	// Delegation covers download buttons inserted by client navigation.
+	scope.listen(
+		document,
+		'click',
+		( event ) => {
+			const button = event.target.closest( '.pb-image-block-download' );
+			if ( ! button ) {
+				return;
 			}
+			event.preventDefault();
+			event.stopPropagation();
+			const fileUrl = button.getAttribute( 'data-full-src' );
+			if ( ! fileUrl ) {
+				return;
+			}
+			const link = document.createElement( 'a' );
+			link.href = fileUrl;
+			link.download = fileUrl.split( '/' ).pop();
+			link.click();
 		},
 		{ capture: true }
 	);
 
-	// Disable drag-to-save for protected FolioBlocks media.
-	const disableDragToSave = document.querySelector(
-		'[data-disable-drag-to-save="true"]'
-	);
-	if ( disableDragToSave ) {
-		document.addEventListener(
-			'dragstart',
-			( e ) => {
-				const protectedMedia = e.target.closest(
-					'[data-disable-drag-to-save="true"] img, [data-disable-drag-to-save="true"] video, .pb-image-lightbox img'
-				);
-				if ( protectedMedia ) {
-					e.preventDefault();
-				}
-			},
-			{ capture: true }
-		);
-	}
-
-	const gallerySelectors = [
-		'.pb-grid-gallery',
-		'.pb-justified-gallery',
-		'.pb-masonry-gallery',
-		'.pb-carousel-gallery',
-	];
-
-	const getRandomizedGallery = ( wrapper ) => {
-		if (
-			gallerySelectors.some( ( selector ) => wrapper.matches( selector ) )
-		) {
-			return wrapper;
-		}
-
-		return (
-			Array.from( wrapper.children ).find( ( child ) =>
-				gallerySelectors.some( ( selector ) =>
-					child.matches( selector )
-				)
-			) || wrapper.querySelector( gallerySelectors.join( ',' ) )
-		);
-	};
-
-	const getGalleryItems = ( gallery ) =>
-		Array.from( gallery.children ).filter(
-			( child ) =>
-				! child.hasAttribute( 'data-pb-carousel-clone' ) &&
-				( child.matches( '.pb-image-block-wrapper' ) ||
-					child.matches( '.wp-block-folioblocks-pb-image-block' ) ||
-					child.querySelector( '.pb-image-block-wrapper' ) )
-		);
-
-	const shuffleItems = ( items ) => {
-		const shuffled = [ ...items ];
-		for ( let i = shuffled.length - 1; i > 0; i-- ) {
-			const j = Math.floor( Math.random() * ( i + 1 ) );
-			[ shuffled[ i ], shuffled[ j ] ] = [ shuffled[ j ], shuffled[ i ] ];
-		}
-
-		const isSameOrder = shuffled.every(
-			( item, index ) => item === items[ index ]
-		);
-		if ( isSameOrder && shuffled.length > 1 ) {
-			shuffled.push( shuffled.shift() );
-		}
-
-		return shuffled;
-	};
-
-	// Add randomizer to galleries
-	const galleries = document.querySelectorAll(
-		'.pb-randomized, [data-randomize="true"]'
-	);
-	galleries.forEach( ( wrapper ) => {
-		const gallery = getRandomizedGallery( wrapper );
-		if ( ! gallery ) {
-			return;
-		}
-
-		const items = getGalleryItems( gallery );
-		if ( items.length < 2 ) {
-			return;
-		}
-
-		const fragment = document.createDocumentFragment();
-		shuffleItems( items ).forEach( ( item ) =>
-			fragment.appendChild( item )
-		);
-		gallery.appendChild( fragment );
-
-		setTimeout( () => {
-			document.dispatchEvent( new Event( 'pbGalleryUpdated' ) );
-		}, 100 );
-	} );
-
-	// Image Download Button Logic
-	const downloadButtons = document.querySelectorAll(
-		'.pb-image-block-download'
-	);
-	downloadButtons.forEach( ( button ) => {
-		button.addEventListener( 'click', ( event ) => {
-			event.stopPropagation();
-
-			const fileUrl = button.getAttribute( 'data-full-src' );
-			const fileName = fileUrl.split( '/' ).pop();
-
-			// Create and click the download link
-			const link = document.createElement( 'a' );
-			link.href = fileUrl;
-			link.download = fileName;
-			link.click();
-		} );
-	} );
-
 	// WooCommerce Icon Logic (Add to Cart / View Product)
-	document.addEventListener(
+	scope.listen(
+		document,
 		'click',
 		( e ) => {
 			const cartBtn = e.target.closest(
@@ -371,8 +272,8 @@ document.addEventListener( 'DOMContentLoaded', () => {
 					} )
 				);
 
-				setTimeout( removeInjectedViewCartLinks, 0 );
-				setTimeout( removeInjectedViewCartLinks, 250 );
+				scope.timeout( removeInjectedViewCartLinks, 0 );
+				scope.timeout( removeInjectedViewCartLinks, 250 );
 			};
 
 			const body = new URLSearchParams();
@@ -399,6 +300,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				},
 				body: body.toString(),
 				credentials: 'same-origin',
+				signal: scope.signal,
 			} )
 				.then( async ( res ) => {
 					if ( ! res.ok ) {
@@ -407,6 +309,9 @@ document.addEventListener( 'DOMContentLoaded', () => {
 					return res.json();
 				} )
 				.then( ( data ) => {
+					if ( scope.signal.aborted || ! cartBtn.isConnected ) {
+						return;
+					}
 					// Woo returns an error + product_url for things like variable products.
 					if ( data?.error ) {
 						if ( data?.product_url ) {
@@ -449,6 +354,9 @@ document.addEventListener( 'DOMContentLoaded', () => {
 					cartBtn.removeAttribute( 'aria-busy' );
 				} )
 				.catch( () => {
+					if ( scope.signal.aborted || ! cartBtn.isConnected ) {
+						return;
+					}
 					cartBtn.classList.remove( 'is-loading' );
 					cartBtn.removeAttribute( 'aria-busy' );
 					// If AJAX doesn't work in this environment, fall back to the reliable redirect.
@@ -457,4 +365,46 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		},
 		{ capture: true }
 	);
+	return scope;
+};
+
+const roots = new Set();
+let runtime;
+store( 'folioblocks/image', {
+	callbacks: {
+		premium() {
+			const { ref } = getElement();
+			const root = ref.closest( '.wp-block-folioblocks-pb-image-block' );
+			roots.add( root );
+			runtime ||= initializeRuntime();
+			const controller = new AbortController();
+			const { signal } = controller;
+			if ( root.getAttribute( 'data-disable-right-click' ) === 'true' ) {
+				document.addEventListener(
+					'contextmenu',
+					( event ) => event.preventDefault(),
+					{ signal }
+				);
+			}
+			if ( root.getAttribute( 'data-disable-drag-to-save' ) === 'true' ) {
+				root.addEventListener(
+					'dragstart',
+					( event ) => {
+						if ( event.target.closest( 'img, video' ) ) {
+							event.preventDefault();
+						}
+					},
+					{ capture: true, signal }
+				);
+			}
+			return () => {
+				controller.abort();
+				roots.delete( root );
+				if ( ! roots.size ) {
+					runtime.dispose();
+					runtime = undefined;
+				}
+			};
+		},
+	},
 } );

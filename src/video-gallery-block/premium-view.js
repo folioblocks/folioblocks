@@ -1,94 +1,63 @@
-/**
- * Video Gallery Block
- * Premium View JS
- */
-document.addEventListener( 'DOMContentLoaded', () => {
-	const getBlockCategories = ( figure ) => {
-		const categoriesAttr = figure?.getAttribute( 'data-filters' ) || '';
-		const categories = categoriesAttr
-			.split( ',' )
-			.map( ( category ) => category.trim() )
-			.filter( Boolean );
+/** Filters and protection belong to the mounted Video Gallery. */
+import { getElement, store } from '@wordpress/interactivity';
+import { createFrontendScope } from '../pb-helpers/frontendScope';
+import { mountGalleryControls } from '../pb-helpers/galleryControls';
 
-		if ( categories.length > 0 ) {
-			return categories;
-		}
-
-		const legacyCategory = figure?.getAttribute( 'data-filter' ) || '';
-		return legacyCategory.trim() ? [ legacyCategory.trim() ] : [];
-	};
-
-	const galleries = document.querySelectorAll(
-		'.wp-block-folioblocks-video-gallery-block'
-	);
-
-	galleries.forEach( ( galleryBlock ) => {
-		const filterButtons = galleryBlock.querySelectorAll(
-			'.pb-video-gallery-filters .filter-button'
-		);
-		const videoBlockWrappers = galleryBlock.querySelectorAll(
-			'.wp-block-folioblocks-pb-video-block'
-		);
-
-		// Filter functionality
-		filterButtons.forEach( ( button ) => {
-			button.addEventListener( 'click', () => {
-				const selected = button.getAttribute( 'data-filter' );
-				const normalizedSelected = ( selected || '' )
-					.trim()
-					.toLowerCase();
-
-				filterButtons.forEach( ( btn ) =>
-					btn.classList.remove( 'is-active' )
+store( 'folioblocks/video-gallery', {
+	callbacks: {
+		premium() {
+			const root = getElement().ref.closest(
+				'.wp-block-folioblocks-video-gallery-block'
+			);
+			const scope = createFrontendScope();
+			const unprotect = mountGalleryControls(
+				root,
+				root,
+				'pb:video-gallery:reflow'
+			);
+			const buttons = root.querySelectorAll(
+				'.pb-video-gallery-filters .filter-button'
+			);
+			const items = root.querySelectorAll(
+				'.wp-block-folioblocks-pb-video-block'
+			);
+			const filter = ( selected ) => {
+				const value = ( selected || 'all' ).trim().toLowerCase();
+				root.setAttribute( 'data-active-filter', value );
+				buttons.forEach( ( button ) =>
+					button.classList.toggle(
+						'is-active',
+						( button.dataset.filter || '' ).trim().toLowerCase() ===
+							value
+					)
 				);
-				button.classList.add( 'is-active' );
-
-				videoBlockWrappers.forEach( ( wrapper ) => {
-					const figure = wrapper.querySelector( '.pb-video-block' );
-					const blockCategories = getBlockCategories( figure );
-					const matchesFilter =
-						normalizedSelected === 'all' ||
-						blockCategories.some(
-							( category ) =>
-								category.toLowerCase() === normalizedSelected
-						);
-
-					if ( matchesFilter ) {
-						wrapper.classList.remove( 'is-hidden' );
-					} else {
-						wrapper.classList.add( 'is-hidden' );
-					}
+				items.forEach( ( item ) => {
+					const video = item.querySelector( '.pb-video-block' );
+					const categories = (
+						video?.dataset.filters ||
+						video?.dataset.filter ||
+						''
+					)
+						.split( ',' )
+						.map( ( category ) => category.trim().toLowerCase() );
+					item.classList.toggle(
+						'is-hidden',
+						value !== 'all' && ! categories.includes( value )
+					);
 				} );
-			} );
-		} );
-	} );
-
-	// Disable right-click on entire page if any gallery block has it enabled
-	const disableRightClick = document.querySelector(
-		'[data-disable-right-click="true"]'
-	);
-	if ( disableRightClick ) {
-		document.addEventListener( 'contextmenu', ( e ) => {
-			e.preventDefault();
-		} );
-	}
-
-	// Disable drag-to-save for protected FolioBlocks media.
-	const disableDragToSave = document.querySelector(
-		'[data-disable-drag-to-save="true"]'
-	);
-	if ( disableDragToSave ) {
-		document.addEventListener(
-			'dragstart',
-			( e ) => {
-				const protectedMedia = e.target.closest(
-					'[data-disable-drag-to-save="true"] img, [data-disable-drag-to-save="true"] video, .pb-video-lightbox img, .pb-video-lightbox video'
-				);
-				if ( protectedMedia ) {
-					e.preventDefault();
-				}
-			},
-			{ capture: true }
-		);
-	}
+			};
+			buttons.forEach( ( button ) =>
+				scope.listen( button, 'click', () =>
+					filter( button.dataset.filter )
+				)
+			);
+			if ( buttons.length ) {
+				filter( root.getAttribute( 'data-active-filter' ) );
+			}
+			return () => {
+				scope.dispose();
+				unprotect();
+			};
+		},
+	},
 } );

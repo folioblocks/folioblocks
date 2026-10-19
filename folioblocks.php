@@ -667,6 +667,7 @@ if (function_exists('fbks_fs')) {
 if (fbks_fs()->can_use_premium_code__premium_only()) {
     require_once plugin_dir_path(__FILE__) . 'includes/pro/php/icon-registration.php';
     require_once plugin_dir_path(__FILE__) . 'includes/pro/php/filter-helpers.php';
+    require_once plugin_dir_path(__FILE__) . 'includes/pro/php/gallery-randomization.php';
     require_once plugin_dir_path(__FILE__) . 'includes/pro/php/css-values.php';
     require_once plugin_dir_path(__FILE__) . 'includes/pro/php/exif-metadata.php';
     require_once plugin_dir_path(__FILE__) . 'includes/pro/php/media-metadata.php';

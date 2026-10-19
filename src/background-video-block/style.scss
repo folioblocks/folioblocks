@@ -4,6 +4,8 @@
  **/
 
 .pb-bgvid {
+	// Keep internal media and controls below overlapping site navigation.
+	isolation: isolate;
 	position: relative;
 	overflow: hidden;
 
@@ -75,7 +77,6 @@
 }
 
 /* Keep poster as a fallback, but don't let it hide loaded media */
-.pb-bgvid.has-media .pb-bgvid__poster,
 .pb-bgvid.is-playing .pb-bgvid__poster {
 	opacity: 0;
 }
@@ -270,4 +271,10 @@
 .pb-bgvid__content .block-list-appender {
 	position: relative;
 	z-index: 2;
+}
+
+/* Keep unavailable or blocked media from covering the fallback poster. */
+.pb-bgvid:not(.is-playing) .pb-bgvid__video,
+.pb-bgvid:not(.is-playing) .pb-bgvid__vimeo {
+    visibility: hidden;
 }

@@ -4,6 +4,8 @@
  **/
 
 .wp-block-folioblocks-before-after-block {
+	// Keep internal media and controls below overlapping site navigation.
+	isolation: isolate;
 	overflow: hidden;
 	padding: 2px;
 }

@@ -1,199 +1,102 @@
-/**
- * Carousel Gallery Block
- * Premium View JS
- */
+/** Carousel autoplay and protection follow their mounted gallery. */
+import { getElement, store } from '@wordpress/interactivity';
+import { createFrontendScope } from '../pb-helpers/frontendScope';
+import { mountGalleryControls } from '../pb-helpers/galleryControls';
 
-document.addEventListener( 'DOMContentLoaded', () => {
-	const blocks = document.querySelectorAll(
-		'.wp-block-folioblocks-carousel-gallery-block'
-	);
-
-	blocks.forEach( ( block ) => {
-		// Guard: don’t double-init this block if something re-runs DOMContentLoaded
-		if ( block.dataset.pbPremiumInited === 'true' ) {
-			return;
-		}
-		block.dataset.pbPremiumInited = 'true';
-
-		const gallery = block.querySelector( '.pb-carousel-gallery' );
-		if ( ! gallery ) {
-			return;
-		}
-
-		// ---- Premium: Disable right-click (if enabled) ----
-		if ( block.dataset.disableRightClick === 'true' ) {
-			document.addEventListener(
-				'contextmenu',
-				( e ) => e.preventDefault(),
-				{ passive: false }
+store( 'folioblocks/carousel', {
+	callbacks: {
+		premium() {
+			const { ref: gallery } = getElement();
+			const block = gallery.closest(
+				'.wp-block-folioblocks-carousel-gallery-block'
 			);
-		}
-
-		// ---- Premium: Autoplay wiring ----
-		const autoplayEnabled = block.dataset.autoplay === 'true';
-		if ( ! autoplayEnabled ) {
-			return;
-		} // Nothing else to do if autoplay is off
-
-		const autoplaySpeed = Number( block.dataset.autoplaySpeed ) || 3;
-		const carousel = gallery.__pbCarousel;
-		if ( ! carousel ) {
-			return;
-		}
-		// NOTE: dataset can be missing/incorrect depending on how the controls are rendered.
-		// Treat "controls visible" as the source of truth.
-		const showControlsFromDataset = block.dataset.showControls === 'true';
-		const hasControlsMarkup =
-			!! block.querySelector( '.pb-carousel-controls' ) ||
-			!! block.querySelector( '.pb-carousel-play-button' );
-		const showControls = showControlsFromDataset || hasControlsMarkup;
-
-		let intervalId = null;
-
-		// Icons and play/pause button(s) (controls markup can vary)
-		// We support either:
-		//  1) A single toggle button: .pb-carousel-play-button containing .play-icon + .pause-icon
-		//  2) Separate buttons: .pb-carousel-play-button (play) and .pb-carousel-pause-button (pause)
-		const playButton = block.querySelector( '.pb-carousel-play-button' );
-		const pauseButton = block.querySelector( '.pb-carousel-pause-button' );
-
-		// Icons may live inside the toggle button (common case)
-		const playIcon = playButton?.querySelector( '.play-icon' );
-		const pauseIcon = playButton?.querySelector( '.pause-icon' );
-
-		const updateIcons = ( isPlaying ) => {
-			// If we have a toggle button with icons, switch icons.
-			if ( playIcon && pauseIcon ) {
-				playIcon.style.display = isPlaying ? 'none' : 'inline';
-				pauseIcon.style.display = isPlaying ? 'inline' : 'none';
-			}
-
-			// If we have separate buttons, optionally reflect state via aria-pressed.
-			if ( playButton ) {
-				playButton.setAttribute(
-					'aria-pressed',
-					String( !! isPlaying )
+			const scope = createFrontendScope();
+			const unprotect = mountGalleryControls(
+				block,
+				gallery,
+				'pb:carousel:reflow'
+			);
+			const playButton = block.querySelector(
+				'.pb-carousel-play-button'
+			);
+			const pauseButton = block.querySelector(
+				'.pb-carousel-pause-button'
+			);
+			const hasControls =
+				block.dataset.showControls === 'true' ||
+				!! block.querySelector(
+					'.pb-carousel-controls, .pb-carousel-play-button'
 				);
-			}
-			if ( pauseButton ) {
-				pauseButton.setAttribute(
+			const enabled = block.dataset.autoplay === 'true';
+			let playing = enabled && ! hasControls;
+			let timer;
+			const icons = () => {
+				const playIcon = playButton?.querySelector( '.play-icon' );
+				const pauseIcon = playButton?.querySelector( '.pause-icon' );
+				if ( playIcon ) {
+					playIcon.style.display = playing ? 'none' : 'inline';
+				}
+				if ( pauseIcon ) {
+					pauseIcon.style.display = playing ? 'inline' : 'none';
+				}
+				playButton?.setAttribute( 'aria-pressed', String( playing ) );
+				pauseButton?.setAttribute(
 					'aria-pressed',
-					String( ! isPlaying )
+					String( ! playing )
 				);
-			}
-		};
-
-		const startAutoplay = () => {
-			if ( intervalId ) {
-				return;
-			}
-
-			// If the base carousel script hasn't finished positioning yet, wait for it.
-			if ( ! gallery.classList.contains( 'pb-carousel-ready' ) ) {
-				const readyObserver = new MutationObserver( () => {
-					if ( gallery.classList.contains( 'pb-carousel-ready' ) ) {
-						readyObserver.disconnect();
-						carousel.syncCurrentIndex();
-						startAutoplay();
-					}
-				} );
-				readyObserver.observe( gallery, {
-					attributes: true,
-					attributeFilter: [ 'class' ],
-				} );
-				return;
-			}
-
-			updateIcons( true );
-			intervalId = setInterval( () => {
-				if ( ! carousel.next() ) {
-					clearInterval( intervalId );
-					intervalId = null;
-					updateIcons( false );
-				}
-			}, autoplaySpeed * 1000 );
-		};
-
-		const stopAutoplay = () => {
-			if ( ! intervalId ) {
-				// Still update icons/state so UI never gets stuck showing “pause”.
-				updateIcons( false );
-				return;
-			}
-			clearInterval( intervalId );
-			intervalId = null;
-			updateIcons( false );
-		};
-
-		// Bind controls
-		const bindControls = () => {
-			// Avoid double-binding (some themes/plugins may re-run scripts)
-			if ( block.dataset.pbPremiumControlsBound === 'true' ) {
-				return;
-			}
-			block.dataset.pbPremiumControlsBound = 'true';
-
-			// Separate pause button support
-			if ( pauseButton ) {
-				pauseButton.addEventListener( 'click', ( e ) => {
-					e.preventDefault();
-					e.stopPropagation();
-					stopAutoplay();
-				} );
-			}
-
-			// Toggle button support (or play-only button if pauseButton exists)
-			if ( playButton ) {
-				playButton.addEventListener( 'click', ( e ) => {
-					e.preventDefault();
-					e.stopPropagation();
-
-					// If we have a separate pause button, treat play button as play-only.
-					if ( pauseButton ) {
-						startAutoplay();
-						return;
-					}
-
-					// Otherwise toggle play/pause.
-					if ( intervalId ) {
-						stopAutoplay();
-					} else {
-						startAutoplay();
-					}
-				} );
-			}
-		};
-
-		// If controls are shown, NEVER auto-start. Require user interaction.
-		if ( showControls ) {
-			bindControls();
-			// Ensure initial icon state is “play”
-			updateIcons( false );
-		} else {
-			// No controls visible: auto-start once the base script marks the gallery ready
-			const maybeStart = () => {
-				if ( gallery.classList.contains( 'pb-carousel-ready' ) ) {
-					carousel.syncCurrentIndex();
-					startAutoplay();
-					observer.disconnect();
-				}
 			};
-			const observer = new MutationObserver( maybeStart );
-			observer.observe( gallery, {
-				attributes: true,
-				attributeFilter: [ 'class' ],
-			} );
-			// Fallback: if already ready by the time we run
-			maybeStart();
-		}
-
-		// Keep index in sync with user swipe
-		let t;
-		gallery.addEventListener( 'scroll', () => {
-			clearTimeout( t );
-			t = setTimeout( carousel.syncCurrentIndex, 100 );
-		} );
-
-		window.addEventListener( 'resize', carousel.syncCurrentIndex );
-	} );
+			const schedule = () => {
+				window.clearTimeout( timer );
+				if (
+					! playing ||
+					! gallery.classList.contains( 'pb-carousel-ready' )
+				) {
+					return;
+				}
+				timer = scope.timeout(
+					() => {
+						if ( gallery.__pbCarousel?.isMoving() ) {
+							schedule();
+							return;
+						}
+						if ( ! gallery.__pbCarousel?.next() ) {
+							playing = false;
+							icons();
+							return;
+						}
+						schedule();
+					},
+					Math.max(
+						0.25,
+						Number( block.dataset.autoplaySpeed ) || 3
+					) * 1000
+				);
+			};
+			scope.listen( gallery, 'pb:carousel:ready', schedule );
+			if ( enabled && playButton ) {
+				scope.listen( playButton, 'click', ( event ) => {
+					event.preventDefault();
+					event.stopPropagation();
+					playing = pauseButton ? true : ! playing;
+					icons();
+					schedule();
+				} );
+			}
+			if ( enabled && pauseButton ) {
+				scope.listen( pauseButton, 'click', ( event ) => {
+					event.preventDefault();
+					event.stopPropagation();
+					playing = false;
+					icons();
+					schedule();
+				} );
+			}
+			icons();
+			schedule();
+			return () => {
+				scope.dispose();
+				unprotect();
+			};
+		},
+	},
 } );

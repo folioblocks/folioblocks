@@ -2,7 +2,7 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
 	"name": "folioblocks/filmstrip-gallery-block",
-	"version": "1.4",
+	"version": "1.5",
 	"title": "Filmstrip Gallery",
 	"category": "folioblocks",
 	"allowedBlocks": [
@@ -16,6 +16,7 @@
 		}
 	},
 	"supports": {
+		"interactivity": true,
 		"align": [
 			"wide",
 			"full"
@@ -558,7 +559,7 @@
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",
 	"render": "file:./render.php",
-	"viewScript": [
+	"viewScriptModule": [
 		"file:./view.js",
 		"file:./premium-view.js"
 	]

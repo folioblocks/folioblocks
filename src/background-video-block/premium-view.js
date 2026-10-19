@@ -1,15 +1,20 @@
-/**
- * Background Video Block
- * Premium View JS
- */
-document.addEventListener( 'DOMContentLoaded', () => {
-	// Disable right-click on entire page if any block has it enabled.
-	const disableRightClick = document.querySelector(
-		'[data-disable-right-click="true"]'
-	);
-	if ( disableRightClick ) {
-		document.addEventListener( 'contextmenu', ( e ) => e.preventDefault(), {
-			passive: false,
-		} );
-	}
+/** Keep page-wide protection tied to the background block's lifetime. */
+import { getElement, store } from '@wordpress/interactivity';
+
+store( 'folioblocks/background-video', {
+	callbacks: {
+		protection() {
+			const { ref } = getElement();
+			if ( ref.getAttribute( 'data-disable-right-click' ) !== 'true' ) {
+				return;
+			}
+			const controller = new AbortController();
+			document.addEventListener(
+				'contextmenu',
+				( event ) => event.preventDefault(),
+				{ signal: controller.signal }
+			);
+			return () => controller.abort();
+		},
+	},
 } );

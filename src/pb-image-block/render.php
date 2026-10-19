@@ -464,7 +464,11 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 	}
 }
 
-$fbks_wrapper_attributes_args = [];
+$fbks_wrapper_attributes_args = [
+    'data-wp-interactive' => 'folioblocks/image',
+    'data-wp-watch' => 'callbacks.initialize',
+    'data-wp-key' => wp_unique_id( 'fbks-image-' ) . '-' . md5( wp_json_encode( [ get_the_ID(), $attributes, $fbks_context ] ) ),
+];
 
 if ( ! empty( $fbks_disable_right_click ) ) {
 	$fbks_wrapper_attributes_args['data-disable-right-click'] = 'true';
@@ -575,7 +579,7 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 	?>
 
 <div 
-	<?php echo wp_kses_post( $fbks_wrapper_attributes ); ?> 
+	<?php echo $fbks_wrapper_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() escapes each attribute value. ?>
 	<?php if ( fbks_fs()->can_use_premium_code__premium_only() ) : if ( '' !== $fbks_filter_categories_attr ) : ?>
 		data-filters="<?php echo esc_attr( $fbks_filter_categories_attr ); ?>"
 	<?php endif; endif; ?>
@@ -583,7 +587,9 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 		data-filter="<?php echo esc_attr( $fbks_filter_category ); ?>"
 	<?php endif; endif; ?>
 >
+    <dialog class="pb-image-lightbox-host" aria-label="<?php esc_attr_e( 'Image lightbox', 'folioblocks' ); ?>"></dialog>
 	<figure
+        <?php if ( fbks_fs()->can_use_premium_code__premium_only() ) : ?>data-wp-watch="callbacks.premium"<?php endif; ?>
 		class="pb-image-block
       <?php if ( fbks_fs()->can_use_premium_code__premium_only() && $fbks_title_hover ) { echo ' title-hover ' . esc_attr( $fbks_hover_variant_class ); } ?>
       <?php if ( fbks_fs()->can_use_premium_code__premium_only() && $fbks_title_hover && $fbks_overlay_entrance_class ) { echo ' ' . esc_attr( $fbks_overlay_entrance_class ); } ?>
@@ -656,7 +662,7 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 					data-lightbox-zoom="true"
 				<?php endif; ?>
 				<?php if ( fbks_fs()->can_use_premium_code__premium_only() && $fbks_show_lightbox_watermark ) : ?>
-					<?php echo wp_kses_data( $fbks_watermark_data_attrs ); ?>
+					<?php echo $fbks_watermark_data_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fbks_get_watermark_overlay_data_attrs() escapes each attribute value. ?>
 				<?php endif; ?>
 				<?php if ( ! empty( $fbks_lightbox_caption ) ) : ?>
 					data-caption="<?php echo esc_attr( $fbks_lightbox_caption ); ?>"
@@ -687,7 +693,8 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 			}
 			$fbks_image_html = wp_get_attachment_image( $fbks_id, $fbks_image_size, false, $fbks_img_attributes );
 			if ( '' !== $fbks_link_url && '' !== $fbks_image_html ) {
-				echo '<a href="' . esc_url( $fbks_link_url ) . '" class="' . esc_attr( $fbks_link_class ) . '"' . wp_kses_data( $fbks_link_attrs ) . '>';
+				// Link attributes contain fixed markup and values escaped when constructed above.
+				echo '<a href="' . esc_url( $fbks_link_url ) . '" class="' . esc_attr( $fbks_link_class ) . '"' . $fbks_link_attrs . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo wp_kses_post( $fbks_image_html );
 				echo '</a>';
 			} else {
@@ -697,13 +704,14 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 		<?php endif; ?>
 
 		<?php if ( fbks_fs()->can_use_premium_code__premium_only() && $fbks_show_gallery_watermark ) : ?>
-			<span class="pb-watermark-overlay" style="<?php echo esc_attr( $fbks_watermark_style ); ?>"<?php echo wp_kses_data( $fbks_watermark_data_attrs ); ?> aria-hidden="true"></span>
+			<span class="pb-watermark-overlay" style="<?php echo esc_attr( $fbks_watermark_style ); ?>"<?php echo $fbks_watermark_data_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fbks_get_watermark_overlay_data_attrs() escapes each attribute value. ?> aria-hidden="true"></span>
 		<?php endif; ?>
 
 		<?php if ( $fbks_is_inside_proofing_gallery && ( $fbks_proofing_enable_heart || $fbks_proofing_enable_flag || $fbks_proofing_enable_comment ) ) : ?>
 			<?php $fbks_proofing_control_slot = 1; ?>
 			<div
 				class="fbks-proofing-thumbnail-controls"
+				data-wp-interactive="folioblocks/proofing-gallery"
 				data-wp-context="<?php echo esc_attr( wp_json_encode( [
 					'imageId'      => $fbks_proofing_image_key,
 					'attachmentId' => $fbks_id,
@@ -876,7 +884,7 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 				<a
 					class="pb-image-block-link-icon <?php echo $fbks_link_icon_display === 'hover' ? 'hover-only' : ''; ?>"
 					href="<?php echo esc_url( $fbks_icon_link_url ); ?>"
-					<?php echo wp_kses_data( $fbks_icon_link_attrs ); ?>
+					<?php echo $fbks_icon_link_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Contains only fixed target and rel attributes. ?>
 					<?php if ( $fbks_link_button_style !== '' ) : ?>
 						style="<?php echo esc_attr( $fbks_link_button_style ); ?>"
 					<?php endif; ?>

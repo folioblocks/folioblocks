@@ -1,317 +1,273 @@
-// Carousel Gallery Block - View JS
-document.addEventListener( 'DOMContentLoaded', () => {
-	const blocks = document.querySelectorAll(
-		'.wp-block-folioblocks-carousel-gallery-block'
+import { getElement, store } from '@wordpress/interactivity';
+import { createFrontendScope } from '../pb-helpers/frontendScope';
+const initializeCarousel = ( block ) => {
+	const gallery = block.querySelector( '.pb-carousel-gallery' );
+	if ( ! gallery ) {
+		return;
+	}
+
+	const scope = createFrontendScope();
+	const loopSlides = block.dataset.loop === 'true';
+	const verticalOnMobile = block.dataset.verticalOnMobile === 'true';
+	const originalSlides = Array.from( gallery.children ).filter(
+		( slide ) => ! slide.hasAttribute( 'data-pb-carousel-clone' )
 	);
+	let trackSlides = originalSlides;
+	let currentIndex = 0;
+	let isReady = false;
+	let isResetting = false;
+	let scrollSyncTimeout;
+	let moving = false;
+	const pendingSteps = [];
 
-	blocks.forEach( ( block ) => {
-		const gallery = block.querySelector( '.pb-carousel-gallery' );
-		if ( ! gallery ) {
-			return;
+	const applyHeight = () => {
+		const width = gallery.offsetWidth;
+		const isMobile = width <= 768;
+		const [ w, h ] = isMobile && verticalOnMobile ? [ 2, 3 ] : [ 3, 2 ];
+		const idealHeight = Math.round( width * 0.85 * ( h / w ) );
+		gallery.style.setProperty(
+			'--pb-carousel-height',
+			`${ Math.min( idealHeight, window.innerHeight * 0.85 ) }px`
+		);
+	};
+
+	const buildLoopTrack = () => {
+		trackSlides = Array.from( gallery.children );
+	};
+
+	const logicalToTrackIndex = ( index ) =>
+		loopSlides && originalSlides.length > 1
+			? originalSlides.length + index
+			: index;
+
+	const getCenteredLeft = ( slide ) => {
+		if ( ! slide ) {
+			return 0;
 		}
+		return Math.max(
+			0,
+			Math.floor(
+				slide.offsetLeft -
+					( gallery.clientWidth - slide.clientWidth ) / 2
+			)
+		);
+	};
 
-		const loopSlides = block.dataset.loop === 'true';
-		const verticalOnMobile = block.dataset.verticalOnMobile === 'true';
-		let originalSlides = Array.from( gallery.children );
-		let trackSlides = originalSlides;
-		let currentIndex = 0;
-		let isReady = false;
-		let isResetting = false;
-		let scrollSyncTimeout;
-		let boundaryResetTimeout;
+	const scrollToTrackIndex = ( trackIndex, smooth = true ) => {
+		const target = trackSlides[ trackIndex ];
+		if ( ! target ) {
+			return false;
+		}
+		gallery.scrollTo( {
+			left: getCenteredLeft( target ),
+			behavior: smooth ? 'smooth' : 'instant',
+		} );
+		return true;
+	};
 
-		const applyHeight = () => {
-			const width = gallery.offsetWidth;
-			const isMobile = width <= 768;
-			const [ w, h ] = isMobile && verticalOnMobile ? [ 2, 3 ] : [ 3, 2 ];
-			const idealHeight = Math.round( width * 0.85 * ( h / w ) );
-			gallery.style.setProperty(
-				'--pb-carousel-height',
-				`${ Math.min( idealHeight, window.innerHeight * 0.85 ) }px`
+	const normalizeLogicalIndex = ( index ) => {
+		if ( ! originalSlides.length ) {
+			return -1;
+		}
+		if ( loopSlides ) {
+			return (
+				( ( index % originalSlides.length ) + originalSlides.length ) %
+				originalSlides.length
 			);
-		};
+		}
+		return Math.max( 0, Math.min( index, originalSlides.length - 1 ) );
+	};
 
-		const prepareClone = ( slide, position ) => {
-			const clone = slide.cloneNode( true );
-			clone.dataset.pbCarouselClone = position;
-			clone.setAttribute( 'aria-hidden', 'true' );
-			clone.setAttribute( 'inert', '' );
-			clone.removeAttribute( 'id' );
-			clone
-				.querySelectorAll( '[id]' )
-				.forEach( ( element ) => element.removeAttribute( 'id' ) );
-			clone
-				.querySelectorAll( '.pb-image-block-lightbox' )
-				.forEach( ( element ) =>
-					element.classList.remove( 'pb-image-block-lightbox' )
-				);
-			clone
-				.querySelectorAll(
-					'a, button, input, select, textarea, [tabindex]'
-				)
-				.forEach( ( element ) =>
-					element.setAttribute( 'tabindex', '-1' )
-				);
-			return clone;
-		};
+	const scrollToSlide = ( index, opts = { smooth: true } ) => {
+		const nextIndex = normalizeLogicalIndex( index );
+		if ( nextIndex < 0 ) {
+			return false;
+		}
+		pendingSteps.length = 0;
+		moving = false;
+		window.clearTimeout( scrollSyncTimeout );
+		currentIndex = nextIndex;
+		return scrollToTrackIndex(
+			logicalToTrackIndex( nextIndex ),
+			opts.smooth !== false
+		);
+	};
 
-		const buildLoopTrack = () => {
-			if ( ! loopSlides || originalSlides.length < 2 ) {
-				trackSlides = originalSlides;
-				return;
-			}
-
-			const before = originalSlides.map( ( slide ) =>
-				prepareClone( slide, 'before' )
-			);
-			const after = originalSlides.map( ( slide ) =>
-				prepareClone( slide, 'after' )
-			);
-			const fragment = document.createDocumentFragment();
-			[ ...before, ...originalSlides, ...after ].forEach( ( slide ) =>
-				fragment.appendChild( slide )
-			);
-			gallery.appendChild( fragment );
-			trackSlides = Array.from( gallery.children );
-		};
-
-		const rebuildLoopTrack = () => {
-			gallery
-				.querySelectorAll( '[data-pb-carousel-clone]' )
-				.forEach( ( clone ) => clone.remove() );
-			originalSlides = Array.from( gallery.children );
-			trackSlides = originalSlides;
-			currentIndex = 0;
-			buildLoopTrack();
-			scrollToSlide( 0, { smooth: false } );
-		};
-
-		const logicalToTrackIndex = ( index ) =>
-			loopSlides && originalSlides.length > 1
-				? originalSlides.length + index
-				: index;
-
-		const getCenteredLeft = ( slide ) => {
-			if ( ! slide ) {
-				return 0;
-			}
-			return Math.max(
-				0,
-				Math.floor(
-					slide.offsetLeft -
-						( gallery.clientWidth - slide.clientWidth ) / 2
-				)
-			);
-		};
-
-		const scrollToTrackIndex = ( trackIndex, smooth = true ) => {
-			const target = trackSlides[ trackIndex ];
-			if ( ! target ) {
-				return false;
-			}
-			const previousScrollBehavior = gallery.style.scrollBehavior;
-			if ( ! smooth ) {
-				gallery.style.scrollBehavior = 'auto';
-			}
-			gallery.scrollTo( {
-				left: getCenteredLeft( target ),
-				behavior: smooth ? 'smooth' : 'auto',
-			} );
-			if ( ! smooth ) {
-				window.requestAnimationFrame( () => {
-					gallery.style.scrollBehavior = previousScrollBehavior;
-				} );
-			}
+	// Complete each movement before crossing back from a decorative loop copy.
+	// Retargeting a native smooth scroll during that jump can expose an empty track.
+	const step = ( direction, opts = { smooth: true } ) => {
+		if ( ! originalSlides.length ) {
+			return false;
+		}
+		if ( moving ) {
+			pendingSteps.push( { direction, opts } );
 			return true;
-		};
+		}
+		const nextIndex = currentIndex + direction;
+		if (
+			! loopSlides &&
+			( nextIndex < 0 || nextIndex >= originalSlides.length )
+		) {
+			return false;
+		}
+		const targetIndex = logicalToTrackIndex( currentIndex ) + direction;
+		currentIndex = normalizeLogicalIndex( nextIndex );
+		moving = true;
+		window.clearTimeout( scrollSyncTimeout );
+		scrollToTrackIndex(
+			originalSlides.length === 1 ? 0 : targetIndex,
+			opts.smooth !== false
+		);
+		// Also settles a no-op movement (for example a one-image gallery).
+		scrollSyncTimeout = scope.timeout( finishMovement, 100 );
+		return true;
+	};
+	const next = ( opts ) => step( 1, opts );
+	const previous = ( opts ) => step( -1, opts );
 
-		const normalizeLogicalIndex = ( index ) => {
-			if ( ! originalSlides.length ) {
-				return -1;
-			}
-			if ( loopSlides ) {
-				return (
-					( ( index % originalSlides.length ) +
-						originalSlides.length ) %
-					originalSlides.length
-				);
-			}
-			return Math.max( 0, Math.min( index, originalSlides.length - 1 ) );
-		};
-
-		const scrollToSlide = ( index, opts = { smooth: true } ) => {
-			const nextIndex = normalizeLogicalIndex( index );
-			if ( nextIndex < 0 ) {
-				return false;
-			}
-			currentIndex = nextIndex;
-			return scrollToTrackIndex(
-				logicalToTrackIndex( nextIndex ),
-				opts.smooth !== false
+	const syncCurrentIndex = () => {
+		if ( ! trackSlides.length || isResetting ) {
+			return currentIndex;
+		}
+		const scrollCenter = gallery.scrollLeft + gallery.clientWidth / 2;
+		let nearestTrackIndex = 0;
+		let nearestDistance = Infinity;
+		trackSlides.forEach( ( slide, index ) => {
+			const distance = Math.abs(
+				scrollCenter - ( slide.offsetLeft + slide.clientWidth / 2 )
 			);
-		};
+			if ( distance < nearestDistance ) {
+				nearestDistance = distance;
+				nearestTrackIndex = index;
+			}
+		} );
 
-		const scheduleBoundaryReset = ( logicalIndex ) => {
-			isResetting = true;
-			window.clearTimeout( boundaryResetTimeout );
-			boundaryResetTimeout = window.setTimeout( () => {
-				scrollToTrackIndex( logicalToTrackIndex( logicalIndex ), false );
-				window.requestAnimationFrame( () => {
+		if ( loopSlides && originalSlides.length > 1 ) {
+			const count = originalSlides.length;
+			currentIndex = ( nearestTrackIndex - count + count ) % count;
+			if ( nearestTrackIndex < count || nearestTrackIndex >= count * 2 ) {
+				isResetting = true;
+				scrollToTrackIndex(
+					logicalToTrackIndex( currentIndex ),
+					false
+				);
+				scope.frame( () => {
 					isResetting = false;
 				} );
-			}, 500 );
-		};
-
-		const next = ( opts = { smooth: true } ) => {
-			if ( ! loopSlides && currentIndex >= originalSlides.length - 1 ) {
-				return false;
 			}
-			if ( loopSlides && currentIndex === originalSlides.length - 1 ) {
-				currentIndex = 0;
-				const didScroll = scrollToTrackIndex(
-					originalSlides.length * 2,
-					opts.smooth !== false
-				);
-				if ( didScroll ) {
-					scheduleBoundaryReset( currentIndex );
-				}
-				return didScroll;
-			}
-			return scrollToSlide( currentIndex + 1, opts );
-		};
+		} else {
+			currentIndex = nearestTrackIndex;
+		}
+		return currentIndex;
+	};
 
-		const previous = ( opts = { smooth: true } ) => {
-			if ( ! loopSlides && currentIndex <= 0 ) {
-				return false;
-			}
-			if ( loopSlides && currentIndex === 0 ) {
-				currentIndex = originalSlides.length - 1;
-				const didScroll = scrollToTrackIndex(
-					originalSlides.length - 1,
-					opts.smooth !== false
-				);
-				if ( didScroll ) {
-					scheduleBoundaryReset( currentIndex );
-				}
-				return didScroll;
-			}
-			return scrollToSlide( currentIndex - 1, opts );
-		};
-
-		const syncCurrentIndex = () => {
-			if ( ! trackSlides.length || isResetting ) {
-				return currentIndex;
-			}
-			const scrollCenter = gallery.scrollLeft + gallery.clientWidth / 2;
-			let nearestTrackIndex = 0;
-			let nearestDistance = Infinity;
-			trackSlides.forEach( ( slide, index ) => {
-				const distance = Math.abs(
-					scrollCenter - ( slide.offsetLeft + slide.clientWidth / 2 )
-				);
-				if ( distance < nearestDistance ) {
-					nearestDistance = distance;
-					nearestTrackIndex = index;
-				}
-			} );
-
-			if ( loopSlides && originalSlides.length > 1 ) {
-				const count = originalSlides.length;
-				currentIndex = ( nearestTrackIndex - count + count ) % count;
-				if (
-					nearestTrackIndex < count ||
-					nearestTrackIndex >= count * 2
-				) {
-					isResetting = true;
-					scrollToTrackIndex(
-						logicalToTrackIndex( currentIndex ),
-						false
-					);
-					window.requestAnimationFrame( () => {
-						isResetting = false;
-					} );
-				}
-			} else {
-				currentIndex = nearestTrackIndex;
-			}
-			return currentIndex;
-		};
-
-		buildLoopTrack();
-		gallery.style.setProperty( 'overflow-anchor', 'none' );
-		gallery.style.overflowX = 'hidden';
-		applyHeight();
-
-		gallery.__pbCarousel = {
-			getCurrentIndex: () => currentIndex,
-			getSlides: () => originalSlides,
-			isLooping: () => loopSlides,
-			next,
-			previous,
-			scrollToSlide,
-			syncCurrentIndex,
-		};
-
-		block
-			.querySelectorAll( '.pb-carousel-chevron' )
-			.forEach( ( button ) => {
-				button.addEventListener( 'click', () => {
-					if ( button.classList.contains( 'prev' ) ) {
-						previous();
-					} else {
-						next();
-					}
-				} );
-			} );
-
-		gallery.addEventListener( 'keydown', ( event ) => {
-			if ( event.key === 'ArrowRight' ) {
-				event.preventDefault();
-				next();
-			} else if ( event.key === 'ArrowLeft' ) {
-				event.preventDefault();
-				previous();
-			}
-		} );
-
-		gallery.addEventListener( 'scroll', () => {
-			if ( ! isReady ) {
+	const finishMovement = () => {
+		syncCurrentIndex();
+		moving = false;
+		// Let the instant loop reset paint before starting another smooth scroll.
+		scope.frame( () => {
+			if ( moving ) {
 				return;
 			}
-			window.clearTimeout( scrollSyncTimeout );
-			scrollSyncTimeout = window.setTimeout( syncCurrentIndex, 100 );
-		} );
-
-		const initialize = () => {
-			applyHeight();
-			scrollToSlide( 0, { smooth: false } );
-			window.requestAnimationFrame( () => {
-				scrollToSlide( 0, { smooth: false } );
-				gallery.style.overflowX = '';
-				gallery.setAttribute( 'tabindex', '0' );
-				gallery.classList.add( 'pb-carousel-ready' );
-				block.classList.remove( 'is-loading' );
-				block.classList.add( 'pb-carousel-loaded' );
-				isReady = true;
-			} );
-		};
-
-		const firstImage = gallery.querySelector( 'img' );
-		if ( ! firstImage || firstImage.complete ) {
-			window.requestAnimationFrame( initialize );
-		} else {
-			firstImage.addEventListener( 'load', initialize, { once: true } );
-			firstImage.addEventListener( 'error', initialize, { once: true } );
-		}
-
-		const resizeObserver = new window.ResizeObserver( () => {
-			applyHeight();
-			if ( isReady ) {
-				scrollToSlide( currentIndex, { smooth: false } );
+			while ( pendingSteps.length ) {
+				const pending = pendingSteps.shift();
+				if ( step( pending.direction, pending.opts ) ) {
+					break;
+				}
 			}
 		} );
-		resizeObserver.observe( gallery.parentElement );
+	};
 
-		document.addEventListener( 'pbGalleryUpdated', rebuildLoopTrack );
+	buildLoopTrack();
+	gallery.style.setProperty( 'overflow-anchor', 'none' );
+	gallery.style.overflowX = 'hidden';
+	applyHeight();
+
+	gallery.__pbCarousel = {
+		getCurrentIndex: () => currentIndex,
+		isMoving: () => moving || pendingSteps.length > 0,
+		getSlides: () => originalSlides,
+		isLooping: () => loopSlides,
+		next,
+		previous,
+		scrollToSlide,
+		syncCurrentIndex,
+	};
+
+	block.querySelectorAll( '.pb-carousel-chevron' ).forEach( ( button ) => {
+		scope.listen( button, 'click', () => {
+			if ( button.classList.contains( 'prev' ) ) {
+				previous();
+			} else {
+				next();
+			}
+		} );
 	} );
+
+	scope.listen( gallery, 'keydown', ( event ) => {
+		if ( event.key === 'ArrowRight' ) {
+			event.preventDefault();
+			next();
+		} else if ( event.key === 'ArrowLeft' ) {
+			event.preventDefault();
+			previous();
+		}
+	} );
+
+	scope.listen( gallery, 'scroll', () => {
+		if ( ! isReady ) {
+			return;
+		}
+		window.clearTimeout( scrollSyncTimeout );
+		scrollSyncTimeout = scope.timeout( finishMovement, 100 );
+	} );
+
+	const initialize = () => {
+		applyHeight();
+		scrollToSlide( 0, { smooth: false } );
+		scope.frame( () => {
+			scrollToSlide( 0, { smooth: false } );
+			gallery.style.overflowX = '';
+			gallery.setAttribute( 'tabindex', '0' );
+			gallery.classList.add( 'pb-carousel-ready' );
+			block.classList.remove( 'is-loading' );
+			block.classList.add( 'pb-carousel-loaded' );
+			isReady = true;
+			gallery.dispatchEvent( new Event( 'pb:carousel:ready' ) );
+		} );
+	};
+
+	scope.frame( initialize );
+
+	const handleResize = () => {
+		applyHeight();
+		if ( isReady ) {
+			scrollToSlide( currentIndex, { smooth: false } );
+		}
+	};
+	originalSlides.forEach( ( slide ) => {
+		const image = slide.querySelector( 'img' );
+		if ( image && ! image.complete ) {
+			scope.listen( image, 'load', handleResize, { once: true } );
+			scope.listen( image, 'error', handleResize, { once: true } );
+		}
+	} );
+
+	const resizeObserver = new window.ResizeObserver( handleResize );
+	resizeObserver.observe( gallery.parentElement );
+	scope.listen( window, 'resize', handleResize );
+
+	gallery.dispatchEvent( new Event( 'pb:carousel:initialized' ) );
+	return () => {
+		scope.dispose();
+		resizeObserver.disconnect();
+		delete gallery.__pbCarousel;
+	};
+};
+store( 'folioblocks/carousel', {
+	callbacks: {
+		initialize() {
+			return initializeCarousel( getElement().ref );
+		},
+	},
 } );

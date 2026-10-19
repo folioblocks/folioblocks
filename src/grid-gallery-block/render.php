@@ -18,6 +18,9 @@ $fbks_extra_class = '';
 $fbks_data_attr   = '';
 $fbks_wrapper_attributes_args = [
     'class' => 'is-loading',
+    'data-wp-interactive' => 'folioblocks/grid',
+    'data-wp-watch' => 'callbacks.initialize',
+    'data-wp-key' => wp_unique_id( 'fbks-grid-' ) . '-' . md5( wp_json_encode( [ get_the_ID(), $attributes, $content ] ) ),
 ];
 
 // Filtering feature
@@ -126,7 +129,8 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 
 $fbks_wrapper_attributes = get_block_wrapper_attributes( $fbks_wrapper_attributes_args );
 
-echo '<div ' . wp_kses_post( $fbks_wrapper_attributes ) . '>';
+// WordPress escapes each wrapper attribute value.
+echo '<div ' . $fbks_wrapper_attributes . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 // Premium: Render filter bar only for premium
 if ( fbks_fs()->can_use_premium_code__premium_only() ) {
@@ -140,6 +144,14 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
     }
 }
 
+// Keep the premium watcher separate from the root layout watcher.
+if ( fbks_fs()->can_use_premium_code__premium_only() ) {
+    $fbks_processor = new WP_HTML_Tag_Processor( $content );
+    if ( $fbks_processor->next_tag( [ 'class_name' => 'pb-grid-gallery' ] ) ) {
+        $fbks_processor->set_attribute( 'data-wp-watch', 'callbacks.premium' );
+        $content = $fbks_processor->get_updated_html();
+    }
+}
 echo wp_kses( $content, fbks_get_allowed_post_html_with_svg() );
 
 echo '</div>';

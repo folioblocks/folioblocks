@@ -2,10 +2,20 @@
  * PB Image Block
  * View JS
  */
-import { initTiltHoverEffects } from '../pb-helpers/tiltHoverEffect';
+import { getElement, store } from '@wordpress/interactivity';
+import { createFrontendScope } from '../pb-helpers/frontendScope';
 
-document.addEventListener( 'DOMContentLoaded', () => {
-	initTiltHoverEffects();
+import {
+	updateTiltHoverVars,
+	resetTiltHoverVars,
+} from '../pb-helpers/tiltHoverEffect';
+
+const roots = new Set();
+let runtime;
+let activeLightbox;
+
+const initializeRuntime = () => {
+	const scope = createFrontendScope();
 	const zoomInIcon =
 		'<svg class="lightbox-zoom-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10.75 4.5a6.25 6.25 0 0 1 4.96 10.05l3.87 3.87-1.16 1.16-3.87-3.87A6.25 6.25 0 1 1 10.75 4.5zm0 1.5a4.75 4.75 0 1 0 0 9.5 4.75 4.75 0 0 0 0-9.5zm.75 2v2h2v1.5h-2v2H10v-2H8V10h2V8h1.5z"/></svg>';
 	const zoomOutIcon =
@@ -89,14 +99,25 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	};
 
 	const scheduleGalleryWatermarkSync = () => {
-		window.requestAnimationFrame( syncGalleryWatermarks );
+		scope.frame( syncGalleryWatermarks );
 	};
 
-	window.addEventListener( 'resize', scheduleGalleryWatermarkSync );
-	document.addEventListener( 'load', scheduleGalleryWatermarkSync, true );
+	scope.listen( window, 'resize', scheduleGalleryWatermarkSync );
+	scope.listen( document, 'load', scheduleGalleryWatermarkSync, true );
 	scheduleGalleryWatermarkSync();
+	scope.listen( document, 'pbImageMounted', scheduleGalleryWatermarkSync );
+	scope.listen( document, 'pbImageLightboxDismiss', ( event ) => {
+		if (
+			event.detail?.root &&
+			activeLightbox?.images.some( ( image ) =>
+				event.detail.root.contains( image )
+			)
+		) {
+			activeLightbox.close( false );
+		}
+	} );
 
-	document.body.addEventListener( 'click', ( event ) => {
+	scope.listen( document.body, 'click', ( event ) => {
 		const shareLink = event.target.closest( '.pb-social-share__link' );
 		if ( ! shareLink ) {
 			return;
@@ -129,20 +150,20 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 	// Track input method for focus visibility control
 	let userUsedKeyboard = false;
-	window.addEventListener( 'keydown', ( e ) => {
+	scope.listen( window, 'keydown', ( e ) => {
 		if ( e.key === 'Tab' || e.key === 'Enter' || e.key === ' ' ) {
 			userUsedKeyboard = true;
 		}
 	} );
-	window.addEventListener( 'mousedown', () => {
+	scope.listen( window, 'mousedown', () => {
 		userUsedKeyboard = false;
 	} );
-	window.addEventListener( 'touchstart', () => {
+	scope.listen( window, 'touchstart', () => {
 		userUsedKeyboard = false;
 	} );
 
 	// Add lightbox functionality to image blocks
-	document.body.addEventListener( 'click', ( event ) => {
+	scope.listen( document.body, 'click', ( event ) => {
 		const isAddToCart = event.target.closest( '.pb-add-to-cart-icon' );
 		const isDownload = event.target.closest( '.pb-image-block-download' );
 		const isSocialShare = event.target.closest( '.pb-social-share__link' );
@@ -152,6 +173,14 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 		const trigger = event.target.closest( '.pb-image-block-lightbox' );
 		if ( ! trigger ) {
+			return;
+		}
+		const host = trigger
+			.closest(
+				'.wp-block-folioblocks-pb-image-block, .wp-block-folioblocks-filmstrip-gallery-block'
+			)
+			?.querySelector( ':scope > .pb-image-lightbox-host' );
+		if ( ! host ) {
 			return;
 		}
 		const userAgent = window.navigator.userAgent;
@@ -214,8 +243,10 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				! getImplicitLightboxScope( image )
 			);
 		} );
+
 		let currentIndex = allImages.indexOf( trigger );
 
+		activeLightbox?.close();
 		const existing = document.querySelector( '.pb-image-lightbox' );
 		if ( existing ) {
 			existing.remove();
@@ -230,13 +261,15 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		inner.className = 'lightbox-inner';
 
 		wrapper.appendChild( inner );
-		document.body.appendChild( wrapper );
+
+		host.appendChild( wrapper );
+		host.showModal();
 
 		if ( useSafariBlurFallback ) {
 			wrapper.classList.add( 'pb-image-lightbox--safari-filter' );
 			safariBlurTargets = Array.from( document.body.children ).filter(
 				( element ) =>
-					element !== wrapper &&
+					! element.contains( host ) &&
 					! element.classList.contains( 'pb-focus-sentinel-start' ) &&
 					! element.classList.contains( 'pb-focus-sentinel-end' )
 			);
@@ -274,8 +307,8 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		focusEnd.tabIndex = 0;
 		focusEnd.className = 'pb-focus-sentinel-end';
 
-		document.body.insertBefore( focusStart, wrapper );
-		document.body.insertBefore( focusEnd, wrapper.nextSibling );
+		host.insertBefore( focusStart, wrapper );
+		host.insertBefore( focusEnd, wrapper.nextSibling );
 
 		focusStart.addEventListener( 'focus', () => {
 			const focusable = wrapper.querySelectorAll(
@@ -295,6 +328,9 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		} );
 
 		function syncLightboxImageHeight() {
+			if ( ! wrapper.isConnected ) {
+				return;
+			}
 			const activeImageWrapper =
 				wrapper.querySelector( '.lightbox-image' );
 			if ( ! activeImageWrapper ) {
@@ -327,9 +363,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 							: availableWidth / aspectRatio;
 					const imageWidth = imageHeight * aspectRatio;
 
-					activeImage.style.width = `${ Math.round(
-						imageWidth
-					) }px`;
+					activeImage.style.width = `${ Math.round( imageWidth ) }px`;
 					activeImage.style.height = `${ Math.round(
 						imageHeight
 					) }px`;
@@ -405,11 +439,14 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			let remainingFrames = Math.max( 1, frames );
 
 			const syncFrame = () => {
+				if ( ! wrapper.isConnected ) {
+					return;
+				}
 				syncLightboxImageHeight();
 				remainingFrames -= 1;
 
 				if ( remainingFrames > 0 ) {
-					window.requestAnimationFrame( syncFrame );
+					scope.frame( syncFrame );
 				}
 			};
 
@@ -535,8 +572,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			const remainingX = lightboxPanTargetX - lightboxPanX;
 			const remainingY = lightboxPanTargetY - lightboxPanY;
 			const isSettled =
-				Math.abs( remainingX ) < 0.2 &&
-				Math.abs( remainingY ) < 0.2;
+				Math.abs( remainingX ) < 0.2 && Math.abs( remainingY ) < 0.2;
 
 			if ( isSettled ) {
 				lightboxPanX = lightboxPanTargetX;
@@ -550,15 +586,13 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			applyLightboxZoom();
 
 			if ( ! isSettled ) {
-				lightboxPanAnimationFrame =
-					window.requestAnimationFrame( animateLightboxPan );
+				lightboxPanAnimationFrame = scope.frame( animateLightboxPan );
 			}
 		}
 
 		function scheduleLightboxPan() {
 			if ( lightboxPanAnimationFrame === null ) {
-				lightboxPanAnimationFrame =
-					window.requestAnimationFrame( animateLightboxPan );
+				lightboxPanAnimationFrame = scope.frame( animateLightboxPan );
 			}
 		}
 
@@ -569,8 +603,10 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			}
 
 			const naturalScale = Math.max(
-				activeImage.naturalWidth / Math.max( 1, activeImage.offsetWidth ),
-				activeImage.naturalHeight / Math.max( 1, activeImage.offsetHeight )
+				activeImage.naturalWidth /
+					Math.max( 1, activeImage.offsetWidth ),
+				activeImage.naturalHeight /
+					Math.max( 1, activeImage.offsetHeight )
 			);
 
 			return Math.min( 3, Math.max( 1.8, naturalScale || 2 ) );
@@ -617,7 +653,10 @@ document.addEventListener( 'DOMContentLoaded', () => {
 					'aria-label',
 					isZoomed ? 'Zoom out' : 'Zoom in'
 				);
-				zoomButton.setAttribute( 'aria-pressed', isZoomed ? 'true' : 'false' );
+				zoomButton.setAttribute(
+					'aria-pressed',
+					isZoomed ? 'true' : 'false'
+				);
 				zoomButton.innerHTML = isZoomed ? zoomOutIcon : zoomInIcon;
 			}
 			scheduleLightboxSync( 3 );
@@ -655,10 +694,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		}
 
 		function moveLightboxWithCursor( panEvent ) {
-			if (
-				! isLightboxZoomed ||
-				lightboxPanPointerId !== null
-			) {
+			if ( ! isLightboxZoomed || lightboxPanPointerId !== null ) {
 				return;
 			}
 
@@ -747,16 +783,26 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 			lightboxPanPointerId = null;
 			wrapper.classList.remove( 'is-panning' );
-			panEvent.currentTarget.releasePointerCapture?.( panEvent.pointerId );
+			panEvent.currentTarget.releasePointerCapture?.(
+				panEvent.pointerId
+			);
 			if ( lightboxDidPan ) {
 				suppressImageClick = true;
-				window.setTimeout( () => {
+				scope.timeout( () => {
 					suppressImageClick = false;
 				}, 80 );
 			}
 		}
 
-		function closeLightbox() {
+		let closed = false;
+		function closeLightbox( restoreFocus = true ) {
+			if ( closed ) {
+				return;
+			}
+			closed = true;
+			activeLightbox = null;
+			host.close();
+			host.removeEventListener( 'cancel', cancelLightbox );
 			document.dispatchEvent(
 				new CustomEvent( 'pbImageLightboxClosing', {
 					detail: { wrapper },
@@ -769,21 +815,20 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			document.body.classList.remove( 'pb-lightbox-open' );
 			focusStart.remove();
 			focusEnd.remove();
-			document.removeEventListener( 'keydown', keyHandler );
-			document.removeEventListener(
-				'mousemove',
-				moveLightboxWithCursor
-			);
-			document.removeEventListener( 'wheel', moveLightboxWithTrackpad );
+			scope.unlisten( document, 'keydown', keyHandler );
+			scope.unlisten( document, 'mousemove', moveLightboxWithCursor );
+			scope.unlisten( document, 'wheel', moveLightboxWithTrackpad );
 			if ( lightboxPanAnimationFrame !== null ) {
 				window.cancelAnimationFrame( lightboxPanAnimationFrame );
 			}
-			window.removeEventListener( 'resize', handleViewportResize );
-			document.removeEventListener(
+			scope.unlisten( window, 'resize', handleViewportResize );
+			scope.unlisten(
+				document,
 				'fullscreenchange',
 				handleViewportResize
 			);
-			document.removeEventListener(
+			scope.unlisten(
+				document,
 				'webkitfullscreenchange',
 				handleViewportResize
 			);
@@ -792,16 +837,24 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				handleLightboxSyncRequest
 			);
 			if (
-				previouslyFocused &&
+				restoreFocus &&
+				previouslyFocused?.isConnected &&
 				typeof previouslyFocused.focus === 'function'
 			) {
 				previouslyFocused.focus();
 			}
 		}
 
-		window.addEventListener( 'resize', handleViewportResize );
-		document.addEventListener( 'fullscreenchange', handleViewportResize );
-		document.addEventListener(
+		activeLightbox = { close: closeLightbox, images: allImages };
+		function cancelLightbox( cancelEvent ) {
+			cancelEvent.preventDefault();
+			closeLightbox();
+		}
+		host.addEventListener( 'cancel', cancelLightbox );
+		scope.listen( window, 'resize', handleViewportResize );
+		scope.listen( document, 'fullscreenchange', handleViewportResize );
+		scope.listen(
+			document,
 			'webkitfullscreenchange',
 			handleViewportResize
 		);
@@ -809,8 +862,8 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			'pbImageLightboxSync',
 			handleLightboxSyncRequest
 		);
-		document.addEventListener( 'mousemove', moveLightboxWithCursor );
-		document.addEventListener( 'wheel', moveLightboxWithTrackpad, {
+		scope.listen( document, 'mousemove', moveLightboxWithCursor );
+		scope.listen( document, 'wheel', moveLightboxWithTrackpad, {
 			passive: false,
 		} );
 		wrapper.addEventListener( 'pointerdown', startLightboxPan );
@@ -1039,6 +1092,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 		function keyHandler( e ) {
 			if ( e.key === 'Escape' ) {
+				e.preventDefault();
 				closeLightbox();
 			} else if ( e.key === 'ArrowRight' ) {
 				showNextImage();
@@ -1047,7 +1101,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			}
 		}
 
-		document.addEventListener( 'keydown', keyHandler );
+		scope.listen( document, 'keydown', keyHandler );
 		renderLightbox( currentIndex );
 
 		wrapper.addEventListener(
@@ -1115,7 +1169,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			} else {
 				showPreviousImage();
 			}
-			window.setTimeout( () => {
+			scope.timeout( () => {
 				suppressImageClick = false;
 			}, 400 );
 		} );
@@ -1156,4 +1210,64 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			focusable[ nextIndex ].focus();
 		} );
 	} );
+	return scope;
+};
+
+store( 'folioblocks/image', {
+	callbacks: {
+		initialize() {
+			const { ref: root } = getElement();
+			roots.add( root );
+			runtime ||= initializeRuntime();
+			const controller = new AbortController();
+			const { signal } = controller;
+			const tiltedElements = [];
+			root.querySelectorAll( '.pb-effect-tilt' ).forEach( ( element ) => {
+				if (
+					window.matchMedia( '(hover: none)' ).matches ||
+					element.dataset.pbTiltHoverReady === 'true'
+				) {
+					return;
+				}
+				element.dataset.pbTiltHoverReady = 'true';
+				tiltedElements.push( element );
+				element.addEventListener(
+					'pointermove',
+					( event ) => updateTiltHoverVars( element, event ),
+					{ signal }
+				);
+				element.addEventListener(
+					'pointerleave',
+					() => resetTiltHoverVars( element ),
+					{ signal }
+				);
+			} );
+			const observer = new window.ResizeObserver( () =>
+				document.dispatchEvent( new Event( 'pbImageMounted' ) )
+			);
+			observer.observe( root );
+			document.dispatchEvent( new Event( 'pbImageMounted' ) );
+			return () => {
+				if (
+					activeLightbox?.images.some( ( image ) =>
+						root.contains( image )
+					)
+				) {
+					activeLightbox.close( false );
+				}
+				controller.abort();
+				tiltedElements.forEach( ( element ) => {
+					delete element.dataset.pbTiltHoverReady;
+					resetTiltHoverVars( element );
+				} );
+				observer.disconnect();
+				roots.delete( root );
+				if ( ! roots.size ) {
+					activeLightbox?.close( false );
+					runtime.dispose();
+					runtime = undefined;
+				}
+			};
+		},
+	},
 } );

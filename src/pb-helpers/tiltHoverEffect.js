@@ -39,7 +39,7 @@ export const getTiltHoverHandlers = () => ( {
 	onPointerLeave: ( event ) => resetTiltHoverVars( event.currentTarget ),
 } );
 
-export const initTiltHoverEffects = ( root = document ) => {
+export const initTiltHoverEffects = ( root = document, { signal } = {} ) => {
 	if (
 		typeof window !== 'undefined' &&
 		window.matchMedia?.( '(hover: none)' ).matches
@@ -53,11 +53,23 @@ export const initTiltHoverEffects = ( root = document ) => {
 		}
 
 		element.dataset.pbTiltHoverReady = 'true';
-		element.addEventListener( 'pointermove', ( event ) =>
-			updateTiltHoverVars( element, event )
+		element.addEventListener(
+			'pointermove',
+			( event ) => updateTiltHoverVars( element, event ),
+			{ signal }
 		);
-		element.addEventListener( 'pointerleave', () =>
-			resetTiltHoverVars( element )
+		element.addEventListener(
+			'pointerleave',
+			() => resetTiltHoverVars( element ),
+			{ signal }
+		);
+		signal?.addEventListener(
+			'abort',
+			() => {
+				delete element.dataset.pbTiltHoverReady;
+				resetTiltHoverVars( element );
+			},
+			{ once: true }
 		);
 	} );
 };

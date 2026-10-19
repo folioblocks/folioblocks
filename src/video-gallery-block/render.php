@@ -99,6 +99,10 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 
 // Default wrapper attributes
 $fbks_wrapper_args = [
+    'data-wp-interactive' => 'folioblocks/video-gallery',
+    'data-wp-watch' => 'callbacks.initialize',
+    'data-wp-key' => wp_unique_id( 'fbks-video-gallery-' ) . '-' . md5( wp_json_encode( [ get_the_ID(), $attributes, $content ] ) ),
+    'data-disable-right-click' => fbks_fs()->can_use_premium_code__premium_only() && ! empty( $attributes['disableRightClick'] ) ? 'true' : 'false',
 	'style' => $fbks_gap_styles . $fbks_active_styles . $fbks_inactive_styles,
 ];
 
@@ -107,7 +111,8 @@ if ( fbks_fs()->can_use_premium_code__premium_only() && ! empty( $fbks_enable_fi
 }
 
 $fbks_wrapper_attributes = get_block_wrapper_attributes( $fbks_wrapper_args );
-echo '<div ' . wp_kses_post( $fbks_wrapper_attributes ) . '>';
+// WordPress escapes each wrapper attribute value.
+echo '<div ' . $fbks_wrapper_attributes . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 	if ( ! empty( $fbks_enable_filter ) && ! empty( $fbks_filter_categories ) ) {
@@ -120,6 +125,16 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 	}
 }
 
+// Keep the filter watcher separate from the gallery initialization watcher.
+if ( fbks_fs()->can_use_premium_code__premium_only() ) {
+    $fbks_processor = new WP_HTML_Tag_Processor( $content );
+    if ( $fbks_processor->next_tag( [ 'class_name' => 'pb-video-gallery' ] ) ) {
+        $fbks_processor->set_attribute( 'data-wp-watch', 'callbacks.premium' );
+        // Protection belongs to the root so page/post overrides can disable it.
+        $fbks_processor->remove_attribute( 'data-disable-right-click' );
+        $content = $fbks_processor->get_updated_html();
+    }
+}
 echo wp_kses( $content, fbks_get_allowed_post_html_with_svg() );
 
 echo '</div>';

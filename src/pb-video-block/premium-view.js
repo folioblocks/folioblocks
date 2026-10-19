@@ -2,7 +2,13 @@
  * PB Video Block
  * Premium View JS
  */
-document.addEventListener( 'DOMContentLoaded', () => {
+import { getElement, store } from '@wordpress/interactivity';
+import { createFrontendScope } from '../pb-helpers/frontendScope';
+import { mountGalleryControls } from '../pb-helpers/galleryControls';
+
+const initializePremium = ( root ) => {
+	const scope = createFrontendScope();
+	const unprotect = mountGalleryControls( root, root, 'pb:video:reflow' );
 	const getFullscreenElement = () =>
 		document.fullscreenElement || document.webkitFullscreenElement;
 	const fullscreenIcon =
@@ -13,33 +19,31 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	const syncFullscreenButtons = () => {
 		const fullscreenElement = getFullscreenElement();
 
-		document
-			.querySelectorAll( '.pb-video-lightbox' )
-			.forEach( ( lightbox ) => {
-				const button = lightbox.querySelector( '.lightbox-fullscreen' );
-				if ( ! button ) {
-					return;
-				}
+		root.querySelectorAll( '.pb-video-lightbox' ).forEach( ( lightbox ) => {
+			const button = lightbox.querySelector( '.lightbox-fullscreen' );
+			if ( ! button ) {
+				return;
+			}
 
-				const isFullscreen =
-					fullscreenElement &&
-					( fullscreenElement === lightbox ||
-						lightbox.contains( fullscreenElement ) );
-				button.innerHTML = isFullscreen
-					? exitFullscreenIcon
-					: fullscreenIcon;
-				button.setAttribute(
-					'aria-label',
-					isFullscreen ? 'Exit fullscreen' : 'Open fullscreen'
-				);
-				button.setAttribute(
-					'aria-pressed',
-					isFullscreen ? 'true' : 'false'
-				);
-			} );
+			const isFullscreen =
+				fullscreenElement &&
+				( fullscreenElement === lightbox ||
+					lightbox.contains( fullscreenElement ) );
+			button.innerHTML = isFullscreen
+				? exitFullscreenIcon
+				: fullscreenIcon;
+			button.setAttribute(
+				'aria-label',
+				isFullscreen ? 'Exit fullscreen' : 'Open fullscreen'
+			);
+			button.setAttribute(
+				'aria-pressed',
+				isFullscreen ? 'true' : 'false'
+			);
+		} );
 	};
 
-	document.querySelectorAll( '.pb-video-lightbox' ).forEach( ( lightbox ) => {
+	root.querySelectorAll( '.pb-video-lightbox' ).forEach( ( lightbox ) => {
 		if (
 			( ! lightbox.requestFullscreen &&
 				! lightbox.webkitRequestFullscreen ) ||
@@ -52,7 +56,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		button.className = 'lightbox-fullscreen';
 		button.type = 'button';
 		button.setAttribute( 'aria-keyshortcuts', 'F' );
-		button.addEventListener( 'click', () => {
+		scope.listen( button, 'click', () => {
 			const fullscreenElement = getFullscreenElement();
 			if (
 				fullscreenElement &&
@@ -94,43 +98,12 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	} );
 
 	syncFullscreenButtons();
-	document.addEventListener( 'fullscreenchange', syncFullscreenButtons );
-	document.addEventListener(
-		'webkitfullscreenchange',
-		syncFullscreenButtons
-	);
-
-	// Disable right-click on entire page if any gallery block has it enabled
-	const disableRightClick = document.querySelector(
-		'[data-disable-right-click="true"]'
-	);
-	if ( disableRightClick ) {
-		document.addEventListener( 'contextmenu', ( e ) => {
-			e.preventDefault();
-		} );
-	}
-
-	// Disable drag-to-save for protected FolioBlocks media.
-	const disableDragToSave = document.querySelector(
-		'[data-disable-drag-to-save="true"]'
-	);
-	if ( disableDragToSave ) {
-		document.addEventListener(
-			'dragstart',
-			( e ) => {
-				const protectedMedia = e.target.closest(
-					'[data-disable-drag-to-save="true"] img, [data-disable-drag-to-save="true"] video, .pb-video-lightbox img, .pb-video-lightbox video'
-				);
-				if ( protectedMedia ) {
-					e.preventDefault();
-				}
-			},
-			{ capture: true }
-		);
-	}
+	scope.listen( document, 'fullscreenchange', syncFullscreenButtons );
+	scope.listen( document, 'webkitfullscreenchange', syncFullscreenButtons );
 
 	// WooCommerce Icon Logic (Add to Cart / View Product)
-	document.addEventListener(
+	scope.listen(
+		root,
 		'click',
 		( e ) => {
 			const cartBtn = e.target.closest( '.pb-video-add-to-cart' );
@@ -195,6 +168,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				},
 				body: body.toString(),
 				credentials: 'same-origin',
+				signal: scope.signal,
 			} )
 				.then( async ( res ) => {
 					if ( ! res.ok ) {
@@ -203,6 +177,9 @@ document.addEventListener( 'DOMContentLoaded', () => {
 					return res.json();
 				} )
 				.then( ( data ) => {
+					if ( scope.signal.aborted || ! cartBtn.isConnected ) {
+						return;
+					}
 					if ( data?.error ) {
 						if ( data?.product_url ) {
 							window.location.href = data.product_url;
@@ -253,9 +230,31 @@ document.addEventListener( 'DOMContentLoaded', () => {
 					}
 				} )
 				.catch( () => {
+					if ( scope.signal.aborted || ! cartBtn.isConnected ) {
+						return;
+					}
 					fallbackRedirect();
 				} );
 		},
 		{ capture: true }
 	);
+	return () => {
+		scope.dispose();
+		unprotect();
+		root.querySelectorAll( '.lightbox-fullscreen' ).forEach( ( button ) =>
+			button.remove()
+		);
+	};
+};
+
+store( 'folioblocks/video', {
+	callbacks: {
+		premium() {
+			return initializePremium(
+				getElement().ref.closest(
+					'.wp-block-folioblocks-pb-video-block'
+				)
+			);
+		},
+	},
 } );

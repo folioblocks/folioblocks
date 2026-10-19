@@ -1,100 +1,69 @@
-/**
- * Before & After Block
- * View JS
- */
-document.addEventListener( 'DOMContentLoaded', function () {
-	const containers = document.querySelectorAll(
-		'.pb-before-after-container'
-	);
+/** Initialize comparisons for both full loads and client-side navigation. */
+import { getElement, store } from '@wordpress/interactivity';
 
-	containers.forEach( ( container ) => {
-		const slider = container.querySelector( '.pb-slider' );
-		const beforeWrapper = container.querySelector( '.pb-before-wrapper' );
-		const afterImage = container.querySelector( '.pb-after-image' );
-
-		if ( ! slider || ! beforeWrapper || ! afterImage ) {
-			return;
-		}
-
-		const initial = Number( slider.value ) || 50;
-		const isVertical = container.classList.contains( 'is-vertical' );
-		const handle = container.querySelector( '.pb-slider-handle' );
-
-		if ( ! handle ) {
-			return;
-		}
-
-		if ( isVertical ) {
-			beforeWrapper.style.clipPath = `inset(0 0 ${ 100 - initial }% 0)`;
-			handle.style.top = `${ initial }%`;
-		} else {
-			beforeWrapper.style.clipPath = `inset(0 ${ 100 - initial }% 0 0)`;
-			handle.style.left = `${ initial }%`;
-		}
-
-		// Maintain aspect ratio from after image
-		const updateHeight = () => {
-			if ( afterImage.naturalWidth && afterImage.naturalHeight ) {
-				const aspectRatio =
-					afterImage.naturalHeight / afterImage.naturalWidth;
-				container.style.height = `${
-					container.offsetWidth * aspectRatio
-				}px`;
+store( 'folioblocks/before-after', {
+	callbacks: {
+		initialize() {
+			const { ref: container } = getElement();
+			const slider = container.querySelector( '.pb-slider' );
+			const beforeWrapper =
+				container.querySelector( '.pb-before-wrapper' );
+			const afterImage = container.querySelector( '.pb-after-image' );
+			const handle = container.querySelector( '.pb-slider-handle' );
+			if ( ! slider || ! beforeWrapper || ! afterImage || ! handle ) {
+				return;
 			}
-		};
 
-		if ( afterImage.complete ) {
-			updateHeight();
-		} else {
-			afterImage.onload = updateHeight;
-		}
-
-		window.addEventListener( 'resize', updateHeight );
-
-		slider.addEventListener( 'input', () => {
-			const value = Number( slider.value );
+			const controller = new AbortController();
+			const { signal } = controller;
 			const isVertical = container.classList.contains( 'is-vertical' );
-
-			if ( isVertical ) {
-				beforeWrapper.style.clipPath = `inset(0 0 ${ 100 - value }% 0)`;
-				container.querySelector(
-					'.pb-slider-handle'
-				).style.top = `${ value }%`;
-			} else {
-				beforeWrapper.style.clipPath = `inset(0 ${ 100 - value }% 0 0)`;
-				container.querySelector(
-					'.pb-slider-handle'
-				).style.left = `${ value }%`;
-			}
-		} );
-		slider.addEventListener(
-			'wheel',
-			( event ) => {
-				const isVertical =
-					container.classList.contains( 'is-vertical' );
-				if ( ! isVertical ) {
-					return;
+			const updatePosition = () => {
+				const value = Number( slider.value );
+				beforeWrapper.style.clipPath = isVertical
+					? `inset(0 0 ${ 100 - value }% 0)`
+					: `inset(0 ${ 100 - value }% 0 0)`;
+				handle.style[ isVertical ? 'top' : 'left' ] = `${ value }%`;
+			};
+			const updateHeight = () => {
+				if ( afterImage.naturalWidth && afterImage.naturalHeight ) {
+					container.style.height = `${
+						container.offsetWidth *
+						( afterImage.naturalHeight / afterImage.naturalWidth )
+					}px`;
 				}
+			};
 
-				event.preventDefault();
-				const delta = event.deltaY;
-				const currentValue = Number( slider.value );
-				const step = 2;
+			updatePosition();
+			updateHeight();
+			afterImage.addEventListener( 'load', updateHeight, { signal } );
+			window.addEventListener( 'resize', updateHeight, { signal } );
+			const observer = new window.ResizeObserver( updateHeight );
+			observer.observe( container );
+			slider.addEventListener( 'input', updatePosition, { signal } );
+			slider.addEventListener(
+				'wheel',
+				( event ) => {
+					if ( ! isVertical ) {
+						return;
+					}
+					event.preventDefault();
+					slider.value = Math.min(
+						100,
+						Math.max(
+							0,
+							Number( slider.value ) +
+								( event.deltaY > 0 ? 2 : -2 )
+						)
+					);
+					updatePosition();
+				},
+				{ passive: false, signal }
+			);
 
-				const newValue = Math.min(
-					100,
-					Math.max( 0, currentValue + ( delta > 0 ? step : -step ) )
-				);
-				slider.value = newValue;
-
-				beforeWrapper.style.clipPath = `inset(0 0 ${
-					100 - newValue
-				}% 0)`;
-				container.querySelector(
-					'.pb-slider-handle'
-				).style.top = `${ newValue }%`;
-			},
-			{ passive: false }
-		);
-	} );
+			return () => {
+				controller.abort();
+				observer.disconnect();
+			};
+		},
+	},
 } );

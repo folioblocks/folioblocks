@@ -16,7 +16,7 @@ $fbks_enable_comment   = ! isset( $attributes['enableComment'] ) || (bool) $attr
 $fbks_filter_align     = isset( $attributes['filterAlign'] ) ? sanitize_key( $attributes['filterAlign'] ) : 'center';
 $fbks_button_align     = isset( $attributes['buttonAlign'] ) ? sanitize_key( $attributes['buttonAlign'] ) : 'right';
 $fbks_proofing_theme   = isset( $attributes['proofingTheme'] ) ? sanitize_key( $attributes['proofingTheme'] ) : 'light';
-$fbks_gallery_id       = wp_unique_id( 'fbks-proofing-gallery-' );
+$fbks_gallery_id       = wp_unique_id( 'fbks-proofing-gallery-' ) . '-' . md5( wp_json_encode( [ get_the_ID(), $fbks_gallery_key ] ) );
 $fbks_page_id          = get_the_ID();
 $fbks_proofing_settings = function_exists( 'fbks_get_proofing_settings' ) ? fbks_get_proofing_settings() : [ 'emailAdminOnSubmit' => false ];
 $fbks_email_admin_on_submit = array_key_exists( 'emailAdminOnSubmit', $attributes )
@@ -163,7 +163,8 @@ if ( ! $fbks_can_view ) {
 				'emailAdminOnSubmit' => $fbks_email_admin_on_submit,
 				'savedSession' => $fbks_saved_session,
 			] ) ); ?>"
-			data-wp-init="callbacks.registerGallery"
+			data-wp-watch="callbacks.registerGallery"
+			data-wp-key="<?php echo esc_attr( $fbks_gallery_id . '-' . md5( wp_json_encode( [ $attributes, $content ] ) ) ); ?>"
 			data-proofing-gallery-id="<?php echo esc_attr( $fbks_gallery_id ); ?>"
 			data-enable-heart="<?php echo esc_attr( $fbks_enable_heart ? 'true' : 'false' ); ?>"
 			data-enable-flag="<?php echo esc_attr( $fbks_enable_flag ? 'true' : 'false' ); ?>"

@@ -730,6 +730,9 @@ if ( $fbks_can_use_premium ) {
 }
 
 $fbks_wrapper_args = [
+    'data-wp-interactive' => 'folioblocks/filmstrip',
+    'data-wp-watch' => 'callbacks.initialize',
+    'data-wp-key' => wp_unique_id( 'fbks-filmstrip-' ) . '-' . md5( wp_json_encode( [ get_the_ID(), $attributes, $content ] ) ),
 	'class' => 'pb-filmstrip-gallery is-' . $fbks_position . ' is-theme-' . $fbks_color_mode,
 ];
 if ( $fbks_can_use_premium ) {
@@ -797,10 +800,10 @@ if ( false === $fbks_data_json ) {
 	$fbks_data_json = '{"settings":{},"images":[]}';
 }
 ?>
-<div <?php echo wp_kses( $fbks_wrapper_attributes, [ 'div' => [] ] ); ?>>
-	<script type="application/json" class="pb-filmstrip-gallery-data"><?php echo $fbks_data_json; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></script>
+<div <?php echo $fbks_wrapper_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() escapes each attribute value. ?> data-fbks-filmstrip="<?php echo esc_attr( $fbks_data_json ); ?>">
 
-	<div class="pb-filmstrip-gallery-preview is-<?php echo esc_attr( $fbks_position ); ?>">
+	<dialog class="pb-image-lightbox-host" aria-label="<?php esc_attr_e( 'Image lightbox', 'folioblocks' ); ?>"></dialog>
+	<div <?php if ( $fbks_can_use_premium ) : ?>data-wp-watch="callbacks.premium"<?php endif; ?> class="pb-filmstrip-gallery-preview is-<?php echo esc_attr( $fbks_position ); ?>">
 		<div class="pb-filmstrip-gallery-main <?php echo $fbks_enable_download ? 'has-download' : ''; ?>">
 			<?php if ( $fbks_has_multiple_images ) : ?>
 				<button
@@ -835,7 +838,6 @@ if ( false === $fbks_data_json ) {
 									height="16"
 									fill="currentColor"
 									aria-hidden="true"
-									style="display:none;"
 								>
 									<path d="M8 5v14l11-7z"></path>
 								</svg>
@@ -1020,7 +1022,7 @@ if ( false === $fbks_data_json ) {
 					/>
 					</a>
 				<?php if ( $fbks_can_use_premium && $fbks_show_gallery_watermark ) : ?>
-					<span class="pb-watermark-overlay" style="<?php echo esc_attr( $fbks_watermark_style ); ?>"<?php echo wp_kses_data( $fbks_watermark_data_attrs ); ?> aria-hidden="true"></span>
+					<span class="pb-watermark-overlay" style="<?php echo esc_attr( $fbks_watermark_style ); ?>"<?php echo $fbks_watermark_data_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fbks_get_watermark_overlay_data_attrs() escapes each attribute value. ?> aria-hidden="true"></span>
 				<?php endif; ?>
 				<div
 					class="pb-image-block-title-container"

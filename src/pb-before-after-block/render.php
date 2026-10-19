@@ -17,21 +17,29 @@ if (empty($fbks_before_image['src']) || empty($fbks_after_image['src'])) {
 	return '';
 }
 
-$fbks_block_wrapper_attributes = get_block_wrapper_attributes();
+$fbks_is_pro = fbks_fs()->can_use_premium_code__premium_only();
+$fbks_loading = $fbks_is_pro && ! empty( $attributes['lazyLoad'] ) ? 'lazy' : 'eager';
+$fbks_wrapper_args = [
+    'data-wp-interactive' => 'folioblocks/before-after',
+    'data-wp-key' => wp_unique_id( 'fbks-comparison-' ) . '-' . md5( wp_json_encode( $attributes ) ),
+];
+if ( $fbks_is_pro ) {
+    $fbks_wrapper_args['data-wp-watch'] = 'callbacks.protection';
+    if ( ! empty( $attributes['disableRightClick'] ) ) {
+        $fbks_wrapper_args['data-disable-right-click'] = 'true';
+    }
+    if ( ! empty( $attributes['disableDragToSave'] ) ) {
+        $fbks_wrapper_args['data-disable-drag-to-save'] = 'true';
+    }
+}
+$fbks_block_wrapper_attributes = get_block_wrapper_attributes( $fbks_wrapper_args );
 
 ?>
 
-<?php echo '<div ' . wp_kses( $fbks_block_wrapper_attributes, [ 'div' => [] ] ) . '>'; ?>
+<?php echo '<div ' . $fbks_block_wrapper_attributes . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() escapes each attribute value. ?>
 	<div
+		data-wp-watch="callbacks.initialize"
 		class="pb-before-after-container <?php echo $fbks_orientation === 'vertical' ? 'is-vertical' : ''; ?>"
-		<?php if ( fbks_fs()->can_use_premium_code__premium_only() ) : ?>
-			<?php if ( !empty($attributes['disableRightClick']) ) : ?>
-				data-disable-right-click="true"
-			<?php endif; ?>
-			<?php if ( !empty($attributes['lazyLoad']) ) : ?>
-				data-lazy-load="true"
-			<?php endif; ?>
-		<?php endif; ?>
 	>
 		<div class="pb-after-wrapper">
 			<?php 
@@ -41,7 +49,7 @@ $fbks_block_wrapper_attributes = get_block_wrapper_attributes();
   					false, 
   					[ 
     					'class' => 'pb-after-image', 
-						'loading' => 'eager',
+						'loading' => $fbks_loading,
   					] 
 				); 
 			?>
@@ -66,7 +74,7 @@ $fbks_block_wrapper_attributes = get_block_wrapper_attributes();
   					false, 
   					[ 
     					'class' => 'pb-before-image', 
-						'loading' => 'eager',
+						'loading' => $fbks_loading,
   					] 
 				); 
 			?>

@@ -103,11 +103,17 @@ if ( $fbks_has_media ) {
 }
 
 $fbks_wrapper_args = array(
+	'data-wp-interactive' => 'folioblocks/background-video',
+	'data-wp-key' => wp_unique_id( 'fbks-bgvid-' ) . '-' . md5( wp_json_encode( $attributes ) ),
 	'class' => $fbks_has_media ? 'pb-bgvid has-media' : 'pb-bgvid',
 	'style' => $fbks_wrapper_style,
 );
 
-if ( ! empty( $attributes['disableRightClick'] ) ) {
+if ( fbks_fs()->can_use_premium_code__premium_only() ) {
+	$fbks_wrapper_args['data-wp-watch'] = 'callbacks.protection';
+}
+
+if ( fbks_fs()->can_use_premium_code__premium_only() && ! empty( $attributes['disableRightClick'] ) ) {
 	$fbks_wrapper_args['data-disable-right-click'] = 'true';
 }
 
@@ -128,10 +134,16 @@ $fbks_content_inner_classes = sprintf(
 );
 
 ?>
-<div <?php echo wp_kses_data( $fbks_wrapper_attributes ); ?> data-fbks-bgvid='<?php echo esc_attr( wp_json_encode( $fbks_view_data ) ); ?>'>
-	<div class="pb-bgvid__media alignfull" style="<?php echo esc_attr( $fbks_layer_style ); ?>" aria-hidden="true">
+<div <?php echo $fbks_wrapper_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() escapes each attribute value. ?> data-fbks-bgvid='<?php echo esc_attr( wp_json_encode( $fbks_view_data ) ); ?>'>
+	<div data-wp-watch="callbacks.initialize" class="pb-bgvid__media alignfull" style="<?php echo esc_attr( $fbks_layer_style ); ?>" aria-hidden="true">
 		<div class="pb-bgvid__poster" style="<?php echo esc_attr( $fbks_poster_style ); ?>"></div>
-		<video class="pb-bgvid__video" playsinline muted preload="metadata" style="display:none;"></video>
+        <?php if ( 'vimeo' === $fbks_media_provider && $fbks_has_media ) : ?>
+            <div class="pb-bgvid__vimeo">
+                <iframe allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Vimeo background video"></iframe>
+            </div>
+        <?php else : ?>
+            <video class="pb-bgvid__video" playsinline muted preload="metadata" style="display:none;"></video>
+        <?php endif; ?>
 		<div class="pb-bgvid__overlay" style="<?php echo esc_attr( $fbks_overlay_style ); ?>"></div>
 	</div>
 

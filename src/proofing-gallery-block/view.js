@@ -3,6 +3,9 @@
  * View.js
  */
 import { getContext, getElement, store } from '@wordpress/interactivity';
+import { createFrontendScope } from '../pb-helpers/frontendScope';
+
+const mounts = new Map();
 
 const PROOFING_COMMENT_MAX_LENGTH = 1000;
 
@@ -10,6 +13,7 @@ const truncateProofingComment = ( comment = '' ) =>
 	String( comment || '' ).slice( 0, PROOFING_COMMENT_MAX_LENGTH );
 
 const createEmptyImageState = () => ( {
+	registered: false,
 	attachmentId: 0,
 	thumbnail: '',
 	title: '',
@@ -28,8 +32,7 @@ const ensureGalleryState = ( galleryId ) => {
 			restUrl: '',
 			presenceUrl: '',
 			trackPresence: false,
-			presenceTimer: null,
-			presenceEventsBound: false,
+			initialized: false,
 			emailAdminOnSubmit: false,
 			isSaving: false,
 			notice: '',
@@ -80,13 +83,23 @@ const stopProofingClick = ( event ) => {
 };
 
 const scheduleReflow = ( gallery ) => {
-	window.requestAnimationFrame( () => {
-		if ( typeof window.pbApplyMasonryLayout === 'function' ) {
-			window.pbApplyMasonryLayout( gallery );
-		}
-		if ( typeof window.folioBlocksJustifiedLayout === 'function' ) {
-			window.folioBlocksJustifiedLayout( gallery );
-		}
+	const mount = mounts.get( gallery.dataset.proofingGalleryId );
+	mount?.scope.frame( () => {
+		gallery
+			.querySelectorAll( '.wp-block-folioblocks-grid-gallery-block' )
+			.forEach( ( root ) =>
+				root.dispatchEvent( new Event( 'pbGridUpdated' ) )
+			);
+		gallery
+			.querySelectorAll( '.pb-masonry-gallery' )
+			.forEach( ( root ) =>
+				root.dispatchEvent( new Event( 'pb:masonry:reflow' ) )
+			);
+		gallery
+			.querySelectorAll( '.pb-justified-gallery' )
+			.forEach( ( root ) =>
+				root.dispatchEvent( new Event( 'pb:justified:reflow' ) )
+			);
 	} );
 };
 
@@ -145,11 +158,12 @@ const imagesToMap = ( images = [] ) =>
 		return result;
 	}, {} );
 
-const serializeGalleryImages = ( gallery ) =>
+const serializeGalleryImages = ( galleryId, gallery ) =>
 	Array.from(
-		gallery.element?.querySelectorAll(
-			'.fbks-proofing-thumbnail-controls'
-		) || []
+		mounts
+			.get( galleryId )
+			?.element.querySelectorAll( '.fbks-proofing-thumbnail-controls' ) ||
+			[]
 	).map( ( controls ) => {
 		const imageBlock = controls.closest(
 			'.wp-block-folioblocks-pb-image-block'
@@ -220,10 +234,9 @@ const syncImageDom = ( controlRoot, imageBlock, image ) => {
 };
 
 const syncGalleryDom = ( galleryId ) => {
-	const gallery = ensureGalleryState( galleryId );
-
-	gallery.element
-		?.querySelectorAll( '.fbks-proofing-thumbnail-controls' )
+	mounts
+		.get( galleryId )
+		?.element.querySelectorAll( '.fbks-proofing-thumbnail-controls' )
 		.forEach( ( controlRoot ) => {
 			const imageBlock = controlRoot.closest(
 				'.wp-block-folioblocks-pb-image-block'
@@ -245,9 +258,12 @@ const syncGalleryDom = ( galleryId ) => {
 };
 
 const sendGalleryPresence = ( galleryId, presence, useBeacon = false ) => {
-	const gallery = ensureGalleryState( galleryId );
+	const gallery = state.galleries[ galleryId ];
+	const mount = mounts.get( galleryId );
 
 	if (
+		! gallery ||
+		! mount ||
 		! gallery.trackPresence ||
 		! gallery.presenceUrl ||
 		! gallery.galleryKey
@@ -265,11 +281,14 @@ const sendGalleryPresence = ( galleryId, presence, useBeacon = false ) => {
 	const body = JSON.stringify( payload );
 
 	if ( useBeacon && window.navigator?.sendBeacon && window.Blob ) {
-		window.navigator.sendBeacon(
-			gallery.presenceUrl,
-			new window.Blob( [ body ], { type: 'application/json' } )
-		);
-		return;
+		if (
+			window.navigator.sendBeacon(
+				gallery.presenceUrl,
+				new window.Blob( [ body ], { type: 'application/json' } )
+			)
+		) {
+			return;
+		}
 	}
 
 	return window
@@ -279,74 +298,79 @@ const sendGalleryPresence = ( galleryId, presence, useBeacon = false ) => {
 				'Content-Type': 'application/json',
 			},
 			body,
+			keepalive: useBeacon,
+			signal: useBeacon ? undefined : mount.scope.signal,
 		} )
 		.catch( () => {} );
 };
 
-const sendTrackedGalleriesPresence = ( presence, useBeacon = false ) => {
-	Object.keys( state.galleries ).forEach( ( galleryId ) => {
-		sendGalleryPresence( galleryId, presence, useBeacon );
-	} );
-};
-
-const bindPresenceEvents = ( galleryId ) => {
+const bindPresenceEvents = ( galleryId, scope ) => {
 	const gallery = ensureGalleryState( galleryId );
-
 	if ( ! gallery.trackPresence ) {
 		return;
 	}
-
-	if ( gallery.presenceTimer ) {
-		window.clearInterval( gallery.presenceTimer );
-	}
-
-	gallery.presenceTimer = window.setInterval( () => {
-		sendGalleryPresence( galleryId, 'active' );
+	scope.interval( () => {
+		if ( document.visibilityState !== 'hidden' ) {
+			sendGalleryPresence( galleryId, 'active' );
+		}
 	}, 45000 );
-
-	if ( window.fbksProofingPresenceEventsBound ) {
-		return;
-	}
-
-	window.fbksProofingPresenceEventsBound = true;
-	window.addEventListener( 'pagehide', () => {
-		sendTrackedGalleriesPresence( 'closed', true );
+	scope.listen( window, 'pagehide', () =>
+		sendGalleryPresence( galleryId, 'closed', true )
+	);
+	scope.listen( window, 'pageshow', () => {
+		if ( document.visibilityState !== 'hidden' ) {
+			sendGalleryPresence( galleryId, 'active' );
+		}
 	} );
-	document.addEventListener( 'visibilitychange', () => {
-		sendTrackedGalleriesPresence(
-			document.visibilityState === 'hidden' ? 'closed' : 'active',
-			document.visibilityState === 'hidden'
+	scope.listen( document, 'visibilitychange', () => {
+		const hidden = document.visibilityState === 'hidden';
+		sendGalleryPresence( galleryId, hidden ? 'closed' : 'active', hidden );
+	} );
+};
+
+const storeLocalSession = ( galleryKey, session ) => {
+	try {
+		window.localStorage?.setItem(
+			`fbksProofingSession:${ galleryKey }`,
+			JSON.stringify( session )
 		);
-	} );
+		return true;
+	} catch {
+		return false;
+	}
 };
 
 const persistGallery = async ( galleryId, status ) => {
 	const gallery = ensureGalleryState( galleryId );
-
+	const mount = mounts.get( galleryId );
+	if ( ! mount || gallery.isSaving ) {
+		return;
+	}
 	if ( ! gallery.restUrl || ! gallery.galleryKey ) {
 		gallery.notice = 'This proofing gallery is missing save settings.';
 		return;
 	}
 
+	const isCurrentMount = () =>
+		mounts.get( galleryId ) === mount && ! mount.scope.signal.aborted;
 	gallery.isSaving = true;
 	gallery.notice = '';
 
-	const images = serializeGalleryImages( gallery );
+	const images = serializeGalleryImages( galleryId, gallery );
 	const localSession = {
 		status,
 		updatedAt: new Date().toISOString(),
 		images,
 	};
 
-	window.localStorage?.setItem(
-		`fbksProofingSession:${ gallery.galleryKey }`,
-		JSON.stringify( localSession )
-	);
+	const savedLocally = storeLocalSession( gallery.galleryKey, localSession );
 	gallery.savedImages = imagesToMap( images );
-	gallery.notice =
-		status === 'submitted'
-			? `Proofing selections submitted locally (${ images.length } images).`
-			: `Progress saved locally (${ images.length } images).`;
+	if ( savedLocally ) {
+		gallery.notice =
+			status === 'submitted'
+				? `Proofing selections submitted locally (${ images.length } images).`
+				: `Progress saved locally (${ images.length } images).`;
+	}
 
 	try {
 		const response = await window.fetch( gallery.restUrl, {
@@ -354,6 +378,7 @@ const persistGallery = async ( galleryId, status ) => {
 			headers: {
 				'Content-Type': 'application/json',
 			},
+			signal: mount.scope.signal,
 			body: JSON.stringify( {
 				status,
 				galleryId,
@@ -370,25 +395,31 @@ const persistGallery = async ( galleryId, status ) => {
 		}
 
 		const result = await response.json();
+		if ( ! isCurrentMount() ) {
+			return;
+		}
 		gallery.savedImages = imagesToMap( result.images || [] );
-		window.localStorage?.setItem(
-			`fbksProofingSession:${ gallery.galleryKey }`,
-			JSON.stringify( {
-				status,
-				updatedAt: result.updatedAt || new Date().toISOString(),
-				images: result.images || images,
-			} )
-		);
+		storeLocalSession( gallery.galleryKey, {
+			status,
+			updatedAt: result.updatedAt || new Date().toISOString(),
+			images: result.images || images,
+		} );
 		gallery.notice =
 			status === 'submitted'
 				? `Proofing selections submitted (${ images.length } images).`
 				: `Progress saved (${ images.length } images). You can return later to continue.`;
 	} catch ( error ) {
-		gallery.notice = `${
-			error?.message || 'Unable to save proofing session.'
-		} Your progress was saved in this browser.`;
+		if ( isCurrentMount() ) {
+			gallery.notice = `${
+				error?.message || 'Unable to save proofing session.'
+			}${
+				savedLocally ? ' Your progress was saved in this browser.' : ''
+			}`;
+		}
 	} finally {
-		gallery.isSaving = false;
+		if ( isCurrentMount() ) {
+			gallery.isSaving = false;
+		}
 	}
 };
 
@@ -444,9 +475,18 @@ const { state, actions } = store( 'folioblocks/proofing-gallery', {
 	},
 	actions: {
 		registerGallery( galleryId, galleryData = {} ) {
+			const element = galleryData.element;
+			if ( ! element ) {
+				return;
+			}
 			const gallery = ensureGalleryState( galleryId );
-			gallery.element =
-				galleryData.element || gallery.element || document;
+			const scope = createFrontendScope();
+			const mount = { element, scope };
+			mounts.set( galleryId, mount );
+			gallery.isSaving = false;
+			gallery.notice = '';
+			gallery.openFlagPanel = '';
+			gallery.openCommentPanel = '';
 			gallery.galleryKey = galleryData.galleryKey || gallery.galleryKey;
 			gallery.clientEmail =
 				galleryData.clientEmail || gallery.clientEmail;
@@ -457,36 +497,54 @@ const { state, actions } = store( 'folioblocks/proofing-gallery', {
 			gallery.trackPresence =
 				galleryData.trackPresence ?? gallery.trackPresence;
 			gallery.emailAdminOnSubmit =
-				galleryData.emailAdminOnSubmit ??
-				gallery.emailAdminOnSubmit;
-			const savedSession = galleryData.savedSession || {};
-			let savedImages = savedSession.images || [];
+				galleryData.emailAdminOnSubmit ?? gallery.emailAdminOnSubmit;
+			if ( ! gallery.initialized ) {
+				const savedSession = galleryData.savedSession || {};
+				let savedImages = savedSession.images || [];
 
-			if ( gallery.galleryKey && savedImages.length === 0 ) {
-				try {
-					const localSession = JSON.parse(
-						window.localStorage?.getItem(
-							`fbksProofingSession:${ gallery.galleryKey }`
-						) || '{}'
-					);
-					savedImages = localSession.images || [];
-				} catch {}
-			}
-
-			gallery.savedImages = imagesToMap( savedImages );
-			Object.entries( gallery.savedImages ).forEach(
-				( [ imageId, savedImage ] ) => {
-					const image = ensureImageState( galleryId, imageId );
-					image.hearted = !! savedImage.hearted;
-					image.flag = savedImage.flag || '';
-					image.comment = truncateProofingComment(
-						savedImage.comment || ''
-					);
+				if ( gallery.galleryKey && savedImages.length === 0 ) {
+					try {
+						const localSession = JSON.parse(
+							window.localStorage?.getItem(
+								`fbksProofingSession:${ gallery.galleryKey }`
+							) || '{}'
+						);
+						savedImages = localSession.images || [];
+					} catch {}
 				}
-			);
+
+				gallery.savedImages = imagesToMap( savedImages );
+				Object.entries( gallery.savedImages ).forEach(
+					( [ imageId, savedImage ] ) => {
+						const image = ensureImageState( galleryId, imageId );
+						image.hearted = !! savedImage.hearted;
+						image.flag = savedImage.flag || '';
+						image.comment = truncateProofingComment(
+							savedImage.comment || ''
+						);
+					}
+				);
+				gallery.initialized = true;
+			}
 			syncGalleryDom( galleryId );
 			sendGalleryPresence( galleryId, 'active' );
-			bindPresenceEvents( galleryId );
+			bindPresenceEvents( galleryId, scope );
+			// Image and inner-gallery callbacks can mount before their parent.
+			scope.frame( () => {
+				syncGalleryDom( galleryId );
+				applyFilter( element );
+			} );
+			return () => {
+				if ( mounts.get( galleryId ) !== mount ) {
+					return;
+				}
+				sendGalleryPresence( galleryId, 'closed', true );
+				scope.dispose();
+				mounts.delete( galleryId );
+				gallery.isSaving = false;
+				gallery.openFlagPanel = '';
+				gallery.openCommentPanel = '';
+			};
 		},
 		registerImage( galleryId, imageId, imageData = {} ) {
 			const gallery = ensureGalleryState( galleryId );
@@ -496,7 +554,7 @@ const { state, actions } = store( 'folioblocks/proofing-gallery', {
 			image.thumbnail = imageData.thumbnail || '';
 			image.title = imageData.title || '';
 
-			if ( savedImage ) {
+			if ( savedImage && ! image.registered ) {
 				image.hearted = !! savedImage.hearted;
 				image.flag = savedImage.flag || '';
 				image.comment = truncateProofingComment(
@@ -504,6 +562,7 @@ const { state, actions } = store( 'folioblocks/proofing-gallery', {
 				);
 			}
 
+			image.registered = true;
 			if ( imageData.element ) {
 				imageData.element.dataset.proofingImageId = imageId;
 				imageData.element.dataset.proofingAttachmentId = String(
@@ -619,18 +678,28 @@ const { state, actions } = store( 'folioblocks/proofing-gallery', {
 	callbacks: {
 		registerGallery() {
 			const context = getContext();
-
-			actions.registerGallery( context.galleryId, {
-				element: getElement().ref,
-				galleryKey: context.galleryKey,
-				clientEmail: context.clientEmail,
-				pageId: context.pageId,
-				restUrl: context.restUrl,
-				presenceUrl: context.presenceUrl,
-				trackPresence: context.trackPresence,
-				emailAdminOnSubmit: context.emailAdminOnSubmit,
-				savedSession: context.savedSession,
+			const element = getElement().ref;
+			const scope = createFrontendScope();
+			let unmount;
+			// Read/update the proofing store outside the watcher so selections
+			// cannot retrigger initialization and close an open control panel.
+			scope.frame( () => {
+				unmount = actions.registerGallery( context.galleryId, {
+					element,
+					galleryKey: context.galleryKey,
+					clientEmail: context.clientEmail,
+					pageId: context.pageId,
+					restUrl: context.restUrl,
+					presenceUrl: context.presenceUrl,
+					trackPresence: context.trackPresence,
+					emailAdminOnSubmit: context.emailAdminOnSubmit,
+					savedSession: context.savedSession,
+				} );
 			} );
+			return () => {
+				scope.dispose();
+				unmount?.();
+			};
 		},
 		registerImage() {
 			const context = getContext();

@@ -1,511 +1,496 @@
-/**
- * Filmstrip Gallery Block
- * View JS (Free/Core)
- */
-document.addEventListener( 'DOMContentLoaded', () => {
-	const galleries = document.querySelectorAll(
-		'.wp-block-folioblocks-filmstrip-gallery-block.pb-filmstrip-gallery, .wp-block-folioblocks-filmstrip-gallery-block .pb-filmstrip-gallery'
-	);
-
-	if ( ! galleries.length ) {
+import { getElement, store } from '@wordpress/interactivity';
+import { createFrontendScope } from '../pb-helpers/frontendScope';
+let galleryInstance = 0;
+const initializeFilmstrip = ( galleryRoot ) => {
+	galleryInstance++;
+	// Data attributes survive sanitization by parent blocks. Keep support
+	// for the previous script container in cached gallery markup.
+	const serializedData =
+		galleryRoot.getAttribute( 'data-fbks-filmstrip' ) ??
+		galleryRoot.querySelector( '.pb-filmstrip-gallery-data' )?.textContent;
+	if ( ! serializedData ) {
 		return;
 	}
 
-	let galleryInstance = 0;
+	let payload;
+	try {
+		payload = JSON.parse( serializedData );
+	} catch {
+		payload = {};
+	}
 
-	galleries.forEach( ( galleryRoot ) => {
-		galleryInstance += 1;
+	const settings = payload?.settings || {};
+	const images = Array.isArray( payload?.images ) ? payload.images : [];
+	if ( ! images.length ) {
+		return;
+	}
 
-		const dataNode = galleryRoot.querySelector(
-			'.pb-filmstrip-gallery-data'
+	const mainImage = galleryRoot.querySelector(
+		'.pb-filmstrip-gallery-main-image'
+	);
+	if ( ! mainImage ) {
+		return;
+	}
+	const scope = createFrontendScope();
+	const mainPanel = galleryRoot.querySelector( '.pb-filmstrip-gallery-main' );
+	const mainMedia = galleryRoot.querySelector(
+		'.pb-filmstrip-gallery-main-media'
+	);
+	const getWatermarkSizingEdge = ( width, height ) => {
+		const shortEdge = Math.min( width, height );
+		const longEdge = Math.max( width, height );
+		const aspectRatio = shortEdge > 0 ? longEdge / shortEdge : 1;
+		const squareAdjustment =
+			aspectRatio >= 1.2
+				? 1
+				: 0.78 + ( ( aspectRatio - 1 ) / 0.2 ) * 0.22;
+
+		return shortEdge * Math.min( 1, Math.max( 0.78, squareAdjustment ) );
+	};
+	const getWatermarkRenderMetrics = (
+		width,
+		height,
+		sizeRatio,
+		insetRatio
+	) => {
+		const sizingEdge = getWatermarkSizingEdge( width, height );
+
+		return {
+			renderSize: ( sizingEdge * sizeRatio ) / 100,
+			renderInset: ( sizingEdge * insetRatio ) / 100,
+		};
+	};
+	const getMainWatermarkOverlay = () => {
+		const watermark = settings.watermark || {};
+		if ( ! mainMedia || ! watermark.showGallery || ! watermark.image ) {
+			return null;
+		}
+
+		let overlay = mainMedia.querySelector(
+			':scope > .pb-watermark-overlay:not(.pb-watermark-overlay--lightbox)'
 		);
-		if ( ! dataNode ) {
+		if ( ! overlay ) {
+			overlay = document.createElement( 'span' );
+			overlay.className = 'pb-watermark-overlay';
+			overlay.setAttribute( 'aria-hidden', 'true' );
+			mainMedia.appendChild( overlay );
+		}
+
+		const escapedImage = String( watermark.image ).replace(
+			/["\\]/g,
+			'\\$&'
+		);
+		overlay.style.setProperty(
+			'--pb-watermark-image',
+			`url("${ escapedImage }")`
+		);
+		overlay.style.setProperty(
+			'--pb-watermark-opacity',
+			String( watermark.opacity || '0.28' )
+		);
+		overlay.style.setProperty(
+			'--pb-watermark-size',
+			`${ watermark.size || '16' }%`
+		);
+		overlay.style.setProperty(
+			'--pb-watermark-position',
+			String( watermark.position || 'bottom right' )
+		);
+		overlay.style.setProperty(
+			'--pb-watermark-repeat',
+			String( watermark.repeat || 'no-repeat' )
+		);
+		overlay.setAttribute(
+			'data-watermark-size',
+			String( watermark.size || '16' )
+		);
+		overlay.setAttribute(
+			'data-watermark-inset',
+			String( watermark.inset || '4' )
+		);
+
+		return overlay;
+	};
+	const syncMainWatermark = () => {
+		const overlay = getMainWatermarkOverlay();
+		if ( ! overlay ) {
 			return;
 		}
 
-		let payload;
-		try {
-			payload = JSON.parse( dataNode.textContent || '{}' );
-		} catch ( err ) {
-			payload = {};
-		}
+		const imageRect = mainImage.getBoundingClientRect();
+		const sizeRatio = Number.parseFloat(
+			overlay.getAttribute( 'data-watermark-size' ) || '16'
+		);
+		const insetRatio = Number.parseFloat(
+			overlay.getAttribute( 'data-watermark-inset' ) || '4'
+		);
+		const { renderSize, renderInset } = getWatermarkRenderMetrics(
+			imageRect.width,
+			imageRect.height,
+			Number.isFinite( sizeRatio ) ? sizeRatio : 16,
+			Number.isFinite( insetRatio ) ? insetRatio : 4
+		);
 
-		const settings = payload?.settings || {};
-		const images = Array.isArray( payload?.images ) ? payload.images : [];
-		if ( ! images.length ) {
+		overlay.style.setProperty(
+			'--pb-watermark-render-size',
+			`${ renderSize }px`
+		);
+		overlay.style.setProperty(
+			'--pb-watermark-inset',
+			`${ renderInset }px`
+		);
+	};
+	const scheduleMainWatermarkSync = () => {
+		scope.frame( syncMainWatermark );
+	};
+	const syncMainMediaRatio = () => {
+		if (
+			mainMedia &&
+			mainImage.naturalWidth > 0 &&
+			mainImage.naturalHeight > 0
+		) {
+			mainMedia.style.setProperty(
+				'--pb-filmstrip-image-ratio',
+				String( mainImage.naturalWidth / mainImage.naturalHeight )
+			);
+		}
+		scheduleMainWatermarkSync();
+	};
+	scope.listen( mainImage, 'load', syncMainMediaRatio );
+	scope.listen( window, 'resize', scheduleMainWatermarkSync );
+	const mainImageLink = galleryRoot.querySelector(
+		'.pb-filmstrip-gallery-main-link'
+	);
+	if ( mainPanel ) {
+		mainPanel.setAttribute( 'role', 'tabpanel' );
+		if ( ! mainPanel.id ) {
+			mainPanel.id = `pb-filmstrip-gallery-panel-${ galleryInstance }`;
+		}
+	}
+
+	const thumbButtons = Array.from(
+		galleryRoot.querySelectorAll( '.pb-filmstrip-gallery-thumb' )
+	);
+	const thumbnailsTrack = galleryRoot.querySelector(
+		'.pb-filmstrip-gallery-thumbnails'
+	);
+	const prevButtons = Array.from(
+		galleryRoot.querySelectorAll(
+			'.pb-filmstrip-gallery-nav-prev, .pb-filmstrip-gallery-strip-nav[data-direction="prev"]'
+		)
+	);
+	const nextButtons = Array.from(
+		galleryRoot.querySelectorAll(
+			'.pb-filmstrip-gallery-nav-next, .pb-filmstrip-gallery-strip-nav[data-direction="next"]'
+		)
+	);
+
+	let activeIndex = 0;
+
+	const normalizeIndex = ( index ) => {
+		const length = images.length;
+		if ( ! length ) {
+			return 0;
+		}
+		return ( ( index % length ) + length ) % length;
+	};
+
+	const keepThumbVisibleInTrack = ( thumbButton ) => {
+		if ( ! thumbButton || ! thumbnailsTrack ) {
 			return;
 		}
 
-		const mainImage = galleryRoot.querySelector(
-			'.pb-filmstrip-gallery-main-image'
+		const trackRect = thumbnailsTrack.getBoundingClientRect();
+		const thumbRect = thumbButton.getBoundingClientRect();
+		const edgePadding = 8;
+
+		if ( thumbRect.left < trackRect.left ) {
+			thumbnailsTrack.scrollLeft +=
+				thumbRect.left - trackRect.left - edgePadding;
+		} else if ( thumbRect.right > trackRect.right ) {
+			thumbnailsTrack.scrollLeft +=
+				thumbRect.right - trackRect.right + edgePadding;
+		}
+
+		if ( thumbRect.top < trackRect.top ) {
+			thumbnailsTrack.scrollTop +=
+				thumbRect.top - trackRect.top - edgePadding;
+		} else if ( thumbRect.bottom > trackRect.bottom ) {
+			thumbnailsTrack.scrollTop +=
+				thumbRect.bottom - trackRect.bottom + edgePadding;
+		}
+	};
+
+	const syncThumbState = () => {
+		thumbButtons.forEach( ( button, index ) => {
+			const isActive = index === activeIndex;
+			button.classList.toggle( 'is-active', isActive );
+			button.setAttribute( 'aria-selected', isActive ? 'true' : 'false' );
+			button.setAttribute( 'tabindex', isActive ? '0' : '-1' );
+
+			if ( mainPanel?.id ) {
+				button.setAttribute( 'aria-controls', mainPanel.id );
+				if ( ! button.id ) {
+					button.id = `${ mainPanel.id }-tab-${ index }`;
+				}
+			}
+
+			if ( isActive && mainPanel && button.id ) {
+				mainPanel.setAttribute( 'aria-labelledby', button.id );
+			}
+		} );
+
+		const activeThumb = thumbButtons[ activeIndex ];
+		if ( activeThumb ) {
+			keepThumbVisibleInTrack( activeThumb );
+		}
+	};
+
+	const emitImageChange = ( image ) => {
+		galleryRoot.dispatchEvent(
+			new CustomEvent( 'pb:filmstrip:change', {
+				detail: {
+					activeIndex,
+					image,
+					images,
+					settings,
+				},
+			} )
 		);
-		if ( ! mainImage ) {
+	};
+
+	const setActiveImage = ( nextIndex ) => {
+		activeIndex = normalizeIndex( nextIndex );
+		const image = images[ activeIndex ];
+		if ( ! image ) {
 			return;
 		}
-		const mainPanel = galleryRoot.querySelector(
-			'.pb-filmstrip-gallery-main'
+
+		if ( image.src ) {
+			mainImage.src = image.src;
+		}
+		if ( image.srcSet ) {
+			mainImage.setAttribute( 'srcset', image.srcSet );
+		} else {
+			mainImage.removeAttribute( 'srcset' );
+		}
+		if ( image.sizes ) {
+			mainImage.setAttribute( 'sizes', image.sizes );
+		} else {
+			mainImage.removeAttribute( 'sizes' );
+		}
+		mainImage.className = `pb-filmstrip-gallery-main-image pb-image-block-img${
+			image.imgClass ? ` ${ image.imgClass }` : ''
+		}`;
+		mainImage.setAttribute(
+			'data-image-id',
+			String( Number( image.id || 0 ) )
 		);
-		const mainMedia = galleryRoot.querySelector(
-			'.pb-filmstrip-gallery-main-media'
-		);
-		const getWatermarkSizingEdge = ( width, height ) => {
-			const shortEdge = Math.min( width, height );
-			const longEdge = Math.max( width, height );
-			const aspectRatio = shortEdge > 0 ? longEdge / shortEdge : 1;
-			const squareAdjustment =
-				aspectRatio >= 1.2
-					? 1
-					: 0.78 + ( ( aspectRatio - 1 ) / 0.2 ) * 0.22;
+		if ( mainMedia ) {
+			const width = Number( image.width || 0 );
+			const height = Number( image.height || 0 );
+			mainMedia.style.setProperty(
+				'--pb-filmstrip-image-ratio',
+				String( width > 0 && height > 0 ? width / height : 1 )
+			);
+		}
 
-			return shortEdge * Math.min( 1, Math.max( 0.78, squareAdjustment ) );
-		};
-		const getWatermarkRenderMetrics = (
-			width,
-			height,
-			sizeRatio,
-			insetRatio
-		) => {
-			const sizingEdge = getWatermarkSizingEdge( width, height );
-
-			return {
-				renderSize: ( sizingEdge * sizeRatio ) / 100,
-				renderInset: ( sizingEdge * insetRatio ) / 100,
-			};
-		};
-		const getMainWatermarkOverlay = () => {
-			const watermark = settings.watermark || {};
-			if ( ! mainMedia || ! watermark.showGallery || ! watermark.image ) {
-				return null;
-			}
-
-			let overlay = mainMedia.querySelector(
-				':scope > .pb-watermark-overlay:not(.pb-watermark-overlay--lightbox)'
-			);
-			if ( ! overlay ) {
-				overlay = document.createElement( 'span' );
-				overlay.className = 'pb-watermark-overlay';
-				overlay.setAttribute( 'aria-hidden', 'true' );
-				mainMedia.appendChild( overlay );
-			}
-
-			const escapedImage = String( watermark.image ).replace(
-				/["\\]/g,
-				'\\$&'
-			);
-			overlay.style.setProperty(
-				'--pb-watermark-image',
-				`url("${ escapedImage }")`
-			);
-			overlay.style.setProperty(
-				'--pb-watermark-opacity',
-				String( watermark.opacity || '0.28' )
-			);
-			overlay.style.setProperty(
-				'--pb-watermark-size',
-				`${ watermark.size || '16' }%`
-			);
-			overlay.style.setProperty(
-				'--pb-watermark-position',
-				String( watermark.position || 'bottom right' )
-			);
-			overlay.style.setProperty(
-				'--pb-watermark-repeat',
-				String( watermark.repeat || 'no-repeat' )
-			);
-			overlay.setAttribute(
-				'data-watermark-size',
-				String( watermark.size || '16' )
-			);
-			overlay.setAttribute(
-				'data-watermark-inset',
-				String( watermark.inset || '4' )
-			);
-
-			return overlay;
-		};
-		const syncMainWatermark = () => {
-			const overlay = getMainWatermarkOverlay();
-			if ( ! overlay ) {
-				return;
-			}
-
-			const imageRect = mainImage.getBoundingClientRect();
-			const sizeRatio = Number.parseFloat(
-				overlay.getAttribute( 'data-watermark-size' ) || '16'
-			);
-			const insetRatio = Number.parseFloat(
-				overlay.getAttribute( 'data-watermark-inset' ) || '4'
-			);
-			const { renderSize, renderInset } = getWatermarkRenderMetrics(
-				imageRect.width,
-				imageRect.height,
-				Number.isFinite( sizeRatio ) ? sizeRatio : 16,
-				Number.isFinite( insetRatio ) ? insetRatio : 4
-			);
-
-			overlay.style.setProperty(
-				'--pb-watermark-render-size',
-				`${ renderSize }px`
-			);
-			overlay.style.setProperty(
-				'--pb-watermark-inset',
-				`${ renderInset }px`
-			);
-		};
-		const scheduleMainWatermarkSync = () => {
-			window.requestAnimationFrame( syncMainWatermark );
-		};
-		const syncMainMediaRatio = () => {
-			if (
-				mainMedia &&
-				mainImage.naturalWidth > 0 &&
-				mainImage.naturalHeight > 0
+		mainImage.alt = image.alt || image.title || 'Selected gallery image';
+		mainImage.loading = settings.lazyLoad ? 'lazy' : 'eager';
+		if ( mainImageLink ) {
+			const clickSettings = image.overrideGalleryClickSettings
+				? image
+				: settings;
+			let imageClickAction = clickSettings.imageClickAction || '';
+			if ( ! imageClickAction && clickSettings.enableDownload ) {
+				imageClickAction = 'download';
+			} else if (
+				! imageClickAction &&
+				clickSettings.enableWooCommerce
 			) {
-				mainMedia.style.setProperty(
-					'--pb-filmstrip-image-ratio',
-					String( mainImage.naturalWidth / mainImage.naturalHeight )
-				);
+				imageClickAction = 'woocommerce';
 			}
-			scheduleMainWatermarkSync();
-		};
-		mainImage.addEventListener( 'load', syncMainMediaRatio );
-		window.addEventListener( 'resize', scheduleMainWatermarkSync );
-		const mainImageLink = galleryRoot.querySelector(
-			'.pb-filmstrip-gallery-main-link'
-		);
-		if ( mainPanel ) {
-			mainPanel.setAttribute( 'role', 'tabpanel' );
-			if ( ! mainPanel.id ) {
-				mainPanel.id = `pb-filmstrip-gallery-panel-${ galleryInstance }`;
-			}
-		}
+			const imageClickTarget = clickSettings.imageClickTarget || 'icon';
+			let linkUrl = image.overrideGalleryClickSettings
+				? ''
+				: image.linkUrl || '';
+			let linkTarget = image.overrideGalleryClickSettings
+				? ''
+				: image.linkTarget || '';
+			let linkClass = 'pb-filmstrip-gallery-main-link';
+			let linkDownload = false;
 
-		const thumbButtons = Array.from(
-			galleryRoot.querySelectorAll( '.pb-filmstrip-gallery-thumb' )
-		);
-		const thumbnailsTrack = galleryRoot.querySelector(
-			'.pb-filmstrip-gallery-thumbnails'
-		);
-		const prevButtons = Array.from(
-			galleryRoot.querySelectorAll(
-				'.pb-filmstrip-gallery-nav-prev, .pb-filmstrip-gallery-strip-nav[data-direction="prev"]'
-			)
-		);
-		const nextButtons = Array.from(
-			galleryRoot.querySelectorAll(
-				'.pb-filmstrip-gallery-nav-next, .pb-filmstrip-gallery-strip-nav[data-direction="next"]'
-			)
-		);
-
-		let activeIndex = 0;
-
-		const normalizeIndex = ( index ) => {
-			const length = images.length;
-			if ( ! length ) {
-				return 0;
-			}
-			return ( ( index % length ) + length ) % length;
-		};
-
-		const keepThumbVisibleInTrack = ( thumbButton ) => {
-			if ( ! thumbButton || ! thumbnailsTrack ) {
-				return;
-			}
-
-			const trackRect = thumbnailsTrack.getBoundingClientRect();
-			const thumbRect = thumbButton.getBoundingClientRect();
-			const edgePadding = 8;
-
-			if ( thumbRect.left < trackRect.left ) {
-				thumbnailsTrack.scrollLeft +=
-					thumbRect.left - trackRect.left - edgePadding;
-			} else if ( thumbRect.right > trackRect.right ) {
-				thumbnailsTrack.scrollLeft +=
-					thumbRect.right - trackRect.right + edgePadding;
-			}
-
-			if ( thumbRect.top < trackRect.top ) {
-				thumbnailsTrack.scrollTop +=
-					thumbRect.top - trackRect.top - edgePadding;
-			} else if ( thumbRect.bottom > trackRect.bottom ) {
-				thumbnailsTrack.scrollTop +=
-					thumbRect.bottom - trackRect.bottom + edgePadding;
-			}
-		};
-
-		const syncThumbState = () => {
-			thumbButtons.forEach( ( button, index ) => {
-				const isActive = index === activeIndex;
-				button.classList.toggle( 'is-active', isActive );
-				button.setAttribute(
-					'aria-selected',
-					isActive ? 'true' : 'false'
-				);
-				button.setAttribute( 'tabindex', isActive ? '0' : '-1' );
-
-				if ( mainPanel?.id ) {
-					button.setAttribute( 'aria-controls', mainPanel.id );
-					if ( ! button.id ) {
-						button.id = `${ mainPanel.id }-tab-${ index }`;
-					}
-				}
-
-				if ( isActive && mainPanel && button.id ) {
-					mainPanel.setAttribute( 'aria-labelledby', button.id );
-				}
-			} );
-
-			const activeThumb = thumbButtons[ activeIndex ];
-			if ( activeThumb ) {
-				keepThumbVisibleInTrack( activeThumb );
-			}
-		};
-
-		const emitImageChange = ( image ) => {
-			galleryRoot.dispatchEvent(
-				new CustomEvent( 'pb:filmstrip:change', {
-					detail: {
-						activeIndex,
-						image,
-						images,
-						settings,
-					},
-				} )
-			);
-		};
-
-		const setActiveImage = ( nextIndex ) => {
-			activeIndex = normalizeIndex( nextIndex );
-			const image = images[ activeIndex ];
-			if ( ! image ) {
-				return;
-			}
-
-			if ( image.src ) {
-				mainImage.src = image.src;
-			}
-			if ( image.srcSet ) {
-				mainImage.setAttribute( 'srcset', image.srcSet );
-			} else {
-				mainImage.removeAttribute( 'srcset' );
-			}
-			if ( image.sizes ) {
-				mainImage.setAttribute( 'sizes', image.sizes );
-			} else {
-				mainImage.removeAttribute( 'sizes' );
-			}
-			mainImage.className = `pb-filmstrip-gallery-main-image pb-image-block-img${
-				image.imgClass ? ` ${ image.imgClass }` : ''
-			}`;
-			mainImage.setAttribute(
-				'data-image-id',
-				String( Number( image.id || 0 ) )
-			);
-			if ( mainMedia ) {
-				const width = Number( image.width || 0 );
-				const height = Number( image.height || 0 );
-				mainMedia.style.setProperty(
-					'--pb-filmstrip-image-ratio',
-					String( width > 0 && height > 0 ? width / height : 1 )
-				);
-			}
-
-			mainImage.alt =
-				image.alt || image.title || 'Selected gallery image';
-			mainImage.loading = settings.lazyLoad ? 'lazy' : 'eager';
-			if ( mainImageLink ) {
-				const clickSettings = image.overrideGalleryClickSettings
-					? image
-					: settings;
-				let imageClickAction = clickSettings.imageClickAction || '';
-				if ( ! imageClickAction && clickSettings.enableDownload ) {
-					imageClickAction = 'download';
-				} else if (
-					! imageClickAction &&
-					clickSettings.enableWooCommerce
-				) {
-					imageClickAction = 'woocommerce';
-				}
-				const imageClickTarget =
-					clickSettings.imageClickTarget || 'icon';
-				let linkUrl = image.overrideGalleryClickSettings
-					? ''
-					: image.linkUrl || '';
-				let linkTarget = image.overrideGalleryClickSettings
-					? ''
-					: image.linkTarget || '';
-				let linkClass = 'pb-filmstrip-gallery-main-link';
-				let linkDownload = false;
-
-				if ( image.overrideGalleryClickSettings ) {
-					if ( imageClickAction === 'media_file' ) {
-						linkUrl = image.fullSrc || image.src || '';
-					} else if ( imageClickAction === 'custom_url' ) {
-						linkUrl = image.customUrl || '';
-						linkTarget = image.customUrlOpenInNewTab
-							? '_blank'
-							: '';
-					} else if ( imageClickAction === 'page_post' ) {
-						linkUrl = image.linkedPostUrl || '';
-						linkTarget = image.linkedPostOpenInNewTab
-							? '_blank'
-							: '';
-					}
-				}
-				if (
-					! (
-						imageClickAction === 'media_file' ||
-						( imageClickTarget === 'thumbnail' &&
-							[ 'custom_url', 'page_post' ].includes(
-								imageClickAction
-							) )
-					)
-				) {
-					linkUrl = '';
-					linkTarget = '';
-				}
-
-				if (
-					imageClickAction === 'download' &&
-					imageClickTarget === 'thumbnail'
-				) {
+			if ( image.overrideGalleryClickSettings ) {
+				if ( imageClickAction === 'media_file' ) {
 					linkUrl = image.fullSrc || image.src || '';
-					linkDownload = true;
-				} else if (
+				} else if ( imageClickAction === 'custom_url' ) {
+					linkUrl = image.customUrl || '';
+					linkTarget = image.customUrlOpenInNewTab ? '_blank' : '';
+				} else if ( imageClickAction === 'page_post' ) {
+					linkUrl = image.linkedPostUrl || '';
+					linkTarget = image.linkedPostOpenInNewTab ? '_blank' : '';
+				}
+			}
+			if (
+				! (
+					imageClickAction === 'media_file' ||
+					( imageClickTarget === 'thumbnail' &&
+						[ 'custom_url', 'page_post' ].includes(
+							imageClickAction
+						) )
+				)
+			) {
+				linkUrl = '';
+				linkTarget = '';
+			}
+
+			if (
+				imageClickAction === 'download' &&
+				imageClickTarget === 'thumbnail'
+			) {
+				linkUrl = image.fullSrc || image.src || '';
+				linkDownload = true;
+			} else if (
+				imageClickAction === 'woocommerce' &&
+				imageClickTarget === 'thumbnail' &&
+				clickSettings.enableWooCommerce &&
+				Number( image.wooProductId || 0 ) > 0
+			) {
+				const configuredAction =
+					image.wooLinkActionRaw &&
+					image.wooLinkActionRaw !== 'inherit'
+						? image.wooLinkActionRaw
+						: clickSettings.wooDefaultLinkAction;
+				const action =
+					configuredAction === 'product' ? 'product' : 'add_to_cart';
+				if ( action === 'product' && image.wooProductUrl ) {
+					linkUrl = image.wooProductUrl;
+				} else {
+					linkUrl = image.wooProductUrl || '#';
+					linkClass += ' pb-add-to-cart-thumbnail';
+					mainImageLink.dataset.wooAction = 'add_to_cart';
+					mainImageLink.dataset.productId = String(
+						image.wooProductId
+					);
+					if ( image.wooProductUrl ) {
+						mainImageLink.dataset.productUrl = String(
+							image.wooProductUrl
+						);
+					} else {
+						delete mainImageLink.dataset.productUrl;
+					}
+				}
+			}
+
+			mainImageLink.className = linkClass;
+
+			if ( linkUrl ) {
+				mainImageLink.href = linkUrl;
+			} else {
+				mainImageLink.removeAttribute( 'href' );
+			}
+
+			if ( linkTarget === '_blank' ) {
+				mainImageLink.target = '_blank';
+				mainImageLink.rel = 'noopener noreferrer';
+			} else {
+				mainImageLink.removeAttribute( 'target' );
+				mainImageLink.removeAttribute( 'rel' );
+			}
+
+			if ( linkDownload ) {
+				mainImageLink.setAttribute( 'download', '' );
+			} else {
+				mainImageLink.removeAttribute( 'download' );
+			}
+
+			if (
+				! (
 					imageClickAction === 'woocommerce' &&
 					imageClickTarget === 'thumbnail' &&
 					clickSettings.enableWooCommerce &&
 					Number( image.wooProductId || 0 ) > 0
-				) {
-					const configuredAction =
-						image.wooLinkActionRaw &&
-						image.wooLinkActionRaw !== 'inherit'
-							? image.wooLinkActionRaw
-							: clickSettings.wooDefaultLinkAction;
-					const action =
-						configuredAction === 'product'
-							? 'product'
-							: 'add_to_cart';
-					if ( action === 'product' && image.wooProductUrl ) {
-						linkUrl = image.wooProductUrl;
-					} else {
-						linkUrl = image.wooProductUrl || '#';
-						linkClass += ' pb-add-to-cart-thumbnail';
-						mainImageLink.dataset.wooAction = 'add_to_cart';
-						mainImageLink.dataset.productId = String(
-							image.wooProductId
-						);
-						if ( image.wooProductUrl ) {
-							mainImageLink.dataset.productUrl = String(
-								image.wooProductUrl
-							);
-						} else {
-							delete mainImageLink.dataset.productUrl;
-						}
-					}
-				}
+				)
+			) {
+				delete mainImageLink.dataset.wooAction;
+				delete mainImageLink.dataset.productId;
+				delete mainImageLink.dataset.productUrl;
+			}
+		}
 
-				mainImageLink.className = linkClass;
+		syncThumbState();
+		scheduleMainWatermarkSync();
+		emitImageChange( image );
+	};
 
-				if ( linkUrl ) {
-					mainImageLink.href = linkUrl;
-				} else {
-					mainImageLink.removeAttribute( 'href' );
-				}
+	thumbButtons.forEach( ( button ) => {
+		scope.listen( button, 'click', () => {
+			const index = Number( button.dataset.index || 0 );
+			setActiveImage( index );
+		} );
 
-				if ( linkTarget === '_blank' ) {
-					mainImageLink.target = '_blank';
-					mainImageLink.rel = 'noopener noreferrer';
-				} else {
-					mainImageLink.removeAttribute( 'target' );
-					mainImageLink.removeAttribute( 'rel' );
-				}
+		scope.listen( button, 'keydown', ( event ) => {
+			const index = Number( button.dataset.index || 0 );
+			let nextIndex = null;
 
-				if ( linkDownload ) {
-					mainImageLink.setAttribute( 'download', '' );
-				} else {
-					mainImageLink.removeAttribute( 'download' );
-				}
-
-					if (
-						! (
-						imageClickAction === 'woocommerce' &&
-						imageClickTarget === 'thumbnail' &&
-						clickSettings.enableWooCommerce &&
-						Number( image.wooProductId || 0 ) > 0
-					)
-				) {
-					delete mainImageLink.dataset.wooAction;
-					delete mainImageLink.dataset.productId;
-					delete mainImageLink.dataset.productUrl;
-				}
+			if ( event.key === 'ArrowRight' || event.key === 'ArrowDown' ) {
+				nextIndex = index + 1;
+			} else if ( event.key === 'ArrowLeft' || event.key === 'ArrowUp' ) {
+				nextIndex = index - 1;
+			} else if ( event.key === 'Home' ) {
+				nextIndex = 0;
+			} else if ( event.key === 'End' ) {
+				nextIndex = images.length - 1;
+			} else if ( event.key === 'Enter' || event.key === ' ' ) {
+				event.preventDefault();
+				setActiveImage( index );
+				return;
 			}
 
-			syncThumbState();
-			scheduleMainWatermarkSync();
-			emitImageChange( image );
-		};
+			if ( null === nextIndex ) {
+				return;
+			}
 
-		thumbButtons.forEach( ( button ) => {
-			button.addEventListener( 'click', () => {
-				const index = Number( button.dataset.index || 0 );
-				setActiveImage( index );
-			} );
+			event.preventDefault();
+			setActiveImage( nextIndex );
 
-			button.addEventListener( 'keydown', ( event ) => {
-				const index = Number( button.dataset.index || 0 );
-				let nextIndex = null;
-
-				if ( event.key === 'ArrowRight' || event.key === 'ArrowDown' ) {
-					nextIndex = index + 1;
-				} else if (
-					event.key === 'ArrowLeft' ||
-					event.key === 'ArrowUp'
-				) {
-					nextIndex = index - 1;
-				} else if ( event.key === 'Home' ) {
-					nextIndex = 0;
-				} else if ( event.key === 'End' ) {
-					nextIndex = images.length - 1;
-				} else if ( event.key === 'Enter' || event.key === ' ' ) {
-					event.preventDefault();
-					setActiveImage( index );
-					return;
-				}
-
-				if ( null === nextIndex ) {
-					return;
-				}
-
-				event.preventDefault();
-				setActiveImage( nextIndex );
-
-				const nextThumb = thumbButtons[ normalizeIndex( nextIndex ) ];
-				if ( nextThumb ) {
-					nextThumb.focus();
-				}
-			} );
+			const nextThumb = thumbButtons[ normalizeIndex( nextIndex ) ];
+			if ( nextThumb ) {
+				nextThumb.focus();
+			}
 		} );
-
-		prevButtons.forEach( ( button ) => {
-			button.addEventListener( 'click', () => {
-				setActiveImage( activeIndex - 1 );
-			} );
-		} );
-
-		nextButtons.forEach( ( button ) => {
-			button.addEventListener( 'click', () => {
-				setActiveImage( activeIndex + 1 );
-			} );
-		} );
-
-		galleryRoot.__pbFilmstrip = {
-			getSettings: () => settings,
-			getImages: () => images,
-			getActiveIndex: () => activeIndex,
-			setActiveImage,
-		};
-
-		setActiveImage( 0 );
 	} );
+
+	prevButtons.forEach( ( button ) => {
+		scope.listen( button, 'click', () => {
+			setActiveImage( activeIndex - 1 );
+		} );
+	} );
+
+	nextButtons.forEach( ( button ) => {
+		scope.listen( button, 'click', () => {
+			setActiveImage( activeIndex + 1 );
+		} );
+	} );
+
+	galleryRoot.__pbFilmstrip = {
+		getSettings: () => settings,
+		getImages: () => images,
+		getActiveIndex: () => activeIndex,
+		setActiveImage,
+	};
+
+	setActiveImage( 0 );
+	galleryRoot.dispatchEvent( new Event( 'pb:filmstrip:initialized' ) );
+	return () => {
+		scope.dispose();
+		delete galleryRoot.__pbFilmstrip;
+	};
+};
+store( 'folioblocks/filmstrip', {
+	callbacks: {
+		initialize() {
+			return initializeFilmstrip( getElement().ref );
+		},
+	},
 } );

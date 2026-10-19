@@ -147,6 +147,10 @@
 		}
 	}
 
+	.pb-carousel-play-button .pause-icon {
+		display: none;
+	}
+
 	.pb-carousel-chevron {
 		font-weight: 700; // makes chevrons visually thicker
 		font-size: 30px; // slightly larger than play to balance optical weight

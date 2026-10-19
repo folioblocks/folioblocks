@@ -10,6 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Base attributes (free features)
 $fbks_wrapper_attributes = array(
+    'data-wp-interactive' => 'folioblocks/carousel',
+    'data-wp-watch' => 'callbacks.initialize',
+    'data-wp-key' => wp_unique_id( 'fbks-carousel-' ) . '-' . md5( wp_json_encode( [ get_the_ID(), $attributes, $content ] ) ),
 	'class'                   => 'is-loading',
 	'data-vertical-on-mobile' => empty( $attributes['verticalOnMobile'] ) ? 'false' : 'true',
 );
@@ -59,9 +62,24 @@ $fbks_controls_icon_color = ! empty( $attributes['controlsIconColor'] )
 	? $attributes['controlsIconColor']
 	: '#ffffff';
 ?>
-<div <?php echo wp_kses( $fbks_wrapper_attr_string, [ 'div' => [] ] ); ?>>
-	<div class="pb-carousel-gallery">
-		<?php echo wp_kses( $content, fbks_get_allowed_post_html_with_svg() ); ?>
+<div <?php echo $fbks_wrapper_attr_string; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() escapes each attribute value. ?>>
+	<div class="pb-carousel-gallery" <?php if ( fbks_fs()->can_use_premium_code__premium_only() ) : ?>data-wp-watch="callbacks.premium"<?php endif; ?>>
+		<?php
+        $fbks_slides = wp_kses( $content, fbks_get_allowed_post_html_with_svg() );
+        $fbks_slide_count = 0;
+        $fbks_slide_processor = new WP_HTML_Tag_Processor( $fbks_slides );
+        while ( $fbks_slide_processor->next_tag( [ 'class_name' => 'wp-block-folioblocks-pb-image-block' ] ) ) {
+            $fbks_slide_count++;
+        }
+        $fbks_loop_track = fbks_fs()->can_use_premium_code__premium_only() && ! empty( $attributes['loopSlides'] ) && $fbks_slide_count > 1;
+        if ( $fbks_loop_track ) {
+            echo fbks_carousel_clone_markup( $fbks_slides, 'before' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Derived from sanitized slide markup with escaped attributes.
+        }
+        echo $fbks_slides; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Sanitized above.
+        if ( $fbks_loop_track ) {
+            echo fbks_carousel_clone_markup( $fbks_slides, 'after' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Derived from sanitized slide markup with escaped attributes.
+        }
+        ?>
 	</div>
 
 	<?php if ( fbks_fs()->can_use_premium_code__premium_only() ) : ?>
@@ -92,7 +110,7 @@ $fbks_controls_icon_color = ! empty( $attributes['controlsIconColor'] )
 						<svg class="play-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
 							<path d="M8 5v14l11-7z"/>
 						</svg>
-						<svg class="pause-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true" style="display:none;">
+						<svg class="pause-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
 							<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
 						</svg>
 					</button>

@@ -423,6 +423,14 @@
 // Base Lightbox Content
 
 .pb-video-lightbox {
+	// The router owns this dialog; the native top layer escapes theme stacking.
+	margin: 0;
+	padding: 0;
+	border: 0;
+	max-width: none;
+	max-height: none;
+	color: inherit;
+	overflow: auto;
 	--pb-video-lightbox-ratio: 1.7778;
 	opacity: 0;
 	visibility: hidden;
@@ -699,4 +707,8 @@
 			}
 		}
 	}
+}
+
+.pb-video-lightbox::backdrop {
+	background: transparent;
 }

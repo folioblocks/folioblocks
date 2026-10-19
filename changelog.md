@@ -4,12 +4,29 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0] - 2026-10-19
+### Changed
+- Updated all FolioBlocks blocks for Gutenberg's Interactivity API full-page client-side navigation: Background Video, Before & After, Loupe, Image, Video, Grid, Justified, Masonry, Modular, Filmstrip, Carousel, Video Gallery, and Proofing Gallery, including the nested Image Row and Image Stack blocks.
+- Scoped frontend initialization, event listeners, timers, observers, and pending requests to mounted blocks so galleries initialize when navigating between pages and clean up when leaving.
+- Bumped each updated block's minor version, including Image Row and Image Stack.
+
+### Fixed
+- Fixed galleries remaining hidden after client-side navigation and ensured lightboxes, playback, autoplay, filters, and page/post media protection settings follow the active page.
+- Fixed header dropdown interactions over Before & After and Background Video blocks, and Carousel loop glitches during rapid navigation.
+- Fixed Proofing Gallery control namespaces, filter reflow, draft restoration, presence tracking cleanup, and stale save responses after navigation.
+
 ## [1.6.0] - 2026-10-08
 ### Changed
-- Standardized all FolioBlock's icons around WordPress sanitization standards.  
+- Standardized gallery SVG markup for WordPress icon sanitization and synchronized artwork across SVG files, shared icon helpers, and block definitions.
+- Normalized gallery icon proportions and artwork coverage, including Carousel, Filmstrip, and Proofing Gallery icons.
+- Updated block rendering to output already-escaped wrapper, link, randomization, and watermark attributes without passing bare attribute fragments through `wp_kses()`, in preparation for upcoming WordPress sanitizer changes.
+- Moved initial Carousel and Filmstrip play/pause icon visibility into CSS so it survives sanitization when galleries are nested inside Background Video.
 
 ### Added
-- Registered FolioBlock's icons into WordPress core/icon block to make them available. 
+- Registered eight FolioBlocks Pro gallery icons in a FolioBlocks collection for the WordPress core Icon block, excluding Image Stack, Image Row, and the FolioBlocks logo.
+
+### Fixed
+- Fixed Filmstrip Gallery initialization when nested inside Background Video by storing gallery data in an escaped HTML data attribute instead of a script element that parent-block sanitization removes. Retained support for the previous script-based data format.
 
 ## [1.6.0] - 2026-09-11
 ### Changed

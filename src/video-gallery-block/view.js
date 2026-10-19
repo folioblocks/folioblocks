@@ -1,14 +1,10 @@
-/**
- * Video Gallery Block
- * View JS
- */
-document.addEventListener( 'DOMContentLoaded', () => {
-	const galleries = document.querySelectorAll(
-		'.wp-block-folioblocks-video-gallery-block'
-	);
+/** Reveal each Video Gallery when its router region mounts. */
+import { getElement, store } from '@wordpress/interactivity';
 
-	galleries.forEach( ( galleryBlock ) => {
-		// Immediately remove is-loading when DOM is ready
-		galleryBlock.classList.remove( 'is-loading' );
-	} );
+store( 'folioblocks/video-gallery', {
+	callbacks: {
+		initialize() {
+			getElement().ref.classList.remove( 'is-loading' );
+		},
+	},
 } );

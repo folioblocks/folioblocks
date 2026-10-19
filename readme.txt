@@ -2,7 +2,7 @@
 Contributors: portfolioblocks , campanellafoto
 Plugin link: https://folioblocks.com/
 Tags: gallery, image gallery, photo gallery, video gallery, lightbox, 
-Tested up to:      7.1
+Tested up to:      7.1.3
 Requires at least: 6.5
 Requires PHP: 7.4
 Stable tag:        1.6.0

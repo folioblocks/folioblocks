@@ -101,7 +101,7 @@ if (fbks_fs()->can_use_premium_code__premium_only()) {
 	if (! in_array($fbks_shadow_style, $fbks_valid_shadow_styles, true)) {
 		$fbks_shadow_style = $fbks_drop_shadow ? 'soft' : 'none';
 	}
-	$fbks_lazy_load = ! empty($attributes['lazyLoad']);
+	$fbks_lazy_load = ! empty($fbks_context['folioBlocks/lazyLoad'] ?? ($attributes['lazyLoad'] ?? false));
 	$fbks_overlay_style = $fbks_hover_context['folioBlocks/overlayStyle'] ?? ($attributes['overlayStyle'] ?? 'default');
 	$fbks_hover_effect = sanitize_key($fbks_hover_context['folioBlocks/hoverEffect'] ?? ($attributes['hoverEffect'] ?? 'none'));
 	$fbks_overlay_entrance = sanitize_key($fbks_hover_context['folioBlocks/overlayEntrance'] ?? ($attributes['overlayEntrance'] ?? 'default'));
@@ -244,7 +244,12 @@ if ($fbks_title) {
 }
 ?>
 
-<div <?php echo wp_kses_post(get_block_wrapper_attributes()); ?>>
+<div <?php echo get_block_wrapper_attributes( [
+    'data-wp-interactive' => 'folioblocks/video',
+    'data-wp-watch' => 'callbacks.initialize',
+    'data-wp-key' => wp_unique_id( 'fbks-video-' ) . '-' . md5( wp_json_encode( [ get_the_ID(), $attributes, $fbks_context ] ) ),
+    'data-disable-right-click' => fbks_fs()->can_use_premium_code__premium_only() && ! empty( $attributes['disableRightClick'] ) ? 'true' : 'false',
+] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- WordPress escapes each wrapper attribute value. ?>>
 	<?php
 	$fbks_overlay_class = '';
 	if ($fbks_play_visibility === 'always' || $fbks_title_visibility === 'always') {
@@ -253,7 +258,7 @@ if ($fbks_title) {
 		$fbks_overlay_class = ' has-overlay-hover';
 	}
 	?>
-	<div class="pb-video-block aspect-<?php echo esc_attr(str_replace(':', '-', $fbks_aspect)); ?><?php echo esc_attr($fbks_overlay_class); ?>
+	<div <?php if ( fbks_fs()->can_use_premium_code__premium_only() ) : ?>data-wp-watch="callbacks.premium"<?php endif; ?> class="pb-video-block aspect-<?php echo esc_attr(str_replace(':', '-', $fbks_aspect)); ?><?php echo esc_attr($fbks_overlay_class); ?>
 		<?php if ($fbks_has_color_overlay) {
 			echo ' has-color-overlay';
 		} ?><?php if ($fbks_has_gradient_overlay) {
@@ -281,9 +286,6 @@ if ($fbks_title) {
 		<?php endif; ?>
 		data-video-url="<?php echo esc_url($fbks_video_url); ?>"
 		data-lbx="<?php echo esc_attr($fbks_lightbox_id); ?>"
-		<?php if (fbks_fs()->can_use_premium_code__premium_only() && ! empty($attributes['disableRightClick'])) : ?>
-		data-disable-right-click="true"
-		<?php endif; ?>
 		style="<?php echo esc_attr($fbks_style); ?>">
 
 		<?php echo wp_kses_post($fbks_thumbnail_html); ?>
@@ -336,7 +338,7 @@ if ($fbks_title) {
 		?>
 	</div>
 	<!-- Lightbox Markup -->
-	<div id="<?php echo esc_attr($fbks_lightbox_dom_id); ?>" class="pb-video-lightbox <?php echo esc_attr($fbks_layout_class); ?><?php echo 'light' === $fbks_lightbox_theme ? ' light-mode' : ''; ?>" data-lbx="<?php echo esc_attr($fbks_lightbox_id); ?>" role="dialog" tabindex="-1" aria-modal="true" aria-hidden="true" aria-label="<?php echo esc_attr($fbks_lightbox_aria_label); ?>" style="--pb-video-lightbox-ratio: <?php echo esc_attr((string) $fbks_video_ratio); ?>;">
+	<dialog id="<?php echo esc_attr($fbks_lightbox_dom_id); ?>" class="pb-video-lightbox <?php echo esc_attr($fbks_layout_class); ?><?php echo 'light' === $fbks_lightbox_theme ? ' light-mode' : ''; ?>" data-lbx="<?php echo esc_attr($fbks_lightbox_id); ?>" role="dialog" tabindex="-1" aria-modal="true" aria-hidden="true" aria-label="<?php echo esc_attr($fbks_lightbox_aria_label); ?>" style="--pb-video-lightbox-ratio: <?php echo esc_attr((string) $fbks_video_ratio); ?>;">
 			<div class="pb-video-lightbox-inner">
 				<button class="pb-video-lightbox-close" aria-label="<?php esc_attr_e('Close', 'folioblocks'); ?>">×</button>
 
@@ -382,5 +384,5 @@ if ($fbks_title) {
 				<div class="pb-video-lightbox-video"></div>
 			<?php endif; ?>
 		</div>
-	</div>
+	</dialog>
 </div>

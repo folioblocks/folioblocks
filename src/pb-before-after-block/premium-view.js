@@ -1,78 +1,31 @@
-/**
- * Before & After Block
- * Premium View JS
- */
-document.addEventListener( 'DOMContentLoaded', () => {
-	const containers = document.querySelectorAll(
-		'.pb-before-after-container'
-	);
-	if ( ! containers.length ) {
-		return;
-	}
+/** Keep page protection tied to each comparison's lifetime. */
+import { getElement, store } from '@wordpress/interactivity';
 
-	containers.forEach( ( container ) => {
-		if (
-			container.dataset.lazyLoad === 'true' &&
-			! container.dataset.lazyInitialized
-		) {
-			const images = container.querySelectorAll( 'img[src]' );
-			if ( 'IntersectionObserver' in window ) {
-				const observer = new window.IntersectionObserver(
-					( entries, obs ) => {
-						entries.forEach( ( entry ) => {
-							if ( entry.isIntersecting ) {
-								const img = entry.target;
-								if ( img.dataset.src ) {
-									img.src = img.dataset.src;
-									img.removeAttribute( 'data-src' );
-								}
-								obs.unobserve( img );
-							}
-						} );
-					}
+store( 'folioblocks/before-after', {
+	callbacks: {
+		protection() {
+			const { ref: root } = getElement();
+			const controller = new AbortController();
+			const { signal } = controller;
+			if ( root.getAttribute( 'data-disable-right-click' ) === 'true' ) {
+				document.addEventListener(
+					'contextmenu',
+					( event ) => event.preventDefault(),
+					{ signal }
 				);
-				images.forEach( ( img ) => {
-					if ( img.dataset.src ) {
-						observer.observe( img );
-					}
-				} );
-				container.dataset.lazyInitialized = 'true';
-			} else {
-				// Fallback: load images immediately if IntersectionObserver not supported
-				images.forEach( ( img ) => {
-					if ( img.dataset.src ) {
-						img.src = img.dataset.src;
-						img.removeAttribute( 'data-src' );
-					}
-				} );
-				container.dataset.lazyInitialized = 'true';
 			}
-		}
-
-		if (
-			container.dataset.disableRightClick === 'true' &&
-			! container.dataset.rightClickDisabled
-		) {
-			container.addEventListener( 'contextmenu', ( e ) =>
-				e.preventDefault()
-			);
-			container.dataset.rightClickDisabled = 'true';
-		}
-
-		if (
-			container.dataset.disableDragToSave === 'true' &&
-			! container.dataset.dragToSaveDisabled
-		) {
-			container.addEventListener(
-				'dragstart',
-				( e ) => {
-					if ( e.target.closest( 'img, video' ) ) {
-						e.preventDefault();
-					}
-				},
-				{ capture: true }
-			);
-			container.dataset.dragToSaveDisabled = 'true';
-		}
-	} );
+			if ( root.getAttribute( 'data-disable-drag-to-save' ) === 'true' ) {
+				root.addEventListener(
+					'dragstart',
+					( event ) => {
+						if ( event.target.closest( 'img, video' ) ) {
+							event.preventDefault();
+						}
+					},
+					{ capture: true, signal }
+				);
+			}
+			return () => controller.abort();
+		},
+	},
 } );
