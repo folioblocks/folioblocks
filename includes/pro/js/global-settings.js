@@ -6,6 +6,173 @@
 		return;
 	}
 
+    const imageCards = form.querySelectorAll( '[data-settings-section="block_image"], [data-settings-section="block_carousel"], [data-settings-section="block_filmstrip"], [data-settings-section="block_modular"], [data-settings-section="block_grid"], [data-settings-section="block_justified"], [data-settings-section="block_masonry"]' );
+    const updateImageDefaults = () => {
+        imageCards.forEach( imageDefaults => {
+        const key = imageDefaults.dataset.settingsSection.slice(6);
+        const read = name => imageDefaults.querySelector( `#fbks-default-${ key }-${ name }` );
+        const action = read( 'imageClickAction' ).value;
+        const target = read( 'imageClickTarget' ).value;
+        const style = read( 'onHoverStyle' ).value;
+        const downloadIcon = action === 'download' && target === 'icon';
+        const secondaryLightbox = downloadIcon || ( [ 'carousel', 'modular', 'grid', 'justified', 'masonry' ].includes( key ) && [ 'custom_url', 'page_post' ].includes( action ) && target === 'icon' );
+        const lightbox = action === 'lightbox' || ( secondaryLightbox && read( 'lightbox' ).checked );
+        const conditions = {
+            'link-target': [ 'download', 'media_file', 'custom_url', 'page_post' ].includes( action ),
+            'link-icon': [ 'media_file', 'custom_url', 'page_post' ].includes( action ) && target === 'icon',
+            'download-icon': downloadIcon,
+            'secondary-lightbox': secondaryLightbox,
+            download: action === 'download',
+            autoplay: !!read( 'autoplay' )?.checked,
+            controls: !!read( 'showControls' )?.checked,
+            filter: !!read( 'enableFilter' )?.checked,
+            lightbox,
+            overlay: style !== 'none',
+            entrance: [ 'blur-overlay', 'fade-overlay', 'color-overlay', 'gradient-overlay' ].includes( style ),
+            exif: ( style !== 'none' && read( 'overlayContent' ).value === 'exif' ) || ( lightbox && read( 'lightboxContent' ).value.includes( 'exif' ) ),
+            color: style === 'color-overlay',
+            'overlay-text': [ 'color-overlay', 'gradient-overlay' ].includes( style ),
+            chip: style === 'chip',
+            'chip-text': [ 'chip', 'chip-gradient' ].includes( style ),
+            gradient: style === 'gradient-overlay',
+            'chip-gradient': style === 'chip-gradient',
+        };
+        imageDefaults.querySelectorAll( '[data-image-default-condition]' ).forEach( field => {
+            field.hidden = ! conditions[ field.dataset.imageDefaultCondition ];
+        } );
+        } );
+    };
+    updateImageDefaults();
+    imageCards.forEach( card => card.addEventListener( 'change', updateImageDefaults ) );
+
+    const videoCards = form.querySelectorAll( '[data-settings-section="block_video"], [data-settings-section="block_video_gallery"]' );
+    const updateVideoDefaults = () => {
+        videoCards.forEach( videoDefaults => {
+        const key = videoDefaults.dataset.settingsSection.slice(6);
+        const input = name => videoDefaults.querySelector( `#fbks-default-${ key }-${ name }` );
+        const read = name => input( name ).value;
+        const filtering = !!input( 'enableFilter' )?.checked;
+        const commerceAvailable = !!config.hasWooCommerce;
+        const commerceEnabled = commerceAvailable && !!input( 'enableWooCommerce' )?.checked;
+        const productOption = input( 'lightboxLayout' ).querySelector( '[value="video-product"]' );
+        if ( productOption ) {
+            productOption.hidden = !commerceEnabled;
+            productOption.disabled = !commerceEnabled;
+            if ( !commerceEnabled && read( 'lightboxLayout' ) === 'video-product' ) input( 'lightboxLayout' ).value = 'split';
+        }
+        const categoryOption = input( 'defaultOverlayContent' ).querySelector( '[value="title-play-category"]' );
+        if ( categoryOption ) {
+            categoryOption.hidden = !filtering;
+            categoryOption.disabled = !filtering;
+            if ( !filtering && read( 'defaultOverlayContent' ) === 'title-play-category' ) input( 'defaultOverlayContent' ).value = 'title-play';
+        }
+        const style = read( 'overlayStyle' );
+        const conditions = {
+            'video-color': style === 'color',
+            'video-gradient': style === 'gradient',
+            'video-text': [ 'color', 'gradient' ].includes( style ),
+            'video-content': read( 'defaultOverlayContent' ) !== 'none',
+            filter: filtering,
+            woocommerce: commerceAvailable,
+            commerce: commerceEnabled,
+        };
+        videoDefaults.querySelectorAll( '[data-image-default-condition]' ).forEach( field => {
+            field.hidden = ! conditions[ field.dataset.imageDefaultCondition ];
+        } );
+        } );
+    };
+    updateVideoDefaults();
+    videoCards.forEach( card => card.addEventListener( 'change', updateVideoDefaults ) );
+
+    const proofingDefaults = form.querySelector( '[data-settings-section="block_proofing"]' );
+    const updateProofingDefaults = () => {
+        if ( !proofingDefaults ) return;
+        const enabled = proofingDefaults.querySelector( '#fbks-default-proofing-enableFlag' ).checked;
+        const advanced = proofingDefaults.querySelector( '#fbks-default-proofing-flagMode input:checked' )?.value === 'advanced';
+        proofingDefaults.querySelectorAll( '[data-image-default-condition]' ).forEach( field => {
+            field.hidden = !enabled || ( field.dataset.imageDefaultCondition === 'proofing-palette' && !advanced );
+        } );
+    };
+    updateProofingDefaults();
+    proofingDefaults?.addEventListener( 'change', updateProofingDefaults );
+
+    // Use WordPress's own gradient editor, including color stops and transparency.
+    if ( window.wp?.element?.createRoot && window.wp?.components?.GradientPicker ) {
+        const { createElement, createRoot, useState, useEffect } = window.wp.element;
+        function GradientControl( { input } ) {
+            const [ value, setValue ] = useState( input.value );
+            useEffect( () => {
+                const reset = () => setValue( input.value );
+                input.addEventListener( 'fbks:reset', reset );
+                return () => input.removeEventListener( 'fbks:reset', reset );
+            }, [ input ] );
+            return createElement( window.wp.components.GradientPicker, {
+                value: value || 'linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%)',
+                clearable: false,
+                enableAlpha: true,
+                onChange: next => {
+                    setValue( next || '' );
+                    input.value = next || '';
+                    input.dispatchEvent( new Event( 'input', { bubbles: true } ) );
+                },
+            } );
+        }
+        form.querySelectorAll( '[data-block-gradient-picker]' ).forEach( container => {
+            createRoot( container ).render( createElement( GradientControl, { input: container.previousElementSibling } ) );
+        } );
+    }
+
+    form.querySelectorAll( '[data-block-default-range]' ).forEach( range => {
+        range.addEventListener( 'input', () => { range.nextElementSibling.value = range.value; } );
+    } );
+
+    const orientation = form.querySelector( '#fbks-default-before_after-sliderOrientation' );
+    const labelPosition = form.querySelector( '#fbks-default-before_after-labelPosition' );
+    if ( orientation && labelPosition ) {
+        const positions = Array.from( labelPosition.options, option => option.cloneNode( true ) );
+        const updateLabelPositions = () => {
+            const selected = labelPosition.value;
+            const allowed = orientation.value === 'vertical' ? [ 'left', 'center', 'right' ] : [ 'top', 'center', 'bottom' ];
+            labelPosition.replaceChildren( ...allowed.map( value => positions.find( option => option.value === value ).cloneNode( true ) ) );
+            labelPosition.value = allowed.includes( selected ) ? selected : 'center';
+        };
+        updateLabelPositions();
+        orientation.addEventListener( 'change', updateLabelPositions );
+    }
+
+    // Keep stored CSS colors behind native pickers; preserve background transparency.
+    form.querySelectorAll( '[data-block-color-picker]' ).forEach( picker => {
+        const value = picker.querySelector( '[data-block-color-value]' );
+        const swatch = picker.querySelector( '[data-block-color-swatch]' );
+        const alpha = picker.querySelector( '[data-block-color-alpha]' );
+        const output = picker.querySelector( '[data-block-color-opacity]' );
+        const syncPicker = () => {
+        const sample = document.createElement( 'span' );
+        sample.style.color = value.value;
+        sample.hidden = true;
+        form.appendChild( sample );
+        const channels = getComputedStyle( sample ).color.match( /[\d.]+/g );
+        sample.remove();
+        if ( channels?.length >= 3 ) {
+            swatch.value = '#' + channels.slice( 0, 3 ).map( channel => Number( channel ).toString( 16 ).padStart( 2, '0' ) ).join( '' );
+            if ( alpha ) { alpha.value = Math.round( Number( channels[3] ?? 1 ) * 100 ); output.value = `${ alpha.value }%`; }
+        }
+        };
+        syncPicker();
+        value.addEventListener( 'fbks:reset', syncPicker );
+        const update = () => {
+            const hex = swatch.value;
+            const rgb = [ 1, 3, 5 ].map( offset => parseInt( hex.slice( offset, offset + 2 ), 16 ) );
+            value.value = alpha ? `rgba(${ rgb.join( ', ' ) }, ${ Number( alpha.value ) / 100 })` : hex;
+            if ( output ) output.value = `${ alpha.value }%`;
+            value.dispatchEvent( new Event( 'input', { bubbles: true } ) );
+        };
+        swatch.addEventListener( 'input', update );
+        swatch.addEventListener( 'change', update );
+        alpha?.addEventListener( 'input', update );
+        alpha?.addEventListener( 'change', update );
+    } );
+
 	const sections = Array.from(
 		form.querySelectorAll( '[data-settings-section]' )
 	);
@@ -291,6 +458,11 @@
 			throw new Error( message );
 		}
 
+        const customized = section.querySelector( '[data-block-default-customized]' );
+        if ( customized && typeof result?.data?.customized === 'boolean' ) {
+            customized.hidden = !result.data.customized;
+        }
+
 		setSectionStatus(
 			section,
 			'saved',
@@ -327,6 +499,29 @@
 			}, delay )
 		);
 	};
+
+    form.querySelectorAll( '[data-reset-block-defaults]' ).forEach( button => {
+        button.addEventListener( 'click', () => {
+            const section = button.closest( '[data-settings-section]' );
+            const defaults = JSON.parse( button.dataset.resetBlockDefaults );
+            window.clearTimeout( timers.get( section ) );
+            section.querySelectorAll( '[name]' ).forEach( control => {
+                const key = control.name.match( /\[([^\]]+)\]$/ )?.[1];
+                if ( ! Object.prototype.hasOwnProperty.call( defaults, key ) ) return;
+                if ( control.type === 'radio' ) control.checked = control.value === defaults[ key ];
+                else if ( control.type === 'checkbox' ) control.checked = defaults[ key ];
+                else if ( control.type !== 'hidden' || control.hasAttribute( 'data-block-color-value' ) ) control.value = defaults[ key ] ?? '';
+                control.dispatchEvent( new Event( 'fbks:reset' ) );
+                // Update dependent selects and slider outputs without scheduling partial saves.
+                control.dispatchEvent( new Event( 'change' ) );
+                if ( control.hasAttribute( 'data-block-default-range' ) ) control.nextElementSibling.value = control.value;
+            } );
+            updateImageDefaults();
+            updateVideoDefaults();
+            updateProofingDefaults();
+            saveSection( section, 'reset' ).catch( () => undefined );
+        } );
+    } );
 
 	form.addEventListener( 'input', ( event ) => {
 		const section = event.target.closest( '[data-settings-section]' );

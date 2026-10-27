@@ -24,6 +24,11 @@ $pages = [ '/empty' => '', '/grid' => $render( 'grid' ), '/justified' => $render
     '/no-controls' => $render( 'grid', [ 'clientEmail' => 'navigation-no-controls@example.invalid', 'enableHeart' => false, 'enableFlag' => false, 'enableComment' => false ] ),
     '/gallery-empty' => $render( 'grid', [ 'clientEmail' => 'navigation-empty@example.invalid' ], [] ),
 ];
+$advanced_palette = [ 'name' => 'Project palette', 'items' => [ [ 'value' => 'class-1', 'label' => 'Winner', 'color' => '#dc2626' ], [ 'value' => 'class-4', 'label' => 'Review', 'color' => '#2563eb' ], [ 'value' => 'class-8', 'label' => 'White', 'color' => '#ffffff' ] ] ];
+$pages['/advanced-flags'] = $render( 'grid', [ 'flagMode' => 'advanced', 'flagPalette' => $advanced_palette, 'clientEmail' => 'navigation-advanced@example.invalid' ] );
+$pages['/stars'] = $render( 'grid', [ 'enableStars' => true, 'clientEmail' => 'navigation-stars@example.invalid' ] );
+$pages['/stars-only'] = $render( 'grid', [ 'enableStars' => true, 'enableHeart' => false, 'enableFlag' => false, 'enableComment' => false, 'clientEmail' => 'navigation-stars-only@example.invalid' ] );
+$pages['/stars-dark'] = $render( 'grid', [ 'enableStars' => true, 'proofingTheme' => 'dark', 'clientEmail' => 'navigation-stars-dark@example.invalid' ] );
 $pages['/saved'] = $render( 'grid', [ 'clientEmail' => 'navigation-saved@example.invalid' ] );
 $processor = new WP_HTML_Tag_Processor( $pages['/saved'] );
 if ( $processor->next_tag( [ 'class_name' => 'fbks-proofing-gallery' ] ) ) {

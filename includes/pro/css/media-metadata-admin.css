@@ -84,8 +84,10 @@
 	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
 }
 
-.fbks-media-metadata-swatch.is-hidden {
-	visibility: hidden;
+.fbks-media-metadata-swatch.is-unclassified {
+    background: transparent;
+    border-color: #8c8f94;
+    box-shadow: none;
 }
 
 .fbks-media-metadata-select {
@@ -197,4 +199,103 @@
 	.fbks-media-exif-grid {
 		grid-template-columns: minmax(0, 1fr);
 	}
+}
+
+/* The editor's media chooser has a narrow sidebar, unlike attachment details. */
+.media-sidebar .compat-item [class*="compat-field-fbks_media_"] {
+    display: block;
+    width: 100%;
+    margin-bottom: 16px;
+}
+.media-sidebar .compat-item [class*="compat-field-fbks_media_"] .label,
+.media-sidebar .compat-item [class*="compat-field-fbks_media_"] .field {
+    float: none;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    text-align: left;
+}
+.media-sidebar .compat-item [class*="compat-field-fbks_media_"] .label {
+    padding-bottom: 6px;
+}
+.media-sidebar .compat-item [class*="compat-field-fbks_media_"] .label span {
+    float: none;
+    min-height: 0;
+    padding-top: 0;
+    font-weight: 600;
+}
+.media-sidebar .fbks-media-exif-grid { grid-template-columns: minmax(0, 1fr); }
+.media-sidebar .fbks-media-metadata-status { flex-wrap: wrap; }
+.media-sidebar .fbks-media-metadata-reset { max-width: 100%; }
+.media-sidebar .fbks-media-exif-field__original,
+.media-sidebar .compat-item [class*="compat-field-fbks_media_"] .help {
+    text-align: left;
+    overflow-wrap: anywhere;
+}
+
+/* Core right-aligns label spans and adds select margins inside the chooser. */
+.media-sidebar .compat-item [class*="compat-field-fbks_media_"] .label span {
+    text-align: left;
+}
+.media-sidebar .compat-item [class*="compat-field-fbks_media_"] select {
+    box-sizing: border-box;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0;
+}
+.media-sidebar .compat-item .compat-field-fbks_media_metadata_status {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 8px;
+    padding-top: 12px;
+    margin-bottom: 16px;
+}
+.media-sidebar .compat-item .compat-field-fbks_media_metadata_status .label {
+    grid-column: 1;
+    grid-row: 1;
+    padding: 0;
+}
+.media-sidebar .compat-item .compat-field-fbks_media_metadata_status .field {
+    display: contents;
+    padding: 0;
+}
+.media-sidebar .compat-field-fbks_media_metadata_status .fbks-media-metadata-status,
+.media-sidebar .compat-field-fbks_media_metadata_status .field > .fbks-media-metadata-badge {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+}
+.media-sidebar .compat-field-fbks_media_metadata_status .help {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: 0;
+}
+
+/* Let the badge and optional reset participate in the sidebar header grid. */
+.media-sidebar .compat-field-fbks_media_metadata_status .fbks-media-metadata-status {
+    display: contents;
+}
+.media-sidebar .compat-field-fbks_media_metadata_status .fbks-media-metadata-badge {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+    align-self: center;
+    float: none;
+    padding: 0 8px;
+    line-height: 22px;
+}
+.media-sidebar .compat-field-fbks_media_metadata_status .label span {
+    line-height: 22px;
+}
+.media-sidebar .compat-item .compat-field-fbks_media_metadata_status .fbks-media-metadata-reset {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: 100%;
+    max-width: 100%;
+    justify-self: stretch;
+}
+.media-sidebar .compat-field-fbks_media_metadata_status .fbks-media-metadata-reset[hidden] {
+    display: none;
 }

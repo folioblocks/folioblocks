@@ -9,6 +9,7 @@
 	"description": "Magnify part of an image with a circular loupe.",
 	"example": {
         "attributes": {
+        "globalDefaultsApplied": { "type": "boolean", "default": false },
         "preview": true
     }
     },

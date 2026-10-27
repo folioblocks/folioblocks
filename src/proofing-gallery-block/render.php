@@ -11,6 +11,8 @@ $fbks_gallery_key      = function_exists( 'fbks_get_proofing_gallery_key' )
 	: 'fbks-proofing-' . md5( $fbks_client_email . '|' . $fbks_gallery_password );
 $fbks_error            = '';
 $fbks_enable_heart     = ! isset( $attributes['enableHeart'] ) || (bool) $attributes['enableHeart'];
+$fbks_enable_stars     = ! empty( $attributes['enableStars'] );
+$fbks_flag_palette = fbks_get_proofing_flag_palette( $attributes );
 $fbks_enable_flag      = ! isset( $attributes['enableFlag'] ) || (bool) $attributes['enableFlag'];
 $fbks_enable_comment   = ! isset( $attributes['enableComment'] ) || (bool) $attributes['enableComment'];
 $fbks_filter_align     = isset( $attributes['filterAlign'] ) ? sanitize_key( $attributes['filterAlign'] ) : 'center';
@@ -68,6 +70,10 @@ $fbks_proofing_icon = static function ( $icon ) {
 		return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 21V4h10.6l.4 3.1h3v9H9.4L9 13.9H8V21H6z" /></svg>';
 	}
 
+	if ( 'star' === $icon ) {
+		return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>';
+	}
+
 	if ( 'comment' === $icon ) {
 		return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v10H8.7L5 18.4V5z" /></svg>';
 	}
@@ -92,24 +98,15 @@ if ( $fbks_enable_heart ) {
 }
 
 if ( $fbks_enable_flag ) {
-	$fbks_filter_options[] = [
-		'label' => __( 'Red Flag', 'folioblocks' ),
-		'value' => 'flag-red',
-		'icon'  => 'flag',
-		'color' => 'red',
-	];
-	$fbks_filter_options[] = [
-		'label' => __( 'Orange Flag', 'folioblocks' ),
-		'value' => 'flag-orange',
-		'icon'  => 'flag',
-		'color' => 'orange',
-	];
-	$fbks_filter_options[] = [
-		'label' => __( 'Green Flag', 'folioblocks' ),
-		'value' => 'flag-green',
-		'icon'  => 'flag',
-		'color' => 'green',
-	];
+    foreach ( $fbks_flag_palette['items'] as $fbks_flag ) {
+        $fbks_filter_options[] = [ 'label' => $fbks_flag['label'], 'value' => 'flag-' . $fbks_flag['value'], 'icon' => 'flag', 'color' => $fbks_flag['value'], 'flagColor' => $fbks_flag['color'] ];
+    }
+}
+
+if ( $fbks_enable_stars ) {
+    for ( $fbks_rating = 1; $fbks_rating <= 5; $fbks_rating++ ) {
+        $fbks_filter_options[] = [ 'label' => sprintf( _n( '%d star', '%d stars', $fbks_rating, 'folioblocks' ), $fbks_rating ), 'value' => 'rating-' . $fbks_rating, 'icon' => 'star', 'rating' => $fbks_rating ];
+    }
 }
 
 if ( $fbks_enable_comment ) {
@@ -171,19 +168,40 @@ if ( ! $fbks_can_view ) {
 			data-enable-comment="<?php echo esc_attr( $fbks_enable_comment ? 'true' : 'false' ); ?>"
 		>
 			<div class="fbks-proofing-gallery__filter-bar align-<?php echo esc_attr( $fbks_filter_align ); ?>" aria-label="<?php esc_attr_e( 'Proofing filters', 'folioblocks' ); ?>">
-				<?php foreach ( $fbks_filter_options as $fbks_filter_option ) : ?>
+				<?php foreach ( $fbks_filter_options as $fbks_filter_index => $fbks_filter_option ) : ?>
+                    <?php if ( isset( $fbks_filter_option['rating'] ) ) : ?>
+                        <?php if ( 1 === $fbks_filter_option['rating'] ) : ?>
+                        <div class="fbks-proofing-rating-filter has-group-divider">
+                            <div class="fbks-proofing-rating-slider" role="slider" tabindex="0" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0"
+                                aria-label="<?php esc_attr_e( 'Filter by star rating', 'folioblocks' ); ?>"
+                                data-wp-bind--aria-valuenow="state.ratingFilterValue"
+                                data-wp-on--pointerdown="actions.startRatingFilterDrag" data-wp-on--pointermove="actions.previewRatingFilter"
+                                data-wp-on--pointerup="actions.commitRatingFilterDrag" data-wp-on--pointercancel="actions.cancelRatingFilterDrag"
+                                data-wp-on--pointerleave="actions.leaveRatingFilterPreview" data-wp-on--keydown="actions.ratingFilterKeyDown">
+                                <?php for ( $fbks_filter_star = 1; $fbks_filter_star <= 5; $fbks_filter_star++ ) : ?>
+                                <span class="fbks-proofing-rating-star" aria-hidden="true" data-wp-context="<?php echo esc_attr( wp_json_encode( [ 'ratingChoice' => $fbks_filter_star ] ) ); ?>" data-wp-class--is-filled="state.isRatingFilterFilled">
+                                    <?php echo wp_kses( $fbks_proofing_icon( 'star' ), fbks_get_allowed_post_html_with_svg() ); ?>
+                                </span>
+                                <?php endfor; ?>
+                            </div>
+                        </div>
+                        <?php endif; ?>
+                        <?php continue; ?>
+                    <?php endif; ?>
 					<?php
 					$fbks_filter_classes = [
 						'fbks-proofing-filter-button',
 						'all' === $fbks_filter_option['value'] ? 'is-active' : '',
 						isset( $fbks_filter_option['color'] ) ? 'is-' . $fbks_filter_option['color'] : '',
 						'is-' . $fbks_filter_option['icon'],
+                        $fbks_filter_index > 0 && $fbks_filter_option['icon'] !== $fbks_filter_options[$fbks_filter_index - 1]['icon'] ? 'has-group-divider' : '',
 					];
 					?>
 					<button
 						type="button"
 						class="<?php echo esc_attr( implode( ' ', array_filter( $fbks_filter_classes ) ) ); ?>"
-						data-proofing-filter="<?php echo esc_attr( $fbks_filter_option['value'] ); ?>"
+						style="<?php echo isset( $fbks_filter_option['flagColor'] ) ? esc_attr( 'color: ' . $fbks_filter_option['flagColor'] . '; --fbks-proofing-flag-outline: ' . fbks_get_proofing_flag_outline( $fbks_filter_option['flagColor'] ) ) : ''; ?>"
+                        data-proofing-filter="<?php echo esc_attr( $fbks_filter_option['value'] ); ?>"
 						data-wp-context="<?php echo esc_attr( wp_json_encode( [ 'galleryId' => $fbks_gallery_id, 'filter' => $fbks_filter_option['value'] ] ) ); ?>"
 						data-wp-on--click="actions.chooseFilter"
 						data-wp-class--is-active="state.isActiveFilter"

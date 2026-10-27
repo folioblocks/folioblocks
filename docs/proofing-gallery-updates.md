@@ -28,8 +28,9 @@ Target release: FolioBlocks 1.6.0.
 - [x] Resumable, batched scan action for existing Media Library JPEG images.
 - [x] Media Library display and editing for Media Ratings, palette-derived Media Color Classes, and camera EXIF details alongside embedded originals.
 - [x] Media Library section and complete reset-to-embedded interface.
-- [ ] Image Block and still-gallery integration.
-- [ ] Proofing Gallery client ratings and advanced flags.
+- [ ] Image Block and still-gallery integration (deferred until a concrete gallery filtering/display feature needs it).
+- [x] Optional Proofing Gallery client stars, editor preview, per-session saving/restoration, Rated filter, keyboard access, and admin reporting.
+- [ ] Proofing Gallery advanced flags and palette snapshots.
 
 ## Confirmed Metadata Example
 
@@ -489,3 +490,7 @@ A later explicit admin action may promote a client rating or flag to the Media L
 - Unlimited palette sizes or non-numeric color-class identifiers.
 - Combined multi-dimensional gallery filters until their behavior is designed.
 - Per-client annotation history beyond the existing proofing-session model.
+
+Client star controls now use a compact draggable star row with drag-to-zero clearing and Done on the right, with exact 1–5-star filters and dividers between feedback groups. Logged-in administrators who can edit a proofing page bypass its page password prompt.
+
+Advanced proofing flags implemented: Simple stays the default; Advanced copies enabled global palette definitions into the gallery. Pickers and filters use that retained palette, with an explicit refresh action. Client sessions retain extended flag values and reporting labels without changing attachment metadata.

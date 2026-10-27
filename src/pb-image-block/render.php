@@ -30,6 +30,8 @@ $fbks_context = $block->context ?? [];
 $fbks_can_override_gallery_settings = fbks_fs()->can_use_premium_code__premium_only();
 $fbks_is_inside_proofing_gallery = $fbks_can_override_gallery_settings && ! empty( $fbks_context['folioBlocks/isProofingGallery'] );
 $fbks_proofing_enable_heart = $fbks_is_inside_proofing_gallery && ( ! isset( $fbks_context['folioBlocks/proofingEnableHeart'] ) || (bool) $fbks_context['folioBlocks/proofingEnableHeart'] );
+$fbks_proofing_enable_stars = $fbks_is_inside_proofing_gallery && ! empty( $fbks_context['folioBlocks/proofingEnableStars'] );
+$fbks_proofing_flag_palette = function_exists( 'fbks_get_proofing_flag_palette' ) ? fbks_get_proofing_flag_palette( [ 'flagMode' => $fbks_context['folioBlocks/proofingFlagMode'] ?? 'simple', 'flagPalette' => $fbks_context['folioBlocks/proofingFlagPalette'] ?? [] ] ) : [ 'items' => [] ];
 $fbks_proofing_enable_flag = $fbks_is_inside_proofing_gallery && ( ! isset( $fbks_context['folioBlocks/proofingEnableFlag'] ) || (bool) $fbks_context['folioBlocks/proofingEnableFlag'] );
 $fbks_proofing_enable_comment = $fbks_is_inside_proofing_gallery && ( ! isset( $fbks_context['folioBlocks/proofingEnableComment'] ) || (bool) $fbks_context['folioBlocks/proofingEnableComment'] );
 $fbks_override_gallery_click = $fbks_can_override_gallery_settings && ! empty( $attributes['overrideGalleryClickSettings'] );
@@ -707,13 +709,16 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 			<span class="pb-watermark-overlay" style="<?php echo esc_attr( $fbks_watermark_style ); ?>"<?php echo $fbks_watermark_data_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fbks_get_watermark_overlay_data_attrs() escapes each attribute value. ?> aria-hidden="true"></span>
 		<?php endif; ?>
 
-		<?php if ( $fbks_is_inside_proofing_gallery && ( $fbks_proofing_enable_heart || $fbks_proofing_enable_flag || $fbks_proofing_enable_comment ) ) : ?>
+		<?php if ( $fbks_is_inside_proofing_gallery && ( $fbks_proofing_enable_heart || $fbks_proofing_enable_flag || $fbks_proofing_enable_stars || $fbks_proofing_enable_comment ) ) : ?>
 			<?php $fbks_proofing_control_slot = 1; ?>
 			<div
 				class="fbks-proofing-thumbnail-controls"
 				data-wp-interactive="folioblocks/proofing-gallery"
 				data-wp-context="<?php echo esc_attr( wp_json_encode( [
 					'imageId'      => $fbks_proofing_image_key,
+                    'flagOptions' => $fbks_proofing_flag_palette['items'],
+					'ratingLabel'  => __( 'Client rating', 'folioblocks' ),
+					'unratedLabel' => __( 'Rate image', 'folioblocks' ),
 					'attachmentId' => $fbks_id,
 					'thumbnail'    => esc_url_raw( $fbks_proofing_thumbnail ),
 					'title'        => $fbks_proofing_title,
@@ -741,23 +746,60 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 						type="button"
 						class="fbks-proofing-thumbnail-control fbks-proofing-thumbnail-control--flag fbks-proofing-thumbnail-control--slot-<?php echo esc_attr( $fbks_proofing_flag_slot ); ?>"
 						data-wp-on--click="actions.toggleFlagPanel"
-						data-wp-class--is-red="state.isCurrentImageFlagRed"
-						data-wp-class--is-orange="state.isCurrentImageFlagOrange"
-						data-wp-class--is-green="state.isCurrentImageFlagGreen"
-						aria-label="<?php esc_attr_e( 'Set flag color', 'folioblocks' ); ?>"
+						data-wp-bind--data-has-flag="state.hasCurrentImageFlag"
+                        data-wp-style----fbks-proofing-flag-color="state.currentImageFlagColor"
+                        aria-label="<?php esc_attr_e( 'Set flag color', 'folioblocks' ); ?>"
 					>
 						<?php echo wp_kses( $fbks_proofing_icon( 'flag' ), fbks_get_allowed_post_html_with_svg() ); ?>
 					</button>
 					<div class="fbks-proofing-flag-popover fbks-proofing-popover--slot-<?php echo esc_attr( $fbks_proofing_flag_slot ); ?>" data-wp-class--is-open="state.isCurrentImageFlagPanelOpen" data-wp-bind--hidden="!state.isCurrentImageFlagPanelOpen" hidden>
-						<button type="button" class="fbks-proofing-flag-swatch is-red" data-proofing-flag-color="red" data-wp-on--click="actions.setFlagFromContext" aria-label="<?php esc_attr_e( 'Red Flag', 'folioblocks' ); ?>"></button>
-						<button type="button" class="fbks-proofing-flag-swatch is-orange" data-proofing-flag-color="orange" data-wp-on--click="actions.setFlagFromContext" aria-label="<?php esc_attr_e( 'Orange Flag', 'folioblocks' ); ?>"></button>
-						<button type="button" class="fbks-proofing-flag-swatch is-green" data-proofing-flag-color="green" data-wp-on--click="actions.setFlagFromContext" aria-label="<?php esc_attr_e( 'Green Flag', 'folioblocks' ); ?>"></button>
+                        <?php foreach ( $fbks_proofing_flag_palette['items'] as $fbks_flag ) : ?>
+                        <button type="button" class="fbks-proofing-flag-swatch" style="background-color: <?php echo esc_attr( $fbks_flag['color'] ); ?>" data-proofing-flag-color="<?php echo esc_attr( $fbks_flag['value'] ); ?>" data-wp-on--click="actions.setFlagFromContext" aria-label="<?php echo esc_attr( $fbks_flag['label'] ); ?>" title="<?php echo esc_attr( $fbks_flag['label'] ); ?>"></button>
+                        <?php endforeach; ?>
 						<button type="button" class="fbks-proofing-flag-clear" data-proofing-flag-color="" data-wp-on--click="actions.setFlagFromContext">
 							<?php esc_html_e( 'Clear', 'folioblocks' ); ?>
 						</button>
 					</div>
 					<?php $fbks_proofing_control_slot++; ?>
 				<?php endif; ?>
+
+
+                <?php if ( $fbks_proofing_enable_stars ) : ?>
+                    <?php $fbks_proofing_rating_slot = $fbks_proofing_control_slot; ?>
+                    <button type="button"
+                        class="fbks-proofing-thumbnail-control fbks-proofing-thumbnail-control--rating fbks-proofing-thumbnail-control--slot-<?php echo esc_attr( $fbks_proofing_rating_slot ); ?>"
+                        data-wp-on--click="actions.toggleRatingPanel"
+                        data-wp-class--is-active="state.isCurrentImageRated"
+                        data-wp-bind--aria-expanded="state.isCurrentImageRatingPanelOpen"
+                        data-wp-bind--aria-label="state.currentImageRatingLabel"
+                        data-rating-label="<?php esc_attr_e( 'Client rating', 'folioblocks' ); ?>"
+                        data-unrated-label="<?php esc_attr_e( 'Rate image', 'folioblocks' ); ?>"
+                        aria-label="<?php esc_attr_e( 'Rate image', 'folioblocks' ); ?>" aria-expanded="false">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                        <span class="fbks-proofing-rating-value" data-wp-text="state.currentImageRatingText"></span>
+                    </button>
+                    <div class="fbks-proofing-rating-popover fbks-proofing-popover--slot-<?php echo esc_attr( $fbks_proofing_rating_slot ); ?>"
+                        role="group" aria-label="<?php esc_attr_e( 'Client star rating', 'folioblocks' ); ?>"
+                        data-wp-class--is-open="state.isCurrentImageRatingPanelOpen" data-wp-bind--hidden="!state.isCurrentImageRatingPanelOpen"
+                        data-wp-on--keydown="actions.ratingPanelKeyDown" hidden>
+                        <div class="fbks-proofing-rating-slider" role="slider" tabindex="0" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0"
+                            aria-label="<?php esc_attr_e( 'Client star rating', 'folioblocks' ); ?>"
+                            data-wp-bind--aria-valuenow="state.currentRatingSliderValue"
+                            data-wp-on--pointerdown="actions.startRatingDrag" data-wp-on--pointermove="actions.previewRating"
+                            data-wp-on--pointerup="actions.commitRatingDrag" data-wp-on--pointercancel="actions.cancelRatingDrag"
+                            data-wp-on--pointerleave="actions.leaveRatingPreview" data-wp-on--keydown="actions.ratingSliderKeyDown">
+                        <?php for ( $fbks_rating = 1; $fbks_rating <= 5; $fbks_rating++ ) : ?>
+                            <span class="fbks-proofing-rating-star" aria-hidden="true"
+                                data-wp-context="<?php echo esc_attr( wp_json_encode( [ 'ratingChoice' => $fbks_rating ] ) ); ?>"
+                                data-wp-class--is-filled="state.isCurrentRatingFilled">
+                                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                            </span>
+                        <?php endfor; ?>
+                        </div>
+                        <button type="button" class="fbks-proofing-rating-done" data-wp-on--click="actions.closeRatingPanel"><?php esc_html_e( 'Done', 'folioblocks' ); ?></button>
+                    </div>
+                    <?php $fbks_proofing_control_slot++; ?>
+                <?php endif; ?>
 
 				<?php if ( $fbks_proofing_enable_comment ) : ?>
 					<?php $fbks_proofing_comment_slot = $fbks_proofing_control_slot; ?>

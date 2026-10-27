@@ -12,6 +12,7 @@
 	"description": "Display images in a filmstrip gallery.",
 	"example": {
 		"attributes": {
+        "globalDefaultsApplied": { "type": "boolean", "default": false },
 			"preview": true
 		}
 	},

@@ -5,6 +5,12 @@
 import { getContext, getElement, store } from '@wordpress/interactivity';
 import { createFrontendScope } from '../pb-helpers/frontendScope';
 
+import {
+	normalizeClientRating,
+	getPointerRating,
+	getKeyboardRating,
+} from '../pb-helpers/proofingRatings';
+
 const mounts = new Map();
 
 const PROOFING_COMMENT_MAX_LENGTH = 1000;
@@ -18,6 +24,7 @@ const createEmptyImageState = () => ( {
 	thumbnail: '',
 	title: '',
 	hearted: false,
+	clientRating: null,
 	flag: '',
 	comment: '',
 } );
@@ -36,6 +43,7 @@ const ensureGalleryState = ( galleryId ) => {
 			emailAdminOnSubmit: false,
 			isSaving: false,
 			notice: '',
+			openRatingPanel: '',
 			openFlagPanel: '',
 			openCommentPanel: '',
 			savedImages: {},
@@ -113,6 +121,8 @@ const getCurrentImageBlock = () =>
 const imageMatchesFilter = ( image, filter ) =>
 	filter === 'all' ||
 	( filter === 'hearted' && image.hearted ) ||
+	( filter.startsWith( 'rating-' ) &&
+		image.clientRating === Number( filter.slice( 7 ) ) ) ||
 	( filter === 'commented' && !! image.comment.trim() ) ||
 	( filter.startsWith( 'flag-' ) &&
 		image.flag === filter.replace( 'flag-', '' ) );
@@ -183,6 +193,7 @@ const serializeGalleryImages = ( galleryId, gallery ) =>
 			hearted:
 				imageBlock?.dataset.proofingHearted === 'true' ||
 				!! image.hearted,
+			clientRating: normalizeClientRating( image.clientRating ),
 			flag: imageBlock?.dataset.proofingFlag || image.flag || '',
 			comment: truncateProofingComment(
 				imageBlock?.dataset.proofingComment || image.comment || ''
@@ -210,6 +221,9 @@ const syncImageDom = ( controlRoot, imageBlock, image ) => {
 
 	imageBlock.dataset.proofingHearted = image.hearted ? 'true' : 'false';
 	imageBlock.dataset.proofingFlag = image.flag || '';
+	imageBlock.dataset.proofingRating = String(
+		normalizeClientRating( image.clientRating ) ?? ''
+	);
 	image.comment = truncateProofingComment( image.comment );
 	imageBlock.dataset.proofingComment = image.comment;
 	imageBlock.dataset.proofingCommented = image.comment.trim()
@@ -222,10 +236,16 @@ const syncImageDom = ( controlRoot, imageBlock, image ) => {
 		image.hearted ? 'true' : 'false'
 	);
 
-	flagButton?.classList.remove( 'is-red', 'is-orange', 'is-green' );
-	if ( image.flag ) {
-		flagButton?.classList.add( `is-${ image.flag }` );
-	}
+	// Gallery initialization and animation frames do not have an Interactivity scope.
+	// Read this image's rendered palette instead of relying on callback context.
+	const flagOption = Array.from(
+		controlRoot.querySelectorAll( '[data-proofing-flag-color]' )
+	).find( ( option ) => option.dataset.proofingFlagColor === image.flag );
+	flagButton?.setAttribute( 'data-has-flag', image.flag ? 'true' : 'false' );
+	flagButton?.style.setProperty(
+		'--fbks-proofing-flag-color',
+		flagOption?.style.backgroundColor || ''
+	);
 
 	commentButton?.classList.toggle( 'is-active', !! image.comment.trim() );
 	if ( textarea ) {
@@ -426,6 +446,18 @@ const persistGallery = async ( galleryId, status ) => {
 const { state, actions } = store( 'folioblocks/proofing-gallery', {
 	state: {
 		galleries: {},
+		get ratingFilterValue() {
+			const gallery = getCurrentGalleryState();
+			return (
+				gallery.ratingFilterPreview ??
+				( gallery.activeFilter.startsWith( 'rating-' )
+					? Number( gallery.activeFilter.slice( 7 ) )
+					: 0 )
+			);
+		},
+		get isRatingFilterFilled() {
+			return state.ratingFilterValue >= getContext().ratingChoice;
+		},
 		get isActiveFilter() {
 			const context = getContext();
 			const activeFilter =
@@ -433,17 +465,52 @@ const { state, actions } = store( 'folioblocks/proofing-gallery', {
 
 			return activeFilter === context.filter;
 		},
+		get isCurrentImageRated() {
+			return (
+				normalizeClientRating( getCurrentImageState().clientRating ) !==
+				null
+			);
+		},
+		get currentImageRatingText() {
+			return getCurrentImageState().clientRating || '';
+		},
+		get currentImageRatingLabel() {
+			const context = getContext();
+			const rating = normalizeClientRating(
+				getCurrentImageState().clientRating
+			);
+			return rating
+				? `${ context.ratingLabel }: ${ rating }/5`
+				: context.unratedLabel;
+		},
+		get currentRatingSliderValue() {
+			return (
+				getCurrentGalleryState().ratingPreview ??
+				getCurrentImageState().clientRating ??
+				0
+			);
+		},
+		get isCurrentRatingFilled() {
+			return state.currentRatingSliderValue >= getContext().ratingChoice;
+		},
+		get isCurrentImageRatingPanelOpen() {
+			return (
+				getCurrentGalleryState().openRatingPanel ===
+				getContext().imageId
+			);
+		},
 		get isCurrentImageHearted() {
 			return getCurrentImageState().hearted;
 		},
-		get isCurrentImageFlagRed() {
-			return getCurrentImageState().flag === 'red';
+		get hasCurrentImageFlag() {
+			return !! getCurrentImageState().flag;
 		},
-		get isCurrentImageFlagOrange() {
-			return getCurrentImageState().flag === 'orange';
-		},
-		get isCurrentImageFlagGreen() {
-			return getCurrentImageState().flag === 'green';
+		get currentImageFlagColor() {
+			return (
+				getContext().flagOptions?.find(
+					( item ) => item.value === getCurrentImageState().flag
+				)?.color || ''
+			);
 		},
 		get isCurrentImageCommented() {
 			return !! getCurrentImageState().comment.trim();
@@ -485,6 +552,9 @@ const { state, actions } = store( 'folioblocks/proofing-gallery', {
 			mounts.set( galleryId, mount );
 			gallery.isSaving = false;
 			gallery.notice = '';
+			gallery.openRatingPanel = '';
+			gallery.ratingPreview = null;
+			gallery.ratingDragging = false;
 			gallery.openFlagPanel = '';
 			gallery.openCommentPanel = '';
 			gallery.galleryKey = galleryData.galleryKey || gallery.galleryKey;
@@ -517,6 +587,9 @@ const { state, actions } = store( 'folioblocks/proofing-gallery', {
 				Object.entries( gallery.savedImages ).forEach(
 					( [ imageId, savedImage ] ) => {
 						const image = ensureImageState( galleryId, imageId );
+						image.clientRating = normalizeClientRating(
+							savedImage.clientRating
+						);
 						image.hearted = !! savedImage.hearted;
 						image.flag = savedImage.flag || '';
 						image.comment = truncateProofingComment(
@@ -542,6 +615,7 @@ const { state, actions } = store( 'folioblocks/proofing-gallery', {
 				scope.dispose();
 				mounts.delete( galleryId );
 				gallery.isSaving = false;
+				gallery.openRatingPanel = '';
 				gallery.openFlagPanel = '';
 				gallery.openCommentPanel = '';
 			};
@@ -555,6 +629,9 @@ const { state, actions } = store( 'folioblocks/proofing-gallery', {
 			image.title = imageData.title || '';
 
 			if ( savedImage && ! image.registered ) {
+				image.clientRating = normalizeClientRating(
+					savedImage.clientRating
+				);
 				image.hearted = !! savedImage.hearted;
 				image.flag = savedImage.flag || '';
 				image.comment = truncateProofingComment(
@@ -573,7 +650,56 @@ const { state, actions } = store( 'folioblocks/proofing-gallery', {
 			}
 		},
 		setFilter( galleryId, filter ) {
+			ensureGalleryState( galleryId ).ratingFilterPreview = null;
 			ensureGalleryState( galleryId ).activeFilter = filter || 'all';
+		},
+		startRatingFilterDrag( event ) {
+			stopProofingClick( event );
+			getCurrentGalleryState().ratingFilterDragging = true;
+			getElement().ref.setPointerCapture?.( event.pointerId );
+			actions.previewRatingFilter( event );
+		},
+		previewRatingFilter( event ) {
+			getCurrentGalleryState().ratingFilterPreview = getPointerRating(
+				event.clientX,
+				getElement().ref.getBoundingClientRect()
+			);
+		},
+		commitRatingFilterDrag( event ) {
+			if ( ! getCurrentGalleryState().ratingFilterDragging ) return;
+			getCurrentGalleryState().ratingFilterDragging = false;
+			actions.updateRatingFilter(
+				getPointerRating(
+					event.clientX,
+					getElement().ref.getBoundingClientRect()
+				)
+			);
+		},
+		cancelRatingFilterDrag() {
+			getCurrentGalleryState().ratingFilterDragging = false;
+			getCurrentGalleryState().ratingFilterPreview = null;
+		},
+		leaveRatingFilterPreview() {
+			if ( ! getCurrentGalleryState().ratingFilterDragging )
+				getCurrentGalleryState().ratingFilterPreview = null;
+		},
+		updateRatingFilter( rating ) {
+			actions.setFilter(
+				getCurrentGalleryId(),
+				rating ? `rating-${ rating }` : 'all'
+			);
+			refreshCurrentGallery();
+		},
+		ratingFilterKeyDown( event ) {
+			const filter = getCurrentGalleryState().activeFilter;
+			const next = getKeyboardRating(
+				event.key,
+				filter.startsWith( 'rating-' ) ? Number( filter.slice( 7 ) ) : 0
+			);
+			if ( next !== undefined ) {
+				stopProofingClick( event );
+				actions.updateRatingFilter( next );
+			}
 		},
 		chooseFilter( event ) {
 			stopProofingClick( event );
@@ -581,6 +707,92 @@ const { state, actions } = store( 'folioblocks/proofing-gallery', {
 			const context = getContext();
 			actions.setFilter( context.galleryId, context.filter );
 			refreshCurrentGallery();
+		},
+		toggleRatingPanel( event ) {
+			stopProofingClick( event );
+			const gallery = getCurrentGalleryState();
+			const imageId = getContext().imageId;
+			const imageBlock = getCurrentImageBlock();
+			gallery.openFlagPanel = '';
+			gallery.openCommentPanel = '';
+			gallery.openRatingPanel =
+				gallery.openRatingPanel === imageId ? '' : imageId;
+			if ( gallery.openRatingPanel && event.detail === 0 ) {
+				mounts.get( getCurrentGalleryId() )?.scope.frame( () => {
+					imageBlock
+						?.querySelector( '.fbks-proofing-rating-slider' )
+						?.focus();
+				} );
+			}
+		},
+		startRatingDrag( event ) {
+			stopProofingClick( event );
+			getCurrentGalleryState().ratingDragging = true;
+			getElement().ref.setPointerCapture?.( event.pointerId );
+			actions.previewRating( event );
+		},
+		previewRating( event ) {
+			getCurrentGalleryState().ratingPreview = getPointerRating(
+				event.clientX,
+				getElement().ref.getBoundingClientRect()
+			);
+		},
+		commitRatingDrag( event ) {
+			if ( ! getCurrentGalleryState().ratingDragging ) return;
+			getCurrentGalleryState().ratingDragging = false;
+			actions.updateRating(
+				getPointerRating(
+					event.clientX,
+					getElement().ref.getBoundingClientRect()
+				)
+			);
+		},
+		cancelRatingDrag() {
+			getCurrentGalleryState().ratingDragging = false;
+			getCurrentGalleryState().ratingPreview = null;
+		},
+		leaveRatingPreview() {
+			if ( ! getCurrentGalleryState().ratingDragging )
+				getCurrentGalleryState().ratingPreview = null;
+		},
+		updateRating( rating ) {
+			getCurrentImageState().clientRating =
+				normalizeClientRating( rating );
+			getCurrentGalleryState().ratingPreview = null;
+			const block = getCurrentImageBlock();
+			if ( block )
+				block.dataset.proofingRating = String(
+					getCurrentImageState().clientRating ?? ''
+				);
+			refreshCurrentGallery();
+		},
+		ratingSliderKeyDown( event ) {
+			const next = getKeyboardRating(
+				event.key,
+				getCurrentImageState().clientRating
+			);
+			if ( next !== undefined ) {
+				stopProofingClick( event );
+				actions.updateRating( next );
+			}
+		},
+		closeRatingPanel( event ) {
+			stopProofingClick( event );
+			actions.cancelRatingDrag();
+			getCurrentGalleryState().openRatingPanel = '';
+			getCurrentImageBlock()
+				?.querySelector( '.fbks-proofing-thumbnail-control--rating' )
+				?.focus();
+		},
+		ratingPanelKeyDown( event ) {
+			if ( event.key !== 'Escape' ) {
+				return;
+			}
+			stopProofingClick( event );
+			getCurrentGalleryState().openRatingPanel = '';
+			getCurrentImageBlock()
+				?.querySelector( '.fbks-proofing-thumbnail-control--rating' )
+				?.focus();
 		},
 		toggleHeart( event ) {
 			stopProofingClick( event );
@@ -597,6 +809,7 @@ const { state, actions } = store( 'folioblocks/proofing-gallery', {
 		},
 		toggleFlagPanel( event ) {
 			stopProofingClick( event );
+			getCurrentGalleryState().openRatingPanel = '';
 
 			const context = getContext();
 			const gallery = getCurrentGalleryState();
@@ -623,6 +836,7 @@ const { state, actions } = store( 'folioblocks/proofing-gallery', {
 
 			const context = getContext();
 			const gallery = getCurrentGalleryState();
+			gallery.openRatingPanel = '';
 			gallery.openFlagPanel = '';
 			gallery.openCommentPanel =
 				gallery.openCommentPanel === context.imageId
@@ -661,6 +875,7 @@ const { state, actions } = store( 'folioblocks/proofing-gallery', {
 			stopProofingClick( event );
 
 			const gallery = getCurrentGalleryState();
+			gallery.openRatingPanel = '';
 			gallery.openFlagPanel = '';
 			gallery.openCommentPanel = '';
 		},

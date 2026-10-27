@@ -1,0 +1,140 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const { JSDOM } = require('jsdom');
+const dom = new JSDOM(`<form class="pb-global-settings-form">${fs.readFileSync('/private/tmp/folioblocks-block-defaults-fixture.html', 'utf8')}</form>`, { runScripts: 'outside-only' });
+const { window } = dom;
+window.folioBlocksGlobalSettingsAutosave = { ajaxUrl: '/fixture', nonce: 'fixture', hasWooCommerce: true };
+window.fetch = async () => ({ ok: true, json: async () => ({ success: true }) });
+window.eval(fs.readFileSync('includes/pro/js/global-settings.js', 'utf8'));
+const card = window.document.querySelector('[data-settings-section="block_image"]');
+const set = (name, value) => {
+    const input = card.querySelector(`#fbks-default-image-${name}`);
+    if (input.type === 'checkbox') input.checked = value; else input.value = value;
+    input.dispatchEvent(new window.Event('change', { bubbles: true }));
+};
+const visible = name => !card.querySelector(`[data-image-default-condition="${name}"]`).hidden;
+set('imageClickAction', 'none'); assert(!visible('lightbox')); assert(!visible('link-target'));
+set('imageClickAction', 'lightbox'); assert(visible('lightbox')); assert(!visible('download-icon'));
+set('imageClickAction', 'download'); set('imageClickTarget', 'icon'); set('lightbox', true);
+assert(visible('download-icon') && visible('lightbox'));
+set('imageClickTarget', 'thumbnail'); assert(!visible('download-icon') && !visible('lightbox'));
+set('onHoverStyle', 'none'); assert(!visible('overlay') && !visible('entrance'));
+set('onHoverStyle', 'color-overlay'); assert(visible('overlay') && visible('color') && visible('overlay-text') && visible('entrance')); assert(!visible('chip'));
+set('onHoverStyle', 'chip-gradient'); assert(visible('chip-gradient') && visible('chip-text')); assert(!visible('gradient') && !visible('color') && !visible('entrance'));
+set('onHoverStyle', 'gradient-overlay'); assert(visible('gradient') && visible('overlay-text') && visible('entrance'));
+set('overlayContent', 'exif'); assert(visible('exif'));
+set('overlayContent', 'title'); assert(!visible('exif'));
+card.querySelector('[data-reset-block-defaults]').click();
+assert.equal(card.querySelector('#fbks-default-image-imageClickAction').value, 'none');
+assert.equal(card.querySelector('#fbks-default-image-onHoverStyle').value, 'none');
+assert(!visible('overlay') && !visible('lightbox'));
+const video = window.document.querySelector('[data-settings-section="block_video"]');
+const changeVideo = (name, value) => {
+    const input = video.querySelector(`#fbks-default-video-${name}`);
+    input.value = value;
+    input.dispatchEvent(new window.Event('change', { bubbles: true }));
+};
+const videoVisible = name => !video.querySelector(`[data-image-default-condition="${name}"]`).hidden;
+changeVideo('overlayStyle', 'default'); assert(!videoVisible('video-color') && !videoVisible('video-gradient') && !videoVisible('video-text'));
+changeVideo('overlayStyle', 'color'); assert(videoVisible('video-color') && videoVisible('video-text') && !videoVisible('video-gradient'));
+changeVideo('overlayStyle', 'gradient'); assert(videoVisible('video-gradient') && videoVisible('video-text') && !videoVisible('video-color'));
+changeVideo('defaultOverlayContent', 'none'); assert(!videoVisible('video-content'));
+changeVideo('defaultOverlayContent', 'play'); assert(videoVisible('video-content'));
+video.querySelector('[data-reset-block-defaults]').click();
+assert(!videoVisible('video-gradient') && !videoVisible('video-text') && videoVisible('video-content'));
+for (const key of ['before_after', 'background_video', 'loupe', 'video']) {
+    assert(window.document.querySelector(`[data-settings-section="block_${key}"] .pb-block-default-group-title`), `${key}: missing section headings`);
+}
+for (const key of ['carousel', 'filmstrip']) {
+    const gallery = window.document.querySelector(`[data-settings-section="block_${key}"]`);
+    const change = (name, value) => {
+        const input = gallery.querySelector(`#fbks-default-${key}-${name}`);
+        if (input.type === 'checkbox') input.checked = value; else input.value = value;
+        input.dispatchEvent(new window.Event('change', { bubbles: true }));
+    };
+    const shown = name => !gallery.querySelector(`[data-image-default-condition="${name}"]`).hidden;
+    assert(!shown('autoplay')); change('autoplay', true); assert(shown('autoplay'));
+    if (key === 'carousel') { change('showControls', true); assert(shown('controls')); }
+    change('imageClickAction', 'download'); assert(shown('download') && shown('secondary-lightbox'));
+    change('lightbox', true); assert(shown('lightbox'));
+    change('imageClickTarget', 'thumbnail'); assert(!shown('secondary-lightbox') && !shown('lightbox'));
+    change('imageClickAction', 'custom_url'); change('imageClickTarget', 'icon'); assert(shown('link-icon'));
+    assert.equal(shown('secondary-lightbox'), key === 'carousel');
+    change('onHoverStyle', 'chip-gradient'); assert(shown('chip-gradient') && !shown('color'));
+    gallery.querySelector('[data-reset-block-defaults]').click();
+    assert(!shown('autoplay') && !shown('chip-gradient') && !shown('download'));
+}
+const videoGallery = window.document.querySelector('[data-settings-section="block_video_gallery"]');
+const changeGallery = (name, value) => {
+    const input = videoGallery.querySelector(`#fbks-default-video_gallery-${name}`);
+    if (input.type === 'checkbox') input.checked = value; else input.value = value;
+    input.dispatchEvent(new window.Event('change', { bubbles: true }));
+};
+const galleryShown = name => !videoGallery.querySelector(`[data-image-default-condition="${name}"]`).hidden;
+assert(!galleryShown('filter') && !galleryShown('commerce'));
+changeGallery('enableFilter', true); assert(galleryShown('filter'));
+changeGallery('defaultOverlayContent', 'title-play-category');
+changeGallery('enableFilter', false);
+assert.equal(videoGallery.querySelector('#fbks-default-video_gallery-defaultOverlayContent').value, 'title-play');
+changeGallery('enableWooCommerce', true); assert(galleryShown('commerce'));
+changeGallery('lightboxLayout', 'video-product');
+changeGallery('enableWooCommerce', false); assert(!galleryShown('commerce'));
+assert.equal(videoGallery.querySelector('#fbks-default-video_gallery-lightboxLayout').value, 'split');
+changeGallery('overlayStyle', 'gradient'); assert(galleryShown('video-gradient'));
+videoGallery.querySelector('[data-reset-block-defaults]').click();
+assert(!galleryShown('filter') && !galleryShown('commerce') && !galleryShown('video-gradient'));
+const modularCard = window.document.querySelector('[data-settings-section="block_modular"]');
+assert(modularCard.querySelector('#fbks-default-modular-collapseOnMobile'));
+assert(!modularCard.querySelector('#fbks-default-modular-autoplay'));
+const modularAction = modularCard.querySelector('#fbks-default-modular-imageClickAction');
+modularAction.value = 'lightbox'; modularAction.dispatchEvent(new window.Event('change', { bubbles: true }));
+assert(!modularCard.querySelector('[data-image-default-condition="lightbox"]').hidden);
+modularCard.querySelector('[data-reset-block-defaults]').click();
+assert(modularCard.querySelector('[data-image-default-condition="lightbox"]').hidden);
+const grid = window.document.querySelector('[data-settings-section="block_grid"]');
+const gridFiltering = grid.querySelector('#fbks-default-grid-enableFilter');
+const filterHeading = grid.querySelector('.pb-block-default-group-title[data-image-default-condition="filter"]');
+assert(filterHeading.hidden);
+gridFiltering.checked = true; gridFiltering.dispatchEvent(new window.Event('change', { bubbles: true }));
+assert(!filterHeading.hidden);
+grid.querySelector('[data-reset-block-defaults]').click(); assert(filterHeading.hidden);
+assert.equal(grid.querySelector('#fbks-default-grid-columns').value, '6');
+assert.equal(grid.querySelector('#fbks-default-grid-tabletColumns').value, '4');
+assert.equal(grid.querySelector('#fbks-default-grid-mobileColumns').value, '2');
+const justified = window.document.querySelector('[data-settings-section="block_justified"]');
+justified.querySelector('[data-reset-block-defaults]').click();
+assert.equal(justified.querySelector('#fbks-default-justified-rowHeight').value, '250');
+for (const name of ['tabletRowHeight', 'mobileRowHeight']) {
+    const slider = justified.querySelector(`#fbks-default-justified-${name}`);
+    assert.equal(slider.type, 'range');
+    assert.equal(slider.value, '250');
+    slider.value = '450';
+}
+assert(!justified.querySelector('[data-block-inherit-toggle]'));
+justified.querySelector('[data-reset-block-defaults]').click();
+assert.equal(justified.querySelector('#fbks-default-justified-mobileRowHeight').value, '250');
+const justifiedFilter = justified.querySelector('#fbks-default-justified-enableFilter');
+justifiedFilter.checked = true; justifiedFilter.dispatchEvent(new window.Event('change', { bubbles: true }));
+assert(!justified.querySelector('.pb-block-default-group-title[data-image-default-condition="filter"]').hidden);
+const masonry = window.document.querySelector('[data-settings-section="block_masonry"]');
+masonry.querySelector('[data-reset-block-defaults]').click();
+for (const [name, value] of Object.entries({columns: '6', tabletColumns: '4', mobileColumns: '2', gap: '10', tabletGap: '10', mobileGap: '10'})) {
+    const control = masonry.querySelector(`#fbks-default-masonry-${name}`);
+    assert.equal(control.type, 'range'); assert.equal(control.value, value);
+}
+const masonryFilter = masonry.querySelector('#fbks-default-masonry-enableFilter');
+masonryFilter.checked = true; masonryFilter.dispatchEvent(new window.Event('change', { bubbles: true }));
+assert(!masonry.querySelector('.pb-block-default-group-title[data-image-default-condition="filter"]').hidden);
+const proofing = window.document.querySelector('[data-settings-section="block_proofing"]');
+proofing.querySelector('[data-reset-block-defaults]').click();
+const flagModeAdvanced = proofing.querySelector('#fbks-default-proofing-flagMode input[value="advanced"]');
+flagModeAdvanced.checked = true; flagModeAdvanced.dispatchEvent(new window.Event('change', { bubbles: true }));
+assert(!proofing.querySelector('[data-image-default-condition="proofing-palette"]').hidden);
+const flagsEnabled = proofing.querySelector('#fbks-default-proofing-enableFlag');
+flagsEnabled.checked = false; flagsEnabled.dispatchEvent(new window.Event('change', { bubbles: true }));
+assert(proofing.querySelector('[data-image-default-condition="proofing-palette"]').hidden);
+proofing.querySelector('[data-reset-block-defaults]').click();
+assert(proofing.querySelector('#fbks-default-proofing-flagMode input[value="simple"]').checked);
+assert(proofing.querySelector('[data-image-default-condition="proofing-palette"]').hidden);
+window.close();
+console.log('Passed: click-dependent controls, download targets, overlay styles, gradients, EXIF visibility and reset.');

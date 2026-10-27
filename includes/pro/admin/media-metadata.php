@@ -88,7 +88,7 @@ if (! function_exists('fbks_render_media_library_color_class_field')) {
 	function fbks_render_media_library_color_class_field($attachment_id, $color_class, $settings, $can_edit)
 	{
 		$current_item = fbks_get_media_library_color_class_item($color_class, $settings);
-		$swatch = '<span class="fbks-media-metadata-swatch' . ($current_item ? '' : ' is-hidden') . '"' . ($current_item ? ' style="--fbks-media-metadata-color:' . esc_attr($current_item['color']) . '"' : '') . ' aria-hidden="true"></span>';
+		$swatch = '<span class="fbks-media-metadata-swatch' . ($current_item ? '' : ' is-unclassified') . '"' . ($current_item ? ' style="--fbks-media-metadata-color:' . esc_attr($current_item['color']) . '"' : '') . ' aria-hidden="true"></span>';
 
 		if (! $can_edit) {
 			return '<span class="fbks-media-metadata-value fbks-media-metadata-readonly--field">' . $swatch . '<span>' . esc_html(fbks_get_media_library_color_class_label($color_class, $settings)) . '</span></span>';

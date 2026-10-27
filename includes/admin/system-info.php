@@ -22,6 +22,69 @@ if ( ! function_exists( 'fbks_enqueue_system_info_scripts' ) ) {
 }
 add_action( 'admin_enqueue_scripts', 'fbks_enqueue_system_info_scripts' );
 
+/** Safe, effective plugin settings for the support export; never dump raw options. */
+function fbks_get_settings_system_info_lines() {
+    $switched = switch_to_locale('en_US');
+    try {
+        $lines = ['=== FolioBlocks Global Settings ==='];
+        if (!function_exists('fbks_get_block_defaults_schema') || !fbks_fs()->can_use_premium_code__premium_only()) {
+            return array_merge($lines, ['Unavailable (requires an active paid plan).', '', '=== Global Block Defaults ===', 'Unavailable (requires an active paid plan).', '']);
+        }
+        $format = static function($value) {
+            if (is_bool($value)) { return $value ? 'Yes' : 'No'; }
+            if (null === $value || '' === $value) { return '(not set)'; }
+            if (is_array($value)) { return $value ? implode(', ', array_map('sanitize_text_field', $value)) : '(none)'; }
+            return sanitize_text_field((string) $value);
+        };
+        $append = static function($heading, $values, $labels) use (&$lines, $format) {
+            $lines[] = $heading . ':';
+            foreach ($labels as $key => $label) { if (array_key_exists($key, $values)) { $lines[] = '  ' . $label . ': ' . $format($values[$key]); } }
+        };
+        $append('Page/Post Settings Defaults', fbks_get_page_media_defaults(), ['lazyLoad' => 'Lazy load images', 'disableRightClick' => 'Disable right-click', 'disableDragToSave' => 'Disable drag to save']);
+        $append('Social Sharing', fbks_get_social_sharing_settings(), ['sources' => 'Enabled services']);
+        $proofing_available = function_exists('fbks_can_use_proofing_sessions') && fbks_can_use_proofing_sessions();
+        if ($proofing_available) {
+            $append('Proofing Sessions', fbks_get_proofing_settings(), ['inProgressRetentionDays' => 'In-progress retention (days)', 'submittedRetentionDays' => 'Submitted retention (days)', 'emailAdminOnSubmit' => 'Email site admin on submit', 'showAdminBar' => 'Show proofing admin bar']);
+        } else { $lines[] = 'Proofing Sessions: Unavailable on current plan'; }
+        if (function_exists('fbks_can_use_media_metadata') && fbks_can_use_media_metadata()) {
+            $metadata = fbks_get_media_metadata_settings();
+            $append('Media Metadata', $metadata, ['importExif' => 'Import EXIF', 'importRatings' => 'Import ratings', 'importColorClasses' => 'Import color classes', 'showInMediaLibrary' => 'Show in Media Library', 'visibleMetadata' => 'Visible metadata', 'allowEditing' => 'Allow editing', 'viewRoles' => 'View roles', 'editRoles' => 'Edit roles', 'enableStarRatings' => 'Enable star ratings', 'unratedLabel' => 'Unrated label', 'enableColorClasses' => 'Enable color classes', 'palettePreset' => 'Palette preset']);
+            foreach ($metadata['palette'] as $index => $item) {
+                $lines[] = sprintf('  Color class %s: %s; %s; %s', $index, $format($item['enabled']), $format($item['color']), $format($item['label']));
+            }
+        } else { $lines[] = 'Media Metadata: Unavailable on current plan'; }
+        $watermarks = fbks_get_watermark_settings();
+        $append('Watermarks', $watermarks, ['enabledByDefault' => 'Enabled by default']);
+        $lines[] = '  Saved watermarks: ' . count($watermarks['items']);
+        $default_watermark = '(none)';
+        foreach (array_values($watermarks['items']) as $index => $item) {
+            if ($item['id'] === $watermarks['defaultWatermarkId']) { $default_watermark = 'Watermark ' . ($index + 1); }
+            $append('  Watermark ' . ($index + 1), $item, ['opacity' => 'Opacity', 'size' => 'Size', 'inset' => 'Inset', 'position' => 'Position', 'repeat' => 'Repeat']);
+            $lines[] = '    Image configured: ' . (!empty($item['assetUrl']) ? 'Yes' : 'No');
+        }
+        $lines[] = '  Default watermark: ' . $default_watermark;
+        $lines[] = '';
+        $lines[] = '=== Global Block Defaults ===';
+        $saved = get_option('fbks_block_defaults', []);
+        $saved = is_array($saved) ? $saved : [];
+        foreach (fbks_get_block_defaults_schema() as $key => $schema) {
+            if ('proofing' === $key && !$proofing_available) { $lines[] = $schema['title'] . ': Unavailable on current plan'; continue; }
+            $changes = fbks_get_block_default_changes($key, $saved[$key] ?? []);
+            $lines[] = $schema['title'] . ': ' . ($changes ? 'Customized' : 'Plugin defaults');
+            $defaults = fbks_sanitize_block_defaults($key, []);
+            foreach ($changes as $name => $value) {
+                $field = $schema['fields'][$name];
+                $display = static function($value) use ($field, $format) { return isset($field['choices'][$value]) ? $field['choices'][$value] . ' [' . $value . ']' : $format($value); };
+                $lines[] = sprintf('  %s (%s): %s (plugin default: %s)', $field['label'], $name, $display($value), $display($defaults[$name]));
+            }
+        }
+        $lines[] = '';
+        return $lines;
+    } finally {
+        if ($switched) { restore_previous_locale(); }
+    }
+}
+
 if ( ! function_exists( 'fbks_render_system_info_page' ) ) {
 	function fbks_render_system_info_page() {
 		fbks_require_admin_nonce_for_post( 'system_info' );
@@ -193,21 +256,6 @@ if ( ! function_exists( 'fbks_render_system_info_page' ) ) {
 		$lines[] = sprintf( 'Block Theme: %s', $is_block_theme );
 		$lines[] = '';
 
-		$lines[] = '=== FolioBlocks ===';
-		$lines[] = sprintf( 'FolioBlocks Version: %s', $plugin_version ? $plugin_version : 'Unknown' );
-		$lines[] = sprintf( 'FolioBlocks License: %s', $license_type );
-		$lines[] = sprintf( 'WooCommerce: %s', $woocommerce_status );
-		$lines[] = '';
-		$lines[] = 'Available Blocks:';
-		if ( ! empty( $folioblocks_blocks ) ) {
-			foreach ( $folioblocks_blocks as $block_label ) {
-				$lines[] = '  - ' . $block_label;
-			}
-		} else {
-			$lines[] = '  (No FolioBlocks blocks registered)';
-		}
-		$lines[] = '';
-
 		$lines[] = '=== PHP & Server Extensions ===';
 		$lines[] = sprintf( 'PHP GD: %s', $gd_loaded );
 		$lines[] = sprintf( 'PHP Imagick: %s', $imagick_loaded );
@@ -255,9 +303,26 @@ if ( ! function_exists( 'fbks_render_system_info_page' ) ) {
 		}
 		$lines[] = '';
 
+		$lines[] = '=== FolioBlocks ===';
+		$lines[] = sprintf( 'FolioBlocks Version: %s', $plugin_version ? $plugin_version : 'Unknown' );
+		$lines[] = sprintf( 'FolioBlocks License: %s', $license_type );
+		$lines[] = sprintf( 'WooCommerce: %s', $woocommerce_status );
+		$lines[] = '';
+		$lines[] = 'Available Blocks:';
+		if ( ! empty( $folioblocks_blocks ) ) {
+			foreach ( $folioblocks_blocks as $block_label ) {
+				$lines[] = '  - ' . $block_label;
+			}
+		} else {
+			$lines[] = '  (No FolioBlocks blocks registered)';
+		}
+		$lines[] = '';
+
+		$lines = array_merge($lines, fbks_get_settings_system_info_lines());
+
 		$export = implode( "\n", $lines );
 		?>
-		<div class="pb-wrap">
+		<div class="pb-wrap" data-plugin-version="<?php echo esc_attr(sprintf(__('Version %s', 'folioblocks'), FBKS_VERSION)); ?>">
 			<div class="pb-settings-header">
 				<img src="<?php echo esc_url( plugin_dir_url( __DIR__ ) . '/icons/pb-brand-icon.svg' ); ?>" alt="<?php echo esc_attr__( 'FolioBlocks', 'folioblocks' ); ?>" class="pb-settings-logo" />
 				<h1>
@@ -271,8 +336,8 @@ if ( ! function_exists( 'fbks_render_system_info_page' ) ) {
 			<div class="settings-container">
 				<div class="settings-left">
 					<div class="pb-dashboard-box">
-						<h2><?php esc_html_e( 'Server Configuration', 'folioblocks' ); ?></h2>
-						<p><?php esc_html_e( 'Below you can find information regarding your server configuration. This can be used to help debug any issues you have with FolioBlocks. Copy and paste the information when requesting support.', 'folioblocks' ); ?></p>
+						<h2><?php esc_html_e( 'System Report', 'folioblocks' ); ?></h2>
+						<p><?php esc_html_e( 'Below you can find your server configuration, active FolioBlocks Global Settings, and customized Global Block Defaults. Copy and paste this information when requesting support. Client credentials and watermark image URLs are excluded.', 'folioblocks' ); ?></p>
 						<textarea
 							readonly
 							class="large-text code"

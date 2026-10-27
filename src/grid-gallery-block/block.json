@@ -12,6 +12,7 @@
 	"description": "Shows images in a clean, responsive grid while maintaining original proportions.",
 	"example": {
 		"attributes": {
+        "globalDefaultsApplied": { "type": "boolean", "default": false },
 			"preview": true
 		}
 	},

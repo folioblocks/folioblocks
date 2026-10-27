@@ -1,3 +1,6 @@
+import useGlobalBlockDefaults from "../pb-helpers/useGlobalBlockDefaults";
+import blockMetadata from "./block.json";
+import { ResponsiveLayoutInspector } from '../pb-helpers/ResponsiveRangeInspector';
 /**
  * Background Video Block
  * Edit JS
@@ -168,6 +171,7 @@ const DEFAULT_CONTENT_COLUMNS_TEMPLATE = [
 ];
 
 export default function Edit({ attributes, setAttributes, clientId }) {
+    useGlobalBlockDefaults(clientId, blockMetadata.name, attributes, setAttributes, blockMetadata.attributes);
 	const {
 		layout,
 		mediaDesktop,
@@ -448,7 +452,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		: {};
 
 	const blockProps = useBlockProps({
-		className: `pb-bgvid${hasAnyBackground ? " has-media" : ""}${
+		className: `pb-bgvid is-editor-preview${hasAnyBackground ? " has-media" : ""}${
 			showInitialPlaceholder ? " is-placeholder" : ""
 		}`,
 		style: blockStyle,
@@ -584,6 +588,16 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 
 	return (
 		<>
+			<ResponsiveLayoutInspector
+                clientId={clientId}
+                title={__("Sizing & Focal Point", "folioblocks")}
+            >
+                {applyFilters(
+                    "folioBlocks.backgroundVideoBlock.sizingFocalControls.inspector",
+                    null,
+                    { clientId, attributes, setAttributes },
+                )}
+            </ResponsiveLayoutInspector>
 			<InspectorControls>
 				<PanelBody
 					title={__("Sizing & Focal Point", "folioblocks")}

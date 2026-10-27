@@ -22,6 +22,7 @@
 	"customClassName": false
 },
 "attributes": {
+        "globalDefaultsApplied": { "type": "boolean", "default": false },
 	"preview": { "type": "boolean", "default": false },
 	"videoUrl": { "type": "string", "default": "" },
 	"videoWidth": { "type": "number", "default": 0 },

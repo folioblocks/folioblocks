@@ -1,3 +1,5 @@
+import useGlobalBlockDefaults from '../pb-helpers/useGlobalBlockDefaults';
+import blockMetadata from './block.json';
 /**
  * Modular Gallery Block
  * Edit JS
@@ -28,6 +30,7 @@ import { getExifAttributesFromMedia } from "../pb-helpers/exifMetadata";
 import { getImageSizeOptions } from "../pb-helpers/imageSizeOptions";
 import { imageProFeatureNotice } from "../pb-helpers/imageProFeatureNotices";
 import ResponsiveRangeControl from "../pb-helpers/ResponsiveRangeControl";
+import ResponsiveRangeInspector, { ResponsiveLayoutInspector } from '../pb-helpers/ResponsiveRangeInspector';
 import {
 	getGalleryGapForWidth,
 	resolveGalleryGaps,
@@ -340,6 +343,7 @@ const applyStackLayout = (stackWrapper, layout, gap) => {
 
 export default function Edit(props) {
 	const { clientId, attributes, setAttributes } = props;
+    useGlobalBlockDefaults(clientId, blockMetadata.name, attributes, setAttributes, blockMetadata.attributes);
 	const { noGap, lightbox, lightboxCaption, preview } = attributes;
 	const responsiveGaps = resolveGalleryGaps(attributes);
 
@@ -919,6 +923,22 @@ export default function Edit(props) {
 					</ToolbarButton>
 				</ToolbarGroup>
 			</BlockControls>
+			<ResponsiveLayoutInspector clientId={ clientId }>
+				<ResponsiveRangeInspector
+					clientId={ clientId }
+					label={__("Gap Between Items", "folioblocks")}
+					desktopKey="gap"
+					tabletKey="tabletGap"
+					mobileKey="mobileGap"
+					attributes={responsiveGaps}
+					setAttributes={(newValues) =>
+						setAttributes({ ...newValues, noGap: false })
+					}
+					min={0}
+					max={50}
+					help={__("Set the space between gallery images.", "folioblocks")}
+				/>
+			</ResponsiveLayoutInspector>
 			<InspectorControls>
 				<PanelBody
 					title={__("General Gallery Settings", "folioblocks")}

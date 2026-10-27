@@ -12,6 +12,7 @@
 	"description": "Displays images in a horizontal, swipeable carousel with optional autoplay.",
 	"example": {
 		"attributes": {
+        "globalDefaultsApplied": { "type": "boolean", "default": false },
 			"preview": true
 		}
 	},
@@ -434,7 +435,8 @@
 			"type": "boolean",
 			"default": false
 		},
-		"autoplay": {
+		"autoplaySpeed": { "type": "number", "default": 3 },
+        "autoplay": {
 			"type": "boolean",
 			"default": false
 		},

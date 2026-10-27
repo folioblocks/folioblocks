@@ -4,6 +4,69 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0] - 2026-10-26
+### Added
+- Expanded Global Block Defaults to Image, Video, Carousel, Filmstrip, Modular, Video Gallery, Grid, Justified, and Masonry blocks. Cards follow their editor controls, with relevant resolution, responsive layout, playback, click, lightbox, overlay, filtering, and style settings, autosaving, and per-block resets.
+- Added Proofing Gallery defaults for Business and Agency plans, including gallery type, feedback options, advanced flag palettes, Save & Submit settings, appearance, and button styles. Client email, password, and nested-gallery settings remain local to each gallery. New galleries retain a copy of their selected advanced flag palette.
+- Added persistent Customized badges to card headers, visible when cards are open or closed. Badges clear after resetting or restoring plugin defaults, and equivalent hex/RGB colors do not count as changes.
+
+### Changed
+- Expanded System Info and its copyable support report with effective Global Settings and customized Global Block Defaults, including plugin-default comparisons. Client credentials, watermark image URLs, and unknown stored fields are excluded.
+- Renamed the section Global Block Defaults, sorted its cards alphabetically, and clarified standalone use in the section description.
+- Rebuilt Image and Video defaults around their editor control schemes, with feature section headings, conditional controls, gradient/color pickers, and named shadow styles. Earlier saved defaults are normalized to the updated controls.
+- Added matching section headings and separators to Before & After, Background Video, and Loupe cards, aligned helper text with editor controls, and enlarged the Before & After icon for visual consistency.
+- Added Resolution to standalone Image defaults and Thumbnail Resolution to standalone Video defaults, including registered custom image sizes.
+- Used matching Desktop, Tablet, and Mobile sliders for Justified row-height defaults. Earlier empty tablet/mobile values initialize from desktop; explicit custom values are preserved.
+- Apply Image and Video defaults only to newly inserted top-level blocks. Gallery defaults apply to new, empty galleries; existing or populated content and photo galleries nested in Proofing retain their settings. Empty Modular starter rows and stacks remain eligible.
+- Kept Lazy Load and Disable Right-Click in Page/Post Settings instead of duplicating them in gallery default cards. Conditional style headings and dividers hide alongside their controls when disabled.
+
+### Fixed
+- Registered Carousel autoplay speed so the existing editor control and global default persist correctly, including fractional seconds.
+- Fixed Video Block front-end thumbnails always using full size. Thumbnails now honor their selected or inherited resolution and fall back to the full-size image when the requested size is unavailable.
+
+## [1.6.0] - 2026-10-22
+### Added
+- Added Background Video block defaults for source, playback, mobile visibility, responsive height/focal points, and overlay settings, with a per-block reset. Block default cards display three per row on wide screens.
+- Added a Block Defaults section below General Settings for all paid plans, starting with Before & After slider/label defaults and Loupe magnification, shape, and theme defaults. Settings autosave and apply only to newly inserted, unconfigured blocks; existing content retains its saved values.
+
+### Changed
+- Added color pickers to block defaults, including opacity for Before & After label backgrounds, with strict server-side color validation.
+- Restricted Media Metadata settings, Media Library tools, imports, scanning, and REST exposure to Business and Agency plans. Existing stored metadata is preserved.
+- Removed the separate Image ID column from Proofing Sessions reports; the image ID now appears in parentheses beside the image name.
+- Proofing Sessions reports omit feedback columns and summary counts disabled in the matching gallery. New sessions retain these options for historical reports.
+- Added sortable Heart, Client Rating, Flag, and Comment headings to Proofing Sessions reports. The first click brings matching feedback or the highest ratings to the top; clicking again reverses the order.
+- Updated Proofing Sessions reports to display client ratings as five stars with a numeric value and flags as palette-colored swatches with their saved labels, including visible white swatches.
+
+### Fixed
+- Adapted FolioBlocks metadata fields to the media chooser sidebar with stacked labels and single-column EXIF controls, preserving the wider Media Library attachment layout.
+- Fixed Before & After label placement when switching orientation by mapping Left/Right to Top/Bottom and back while preserving Center.
+- Added a fallback to the matching gallery's retained palette for older sessions without saved palette definitions. Flags whose palette is no longer available display a color-class label instead of an internal identifier.
+
+## [1.6.0] - 2026-10-21
+### Added
+- Added optional Proofing Gallery client star ratings with a compact draggable star picker, drag-to-zero clearing, keyboard controls, and a Done button. Ratings are restored with saved sessions and local drafts and appear in Client Rating reports. Stars remain disabled by default for existing galleries.
+- Added a compact, unnumbered star filter for exact one-to-five-star ratings. Clicking or dragging selects a rating; dragging to zero returns to All Images.
+- Added Simple and Advanced Proofing Gallery flags. Advanced starts with the global default palette and lets authors select another available palette. Each gallery retains its selected colors and labels independently of later global changes and the Enable Color Classes setting.
+- Added extended flag support to editor previews, client pickers, filters, saved selections, and session reports, with palette-label tooltips on flag swatches.
+- Added WordPress 7.2 responsive editing integration for Grid Gallery Columns; Masonry Gallery Columns and Gap; Justified Gallery Row Height and Gap; Modular and Carousel Gallery Gap; and Video Gallery Columns and Gap. Nested galleries inside Proofing Gallery expose the same controls.
+- Added Background Video responsive Height, Focal Point X, and Focal Point Y controls in a single Sizing & Focal Point panel.
+
+### Changed
+- Refined the Proofing Gallery filter bar with feedback-group dividers, tighter flag spacing, filled heart and comment selections, and consistently filled palette-colored flags with an underline marking the selected flag. The selected heart uses the same red as the gallery control.
+- Positioned Stars at the bottom left and Comments at the bottom right when all proofing controls are enabled. Galleries without Stars retain their existing control positions.
+- Grouped flag settings beneath Enable Flag, using inline Simple/Advanced radio controls and an Advanced palette selector.
+- Grouped responsive gallery controls in one Layout panel using a shared inspector helper, with explanatory text for Columns and Gap controls.
+- Kept responsive edits synchronized with the original FolioBlocks controls and existing saved attributes, limits, and Pro availability. FolioBlocks continues to use its existing breakpoints; theme-defined breakpoints and native style-state storage are not adopted by this integration.
+- Retained the original responsive device controls for normal editing and older WordPress versions.
+
+### Fixed
+- Fixed an Interactivity API scope error during Proofing Gallery initialization and saved flag restoration.
+- Fixed Proofing Gallery password prompts for logged-in administrators who can edit the protected page, while preserving visitor password protection.
+- Fixed flag picker sizing, image-edge insets, and editor positioning so the editor picker opens to the left of the flag icon, matching the front end.
+- Added contrasting edges to pale and white flag filters so they remain visible.
+- Removed the star picker's focus border on mouse opening while retaining keyboard focus indicators.
+- Fixed Background Video previews being hidden in the editor by shared styles that waited for a playback class set only by the front-end player. Preserved front-end fallback poster behavior.
+
 ## [1.6.0] - 2026-10-19
 ### Changed
 - Updated all FolioBlocks blocks for Gutenberg's Interactivity API full-page client-side navigation: Background Video, Before & After, Loupe, Image, Video, Grid, Justified, Masonry, Modular, Filmstrip, Carousel, Video Gallery, and Proofing Gallery, including the nested Image Row and Image Stack blocks.

@@ -1,8 +1,12 @@
+import useGlobalBlockDefaults from '../pb-helpers/useGlobalBlockDefaults';
+import blockMetadata from './block.json';
+import { getProofingFlags, captureProofingPalette, getProofingFlagOutline, getProofingPaletteOptions, getProofingPaletteId } from '../pb-helpers/proofingFlags';
+import ProofingRatingFilter from '../pb-helpers/ProofingRatingFilter';
 /**
  * Proofing Gallery Block
  * Edit JS
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import {
 	InspectorControls,
 	MediaPlaceholder,
@@ -15,6 +19,7 @@ import {
 	Notice,
 	PanelBody,
 	RangeControl,
+    RadioControl,
 	SelectControl,
 	TextControl,
 	ToggleControl,
@@ -69,6 +74,7 @@ const PROOFING_FILTER_OPTIONS = [
 		icon: 'flag',
 		color: 'green',
 	},
+	...[ 1, 2, 3, 4, 5 ].map( rating => ( { label: rating === 1 ? __( '1 star', 'folioblocks' ) : sprintf( __( '%d stars', 'folioblocks' ), rating ), value: `rating-${ rating }`, icon: 'star', rating } ) ),
 	{
 		label: __( 'Commented', 'folioblocks' ),
 		value: 'commented',
@@ -77,10 +83,14 @@ const PROOFING_FILTER_OPTIONS = [
 ];
 
 const getProofingFilterOptions = ( attributes = {} ) =>
-	PROOFING_FILTER_OPTIONS.filter(
+	PROOFING_FILTER_OPTIONS.flatMap( option => option.value === 'flag-red'
+        ? getProofingFlags( attributes ).map( item => ( { label: item.label, value: `flag-${ item.value }`, icon: 'flag', color: item.value, flagColor: item.color } ) )
+        : option.value.startsWith( 'flag-' ) ? [] : [ option ] ).filter(
 		( option ) =>
 			option.value === 'all' ||
-			( option.value === 'hearted' && attributes.enableHeart !== false ) ||
+			( option.value.startsWith( 'rating-' ) && attributes.enableStars === true ) ||
+			( option.value === 'hearted' &&
+				attributes.enableHeart !== false ) ||
 			( option.value.startsWith( 'flag-' ) &&
 				attributes.enableFlag !== false ) ||
 			( option.value === 'commented' &&
@@ -603,6 +613,14 @@ const ProofingFilterIcon = ( { icon } ) => {
 		);
 	}
 
+	if ( icon === 'star' ) {
+		return (
+			<svg viewBox="0 0 24 24" aria-hidden="true">
+				<path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z" />
+			</svg>
+		);
+	}
+
 	if ( icon === 'comment' ) {
 		return (
 			<svg viewBox="0 0 24 24" aria-hidden="true">
@@ -615,6 +633,7 @@ const ProofingFilterIcon = ( { icon } ) => {
 };
 
 export default function Edit( { attributes, setAttributes, clientId } ) {
+    useGlobalBlockDefaults(clientId, blockMetadata.name, attributes, setAttributes, blockMetadata.attributes);
 	const {
 		clientEmail,
 		galleryPassword,
@@ -641,6 +660,9 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			attributes.enableComment,
 			attributes.enableFlag,
 			attributes.enableHeart,
+			attributes.enableStars,
+            attributes.flagMode,
+            attributes.flagPalette,
 		]
 	);
 	const { replaceInnerBlocks, updateBlockAttributes } =
@@ -693,6 +715,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		attributes.enableComment,
 		attributes.enableFlag,
 		attributes.enableHeart,
+		attributes.enableStars,
 		proofingFilter,
 		proofingFilterOptions,
 	] );
@@ -712,6 +735,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				const flagColor = image.dataset.proofingFlag || '';
 				const shouldShow =
 					proofingFilter === 'all' ||
+					( proofingFilter.startsWith( 'rating-' ) && Number( image.dataset.proofingRating ) === Number( proofingFilter.slice( 7 ) ) ) ||
 					( proofingFilter === 'hearted' &&
 						image.dataset.proofingHearted === 'true' ) ||
 					( proofingFilter === 'commented' &&
@@ -1049,7 +1073,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						{ __( 'Proofing Options', 'folioblocks' ) }
 					</div>
 					<ToggleControl
-						label={ __( 'Enable Heart', 'folioblocks' ) }
+						label={ __( 'Enable Hearts', 'folioblocks' ) }
 						checked={ attributes.enableHeart !== false }
 						onChange={ ( value ) =>
 							setAttributes( { enableHeart: value } )
@@ -1061,19 +1085,48 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						) }
 					/>
 					<ToggleControl
-						label={ __( 'Enable Flag', 'folioblocks' ) }
+						label={ __( 'Enable Color Flags', 'folioblocks' ) }
 						checked={ attributes.enableFlag !== false }
 						onChange={ ( value ) =>
 							setAttributes( { enableFlag: value } )
 						}
 						__nextHasNoMarginBottom
 						help={ __(
-							'Show Flag icon so clients can assign a red, orange, or green status to images.',
+							'Show Flag icon so clients can assign a color status to images.',
 							'folioblocks'
 						) }
 					/>
+                    { attributes.enableFlag !== false && <div className="fbks-proofing-inspector__flag-palette">
+                        <RadioControl label={ __( 'Flag mode', 'folioblocks' ) }
+                            selected={ attributes.flagMode || 'simple' }
+                            options={ [ { label: __( 'Simple', 'folioblocks' ), value: 'simple' }, { label: __( 'Advanced', 'folioblocks' ), value: 'advanced' } ] }
+                            onChange={ mode => setAttributes( { flagMode: mode, ...( mode === 'advanced' && ! attributes.flagPalette?.items ? { flagPalette: captureProofingPalette() } : {} ) } ) }
+                        />
+                        { attributes.flagMode === 'advanced' && <>
+                            <SelectControl label={ __( 'Palette', 'folioblocks' ) }
+                                value={ getProofingPaletteId( attributes.flagPalette ) }
+                                options={ getProofingPaletteOptions( attributes.flagPalette ) }
+                                onChange={ preset => setAttributes( { flagPalette: captureProofingPalette( preset ) } ) }
+                                help={ __( 'This gallery keeps a copy of the selected palette.', 'folioblocks' ) }
+                                __nextHasNoMarginBottom
+                            />
+                            { ! getProofingFlags( attributes ).length && <Notice status="warning" isDismissible={ false }>{ __( 'No colors are enabled in this palette. Choose another palette or enable colors in Global Settings.', 'folioblocks' ) }</Notice> }
+                        </> }
+                    </div> }
 					<ToggleControl
-						label={ __( 'Enable Comment', 'folioblocks' ) }
+						label={ __( 'Enable Star Ratings', 'folioblocks' ) }
+						checked={ attributes.enableStars === true }
+						onChange={ ( value ) =>
+							setAttributes( { enableStars: value } )
+						}
+						help={ __(
+							'Let clients rate images from one to five stars.',
+							'folioblocks'
+						) }
+						__nextHasNoMarginBottom
+					/>
+					<ToggleControl
+						label={ __( 'Enable Comments', 'folioblocks' ) }
 						checked={ attributes.enableComment !== false }
 						onChange={ ( value ) =>
 							setAttributes( { enableComment: value } )
@@ -1083,7 +1136,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 							'Show Comment icon for image-specific client notes.',
 							'folioblocks'
 						) }
-					/>					
+					/>
 				</PanelBody>
 				<PanelBody
 					title={ __( 'Proofing Save & Submit Settings', 'folioblocks' ) }
@@ -1285,7 +1338,9 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 								'folioblocks'
 							) }
 						>
-							{ proofingFilterOptions.map( ( option ) => (
+							{ proofingFilterOptions.map( ( option, index ) => option.rating ? (
+                                    option.rating === 1 ? <ProofingRatingFilter key="ratings" filter={ proofingFilter } onChange={ setProofingFilter } divider={ index > 0 } /> : null
+                                ) : (
 								<button
 									type="button"
 									key={ option.value }
@@ -1298,6 +1353,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 											? `is-${ option.color }`
 											: '',
 										`is-${ option.icon }`,
+                                        index > 0 && option.icon !== proofingFilterOptions[index - 1].icon ? 'has-group-divider' : '',
 									]
 										.filter( Boolean )
 										.join( ' ' ) }
@@ -1307,10 +1363,12 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 									aria-pressed={
 										proofingFilter === option.value
 									}
-									aria-label={ option.label }
+									style={ option.flagColor ? { color: option.flagColor, '--fbks-proofing-flag-outline': getProofingFlagOutline( option.flagColor ) } : undefined }
+                                    aria-label={ option.label }
 									title={ option.label }
 								>
-									<ProofingFilterIcon icon={ option.icon } />
+
+                                    <ProofingFilterIcon icon={ option.icon } />
 								</button>
 							) ) }
 						</div>

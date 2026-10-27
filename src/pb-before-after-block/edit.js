@@ -1,3 +1,6 @@
+import { getBeforeAfterLabelPosition } from "../pb-helpers/beforeAfterLabelPosition";
+import useGlobalBlockDefaults from "../pb-helpers/useGlobalBlockDefaults";
+import blockMetadata from "./block.json";
 /**
  * Before & After Block
  * Edit JS
@@ -100,7 +103,8 @@ function CustomPlaceholder({
 	);
 }
 
-export default function Edit({ attributes, setAttributes }) {
+export default function Edit({ attributes, setAttributes, clientId }) {
+    useGlobalBlockDefaults(clientId, blockMetadata.name, attributes, setAttributes, blockMetadata.attributes);
 	const {
 		beforeImage = {},
 		afterImage = {},
@@ -108,7 +112,8 @@ export default function Edit({ attributes, setAttributes }) {
 		sliderColor,
 		preview,
 	} = attributes;
-	const [sliderValue, setSliderValue] = useState(50);
+	const [sliderValue, setSliderValue] = useState(attributes.startingPosition ?? 50);
+    useEffect(() => { setSliderValue(attributes.startingPosition ?? 50); }, [attributes.startingPosition]);
 	const containerRef = useRef(null);
 	const afterImageRef = useRef(null);
 	const availableImageSizes = useSelect(
@@ -307,6 +312,7 @@ export default function Edit({ attributes, setAttributes }) {
 								onChange={(newOrientation) =>
 									setAttributes({
 										sliderOrientation: newOrientation,
+                                        labelPosition: getBeforeAfterLabelPosition(newOrientation, attributes.labelPosition),
 									})
 								}
 								help={__(

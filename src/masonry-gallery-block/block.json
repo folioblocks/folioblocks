@@ -9,6 +9,7 @@
 	"description": "Stacks images in a masonry layout with variable heights for a dynamic visual flow.",
 	"example": {
 		"attributes": {
+        "globalDefaultsApplied": { "type": "boolean", "default": false },
 			"preview": true
 		}
 	},

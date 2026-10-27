@@ -103,7 +103,7 @@
 			return;
 		}
 
-		swatch.classList.toggle( 'is-hidden', ! color );
+		swatch.classList.toggle( 'is-unclassified', ! color );
 		if ( color ) {
 			swatch.style.setProperty( '--fbks-media-metadata-color', color );
 		} else {

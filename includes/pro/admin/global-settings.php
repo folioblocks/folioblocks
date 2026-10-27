@@ -218,6 +218,19 @@ if (! function_exists('fbks_ajax_save_global_settings_section')) {
 		$section = isset($_POST['section']) ? sanitize_key(wp_unslash($_POST['section'])) : '';
 		$operation = isset($_POST['operation']) ? sanitize_key(wp_unslash($_POST['operation'])) : 'save';
 
+        if (in_array($section, ['block_before_after', 'block_loupe', 'block_background_video', 'block_image', 'block_video', 'block_carousel', 'block_filmstrip', 'block_video_gallery', 'block_modular', 'block_grid', 'block_justified', 'block_masonry', 'block_proofing'], true)) {
+            if (!fbks_fs()->can_use_premium_code__premium_only()) { wp_send_json_error(['message' => __('Block defaults require a paid plan.', 'folioblocks')], 403); }
+            $key = substr($section, 6);
+            if ('proofing' === $key && !fbks_can_use_proofing_sessions()) { wp_send_json_error(['message' => __('Proofing defaults require a Business or Agency plan.', 'folioblocks')], 403); }
+            $raw = isset($_POST['fbks_block_defaults'][$key]) ? wp_unslash($_POST['fbks_block_defaults'][$key]) : [];
+            if ('reset' === $operation) {
+                $saved = get_option('fbks_block_defaults', []);
+                $saved = is_array($saved) ? $saved : [];
+                unset($saved[$key]);
+                update_option('fbks_block_defaults', $saved);
+            } else { fbks_save_block_defaults($key, $raw); }
+            wp_send_json_success(['message' => __('Saved.', 'folioblocks'), 'customized' => 'reset' !== $operation && fbks_block_defaults_are_customized($key, $raw)]);
+        }
 		switch ($section) {
 			case 'page_media_defaults':
 				$raw_settings = isset($_POST['fbks_page_media_defaults']) && is_array($_POST['fbks_page_media_defaults'])
@@ -227,6 +240,7 @@ if (! function_exists('fbks_ajax_save_global_settings_section')) {
 				break;
 
 			case 'media_metadata':
+                if (!fbks_can_use_media_metadata()) { wp_send_json_error(array('message' => __('Media Metadata requires a Business or Agency plan.', 'folioblocks')), 403); }
 				if (! function_exists('fbks_sanitize_media_metadata_settings') || ! defined('FBKS_MEDIA_METADATA_SETTINGS_OPTION')) {
 					wp_send_json_error(array('message' => __('Media Metadata settings are unavailable.', 'folioblocks')), 500);
 				}
@@ -490,6 +504,7 @@ if (! function_exists('fbks_get_existing_jpeg_attachment_batch')) {
 if (! function_exists('fbks_process_media_metadata_scan_batch')) {
 	function fbks_process_media_metadata_scan_batch($state)
 	{
+        if (!fbks_can_use_media_metadata()) { return $state; }
 		$state = fbks_normalize_media_metadata_scan_state($state);
 		$attachment_ids = fbks_get_existing_jpeg_attachment_batch($state['lastId']);
 
@@ -527,6 +542,7 @@ if (! function_exists('fbks_process_media_metadata_scan_batch')) {
 if (! function_exists('fbks_ajax_scan_existing_media_metadata')) {
 	function fbks_ajax_scan_existing_media_metadata()
 	{
+        if (!fbks_can_use_media_metadata()) { wp_send_json_error(array('message' => __('Media Metadata requires a Business or Agency plan.', 'folioblocks')), 403); }
 		check_ajax_referer(fbks_get_admin_nonce_action('global-settings'), 'nonce');
 
 		if (! current_user_can('manage_options')) {
@@ -865,15 +881,21 @@ if (! function_exists('fbks_render_global_settings_page')) {
 		fbks_require_admin_nonce_for_post('global-settings');
 
 		$notice = '';
+        if ('POST' === ($_SERVER['REQUEST_METHOD'] ?? '') && fbks_fs()->can_use_premium_code__premium_only() && isset($_POST['fbks_block_defaults']) && is_array($_POST['fbks_block_defaults'])) {
+            foreach (fbks_get_block_defaults_schema() as $key => $schema) {
+                if (isset($_POST['fbks_block_defaults'][$key])) { fbks_save_block_defaults($key, wp_unslash($_POST['fbks_block_defaults'][$key])); }
+            }
+            $notice = __('Block settings saved.', 'folioblocks');
+        }
+
 		if (
 			isset($_SERVER['REQUEST_METHOD']) &&
 			'POST' === strtoupper(sanitize_text_field(wp_unslash($_SERVER['REQUEST_METHOD']))) &&
-			isset($_POST['fbks_watermarks'], $_POST['fbks_social_sharing'], $_POST['fbks_proofing'], $_POST['fbks_page_media_defaults'], $_POST['fbks_media_metadata']) &&
+			isset($_POST['fbks_watermarks'], $_POST['fbks_social_sharing'], $_POST['fbks_proofing'], $_POST['fbks_page_media_defaults']) &&
 			is_array($_POST['fbks_watermarks']) &&
 			is_array($_POST['fbks_social_sharing']) &&
 			is_array($_POST['fbks_proofing']) &&
-			is_array($_POST['fbks_page_media_defaults']) &&
-			is_array($_POST['fbks_media_metadata'])
+			is_array($_POST['fbks_page_media_defaults'])
 		) {
 			$raw_watermark_settings = wp_unslash($_POST['fbks_watermarks']);
 			$settings = fbks_sanitize_watermark_settings($raw_watermark_settings);
@@ -889,7 +911,7 @@ if (! function_exists('fbks_render_global_settings_page')) {
 			}
 			$page_media_defaults = fbks_sanitize_page_media_defaults(wp_unslash($_POST['fbks_page_media_defaults']));
 			update_option(FBKS_PAGE_MEDIA_DEFAULTS_OPTION, $page_media_defaults);
-			if (function_exists('fbks_sanitize_media_metadata_settings') && defined('FBKS_MEDIA_METADATA_SETTINGS_OPTION')) {
+			if (fbks_can_use_media_metadata() && isset($_POST['fbks_media_metadata']) && is_array($_POST['fbks_media_metadata']) && function_exists('fbks_sanitize_media_metadata_settings') && defined('FBKS_MEDIA_METADATA_SETTINGS_OPTION')) {
 				$media_metadata_settings = fbks_sanitize_media_metadata_settings(wp_unslash($_POST['fbks_media_metadata']));
 				update_option(FBKS_MEDIA_METADATA_SETTINGS_OPTION, $media_metadata_settings);
 			}
@@ -932,7 +954,7 @@ if (! function_exists('fbks_render_global_settings_page')) {
 		$media_metadata_last_scanned = fbks_get_media_metadata_last_scanned_label($media_metadata_scan_state);
 		$media_metadata_page_scan_state['lastScanned'] = $media_metadata_last_scanned;
 		?>
-		<div class="pb-wrap">
+		<div class="pb-wrap" data-plugin-version="<?php echo esc_attr(sprintf(__('Version %s', 'folioblocks'), FBKS_VERSION)); ?>">
 			<div class="pb-settings-header">
 				<img src="<?php echo esc_url(FBKS_PLUGIN_URL . 'includes/icons/pb-brand-icon.svg'); ?>" alt="<?php echo esc_attr__('FolioBlocks', 'folioblocks'); ?>" class="pb-settings-logo" />
 				<h1><?php esc_html_e('FolioBlocks', 'folioblocks'); ?><?php if (fbks_fs()->can_use_premium_code()) : ?> <?php esc_html_e('Pro', 'folioblocks'); ?><?php endif; ?> - <?php esc_html_e('Global Settings', 'folioblocks'); ?></h1>
@@ -953,6 +975,8 @@ if (! function_exists('fbks_render_global_settings_page')) {
 					<form class="pb-global-settings-form" method="post" action="<?php echo esc_url(admin_url('admin.php?page=folioblocks-global-settings')); ?>">
 						<?php fbks_render_admin_nonce_field('global-settings'); ?>
 
+<h2 class="pb-global-settings-section-title"><?php esc_html_e('General Settings', 'folioblocks'); ?></h2>
+                        <p class="pb-global-settings-section-description"><?php esc_html_e('Manage site-wide preferences for media, sharing, proofing, and watermarks. Open a card to adjust its settings; changes are saved automatically.', 'folioblocks'); ?></p>
 						<details class="pb-dashboard-box pb-global-settings-panel" data-settings-section="page_media_defaults">
 							<summary class="pb-global-settings-panel__summary">
 								<span class="pb-global-settings-panel__heading">
@@ -995,7 +1019,8 @@ if (! function_exists('fbks_render_global_settings_page')) {
 							</div>
 						</details>
 
-						<details class="pb-dashboard-box pb-global-settings-panel" data-settings-section="media_metadata" data-media-metadata-settings>
+						<?php if (fbks_can_use_media_metadata()) : ?>
+                        <details class="pb-dashboard-box pb-global-settings-panel" data-settings-section="media_metadata" data-media-metadata-settings>
 							<summary class="pb-global-settings-panel__summary">
 								<span class="pb-global-settings-panel__heading">
 									<span class="pb-global-settings-panel__title"><?php esc_html_e('Media Metadata', 'folioblocks'); ?></span>
@@ -1200,7 +1225,8 @@ if (! function_exists('fbks_render_global_settings_page')) {
 							</div>
 						</details>
 
-						<details class="pb-dashboard-box pb-global-settings-panel" data-settings-section="social_sharing">
+						<?php endif; ?>
+                        <details class="pb-dashboard-box pb-global-settings-panel" data-settings-section="social_sharing">
 							<summary class="pb-global-settings-panel__summary">
 								<span class="pb-global-settings-panel__heading">
 									<span class="pb-global-settings-panel__title"><?php esc_html_e('Social Sharing', 'folioblocks'); ?></span>
@@ -1317,7 +1343,10 @@ if (! function_exists('fbks_render_global_settings_page')) {
 							</div>
 						</details>
 
-						<p class="buy-button-wrapper pb-global-settings-save-wrapper" data-global-save-fallback>
+                        <h2 class="pb-global-settings-section-title"><?php esc_html_e('Global Block Defaults', 'folioblocks'); ?></h2>
+                        <p class="pb-global-settings-section-description"><?php esc_html_e('Choose the starting settings for newly inserted FolioBlocks blocks. Individual blocks can be adjusted in the editor, and existing blocks keep their saved settings.', 'folioblocks'); ?><br /><?php esc_html_e('For blocks that can be nested inside other blocks, global defaults apply only when they are used on their own, outside another block.', 'folioblocks'); ?></p>
+                        <div class="pb-block-default-grid"><?php fbks_render_block_defaults_panels(); ?></div>
+                        <p class="buy-button-wrapper pb-global-settings-save-wrapper" data-global-save-fallback>
 							<button type="submit" class="button button-primary buy-button">
 								<?php esc_html_e('Save Global Settings', 'folioblocks'); ?>
 							</button>

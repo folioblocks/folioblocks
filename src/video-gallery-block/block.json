@@ -9,6 +9,7 @@
 	"description": "Displays videos in a responsive grid with thumbnails, titles, and lightbox playback.",
 	"example": {
         "attributes": {
+        "globalDefaultsApplied": { "type": "boolean", "default": false },
         "preview": true
     }
     },

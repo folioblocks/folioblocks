@@ -1,5 +1,25 @@
 # Global Settings Action Plan
 
+## October 26, 2026 Update
+
+- Added Image and Video block defaults for standalone blocks, covering lightbox, hover/overlay, borders, shadows, and Video thumbnail aspect ratio and visibility controls.
+- Nested Image/Video blocks continue to use gallery context; defaults do not enable gallery overrides.
+- Media choices, titles/captions, custom links, and product assignments remain local. Lazy loading and image protection remain controlled through Page/Post defaults.
+- Preserved the manually adjusted row gaps and helper-text spacing.
+
+## First Pass — October 22, 2026
+
+- Implemented General Settings and Block Defaults headings on one page, with block defaults starting below Watermarks and icon-based block cards.
+- Available on every paid plan; uses the existing administrator permissions and section autosaving.
+- Before & After: orientation, starting position, slider color, and label visibility, position, and colors.
+- Background Video: source, loop, mobile visibility, responsive height/focal points, and overlay color/opacity.
+- Loupe: magnification, shape, and theme. Size and border defaults remain deferred because those attributes are not wired through the current block experience.
+- Defaults are copied once into newly inserted, unconfigured blocks. Existing saved blocks, preview blocks, and media-bearing imported content retain their settings.
+- Lazy loading and image protection continue to use the existing Page/Post defaults.
+- Live inheritance, Reset to Global, settings import/export, and other blocks remain future work.
+
+The original proposal below is historical guidance; the first-pass scope above supersedes its proposed starting blocks and page structure.
+
 ## Goal
 
 Create a FolioBlocks Global Settings system that gives site owners one place to define common defaults for FolioBlocks blocks.
@@ -471,6 +491,8 @@ npm run i18n:pot
 
 ## Open Decisions
 
+Image Block defaults now follow the editor's click, hover, and styles groups. Conditional controls cover lightbox, download, link targets, overlay content, colors, gradients, and named shadow styles. Gallery inheritance and image-specific URL/product assignments remain local to blocks. Earlier lightbox, overlay, and shadow defaults are normalized when read.
+
 - Should MVP global settings apply to newly inserted blocks only, or should we prioritize live inheritance immediately?
 - Should the default mode for new blocks be "copy global values" or "inherit global values"?
 - Should Global Settings be a separate submenu or a tab inside the Dashboard page?
@@ -491,3 +513,26 @@ Start with a conservative first build:
 - Do not implement live inheritance until the admin UI and defaults are proven.
 
 This gives users immediate value, keeps the update predictable, and leaves a clean path to a stronger inheritance system later.
+
+
+## Block Defaults implementation rules
+
+- Review `edit.js` and any premium inspector controls before selecting defaults. Mirror their labels, grouped controls, visibility conditions, and coupled attribute updates rather than exposing every stored attribute.
+- Image and Video defaults apply only to newly inserted top-level blocks. Any block parent excludes them, including galleries, Groups, and Columns. Existing content and configured media remain protected.
+- Before & After, Background Video, and Loupe cards use section headings and separators. Video follows its editor's thumbnail, click, hover, and style sections, including combined overlay content/visibility, gradients, and named shadows.
+
+- Carousel and Filmstrip defaults now mirror their gallery settings, click, hover, and style sections. Carousel includes mobile orientation, responsive gaps, loop and navigation controls; Filmstrip includes thumbnail placement, pause-on-hover, full-screen, random order, and color mode. Per-image URLs/products and gallery content remain configured in the gallery. Shared click/hover fields reuse the reviewed control definitions; coupled flags are resolved before initialization. Populated galleries and transforms retain their settings.
+
+- Video Gallery defaults include responsive columns/gaps, thumbnail resolution/aspect ratio, click/hover controls, filtering alignment/colors, thumbnail styles, and conditional WooCommerce icon settings. Category names and product assignments remain gallery content. Page/Post protection and performance settings are excluded.
+
+- Modular defaults follow General Gallery Settings, Gallery Click Settings, Gallery Hover Settings, and Gallery Image Styles. Empty starter rows/stacks are eligible; recursive media detection protects populated galleries. Watermarks retain their existing global defaults; Page/Post controls remain excluded.
+
+- Grid defaults follow the editor’s resolution, responsive columns (6/4/2), randomization, click/hover, filtering, and image/filter styles. Filter style sections hide when disabled. Defaults skip existing/populated galleries and Grids inside Proofing Galleries.
+
+- Justified defaults follow its editor with preferred row heights (100–1500px), desktop-inheriting tablet/mobile overrides, responsive gaps (0–50px), resolution, randomization, and shared click/hover/filter/image styles. Existing galleries and Proofing children remain protected.
+
+- Justified uses visible sliders for all three device row heights, matching its gap controls. Older empty tablet/mobile defaults initialize from desktop; resets restore 250px for each device.
+
+- Masonry defaults follow its editor: resolution, responsive columns (6/4/2), responsive gaps (0–50px), random order, and shared click/hover/filter/image styles. Existing galleries and Proofing children retain their settings.
+
+- Proofing defaults are restricted to Business/Agency and mirror only Proofing-owned controls: gallery type, filter alignment, feedback flags/stars/hearts/comments, palette choice, submit notification/alignment, UI mode, and button styles. Client email/password and nested-gallery layout/lightbox settings are excluded. Each new advanced gallery captures its palette; populated or client-configured galleries retain their settings.

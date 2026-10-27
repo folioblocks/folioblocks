@@ -9,6 +9,7 @@
 	"description": "Organizes images into custom rows for precise control over layout and spacing.",
 	"example": {
 		"attributes": {
+        "globalDefaultsApplied": { "type": "boolean", "default": false },
 			"preview": true
 		}
 	},

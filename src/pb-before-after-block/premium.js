@@ -1,3 +1,4 @@
+import { getBeforeAfterLabelPosition } from '../pb-helpers/beforeAfterLabelPosition';
 /**
  * Before & After Block
  * Premium JS
@@ -63,7 +64,7 @@ addFilter(
 				{ showLabels && (
 					<SelectControl
 						label={ __( 'Label Position', 'folioblocks' ) }
-						value={ labelPosition }
+						value={ getBeforeAfterLabelPosition( sliderOrientation, labelPosition ) }
 						options={
 							sliderOrientation === 'vertical'
 								? [
@@ -137,7 +138,7 @@ addFilter(
 			<>
 				{ content }
 				<div
-					className={ `pb-label pb-before-label label-${ labelPosition }` }
+					className={ `pb-label pb-before-label label-${ getBeforeAfterLabelPosition( attributes.sliderOrientation, labelPosition ) }` }
 					style={ {
 						color: labelTextColor,
 						backgroundColor: labelBackgroundColor,
@@ -167,7 +168,7 @@ addFilter(
 			<>
 				{ content }
 				<div
-					className={ `pb-label pb-after-label label-${ labelPosition }` }
+					className={ `pb-label pb-after-label label-${ getBeforeAfterLabelPosition( attributes.sliderOrientation, labelPosition ) }` }
 					style={ {
 						color: labelTextColor,
 						backgroundColor: labelBackgroundColor,

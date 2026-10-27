@@ -273,8 +273,8 @@
 	z-index: 2;
 }
 
-/* Keep unavailable or blocked media from covering the fallback poster. */
-.pb-bgvid:not(.is-playing) .pb-bgvid__video,
-.pb-bgvid:not(.is-playing) .pb-bgvid__vimeo {
+/* Front-end playback manages this class; editor previews autoplay independently. */
+.pb-bgvid:not(.is-playing):not(.is-editor-preview) .pb-bgvid__video,
+.pb-bgvid:not(.is-playing):not(.is-editor-preview) .pb-bgvid__vimeo {
     visibility: hidden;
 }

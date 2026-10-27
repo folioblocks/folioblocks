@@ -1,3 +1,5 @@
+import useGlobalBlockDefaults from '../pb-helpers/useGlobalBlockDefaults';
+import blockMetadata from './block.json';
 /**
  * Filmstrip Gallery Block
  * Edit JS
@@ -183,6 +185,7 @@ const getImageSrcForResolution = ( block, resolution ) =>
 	'';
 
 export default function Edit( { attributes, setAttributes, clientId } ) {
+    useGlobalBlockDefaults(clientId, blockMetadata.name, attributes, setAttributes, blockMetadata.attributes);
 	const {
 		preview,
 		resolution = 'large',

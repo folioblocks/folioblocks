@@ -1,3 +1,5 @@
+import useGlobalBlockDefaults from "../pb-helpers/useGlobalBlockDefaults";
+import blockMetadata from "./block.json";
 /**
  * PB Loupe Block
  * Edit JS
@@ -29,7 +31,8 @@ import { getImageSizeOptions } from "../pb-helpers/imageSizeOptions";
 import { specialistProFeatureNotice } from "../pb-helpers/specialistProFeatureNotices";
 import "./editor.scss";
 
-export default function Edit({ attributes, setAttributes }) {
+export default function Edit({ attributes, setAttributes, clientId }) {
+    useGlobalBlockDefaults(clientId, blockMetadata.name, attributes, setAttributes, blockMetadata.attributes);
 	const {
 		id,
 		url,

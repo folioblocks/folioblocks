@@ -1,3 +1,5 @@
+import useGlobalBlockDefaults from '../pb-helpers/useGlobalBlockDefaults';
+import blockMetadata from './block.json';
 /**
  * Masonry Gallery Block
  * Edit JS
@@ -33,6 +35,7 @@ import {
 	resolveLegacyGalleryGaps,
 } from '../pb-helpers/galleryGap';
 import ResponsiveRangeControl from '../pb-helpers/ResponsiveRangeControl';
+import ResponsiveRangeInspector, { ResponsiveLayoutInspector } from '../pb-helpers/ResponsiveRangeInspector';
 import { useProofingGalleryContext } from '../pb-helpers/useProofingGalleryContext';
 import './editor.scss';
 
@@ -238,6 +241,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 	const { replaceInnerBlocks, updateBlockAttributes } =
 		useDispatch( 'core/block-editor' );
 	const { isInsideProofingGallery } = useProofingGalleryContext( clientId );
+    useGlobalBlockDefaults(clientId, blockMetadata.name, attributes, setAttributes, blockMetadata.attributes, isInsideProofingGallery);
 
 	const innerBlocks = useSelect(
 		( select ) => select( 'core/block-editor' ).getBlocks( clientId ),
@@ -603,6 +607,25 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 					</ToolbarButton>
 				</ToolbarGroup>
 			</BlockControls>
+			<ResponsiveLayoutInspector clientId={ clientId }>
+				<ResponsiveRangeInspector
+					clientId={ clientId }
+					label={__("Columns", "folioblocks")}
+					help={ __( 'Set the number of columns for this screen size.', 'folioblocks' ) }
+					desktopKey="columns"
+					tabletKey="tabletColumns"
+					mobileKey="mobileColumns"
+					attributes={attributes}
+					setAttributes={setAttributes}
+					min={1}
+					max={columns || 8}
+				/>
+				{applyFilters(
+					"folioBlocks.masonryGallery.responsiveGapControl.inspector",
+					null,
+					{ clientId, attributes, setAttributes },
+				)}
+			</ResponsiveLayoutInspector>
 			<InspectorControls>
 				<PanelBody
 					title={ __( 'Masonry Gallery Settings', 'folioblocks' ) }

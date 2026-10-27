@@ -13,6 +13,13 @@ if (! function_exists('fbks_can_manage_proofing_sessions')) {
 	}
 }
 
+function fbks_enqueue_proofing_session_report_assets() {
+    if ( ! fbks_can_manage_proofing_sessions() || 'folioblocks-proofing-sessions' !== (isset($_GET['page']) ? sanitize_key(wp_unslash($_GET['page'])) : '') ) { return; }
+    $path = FBKS_PLUGIN_DIR . 'includes/pro/js/proofing-sessions.js';
+    wp_enqueue_script('folioblocks-proofing-sessions', FBKS_PLUGIN_URL . 'includes/pro/js/proofing-sessions.js', [], filemtime($path), true);
+}
+add_action('admin_enqueue_scripts', 'fbks_enqueue_proofing_session_report_assets');
+
 if (! function_exists('fbks_get_proofing_session_status_label')) {
 	function fbks_get_proofing_session_status_label($status)
 	{
@@ -150,6 +157,7 @@ if (! function_exists('fbks_get_proofing_session_counts')) {
 		$counts = array(
 			'total'    => 0,
 			'hearted'  => 0,
+			'rated'    => 0,
 			'flagged'  => 0,
 			'comments' => 0,
 		);
@@ -164,6 +172,10 @@ if (! function_exists('fbks_get_proofing_session_counts')) {
 			}
 
 			$counts['total']++;
+
+			if (fbks_normalize_client_rating($image['clientRating'] ?? null) !== null) {
+				$counts['rated']++;
+			}
 
 			if (! empty($image['hearted'])) {
 				$counts['hearted']++;
@@ -278,6 +290,42 @@ if (! function_exists('fbks_get_proofing_attachment_filename')) {
 	}
 }
 
+/** Display client feedback without reading attachment metadata or the live global palette. */
+function fbks_render_proofing_client_rating($value) {
+    $rating = fbks_normalize_client_rating($value);
+    if (null === $rating) { echo '&mdash;'; return; }
+    $label = sprintf(_n('%d star out of 5', '%d stars out of 5', $rating, 'folioblocks'), $rating);
+    ?>
+    <span class="fbks-proofing-client-rating" role="img" aria-label="<?php echo esc_attr($label); ?>" title="<?php echo esc_attr($label); ?>">
+        <span class="fbks-proofing-client-rating__stars" aria-hidden="true">
+            <?php for ($star = 1; $star <= 5; $star++) : ?>
+                <svg class="<?php echo $star <= $rating ? 'is-filled' : ''; ?>" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+            <?php endfor; ?>
+        </span>
+        <span class="fbks-proofing-client-rating__value" aria-hidden="true"><?php echo esc_html($rating . ' / 5'); ?></span>
+    </span>
+    <?php
+}
+
+function fbks_render_proofing_client_flag($flag, $palette = []) {
+    if (empty($flag)) { echo '&mdash;'; return; }
+    $simple = fbks_get_proofing_flag_palette();
+    $items = is_array($palette['items'] ?? null) ? $palette['items'] : [];
+    $selected = null;
+    foreach (array_merge($items, $simple['items']) as $item) {
+        if (is_array($item) && ($item['value'] ?? '') === $flag) { $selected = $item; break; }
+    }
+    $color = sanitize_hex_color($selected['color'] ?? '');
+    $label = $selected['label'] ?? (preg_match('/^class-([1-8])$/', $flag, $match)
+        ? sprintf(__('Color class %d', 'folioblocks'), (int) $match[1]) : __('Unknown flag', 'folioblocks'));
+    ?>
+    <span class="fbks-proofing-client-flag">
+        <?php if ($color) : ?><span class="fbks-proofing-client-flag__swatch" style="background-color: <?php echo esc_attr($color); ?>" aria-hidden="true"></span><?php endif; ?>
+        <span><?php echo esc_html($label); ?></span>
+    </span>
+    <?php
+}
+
 if (! function_exists('fbks_get_proofing_session_admin_data')) {
 	function fbks_get_proofing_session_admin_data($post_id)
 	{
@@ -292,13 +340,29 @@ if (! function_exists('fbks_get_proofing_session_admin_data')) {
 			? fbks_normalize_proofing_images($images)
 			: array();
 		$images = fbks_backfill_proofing_image_titles($images);
+        $palette = get_post_meta($post_id, '_fbks_proofing_flag_palette', true);
+        $controls = get_post_meta($post_id, '_fbks_proofing_controls', true);
+        $controls = is_array($controls) ? $controls : array_fill_keys(['heart', 'rating', 'flag', 'comment'], true);
+        $page_id = absint(get_post_meta($post_id, '_fbks_proofing_page_id', true));
+        $gallery_key = (string) get_post_meta($post_id, '_fbks_proofing_gallery_key', true);
+        // Use the matching gallery's current options, with saved options for historical sessions.
+        foreach (fbks_get_current_proofing_galleries_for_page($page_id) as $gallery) {
+            if ($gallery_key !== $gallery['galleryKey']) { continue; }
+            $controls = $gallery['controls'];
+            if (!is_array($palette) || !isset($palette['items'])) { $palette = $gallery['flagPalette']; }
+            break;
+        }
+        $palette = is_array($palette) ? $palette : [];
+
 
 		return array(
 			'id'          => $post_id,
 			'galleryKey'  => sanitize_text_field((string) get_post_meta($post_id, '_fbks_proofing_gallery_key', true)),
 			'status'      => sanitize_key((string) get_post_meta($post_id, '_fbks_proofing_status', true)),
 			'presence'    => sanitize_key((string) get_post_meta($post_id, '_fbks_proofing_presence', true)),
-			'clientEmail' => sanitize_email((string) get_post_meta($post_id, '_fbks_proofing_client_email', true)),
+			'flagPalette' => $palette,
+            'controls' => $controls,
+            'clientEmail' => sanitize_email((string) get_post_meta($post_id, '_fbks_proofing_client_email', true)),
 			'pageId'      => absint(get_post_meta($post_id, '_fbks_proofing_page_id', true)),
 			'galleryId'   => sanitize_text_field((string) get_post_meta($post_id, '_fbks_proofing_gallery_id', true)),
 			'updatedAt'   => sanitize_text_field((string) get_post_meta($post_id, '_fbks_proofing_updated_at', true)),
@@ -391,14 +455,15 @@ if (! function_exists('fbks_get_proofing_sessions_for_admin')) {
 }
 
 if (! function_exists('fbks_render_proofing_sessions_summary')) {
-	function fbks_render_proofing_sessions_summary($counts)
+	function fbks_render_proofing_sessions_summary($counts, $controls = null)
 	{
 		?>
 		<ul class="fbks-proofing-summary">
 			<li><strong><?php echo esc_html(absint($counts['total'])); ?></strong><span><?php esc_html_e('Images', 'folioblocks'); ?></span></li>
-			<li><strong><?php echo esc_html(absint($counts['hearted'])); ?></strong><span><?php esc_html_e('Hearted', 'folioblocks'); ?></span></li>
-			<li><strong><?php echo esc_html(absint($counts['flagged'])); ?></strong><span><?php esc_html_e('Flagged', 'folioblocks'); ?></span></li>
-			<li><strong><?php echo esc_html(absint($counts['comments'])); ?></strong><span><?php esc_html_e('Comments', 'folioblocks'); ?></span></li>
+			<?php if (null === $controls || !empty($controls['heart'])) : ?><li><strong><?php echo esc_html(absint($counts['hearted'])); ?></strong><span><?php esc_html_e('Hearted', 'folioblocks'); ?></span></li><?php endif; ?>
+			<?php if (null === $controls || !empty($controls['rating'])) : ?><li><strong><?php echo esc_html(absint($counts['rated'])); ?></strong><span><?php esc_html_e('Rated', 'folioblocks'); ?></span></li><?php endif; ?>
+			<?php if (null === $controls || !empty($controls['flag'])) : ?><li><strong><?php echo esc_html(absint($counts['flagged'])); ?></strong><span><?php esc_html_e('Flagged', 'folioblocks'); ?></span></li><?php endif; ?>
+			<?php if (null === $controls || !empty($controls['comment'])) : ?><li><strong><?php echo esc_html(absint($counts['comments'])); ?></strong><span><?php esc_html_e('Comments', 'folioblocks'); ?></span></li><?php endif; ?>
 		</ul>
 		<?php
 	}
@@ -478,7 +543,7 @@ if (! function_exists('fbks_render_proofing_sessions_list')) {
 								<td data-label="<?php esc_attr_e('Page', 'folioblocks'); ?>">
 									<?php fbks_render_proofing_session_page_reference($session); ?>
 								</td>
-								<td data-label="<?php esc_attr_e('Selections', 'folioblocks'); ?>"><?php fbks_render_proofing_sessions_summary($session['counts']); ?></td>
+								<td data-label="<?php esc_attr_e('Selections', 'folioblocks'); ?>"><?php fbks_render_proofing_sessions_summary($session['counts'], $session['controls'] ?? null); ?></td>
 								<td data-label="<?php esc_attr_e('Updated', 'folioblocks'); ?>"><?php echo esc_html($session['updatedAt'] ? mysql2date(get_option('date_format') . ' ' . get_option('time_format'), $session['updatedAt']) : __('Unknown', 'folioblocks')); ?></td>
 								<td class="fbks-proofing-session-actions" data-label="<?php esc_attr_e('Actions', 'folioblocks'); ?>">
 									<span class="fbks-proofing-session-action-buttons">
@@ -499,6 +564,7 @@ if (! function_exists('fbks_render_proofing_sessions_list')) {
 if (! function_exists('fbks_render_proofing_session_detail')) {
 	function fbks_render_proofing_session_detail($session)
 	{
+        $controls = $session['controls'] ?? array_fill_keys(['heart', 'rating', 'flag', 'comment'], true);
 		$back_url = admin_url('admin.php?page=folioblocks-proofing-sessions');
 		?>
 		<?php fbks_render_proofing_session_detail_actions($session['id'], $back_url); ?>
@@ -521,7 +587,7 @@ if (! function_exists('fbks_render_proofing_session_detail')) {
 						?>
 					</p>
 				</div>
-				<?php fbks_render_proofing_sessions_summary($session['counts']); ?>
+				<?php fbks_render_proofing_sessions_summary($session['counts'], $session['controls'] ?? null); ?>
 			</div>
 		</div>
 
@@ -534,10 +600,19 @@ if (! function_exists('fbks_render_proofing_session_detail')) {
 					<thead>
 						<tr>
 							<th><?php esc_html_e('Image', 'folioblocks'); ?></th>
-							<th><?php esc_html_e('Image ID', 'folioblocks'); ?></th>
-							<th><?php esc_html_e('Heart', 'folioblocks'); ?></th>
-							<th><?php esc_html_e('Flag', 'folioblocks'); ?></th>
-							<th><?php esc_html_e('Comment', 'folioblocks'); ?></th>
+
+                            <?php if (!empty($controls['heart'])) : ?>
+							<th scope="col" aria-sort="none"><button type="button" class="fbks-proofing-sort" data-proofing-sort="heart"><?php esc_html_e('Hearts', 'folioblocks'); ?><span class="fbks-proofing-sort__indicator" aria-hidden="true">↕</span></button></th>
+                            <?php endif; ?>
+                            <?php if (!empty($controls['rating'])) : ?>
+							<th scope="col" aria-sort="none"><button type="button" class="fbks-proofing-sort" data-proofing-sort="rating"><?php esc_html_e('Star Rating', 'folioblocks'); ?><span class="fbks-proofing-sort__indicator" aria-hidden="true">↕</span></button></th>
+                            <?php endif; ?>
+                            <?php if (!empty($controls['flag'])) : ?>
+							<th scope="col" aria-sort="none"><button type="button" class="fbks-proofing-sort" data-proofing-sort="flag"><?php esc_html_e('Colored Flags', 'folioblocks'); ?><span class="fbks-proofing-sort__indicator" aria-hidden="true">↕</span></button></th>
+                            <?php endif; ?>
+                            <?php if (!empty($controls['comment'])) : ?>
+							<th scope="col" aria-sort="none"><button type="button" class="fbks-proofing-sort" data-proofing-sort="comment"><?php esc_html_e('Comments', 'folioblocks'); ?><span class="fbks-proofing-sort__indicator" aria-hidden="true">↕</span></button></th>
+                            <?php endif; ?>
 						</tr>
 					</thead>
 					<tbody>
@@ -548,7 +623,10 @@ if (! function_exists('fbks_render_proofing_session_detail')) {
 							$filename = fbks_get_proofing_attachment_filename($attachment_id);
 							$media_url = $attachment_id ? get_edit_post_link($attachment_id) : '';
 							?>
-							<tr>
+                            <tr data-sort-heart="<?php echo empty($image['hearted']) ? '0' : '1'; ?>"
+                                data-sort-rating="<?php echo esc_attr(fbks_normalize_client_rating($image['clientRating'] ?? null) ?? 0); ?>"
+                                data-sort-flag="<?php echo empty($image['flag']) ? '0' : '1'; ?>"
+                                data-sort-comment="<?php echo '' === trim($image['comment'] ?? '') ? '0' : '1'; ?>">
 								<td class="fbks-proofing-image-cell" data-label="<?php esc_attr_e('Image', 'folioblocks'); ?>">
 									<span class="fbks-proofing-image-preview">
 										<?php if ($image_url) : ?>
@@ -556,7 +634,7 @@ if (! function_exists('fbks_render_proofing_session_detail')) {
 										<?php endif; ?>
 									</span>
 									<div>
-										<strong><?php echo esc_html($image['title'] ?: __('Untitled image', 'folioblocks')); ?></strong>
+										<span class="fbks-proofing-image-heading"><strong><?php echo esc_html($image['title'] ?: __('Untitled image', 'folioblocks')); ?></strong> <span class="fbks-proofing-session-meta">(<?php echo esc_html($image['imageId']); ?>)</span></span>
 										<?php if ($filename) : ?>
 											<span class="fbks-proofing-image-filename"><?php echo esc_html($filename); ?></span>
 										<?php endif; ?>
@@ -565,21 +643,21 @@ if (! function_exists('fbks_render_proofing_session_detail')) {
 										<?php endif; ?>
 									</div>
 								</td>
-								<td data-label="<?php esc_attr_e('Image ID', 'folioblocks'); ?>">
-									<code><?php echo esc_html($image['imageId']); ?></code>
-									<?php if ($attachment_id) : ?>
-										<br /><span class="fbks-proofing-session-meta"><?php echo esc_html(sprintf(__('Attachment #%d', 'folioblocks'), $attachment_id)); ?></span>
-									<?php endif; ?>
+
+								<?php if (!empty($controls['heart'])) : ?>
+                                <td data-label="<?php esc_attr_e('Hearts', 'folioblocks'); ?>"><?php echo ! empty($image['hearted']) ? esc_html__('Yes', 'folioblocks') : '&mdash;'; ?></td>
+                                <?php endif; ?>
+								<?php if (!empty($controls['rating'])) : ?>
+                                <td data-label="<?php esc_attr_e('Star Rating', 'folioblocks'); ?>"><?php fbks_render_proofing_client_rating($image['clientRating'] ?? null); ?></td>
+                                <?php endif; ?>
+								<?php if (!empty($controls['flag'])) : ?>
+                                <td data-label="<?php esc_attr_e('Colored Flags', 'folioblocks'); ?>">
+                                    <?php fbks_render_proofing_client_flag($image['flag'] ?? '', $session['flagPalette'] ?? []); ?>
 								</td>
-								<td data-label="<?php esc_attr_e('Heart', 'folioblocks'); ?>"><?php echo ! empty($image['hearted']) ? esc_html__('Yes', 'folioblocks') : '&mdash;'; ?></td>
-								<td data-label="<?php esc_attr_e('Flag', 'folioblocks'); ?>">
-									<?php if (! empty($image['flag'])) : ?>
-										<span class="fbks-proofing-flag-chip is-<?php echo esc_attr($image['flag']); ?>"><?php echo esc_html(ucfirst($image['flag'])); ?></span>
-									<?php else : ?>
-										&mdash;
-									<?php endif; ?>
-								</td>
-								<td data-label="<?php esc_attr_e('Comment', 'folioblocks'); ?>"><?php echo ! empty($image['comment']) ? nl2br(esc_html($image['comment'])) : '&mdash;'; ?></td>
+                                <?php endif; ?>
+								<?php if (!empty($controls['comment'])) : ?>
+                                <td data-label="<?php esc_attr_e('Comments', 'folioblocks'); ?>"><?php echo ! empty($image['comment']) ? nl2br(esc_html($image['comment'])) : '&mdash;'; ?></td>
+                                <?php endif; ?>
 							</tr>
 						<?php endforeach; ?>
 					</tbody>
@@ -604,7 +682,7 @@ if (! function_exists('fbks_render_proofing_sessions_page')) {
 
 		if (! defined('FBKS_PROOFING_SESSION_POST_TYPE')) {
 			?>
-			<div class="pb-wrap">
+			<div class="pb-wrap" data-plugin-version="<?php echo esc_attr(sprintf(__('Version %s', 'folioblocks'), FBKS_VERSION)); ?>">
 				<?php fbks_render_proofing_sessions_page_header(__('Proofing session storage is not available.', 'folioblocks')); ?>
 			</div>
 			<?php
@@ -614,7 +692,7 @@ if (! function_exists('fbks_render_proofing_sessions_page')) {
 		$session_id = isset($_GET['session_id']) ? absint($_GET['session_id']) : 0;
 		$session = $session_id ? fbks_get_proofing_session_admin_data($session_id) : null;
 		?>
-		<div class="pb-wrap pb-proofing-sessions-wrap">
+		<div class="pb-wrap pb-proofing-sessions-wrap" data-plugin-version="<?php echo esc_attr(sprintf(__('Version %s', 'folioblocks'), FBKS_VERSION)); ?>">
 			<?php fbks_render_proofing_sessions_page_header(__('Review saved and submitted client proofing selections.', 'folioblocks')); ?>
 			<?php
 			if (isset($_GET['proofing_deleted'])) {

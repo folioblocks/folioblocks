@@ -9,6 +9,7 @@
 	"description": "A container block capable of displaying a background video (Self-Hosted or Vimeo).",
 	"example": {
 		"attributes": {
+        "globalDefaultsApplied": { "type": "boolean", "default": false },
 			"preview": true
 		}
 	},

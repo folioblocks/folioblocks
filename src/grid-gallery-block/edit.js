@@ -1,3 +1,5 @@
+import useGlobalBlockDefaults from '../pb-helpers/useGlobalBlockDefaults';
+import blockMetadata from './block.json';
 /**
  * Grid Gallery Block
  * Edit JS
@@ -24,6 +26,7 @@ import { applyFilters } from '@wordpress/hooks';
 import { plus } from '@wordpress/icons';
 import { decodeEntities } from '@wordpress/html-entities';
 import ResponsiveRangeControl from '../pb-helpers/ResponsiveRangeControl';
+import ResponsiveRangeInspector, { ResponsiveLayoutInspector } from '../pb-helpers/ResponsiveRangeInspector';
 import { IconGridGallery, IconPBSpinner } from '../pb-helpers/icons';
 import { fbksNormalizeActiveFilterValue } from '../pb-helpers/filterConstants';
 import { getExifAttributesFromMedia } from '../pb-helpers/exifMetadata';
@@ -340,6 +343,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	const wrapperRef = useRef( null );
 	const galleryRef = useRef( null );
 	const { isInsideProofingGallery } = useProofingGalleryContext( clientId );
+    useGlobalBlockDefaults(clientId, blockMetadata.name, attributes, setAttributes, blockMetadata.attributes, isInsideProofingGallery);
 	const { replaceInnerBlocks, updateBlockAttributes } =
 		useDispatch( 'core/block-editor' );
 	const [ isLoading, setIsLoading ] = useState( false );
@@ -677,6 +681,20 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			</BlockControls>
 
 			{ /* Inspector Controls */ }
+			<ResponsiveLayoutInspector clientId={ clientId }>
+				<ResponsiveRangeInspector
+					clientId={ clientId }
+					label={ __( 'Columns', 'folioblocks' ) }
+					help={ __( 'Set the number of columns for this screen size.', 'folioblocks' ) }
+					desktopKey="columns"
+					tabletKey="tabletColumns"
+					mobileKey="mobileColumns"
+					min={ 1 }
+					max={ columns || 8 }
+					attributes={ attributes }
+					setAttributes={ setAttributes }
+				/>
+			</ResponsiveLayoutInspector>
 			<InspectorControls>
 				{ /* Gallery Settings Panel */ }
 				<PanelBody

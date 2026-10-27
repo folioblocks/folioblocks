@@ -168,7 +168,7 @@ if (! $fbks_thumbnail) {
 } else {
 	$fbks_thumbnail_html = wp_get_attachment_image(
 		$attributes['thumbnailId'] ?? 0,
-		'full',
+		$fbks_context['folioBlocks/thumbnailSize'] ?? ($attributes['thumbnailSize'] ?? 'large'),
 		false,
 		[
 			'alt'   => $fbks_title,

@@ -88,11 +88,11 @@
 
 	&:hover,
 	&:focus-visible {
-		background: #f8fafc;
+		background: transparent;
 		color: #111827;
 	}
 
-	&.is-active {
+	&.is-all.is-active {
 		border-color: #111827;
 		background: #111827;
 		color: #fff;
@@ -100,38 +100,21 @@
 	}
 
 	&.is-heart.is-active svg,
-	&.is-flag.is-active svg {
+	&.is-flag.is-active svg,
+	&.is-comment.is-active svg {
 		fill: currentColor;
 	}
 
 	&.is-red {
 		color: #dc2626;
-
-		&.is-active {
-			border-color: #dc2626;
-			background: #dc2626;
-			color: #fff;
-		}
 	}
 
 	&.is-orange {
 		color: #f97316;
-
-		&.is-active {
-			border-color: #f97316;
-			background: #f97316;
-			color: #fff;
-		}
 	}
 
 	&.is-green {
 		color: #16a34a;
-
-		&.is-active {
-			border-color: #16a34a;
-			background: #16a34a;
-			color: #fff;
-		}
 	}
 }
 
@@ -147,11 +130,11 @@
 
 		&:hover,
 		&:focus-visible {
-			background: rgba(255, 255, 255, 0.08);
+			background: transparent;
 			color: #fff;
 		}
 
-		&.is-active {
+		&.is-all.is-active {
 			border-color: rgba(255, 255, 255, 0.28);
 			background: #f9fafb;
 			color: #111827;
@@ -160,32 +143,14 @@
 
 		&.is-red {
 			color: #f87171;
-
-			&.is-active {
-				border-color: #f87171;
-				background: #dc2626;
-				color: #fff;
-			}
 		}
 
 		&.is-orange {
 			color: #fb923c;
-
-			&.is-active {
-				border-color: #fb923c;
-				background: #f97316;
-				color: #111;
-			}
 		}
 
 		&.is-green {
 			color: #4ade80;
-
-			&.is-active {
-				border-color: #4ade80;
-				background: #16a34a;
-				color: #fff;
-			}
 		}
 	}
 }
@@ -640,4 +605,156 @@
 	background: #181818;
 	color: #f9fafb;
 	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.34);
+}
+
+/* Client ratings share the thumbnail corner controls and popover positioning. */
+.fbks-proofing-thumbnail-control--rating.is-active {
+    color: #a16207;
+    border-color: #a16207;
+    background: #fff;
+    svg { fill: currentColor; }
+}
+.fbks-proofing-rating-value {
+    position: absolute;
+    right: -3px;
+    bottom: -3px;
+    font-size: 11px;
+    line-height: 16px;
+    min-width: 16px;
+    border-radius: 8px;
+    color: #fff;
+    background: #854d0e;
+    &:empty { display: none; }
+}
+.fbks-proofing-rating-popover {
+    position: absolute;
+    z-index: 8;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 8px;
+    width: max-content;
+    max-width: calc(100% - 16px);
+    padding: 8px;
+    background: #fff;
+    color: #111;
+    border: 1px solid rgba(15, 23, 42, .2);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .18);
+    &[hidden] { display: none; }
+}
+.fbks-proofing-rating-done {
+    flex: 0 0 auto;
+    cursor: pointer;
+    border: 1px solid #9ca3af;
+    border-radius: 4px;
+    background: inherit;
+    color: inherit;
+    padding: 2px 6px;
+    box-sizing: border-box;
+    height: 25px;
+    display: inline-flex;
+    align-items: center;
+    min-height: 25px;
+    font-size: 12px;
+    line-height: 1.4;
+    &.is-selected { color: #713f12; background: #fef3c7; border-color: #a16207; }
+    &:focus-visible { outline: 2px solid #3858e9; outline-offset: 2px; }
+}
+.is-proofing-dark .fbks-proofing-rating-popover,
+.fbks-proofing-popover--dark.fbks-proofing-rating-popover {
+    background: #181818;
+    color: #f9fafb;
+    border-color: #6b7280;
+}
+
+.fbks-proofing-rating-slider {
+    display: flex; direction: ltr; flex: 0 1 140px; width: 140px; min-width: 0; touch-action: none;
+    user-select: none; cursor: pointer; border-radius: 4px;
+    &:focus { outline: none; box-shadow: none; }
+    &:focus-visible { outline: 2px solid #3858e9; outline-offset: 2px; }
+}
+.fbks-proofing-rating-star {
+    flex: 1; min-width: 0; padding: 2px; color: #a16207; pointer-events: none;
+    svg { display: block; width: 100%; max-width: 26px; height: auto; aspect-ratio: 1; fill: none; stroke: currentColor; stroke-width: 1.5; }
+    &.is-filled svg { fill: #eab308; }
+}
+.fbks-proofing-filter-button.has-group-divider,
+.fbks-proofing-rating-filter.has-group-divider { position: relative; margin-left: 12px;
+    &::before { content: ''; position: absolute; left: -8px; top: 25%; height: 50%; border-left: 1px solid rgba(128,128,128,.35); }
+}
+.fbks-proofing-filter-rating { font-size: 12px; margin-right: 2px; }
+
+.fbks-proofing-rating-filter {
+    display: flex; align-items: center;
+    .fbks-proofing-rating-slider { flex: none; width: 110px; }
+    .fbks-proofing-rating-star { padding: 2px; }
+}
+
+/* Keep flag targets as compact as the stars without extra space between colors. */
+.fbks-proofing-filter-button.is-flag {
+    width: 22px;
+    & + .fbks-proofing-filter-button.is-flag { margin-left: -6px; }
+}
+
+.fbks-proofing-filter-button.is-heart.is-active,
+.fbks-proofing-gallery.is-proofing-dark .fbks-proofing-filter-button.is-heart.is-active {
+    color: #e11d48;
+}
+
+.fbks-proofing-thumbnail-control--flag[data-has-flag="true"] {
+    color: var(--fbks-proofing-flag-color);
+    border-color: var(--fbks-proofing-flag-color);
+    background: rgba(255, 255, 255, .92);
+    svg { fill: currentColor; }
+}
+.fbks-proofing-flag-popover {
+    box-sizing: border-box;
+    flex-wrap: wrap;
+    width: max-content;
+    max-width: calc(100% - 16px);
+    &.is-editor-picker {
+        position: static;
+        width: max-content;
+        max-width: min(300px, calc(100vw - 32px));
+    }
+}
+
+/* Keep pale and white palette flags visible against either proofing theme. */
+.fbks-proofing-filter-button.is-flag svg,
+.fbks-proofing-thumbnail-control--flag[data-has-flag="true"] svg {
+    filter: drop-shadow(0 0 .6px rgba(71, 84, 103, .7));
+}
+.fbks-proofing-flag-swatch { flex: 0 0 24px; }
+
+.fbks-proofing-filter-button.is-flag svg {
+    stroke: var(--fbks-proofing-flag-outline, currentColor);
+    filter: none;
+}
+
+.fbks-proofing-filter-button.is-flag {
+    position: relative;
+
+    svg { fill: currentColor; }
+
+    &.is-active::after {
+        content: '';
+        position: absolute;
+        bottom: 2px;
+        left: 4px;
+        right: 4px;
+        height: 2px;
+        border-radius: 1px;
+        background: var(--fbks-proofing-flag-outline, currentColor);
+    }
+}
+
+.fbks-proofing-rating-popover .fbks-proofing-rating-slider {
+    height: 25px;
+    align-items: center;
+    .fbks-proofing-rating-star {
+        box-sizing: border-box;
+        height: 25px;
+        svg { max-width: 21px; max-height: 21px; }
+    }
 }

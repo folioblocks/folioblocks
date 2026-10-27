@@ -352,3 +352,26 @@
 		padding: 24px;
 	}
 }
+
+.fbks-proofing-inspector__flag-palette {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 16px 0 24px;
+    margin-inline-start: 40px;
+}
+
+.fbks-proofing-inspector__flag-palette .components-radio-control__group-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    margin-inline: 0;
+    padding-inline: 0;
+    gap: 16px;
+}
+
+.fbks-proofing-inspector__flag-palette .components-radio-control {
+    margin-bottom: 0;
+}

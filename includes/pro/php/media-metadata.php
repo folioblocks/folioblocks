@@ -12,6 +12,12 @@ if (! defined('ABSPATH')) {
 
 require_once __DIR__ . '/media-metadata-parser.php';
 
+/** Keep all Media Metadata entry points on the same plan entitlement. */
+function fbks_can_use_media_metadata() {
+    return function_exists('fbks_fs') && fbks_fs()->can_use_premium_code__premium_only() &&
+        (fbks_fs()->is_plan('business') || fbks_fs()->is_plan('agency'));
+}
+
 if (! defined('FBKS_MEDIA_METADATA_META_KEY')) {
 	define('FBKS_MEDIA_METADATA_META_KEY', '_fbks_media_metadata');
 }
@@ -288,6 +294,7 @@ if (! function_exists('fbks_current_user_has_media_metadata_role')) {
 if (! function_exists('fbks_current_user_can_view_media_metadata')) {
 	function fbks_current_user_can_view_media_metadata($attachment_id = 0)
 	{
+        if (!fbks_can_use_media_metadata()) { return false; }
 		$settings = fbks_get_media_metadata_settings();
 		if (! $settings['showInMediaLibrary'] || ! fbks_current_user_has_media_metadata_role($settings['viewRoles'])) {
 			return false;
@@ -300,6 +307,7 @@ if (! function_exists('fbks_current_user_can_view_media_metadata')) {
 if (! function_exists('fbks_current_user_can_edit_media_metadata')) {
 	function fbks_current_user_can_edit_media_metadata($attachment_id = 0)
 	{
+        if (!fbks_can_use_media_metadata()) { return false; }
 		$settings = fbks_get_media_metadata_settings();
 		if (! $settings['showInMediaLibrary'] || ! $settings['allowEditing'] || ! fbks_current_user_has_media_metadata_role($settings['editRoles'])) {
 			return false;
@@ -520,6 +528,7 @@ if (! function_exists('fbks_get_attachment_media_metadata_file')) {
 if (! function_exists('fbks_import_attachment_media_metadata')) {
 	function fbks_import_attachment_media_metadata($attachment_id, $force = false, $reset_library = false, $attachment_metadata = array())
 	{
+        if (!fbks_can_use_media_metadata()) { return new WP_Error('fbks_media_metadata_unavailable', __('Media Metadata requires a Business or Agency plan.', 'folioblocks')); }
 		$attachment_id = absint($attachment_id);
 		if (! $attachment_id || 'attachment' !== get_post_type($attachment_id)) {
 			return new WP_Error('fbks_invalid_attachment', __('A valid attachment is required.', 'folioblocks'));
@@ -568,6 +577,7 @@ if (! function_exists('fbks_import_attachment_media_metadata')) {
 if (! function_exists('fbks_update_attachment_library_media_metadata')) {
 	function fbks_update_attachment_library_media_metadata($attachment_id, $changes)
 	{
+        if (!fbks_can_use_media_metadata()) { return new WP_Error('fbks_media_metadata_unavailable', __('Media Metadata requires a Business or Agency plan.', 'folioblocks')); }
 		$attachment_id = absint($attachment_id);
 		$record = fbks_get_attachment_media_metadata($attachment_id, true);
 
@@ -593,6 +603,7 @@ if (! function_exists('fbks_update_attachment_library_media_metadata')) {
 if (! function_exists('fbks_reset_attachment_library_media_metadata')) {
 	function fbks_reset_attachment_library_media_metadata($attachment_id, $section = 'all')
 	{
+        if (!fbks_can_use_media_metadata()) { return new WP_Error('fbks_media_metadata_unavailable', __('Media Metadata requires a Business or Agency plan.', 'folioblocks')); }
 		$attachment_id = absint($attachment_id);
 		$record = fbks_get_attachment_media_metadata($attachment_id, true);
 
@@ -623,6 +634,7 @@ if (! function_exists('fbks_reset_attachment_library_media_metadata')) {
 if (! function_exists('fbks_import_media_metadata_during_generation')) {
 	function fbks_import_media_metadata_during_generation($metadata, $attachment_id)
 	{
+        if (!fbks_can_use_media_metadata()) { return $metadata; }
 		$settings = fbks_get_media_metadata_settings();
 		$has_enabled_import = $settings['importExif'] || $settings['importRatings'] || $settings['importColorClasses'];
 
@@ -638,6 +650,7 @@ add_filter('wp_generate_attachment_metadata', 'fbks_import_media_metadata_during
 if (! function_exists('fbks_register_attachment_media_metadata_rest_field')) {
 	function fbks_register_attachment_media_metadata_rest_field()
 	{
+        if (!fbks_can_use_media_metadata()) { return ; }
 		register_rest_field(
 			'attachment',
 			'folioblocks_media_metadata',

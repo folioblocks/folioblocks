@@ -1,3 +1,5 @@
+import useGlobalBlockDefaults from '../pb-helpers/useGlobalBlockDefaults';
+import blockMetadata from './block.json';
 /**
  * Video Gallery Block
  * Edit JS
@@ -29,6 +31,7 @@ import { useState, useEffect } from "@wordpress/element";
 import { applyFilters } from "@wordpress/hooks";
 import { plus } from "@wordpress/icons";
 import ResponsiveRangeControl from "../pb-helpers/ResponsiveRangeControl";
+import ResponsiveRangeInspector, { ResponsiveLayoutInspector } from '../pb-helpers/ResponsiveRangeInspector';
 import { IconVideoGallery } from "../pb-helpers/icons";
 import {
 	FBKS_ALL_FILTER_TOKEN,
@@ -81,6 +84,7 @@ const getOverlayContentAttributes = (content, visibility) => ({
 });
 
 export default function Edit({ attributes, setAttributes, clientId }) {
+    useGlobalBlockDefaults(clientId, blockMetadata.name, attributes, setAttributes, blockMetadata.attributes);
 	/**
 	 * Attribute Destructuring
 	 */
@@ -449,6 +453,32 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 				</Modal>
 			)}
 
+			<ResponsiveLayoutInspector clientId={ clientId }>
+				<ResponsiveRangeInspector
+					clientId={ clientId }
+					label={__("Columns", "folioblocks")}
+					help={ __( 'Set the number of columns for this screen size.', 'folioblocks' ) }
+					desktopKey="columns"
+					tabletKey="tabletColumns"
+					mobileKey="mobileColumns"
+					attributes={attributes}
+					setAttributes={setAttributes}
+					min={1}
+					max={columns || 8}
+				/>
+				<ResponsiveRangeInspector
+					clientId={ clientId }
+					label={__("Gap Between Items", "folioblocks")}
+					desktopKey="gap"
+					tabletKey="tabletGap"
+					mobileKey="mobileGap"
+					attributes={responsiveGaps}
+					setAttributes={setAttributes}
+					min={0}
+					max={50}
+					help={__("Set the space between video thumbnails.", "folioblocks")}
+				/>
+			</ResponsiveLayoutInspector>
 			<InspectorControls>
 				<PanelBody
 					title={__("Video Gallery Settings", "folioblocks")}

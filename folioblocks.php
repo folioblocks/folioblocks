@@ -151,10 +151,20 @@ if (function_exists('fbks_fs')) {
                     ),
                 ];
 
-                if (fbks_fs()->can_use_premium_code__premium_only()) {
+                if (fbks_fs()->can_use_premium_code__premium_only() && function_exists('fbks_get_block_defaults')) {
+                    $shared_data['blockDefaults'] = fbks_get_block_defaults();
+                }
+
+                if (function_exists('fbks_can_use_media_metadata') && fbks_can_use_media_metadata()) {
                     $shared_data['mediaMetadata'] = function_exists('fbks_get_media_metadata_settings')
                         ? fbks_get_media_metadata_settings()
                         : array();
+                    $shared_data['proofingFlagPalettes'] = function_exists('fbks_get_media_metadata_palette_presets')
+                        ? fbks_get_media_metadata_palette_presets()
+                        : array();
+                    if (isset($shared_data['proofingFlagPalettes']['custom']) && 'custom' === ($shared_data['mediaMetadata']['palettePreset'] ?? '')) {
+                        $shared_data['proofingFlagPalettes']['custom']['items'] = $shared_data['mediaMetadata']['palette'];
+                    }
                 }
 
                 return $shared_data;
@@ -494,16 +504,6 @@ if (function_exists('fbks_fs')) {
             'folioblocks-settings',         // SAME slug as main page
             'fbks_render_settings_page'
         );
-        if (fbks_fs()->can_use_premium_code__premium_only()) {
-            add_submenu_page(
-                'folioblocks-settings',
-                __('Global Settings', 'folioblocks'),
-                __('Global Settings', 'folioblocks'),
-                'manage_options',
-                'folioblocks-global-settings',
-                'fbks_render_global_settings_page'
-            );
-        }
         if (fbks_fs()->can_use_premium_code__premium_only() && (fbks_fs()->is_plan('business') || fbks_fs()->is_plan('agency'))) {
             add_submenu_page(
                 'folioblocks-settings',
@@ -512,6 +512,16 @@ if (function_exists('fbks_fs')) {
                 'manage_options',
                 'folioblocks-proofing-sessions',
                 'fbks_render_proofing_sessions_page'
+            );
+        }
+        if (fbks_fs()->can_use_premium_code__premium_only()) {
+            add_submenu_page(
+                'folioblocks-settings',
+                __('Global Settings', 'folioblocks'),
+                __('Global Settings', 'folioblocks'),
+                'manage_options',
+                'folioblocks-global-settings',
+                'fbks_render_global_settings_page'
             );
         }
         if (! fbks_fs()->can_use_premium_code__premium_only()) {
@@ -588,17 +598,19 @@ if (function_exists('fbks_fs')) {
 				: $media_metadata_scan_state;
 			$media_metadata_scan_state['lastScanned'] = $media_metadata_last_scanned;
 
+            wp_enqueue_style('wp-components');
             $global_settings_script_path = plugin_dir_path(__FILE__) . 'includes/pro/js/global-settings.js';
             wp_enqueue_script(
                 'folioblocks-global-settings-js',
                 plugin_dir_url(__FILE__) . 'includes/pro/js/global-settings.js',
-                array(),
+                array('wp-element', 'wp-components'),
                 file_exists($global_settings_script_path) ? filemtime($global_settings_script_path) : FBKS_VERSION,
                 true
             );
             wp_add_inline_script(
                 'folioblocks-global-settings-js',
                 'window.folioBlocksGlobalSettingsAutosave = ' . wp_json_encode(array(
+                    'hasWooCommerce' => class_exists('WooCommerce'),
                     'ajaxUrl'             => admin_url('admin-ajax.php'),
                     'nonce'               => wp_create_nonce(fbks_get_admin_nonce_action('global-settings')),
                     'openPanelsStorageKey' => 'folioblocks_global_settings_open_panels_' . get_current_blog_id() . '_' . get_current_user_id(),
@@ -614,7 +626,7 @@ if (function_exists('fbks_fs')) {
 					'scanningText'       => __('Scanning…', 'folioblocks'),
 					'scanErrorText'      => __('The Media Library scan could not continue. Please try again.', 'folioblocks'),
 					'mediaMetadataScanState' => $media_metadata_scan_state,
-					'mediaMetadataPalettes' => function_exists('fbks_get_media_metadata_palette_presets')
+					'mediaMetadataPalettes' => function_exists('fbks_can_use_media_metadata') && fbks_can_use_media_metadata() && function_exists('fbks_get_media_metadata_palette_presets')
 						? fbks_get_media_metadata_palette_presets()
 						: array(),
                 )) . ';',
@@ -671,6 +683,7 @@ if (fbks_fs()->can_use_premium_code__premium_only()) {
     require_once plugin_dir_path(__FILE__) . 'includes/pro/php/css-values.php';
     require_once plugin_dir_path(__FILE__) . 'includes/pro/php/exif-metadata.php';
     require_once plugin_dir_path(__FILE__) . 'includes/pro/php/media-metadata.php';
+    require_once plugin_dir_path(__FILE__) . 'includes/pro/php/block-defaults.php';
     if (is_admin()) {
         require_once plugin_dir_path(__FILE__) . 'includes/pro/admin/media-metadata.php';
     }

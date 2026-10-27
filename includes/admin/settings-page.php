@@ -457,7 +457,7 @@ function fbks_render_settings_page()
 	$fbks_pro_block_version = defined('FBKS_VERSION') ? preg_replace('/^(\d+\.\d+).*$/', '$1', FBKS_VERSION) : '';
 
 ?>
-	<div class="pb-wrap">
+	<div class="pb-wrap" data-plugin-version="<?php echo esc_attr(sprintf(__('Version %s', 'folioblocks'), FBKS_VERSION)); ?>">
 		<div class="pb-settings-header">
 			<img src="<?php echo esc_url(plugin_dir_url(__DIR__) . '/icons/pb-brand-icon.svg'); ?>" alt="<?php echo esc_attr__('FolioBlocks', 'folioblocks'); ?>" class="pb-settings-logo" />
 			<h1><?php esc_html_e('FolioBlocks', 'folioblocks'); ?><?php if ($fbks_can_use_premium) : ?> <?php esc_html_e('Pro', 'folioblocks'); ?><?php endif; ?> - <?php esc_html_e('Dashboard', 'folioblocks'); ?></h1>

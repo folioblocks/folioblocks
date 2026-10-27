@@ -1,6 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { addFilter } from '@wordpress/hooks';
 import ResponsiveRangeControl from './ResponsiveRangeControl';
+import ResponsiveRangeInspector from './ResponsiveRangeInspector';
 import { resolveGalleryGaps } from './galleryGap';
 
 export const registerResponsiveGapPremiumControl = ( {
@@ -13,6 +14,29 @@ export const registerResponsiveGapPremiumControl = ( {
 		`${ namespace }-responsive-gap-values`,
 		( defaultGaps, attributes = {} ) => resolveGalleryGaps( attributes )
 	);
+
+	// Only the premium bundle registers this fill, matching the normal gap control.
+	addFilter(
+		`${hookName}.inspector`,
+		`${namespace}-responsive-gap-inspector`,
+		(defaultContent, { clientId, attributes = {}, setAttributes } = {}) => (
+			<ResponsiveRangeInspector
+				clientId={clientId}
+				label={__("Gap Between Items", "folioblocks")}
+				desktopKey="gap"
+				tabletKey="tabletGap"
+				mobileKey="mobileGap"
+				attributes={resolveGalleryGaps(attributes)}
+				setAttributes={(newValues) =>
+					setAttributes({ ...newValues, noGap: false })
+				}
+				min={0}
+				max={50}
+				help={__("Set the space between gallery images.", "folioblocks")}
+			/>
+		),
+	);
+
 
 	addFilter(
 		hookName,

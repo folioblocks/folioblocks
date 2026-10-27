@@ -14,6 +14,7 @@
 	"description": "Let clients select, approve, and comment on images in a private proofing gallery.",
 	"example": {
 		"attributes": {
+        "globalDefaultsApplied": { "type": "boolean", "default": false },
 			"preview": true
 		}
 	},
@@ -70,6 +71,10 @@
 		"enableHeart": {
 			"type": "boolean",
 			"default": true
+		},
+		"enableStars": {
+			"type": "boolean",
+			"default": false
 		},
 		"enableFlag": {
 			"type": "boolean",
@@ -243,6 +248,18 @@
 		"lightboxZoom": {
 			"type": "boolean",
 			"default": false
+		},
+		"flagMode": {
+			"type": "string",
+			"enum": [
+				"simple",
+				"advanced"
+			],
+			"default": "simple"
+		},
+		"flagPalette": {
+			"type": "object",
+			"default": {}
 		}
 	},
 	"providesContext": {
@@ -259,10 +276,13 @@
 		"folioBlocks/watermarkDisplay": "watermarkDisplay",
 		"folioBlocks/isProofingGallery": "isProofingGallery",
 		"folioBlocks/proofingEnableHeart": "enableHeart",
+		"folioBlocks/proofingEnableStars": "enableStars",
 		"folioBlocks/proofingEnableFlag": "enableFlag",
 		"folioBlocks/proofingEnableComment": "enableComment",
 		"folioBlocks/lightboxCounter": "lightboxCounter",
-		"folioBlocks/lightboxZoom": "lightboxZoom"
+		"folioBlocks/lightboxZoom": "lightboxZoom",
+		"folioBlocks/proofingFlagMode": "flagMode",
+		"folioBlocks/proofingFlagPalette": "flagPalette"
 	},
 	"textdomain": "folioblocks",
 	"editorScript": [

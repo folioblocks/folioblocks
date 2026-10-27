@@ -1,3 +1,5 @@
+import useGlobalBlockDefaults from "../pb-helpers/useGlobalBlockDefaults";
+import blockMetadata from "./block.json";
 /**
  * PB Video Block
  * Edit JS
@@ -204,7 +206,8 @@ function getVideoEmbedMarkup(videoUrl, videoEmbedPreview, isPro = false) {
 	return <video src={videoUrl} controls autoPlay />;
 }
 
-export default function Edit({ attributes, setAttributes, context }) {
+export default function Edit({ attributes, setAttributes, context, clientId }) {
+    useGlobalBlockDefaults(clientId, blockMetadata.name, attributes, setAttributes, blockMetadata.attributes, Object.keys(context || {}).some(key => key.startsWith('folioBlocks/')));
 	const {
 		videoUrl,
 		videoWidth,

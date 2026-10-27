@@ -1,3 +1,5 @@
+import useGlobalBlockDefaults from '../pb-helpers/useGlobalBlockDefaults';
+import blockMetadata from './block.json';
 /**
  * Justified Gallery Block
  * Edit JS
@@ -34,6 +36,7 @@ import {
 } from '../pb-helpers/galleryGap';
 import { calculateJustifiedLayout } from '../pb-helpers/justifiedLayout';
 import ResponsiveRangeControl from '../pb-helpers/ResponsiveRangeControl';
+import ResponsiveRangeInspector, { ResponsiveLayoutInspector } from '../pb-helpers/ResponsiveRangeInspector';
 import { useProofingGalleryContext } from '../pb-helpers/useProofingGalleryContext';
 import './editor.scss';
 
@@ -211,6 +214,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	const { replaceInnerBlocks, updateBlockAttributes } =
 		useDispatch( 'core/block-editor' );
 	const { isInsideProofingGallery } = useProofingGalleryContext( clientId );
+    useGlobalBlockDefaults(clientId, blockMetadata.name, attributes, setAttributes, blockMetadata.attributes, isInsideProofingGallery);
 
 	const innerBlocks = useSelect(
 		( select ) => select( 'core/block-editor' ).getBlocks( clientId ),
@@ -604,6 +608,28 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				</ToolbarGroup>
 			</BlockControls>
 
+			<ResponsiveLayoutInspector clientId={ clientId }>
+				<ResponsiveRangeInspector
+					clientId={ clientId }
+					label={__("Row Height", "folioblocks")}
+					desktopKey="rowHeight"
+					tabletKey="tabletRowHeight"
+					mobileKey="mobileRowHeight"
+					attributes={{ ...attributes, rowHeight }}
+					setAttributes={setAttributes}
+					min={100}
+					max={1500}
+					help={__(
+						"Set the preferred row height. Rows adjust as needed to fill the gallery width.",
+						"folioblocks",
+					)}
+				/>
+				{applyFilters(
+					"folioBlocks.justifiedGallery.responsiveGapControl.inspector",
+					null,
+					{ clientId, attributes, setAttributes },
+				)}
+			</ResponsiveLayoutInspector>
 			<InspectorControls>
 				<PanelBody
 					title={ __( 'Justified Gallery Settings', 'folioblocks' ) }

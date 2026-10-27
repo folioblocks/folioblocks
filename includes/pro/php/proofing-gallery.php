@@ -22,6 +22,33 @@ function fbks_can_use_proofing_sessions() {
 		( fbks_fs()->is_plan( 'business' ) || fbks_fs()->is_plan( 'agency' ) );
 }
 
+function fbks_get_proofing_flag_outline( $color ) {
+    $hex = ltrim( $color, '#' );
+    if ( 3 === strlen( $hex ) ) { $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2]; }
+    $brightness = hexdec( substr( $hex, 0, 2 ) ) * .299 + hexdec( substr( $hex, 2, 2 ) ) * .587 + hexdec( substr( $hex, 4, 2 ) ) * .114;
+    return $brightness > 220 ? '#64748b' : $color;
+}
+
+/** Gallery-owned color definitions; never read the live global palette on render. */
+function fbks_get_proofing_flag_palette( $attributes = [] ) {
+    if ( 'advanced' !== ( $attributes['flagMode'] ?? 'simple' ) || ! isset( $attributes['flagPalette']['items'] ) || ! is_array( $attributes['flagPalette']['items'] ) ) {
+        return [ 'name' => 'simple', 'items' => [
+            [ 'value' => 'red', 'label' => __( 'Red', 'folioblocks' ), 'color' => '#dc2626' ],
+            [ 'value' => 'orange', 'label' => __( 'Orange', 'folioblocks' ), 'color' => '#f97316' ],
+            [ 'value' => 'green', 'label' => __( 'Green', 'folioblocks' ), 'color' => '#16a34a' ],
+        ] ];
+    }
+    $items = [];
+    foreach ( $attributes['flagPalette']['items'] as $item ) {
+        if ( ! is_array( $item ) ) { continue; }
+        $value = sanitize_key( $item['value'] ?? '' );
+        $color = sanitize_hex_color( $item['color'] ?? '' );
+        if ( ! preg_match( '/^class-[1-8]$/', $value ) || ! $color ) { continue; }
+        $items[$value] = [ 'value' => $value, 'label' => sanitize_text_field( $item['label'] ?? $value ), 'color' => $color ];
+    }
+    return [ 'name' => sanitize_text_field( $attributes['flagPalette']['name'] ?? '' ), 'items' => array_values( $items ) ];
+}
+
 function fbks_get_proofing_settings_defaults() {
 	return [
 		'inProgressRetentionDays' => FBKS_PROOFING_STALE_RETENTION_DAYS,
@@ -58,6 +85,15 @@ function fbks_sanitize_proofing_settings( $settings ) {
 function fbks_get_proofing_settings() {
 	return fbks_sanitize_proofing_settings( get_option( FBKS_PROOFING_SETTINGS_OPTION, [] ) );
 }
+
+/** Core's page password gate runs before the gallery's own administrator bypass. */
+function fbks_admin_preview_proofing_password_required( $required, $post ) {
+    if ( ! $required || ! $post instanceof WP_Post || ! current_user_can( 'manage_options' ) || ! current_user_can( 'edit_post', $post->ID ) ) {
+        return $required;
+    }
+    return fbks_collect_proofing_gallery_keys_from_blocks( parse_blocks( $post->post_content ) ) ? false : $required;
+}
+add_filter( 'post_password_required', 'fbks_admin_preview_proofing_password_required', 10, 2 );
 
 function fbks_sanitize_proofing_comment( $comment ) {
 	$comment = sanitize_textarea_field( (string) $comment );
@@ -134,6 +170,15 @@ function fbks_collect_proofing_image_ids_from_blocks( $blocks ) {
 	return array_values( array_unique( array_filter( $image_ids ) ) );
 }
 
+function fbks_get_proofing_feedback_controls( $attributes = [] ) {
+    return [
+        'heart' => !isset($attributes['enableHeart']) || (bool) $attributes['enableHeart'],
+        'rating' => !empty($attributes['enableStars']),
+        'flag' => !isset($attributes['enableFlag']) || (bool) $attributes['enableFlag'],
+        'comment' => !isset($attributes['enableComment']) || (bool) $attributes['enableComment'],
+    ];
+}
+
 function fbks_collect_proofing_galleries_from_blocks( $blocks ) {
 	$galleries = [];
 
@@ -151,7 +196,9 @@ function fbks_collect_proofing_galleries_from_blocks( $blocks ) {
 
 			$galleries[] = [
 				'galleryKey' => $gallery_key,
-				'imageIds'   => fbks_collect_proofing_image_ids_from_blocks( $block['innerBlocks'] ?? [] ),
+				'flagPalette' => fbks_get_proofing_flag_palette( $attributes ),
+                'controls' => fbks_get_proofing_feedback_controls( $attributes ),
+                'imageIds'   => fbks_collect_proofing_image_ids_from_blocks( $block['innerBlocks'] ?? [] ),
 			];
 		}
 
@@ -260,6 +307,13 @@ function fbks_register_proofing_session_post_type() {
 }
 add_action( 'init', 'fbks_register_proofing_session_post_type' );
 
+function fbks_normalize_client_rating( $value ) {
+    if ( ! is_int( $value ) || $value < 1 || $value > 5 ) {
+        return null;
+    }
+    return $value;
+}
+
 function fbks_normalize_proofing_images( $images ) {
 	if ( ! is_array( $images ) ) {
 		return [];
@@ -273,7 +327,7 @@ function fbks_normalize_proofing_images( $images ) {
 		}
 
 		$flag = isset( $image['flag'] ) ? sanitize_key( $image['flag'] ) : '';
-		if ( ! in_array( $flag, [ '', 'red', 'orange', 'green' ], true ) ) {
+		if ( ! in_array( $flag, [ '', 'red', 'orange', 'green' ], true ) && ! preg_match( '/^class-[1-8]$/', $flag ) ) {
 			$flag = '';
 		}
 
@@ -283,6 +337,7 @@ function fbks_normalize_proofing_images( $images ) {
 			'thumbnail'    => isset( $image['thumbnail'] ) ? esc_url_raw( (string) $image['thumbnail'] ) : '',
 			'title'        => isset( $image['title'] ) ? sanitize_text_field( (string) $image['title'] ) : '',
 			'hearted'      => ! empty( $image['hearted'] ),
+			'clientRating' => fbks_normalize_client_rating( $image['clientRating'] ?? null ),
 			'flag'         => $flag,
 			'comment'      => isset( $image['comment'] ) ? fbks_sanitize_proofing_comment( $image['comment'] ) : '',
 		];
@@ -550,6 +605,13 @@ function fbks_save_proofing_session( WP_REST_Request $request ) {
 	update_post_meta( $post_id, '_fbks_proofing_presence', 'active' );
 	update_post_meta( $post_id, '_fbks_proofing_last_seen_at', $updated_at );
 	update_post_meta( $post_id, '_fbks_proofing_images', $images );
+    foreach ( fbks_get_current_proofing_galleries_for_page( $page_id ) as $gallery ) {
+        if ( $gallery_key === $gallery['galleryKey'] ) {
+            update_post_meta( $post_id, '_fbks_proofing_flag_palette', $gallery['flagPalette'] );
+            update_post_meta( $post_id, '_fbks_proofing_controls', $gallery['controls'] );
+            break;
+        }
+    }
 
 	if ( 'submitted' === $status && 'submitted' !== $previous_status ) {
 		fbks_email_admin_proofing_session_submitted( $post_id, $client_email, $page_id, $email_admin_on_submit );

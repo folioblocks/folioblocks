@@ -9,6 +9,7 @@
 	"description": "Creates a justified gallery layout where rows are dynamically sized for balance.",
 	"example": {
 		"attributes": {
+        "globalDefaultsApplied": { "type": "boolean", "default": false },
 			"preview": true
 		}
 	},

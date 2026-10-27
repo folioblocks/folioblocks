@@ -1,8 +1,12 @@
+import useGlobalBlockDefaults from "../pb-helpers/useGlobalBlockDefaults";
+import blockMetadata from "./block.json";
+import { getProofingFlags } from '../pb-helpers/proofingFlags';
 /**
  * PB Image Block
  * Edit JS
  */
 import { __ } from '@wordpress/i18n';
+import ProofingStarControl from '../pb-helpers/ProofingStarControl';
 import {
 	useBlockProps,
 	InspectorControls,
@@ -246,11 +250,15 @@ const ImageMetadataControls = ( {
 );
 
 const ProofingThumbnailControls = ( {
+	enableStars = false,
 	enableHeart = true,
 	enableFlag = true,
+    flagOptions,
 	enableComment = true,
 	proofingTheme = 'light',
 } ) => {
+	const [ rating, setRating ] = useState( null );
+	const [ isRatingOpen, setIsRatingOpen ] = useState( false );
 	const [ liked, setLiked ] = useState( false );
 	const [ flagColor, setFlagColor ] = useState( '' );
 	const [ comment, setComment ] = useState( '' );
@@ -258,14 +266,11 @@ const ProofingThumbnailControls = ( {
 	const [ isCommentOpen, setIsCommentOpen ] = useState( false );
 	const controlsRef = useRef( null );
 	const flagButtonRef = useRef( null );
-	const flagColors = [
-		{ label: __( 'Red', 'folioblocks' ), value: 'red' },
-		{ label: __( 'Orange', 'folioblocks' ), value: 'orange' },
-		{ label: __( 'Green', 'folioblocks' ), value: 'green' },
-	];
+	const flagColors = flagOptions || getProofingFlags();
 	const enabledProofingControls = [
 		enableHeart ? 'heart' : '',
 		enableFlag ? 'flag' : '',
+		enableStars ? 'rating' : '',
 		enableComment ? 'comment' : '',
 	].filter( Boolean );
 	const getProofingControlSlot = ( control ) =>
@@ -288,6 +293,7 @@ const ProofingThumbnailControls = ( {
 			return;
 		}
 
+		imageBlock.dataset.proofingRating = String( rating ?? '' );
 		imageBlock.dataset.proofingHearted = liked ? 'true' : 'false';
 		imageBlock.dataset.proofingFlag = flagColor || '';
 		imageBlock.dataset.proofingComment = comment;
@@ -297,7 +303,7 @@ const ProofingThumbnailControls = ( {
 		window.dispatchEvent(
 			new CustomEvent( 'folioblocks:proofing-state-change' )
 		);
-	}, [ liked, flagColor, comment ] );
+	}, [ liked, flagColor, comment, rating ] );
 
 	return (
 		<div className="fbks-proofing-thumbnail-controls" ref={ controlsRef }>
@@ -324,7 +330,9 @@ const ProofingThumbnailControls = ( {
 			{ enableFlag && (
 				<div className="fbks-proofing-thumbnail-flag-wrap">
 					<button
-						ref={ flagButtonRef }
+						style={ flagColor ? { '--fbks-proofing-flag-color': flagColors.find( item => item.value === flagColor )?.color } : undefined }
+                        data-has-flag={ !! flagColor }
+                        ref={ flagButtonRef }
 						type="button"
 						className={ `fbks-proofing-thumbnail-control fbks-proofing-thumbnail-control--flag${
 							flagColor ? ` is-${ flagColor }` : ''
@@ -334,6 +342,8 @@ const ProofingThumbnailControls = ( {
 						aria-label={ __( 'Set flag color', 'folioblocks' ) }
 						onClick={ ( event ) => {
 							stopProofingClick( event );
+							setIsRatingOpen( false );
+							setIsCommentOpen( false );
 							setIsFlagPickerOpen( ! isFlagPickerOpen );
 						} }
 					>
@@ -344,12 +354,12 @@ const ProofingThumbnailControls = ( {
 					{ isFlagPickerOpen && (
 						<Popover
 							anchor={ flagButtonRef.current }
-							position="bottom right"
+							placement="bottom-end"
 							onClose={ () => setIsFlagPickerOpen( false ) }
 							focusOnMount={ false }
 						>
 							<div
-								className={ `fbks-proofing-flag-popover${
+								className={ `fbks-proofing-flag-popover is-editor-picker${
 									isDarkProofingTheme
 										? ' fbks-proofing-popover--dark'
 										: ''
@@ -358,9 +368,11 @@ const ProofingThumbnailControls = ( {
 								{ flagColors.map( ( color ) => (
 									<button
 										type="button"
-										key={ color.value }
+										style={ { backgroundColor: color.color } }
+                                        key={ color.value }
 										className={ `fbks-proofing-flag-swatch is-${ color.value }` }
 										aria-label={ color.label }
+                                        title={ color.label }
 										onClick={ ( event ) => {
 											stopProofingClick( event );
 											setFlagColor( color.value );
@@ -384,19 +396,36 @@ const ProofingThumbnailControls = ( {
 					) }
 				</div>
 			) }
+			{ enableStars && (
+				<ProofingStarControl
+					value={ rating }
+					onChange={ setRating }
+					slot={ getProofingControlSlot( 'rating' ) }
+					open={ isRatingOpen }
+					onOpenChange={ ( open ) => {
+						setIsFlagPickerOpen( false );
+						setIsCommentOpen( false );
+						setIsRatingOpen( open );
+					} }
+					dark={ isDarkProofingTheme }
+				/>
+			) }
 			{ enableComment && (
 				<>
 					<button
 						type="button"
 						className={ `fbks-proofing-thumbnail-control fbks-proofing-thumbnail-control--comment${
 							comment.trim() ? ' is-active' : ''
-						}${ isCommentOpen ? ' is-open' : '' } fbks-proofing-thumbnail-control--slot-${ getProofingControlSlot(
+						}${
+							isCommentOpen ? ' is-open' : ''
+						} fbks-proofing-thumbnail-control--slot-${ getProofingControlSlot(
 							'comment'
 						) }` }
 						aria-label={ __( 'Comment on image', 'folioblocks' ) }
 						onClick={ ( event ) => {
 							stopProofingClick( event );
 							setIsFlagPickerOpen( false );
+							setIsRatingOpen( false );
 							setIsCommentOpen( ! isCommentOpen );
 						} }
 					>
@@ -422,7 +451,10 @@ const ProofingThumbnailControls = ( {
 									rows="3"
 									maxLength={ PROOFING_COMMENT_MAX_LENGTH }
 									value={ comment }
-									aria-label={ __( 'Comment', 'folioblocks' ) }
+									aria-label={ __(
+										'Comment',
+										'folioblocks'
+									) }
 									onChange={ ( event ) =>
 										setComment(
 											truncateProofingComment(
@@ -472,6 +504,7 @@ export default function Edit( {
 	context,
 	clientId,
 } ) {
+    useGlobalBlockDefaults(clientId, blockMetadata.name, attributes, setAttributes, blockMetadata.attributes, Object.keys(context || {}).some(key => key.startsWith('folioBlocks/')));
 	const {
 		id,
 		src,
@@ -1044,8 +1077,10 @@ export default function Edit( {
 			'hover' ) !== 'none';
 	const proofingControls = isInsideProofingGallery ? (
 		<ProofingThumbnailControls
+			enableStars={ proofingGalleryAttributes.enableStars === true }
 			enableHeart={ proofingGalleryAttributes.enableHeart !== false }
 			enableFlag={ proofingGalleryAttributes.enableFlag !== false }
+            flagOptions={ getProofingFlags( proofingGalleryAttributes ) }
 			enableComment={ proofingGalleryAttributes.enableComment !== false }
 			proofingTheme={ proofingGalleryAttributes.proofingTheme || 'light' }
 		/>

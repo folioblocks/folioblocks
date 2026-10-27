@@ -1,3 +1,6 @@
+import useGlobalBlockDefaults from '../pb-helpers/useGlobalBlockDefaults';
+import blockMetadata from './block.json';
+import { ResponsiveLayoutInspector } from '../pb-helpers/ResponsiveRangeInspector';
 /**
  * Carousel Gallery Block
  * Edit JS
@@ -135,6 +138,7 @@ const getImageClickHelp = ( value ) => {
 };
 
 export default function Edit( { clientId, attributes, setAttributes } ) {
+    useGlobalBlockDefaults(clientId, blockMetadata.name, attributes, setAttributes, blockMetadata.attributes);
 	const ALLOWED_BLOCKS = [ 'folioblocks/pb-image-block' ];
 	const [ isLoading, setIsLoading ] = useState( false );
 
@@ -639,6 +643,13 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 					</ToolbarButton>
 				</ToolbarGroup>
 			</BlockControls>
+			<ResponsiveLayoutInspector clientId={ clientId }>
+				{applyFilters(
+					"folioBlocks.carouselGallery.responsiveGapControl.inspector",
+					null,
+					{ clientId, attributes, setAttributes },
+				)}
+			</ResponsiveLayoutInspector>
 			<InspectorControls>
 				<PanelBody
 					title={ __( 'Carousel Gallery Settings', 'folioblocks' ) }
