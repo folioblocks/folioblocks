@@ -1,6 +1,6 @@
 /** Gallery controls initialize and clean up with their element. */
 import { getElement, store } from '@wordpress/interactivity';
-import { mountGalleryControls } from '../pb-helpers/galleryControls';
+import { mountGalleryControls } from '../fbks-helpers/galleryControls';
 store( 'folioblocks/justified', {
 	callbacks: {
 		premium() {

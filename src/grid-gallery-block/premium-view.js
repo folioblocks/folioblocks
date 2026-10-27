@@ -1,6 +1,6 @@
 /** Grid filters and page protection are scoped to each gallery. */
 import { getElement, store } from '@wordpress/interactivity';
-import { createFrontendScope } from '../pb-helpers/frontendScope';
+import { createFrontendScope } from '../fbks-helpers/frontendScope';
 
 const categoriesFor = ( item ) => {
 	const categories = ( item.getAttribute( 'data-filters' ) || '' )

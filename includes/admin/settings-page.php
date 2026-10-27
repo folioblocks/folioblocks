@@ -337,19 +337,19 @@ if (! function_exists('fbks_render_dashboard_news_items')) {
 					continue;
 				}
 				?>
-				<li class="pb-news-item">
+				<li class="fbks-news-item">
 					<?php if (! empty($port_image)) : ?>
-						<a href="<?php echo esc_url($port_link); ?>" class="pb-news-thumb" target="_blank" rel="noopener noreferrer"><img src="<?php echo esc_url($port_image); ?>" alt=""></a>
+						<a href="<?php echo esc_url($port_link); ?>" class="fbks-news-thumb" target="_blank" rel="noopener noreferrer"><img src="<?php echo esc_url($port_image); ?>" alt=""></a>
 					<?php endif; ?>
-					<div class="pb-news-content">
+					<div class="fbks-news-content">
 						<a href="<?php echo esc_url($port_link); ?>" target="_blank" rel="noopener noreferrer">
 							<?php echo esc_html($port_title); ?>
 						</a>
 						<?php if (! empty($port_date)) : ?>
-							<div class="pb-news-meta"><?php echo esc_html($port_date); ?></div>
+							<div class="fbks-news-meta"><?php echo esc_html($port_date); ?></div>
 						<?php endif; ?>
 						<?php if (! empty($port_desc)) : ?>
-							<div class="pb-news-excerpt"><?php echo esc_html($port_desc); ?></div>
+							<div class="fbks-news-excerpt"><?php echo esc_html($port_desc); ?></div>
 						<?php endif; ?>
 					</div>
 				</li>
@@ -363,7 +363,7 @@ if (! function_exists('fbks_render_dashboard_news_items')) {
 			return $output;
 		}
 
-		return '<li class="pb-news-item--empty">' . esc_html__('No news items found right now. Please check back later.', 'folioblocks') . '</li>';
+		return '<li class="fbks-news-item--empty">' . esc_html__('No news items found right now. Please check back later.', 'folioblocks') . '</li>';
 	}
 }
 
@@ -394,17 +394,17 @@ if (! function_exists('fbks_get_dashboard_block_versions')) {
 	{
 		$block_directories = array(
 			'background-video-block',
-			'pb-before-after-block',
+			'before-after-block',
 			'carousel-gallery-block',
 			'filmstrip-gallery-block',
 			'grid-gallery-block',
-			'pb-image-block',
+			'image-block',
 			'justified-gallery-block',
-			'pb-loupe-block',
+			'loupe-block',
 			'masonry-gallery-block',
 			'modular-gallery-block',
 			'proofing-gallery-block',
-			'pb-video-block',
+			'video-block',
 			'video-gallery-block',
 		);
 
@@ -440,7 +440,7 @@ if (! function_exists('fbks_render_dashboard_block_meta')) {
 			return;
 		}
 
-		echo '<span class="pb-block-version">' . esc_html(sprintf(
+		echo '<span class="fbks-block-version">' . esc_html(sprintf(
 			/* translators: %s: block version number. */
 			__('v%s', 'folioblocks'),
 			$current_version
@@ -457,15 +457,15 @@ function fbks_render_settings_page()
 	$fbks_pro_block_version = defined('FBKS_VERSION') ? preg_replace('/^(\d+\.\d+).*$/', '$1', FBKS_VERSION) : '';
 
 ?>
-	<div class="pb-wrap" data-plugin-version="<?php echo esc_attr(sprintf(__('Version %s', 'folioblocks'), FBKS_VERSION)); ?>">
-		<div class="pb-settings-header">
-			<img src="<?php echo esc_url(plugin_dir_url(__DIR__) . '/icons/pb-brand-icon.svg'); ?>" alt="<?php echo esc_attr__('FolioBlocks', 'folioblocks'); ?>" class="pb-settings-logo" />
+	<div class="fbks-wrap" data-plugin-version="<?php echo esc_attr(sprintf(__('Version %s', 'folioblocks'), FBKS_VERSION)); ?>">
+		<div class="fbks-settings-header">
+			<img src="<?php echo esc_url(plugin_dir_url(__DIR__) . '/icons/pb-brand-icon.svg'); ?>" alt="<?php echo esc_attr__('FolioBlocks', 'folioblocks'); ?>" class="fbks-settings-logo" />
 			<h1><?php esc_html_e('FolioBlocks', 'folioblocks'); ?><?php if ($fbks_can_use_premium) : ?> <?php esc_html_e('Pro', 'folioblocks'); ?><?php endif; ?> - <?php esc_html_e('Dashboard', 'folioblocks'); ?></h1>
 		</div>
 
 		<div class="settings-container">
 			<div class="settings-left">
-				<div class="pb-dashboard-box">
+				<div class="fbks-dashboard-box">
 					<h2><?php esc_html_e('Welcome to FolioBlocks:', 'folioblocks'); ?></h2>
 					<?php if ($fbks_can_use_premium) : ?>
 						<p>
@@ -482,11 +482,11 @@ function fbks_render_settings_page()
 							<?php esc_html_e('FolioBlocks is a paid premium plugin. This free version available in the WordPress plugin repository is only meant to give you a taste of what the full version can do.', 'folioblocks'); ?>
 						</p>
 					<?php endif; ?>
-					<div class="pb-blocks-grid">
+					<div class="fbks-blocks-grid">
 						<h3><?php esc_html_e('Available Blocks:', 'folioblocks'); ?></h3>
-						<div class="pb-blocks-list">
-							<div class="pb-block-item">
-								<div class="pb-block-icon">
+						<div class="fbks-blocks-list">
+							<div class="fbks-block-item">
+								<div class="fbks-block-icon">
 									<svg viewBox="0 0 1247.24 1247.24" width="36" height="36" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
 										<path fillRule="evenodd" d="M180 180H1067C1115 180 1155 220 1155 268V979C1155 1027 1115 1067 1067 1067H180C132 1067 92 1027 92 979V268C92 220 132 180 180 180ZM180 230C150 230 124 256 124 286V961C124 991 150 1017 180 1017H1067C1097 1017 1123 991 1123 961V286C1123 256 1097 230 1067 230H180Z" />
 										<path d="m414,329.78717l420,0c21,0 38,17 38,38s-17,38 -38,38l-420,0c-21,0 -38,-17 -38,-38s17,-38 38,-38z" />
@@ -498,8 +498,8 @@ function fbks_render_settings_page()
 								<?php fbks_render_dashboard_block_meta('background-video-block', $fbks_block_versions); ?>
 								<a href="https://folioblocks.com/blocks/background-video-block/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Demo', 'folioblocks'); ?></a>
 							</div>
-							<div class="pb-block-item">
-								<div class="pb-block-icon">
+							<div class="fbks-block-item">
+								<div class="fbks-block-icon">
 									<svg viewBox="-74.12 -75.95 1247.24 1247.24" width="38" height="38" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
 										<g data-name="Layer 1" id="Layer_1-2">
 											<g>
@@ -513,11 +513,11 @@ function fbks_render_settings_page()
 									</svg>
 								</div>
 								<span><?php esc_html_e('Before & After Block', 'folioblocks'); ?></span>
-								<?php fbks_render_dashboard_block_meta('pb-before-after-block', $fbks_block_versions); ?>
+								<?php fbks_render_dashboard_block_meta('before-after-block', $fbks_block_versions); ?>
 								<a href="https://folioblocks.com/blocks/before-after-block/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Demo', 'folioblocks'); ?></a>
 							</div>
-							<div class="pb-block-item">
-								<div class="pb-block-icon">
+							<div class="fbks-block-item">
+								<div class="fbks-block-icon">
 									<svg viewBox="0 0 1247.24 1247.24" width="36" height="36" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
 										<g stroke="null" data-name="Layer 1" id="Layer_1">
 											<rect stroke="null" x="-161.50317" y="-161.50317" id="svg_2" fill="none" height="1570.00635" width="1570.00635" />
@@ -534,8 +534,8 @@ function fbks_render_settings_page()
 								<?php fbks_render_dashboard_block_meta('carousel-gallery-block', $fbks_block_versions); ?>
 								<a href="https://folioblocks.com/blocks/carousel-gallery-block/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Demo', 'folioblocks'); ?></a>
 							</div>
-							<div class="pb-block-item">
-								<div class="pb-block-icon">
+							<div class="fbks-block-item">
+								<div class="fbks-block-icon">
 									<svg viewBox="0 0 1247.24 1247.24" width="36" height="36" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
 										<g id="Layer_1-2">
 											<g>
@@ -553,8 +553,8 @@ function fbks_render_settings_page()
 								<?php fbks_render_dashboard_block_meta('filmstrip-gallery-block', $fbks_block_versions); ?>
 								<a href="https://folioblocks.com/blocks/filmstrip-gallery-block/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Demo', 'folioblocks'); ?></a>
 							</div>
-							<div class="pb-block-item">
-								<div class="pb-block-icon">
+							<div class="fbks-block-item">
+								<div class="fbks-block-icon">
 									<svg viewBox="0 0 1247.24 1247.24" width="36" height="36" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
 										<g>
 											<path d="M392.02,146.83H130.15c-25.65,0-46.53,20.89-46.53,46.57v136.1c0,25.68,20.88,46.57,46.53,46.57h261.86c25.66,0,46.53-20.89,46.53-46.57v-136.1c0-25.68-20.87-46.57-46.53-46.57h.01ZM390.43,327.91H131.74v-132.92h258.69v132.92h0Z" />
@@ -573,20 +573,20 @@ function fbks_render_settings_page()
 								<?php fbks_render_dashboard_block_meta('grid-gallery-block', $fbks_block_versions); ?>
 								<a href="https://folioblocks.com/blocks/grid-gallery-block/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Demo', 'folioblocks'); ?></a>
 							</div>
-							<div class="pb-block-item">
-								<div class="pb-block-icon">
+							<div class="fbks-block-item">
+								<div class="fbks-block-icon">
 									<svg viewBox="0 0 1247.24 1247.24" width="36" height="36" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
 										<path d="M180 180H1067C1115 180 1155 220 1155 268V979C1155 1027 1115 1067 1067 1067H180C132 1067 92 1027 92 979V268C92 220 132 180 180 180ZM180 230C150 230 124 256 124 286V961C124 991 150 1017 180 1017H1067C1097 1017 1123 991 1123 961V286C1123 256 1097 230 1067 230H180Z" />
 										<circle cx="455" cy="420" r="85" />
 										<path d="M820 520c17 0 33 9 41 24l205 355c8 14 8 31 0 45-8 14-24 24-41 24H300c-17 0-32-9-41-24-9-15-8-33 3-47l125-170c8-11 21-18 35-18 14 0 27 6 35 18l45 65 95-160c8-14 24-24 41-24Z" />
 									</svg>
 								</div>
-								<span class="pb-block-title--stacked"><?php esc_html_e('Image Block', 'folioblocks'); ?></span>
-								<?php fbks_render_dashboard_block_meta('pb-image-block', $fbks_block_versions); ?>
+								<span class="fbks-block-title--stacked"><?php esc_html_e('Image Block', 'folioblocks'); ?></span>
+								<?php fbks_render_dashboard_block_meta('image-block', $fbks_block_versions); ?>
 								<a href="https://folioblocks.com/blocks/image-block/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Demo', 'folioblocks'); ?></a>
 							</div>
-							<div class="pb-block-item">
-								<div class="pb-block-icon">
+							<div class="fbks-block-item">
+								<div class="fbks-block-icon">
 									<svg viewBox="0 0 1247.24 1247.24" width="36" height="36" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
 										<g id="Layer_1-2">
 											<g>
@@ -604,20 +604,20 @@ function fbks_render_settings_page()
 								<?php fbks_render_dashboard_block_meta('justified-gallery-block', $fbks_block_versions); ?>
 								<a href="https://folioblocks.com/blocks/justified-gallery-block/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Demo', 'folioblocks'); ?></a>
 							</div>
-							<div class="pb-block-item">
-								<div class="pb-block-icon">
+							<div class="fbks-block-item">
+								<div class="fbks-block-icon">
 									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1247.24 1247.24">
 										<path d="M415 130H176c-30 0-55 25-55 55v239h55V185h239v-55zM832 130h239c30 0 55 25 55 55v239h-55V185H832v-55zM1117 832v239c0 30-25 55-55 55H832v-55h239V832h55zM415 1117H176c-30 0-55-25-55-55V832h55v239h239v46z" />
 										<path d="M580 350 A230 230 0 1 1 579.9 350 M580 440 A140 140 0 1 0 580.1 440" />
 										<path d="M707 707l243 243 40-40-243-243-40 40z" />
 									</svg>
 								</div>
-								<span class="pb-block-title--stacked"><?php esc_html_e('Loupe Block', 'folioblocks'); ?></span>
-								<?php fbks_render_dashboard_block_meta('pb-loupe-block', $fbks_block_versions); ?>
+								<span class="fbks-block-title--stacked"><?php esc_html_e('Loupe Block', 'folioblocks'); ?></span>
+								<?php fbks_render_dashboard_block_meta('loupe-block', $fbks_block_versions); ?>
 								<a href="https://folioblocks.com/blocks/loupe-block/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Demo', 'folioblocks'); ?></a>
 							</div>
-							<div class="pb-block-item">
-								<div class="pb-block-icon">
+							<div class="fbks-block-item">
+								<div class="fbks-block-icon">
 									<svg viewBox="0 0 1247.24 1247.24" width="36" height="36" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
 										<g id="Layer_1-2">
 											<g>
@@ -636,8 +636,8 @@ function fbks_render_settings_page()
 								<?php fbks_render_dashboard_block_meta('masonry-gallery-block', $fbks_block_versions); ?>
 								<a href="https://folioblocks.com/blocks/masonry-gallery-block/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Demo', 'folioblocks'); ?></a>
 							</div>
-							<div class="pb-block-item<?php echo $fbks_can_use_premium ? '' : ' is-unavailable'; ?>">
-								<div class="pb-block-icon">
+							<div class="fbks-block-item<?php echo $fbks_can_use_premium ? '' : ' is-unavailable'; ?>">
+								<div class="fbks-block-icon">
 									<svg viewBox="0 0 1247.24 1247.24" width="36" height="36" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
 										<g id="Layer_1-2">
 											<g>
@@ -654,8 +654,8 @@ function fbks_render_settings_page()
 								<?php fbks_render_dashboard_block_meta('modular-gallery-block', $fbks_block_versions, $fbks_pro_block_version); ?>
 								<a href="https://folioblocks.com/blocks/modular-gallery-block/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Demo', 'folioblocks'); ?></a>
 							</div>
-							<div class="pb-block-item<?php echo $fbks_can_use_proofing ? '' : ' is-unavailable'; ?>">
-								<div class="pb-block-icon">
+							<div class="fbks-block-item<?php echo $fbks_can_use_proofing ? '' : ' is-unavailable'; ?>">
+								<div class="fbks-block-icon">
 									<svg viewBox="0 0 1247.24 1247.24" width="36" height="36" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
 										<g fill="none" stroke="currentColor" stroke-width="45" stroke-linecap="round" stroke-linejoin="round">
 											<path d="M415 130H176c-25.65 0-46.53 20.89-46.53 46.57V415" />
@@ -670,19 +670,19 @@ function fbks_render_settings_page()
 								<?php fbks_render_dashboard_block_meta('proofing-gallery-block', $fbks_block_versions, $fbks_pro_block_version); ?>
 								<a href="https://folioblocks.com/blocks/proofing-gallery-block/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Demo', 'folioblocks'); ?></a>
 							</div>
-							<div class="pb-block-item">
-								<div class="pb-block-icon">
+							<div class="fbks-block-item">
+								<div class="fbks-block-icon">
 									<svg viewBox="0 0 1247.24 1247.24" width="36" height="36" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
 										<path d="M180 180H1067C1115 180 1155 220 1155 268V979C1155 1027 1115 1067 1067 1067H180C132 1067 92 1027 92 979V268C92 220 132 180 180 180ZM180 230C150 230 124 256 124 286V961C124 991 150 1027 180 1027H1067C1097 1027 1123 991 1123 961V286C1123 256 1097 230 1067 230H180Z" />
 										<path d="M460 445v360c0 15 10 25 24 25 6 0 12-2 17-6l268-180c19-13 19-43 0-56L501 394c-5-4-11-6-17-6-14 0-24 10-24 25z" />
 									</svg>
 								</div>
-								<span class="pb-block-title--stacked"><?php esc_html_e('Video Block', 'folioblocks'); ?></span>
-								<?php fbks_render_dashboard_block_meta('pb-video-block', $fbks_block_versions); ?>
+								<span class="fbks-block-title--stacked"><?php esc_html_e('Video Block', 'folioblocks'); ?></span>
+								<?php fbks_render_dashboard_block_meta('video-block', $fbks_block_versions); ?>
 								<a href="https://folioblocks.com/blocks/video-block/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Demo', 'folioblocks'); ?></a>
 							</div>
-							<div class="pb-block-item">
-								<div class="pb-block-icon">
+							<div class="fbks-block-item">
+								<div class="fbks-block-icon">
 									<svg viewBox="0 0 1247.24 1247.24" width="36" height="36" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
 										<g id="Layer_1-2">
 											<g>
@@ -706,7 +706,7 @@ function fbks_render_settings_page()
 							</div>
 						</div>
 						<?php if (! $fbks_can_use_proofing) : ?>
-							<p class="pb-blocks-availability-note">
+							<p class="fbks-blocks-availability-note">
 								<?php if (! $fbks_can_use_premium) : ?>
 									<?php esc_html_e('* Modular Gallery Block available in Pro, Business, or Agency plans. Proofing Gallery Block available in Business & Agency plans.', 'folioblocks'); ?>
 								<?php else : ?>
@@ -718,7 +718,7 @@ function fbks_render_settings_page()
 						</div>
 				</div>
 				<?php if (! $fbks_can_use_premium) : ?>
-					<div class="pb-dashboard-box">
+					<div class="fbks-dashboard-box">
 						<h2><?php esc_html_e('Pro Version - Features:', 'folioblocks'); ?></h2>
 						<p>
 							<?php esc_html_e('Pro unlocks FolioBlocks\' advanced gallery, commerce, proofing, styling, protection, and workflow features, including additional Pro-only blocks and deeper controls across image and video blocks.', 'folioblocks'); ?>
@@ -756,19 +756,19 @@ function fbks_render_settings_page()
 					</div>
 				<?php endif; ?>
 
-				<div class="pb-dashboard-box">
-					<div class="pb-news-heading">
+				<div class="fbks-dashboard-box">
+					<div class="fbks-news-heading">
 						<h2><?php esc_html_e('Latest News From FolioBlocks Website:', 'folioblocks'); ?></h2>
-						<button type="button" class="pb-news-refresh" data-fbks-dashboard-news-refresh aria-label="<?php echo esc_attr__('Refresh latest news', 'folioblocks'); ?>" title="<?php echo esc_attr__('Refresh latest news', 'folioblocks'); ?>">
+						<button type="button" class="fbks-news-refresh" data-fbks-dashboard-news-refresh aria-label="<?php echo esc_attr__('Refresh latest news', 'folioblocks'); ?>" title="<?php echo esc_attr__('Refresh latest news', 'folioblocks'); ?>">
 							<span class="dashicons dashicons-update" aria-hidden="true"></span>
 						</button>
 					</div>
-					<ul class="pb-latest-news" data-fbks-dashboard-news aria-live="polite">
-						<li class="pb-news-item--empty">
+					<ul class="fbks-latest-news" data-fbks-dashboard-news aria-live="polite">
+						<li class="fbks-news-item--empty">
 							<?php esc_html_e('Loading latest news...', 'folioblocks'); ?>
 						</li>
 					</ul>
-					<p class="pb-news-view-all">
+					<p class="fbks-news-view-all">
 						<a href="https://folioblocks.com/news/" target="_blank" rel="noopener noreferrer">
 							<?php esc_html_e('View all news', 'folioblocks'); ?> &rarr;
 						</a>
@@ -777,11 +777,11 @@ function fbks_render_settings_page()
 			</div>
 
 				<div class="settings-right">
-					<div class="pb-dashboard-box">
+					<div class="fbks-dashboard-box">
 						<h2><?php esc_html_e('Quick Links:', 'folioblocks'); ?></h2>
 						<?php fbks_render_quick_links(); ?>
 					</div>
-				<div class="pb-dashboard-box">
+				<div class="fbks-dashboard-box">
 					<h2><?php esc_html_e('Changelog:', 'folioblocks'); ?></h2>
 					<?php
 					$readme_path = plugin_dir_path(__DIR__) . '../readme.txt';
@@ -797,7 +797,7 @@ function fbks_render_settings_page()
 							preg_match_all('/^=\s*(\d[\d\.]*)\s*=/m', $changelog, $version_matches);
 							$versions = $version_matches[1];
 
-							echo '<ul class="pb-changelog">';
+							echo '<ul class="fbks-changelog">';
 
 							for ($i = 0; $i < min(5, count($entries)); $i++) {
 								$version = isset($versions[$i]) ? $versions[$i] : __('Version', 'folioblocks');

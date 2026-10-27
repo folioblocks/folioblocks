@@ -14,13 +14,13 @@ import {
 	__experimentalToolsPanel as ToolsPanel,
 	__experimentalToolsPanelItem as ToolsPanelItem,
 } from '@wordpress/components';
-import { wooCartIcon } from '../pb-helpers/icons.js';
-import ProductSearchControl from '../pb-helpers/ProductSearchControl.js';
+import { wooCartIcon } from '../fbks-helpers/icons.js';
+import ProductSearchControl from '../fbks-helpers/ProductSearchControl.js';
 import CompactColorControl, {
 	CompactTwoColorControl,
-} from '../pb-helpers/CompactColorControl.js';
-import '../pb-helpers/applyThumbnails';
-import { enableVideoTransforms } from '../pb-helpers/galleryTransforms';
+} from '../fbks-helpers/CompactColorControl.js';
+import '../fbks-helpers/applyThumbnails';
+import { enableVideoTransforms } from '../fbks-helpers/galleryTransforms';
 
 enableVideoTransforms('folioblocks/pb-video-block');
 
@@ -281,7 +281,7 @@ addFilter(
 
 		return (
 			<ToolsPanel
-				label={__('Gallery Hover Styles', 'folioblocks')}
+				label={__('Video Hover Styles', 'folioblocks')}
 				resetAll={() =>
 					setAttributes({
 						[bgAttribute]: defaultBg,

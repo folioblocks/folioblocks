@@ -322,9 +322,9 @@ if ( ! function_exists( 'fbks_render_system_info_page' ) ) {
 
 		$export = implode( "\n", $lines );
 		?>
-		<div class="pb-wrap" data-plugin-version="<?php echo esc_attr(sprintf(__('Version %s', 'folioblocks'), FBKS_VERSION)); ?>">
-			<div class="pb-settings-header">
-				<img src="<?php echo esc_url( plugin_dir_url( __DIR__ ) . '/icons/pb-brand-icon.svg' ); ?>" alt="<?php echo esc_attr__( 'FolioBlocks', 'folioblocks' ); ?>" class="pb-settings-logo" />
+		<div class="fbks-wrap" data-plugin-version="<?php echo esc_attr(sprintf(__('Version %s', 'folioblocks'), FBKS_VERSION)); ?>">
+			<div class="fbks-settings-header">
+				<img src="<?php echo esc_url( plugin_dir_url( __DIR__ ) . '/icons/pb-brand-icon.svg' ); ?>" alt="<?php echo esc_attr__( 'FolioBlocks', 'folioblocks' ); ?>" class="fbks-settings-logo" />
 				<h1>
 					<?php esc_html_e( 'FolioBlocks', 'folioblocks' ); ?>
 					<?php if ( fbks_fs()->can_use_premium_code() ) : ?>
@@ -335,7 +335,7 @@ if ( ! function_exists( 'fbks_render_system_info_page' ) ) {
 			</div>
 			<div class="settings-container">
 				<div class="settings-left">
-					<div class="pb-dashboard-box">
+					<div class="fbks-dashboard-box">
 						<h2><?php esc_html_e( 'System Report', 'folioblocks' ); ?></h2>
 						<p><?php esc_html_e( 'Below you can find your server configuration, active FolioBlocks Global Settings, and customized Global Block Defaults. Copy and paste this information when requesting support. Client credentials and watermark image URLs are excluded.', 'folioblocks' ); ?></p>
 						<textarea
@@ -358,7 +358,7 @@ if ( ! function_exists( 'fbks_render_system_info_page' ) ) {
 					</div>
 				</div>
 				<div class="settings-right">
-					<div class="pb-dashboard-box">
+					<div class="fbks-dashboard-box">
 						<h2><?php esc_html_e( 'Quick Links:', 'folioblocks' ); ?></h2>
 						<?php fbks_render_quick_links(); ?>
 					</div>

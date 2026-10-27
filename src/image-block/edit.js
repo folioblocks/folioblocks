@@ -1,12 +1,12 @@
-import useGlobalBlockDefaults from "../pb-helpers/useGlobalBlockDefaults";
+import useGlobalBlockDefaults from "../fbks-helpers/useGlobalBlockDefaults";
 import blockMetadata from "./block.json";
-import { getProofingFlags } from '../pb-helpers/proofingFlags';
+import { getProofingFlags } from '../fbks-helpers/proofingFlags';
 /**
  * PB Image Block
  * Edit JS
  */
 import { __ } from '@wordpress/i18n';
-import ProofingStarControl from '../pb-helpers/ProofingStarControl';
+import ProofingStarControl from '../fbks-helpers/ProofingStarControl';
 import {
 	useBlockProps,
 	InspectorControls,
@@ -29,22 +29,22 @@ import {
 import { useRef, useEffect, useState } from '@wordpress/element';
 import { stack } from '@wordpress/icons';
 import { applyFilters } from '@wordpress/hooks';
-import { IconImageBlock } from '../pb-helpers/icons';
+import { IconImageBlock } from '../fbks-helpers/icons';
 import {
 	FBKS_ALL_FILTER_TOKEN,
 	fbksNormalizeActiveFilterValue,
-} from '../pb-helpers/filterConstants';
+} from '../fbks-helpers/filterConstants';
 import {
 	getEmptyExifAttributes,
 	getExifAttributesFromMedia,
 	hasStoredExifAttributes,
-} from '../pb-helpers/exifMetadata';
-import { getImageSizeOptions } from '../pb-helpers/imageSizeOptions';
-import { imageProFeatureNotice } from '../pb-helpers/imageProFeatureNotices';
-import { getShadowStyleClass } from '../pb-helpers/ImageStyleControl';
-import { getOverlayTypographyCSS } from '../pb-helpers/overlayTypographyControls';
-import { getTiltHoverHandlers } from '../pb-helpers/tiltHoverEffect';
-import { useProofingGalleryContext } from '../pb-helpers/useProofingGalleryContext';
+} from '../fbks-helpers/exifMetadata';
+import { getImageSizeOptions } from '../fbks-helpers/imageSizeOptions';
+import { imageProFeatureNotice } from '../fbks-helpers/imageProFeatureNotices';
+import { getShadowStyleClass } from '../fbks-helpers/ImageStyleControl';
+import { getOverlayTypographyCSS } from '../fbks-helpers/overlayTypographyControls';
+import { getTiltHoverHandlers } from '../fbks-helpers/tiltHoverEffect';
+import { useProofingGalleryContext } from '../fbks-helpers/useProofingGalleryContext';
 import './editor.scss';
 
 const getImageClickAction = ( {
@@ -70,7 +70,9 @@ const getImageClickAction = ( {
 
 const getImageClickAttributes = ( value ) => {
 	switch ( value ) {
-		case 'lightbox':
+		case 'video_lightbox':
+            return { imageClickAction: 'video_lightbox', imageClickTarget: 'icon', linkIconDisplay: 'hover', lightbox: true, enableLightbox: true, lightboxZoom: false, enableDownload: false, enableWooCommerce: false };
+        case 'lightbox':
 			return {
 				imageClickAction: 'lightbox',
 				lightbox: true,
@@ -226,7 +228,6 @@ const ImageMetadataControls = ( {
 			onChange={ ( value ) => setAttributes( { caption: value } ) }
 			help={ __( 'Add image caption.', 'folioblocks' ) }
 			__nextHasNoMarginBottom
-			__next40pxDefaultSize
 		/>
 		<TextControl
 			label={ __( 'Image Title', 'folioblocks' ) }
@@ -875,6 +876,7 @@ export default function Edit( {
 			? 'title'
 			: configuredOverlayContent;
 	const hasHoverOverlayContent =
+        effectiveOverlayContent === 'video_play' ? configuredImageClickAction === 'video_lightbox' :
 		effectiveOverlayContent === 'product'
 			? effectiveHoverWooActive && Number( attributes.wooProductId ) > 0
 			: effectiveOverlayContent === 'caption'
@@ -908,7 +910,8 @@ export default function Edit( {
 			galleryOverridesEnabled ||
 			!! effectiveWooActive ||
 			contextImageClickAction === 'custom_url' ||
-			contextImageClickAction === 'page_post' );
+			contextImageClickAction === 'page_post' ||
+            contextImageClickAction === 'video_lightbox' );
 
 	// Migrate legacy keys to new ones (non-destructive, only when new keys are undefined)
 	useEffect( () => {
@@ -1089,6 +1092,7 @@ export default function Edit( {
 	return (
 		<>
 			<BlockControls>
+                { configuredImageClickAction === 'video_lightbox' && applyFilters( 'folioBlocks.imageBlock.videoToolbar', null, { attributes, setAttributes } ) }
 				{ src && (
 					<ToolbarGroup>
 						<MediaUpload
@@ -1294,7 +1298,8 @@ export default function Edit( {
 									) }
 								</>
 							) }
-							{ hasWooCommerce &&
+							{ configuredImageClickAction === 'video_lightbox' && isInsideGallery && !overrideGalleryClickSettings && applyFilters( 'folioBlocks.imageBlock.videoSourceControls', null, { attributes, setAttributes } ) }
+                                { hasWooCommerce &&
 								activeImageClickAction === 'woocommerce' &&
 								applyFilters(
 									'folioBlocks.imageBlock.wooProductLinkControl',
@@ -1416,7 +1421,7 @@ export default function Edit( {
 											attributes: {
 												...attributes,
 												imageClickAction:
-													activeImageClickAction,
+													configuredImageClickAction,
 												enableWooCommerce:
 													effectiveHoverWooActive,
 											},
@@ -1638,7 +1643,8 @@ export default function Edit( {
 											effectiveCartIconBgColor,
 										}
 									) }
-									{ shouldShowLinkIcon &&
+									{ configuredImageClickAction === 'video_lightbox' && effectiveImageClickTarget === 'icon' && applyFilters( 'folioBlocks.imageBlock.videoIcon', null, { attributes, effectiveLinkIconDisplay, linkIconStyleVars } ) }
+                                    { shouldShowLinkIcon &&
 										applyFilters(
 											'folioBlocks.imageBlock.linkButton',
 											null,
@@ -1775,7 +1781,8 @@ export default function Edit( {
 										effectiveCartIconBgColor,
 									}
 								) }
-								{ shouldShowLinkIcon &&
+								{ configuredImageClickAction === 'video_lightbox' && effectiveImageClickTarget === 'icon' && applyFilters( 'folioBlocks.imageBlock.videoIcon', null, { attributes, effectiveLinkIconDisplay, linkIconStyleVars } ) }
+                                    { shouldShowLinkIcon &&
 									applyFilters(
 										'folioBlocks.imageBlock.linkButton',
 										null,

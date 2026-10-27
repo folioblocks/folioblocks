@@ -3,13 +3,13 @@
  * View.js
  */
 import { getContext, getElement, store } from '@wordpress/interactivity';
-import { createFrontendScope } from '../pb-helpers/frontendScope';
+import { createFrontendScope } from '../fbks-helpers/frontendScope';
 
 import {
 	normalizeClientRating,
 	getPointerRating,
 	getKeyboardRating,
-} from '../pb-helpers/proofingRatings';
+} from '../fbks-helpers/proofingRatings';
 
 const mounts = new Map();
 

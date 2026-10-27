@@ -2,7 +2,7 @@
  * Proofing Gallery Block
  * Premium JS
  */
-import { registerWatermarkOverlayControls } from '../pb-helpers/watermarkOverlayControls';
+import { registerWatermarkOverlayControls } from '../fbks-helpers/watermarkOverlayControls';
 
 registerWatermarkOverlayControls( {
 	hookPrefix: 'folioBlocks.proofingGallery',

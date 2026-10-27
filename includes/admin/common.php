@@ -125,7 +125,7 @@ if (! function_exists('fbks_render_quick_links')) {
 			),
 		);
 		?>
-		<ul class="pb-quick-links">
+		<ul class="fbks-quick-links">
 			<?php foreach (fbks_get_quick_links() as $link) : ?>
 				<li>
 					<a href="<?php echo esc_url($link['href']); ?>" target="_blank" rel="noopener noreferrer">

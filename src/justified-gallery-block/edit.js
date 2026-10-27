@@ -1,4 +1,4 @@
-import useGlobalBlockDefaults from '../pb-helpers/useGlobalBlockDefaults';
+import useGlobalBlockDefaults from '../fbks-helpers/useGlobalBlockDefaults';
 import blockMetadata from './block.json';
 /**
  * Justified Gallery Block
@@ -25,19 +25,19 @@ import { plus } from '@wordpress/icons';
 import { useCallback, useEffect, useRef, useState } from '@wordpress/element';
 import { decodeEntities } from '@wordpress/html-entities';
 import { applyFilters } from '@wordpress/hooks';
-import { IconJustifiedGallery, IconPBSpinner } from '../pb-helpers/icons';
-import { fbksNormalizeActiveFilterValue } from '../pb-helpers/filterConstants';
-import { getExifAttributesFromMedia } from '../pb-helpers/exifMetadata';
-import { getImageSizeOptions } from '../pb-helpers/imageSizeOptions';
-import { imageProFeatureNotice } from '../pb-helpers/imageProFeatureNotices';
+import { IconJustifiedGallery, IconPBSpinner } from '../fbks-helpers/icons';
+import { fbksNormalizeActiveFilterValue } from '../fbks-helpers/filterConstants';
+import { getExifAttributesFromMedia } from '../fbks-helpers/exifMetadata';
+import { getImageSizeOptions } from '../fbks-helpers/imageSizeOptions';
+import { imageProFeatureNotice } from '../fbks-helpers/imageProFeatureNotices';
 import {
 	getGalleryGapForWidth,
 	resolveLegacyGalleryGaps,
-} from '../pb-helpers/galleryGap';
-import { calculateJustifiedLayout } from '../pb-helpers/justifiedLayout';
-import ResponsiveRangeControl from '../pb-helpers/ResponsiveRangeControl';
-import ResponsiveRangeInspector, { ResponsiveLayoutInspector } from '../pb-helpers/ResponsiveRangeInspector';
-import { useProofingGalleryContext } from '../pb-helpers/useProofingGalleryContext';
+} from '../fbks-helpers/galleryGap';
+import { calculateJustifiedLayout } from '../fbks-helpers/justifiedLayout';
+import ResponsiveRangeControl from '../fbks-helpers/ResponsiveRangeControl';
+import ResponsiveRangeInspector, { ResponsiveLayoutInspector } from '../fbks-helpers/ResponsiveRangeInspector';
+import { useProofingGalleryContext } from '../fbks-helpers/useProofingGalleryContext';
 import './editor.scss';
 
 const ALLOWED_BLOCKS = [ 'folioblocks/pb-image-block' ];
@@ -79,7 +79,9 @@ const getImageClickAction = ( {
 
 const getImageClickAttributes = ( value ) => {
 	switch ( value ) {
-		case 'lightbox':
+		case 'video_lightbox':
+            return { imageClickAction: 'video_lightbox', imageClickTarget: 'icon', linkIconDisplay: 'hover', lightbox: true, enableLightbox: true, lightboxZoom: false, enableDownload: false, enableWooCommerce: false };
+        case 'lightbox':
 			return {
 				imageClickAction: 'lightbox',
 				lightbox: true,

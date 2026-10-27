@@ -360,7 +360,7 @@ if (! function_exists('fbks_render_free_pro_plan_header')) {
 	function fbks_render_free_pro_plan_header($label, $short_label)
 	{
 		printf(
-			'<th><span class="pb-comparison-plan-label">%1$s</span><span class="pb-comparison-plan-label-short" aria-hidden="true">%2$s</span></th>',
+			'<th><span class="fbks-comparison-plan-label">%1$s</span><span class="fbks-comparison-plan-label-short" aria-hidden="true">%2$s</span></th>',
 			esc_html($label),
 			esc_html($short_label)
 		);
@@ -372,20 +372,20 @@ if (! function_exists('fbks_render_free_pro_page')) {
 	{
 		$sections = fbks_get_free_pro_sections();
 ?>
-		<div class="pb-wrap" data-plugin-version="<?php echo esc_attr(sprintf(__('Version %s', 'folioblocks'), FBKS_VERSION)); ?>">
-			<div class="pb-settings-header">
-				<img src="<?php echo esc_url(plugin_dir_url(__DIR__) . '/icons/pb-brand-icon.svg'); ?>" alt="<?php echo esc_attr__('FolioBlocks', 'folioblocks'); ?>" class="pb-settings-logo" />
+		<div class="fbks-wrap" data-plugin-version="<?php echo esc_attr(sprintf(__('Version %s', 'folioblocks'), FBKS_VERSION)); ?>">
+			<div class="fbks-settings-header">
+				<img src="<?php echo esc_url(plugin_dir_url(__DIR__) . '/icons/pb-brand-icon.svg'); ?>" alt="<?php echo esc_attr__('FolioBlocks', 'folioblocks'); ?>" class="fbks-settings-logo" />
 				<h1><?php esc_html_e('FolioBlocks', 'folioblocks'); ?> - <?php esc_html_e('Free vs Pro', 'folioblocks'); ?></h1>
 			</div>
 
 			<div class="settings-container">
 				<div class="settings-left">
-					<div class="pb-dashboard-box">
+					<div class="fbks-dashboard-box">
 						<h2><?php esc_html_e('Compare Features', 'folioblocks'); ?></h2>
 						<p><?php esc_html_e('Compare the features to find the best option for your website.', 'folioblocks'); ?></p>
 
 						<?php foreach ($sections as $section) : ?>
-							<table class="pb-comparison-table">
+							<table class="fbks-comparison-table">
 								<thead>
 									<tr>
 										<th><?php echo esc_html($section['title']); ?></th>
@@ -412,7 +412,7 @@ if (! function_exists('fbks_render_free_pro_page')) {
 				</div>
 
 				<div class="settings-right">
-					<div class="pb-dashboard-box">
+					<div class="fbks-dashboard-box">
 						<h2><?php esc_html_e('Unlock Pro', 'folioblocks'); ?></h2>
 						<p><?php esc_html_e('Upgrade to Pro to unlock all of these features.', 'folioblocks'); ?></p>
 						<p class="buy-button-wrapper">
@@ -422,7 +422,7 @@ if (! function_exists('fbks_render_free_pro_page')) {
 						</p>
 					</div>
 
-					<div class="pb-dashboard-box">
+					<div class="fbks-dashboard-box">
 						<h2><?php esc_html_e('Quick Links:', 'folioblocks'); ?></h2>
 						<?php fbks_render_quick_links(); ?>
 					</div>

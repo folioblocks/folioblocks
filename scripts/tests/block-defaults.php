@@ -31,7 +31,7 @@ foreach (['none', 'lightbox', 'download', 'media_file', 'custom_url', 'page_post
     foreach (['icon', 'thumbnail'] as $target) {
         $settings = fbks_sanitize_block_defaults('image', ['imageClickAction' => $action, 'imageClickTarget' => $target, 'lightbox' => true, 'onHoverStyle' => 'chip-gradient', 'shadowStyle' => 'dramatic']);
         $attrs = fbks_resolve_image_block_defaults($settings);
-        $expected_lightbox = 'lightbox' === $action || ('download' === $action && 'icon' === $target);
+        $expected_lightbox = 'lightbox' === $action || (in_array($action, ['download', 'custom_url', 'page_post'], true) && 'icon' === $target);
         check_block_default($expected_lightbox === $attrs['lightbox'] && $attrs['lightbox'] === $attrs['enableLightbox'], 'Click and lightbox flags disagree.');
         check_block_default(('download' === $action) === $attrs['enableDownload'], 'Download flag disagrees with click behavior.');
         check_block_default(true === $attrs['showTitleOnHover'] && true === $attrs['dropShadow'], 'Overlay or shadow attributes not enabled.');
@@ -65,7 +65,7 @@ echo "Passed: Video content/visibility mapping, gradients, shadows, and legacy m
 foreach (['carousel', 'filmstrip', 'modular', 'grid', 'justified', 'masonry'] as $key) {
     foreach (['none', 'lightbox', 'download', 'custom_url', 'page_post'] as $action) {
         $values = fbks_resolve_gallery_block_defaults($key, fbks_sanitize_block_defaults($key, ['imageClickAction' => $action, 'lightbox' => true, 'onHoverStyle' => 'chip-gradient']));
-        check_block_default($values['lightbox'] === (in_array($action, ['lightbox', 'download'], true) || (in_array($key, ['carousel', 'modular', 'grid', 'justified', 'masonry'], true) && in_array($action, ['custom_url', 'page_post'], true))), 'Gallery click mapping failed.');
+        check_block_default($values['lightbox'] === (in_array($action, ['lightbox', 'download'], true) || (in_array($key, ['carousel', 'filmstrip', 'modular', 'grid', 'justified', 'masonry'], true) && in_array($action, ['custom_url', 'page_post'], true))), 'Gallery click mapping failed.');
         check_block_default($values['enableDownload'] === ('download' === $action) && $values['onHoverTitle'], 'Gallery flags failed.');
         check_block_default(!isset($values['showTitleOnHover'], $values['downloadDisplay'], $values['mobileOrientation']), 'Virtual gallery fields leaked.');
     }
@@ -109,3 +109,55 @@ check_block_default(!fbks_block_defaults_are_customized('before_after', ['slider
 check_block_default(fbks_block_defaults_are_customized('before_after', ['labelBackgroundColor' => 'rgba(0,0,0,0.5)']), 'Changed opacity not detected.');
 check_block_default(!fbks_block_defaults_are_customized('video_gallery', ['filterBgColor' => 'rgba(255,255,255,0)']), 'Equivalent transparent color marked customized.');
 echo "Passed: persistent customization state, default equivalence, and opacity changes.\n";
+
+foreach (['carousel', 'filmstrip', 'grid', 'justified', 'masonry', 'modular'] as $key) {
+foreach (['icon', 'thumbnail'] as $target) {
+    $values = fbks_resolve_gallery_block_defaults($key, fbks_sanitize_block_defaults($key, ['imageClickAction' => 'woocommerce', 'imageClickTarget' => $target, 'lightbox' => true, 'lightboxContent' => 'product', 'wooDefaultLinkAction' => 'product']));
+    check_block_default($values['enableWooCommerce'] && !$values['enableDownload'], 'Carousel commerce flags failed.');
+    check_block_default($values['lightbox'] === ('icon' === $target), 'Carousel commerce lightbox target failed.');
+    check_block_default('product' === $values['wooLightboxInfoType'] && 'product' === $values['wooDefaultLinkAction'], 'Carousel product defaults failed.');
+    if ('thumbnail' === $target) { check_block_default('none' === $values['wooCartIconDisplay'], 'Thumbnail product target retained a cart icon.'); }
+}
+}
+echo "Passed: reviewed photo gallery WooCommerce flags, product defaults and thumbnail target mapping.\n";
+
+foreach ([true => 'hover', false => 'always'] as $legacy => $display) {
+    $values = fbks_sanitize_block_defaults('image', ['downloadOnHover' => (bool) $legacy]);
+    check_block_default($display === $values['downloadDisplay'], 'Image download display migration failed.');
+    $resolved = fbks_resolve_image_block_defaults($values);
+    check_block_default((bool) $legacy === $resolved['downloadOnHover'] && !isset($resolved['downloadDisplay']), 'Image virtual display mapping failed.');
+}
+foreach (['icon', 'thumbnail'] as $target) {
+    $values = fbks_resolve_image_block_defaults(fbks_sanitize_block_defaults('image', ['imageClickAction' => 'woocommerce', 'imageClickTarget' => $target, 'lightbox' => true, 'lightboxContent' => 'product', 'wooLinkAction' => 'product', 'onHoverStyle' => 'chip', 'overlayContent' => 'product', 'wooProductPriceOnHover' => true]));
+    check_block_default($values['enableWooCommerce'] && !$values['enableDownload'], 'Image commerce flags failed.');
+    check_block_default($values['lightbox'] === ('icon' === $target) && $values['enableLightbox'] === $values['lightbox'], 'Image commerce lightbox mapping failed.');
+    check_block_default('product' === $values['wooLinkAction'] && 'product' === $values['wooLightboxInfoType'] && $values['wooProductPriceOnHover'], 'Image product defaults failed.');
+}
+echo "Passed: Image download display migration and WooCommerce mapping.\n";
+
+foreach (['image', 'carousel', 'filmstrip', 'grid', 'justified', 'modular', 'masonry'] as $key) {
+    $settings = fbks_sanitize_block_defaults($key, ['imageClickAction' => 'video_lightbox', 'overlayContent' => 'video_play', 'lightboxZoom' => true, 'linkIconDisplay' => 'none']);
+    $values = 'image' === $key ? fbks_resolve_image_block_defaults($settings) : fbks_resolve_gallery_block_defaults($key, $settings);
+    check_block_default($values['lightbox'] && !$values['lightboxZoom'] && !$values['enableDownload'] && !$values['enableWooCommerce'], 'Video lightbox flags failed: ' . $key);
+    check_block_default('hover' === $values['linkIconDisplay'] && 'video_play' === $values['overlayContent'], 'Video icon/overlay defaults failed: ' . $key);
+}
+check_block_default(isset(WP_Block_Type_Registry::get_instance()->get_registered('folioblocks/pb-image-block')->attributes['videoLightboxUrl']), 'Video URL is not registered for persistence.');
+echo "Passed: video lightbox defaults for Image and all photo galleries, zoom exclusion and URL persistence schema.\n";
+
+$image_schema = fbks_get_block_defaults_schema()['image'];
+check_block_default(!isset($image_schema['fields']['videoLightboxUrl']) && !isset($image_schema['fields']['lightboxCounter']), 'Image local-only fields leaked into global defaults.');
+$actions = array_keys($image_schema['fields']['imageClickAction']['choices']);
+check_block_default('video_lightbox' === $actions[array_search('woocommerce', $actions, true) - 1], 'Image video action order differs from editor.');
+$clean = fbks_sanitize_block_defaults('image', ['imageClickAction' => 'lightbox', 'overlayContent' => 'video_play']);
+check_block_default('title' === $clean['overlayContent'], 'Inactive Image video overlay retained.');
+echo "Passed: Image global defaults omit local settings, match action order, and sanitize inactive play overlays.\n";
+
+foreach (['carousel', 'filmstrip', 'grid', 'justified', 'modular', 'masonry'] as $key) {
+    $schema = fbks_get_block_defaults_schema()[$key];
+    check_block_default(isset($schema['fields']['lightboxCounter']) && !isset($schema['fields']['videoLightboxUrl']), 'Gallery counter/source defaults failed: ' . $key);
+    $choices = array_keys($schema['fields']['imageClickAction']['choices']);
+    check_block_default('video_lightbox' === $choices[array_search('woocommerce', $choices, true) - 1], 'Gallery video option order failed: ' . $key);
+    $clean = fbks_sanitize_block_defaults($key, ['imageClickAction' => 'none', 'overlayContent' => 'video_play']);
+    check_block_default('title' === $clean['overlayContent'], 'Inactive gallery play overlay retained: ' . $key);
+}
+echo "Passed: gallery global video option order, counters, per-image sources and inactive play overlay sanitization.\n";

@@ -1,3 +1,4 @@
+import { registerVideoLightboxControls } from './videoLightboxControls';
 import { __ } from '@wordpress/i18n';
 import { addFilter, applyFilters } from '@wordpress/hooks';
 import {
@@ -27,6 +28,7 @@ const LightboxContentControl = ({
 	showProductInfoOption = false,
 	showAppearanceControl = true,
 	showCounterControl = false,
+	showZoomControl = true,
 }) => {
 	const value = getLightboxContent(attributes);
 	const options = [
@@ -144,7 +146,7 @@ const LightboxContentControl = ({
 					)}
 				/>
 			)}
-			<ToggleControl
+			{ showZoomControl && <ToggleControl
 				label={__('Enable Lightbox Zoom', 'folioblocks')}
 				checked={!!attributes.lightboxZoom}
 				onChange={(lightboxZoom) => setAttributes({ lightboxZoom })}
@@ -153,7 +155,7 @@ const LightboxContentControl = ({
 					'Let visitors zoom into lightbox images.',
 					'folioblocks'
 				)}
-			/>
+			/> }
 			{[
 				'exif',
 				'title_exif',
@@ -198,7 +200,7 @@ const LinkTargetControls = ({
 				value={imageClickTarget}
 				options={[
 					{
-						label: __('Link Target Icon', 'folioblocks'),
+						label: __('Icon', 'folioblocks'),
 						value: 'icon',
 					},
 					{
@@ -308,6 +310,7 @@ export const registerImageClickActionPremiumControls = ({
 	supportsLightbox = true,
 	showCounterControl = true,
 }) => {
+    registerVideoLightboxControls( { hookPrefix, namespace, LightboxControl: LightboxContentControl } );
 	addFilter(
 		`${hookPrefix}.imageClickActionOptions`,
 		`${namespace}-premium-click-action-options`,

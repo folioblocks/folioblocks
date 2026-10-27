@@ -3,7 +3,7 @@
  * Premium View JS
  */
 import { getElement, store } from '@wordpress/interactivity';
-import { createFrontendScope } from '../pb-helpers/frontendScope';
+import { createFrontendScope } from '../fbks-helpers/frontendScope';
 
 const initializeRuntime = () => {
 	const scope = createFrontendScope();

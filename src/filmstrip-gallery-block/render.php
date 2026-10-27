@@ -116,7 +116,7 @@ if ( $fbks_can_use_premium ) {
 		: 'add_to_cart';
 
 	$fbks_woo_hover_info = ! empty( $attributes['wooProductPriceOnHover'] );
-	$fbks_overlay_content = isset( $attributes['overlayContent'] ) && in_array( $attributes['overlayContent'], [ 'title', 'caption', 'product', 'exif', 'social' ], true )
+	$fbks_overlay_content = isset( $attributes['overlayContent'] ) && in_array( $attributes['overlayContent'], [ 'title', 'caption', 'product', 'exif', 'social', 'video_play' ], true )
 		? $attributes['overlayContent']
 		: ( $fbks_woo_hover_info ? 'product' : 'title' );
 	$fbks_social_sources = function_exists( 'fbks_normalize_social_share_sources' )
@@ -431,6 +431,7 @@ if ( is_array( $fbks_inner_blocks ) && ! empty( $fbks_inner_blocks ) ) {
 			'enableWooCommerce' => ! empty( $fbks_image_attrs['enableWooCommerce'] ),
 			'imageClickAction' => isset( $fbks_image_attrs['imageClickAction'] ) ? (string) $fbks_image_attrs['imageClickAction'] : '',
 			'overrideGalleryClickSettings' => ! empty( $fbks_image_attrs['overrideGalleryClickSettings'] ),
+            'videoLightboxUrl' => esc_url_raw( $fbks_image_attrs['videoLightboxUrl'] ?? '', [ 'http', 'https' ] ),
 			'imageClickTarget' => isset( $fbks_image_attrs['imageClickTarget'] ) ? (string) $fbks_image_attrs['imageClickTarget'] : 'icon',
 			'enableDownload'   => ! empty( $fbks_image_attrs['enableDownload'] ),
 			'downloadOnHover'  => isset( $fbks_image_attrs['downloadOnHover'] ) ? (bool) $fbks_image_attrs['downloadOnHover'] : true,
@@ -450,6 +451,8 @@ if ( is_array( $fbks_inner_blocks ) && ! empty( $fbks_inner_blocks ) ) {
 			'lightbox'         => ! empty( $fbks_image_attrs['lightbox'] ) || ! empty( $fbks_image_attrs['enableLightbox'] ),
 			'lightboxTheme'    => isset( $fbks_image_attrs['lightboxTheme'] ) ? (string) $fbks_image_attrs['lightboxTheme'] : 'inherit',
 			'lightboxContent'  => isset( $fbks_image_attrs['lightboxContent'] ) ? (string) $fbks_image_attrs['lightboxContent'] : '',
+            'lightboxZoom' => !empty( $fbks_image_attrs['lightboxZoom'] ),
+            'lightboxCounter' => !empty( $fbks_image_attrs['lightboxCounter'] ),
 			'enableLightboxSocialSharing' => ! empty( $fbks_image_attrs['enableLightboxSocialSharing'] ),
 				'exifCamera'      => isset( $fbks_image_attrs['exifCamera'] ) ? (string) $fbks_image_attrs['exifCamera'] : '',
 				'exifFocalLength' => isset( $fbks_image_attrs['exifFocalLength'] ) ? (string) $fbks_image_attrs['exifFocalLength'] : '',

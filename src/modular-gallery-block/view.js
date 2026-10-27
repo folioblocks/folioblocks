@@ -1,6 +1,6 @@
 /** Modular rows and stacks follow the mounted gallery's lifetime. */
 import { getElement, store } from '@wordpress/interactivity';
-import { mountGalleryLayout } from '../pb-helpers/galleryLifecycle';
+import { mountGalleryLayout } from '../fbks-helpers/galleryLifecycle';
 
 function getImageAspectRatio( img ) {
 	if ( ! img ) {

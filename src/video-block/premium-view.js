@@ -3,8 +3,8 @@
  * Premium View JS
  */
 import { getElement, store } from '@wordpress/interactivity';
-import { createFrontendScope } from '../pb-helpers/frontendScope';
-import { mountGalleryControls } from '../pb-helpers/galleryControls';
+import { createFrontendScope } from '../fbks-helpers/frontendScope';
+import { mountGalleryControls } from '../fbks-helpers/galleryControls';
 
 const initializePremium = ( root ) => {
 	const scope = createFrontendScope();

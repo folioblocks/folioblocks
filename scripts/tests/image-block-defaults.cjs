@@ -1,7 +1,7 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const { JSDOM } = require('jsdom');
-const dom = new JSDOM(`<form class="pb-global-settings-form">${fs.readFileSync('/private/tmp/folioblocks-block-defaults-fixture.html', 'utf8')}</form>`, { runScripts: 'outside-only' });
+const dom = new JSDOM(`<form class="fbks-global-settings-form">${fs.readFileSync('/private/tmp/folioblocks-block-defaults-fixture.html', 'utf8')}</form>`, { runScripts: 'outside-only' });
 const { window } = dom;
 window.folioBlocksGlobalSettingsAutosave = { ajaxUrl: '/fixture', nonce: 'fixture', hasWooCommerce: true };
 window.fetch = async () => ({ ok: true, json: async () => ({ success: true }) });
@@ -43,7 +43,7 @@ changeVideo('defaultOverlayContent', 'play'); assert(videoVisible('video-content
 video.querySelector('[data-reset-block-defaults]').click();
 assert(!videoVisible('video-gradient') && !videoVisible('video-text') && videoVisible('video-content'));
 for (const key of ['before_after', 'background_video', 'loupe', 'video']) {
-    assert(window.document.querySelector(`[data-settings-section="block_${key}"] .pb-block-default-group-title`), `${key}: missing section headings`);
+    assert(window.document.querySelector(`[data-settings-section="block_${key}"] .fbks-block-default-group-title`), `${key}: missing section headings`);
 }
 for (const key of ['carousel', 'filmstrip']) {
     const gallery = window.document.querySelector(`[data-settings-section="block_${key}"]`);
@@ -59,7 +59,7 @@ for (const key of ['carousel', 'filmstrip']) {
     change('lightbox', true); assert(shown('lightbox'));
     change('imageClickTarget', 'thumbnail'); assert(!shown('secondary-lightbox') && !shown('lightbox'));
     change('imageClickAction', 'custom_url'); change('imageClickTarget', 'icon'); assert(shown('link-icon'));
-    assert.equal(shown('secondary-lightbox'), key === 'carousel');
+    assert(shown('secondary-lightbox'));
     change('onHoverStyle', 'chip-gradient'); assert(shown('chip-gradient') && !shown('color'));
     gallery.querySelector('[data-reset-block-defaults]').click();
     assert(!shown('autoplay') && !shown('chip-gradient') && !shown('download'));
@@ -93,7 +93,7 @@ modularCard.querySelector('[data-reset-block-defaults]').click();
 assert(modularCard.querySelector('[data-image-default-condition="lightbox"]').hidden);
 const grid = window.document.querySelector('[data-settings-section="block_grid"]');
 const gridFiltering = grid.querySelector('#fbks-default-grid-enableFilter');
-const filterHeading = grid.querySelector('.pb-block-default-group-title[data-image-default-condition="filter"]');
+const filterHeading = grid.querySelector('.fbks-block-default-group-title[data-image-default-condition="filter"]');
 assert(filterHeading.hidden);
 gridFiltering.checked = true; gridFiltering.dispatchEvent(new window.Event('change', { bubbles: true }));
 assert(!filterHeading.hidden);
@@ -115,7 +115,7 @@ justified.querySelector('[data-reset-block-defaults]').click();
 assert.equal(justified.querySelector('#fbks-default-justified-mobileRowHeight').value, '250');
 const justifiedFilter = justified.querySelector('#fbks-default-justified-enableFilter');
 justifiedFilter.checked = true; justifiedFilter.dispatchEvent(new window.Event('change', { bubbles: true }));
-assert(!justified.querySelector('.pb-block-default-group-title[data-image-default-condition="filter"]').hidden);
+assert(!justified.querySelector('.fbks-block-default-group-title[data-image-default-condition="filter"]').hidden);
 const masonry = window.document.querySelector('[data-settings-section="block_masonry"]');
 masonry.querySelector('[data-reset-block-defaults]').click();
 for (const [name, value] of Object.entries({columns: '6', tabletColumns: '4', mobileColumns: '2', gap: '10', tabletGap: '10', mobileGap: '10'})) {
@@ -124,7 +124,7 @@ for (const [name, value] of Object.entries({columns: '6', tabletColumns: '4', mo
 }
 const masonryFilter = masonry.querySelector('#fbks-default-masonry-enableFilter');
 masonryFilter.checked = true; masonryFilter.dispatchEvent(new window.Event('change', { bubbles: true }));
-assert(!masonry.querySelector('.pb-block-default-group-title[data-image-default-condition="filter"]').hidden);
+assert(!masonry.querySelector('.fbks-block-default-group-title[data-image-default-condition="filter"]').hidden);
 const proofing = window.document.querySelector('[data-settings-section="block_proofing"]');
 proofing.querySelector('[data-reset-block-defaults]').click();
 const flagModeAdvanced = proofing.querySelector('#fbks-default-proofing-flagMode input[value="advanced"]');
@@ -136,5 +136,191 @@ assert(proofing.querySelector('[data-image-default-condition="proofing-palette"]
 proofing.querySelector('[data-reset-block-defaults]').click();
 assert(proofing.querySelector('#fbks-default-proofing-flagMode input[value="simple"]').checked);
 assert(proofing.querySelector('[data-image-default-condition="proofing-palette"]').hidden);
-window.close();
 console.log('Passed: click-dependent controls, download targets, overlay styles, gradients, EXIF visibility and reset.');
+
+// Reviewed galleries share click ordering, conditional styles and commerce behavior.
+for (const key of ['carousel', 'filmstrip', 'grid', 'justified', 'masonry', 'modular']) {
+    const card = window.document.querySelector(`[data-settings-section="block_${key}"]`);
+    const input = name => card.querySelector(`#fbks-default-${key}-${name}`);
+    const change = (name, value) => {
+        if (input(name).type === 'checkbox') input(name).checked = value; else input(name).value = value;
+        input(name).dispatchEvent(new window.Event('change', { bubbles: true }));
+    };
+    const visible = name => !card.querySelector(`[data-image-default-condition="${name}"]`).hidden;
+    assert(input('imageClickTarget').compareDocumentPosition(input('downloadDisplay')) & window.Node.DOCUMENT_POSITION_FOLLOWING);
+    assert(input('downloadDisplay').compareDocumentPosition(input('lightbox')) & window.Node.DOCUMENT_POSITION_FOLLOWING);
+    const headings = [...card.querySelectorAll('.fbks-block-default-group-title')];
+    assert.equal(headings[headings.findIndex(el => el.textContent === (key === 'filmstrip' ? 'Gallery Styles' : 'Gallery Image Styles')) + 1].textContent, 'Gallery Click Styles');
+    assert.equal(headings[headings.findIndex(el => el.textContent === 'Gallery Click Styles') + 1].textContent, 'Gallery Hover Styles');
+    for (const style of ['none', 'blur-overlay', 'fade-overlay', 'gradient-bottom', 'color-overlay', 'gradient-overlay', 'chip', 'chip-gradient']) {
+        change('onHoverStyle', style);
+        assert.equal(visible('hover-styles'), ['color-overlay', 'gradient-overlay', 'chip', 'chip-gradient'].includes(style));
+    }
+    const stylesHeading = headings.find(el => el.textContent === 'Gallery Hover Styles');
+    for (const name of ['overlayBgColor', 'overlayTextColor', 'chipOverlayBgColor', 'chipOverlayTextColor', 'overlayBgGradient', 'chipOverlayBgGradient']) {
+        const field = input(name).closest('.fbks-block-default-field');
+        let heading = field.previousElementSibling;
+        while (heading && !heading.classList.contains('fbks-block-default-group-title')) heading = heading.previousElementSibling;
+        assert.equal(heading, stylesHeading);
+    }
+    change('imageClickAction', 'none'); assert(!visible('click-styles'));
+    change('imageClickAction', 'download'); assert(visible('click-styles'));
+    change('imageClickAction', 'page_post'); change('imageClickTarget', 'icon'); change('linkIconDisplay', 'none'); assert(!visible('click-styles'));
+    change('linkIconDisplay', 'hover'); assert(visible('click-styles'));
+    change('imageClickAction', 'woocommerce'); assert(visible('commerce') && visible('cart-icon'));
+    change('lightbox', true); assert(visible('lightbox'));
+    change('wooCartIconDisplay', 'none'); assert(!visible('cart-icon') && !visible('click-styles'));
+    change('imageClickTarget', 'thumbnail'); assert(!visible('secondary-lightbox') && !visible('lightbox'));
+    window.folioBlocksGlobalSettingsAutosave.hasWooCommerce = false;
+    change('imageClickAction', 'none');
+    assert(input('imageClickAction').querySelector('option[value="woocommerce"]').disabled);
+    window.folioBlocksGlobalSettingsAutosave.hasWooCommerce = true;
+}
+console.log('Passed: reviewed photo gallery click order, conditional icon styles, WooCommerce controls and availability.');
+
+// Photo galleries keep behavior controls and expose conditional style sections.
+for (const key of ['grid', 'justified', 'masonry', 'modular']) {
+    const card = window.document.querySelector(`[data-settings-section="block_${key}"]`);
+    const input = name => card.querySelector(`#fbks-default-${key}-${name}`);
+    const change = (name, value) => { input(name).value = value; input(name).dispatchEvent(new window.Event('change', { bubbles: true })); };
+    const heading = text => [...card.querySelectorAll('.fbks-block-default-group-title')].find(el => el.textContent === text);
+    assert.equal(heading('Gallery Image Styles').nextElementSibling.classList.contains('fbks-block-default-field'), true);
+    const headings = [...card.querySelectorAll('.fbks-block-default-group-title')].map(el => el.textContent);
+    assert.deepEqual(headings.slice(headings.indexOf('Gallery Image Styles'), headings.indexOf('Gallery Image Styles') + 3), ['Gallery Image Styles', 'Gallery Click Styles', 'Gallery Hover Styles']);
+    for (const [group, names] of Object.entries({
+        'Gallery Click Styles': ['downloadIconColor', 'downloadIconBgColor', 'linkIconColor', 'linkIconBgColor'],
+        'Gallery Hover Styles': ['overlayBgColor', 'overlayTextColor', 'chipOverlayBgColor', 'chipOverlayTextColor', 'overlayBgGradient', 'chipOverlayBgGradient'],
+    })) {
+        for (const name of names) {
+            let previous = input(name).closest('.fbks-block-default-field').previousElementSibling;
+            while (previous && !previous.classList.contains('fbks-block-default-group-title')) previous = previous.previousElementSibling;
+            assert.equal(previous, heading(group));
+        }
+    }
+    change('imageClickAction', 'none'); assert(heading('Gallery Click Styles').hidden);
+    change('imageClickAction', 'download'); assert(!heading('Gallery Click Styles').hidden);
+    change('imageClickAction', 'page_post'); change('imageClickTarget', 'icon'); change('linkIconDisplay', 'none'); assert(heading('Gallery Click Styles').hidden);
+    change('linkIconDisplay', 'hover'); assert(!heading('Gallery Click Styles').hidden);
+    change('onHoverStyle', 'none'); assert(heading('Gallery Hover Styles').hidden);
+    for (const style of ['color-overlay', 'gradient-overlay', 'chip', 'chip-gradient']) {
+        change('onHoverStyle', style); assert(!heading('Gallery Hover Styles').hidden);
+    }
+}
+console.log('Passed: Grid, Justified, Masonry and Modular style grouping, heading order and conditional visibility.');
+
+// Standalone Image uses display selectors, style sections and commerce.
+{
+    const card = window.document.querySelector('[data-settings-section="block_image"]');
+    const input = name => card.querySelector(`#fbks-default-image-${name}`);
+    const visible = condition => !card.querySelector(`[data-image-default-condition="${condition}"]`).hidden;
+    const heading = text => [...card.querySelectorAll('.fbks-block-default-group-title')].find(el => el.textContent === text);
+    assert.equal(input('downloadDisplay').tagName, 'SELECT');
+    assert(!input('downloadOnHover'));
+    assert.equal(input('borderWidth').type, 'range');
+    for (const name of ['linkIconColor', 'linkIconBgColor', 'cartIconColor', 'cartIconBgColor']) assert.equal(input(name).type, 'color');
+    set('imageClickAction', 'none'); set('onHoverStyle', 'none');
+    assert(heading('Image Click Styles').hidden && heading('Image Hover Styles').hidden);
+    for (const action of ['custom_url', 'page_post', 'woocommerce']) {
+        set('imageClickAction', action); set('imageClickTarget', 'icon'); set('lightbox', true);
+        assert(visible('secondary-lightbox') && visible('lightbox'));
+        set('imageClickTarget', 'thumbnail'); assert(!visible('secondary-lightbox') && !visible('lightbox'));
+    }
+    set('imageClickAction', 'woocommerce'); set('imageClickTarget', 'icon');
+    assert(visible('commerce') && visible('cart-icon'));
+    set('onHoverStyle', 'blur-overlay'); set('overlayContent', 'product');
+    assert(visible('product-overlay'));
+    assert(heading('Image Hover Styles').hidden);
+    for (const name of ['overlayFontFamily', 'overlayFontWeight', 'overlayFontStyle']) assert(!input(name));
+    set('overlayContent', 'exif'); assert(heading('Image Hover Styles').hidden);
+    set('onHoverStyle', 'color-overlay'); assert(!heading('Image Hover Styles').hidden);
+    card.querySelector('[data-reset-block-defaults]').click();
+    assert.equal(input('downloadDisplay').value, 'hover');
+    assert(heading('Image Click Styles').hidden && heading('Image Hover Styles').hidden);
+}
+console.log('Passed: Image display controls, missing colors, style sections and WooCommerce.');
+
+for (const [key, title] of [['video', 'Video Hover Styles'], ['video_gallery', 'Gallery Hover Styles']]) {
+    const card = window.document.querySelector(`[data-settings-section="block_${key}"]`);
+    const heading = [...card.querySelectorAll('.fbks-block-default-group-title')].find(el => el.textContent === title);
+    assert(heading);
+    for (const name of ['overlayBgColor', 'overlayBgGradient', 'overlayTextColor']) {
+        let previous = card.querySelector(`#fbks-default-${key}-${name}`).closest('.fbks-block-default-field').previousElementSibling;
+        while (previous && !previous.classList.contains('fbks-block-default-group-title')) previous = previous.previousElementSibling;
+        assert.equal(previous, heading);
+    }
+    const style = card.querySelector(`#fbks-default-${key}-overlayStyle`);
+    for (const value of ['default', 'blur', 'color', 'gradient']) {
+        style.value = value; style.dispatchEvent(new window.Event('change', { bubbles: true }));
+        assert.equal(heading.hidden, !['color', 'gradient'].includes(value));
+    }
+}
+console.log('Passed: Video and Video Gallery hover style grouping and conditional headings.');
+
+for (const key of ['image', 'carousel', 'filmstrip', 'grid', 'justified', 'modular', 'masonry']) {
+    const card = window.document.querySelector(`[data-settings-section="block_${key}"]`);
+    const action = card.querySelector(`#fbks-default-${key}-imageClickAction`);
+    action.value = 'video_lightbox'; action.dispatchEvent(new window.Event('change', {bubbles: true}));
+    assert(!card.querySelector('[data-image-default-condition="lightbox"]').hidden);
+    assert(card.querySelector('[data-image-default-condition="lightbox-zoom"]').hidden);
+    assert(!card.querySelector(`#fbks-default-${key}-overlayContent option[value="video_play"]`).disabled);
+    assert(card.querySelector(`#fbks-default-${key}-linkIconDisplay option[value="none"]`).disabled);
+    assert(!card.querySelector(`#fbks-default-${key}-videoLightboxUrl`));
+}
+console.log('Passed: video lightbox defaults visibility, zoom exclusion, and per-image-only sources.');
+
+// Image global defaults mirror the settled editor without per-image data or a counter.
+{
+    const card = window.document.querySelector('[data-settings-section="block_image"]');
+    const input = name => card.querySelector(`#fbks-default-image-${name}`);
+    const change = (name,value) => { input(name).value=value; input(name).dispatchEvent(new window.Event('change',{bubbles:true})); };
+    const options = Array.from(input('imageClickAction').options);
+    assert.equal(options[options.findIndex(option=>option.value==='woocommerce')-1].value,'video_lightbox');
+    assert.equal(options.find(option=>option.value==='download').textContent,'Enable Image Downloads');
+    assert.deepEqual(Array.from(input('imageClickTarget').options,option=>option.textContent),['Icon','Thumbnail']);
+    assert(!input('videoLightboxUrl') && !input('lightboxCounter'));
+    assert(!input('overlayFontFamily') && !input('overlayFontWeight') && !input('overlayFontStyle'));
+    change('imageClickAction','video_lightbox'); change('imageClickTarget','icon');
+    assert(card.querySelector('[data-image-default-condition="secondary-lightbox"]').hidden);
+    assert(card.querySelector('[data-image-default-condition="lightbox-zoom"]').hidden);
+    assert(!card.querySelector('[data-image-default-condition="link-icon"]').hidden);
+    assert(!card.querySelector('[data-image-default-condition="lightbox"]').hidden);
+    const display = Array.from(input('linkIconDisplay').options).filter(option=>!option.hidden && !option.disabled);
+    assert.deepEqual(display.map(option=>option.textContent),['On Hover','Always']);
+    change('imageClickTarget','thumbnail');
+    assert(card.querySelector('[data-image-default-condition="link-icon"]').hidden);
+    assert(card.querySelector('.fbks-block-default-group-title[data-image-default-condition="click-styles"]').hidden);
+    change('onHoverStyle','color-overlay'); change('overlayContent','video_play');
+    assert(!card.querySelector('.fbks-block-default-group-title[data-image-default-condition="hover-styles"]').hidden);
+    change('imageClickAction','lightbox');
+    assert.equal(input('overlayContent').value,'title');
+    assert(input('overlayContent').querySelector('option[value="video_play"]').disabled);
+}
+console.log('Passed: Image global default labels/order, video controls, icon targeting, omitted local settings and inactive play overlay reset.');
+
+// All photo gallery defaults expose the settled video behavior, counter and style conditions.
+for (const key of ['carousel','filmstrip','grid','justified','modular','masonry']) {
+    const card = window.document.querySelector(`[data-settings-section="block_${key}"]`);
+    const input = name => card.querySelector(`#fbks-default-${key}-${name}`);
+    const change = (name,value) => { input(name).value=value; input(name).dispatchEvent(new window.Event('change',{bubbles:true})); };
+    const choices = Array.from(input('imageClickAction').options);
+    assert.equal(choices[choices.findIndex(option=>option.value==='woocommerce')-1].value,'video_lightbox');
+    assert.equal(choices.find(option=>option.value==='download').textContent,'Enable Image Downloads');
+    assert.deepEqual(Array.from(input('imageClickTarget').options,option=>option.textContent),['Icon','Thumbnail']);
+    assert(!input('videoLightboxUrl') && input('lightboxCounter'));
+    change('imageClickAction','video_lightbox'); change('imageClickTarget','icon');
+    assert.deepEqual(Array.from(input('linkIconDisplay').options).filter(option=>!option.hidden&&!option.disabled).map(option=>option.textContent),['On Hover','Always']);
+    for(const name of ['linkIconDisplay','lightboxTheme','lightboxContent','lightboxCounter']) assert(!input(name).closest('[data-image-default-condition]').hidden,key+': '+name);
+    assert(card.querySelector('[data-image-default-condition="lightbox-zoom"]').hidden);
+    for(const [first,second] of [['imageClickTarget','linkIconDisplay'],['linkIconDisplay','lightboxTheme'],['lightboxTheme','lightboxContent'],['lightboxContent','lightboxCounter']]) assert(input(first).compareDocumentPosition(input(second)) & window.Node.DOCUMENT_POSITION_FOLLOWING);
+    for(const style of ['blur-overlay','fade-overlay','gradient-bottom','chip','chip-gradient','color-overlay','gradient-overlay']) {
+        change('onHoverStyle',style); change('overlayContent','video_play');
+        assert(!input('overlayContent').querySelector('option[value="video_play"]').disabled);
+    }
+    change('imageClickTarget','thumbnail');
+    assert(input('linkIconDisplay').closest('[data-image-default-condition]').hidden);
+    assert(card.querySelector('.fbks-block-default-group-title[data-image-default-condition="click-styles"]').hidden);
+    change('imageClickAction','none'); assert.equal(input('overlayContent').value,'title');
+}
+console.log('Passed: six gallery global video defaults, labels/order, counters, icon styles, overlay choices and inactive reset.');
+
+window.close();

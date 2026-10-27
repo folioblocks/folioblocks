@@ -1,6 +1,6 @@
 ( () => {
 	const config = window.folioBlocksGlobalSettingsAutosave || {};
-	const form = document.querySelector( '.pb-global-settings-form' );
+	const form = document.querySelector( '.fbks-global-settings-form' );
 
 	if ( ! form || ! config.ajaxUrl || ! config.nonce || ! window.fetch ) {
 		return;
@@ -11,15 +11,36 @@
         imageCards.forEach( imageDefaults => {
         const key = imageDefaults.dataset.settingsSection.slice(6);
         const read = name => imageDefaults.querySelector( `#fbks-default-${ key }-${ name }` );
+        const commerceOption = [ 'image', 'carousel', 'filmstrip', 'grid', 'justified', 'masonry', 'modular' ].includes( key ) && read( 'imageClickAction' ).querySelector( 'option[value="woocommerce"]' );
+        if ( commerceOption ) { commerceOption.hidden = commerceOption.disabled = !config.hasWooCommerce; }
         const action = read( 'imageClickAction' ).value;
+        const commerce = [ 'image', 'carousel', 'filmstrip', 'grid', 'justified', 'masonry', 'modular' ].includes( key ) && action === 'woocommerce' && !!config.hasWooCommerce;
         const target = read( 'imageClickTarget' ).value;
         const style = read( 'onHoverStyle' ).value;
         const downloadIcon = action === 'download' && target === 'icon';
-        const secondaryLightbox = downloadIcon || ( [ 'carousel', 'modular', 'grid', 'justified', 'masonry' ].includes( key ) && [ 'custom_url', 'page_post' ].includes( action ) && target === 'icon' );
-        const lightbox = action === 'lightbox' || ( secondaryLightbox && read( 'lightbox' ).checked );
+        const secondaryLightbox = ( commerce && target === 'icon' ) || downloadIcon || ( [ 'image', 'carousel', 'filmstrip', 'modular', 'grid', 'justified', 'masonry' ].includes( key ) && [ 'custom_url', 'page_post' ].includes( action ) && target === 'icon' );
+        const lightbox = action === 'video_lightbox' || action === 'lightbox' || ( secondaryLightbox && read( 'lightbox' ).checked );
+        if ( action === 'video_lightbox' && read( 'linkIconDisplay' ).value === 'none' ) read( 'linkIconDisplay' ).value = 'hover';
+        const linkIconStyle = [ 'video_lightbox', 'custom_url', 'page_post' ].includes( action ) && target === 'icon' && read( 'linkIconDisplay' ).value !== 'none';
+        const cartIcon = commerce && target === 'icon' && read( 'wooCartIconDisplay' ).value !== 'none';
+        const productContent = [ 'image', 'carousel', 'filmstrip', 'grid', 'justified', 'masonry', 'modular' ].includes( key ) && read( 'lightboxContent' ).querySelector( 'option[value="product"]' );
+        if ( productContent ) { productContent.hidden = productContent.disabled = !commerce; }
+        const productOverlayOption = key === 'image' && read( 'overlayContent' ).querySelector( 'option[value="product"]' );
+        if ( productOverlayOption ) { productOverlayOption.hidden = productOverlayOption.disabled = !commerce; }
+        const playOverlay = read( 'overlayContent' ).querySelector( 'option[value="video_play"]' );
+        if ( playOverlay ) playOverlay.hidden = playOverlay.disabled = action !== 'video_lightbox';
+        if ( action !== 'video_lightbox' && read( 'overlayContent' ).value === 'video_play' ) read( 'overlayContent' ).value = 'title';
+        const neverIcon = read( 'linkIconDisplay' ).querySelector( 'option[value="none"]' );
+        if ( neverIcon ) neverIcon.hidden = neverIcon.disabled = action === 'video_lightbox';
         const conditions = {
-            'link-target': [ 'download', 'media_file', 'custom_url', 'page_post' ].includes( action ),
-            'link-icon': [ 'media_file', 'custom_url', 'page_post' ].includes( action ) && target === 'icon',
+            'product-overlay': commerce && style !== 'none' && read( 'overlayContent' ).value === 'product',
+            commerce,
+            'cart-icon': cartIcon,
+            'link-icon-style': linkIconStyle,
+            'click-styles': action === 'download' || linkIconStyle || cartIcon,
+            'hover-styles': [ 'color-overlay', 'gradient-overlay', 'chip', 'chip-gradient' ].includes( style ),
+            'link-target': action === 'video_lightbox' || commerce || [ 'download', 'media_file', 'custom_url', 'page_post' ].includes( action ),
+            'link-icon': [ 'video_lightbox', 'media_file', 'custom_url', 'page_post' ].includes( action ) && target === 'icon',
             'download-icon': downloadIcon,
             'secondary-lightbox': secondaryLightbox,
             download: action === 'download',
@@ -27,6 +48,7 @@
             controls: !!read( 'showControls' )?.checked,
             filter: !!read( 'enableFilter' )?.checked,
             lightbox,
+            'lightbox-zoom': lightbox && action !== 'video_lightbox',
             overlay: style !== 'none',
             entrance: [ 'blur-overlay', 'fade-overlay', 'color-overlay', 'gradient-overlay' ].includes( style ),
             exif: ( style !== 'none' && read( 'overlayContent' ).value === 'exif' ) || ( lightbox && read( 'lightboxContent' ).value.includes( 'exif' ) ),
@@ -539,7 +561,7 @@
 		}
 
 		if (
-			event.target.matches( '.pb-watermark-delete-control input' ) &&
+			event.target.matches( '.fbks-watermark-delete-control input' ) &&
 			event.target.checked &&
 			// A destructive autosave needs an explicit confirmation.
 			// eslint-disable-next-line no-alert
@@ -554,7 +576,7 @@
 			.then( () => {
 				if (
 					event.target.matches(
-						'.pb-watermark-delete-control input'
+						'.fbks-watermark-delete-control input'
 					) &&
 					event.target.checked
 				) {

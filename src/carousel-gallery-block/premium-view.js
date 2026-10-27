@@ -1,7 +1,7 @@
 /** Carousel autoplay and protection follow their mounted gallery. */
 import { getElement, store } from '@wordpress/interactivity';
-import { createFrontendScope } from '../pb-helpers/frontendScope';
-import { mountGalleryControls } from '../pb-helpers/galleryControls';
+import { createFrontendScope } from '../fbks-helpers/frontendScope';
+import { mountGalleryControls } from '../fbks-helpers/galleryControls';
 
 store( 'folioblocks/carousel', {
 	callbacks: {

@@ -14,8 +14,8 @@ import { createBlock } from "@wordpress/blocks";
 import { ToolbarGroup, ToolbarButton } from "@wordpress/components";
 import { stack } from "@wordpress/icons";
 import { decodeEntities } from "@wordpress/html-entities";
-import { IconImageBlock } from "../pb-helpers/icons";
-import { getExifAttributesFromMedia } from "../pb-helpers/exifMetadata";
+import { IconImageBlock } from "../fbks-helpers/icons";
+import { getExifAttributesFromMedia } from "../fbks-helpers/exifMetadata";
 
 const ALLOWED_BLOCKS = [
 	"folioblocks/pb-image-block",

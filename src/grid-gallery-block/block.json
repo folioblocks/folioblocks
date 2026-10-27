@@ -406,7 +406,8 @@
 				"caption",
 				"product",
 				"exif",
-				"social"
+				"social",
+				"video_play"
 			],
 			"default": "title"
 		},
@@ -419,7 +420,8 @@
 				"woocommerce",
 				"media_file",
 				"custom_url",
-				"page_post"
+				"page_post",
+				"video_lightbox"
 			],
 			"default": ""
 		},

@@ -448,9 +448,9 @@ A later explicit admin action may promote a client rating or flag to the Media L
 - `includes/pro/php/proofing-gallery.php`
 - New shared media-metadata PHP module
 - Media Library admin scripts and styles
-- `src/pb-image-block/block.json`
-- `src/pb-image-block/edit.js`
-- `src/pb-image-block/render.php`
+- `src/image-block/block.json`
+- `src/image-block/edit.js`
+- `src/image-block/render.php`
 - `src/proofing-gallery-block/block.json`
 - `src/proofing-gallery-block/edit.js`
 - `src/proofing-gallery-block/render.php`

@@ -1,5 +1,5 @@
 import { getElement, store } from '@wordpress/interactivity';
-import { createFrontendScope } from '../pb-helpers/frontendScope';
+import { createFrontendScope } from '../fbks-helpers/frontendScope';
 let galleryInstance = 0;
 const initializeFilmstrip = ( galleryRoot ) => {
 	galleryInstance++;

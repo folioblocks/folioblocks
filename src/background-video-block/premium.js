@@ -5,8 +5,8 @@
 import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 import { ToggleControl } from '@wordpress/components';
-import ResponsiveHeightRangeControl from '../pb-helpers/ResponsiveHeightRangeControl';
-import ResponsiveRangeInspector from '../pb-helpers/ResponsiveRangeInspector';
+import ResponsiveHeightRangeControl from '../fbks-helpers/ResponsiveHeightRangeControl';
+import ResponsiveRangeInspector from '../fbks-helpers/ResponsiveRangeInspector';
 
 addFilter(
 	'folioBlocks.backgroundVideoBlock.sizingFocalControls',

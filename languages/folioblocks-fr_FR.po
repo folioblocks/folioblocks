@@ -50,15 +50,15 @@ msgstr ""
 msgid "Actions"
 msgstr ""
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:117
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:117
 msgid "Activate and set your overlay style."
 msgstr "Activez et définissez votre style de superposition."
 
-#: src/pb-helpers/filteringPremiumControls.js:531
+#: src/fbks-helpers/filteringPremiumControls.js:531
 msgid "Active Item Colors"
 msgstr "Couleurs de l'élément actif"
 
-#: src/pb-helpers/imageProFeatureNotices.js:72 src/video-gallery-block/edit.js:636
+#: src/fbks-helpers/imageProFeatureNotices.js:72 src/video-gallery-block/edit.js:636
 msgid "Add a visitor-facing filter bar."
 msgstr "Ajoutez une barre de filtre destinée aux visiteurs."
 
@@ -102,19 +102,19 @@ msgstr "Ajouter des images"
 msgid "Add product and cart actions."
 msgstr "Ajoutez des actions de produit et de panier."
 
-#: src/pb-helpers/imageProFeatureNotices.js:112 src/video-gallery-block/edit.js:708
+#: src/fbks-helpers/imageProFeatureNotices.js:112 src/video-gallery-block/edit.js:708
 msgid "Add rounded corners."
 msgstr "Ajoutez des coins arrondis."
 
-#: src/filmstrip-gallery-block/render.php:905 src/pb-helpers/imageClickActionPremiumControls.js:470 src/pb-image-block/premium.js:1091 src/pb-image-block/premium.js:1107 src/pb-image-block/premium.js:1376 src/pb-image-block/premium.js:1392 src/pb-image-block/premium.js:1765 src/pb-image-block/render.php:861 src/pb-video-block/premium.js:611 src/pb-video-block/premium.js:627 src/pb-video-block/premium.js:847 src/pb-video-block/render.php:322 src/video-gallery-block/premium.js:150
+#: src/filmstrip-gallery-block/render.php:905 src/fbks-helpers/imageClickActionPremiumControls.js:470 src/pb-image-block/premium.js:1091 src/pb-image-block/premium.js:1107 src/pb-image-block/premium.js:1376 src/pb-image-block/premium.js:1392 src/pb-image-block/premium.js:1765 src/pb-image-block/render.php:861 src/pb-video-block/premium.js:611 src/pb-video-block/premium.js:627 src/pb-video-block/premium.js:847 src/pb-video-block/render.php:322 src/video-gallery-block/premium.js:150
 msgid "Add to Cart"
 msgstr "Ajouter au panier"
 
-#: src/pb-helpers/imageClickStylePremiumControls.js:121 src/pb-video-block/premium.js:761 src/video-gallery-block/premium.js:481
+#: src/fbks-helpers/imageClickStylePremiumControls.js:121 src/pb-video-block/premium.js:761 src/video-gallery-block/premium.js:481
 msgid "Add to Cart Icon"
 msgstr "Icône Ajouter au panier"
 
-#: src/pb-helpers/imageClickStylePremiumControls.js:117 src/pb-video-block/premium.js:747 src/video-gallery-block/premium.js:468
+#: src/fbks-helpers/imageClickStylePremiumControls.js:117 src/pb-video-block/premium.js:747 src/video-gallery-block/premium.js:468
 msgid "Add to Cart Icon Colors"
 msgstr "Couleurs de l'icône Ajouter au panier"
 
@@ -142,19 +142,19 @@ msgstr ""
 msgid "Additional video providers: Bunny Stream, Cloudflare Stream, DailyMotion, Loom, VideoPress, and Wistia"
 msgstr ""
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:101
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:101
 msgid "Adds a soft blur overlay behind the title or product info."
 msgstr "Ajoute une superposition légèrement floutée derrière le titre ou les informations du produit."
 
-#: src/pb-helpers/specialistProFeatureNotices.js:50
+#: src/fbks-helpers/specialistProFeatureNotices.js:50
 msgid "Adjust horizontal focal points per device."
 msgstr "Ajustez les points focaux horizontaux par appareil."
 
-#: src/pb-helpers/ResponsiveRangeControl.js:84
+#: src/fbks-helpers/ResponsiveRangeControl.js:84
 msgid "Adjust the default amount of columns on %s."
 msgstr "Ajustez le nombre de colonnes par defaut sur %s."
 
-#: src/pb-helpers/ResponsiveHeightRangeControl.js:129
+#: src/fbks-helpers/ResponsiveHeightRangeControl.js:129
 msgid "Adjust the height (%1$s) on %2$s."
 msgstr "Ajustez la hauteur (%1$s) sur %2$s."
 
@@ -166,7 +166,7 @@ msgstr "Ajustez le point focal horizontal par appareil."
 msgid "Adjust the vertical focal point per device."
 msgstr "Ajustez le point focal vertical par appareil."
 
-#: src/pb-helpers/specialistProFeatureNotices.js:51
+#: src/fbks-helpers/specialistProFeatureNotices.js:51
 msgid "Adjust vertical focal points per device."
 msgstr "Ajustez les points focaux verticaux par appareil."
 
@@ -178,11 +178,11 @@ msgstr "Position video ajustable (X / Y)"
 msgid "Adjustable video position (X / Y) for Tablet & Mobile"
 msgstr "Position video ajustable (X / Y) pour tablette et mobile"
 
-#: src/pb-helpers/imageProFeatureNotices.js:32
+#: src/fbks-helpers/imageProFeatureNotices.js:32
 msgid "Advanced Click Actions"
 msgstr "Actions de clic avancées"
 
-#: src/pb-helpers/specialistProFeatureNotices.js:6
+#: src/fbks-helpers/specialistProFeatureNotices.js:6
 msgid "Advanced Comparison Controls"
 msgstr "Contrôles de comparaison avancés"
 
@@ -218,7 +218,7 @@ msgstr "Image après"
 msgid "Alignment & Style Controls for Save & Continue and Submit buttons"
 msgstr ""
 
-#: includes/pro/admin/proofing-sessions.php:409 includes/pro/php/filter-helpers.php:38 src/pb-helpers/filteringPremiumControls.js:226
+#: includes/pro/admin/proofing-sessions.php:409 includes/pro/php/filter-helpers.php:38 src/fbks-helpers/filteringPremiumControls.js:226
 msgid "All"
 msgstr "Tous"
 
@@ -234,7 +234,7 @@ msgstr "Tous les blocs et toutes les galeries fonctionnent entièrement depuis l
 msgid "Alternative Text"
 msgstr "Texte alternatif"
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:262 src/pb-helpers/imageClickActionPremiumControls.js:402 src/pb-helpers/imageClickActionPremiumControls.js:515 src/pb-image-block/premium.js:618 src/pb-image-block/premium.js:1171 src/pb-image-block/premium.js:1275 src/pb-video-block/premium.js:492 src/video-gallery-block/premium.js:133
+#: src/fbks-helpers/imageClickActionPremiumControls.js:262 src/fbks-helpers/imageClickActionPremiumControls.js:402 src/fbks-helpers/imageClickActionPremiumControls.js:515 src/pb-image-block/premium.js:618 src/pb-image-block/premium.js:1171 src/pb-image-block/premium.js:1275 src/pb-video-block/premium.js:492 src/video-gallery-block/premium.js:133
 msgid "Always"
 msgstr "Toujours"
 
@@ -246,15 +246,15 @@ msgstr "Toujours afficher la superposition"
 msgid "Aperture"
 msgstr "Ouverture"
 
-#: src/pb-helpers/filteringPremiumControls.js:357 src/pb-helpers/filteringPremiumControls.js:382 src/pb-helpers/overlayTypographyControls.js:74
+#: src/fbks-helpers/filteringPremiumControls.js:357 src/fbks-helpers/filteringPremiumControls.js:382 src/fbks-helpers/overlayTypographyControls.js:74
 msgid "Appearance"
 msgstr "Apparence"
 
-#: src/pb-helpers/imageProFeatureNotices.js:113
+#: src/fbks-helpers/imageProFeatureNotices.js:113
 msgid "Apply image drop shadows."
 msgstr "Appliquez des ombres portées à l’image."
 
-#: src/pb-helpers/watermarkOverlayControls.js:275
+#: src/fbks-helpers/watermarkOverlayControls.js:275
 msgid "Apply one of your saved watermarks to this block."
 msgstr ""
 
@@ -262,7 +262,7 @@ msgstr ""
 msgid "Apply thumbnail drop shadows."
 msgstr "Appliquez des ombres portées aux miniatures."
 
-#: src/pb-helpers/imageProFeatureNotices.js:73
+#: src/fbks-helpers/imageProFeatureNotices.js:73
 msgid "Assign multiple categories to images."
 msgstr "Attribuez plusieurs catégories aux images."
 
@@ -274,11 +274,11 @@ msgstr "Attribuez plusieurs catégories aux vidéos."
 msgid "Attachment #%d"
 msgstr ""
 
-#: src/pb-helpers/imageProFeatureNotices.js:137
+#: src/fbks-helpers/imageProFeatureNotices.js:137
 msgid "Automatically advance carousel slides."
 msgstr "Avancez automatiquement les diapositives du carrousel."
 
-#: src/pb-helpers/imageProFeatureNotices.js:163
+#: src/fbks-helpers/imageProFeatureNotices.js:163
 msgid "Automatically advance filmstrip images."
 msgstr "Avance automatiquement les images de la pellicule."
 
@@ -290,7 +290,7 @@ msgstr "Passer automatiquement à l'image suivante dans le carrousel."
 msgid "Automatically advance to the next image in the gallery."
 msgstr "Passer automatiquement à l'image suivante dans la galerie."
 
-#: src/pb-helpers/imageProFeatureNotices.js:12
+#: src/fbks-helpers/imageProFeatureNotices.js:12
 msgid "Automatically shuffle gallery images."
 msgstr "Mélangez automatiquement les images de la galerie."
 
@@ -318,7 +318,7 @@ msgstr ""
 msgid "Back to Sessions"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:256 src/pb-helpers/filteringPremiumControls.js:547 src/pb-helpers/filteringPremiumControls.js:570 src/pb-helpers/imageClickStylePremiumControls.js:58 src/pb-helpers/imageHoverActionPremiumControls.js:410 src/pb-video-block/premium.js:326 src/pb-video-block/premium.js:773 src/proofing-gallery-block/edit.js:340 src/video-gallery-block/premium.js:417 src/video-gallery-block/premium.js:493
+#: src/carousel-gallery-block/premium.js:256 src/fbks-helpers/filteringPremiumControls.js:547 src/fbks-helpers/filteringPremiumControls.js:570 src/fbks-helpers/imageClickStylePremiumControls.js:58 src/fbks-helpers/imageHoverActionPremiumControls.js:410 src/pb-video-block/premium.js:326 src/pb-video-block/premium.js:773 src/proofing-gallery-block/edit.js:340 src/video-gallery-block/premium.js:417 src/video-gallery-block/premium.js:493
 msgid "Background"
 msgstr "Arrière-plan"
 
@@ -358,7 +358,7 @@ msgstr "Position du libelle avant/apres"
 msgid "Below you can find information regarding your server configuration. This can be used to help debug any issues you have with FolioBlocks. Copy and paste the information when requesting support."
 msgstr "Vous trouverez ci-dessous des informations concernant la configuration de votre serveur. Elles peuvent être utiles pour déboguer tout problème rencontré avec FolioBlocks. Copiez-collez ces informations lors d'une demande d'assistance."
 
-#: src/pb-helpers/overlayTypographyControls.js:52
+#: src/fbks-helpers/overlayTypographyControls.js:52
 msgid "Black"
 msgstr ""
 
@@ -370,7 +370,7 @@ msgstr "Transformations de blocs entre blocs vidéo compatibles"
 msgid "Block Transforms: Between compatible image blocks"
 msgstr ""
 
-#: includes/pro/php/social-sharing.php:32 src/pb-helpers/socialSharingControls.js:8
+#: includes/pro/php/social-sharing.php:32 src/fbks-helpers/socialSharingControls.js:8
 msgid "Bluesky"
 msgstr ""
 
@@ -378,23 +378,23 @@ msgstr ""
 msgid "BlueSky"
 msgstr "BlueSky"
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:14 src/pb-video-block/premium.js:217 src/video-gallery-block/premium.js:308
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:14 src/pb-video-block/premium.js:217 src/video-gallery-block/premium.js:308
 msgid "Blur Overlay"
 msgstr "Superposition floue"
 
-#: src/pb-helpers/overlayTypographyControls.js:50
+#: src/fbks-helpers/overlayTypographyControls.js:50
 msgid "Bold"
 msgstr ""
 
-#: src/pb-helpers/ImageStyleControl.js:46
+#: src/fbks-helpers/ImageStyleControl.js:46
 msgid "Border Color"
 msgstr "Couleur de bordure"
 
-#: src/pb-helpers/ImageStyleControl.js:74 src/proofing-gallery-block/edit.js:382
+#: src/fbks-helpers/ImageStyleControl.js:74 src/proofing-gallery-block/edit.js:382
 msgid "Border Radius"
 msgstr "Rayon de bordure"
 
-#: src/pb-helpers/ImageStyleControl.js:58 src/proofing-gallery-block/edit.js:396
+#: src/fbks-helpers/ImageStyleControl.js:58 src/proofing-gallery-block/edit.js:396
 msgid "Border Width"
 msgstr "Largeur de bordure"
 
@@ -402,7 +402,7 @@ msgstr "Largeur de bordure"
 msgid "Bottom"
 msgstr "Bas"
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:16
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:16
 msgid "Bottom Gradient Overlay"
 msgstr ""
 
@@ -422,7 +422,7 @@ msgstr ""
 msgid "Camera Model"
 msgstr "Modèle de l’appareil"
 
-#: src/carousel-gallery-block/edit.js:809 src/pb-helpers/imageProFeatureNotices.js:145
+#: src/carousel-gallery-block/edit.js:809 src/fbks-helpers/imageProFeatureNotices.js:145
 msgid "Carousel Control Styles"
 msgstr "Styles des contrôles de Carousel"
 
@@ -438,7 +438,7 @@ msgstr "Bloc galerie carrousel"
 msgid "Carousel Gallery Settings"
 msgstr "Réglages de Carousel Gallery"
 
-#: src/pb-helpers/imageProFeatureNotices.js:131
+#: src/fbks-helpers/imageProFeatureNotices.js:131
 msgid "Carousel Playback and Controls"
 msgstr "Lecture et commandes du carrousel"
 
@@ -450,11 +450,11 @@ msgstr ""
 msgid "Carousel Styles"
 msgstr "Styles de Carousel"
 
-#: includes/pro/admin/global-settings.php:231 includes/pro/admin/global-settings.php:624 src/carousel-gallery-block/premium.js:154 src/pb-before-after-block/premium.js:75 src/pb-before-after-block/premium.js:92 src/pb-helpers/filteringPremiumControls.js:168 src/proofing-gallery-block/edit.js:179
+#: includes/pro/admin/global-settings.php:231 includes/pro/admin/global-settings.php:624 src/carousel-gallery-block/premium.js:154 src/pb-before-after-block/premium.js:75 src/pb-before-after-block/premium.js:92 src/fbks-helpers/filteringPremiumControls.js:168 src/proofing-gallery-block/edit.js:179
 msgid "Center"
 msgstr "Centre"
 
-#: src/pb-helpers/ResponsiveHeightRangeControl.js:161 src/pb-helpers/ResponsiveRangeControl.js:118
+#: src/fbks-helpers/ResponsiveHeightRangeControl.js:161 src/fbks-helpers/ResponsiveRangeControl.js:118
 msgid "Change device"
 msgstr "Changer d'appareil"
 
@@ -482,19 +482,19 @@ msgstr "Changer la vidéo"
 msgid "Changelog:"
 msgstr "Journal des modifications :"
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:20 src/pb-helpers/imageHoverActionPremiumControls.js:386
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:20 src/fbks-helpers/imageHoverActionPremiumControls.js:386
 msgid "Chip Gradient Overlay"
 msgstr ""
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:23 src/pb-helpers/imageHoverActionPremiumControls.js:384
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:23 src/fbks-helpers/imageHoverActionPremiumControls.js:384
 msgid "Chip Overlay"
 msgstr "Superposition en pastille"
 
-#: src/pb-helpers/specialistProFeatureNotices.js:37
+#: src/fbks-helpers/specialistProFeatureNotices.js:37
 msgid "Choose a circular or square loupe."
 msgstr "Choisissez une loupe circulaire ou carrée."
 
-#: src/pb-helpers/ImageStyleControl.js:113
+#: src/fbks-helpers/ImageStyleControl.js:113
 msgid "Choose a drop shadow style for the %s."
 msgstr "Choisissez un style d'ombre portée pour le %s."
 
@@ -502,19 +502,19 @@ msgstr "Choisissez un style d'ombre portée pour le %s."
 msgid "Choose a light or dark appearance."
 msgstr "Choisissez une apparence claire ou sombre."
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:90 src/pb-image-block/premium.js:730 src/pb-video-block/premium.js:71 src/video-gallery-block/premium.js:59
+#: src/fbks-helpers/imageClickActionPremiumControls.js:90 src/pb-image-block/premium.js:730 src/pb-video-block/premium.js:71 src/video-gallery-block/premium.js:59
 msgid "Choose a light or dark lightbox background."
 msgstr "Choisissez un arrière-plan lightbox clair ou foncé."
 
-#: src/pb-helpers/imageProFeatureNotices.js:26
+#: src/fbks-helpers/imageProFeatureNotices.js:26
 msgid "Choose any spacing from 0 to 50 pixels."
 msgstr "Choisissez n’importe quel espacement de 0 à 50 pixels."
 
-#: src/pb-helpers/imageProFeatureNotices.js:85
+#: src/fbks-helpers/imageProFeatureNotices.js:85
 msgid "Choose from saved watermarks."
 msgstr ""
 
-#: src/pb-helpers/imageProFeatureNotices.js:55
+#: src/fbks-helpers/imageProFeatureNotices.js:55
 msgid "Choose gradient, blur, color, or chip hover styles."
 msgstr "Choisissez des styles de dégradé, de flou, de couleur ou de survol de puces."
 
@@ -526,11 +526,11 @@ msgstr "Choisissez des styles de dégradé, de flou ou de survol de couleur."
 msgid "Choose how overlay content enters the thumbnail."
 msgstr ""
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:178
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:178
 msgid "Choose how the image itself moves or changes on hover."
 msgstr ""
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:252
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:252
 msgid "Choose how the overlay enters the image."
 msgstr ""
 
@@ -538,11 +538,11 @@ msgstr ""
 msgid "Choose how the video thumbnail moves or changes on hover."
 msgstr ""
 
-#: src/pb-helpers/specialistProFeatureNotices.js:14
+#: src/fbks-helpers/specialistProFeatureNotices.js:14
 msgid "Choose label placement for each slider orientation."
 msgstr "Choisissez l’emplacement de l’étiquette pour chaque orientation du curseur."
 
-#: src/pb-helpers/specialistProFeatureNotices.js:26
+#: src/fbks-helpers/specialistProFeatureNotices.js:26
 msgid "Choose label text and background colors."
 msgstr "Choisissez le texte de l'étiquette et les couleurs d'arrière-plan."
 
@@ -566,11 +566,11 @@ msgstr "Choisissez le style de superposition au survol."
 msgid "Choose up to 5 social sharing sources used when Social Media is selected for lightbox or overlay content."
 msgstr ""
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:128 src/pb-image-block/premium.js:772
+#: src/fbks-helpers/imageClickActionPremiumControls.js:128 src/pb-image-block/premium.js:772
 msgid "Choose what appears below images in the lightbox."
 msgstr "Choisissez ce qui apparaît sous les images dans la Lightbox."
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:282
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:282
 msgid "Choose what appears when hovering over images."
 msgstr "Choisissez ce qui apparaît au survol des images."
 
@@ -606,15 +606,15 @@ msgstr "Choisissez ce qui se passe lorsque les visiteurs utilisent le lien produ
 msgid "Choose what happens when visitors use this image product link. Select Inherit to follow the gallery default."
 msgstr "Choisissez ce qui se passe lorsque les visiteurs utilisent le lien produit de cette image. Sélectionnez Hériter pour suivre le réglage par défaut de la galerie."
 
-#: src/pb-helpers/imageProFeatureNotices.js:140 src/pb-helpers/imageProFeatureNotices.js:151
+#: src/fbks-helpers/imageProFeatureNotices.js:140 src/fbks-helpers/imageProFeatureNotices.js:151
 msgid "Choose when navigation controls appear."
 msgstr "Choisissez quand les commandes de navigation apparaissent."
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:524 src/pb-image-block/premium.js:1284 src/pb-video-block/premium.js:501
+#: src/fbks-helpers/imageClickActionPremiumControls.js:524 src/pb-image-block/premium.js:1284 src/pb-video-block/premium.js:501
 msgid "Choose when to display the Add to Cart icon."
 msgstr "Choisissez quand afficher l'icône Ajouter au panier."
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:271 src/pb-image-block/premium.js:627
+#: src/fbks-helpers/imageClickActionPremiumControls.js:271 src/pb-image-block/premium.js:627
 msgid "Choose when to display the link target icon."
 msgstr "Choisissez quand afficher l’icône de cible du lien."
 
@@ -622,11 +622,11 @@ msgstr "Choisissez quand afficher l’icône de cible du lien."
 msgid "Choose where the thumbnail strip appears."
 msgstr "Choisissez l’emplacement de la bande de miniatures."
 
-#: src/pb-helpers/watermarkOverlayControls.js:358
+#: src/fbks-helpers/watermarkOverlayControls.js:358
 msgid "Choose where this watermark should appear."
 msgstr ""
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:240
+#: src/fbks-helpers/imageClickActionPremiumControls.js:240
 msgid "Choose whether the link is attached to each image or an icon."
 msgstr "Choisissez si le lien est attaché à chaque image ou à une icône."
 
@@ -682,7 +682,7 @@ msgstr "Fermer la Lightbox"
 msgid "Collapse layout on Mobile"
 msgstr "Réduire la mise en page sur mobile"
 
-#: src/pb-helpers/CompactColorControl.js:264
+#: src/fbks-helpers/CompactColorControl.js:264
 msgid "Color"
 msgstr ""
 
@@ -690,7 +690,7 @@ msgstr ""
 msgid "Color Mode"
 msgstr "Mode couleur"
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:24 src/pb-helpers/imageHoverActionPremiumControls.js:389 src/pb-video-block/premium.js:221 src/pb-video-block/premium.js:311 src/video-gallery-block/premium.js:312 src/video-gallery-block/premium.js:402
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:24 src/fbks-helpers/imageHoverActionPremiumControls.js:389 src/pb-video-block/premium.js:221 src/pb-video-block/premium.js:311 src/video-gallery-block/premium.js:312 src/video-gallery-block/premium.js:402
 msgid "Color Overlay"
 msgstr "Superposition couleur"
 
@@ -726,11 +726,11 @@ msgstr "Comparer les fonctionnalités"
 msgid "Compare the features to find the best option for your website."
 msgstr "Comparez les fonctionnalités pour trouver la meilleure option pour votre site web."
 
-#: src/pb-helpers/imageProFeatureNotices.js:139
+#: src/fbks-helpers/imageProFeatureNotices.js:139
 msgid "Configure playback timing and behavior."
 msgstr "Configurez le timing et le comportement de la lecture."
 
-#: src/pb-helpers/imageProFeatureNotices.js:126 src/video-gallery-block/edit.js:322
+#: src/fbks-helpers/imageProFeatureNotices.js:126 src/video-gallery-block/edit.js:322
 msgid "Control filter-bar typography."
 msgstr "Contrôlez la typographie de la barre de filtre."
 
@@ -742,7 +742,7 @@ msgstr ""
 msgid "Controls Alignment"
 msgstr "Alignement des contrôles"
 
-#: includes/pro/php/social-sharing.php:44 src/pb-helpers/socialSharingControls.js:11
+#: includes/pro/php/social-sharing.php:44 src/fbks-helpers/socialSharingControls.js:11
 msgid "Copy Link"
 msgstr ""
 
@@ -750,7 +750,7 @@ msgstr ""
 msgid "Copy to clipboard"
 msgstr "Copier dans le presse-papiers"
 
-#: src/pb-helpers/imageProFeatureNotices.js:177
+#: src/fbks-helpers/imageProFeatureNotices.js:177
 msgid "Create a brighter or more cinematic presentation."
 msgstr "Créez une présentation plus lumineuse ou plus cinématographique."
 
@@ -790,19 +790,19 @@ msgstr "URL personnalisée"
 msgid "Custom video block used by the FolioBlocks gallery blocks."
 msgstr "Bloc vidéo personnalisé utilisé par les blocs de galerie FolioBlocks."
 
-#: src/pb-helpers/imageProFeatureNotices.js:111 src/video-gallery-block/edit.js:707
+#: src/fbks-helpers/imageProFeatureNotices.js:111 src/video-gallery-block/edit.js:707
 msgid "Customize border colors and widths."
 msgstr "Personnalisez les couleurs et les largeurs des bordures."
 
-#: src/pb-helpers/imageProFeatureNotices.js:152
+#: src/fbks-helpers/imageProFeatureNotices.js:152
 msgid "Customize control colors and appearance."
 msgstr "Personnalisez les couleurs et l’apparence des contrôles."
 
-#: src/pb-helpers/imageProFeatureNotices.js:124 src/video-gallery-block/edit.js:320
+#: src/fbks-helpers/imageProFeatureNotices.js:124 src/video-gallery-block/edit.js:320
 msgid "Customize filter text and background colors."
 msgstr "Personnalisez le texte du filtre et les couleurs d’arrière-plan."
 
-#: src/pb-helpers/imageProFeatureNotices.js:74 src/video-gallery-block/edit.js:638
+#: src/fbks-helpers/imageProFeatureNotices.js:74 src/video-gallery-block/edit.js:638
 msgid "Customize filter-bar typography and colors."
 msgstr "Personnalisez la typographie et les couleurs de la barre de filtre."
 
@@ -810,7 +810,7 @@ msgstr "Personnalisez la typographie et les couleurs de la barre de filtre."
 msgid "Customize overlay and play-button colors."
 msgstr "Personnalisez les couleurs de la superposition et des boutons de lecture."
 
-#: src/pb-helpers/imageProFeatureNotices.js:60
+#: src/fbks-helpers/imageProFeatureNotices.js:60
 msgid "Customize overlay colors."
 msgstr "Personnalisez les couleurs de superposition."
 
@@ -818,11 +818,11 @@ msgstr "Personnalisez les couleurs de superposition."
 msgid "Customize the information shown in the lightbox."
 msgstr "Personnalisez les informations affichées dans la visionneuse."
 
-#: src/pb-helpers/specialistProFeatureNotices.js:25
+#: src/fbks-helpers/specialistProFeatureNotices.js:25
 msgid "Customize the slider handle and line color."
 msgstr "Personnalisez la poignée du curseur et la couleur de la ligne."
 
-#: src/filmstrip-gallery-block/premium.js:92 src/pb-helpers/imageClickActionPremiumControls.js:105 src/pb-image-block/premium.js:751 src/pb-loupe-block/premium.js:54 src/pb-video-block/premium.js:77 src/proofing-gallery-block/edit.js:207 src/video-gallery-block/premium.js:65
+#: src/filmstrip-gallery-block/premium.js:92 src/fbks-helpers/imageClickActionPremiumControls.js:105 src/pb-image-block/premium.js:751 src/pb-loupe-block/premium.js:54 src/pb-video-block/premium.js:77 src/proofing-gallery-block/edit.js:207 src/video-gallery-block/premium.js:65
 msgid "Dark"
 msgstr "Sombre"
 
@@ -830,7 +830,7 @@ msgstr "Sombre"
 msgid "Dashboard"
 msgstr "Tableau de bord"
 
-#: src/pb-helpers/CompactColorControl.js:260 src/pb-helpers/getThemeSettings.js:42 src/pb-helpers/imageHoverActionPremiumControls.js:42 src/pb-helpers/overlayTypographyControls.js:39 src/pb-video-block/premium.js:45 src/video-gallery-block/premium.js:39
+#: src/fbks-helpers/CompactColorControl.js:260 src/fbks-helpers/getThemeSettings.js:42 src/fbks-helpers/imageHoverActionPremiumControls.js:42 src/fbks-helpers/overlayTypographyControls.js:39 src/pb-video-block/premium.js:45 src/video-gallery-block/premium.js:39
 msgid "Default"
 msgstr "Par defaut"
 
@@ -846,11 +846,11 @@ msgstr "Superposition par défaut"
 msgid "Default Product Click Behavior"
 msgstr "Comportement par défaut du clic produit"
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:463 src/pb-image-block/premium.js:1355
+#: src/fbks-helpers/imageClickActionPremiumControls.js:463 src/pb-image-block/premium.js:1355
 msgid "Default Product Link Behavior"
 msgstr "Comportement par défaut du lien produit"
 
-#: includes/pro/admin/global-settings.php:364 src/pb-helpers/watermarkOverlayControls.js:332
+#: includes/pro/admin/global-settings.php:364 src/fbks-helpers/watermarkOverlayControls.js:332
 msgid "Default Watermark"
 msgstr ""
 
@@ -870,7 +870,7 @@ msgstr ""
 msgid "Demo"
 msgstr "Démo"
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:31 src/pb-video-block/premium.js:35 src/video-gallery-block/premium.js:29
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:31 src/pb-video-block/premium.js:35 src/video-gallery-block/premium.js:29
 msgid "Desaturate"
 msgstr ""
 
@@ -878,7 +878,7 @@ msgstr ""
 msgid "Description"
 msgstr "Description"
 
-#: src/pb-helpers/ResponsiveHeightRangeControl.js:37 src/pb-helpers/ResponsiveRangeControl.js:30
+#: src/fbks-helpers/ResponsiveHeightRangeControl.js:37 src/fbks-helpers/ResponsiveRangeControl.js:30
 msgid "Desktop"
 msgstr "Ordinateur"
 
@@ -894,11 +894,11 @@ msgstr "Désactiver sur mobile"
 msgid "Disable Right-Click"
 msgstr "Désactiver le clic droit"
 
-#: src/pb-helpers/specialistProFeatureNotices.js:62
+#: src/fbks-helpers/specialistProFeatureNotices.js:62
 msgid "Disable right-click on compatible FolioBlocks media."
 msgstr "Désactivez le clic droit sur les supports FolioBlocks compatibles."
 
-#: src/pb-helpers/imageProFeatureNotices.js:98 src/pb-helpers/specialistProFeatureNotices.js:74 src/pb-video-block/edit.js:1098 src/video-gallery-block/edit.js:679
+#: src/fbks-helpers/imageProFeatureNotices.js:98 src/fbks-helpers/specialistProFeatureNotices.js:74 src/pb-video-block/edit.js:1098 src/video-gallery-block/edit.js:679
 msgid "Disable right-click on displayed media."
 msgstr "Désactivez le clic droit sur le média affiché."
 
@@ -910,7 +910,7 @@ msgstr "Désactiver le clic droit sur la page"
 msgid "Disable Video on Mobile"
 msgstr "Desactiver la video sur mobile"
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:500 src/pb-image-block/premium.js:1263 src/pb-video-block/premium.js:481 src/video-gallery-block/premium.js:125
+#: src/fbks-helpers/imageClickActionPremiumControls.js:500 src/pb-image-block/premium.js:1263 src/pb-video-block/premium.js:481 src/video-gallery-block/premium.js:125
 msgid "Display Add to Cart Icon"
 msgstr "Afficher l'icône Ajouter au panier"
 
@@ -918,11 +918,11 @@ msgstr "Afficher l'icône Ajouter au panier"
 msgid "Display Before & After labels."
 msgstr "Afficher les étiquettes Avant et Après."
 
-#: src/pb-helpers/specialistProFeatureNotices.js:13
+#: src/fbks-helpers/specialistProFeatureNotices.js:13
 msgid "Display Before and After labels."
 msgstr "Afficher les étiquettes Avant et Après."
 
-#: src/pb-helpers/imageProFeatureNotices.js:206
+#: src/fbks-helpers/imageProFeatureNotices.js:206
 msgid "Display camera details in overlays and lightboxes."
 msgstr "Affichez les détails de la caméra dans des superpositions et des lightbox."
 
@@ -930,7 +930,7 @@ msgstr "Affichez les détails de la caméra dans des superpositions et des light
 msgid "Display Filtering Categories in Video Overlays"
 msgstr "Afficher les catégories de filtrage dans les superpositions vidéo"
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:391 src/pb-image-block/premium.js:1163
+#: src/fbks-helpers/imageClickActionPremiumControls.js:391 src/pb-image-block/premium.js:1163
 msgid "Display Image Download Icon"
 msgstr "Afficher l'icône de téléchargement de l'image"
 
@@ -938,7 +938,7 @@ msgstr "Afficher l'icône de téléchargement de l'image"
 msgid "Display images in a filmstrip gallery."
 msgstr "Afficher les images dans une galerie type pellicule."
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:250 src/pb-image-block/premium.js:606
+#: src/fbks-helpers/imageClickActionPremiumControls.js:250 src/pb-image-block/premium.js:606
 msgid "Display Link Target Icon"
 msgstr "Afficher l’icône de cible du lien"
 
@@ -954,11 +954,11 @@ msgstr "Affichez le titre et la description de la vidéo."
 msgid "Display video titles and descriptions."
 msgstr "Afficher les titres et les descriptions des vidéos."
 
-#: src/pb-helpers/watermarkOverlayControls.js:350
+#: src/fbks-helpers/watermarkOverlayControls.js:350
 msgid "Display Watermark On"
 msgstr ""
 
-#: src/pb-helpers/imageProFeatureNotices.js:86
+#: src/fbks-helpers/imageProFeatureNotices.js:86
 msgid "Display watermarks on gallery images, lightbox images, or both."
 msgstr ""
 
@@ -966,23 +966,23 @@ msgstr ""
 msgid "Displays images in a horizontal, swipeable carousel with optional autoplay."
 msgstr "Affiche les images dans un carrousel horizontal, navigable par glissement, avec lecture automatique facultative."
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:91
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:91
 msgid "Displays the overlay content in a compact chip above the image."
 msgstr "Affiche le contenu de superposition dans une pastille compacte au-dessus de l’image."
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:96
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:96
 msgid "Displays the overlay content in a compact chip with a gradient background."
 msgstr ""
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:111 src/pb-video-block/premium.js:236
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:111 src/pb-video-block/premium.js:236
 msgid "Displays the overlay content over a gradient background set in Styles panel."
 msgstr ""
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:106 src/pb-video-block/premium.js:231
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:106 src/pb-video-block/premium.js:231
 msgid "Displays the overlay content over a solid background color set in Styles panel."
 msgstr ""
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:86
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:86
 msgid "Displays the overlay content over a subtle gradient at the bottom of the image."
 msgstr "Affiche le contenu de superposition sur un dégradé subtil en bas de l’image."
 
@@ -994,11 +994,11 @@ msgstr "Affiche les vidéos dans une grille responsive avec miniatures, titres e
 msgid "Done"
 msgstr ""
 
-#: src/pb-helpers/imageClickStylePremiumControls.js:104
+#: src/fbks-helpers/imageClickStylePremiumControls.js:104
 msgid "Download Icon"
 msgstr "Icône de téléchargement"
 
-#: src/pb-helpers/imageClickStylePremiumControls.js:100
+#: src/fbks-helpers/imageClickStylePremiumControls.js:100
 msgid "Download Icon Colors"
 msgstr "Couleurs de l'icône de téléchargement"
 
@@ -1018,11 +1018,11 @@ msgstr "Reorganisation des videos par glisser-deposer"
 msgid "Drag Handle Starting Position (%)"
 msgstr "Position de départ de la poignée (%)"
 
-#: src/pb-helpers/ImageStyleControl.js:101
+#: src/fbks-helpers/ImageStyleControl.js:101
 msgid "Dramatic"
 msgstr "Dramatique"
 
-#: src/pb-helpers/ImageStyleControl.js:90
+#: src/fbks-helpers/ImageStyleControl.js:90
 msgid "Drop Shadow"
 msgstr "Ombre portée"
 
@@ -1066,7 +1066,7 @@ msgstr "Modifier le lien de page/article"
 msgid "Edit WooCommerce Product"
 msgstr "Modifier le produit WooCommerce"
 
-#: src/pb-helpers/ImageStyleControl.js:97
+#: src/fbks-helpers/ImageStyleControl.js:97
 msgid "Elevated"
 msgstr "Élevé"
 
@@ -1106,15 +1106,15 @@ msgstr "Activer le mode plein écran pour la galerie sur le front-end."
 msgid "Enable Heart"
 msgstr ""
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:327 src/pb-image-block/premium.js:819
+#: src/fbks-helpers/imageClickActionPremiumControls.js:327 src/pb-image-block/premium.js:819
 msgid "Enable Image Downloads"
 msgstr "Activer le téléchargement d'images"
 
-#: src/pb-helpers/filteringPremiumControls.js:66
+#: src/fbks-helpers/filteringPremiumControls.js:66
 msgid "Enable Image Filtering"
 msgstr "Activer le filtrage des images"
 
-#: src/pb-helpers/filteringPremiumControls.js:67
+#: src/fbks-helpers/filteringPremiumControls.js:67
 msgid "Enable image filtering with categories."
 msgstr "Activer le filtrage des images avec catégories."
 
@@ -1122,7 +1122,7 @@ msgstr "Activer le filtrage des images avec catégories."
 msgid "Enable Lazy Load of Images"
 msgstr "Activer le chargement différé des images"
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:279 src/pb-helpers/imageClickActionPremiumControls.js:420 src/pb-helpers/imageClickActionPremiumControls.js:531 src/pb-image-block/premium.js:635 src/pb-image-block/premium.js:1190 src/pb-image-block/premium.js:1291
+#: src/fbks-helpers/imageClickActionPremiumControls.js:279 src/fbks-helpers/imageClickActionPremiumControls.js:420 src/fbks-helpers/imageClickActionPremiumControls.js:531 src/pb-image-block/premium.js:635 src/pb-image-block/premium.js:1190 src/pb-image-block/premium.js:1291
 msgid "Enable Lightbox"
 msgstr "Activer la Lightbox"
 
@@ -1130,7 +1130,7 @@ msgstr "Activer la Lightbox"
 msgid "Enable Lightbox in Editor"
 msgstr "Activer la Lightbox dans l'éditeur"
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:148 src/pb-image-block/premium.js:778
+#: src/fbks-helpers/imageClickActionPremiumControls.js:148 src/pb-image-block/premium.js:778
 msgid "Enable Lightbox Zoom"
 msgstr ""
 
@@ -1138,7 +1138,7 @@ msgstr ""
 msgid "Enable the default watermark for new compatible blocks"
 msgstr ""
 
-#: src/pb-helpers/watermarkOverlayControls.js:362
+#: src/fbks-helpers/watermarkOverlayControls.js:362
 msgid "Enable the lightbox to watermark enlarged lightbox images."
 msgstr ""
 
@@ -1146,7 +1146,7 @@ msgstr ""
 msgid "Enable Video Filtering"
 msgstr "Activer le filtrage des vidéos"
 
-#: src/pb-helpers/watermarkOverlayControls.js:274
+#: src/fbks-helpers/watermarkOverlayControls.js:274
 msgid "Enable Watermarking"
 msgstr ""
 
@@ -1178,7 +1178,7 @@ msgstr "Entrez un mot de passe pour protéger cette page."
 msgid "Enter a valid client email address before creating the proofing gallery."
 msgstr ""
 
-#: src/pb-helpers/ValidatedUrlControl.js:11
+#: src/fbks-helpers/ValidatedUrlControl.js:11
 msgid "Enter a valid URL beginning with http:// or https://."
 msgstr "Saisissez une URL valide commençant par http:// ou https://."
 
@@ -1190,7 +1190,7 @@ msgstr ""
 msgid "EXIF DATA"
 msgstr "DONNÉES EXIF"
 
-#: src/pb-helpers/imageProFeatureNotices.js:199
+#: src/fbks-helpers/imageProFeatureNotices.js:199
 msgid "EXIF Metadata"
 msgstr "Métadonnées EXIF"
 
@@ -1206,27 +1206,27 @@ msgstr ""
 msgid "Export Submitted Proofing session reports as PDF"
 msgstr ""
 
-#: src/pb-helpers/overlayTypographyControls.js:51
+#: src/fbks-helpers/overlayTypographyControls.js:51
 msgid "Extra Bold"
 msgstr ""
 
-#: src/pb-helpers/overlayTypographyControls.js:45
+#: src/fbks-helpers/overlayTypographyControls.js:45
 msgid "Extra Light"
 msgstr ""
 
-#: includes/admin/common.php:107 includes/pro/php/social-sharing.php:20 src/pb-helpers/socialSharingControls.js:5
+#: includes/admin/common.php:107 includes/pro/php/social-sharing.php:20 src/fbks-helpers/socialSharingControls.js:5
 msgid "Facebook"
 msgstr "Facebook"
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:43 src/pb-video-block/premium.js:46 src/video-gallery-block/premium.js:40
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:43 src/pb-video-block/premium.js:46 src/video-gallery-block/premium.js:40
 msgid "Fade"
 msgstr ""
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:25
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:25
 msgid "Fade Overlay"
 msgstr "Superposition en fondu"
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:81
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:81
 msgid "Fades in a clean title overlay when hovering over the image."
 msgstr "Fait apparaître une superposition de titre nette au survol de l’image."
 
@@ -1234,7 +1234,7 @@ msgstr "Fait apparaître une superposition de titre nette au survol de l’image
 msgid "Feedback"
 msgstr "Retour"
 
-#: src/pb-helpers/imageProFeatureNotices.js:170
+#: src/fbks-helpers/imageProFeatureNotices.js:170
 msgid "Filmstrip Color Mode"
 msgstr "Mode couleur de la pellicule"
 
@@ -1250,7 +1250,7 @@ msgstr "Bloc galerie pellicule"
 msgid "Filmstrip Gallery Settings"
 msgstr "Réglages de Filmstrip Gallery"
 
-#: src/pb-helpers/imageProFeatureNotices.js:157
+#: src/fbks-helpers/imageProFeatureNotices.js:157
 msgid "Filmstrip Playback and Display"
 msgstr "Lecture et affichage de la pellicule"
 
@@ -1262,15 +1262,15 @@ msgstr "Miniatures de Filmstrip"
 msgid "filter"
 msgstr "filtre"
 
-#: src/pb-helpers/filteringPremiumControls.js:151 src/proofing-gallery-block/edit.js:1035
+#: src/fbks-helpers/filteringPremiumControls.js:151 src/proofing-gallery-block/edit.js:1035
 msgid "Filter Bar Alignment"
 msgstr "Alignement de la barre de filtre"
 
-#: src/pb-helpers/filteringPremiumControls.js:505
+#: src/fbks-helpers/filteringPremiumControls.js:505
 msgid "Filter Bar Colors"
 msgstr "Couleurs de la barre de filtre"
 
-#: src/pb-helpers/filteringPremiumControls.js:177 src/pb-image-block/premium.js:1489 src/pb-video-block/premium.js:399
+#: src/fbks-helpers/filteringPremiumControls.js:177 src/pb-image-block/premium.js:1489 src/pb-video-block/premium.js:399
 msgid "Filter Categories"
 msgstr "Catégories de filtre"
 
@@ -1310,7 +1310,7 @@ msgstr "Valeurs de secours des métadonnées d’image FolioBlocks."
 msgid "FolioBlocks is a paid premium plugin. This free version available in the WordPress plugin repository is only meant to give you a taste of what the full version can do."
 msgstr "FolioBlocks est une extension premium payante. Cette version gratuite disponible dans le répertoire des extensions WordPress est uniquement destinée à vous donner un aperçu de ce que peut faire la version complète."
 
-#: src/pb-helpers/icons.js:265
+#: src/fbks-helpers/icons.js:265
 msgid "Folioblocks loading"
 msgstr "Chargement de Folioblocks"
 
@@ -1322,11 +1322,11 @@ msgstr "Paramètres de la page FolioBlocks"
 msgid "FolioBlocks Pro - Proofing Sessions"
 msgstr ""
 
-#: src/pb-helpers/filteringPremiumControls.js:297 src/pb-helpers/filteringPremiumControls.js:305 src/pb-helpers/overlayTypographyControls.js:190
+#: src/fbks-helpers/filteringPremiumControls.js:297 src/fbks-helpers/filteringPremiumControls.js:305 src/fbks-helpers/overlayTypographyControls.js:190
 msgid "Font Family"
 msgstr "Famille de police"
 
-#: src/pb-helpers/filteringPremiumControls.js:328 src/proofing-gallery-block/edit.js:430
+#: src/fbks-helpers/filteringPremiumControls.js:328 src/proofing-gallery-block/edit.js:430
 msgid "Font Size"
 msgstr "Taille de police"
 
@@ -1338,7 +1338,7 @@ msgstr "Gratuit"
 msgid "Free vs Pro"
 msgstr "Gratuit vs Pro"
 
-#: src/pb-helpers/imageSizeOptions.js:6 src/pb-helpers/imageSizeOptions.js:27
+#: src/fbks-helpers/imageSizeOptions.js:6 src/fbks-helpers/imageSizeOptions.js:27
 msgid "Full"
 msgstr "Taille réelle"
 
@@ -1358,11 +1358,11 @@ msgstr ""
 msgid "Gallery Click Settings"
 msgstr "Réglages de clic de la galerie"
 
-#: src/pb-helpers/imageClickStylePremiumControls.js:66
+#: src/fbks-helpers/imageClickStylePremiumControls.js:66
 msgid "Gallery Click Styles"
 msgstr "Styles de clic de la galerie"
 
-#: src/pb-helpers/imageProFeatureNotices.js:66
+#: src/fbks-helpers/imageProFeatureNotices.js:66
 msgid "Gallery Filtering"
 msgstr "Filtrage de la galerie"
 
@@ -1374,11 +1374,11 @@ msgstr "Catégories de filtrage de la galerie"
 msgid "Gallery Filtering Settings"
 msgstr "Réglages de filtrage de galerie"
 
-#: src/grid-gallery-block/edit.js:877 src/justified-gallery-block/edit.js:816 src/masonry-gallery-block/edit.js:826 src/pb-helpers/filteringPremiumControls.js:282 src/pb-helpers/imageProFeatureNotices.js:118 src/video-gallery-block/edit.js:310 src/video-gallery-block/edit.js:314
+#: src/grid-gallery-block/edit.js:877 src/justified-gallery-block/edit.js:816 src/masonry-gallery-block/edit.js:826 src/fbks-helpers/filteringPremiumControls.js:282 src/fbks-helpers/imageProFeatureNotices.js:118 src/video-gallery-block/edit.js:310 src/video-gallery-block/edit.js:314
 msgid "Gallery Filtering Styles"
 msgstr "Styles de filtrage de galerie"
 
-#: src/carousel-gallery-block/edit.js:774 src/filmstrip-gallery-block/edit.js:1297 src/grid-gallery-block/edit.js:793 src/justified-gallery-block/edit.js:740 src/masonry-gallery-block/edit.js:746 src/modular-gallery-block/edit.js:1023 src/pb-helpers/imageProFeatureNotices.js:49 src/video-gallery-block/edit.js:542 src/video-gallery-block/edit.js:548
+#: src/carousel-gallery-block/edit.js:774 src/filmstrip-gallery-block/edit.js:1297 src/grid-gallery-block/edit.js:793 src/justified-gallery-block/edit.js:740 src/masonry-gallery-block/edit.js:746 src/modular-gallery-block/edit.js:1023 src/fbks-helpers/imageProFeatureNotices.js:49 src/video-gallery-block/edit.js:542 src/video-gallery-block/edit.js:548
 msgid "Gallery Hover Settings"
 msgstr "Réglages de survol de la galerie"
 
@@ -1386,15 +1386,15 @@ msgstr "Réglages de survol de la galerie"
 msgid "Gallery Hover Styles"
 msgstr "Styles de survol de la galerie"
 
-#: src/carousel-gallery-block/edit.js:813 src/grid-gallery-block/edit.js:849 src/justified-gallery-block/edit.js:789 src/masonry-gallery-block/edit.js:798 src/modular-gallery-block/edit.js:1050 src/pb-helpers/imageProFeatureNotices.js:105
+#: src/carousel-gallery-block/edit.js:813 src/grid-gallery-block/edit.js:849 src/justified-gallery-block/edit.js:789 src/masonry-gallery-block/edit.js:798 src/modular-gallery-block/edit.js:1050 src/fbks-helpers/imageProFeatureNotices.js:105
 msgid "Gallery Image Styles"
 msgstr "Styles d'image de galerie"
 
-#: src/pb-helpers/watermarkOverlayControls.js:249
+#: src/fbks-helpers/watermarkOverlayControls.js:249
 msgid "Gallery Images"
 msgstr ""
 
-#: src/pb-helpers/watermarkOverlayControls.js:261
+#: src/fbks-helpers/watermarkOverlayControls.js:261
 msgid "Gallery Images & Lightbox"
 msgstr ""
 
@@ -1426,7 +1426,7 @@ msgstr ""
 msgid "Gallery Type"
 msgstr ""
 
-#: src/modular-gallery-block/edit.js:949 src/pb-helpers/responsiveGapPremiumControl.js:26 src/video-gallery-block/edit.js:465
+#: src/modular-gallery-block/edit.js:949 src/fbks-helpers/responsiveGapPremiumControl.js:26 src/video-gallery-block/edit.js:465
 msgid "Gap Between Items"
 msgstr "Écart entre les éléments"
 
@@ -1434,11 +1434,11 @@ msgstr "Écart entre les éléments"
 msgid "General Gallery Settings"
 msgstr "Réglages généraux de la galerie"
 
-#: src/pb-helpers/ProFeatureNotice.js:27
+#: src/fbks-helpers/ProFeatureNotice.js:27
 msgid "Get FolioBlocks Pro"
 msgstr "Obtenez FolioBlocks Pro"
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:32 src/pb-video-block/premium.js:36 src/video-gallery-block/premium.js:30
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:32 src/pb-video-block/premium.js:36 src/video-gallery-block/premium.js:30
 msgid "Glare"
 msgstr ""
 
@@ -1454,11 +1454,11 @@ msgstr ""
 msgid "Global settings saved."
 msgstr ""
 
-#: src/pb-helpers/CompactColorControl.js:265 src/pb-helpers/imageHoverActionPremiumControls.js:418
+#: src/fbks-helpers/CompactColorControl.js:265 src/fbks-helpers/imageHoverActionPremiumControls.js:418
 msgid "Gradient"
 msgstr ""
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:26 src/pb-helpers/imageHoverActionPremiumControls.js:388 src/pb-video-block/premium.js:225 src/pb-video-block/premium.js:310 src/video-gallery-block/premium.js:316 src/video-gallery-block/premium.js:401
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:26 src/fbks-helpers/imageHoverActionPremiumControls.js:388 src/pb-video-block/premium.js:225 src/pb-video-block/premium.js:310 src/video-gallery-block/premium.js:316 src/video-gallery-block/premium.js:401
 msgid "Gradient Overlay"
 msgstr ""
 
@@ -1506,11 +1506,11 @@ msgstr ""
 msgid "Height"
 msgstr "Hauteur"
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:298
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:298
 msgid "Hide EXIF fields that do not have a value."
 msgstr "Masquer les champs EXIF sans valeur."
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:170 src/pb-image-block/premium.js:802
+#: src/fbks-helpers/imageClickActionPremiumControls.js:170 src/pb-image-block/premium.js:802
 msgid "Hide EXIF rows that do not have a value."
 msgstr "Masquer les lignes EXIF sans valeur."
 
@@ -1518,7 +1518,7 @@ msgstr "Masquer les lignes EXIF sans valeur."
 msgid "Hide Password"
 msgstr ""
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:164 src/pb-helpers/imageHoverActionPremiumControls.js:289 src/pb-image-block/premium.js:796
+#: src/fbks-helpers/imageClickActionPremiumControls.js:164 src/fbks-helpers/imageHoverActionPremiumControls.js:289 src/pb-image-block/premium.js:796
 msgid "Hide Unknown EXIF Fields"
 msgstr "Masquer les champs EXIF inconnus"
 
@@ -1534,11 +1534,11 @@ msgstr "Images horizontales"
 msgid "Horizontal Padding"
 msgstr ""
 
-#: src/pb-helpers/CompactColorControl.js:261
+#: src/fbks-helpers/CompactColorControl.js:261
 msgid "Hover"
 msgstr "Survol"
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:170 src/pb-video-block/premium.js:175 src/video-gallery-block/premium.js:266
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:170 src/pb-video-block/premium.js:175 src/video-gallery-block/premium.js:266
 msgid "Hover Effect"
 msgstr ""
 
@@ -1574,11 +1574,11 @@ msgstr "https://vimeo.com/12345678"
 msgid "I already did"
 msgstr "je l'ai déjà fait"
 
-#: src/carousel-gallery-block/premium.js:257 src/pb-helpers/imageClickStylePremiumControls.js:57 src/pb-video-block/premium.js:772 src/video-gallery-block/premium.js:492
+#: src/carousel-gallery-block/premium.js:257 src/fbks-helpers/imageClickStylePremiumControls.js:57 src/pb-video-block/premium.js:772 src/video-gallery-block/premium.js:492
 msgid "Icon"
 msgstr "Icône"
 
-#: includes/pro/admin/proofing-sessions.php:520 src/pb-helpers/ImageStyleControl.js:31
+#: includes/pro/admin/proofing-sessions.php:520 src/fbks-helpers/ImageStyleControl.js:31
 msgid "Image"
 msgstr "Image"
 
@@ -1622,7 +1622,7 @@ msgstr "Contenu de l’image"
 msgid "Image Drop Shadows: Subtle, Soft, Elevated, and Dramatic"
 msgstr ""
 
-#: src/pb-helpers/applyThumbnails.js:10
+#: src/fbks-helpers/applyThumbnails.js:10
 msgid "Image has per-image overrides"
 msgstr ""
 
@@ -1630,7 +1630,7 @@ msgstr ""
 msgid "Image Hover Settings"
 msgstr "Réglages de survol de l’image"
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:127
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:127
 msgid "Image Hover Styles"
 msgstr "Styles de survol de l’image"
 
@@ -1686,7 +1686,7 @@ msgstr ""
 msgid "In session"
 msgstr ""
 
-#: src/pb-helpers/filteringPremiumControls.js:554
+#: src/fbks-helpers/filteringPremiumControls.js:554
 msgid "Inactive Item Colors"
 msgstr "Couleurs de l'élément inactif"
 
@@ -1714,7 +1714,7 @@ msgstr "Action de révision non valide."
 msgid "ISO"
 msgstr "ISO"
 
-#: src/pb-helpers/overlayTypographyControls.js:56
+#: src/fbks-helpers/overlayTypographyControls.js:56
 msgid "Italic"
 msgstr ""
 
@@ -1734,15 +1734,15 @@ msgstr "Bloc galerie justifiee"
 msgid "Justified Gallery Settings"
 msgstr "Réglages de Justified Gallery"
 
-#: src/pb-helpers/imageProFeatureNotices.js:13
+#: src/fbks-helpers/imageProFeatureNotices.js:13
 msgid "Keep repeat visits feeling fresh."
 msgstr "Gardez les visites répétées avec une sensation de fraîcheur."
 
-#: src/pb-helpers/imageProFeatureNotices.js:207
+#: src/fbks-helpers/imageProFeatureNotices.js:207
 msgid "Keep technical information attached to the image."
 msgstr "Conservez les informations techniques attachées à l’image."
 
-#: src/pb-helpers/imageProFeatureNotices.js:87
+#: src/fbks-helpers/imageProFeatureNotices.js:87
 msgid "Keep watermark styling managed globally."
 msgstr ""
 
@@ -1766,7 +1766,7 @@ msgstr ""
 msgid "Landscape 4:3"
 msgstr ""
 
-#: src/pb-helpers/imageSizeOptions.js:5
+#: src/fbks-helpers/imageSizeOptions.js:5
 msgid "Large"
 msgstr "Grand"
 
@@ -1782,11 +1782,11 @@ msgstr "Dernieres actualites du site web de FolioBlocks :"
 msgid "Lazy load compatible FolioBlocks images and thumbnails on this page."
 msgstr "Chargement paresseux d'images et de miniatures FolioBlocks compatibles sur cette page."
 
-#: src/pb-helpers/specialistProFeatureNotices.js:75
+#: src/fbks-helpers/specialistProFeatureNotices.js:75
 msgid "Lazy-load compatible images."
 msgstr "Images compatibles avec le chargement différé."
 
-#: src/pb-helpers/imageProFeatureNotices.js:99
+#: src/fbks-helpers/imageProFeatureNotices.js:99
 msgid "Lazy-load gallery images."
 msgstr "Images de galerie à chargement paresseux."
 
@@ -1794,7 +1794,7 @@ msgstr "Images de galerie à chargement paresseux."
 msgid "Lazy-load videos and thumbnails."
 msgstr "Chargement paresseux de vidéos et de miniatures."
 
-#: src/carousel-gallery-block/premium.js:149 src/filmstrip-gallery-block/edit.js:1193 src/pb-before-after-block/premium.js:71 src/pb-helpers/filteringPremiumControls.js:164 src/proofing-gallery-block/edit.js:175
+#: src/carousel-gallery-block/premium.js:149 src/filmstrip-gallery-block/edit.js:1193 src/pb-before-after-block/premium.js:71 src/fbks-helpers/filteringPremiumControls.js:164 src/proofing-gallery-block/edit.js:175
 msgid "Left"
 msgstr "Gauche"
 
@@ -1802,7 +1802,7 @@ msgstr "Gauche"
 msgid "Let clients select, approve, and comment on images in a private proofing gallery."
 msgstr ""
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:152
+#: src/fbks-helpers/imageClickActionPremiumControls.js:152
 msgid "Let visitors zoom into lightbox images."
 msgstr ""
 
@@ -1810,19 +1810,19 @@ msgstr ""
 msgid "Let visitors zoom into this image in the lightbox."
 msgstr ""
 
-#: src/pb-helpers/filteringPremiumControls.js:486
+#: src/fbks-helpers/filteringPremiumControls.js:486
 msgid "Letter case"
 msgstr "Casse"
 
-#: src/pb-helpers/filteringPremiumControls.js:452
+#: src/fbks-helpers/filteringPremiumControls.js:452
 msgid "Letter spacing"
 msgstr "Espacement des lettres"
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:33 src/pb-video-block/premium.js:37 src/video-gallery-block/premium.js:31
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:33 src/pb-video-block/premium.js:37 src/video-gallery-block/premium.js:31
 msgid "Lift"
 msgstr ""
 
-#: src/filmstrip-gallery-block/premium.js:88 src/pb-helpers/imageClickActionPremiumControls.js:101 src/pb-helpers/overlayTypographyControls.js:46 src/pb-image-block/premium.js:747 src/pb-loupe-block/premium.js:50 src/pb-video-block/premium.js:76 src/proofing-gallery-block/edit.js:203 src/video-gallery-block/premium.js:64
+#: src/filmstrip-gallery-block/premium.js:88 src/fbks-helpers/imageClickActionPremiumControls.js:101 src/fbks-helpers/overlayTypographyControls.js:46 src/pb-image-block/premium.js:747 src/pb-loupe-block/premium.js:50 src/pb-video-block/premium.js:76 src/proofing-gallery-block/edit.js:203 src/video-gallery-block/premium.js:64
 msgid "Light"
 msgstr "Clair"
 
@@ -1834,15 +1834,15 @@ msgstr ""
 msgid "Light Mode & Dark Mode Styles"
 msgstr "Styles mode clair et mode sombre"
 
-#: includes/admin/free-pro.php:53 includes/admin/free-pro.php:84 includes/admin/free-pro.php:109 includes/admin/free-pro.php:136 includes/admin/free-pro.php:165 includes/admin/free-pro.php:211 includes/admin/free-pro.php:239 src/pb-helpers/watermarkOverlayControls.js:257
+#: includes/admin/free-pro.php:53 includes/admin/free-pro.php:84 includes/admin/free-pro.php:109 includes/admin/free-pro.php:136 includes/admin/free-pro.php:165 includes/admin/free-pro.php:211 includes/admin/free-pro.php:239 src/fbks-helpers/watermarkOverlayControls.js:257
 msgid "Lightbox"
 msgstr "Lightbox"
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:89 src/pb-image-block/premium.js:729 src/pb-video-block/premium.js:61 src/video-gallery-block/premium.js:49
+#: src/fbks-helpers/imageClickActionPremiumControls.js:89 src/pb-image-block/premium.js:729 src/pb-video-block/premium.js:61 src/video-gallery-block/premium.js:49
 msgid "Lightbox Appearance"
 msgstr "Apparence de la visionneuse"
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:112 src/pb-image-block/premium.js:756 src/pb-video-block/premium.js:149 src/video-gallery-block/premium.js:242
+#: src/fbks-helpers/imageClickActionPremiumControls.js:112 src/pb-image-block/premium.js:756 src/pb-video-block/premium.js:149 src/video-gallery-block/premium.js:242
 msgid "Lightbox Content"
 msgstr "Contenu de la Lightbox"
 
@@ -1866,31 +1866,31 @@ msgstr ""
 msgid "Like image"
 msgstr ""
 
-#: src/pb-helpers/filteringPremiumControls.js:409
+#: src/fbks-helpers/filteringPremiumControls.js:409
 msgid "Line Height"
 msgstr "Hauteur de ligne"
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:335 src/pb-image-block/premium.js:827
+#: src/fbks-helpers/imageClickActionPremiumControls.js:335 src/pb-image-block/premium.js:827
 msgid "Link Image to Custom URL"
 msgstr "Lier l’image à une URL personnalisée"
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:331 src/pb-image-block/premium.js:823
+#: src/fbks-helpers/imageClickActionPremiumControls.js:331 src/pb-image-block/premium.js:823
 msgid "Link Image to Media File"
 msgstr "Lier l’image au fichier média"
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:339 src/pb-image-block/premium.js:831
+#: src/fbks-helpers/imageClickActionPremiumControls.js:339 src/pb-image-block/premium.js:831
 msgid "Link Image to Page/Post"
 msgstr "Lier l’image à une page/article"
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:197 src/pb-image-block/premium.js:550
+#: src/fbks-helpers/imageClickActionPremiumControls.js:197 src/pb-image-block/premium.js:550
 msgid "Link Target"
 msgstr "Cible du lien"
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:201 src/pb-helpers/imageClickStylePremiumControls.js:138 src/pb-image-block/premium.js:554
+#: src/fbks-helpers/imageClickActionPremiumControls.js:201 src/fbks-helpers/imageClickStylePremiumControls.js:138 src/pb-image-block/premium.js:554
 msgid "Link Target Icon"
 msgstr "Icône de cible du lien"
 
-#: src/pb-helpers/imageClickStylePremiumControls.js:134
+#: src/fbks-helpers/imageClickStylePremiumControls.js:134
 msgid "Link Target Icon Colors"
 msgstr "Couleurs de l’icône de cible du lien"
 
@@ -1898,7 +1898,7 @@ msgstr "Couleurs de l’icône de cible du lien"
 msgid "Link this video to a WooCommerce product."
 msgstr "Lier cette vidéo à un produit WooCommerce."
 
-#: src/pb-helpers/imageProFeatureNotices.js:38
+#: src/fbks-helpers/imageProFeatureNotices.js:38
 msgid "Link to media files, custom URLs, Pages, or Posts."
 msgstr "Créez des liens vers des fichiers multimédias, des URL personnalisées, des pages ou des publications."
 
@@ -1910,11 +1910,11 @@ msgstr "Liez des vidéos aux produits WooCommerce."
 msgid "Linked Page or Post"
 msgstr "Page ou article lié"
 
-#: src/pb-helpers/ProductSearchControl.js:73
+#: src/fbks-helpers/ProductSearchControl.js:73
 msgid "Linked WooCommerce Product"
 msgstr "Produit WooCommerce lie"
 
-#: includes/pro/php/social-sharing.php:24 src/pb-helpers/socialSharingControls.js:6
+#: includes/pro/php/social-sharing.php:24 src/fbks-helpers/socialSharingControls.js:6
 msgid "LinkedIn"
 msgstr ""
 
@@ -1934,7 +1934,7 @@ msgstr "Boucle"
 msgid "Loop Carousel Slides"
 msgstr "Boucler les diapositives de Carousel"
 
-#: src/pb-helpers/imageProFeatureNotices.js:138
+#: src/fbks-helpers/imageProFeatureNotices.js:138
 msgid "Loop slides continuously."
 msgstr "La boucle glisse en continu."
 
@@ -1942,7 +1942,7 @@ msgstr "La boucle glisse en continu."
 msgid "Loop Video"
 msgstr "Boucler la video"
 
-#: src/pb-helpers/specialistProFeatureNotices.js:31
+#: src/fbks-helpers/specialistProFeatureNotices.js:31
 msgid "Loupe Appearance"
 msgstr "Apparence de la loupe"
 
@@ -1994,7 +1994,7 @@ msgstr "Bloc galerie masonry"
 msgid "Masonry Gallery Settings"
 msgstr "Réglages de Masonry Gallery"
 
-#: src/pb-helpers/imageProFeatureNotices.js:176
+#: src/fbks-helpers/imageProFeatureNotices.js:176
 msgid "Match the filmstrip controls to your site."
 msgstr "Faites correspondre les contrôles de la pellicule à votre site."
 
@@ -2002,7 +2002,7 @@ msgstr "Faites correspondre les contrôles de la pellicule à votre site."
 msgid "Maybe later"
 msgstr "Peut-être plus tard"
 
-#: src/pb-helpers/specialistProFeatureNotices.js:56
+#: src/fbks-helpers/specialistProFeatureNotices.js:56
 msgid "Media Protection"
 msgstr "Protection des médias"
 
@@ -2010,7 +2010,7 @@ msgstr "Protection des médias"
 msgid "Media protection and performance controls: lazy load, disable right-click, disable drag-to-save, and password protection support"
 msgstr ""
 
-#: src/pb-helpers/imageSizeOptions.js:4 src/pb-helpers/overlayTypographyControls.js:48
+#: src/fbks-helpers/imageSizeOptions.js:4 src/fbks-helpers/overlayTypographyControls.js:48
 msgid "Medium"
 msgstr "Moyen"
 
@@ -2034,7 +2034,7 @@ msgstr ""
 msgid "Missing proofing gallery key."
 msgstr ""
 
-#: src/pb-helpers/ResponsiveHeightRangeControl.js:39 src/pb-helpers/ResponsiveRangeControl.js:32
+#: src/fbks-helpers/ResponsiveHeightRangeControl.js:39 src/fbks-helpers/ResponsiveRangeControl.js:32
 msgid "Mobile"
 msgstr "Mobile"
 
@@ -2106,7 +2106,7 @@ msgstr "Aucune actualité trouvée pour le moment. Revenez plus tard."
 msgid "No proofing sessions found yet."
 msgstr ""
 
-#: src/pb-helpers/watermarkOverlayControls.js:318
+#: src/fbks-helpers/watermarkOverlayControls.js:318
 msgid "No saved watermarks are available. Create and save a watermark in FolioBlocks Global Settings before enabling watermarking."
 msgstr ""
 
@@ -2114,7 +2114,7 @@ msgstr ""
 msgid "No saved watermarks yet. Add your first watermark below."
 msgstr ""
 
-#: src/pb-helpers/filteringPremiumControls.js:319 src/pb-helpers/overlayTypographyControls.js:204
+#: src/fbks-helpers/filteringPremiumControls.js:319 src/fbks-helpers/overlayTypographyControls.js:204
 msgid "No theme fonts found. Add font families in theme.json or Global Styles."
 msgstr "Aucune police de thème trouvée. Ajoutez des familles de polices dans theme.json ou les Styles globaux."
 
@@ -2122,7 +2122,7 @@ msgstr "Aucune police de thème trouvée. Ajoutez des familles de polices dans t
 msgid "No Thumbnail Selected"
 msgstr "Aucune miniature sélectionnée"
 
-#: src/carousel-gallery-block/edit.js:598 src/filmstrip-gallery-block/edit.js:703 src/grid-gallery-block/edit.js:553 src/justified-gallery-block/edit.js:562 src/masonry-gallery-block/edit.js:561 src/modular-gallery-block/edit.js:880 src/pb-helpers/CompactColorControl.js:227 src/pb-helpers/ImageStyleControl.js:93 src/pb-helpers/imageClickActionPremiumControls.js:34 src/pb-helpers/imageClickActionPremiumControls.js:254 src/pb-helpers/imageClickActionPremiumControls.js:507 src/pb-helpers/imageHoverActionPremiumControls.js:13 src/pb-helpers/imageHoverActionPremiumControls.js:30 src/pb-helpers/watermarkOverlayControls.js:245 src/pb-image-block/edit.js:1012 src/pb-image-block/premium.js:610 src/pb-image-block/premium.js:690 src/pb-image-block/premium.js:1267 src/pb-video-block/edit.js:970 src/pb-video-block/premium.js:34 src/video-gallery-block/edit.js:572 src/video-gallery-block/premium.js:28
+#: src/carousel-gallery-block/edit.js:598 src/filmstrip-gallery-block/edit.js:703 src/grid-gallery-block/edit.js:553 src/justified-gallery-block/edit.js:562 src/masonry-gallery-block/edit.js:561 src/modular-gallery-block/edit.js:880 src/fbks-helpers/CompactColorControl.js:227 src/fbks-helpers/ImageStyleControl.js:93 src/fbks-helpers/imageClickActionPremiumControls.js:34 src/fbks-helpers/imageClickActionPremiumControls.js:254 src/fbks-helpers/imageClickActionPremiumControls.js:507 src/fbks-helpers/imageHoverActionPremiumControls.js:13 src/fbks-helpers/imageHoverActionPremiumControls.js:30 src/fbks-helpers/watermarkOverlayControls.js:245 src/pb-image-block/edit.js:1012 src/pb-image-block/premium.js:610 src/pb-image-block/premium.js:690 src/pb-image-block/premium.js:1267 src/pb-video-block/edit.js:970 src/pb-video-block/premium.js:34 src/video-gallery-block/edit.js:572 src/video-gallery-block/premium.js:28
 msgid "None"
 msgstr "Aucun"
 
@@ -2134,11 +2134,11 @@ msgstr ""
 msgid "Number of days to keep viewing and saved in-progress proofing sessions."
 msgstr ""
 
-#: src/pb-helpers/imageProFeatureNotices.js:39
+#: src/fbks-helpers/imageProFeatureNotices.js:39
 msgid "Offer downloads or connect WooCommerce products."
 msgstr "Proposez des téléchargements ou connectez des produits WooCommerce."
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:258 src/pb-helpers/imageClickActionPremiumControls.js:398 src/pb-helpers/imageClickActionPremiumControls.js:511 src/pb-image-block/premium.js:614 src/pb-image-block/premium.js:1167 src/pb-image-block/premium.js:1271 src/pb-video-block/premium.js:488 src/video-gallery-block/premium.js:129
+#: src/fbks-helpers/imageClickActionPremiumControls.js:258 src/fbks-helpers/imageClickActionPremiumControls.js:398 src/fbks-helpers/imageClickActionPremiumControls.js:511 src/pb-image-block/premium.js:614 src/pb-image-block/premium.js:1167 src/pb-image-block/premium.js:1271 src/pb-video-block/premium.js:488 src/video-gallery-block/premium.js:129
 msgid "On Hover"
 msgstr "Au survol"
 
@@ -2154,7 +2154,7 @@ msgstr ""
 msgid "Open Fullscreen"
 msgstr "Ouvrir en plein écran"
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:426 src/pb-helpers/imageClickActionPremiumControls.js:537 src/pb-image-block/premium.js:1199 src/pb-image-block/premium.js:1300
+#: src/fbks-helpers/imageClickActionPremiumControls.js:426 src/fbks-helpers/imageClickActionPremiumControls.js:537 src/pb-image-block/premium.js:1199 src/pb-image-block/premium.js:1300
 msgid "Open images in a lightbox when clicked."
 msgstr "Ouvre les images dans une Lightbox au clic."
 
@@ -2162,11 +2162,11 @@ msgstr "Ouvre les images dans une Lightbox au clic."
 msgid "Open images in a lightbox when the thumbnail is clicked."
 msgstr "Ouvre les images dans une Lightbox lorsque la miniature est cliquée."
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:285
+#: src/fbks-helpers/imageClickActionPremiumControls.js:285
 msgid "Open images in a lightbox when thumbnails are clicked."
 msgstr "Ouvre les images dans une Lightbox lorsque les miniatures sont cliquées."
 
-#: src/carousel-gallery-block/edit.js:600 src/grid-gallery-block/edit.js:555 src/justified-gallery-block/edit.js:564 src/masonry-gallery-block/edit.js:563 src/modular-gallery-block/edit.js:882 src/pb-helpers/imageClickActionPremiumControls.js:321 src/pb-image-block/edit.js:1014
+#: src/carousel-gallery-block/edit.js:600 src/grid-gallery-block/edit.js:555 src/justified-gallery-block/edit.js:564 src/masonry-gallery-block/edit.js:563 src/modular-gallery-block/edit.js:882 src/fbks-helpers/imageClickActionPremiumControls.js:321 src/pb-image-block/edit.js:1014
 msgid "Open in Lightbox"
 msgstr "Ouvrir dans la Lightbox"
 
@@ -2186,7 +2186,7 @@ msgstr "Ouvrir le lien"
 msgid "Open Media"
 msgstr ""
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:474 src/pb-image-block/premium.js:1098 src/pb-image-block/premium.js:1114 src/pb-image-block/premium.js:1383 src/pb-image-block/premium.js:1399 src/pb-video-block/premium.js:618 src/pb-video-block/premium.js:634 src/video-gallery-block/premium.js:154
+#: src/fbks-helpers/imageClickActionPremiumControls.js:474 src/pb-image-block/premium.js:1098 src/pb-image-block/premium.js:1114 src/pb-image-block/premium.js:1383 src/pb-image-block/premium.js:1399 src/pb-video-block/premium.js:618 src/pb-video-block/premium.js:634 src/video-gallery-block/premium.js:154
 msgid "Open Product Page"
 msgstr "Ouvrir la page produit"
 
@@ -2194,7 +2194,7 @@ msgstr "Ouvrir la page produit"
 msgid "Open the custom URL in a new browser tab."
 msgstr "Ouvre l’URL personnalisée dans un nouvel onglet du navigateur."
 
-#: src/pb-helpers/imageProFeatureNotices.js:164
+#: src/fbks-helpers/imageProFeatureNotices.js:164
 msgid "Open the filmstrip in fullscreen mode."
 msgstr "Ouvrez la pellicule en mode plein écran."
 
@@ -2218,15 +2218,15 @@ msgstr "Organise les images en rangées personnalisées pour un contrôle préci
 msgid "Overlay color"
 msgstr "Couleur de la superposition"
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:368 src/pb-video-block/premium.js:293 src/video-gallery-block/premium.js:384
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:368 src/pb-video-block/premium.js:293 src/video-gallery-block/premium.js:384
 msgid "Overlay Colors"
 msgstr "Couleurs de superposition"
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:262 src/pb-video-block/edit.js:961 src/video-gallery-block/edit.js:563
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:262 src/pb-video-block/edit.js:961 src/video-gallery-block/edit.js:563
 msgid "Overlay Content"
 msgstr "Contenu de la superposition"
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:244 src/pb-video-block/premium.js:246 src/video-gallery-block/premium.js:337
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:244 src/pb-video-block/premium.js:246 src/video-gallery-block/premium.js:337
 msgid "Overlay Entrance"
 msgstr ""
 
@@ -2234,15 +2234,15 @@ msgstr ""
 msgid "Overlay opacity"
 msgstr "Opacité de la superposition"
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:185 src/pb-video-block/premium.js:187 src/video-gallery-block/premium.js:278
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:185 src/pb-video-block/premium.js:187 src/video-gallery-block/premium.js:278
 msgid "Overlay Style"
 msgstr ""
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:424
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:424
 msgid "Overlay Typography"
 msgstr ""
 
-#: src/pb-helpers/imageProFeatureNotices.js:44
+#: src/fbks-helpers/imageProFeatureNotices.js:44
 msgid "Override click behavior for individual images."
 msgstr "Remplacez le comportement de clic pour des images individuelles."
 
@@ -2254,7 +2254,7 @@ msgstr "Remplacer les paramètres de clic et de survol de la galerie par image"
 msgid "Override Gallery Click Settings"
 msgstr "Remplacer les paramètres de clic de la galerie"
 
-#: src/pb-helpers/imageProFeatureNotices.js:189
+#: src/fbks-helpers/imageProFeatureNotices.js:189
 msgid "Override gallery click settings."
 msgstr "Remplacez les paramètres de clic de la galerie."
 
@@ -2270,11 +2270,11 @@ msgstr "Remplacez les paramètres de survol de la galerie pour des vidéos indiv
 msgid "Override Gallery Hover Settings Per Video"
 msgstr "Remplacer les paramètres de survol de la galerie par vidéo"
 
-#: src/pb-helpers/imageProFeatureNotices.js:190
+#: src/fbks-helpers/imageProFeatureNotices.js:190
 msgid "Override gallery hover settings."
 msgstr "Remplacez les paramètres de survol de la galerie."
 
-#: src/pb-helpers/imageProFeatureNotices.js:61
+#: src/fbks-helpers/imageProFeatureNotices.js:61
 msgid "Override hover settings for individual images."
 msgstr "Remplacez les paramètres de survol pour les images individuelles."
 
@@ -2314,7 +2314,7 @@ msgstr ""
 msgid "Page: %s"
 msgstr ""
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:34 src/pb-video-block/premium.js:38 src/video-gallery-block/premium.js:32
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:34 src/pb-video-block/premium.js:38 src/video-gallery-block/premium.js:32
 msgid "Pan"
 msgstr ""
 
@@ -2354,7 +2354,7 @@ msgstr ""
 msgid "Per-Image Click & Hover Setting Overrides"
 msgstr "Remplacements des paramètres de clic et de survol par image"
 
-#: src/pb-helpers/imageProFeatureNotices.js:183 src/pb-image-block/edit.js:1195
+#: src/fbks-helpers/imageProFeatureNotices.js:183 src/pb-image-block/edit.js:1195
 msgid "Per-Image Gallery Overrides"
 msgstr "Remplacements de la galerie par image"
 
@@ -2374,7 +2374,7 @@ msgstr "photo"
 msgid "picture"
 msgstr "image"
 
-#: includes/pro/php/social-sharing.php:36 src/pb-helpers/socialSharingControls.js:9
+#: includes/pro/php/social-sharing.php:36 src/fbks-helpers/socialSharingControls.js:9
 msgid "Pinterest"
 msgstr ""
 
@@ -2410,7 +2410,7 @@ msgstr "Lecture"
 msgid "Playback Control Colors"
 msgstr "Couleurs des contrôles de lecture"
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:35 src/pb-video-block/premium.js:39 src/video-gallery-block/premium.js:33
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:35 src/pb-video-block/premium.js:39 src/video-gallery-block/premium.js:33
 msgid "Pop"
 msgstr ""
 
@@ -2594,7 +2594,7 @@ msgstr ""
 msgid "Proofing workflow on Business/Agency: private client galleries, hearts, color flags, comments, filters, save/continue, submit, email notifications, admin session reports, and PDF export"
 msgstr ""
 
-#: src/pb-helpers/imageProFeatureNotices.js:92 src/pb-helpers/specialistProFeatureNotices.js:68 src/pb-video-block/edit.js:1092 src/video-gallery-block/edit.js:673
+#: src/fbks-helpers/imageProFeatureNotices.js:92 src/fbks-helpers/specialistProFeatureNotices.js:68 src/pb-video-block/edit.js:1092 src/video-gallery-block/edit.js:673
 msgid "Protection and Performance"
 msgstr "Protection et performances"
 
@@ -2610,19 +2610,19 @@ msgstr "Achetez une licence FolioBlocks dès aujourd'hui et profitez du meilleur
 msgid "Quick Links:"
 msgstr "Liens rapides :"
 
-#: src/pb-helpers/imageProFeatureNotices.js:6
+#: src/fbks-helpers/imageProFeatureNotices.js:6
 msgid "Randomize Gallery Order"
 msgstr "Randomiser l'ordre de la galerie"
 
-#: includes/admin/free-pro.php:82 includes/admin/free-pro.php:108 includes/admin/free-pro.php:163 includes/admin/free-pro.php:209 includes/admin/free-pro.php:237 src/pb-helpers/simplePremiumControls.js:81
+#: includes/admin/free-pro.php:82 includes/admin/free-pro.php:108 includes/admin/free-pro.php:163 includes/admin/free-pro.php:209 includes/admin/free-pro.php:237 src/fbks-helpers/simplePremiumControls.js:81
 msgid "Randomize Image Order"
 msgstr "Ordre aléatoire des images"
 
-#: src/pb-helpers/imageProFeatureNotices.js:165
+#: src/fbks-helpers/imageProFeatureNotices.js:165
 msgid "Randomize image order."
 msgstr "Randomisez l’ordre des images."
 
-#: src/pb-helpers/simplePremiumControls.js:82
+#: src/fbks-helpers/simplePremiumControls.js:82
 msgid "Randomize order of images."
 msgstr "Mélanger l'ordre des images."
 
@@ -2634,7 +2634,7 @@ msgstr "Notez les FolioBlocks"
 msgid "Rate Us"
 msgstr "Donnez-nous une note"
 
-#: src/pb-helpers/imageProFeatureNotices.js:205
+#: src/fbks-helpers/imageProFeatureNotices.js:205
 msgid "Read stored EXIF metadata."
 msgstr "Lire les métadonnées EXIF ​​​​stockées."
 
@@ -2654,7 +2654,7 @@ msgstr ""
 msgid "Red Flag"
 msgstr ""
 
-#: src/pb-helpers/overlayTypographyControls.js:47
+#: src/fbks-helpers/overlayTypographyControls.js:47
 msgid "Regular"
 msgstr ""
 
@@ -2674,7 +2674,7 @@ msgstr "Supprimer l'espace entre les images"
 msgid "Remove Link"
 msgstr "Supprimer le lien"
 
-#: src/pb-helpers/ProductSearchControl.js:144 src/pb-helpers/ProductSearchControl.js:166
+#: src/fbks-helpers/ProductSearchControl.js:144 src/fbks-helpers/ProductSearchControl.js:166
 msgid "Remove Product"
 msgstr "Supprimer le produit"
 
@@ -2706,7 +2706,7 @@ msgstr "Exiger un mot de passe avant que les visiteurs puissent consulter la pag
 msgid "Resolution"
 msgstr "Résolution"
 
-#: src/pb-helpers/specialistProFeatureNotices.js:43
+#: src/fbks-helpers/specialistProFeatureNotices.js:43
 msgid "Responsive Background Video Controls"
 msgstr "Contrôles vidéo d'arrière-plan réactifs"
 
@@ -2714,7 +2714,7 @@ msgstr "Contrôles vidéo d'arrière-plan réactifs"
 msgid "Responsive Design Ready: Works on Desktop, Tablet, and Mobile"
 msgstr ""
 
-#: src/pb-helpers/imageProFeatureNotices.js:19
+#: src/fbks-helpers/imageProFeatureNotices.js:19
 msgid "Responsive Gallery Gaps"
 msgstr "Lacunes de la galerie réactive"
 
@@ -2742,7 +2742,7 @@ msgstr ""
 msgid "Review the session: %s"
 msgstr ""
 
-#: src/carousel-gallery-block/premium.js:159 src/filmstrip-gallery-block/edit.js:1197 src/pb-before-after-block/premium.js:82 src/pb-helpers/filteringPremiumControls.js:172 src/proofing-gallery-block/edit.js:183
+#: src/carousel-gallery-block/premium.js:159 src/filmstrip-gallery-block/edit.js:1197 src/pb-before-after-block/premium.js:82 src/fbks-helpers/filteringPremiumControls.js:172 src/proofing-gallery-block/edit.js:183
 msgid "Right"
 msgstr "Droite"
 
@@ -2790,7 +2790,7 @@ msgstr ""
 msgid "Search pages or posts..."
 msgstr "Rechercher des pages ou articles..."
 
-#: src/pb-helpers/ProductSearchControl.js:80
+#: src/fbks-helpers/ProductSearchControl.js:80
 msgid "Search products…"
 msgstr "Rechercher des produits…"
 
@@ -2838,7 +2838,7 @@ msgstr "Sélectionnez une ou plusieurs catégories pour cette vidéo."
 msgid "Select or Insert Video"
 msgstr "Sélectionner ou insérer une vidéo"
 
-#: src/pb-helpers/filteringPremiumControls.js:400
+#: src/fbks-helpers/filteringPremiumControls.js:400
 msgid "Select the font’s weight and style (matches WordPress Typography → Appearance)."
 msgstr "Sélectionnez la graisse et le style de la police (correspond à Typographie → Apparence dans WordPress)."
 
@@ -2874,7 +2874,7 @@ msgstr "Auto-hébergé"
 msgid "self-hosted videos"
 msgstr "vidéos auto-hébergées"
 
-#: src/pb-helpers/overlayTypographyControls.js:49
+#: src/fbks-helpers/overlayTypographyControls.js:49
 msgid "Semi Bold"
 msgstr ""
 
@@ -2882,7 +2882,7 @@ msgstr ""
 msgid "Send email to the site admin when the client has submitted the session on the Proofing Gallery."
 msgstr ""
 
-#: src/pb-helpers/filteringPremiumControls.js:191
+#: src/fbks-helpers/filteringPremiumControls.js:191
 msgid "Separate categories with commas"
 msgstr "Séparez les catégories par des virgules"
 
@@ -2890,15 +2890,15 @@ msgstr "Séparez les catégories par des virgules"
 msgid "Server Configuration"
 msgstr "Configuration du serveur"
 
-#: src/pb-helpers/ImageStyleControl.js:53
+#: src/fbks-helpers/ImageStyleControl.js:53
 msgid "Set %s border color."
 msgstr "Définit la couleur de la bordure %s."
 
-#: src/pb-helpers/ImageStyleControl.js:85
+#: src/fbks-helpers/ImageStyleControl.js:85
 msgid "Set %s border radius."
 msgstr "Définissez le rayon de bordure %s."
 
-#: src/pb-helpers/ImageStyleControl.js:69
+#: src/fbks-helpers/ImageStyleControl.js:69
 msgid "Set %s border width."
 msgstr "Définissez la largeur de bordure %s."
 
@@ -2906,7 +2906,7 @@ msgstr "Définissez la largeur de bordure %s."
 msgid "Set a gallery password before creating the proofing gallery."
 msgstr ""
 
-#: src/pb-helpers/filteringPremiumControls.js:155
+#: src/fbks-helpers/filteringPremiumControls.js:155
 msgid "Set alignment of the filter bar."
 msgstr "Définissez l'alignement de la barre de filtre."
 
@@ -2942,11 +2942,11 @@ msgstr "Definir une hauteur de bloc personnalisee sur ordinateur"
 msgid "Set Custom Block Height on Tablet & Mobile"
 msgstr "Definir une hauteur de bloc personnalisee sur tablette et mobile"
 
-#: src/pb-helpers/imageProFeatureNotices.js:25
+#: src/fbks-helpers/imageProFeatureNotices.js:25
 msgid "Set custom desktop, tablet, and mobile gaps."
 msgstr "Définissez des écarts personnalisés entre les ordinateurs de bureau, les tablettes et les appareils mobiles."
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:413
+#: src/fbks-helpers/imageClickActionPremiumControls.js:413
 msgid "Set display preference for Image Download icon."
 msgstr "Définissez la préférence d'affichage de l'icône de téléchargement d'image."
 
@@ -2954,7 +2954,7 @@ msgstr "Définissez la préférence d'affichage de l'icône de téléchargement 
 msgid "Set display preference for the download icon."
 msgstr "Définissez la préférence d'affichage de l'icône de téléchargement."
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:236
+#: src/fbks-helpers/imageClickActionPremiumControls.js:236
 msgid "Set each image destination from its individual Image Block settings."
 msgstr "Définissez la destination de chaque image depuis les réglages de son bloc d’image."
 
@@ -2974,7 +2974,7 @@ msgstr ""
 msgid "Set Image Resolution on Slides"
 msgstr "Definir la resolution de l'image sur les diapositives"
 
-#: src/pb-helpers/specialistProFeatureNotices.js:49
+#: src/fbks-helpers/specialistProFeatureNotices.js:49
 msgid "Set independent desktop, tablet, and mobile heights."
 msgstr "Définissez des hauteurs indépendantes pour les ordinateurs de bureau, les tablettes et les appareils mobiles."
 
@@ -3022,11 +3022,11 @@ msgstr ""
 msgid "Set the preferred row height. Rows adjust as needed to fill the gallery width."
 msgstr "Définissez la hauteur de ligne préférée. Les lignes s'ajustent selon les besoins pour remplir la largeur de la galerie."
 
-#: src/pb-helpers/specialistProFeatureNotices.js:12
+#: src/fbks-helpers/specialistProFeatureNotices.js:12
 msgid "Set the slider handle starting position."
 msgstr "Réglez la position de départ de la poignée coulissante."
 
-#: src/modular-gallery-block/edit.js:965 src/pb-helpers/responsiveGapPremiumControl.js:39
+#: src/modular-gallery-block/edit.js:965 src/fbks-helpers/responsiveGapPremiumControl.js:39
 msgid "Set the space between gallery images."
 msgstr "Définissez l'espace entre les images de la galerie."
 
@@ -3050,7 +3050,7 @@ msgstr "Définissez la résolution de la miniature."
 msgid "Set video Thumbnail aspect ratio."
 msgstr "Définissez le ratio de la miniature vidéo."
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:483
+#: src/fbks-helpers/imageClickActionPremiumControls.js:483
 msgid "Sets the default WooCommerce product action for this gallery. Individual images can override this setting."
 msgstr "Définit l’action produit WooCommerce par défaut pour cette galerie. Les images individuelles peuvent remplacer ce réglage."
 
@@ -3070,7 +3070,7 @@ msgstr ""
 msgid "Share on %s"
 msgstr ""
 
-#: src/pb-helpers/socialSharingControls.js:114
+#: src/fbks-helpers/socialSharingControls.js:114
 msgid "Sharing Sources"
 msgstr ""
 
@@ -3082,7 +3082,7 @@ msgstr "Afficher les étiquettes Avant et Après"
 msgid "Show Comment icon for image-specific client notes."
 msgstr ""
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:46 src/pb-helpers/imageHoverActionPremiumControls.js:151 src/pb-image-block/premium.js:693
+#: src/fbks-helpers/imageClickActionPremiumControls.js:46 src/fbks-helpers/imageHoverActionPremiumControls.js:151 src/pb-image-block/premium.js:693
 msgid "Show EXIF Data"
 msgstr "Afficher les données EXIF"
 
@@ -3094,43 +3094,43 @@ msgstr ""
 msgid "Show Heart icon so clients can mark images they like."
 msgstr ""
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:42 src/pb-helpers/imageHoverActionPremiumControls.js:147 src/pb-image-block/premium.js:692
+#: src/fbks-helpers/imageClickActionPremiumControls.js:42 src/fbks-helpers/imageHoverActionPremiumControls.js:147 src/pb-image-block/premium.js:692
 msgid "Show Image Caption"
 msgstr "Afficher la légende de l'image"
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:54 src/pb-image-block/premium.js:699
+#: src/fbks-helpers/imageClickActionPremiumControls.js:54 src/pb-image-block/premium.js:699
 msgid "Show Image Caption & EXIF Data"
 msgstr "Afficher la légende de l'image et les données EXIF"
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:135
+#: src/fbks-helpers/imageClickActionPremiumControls.js:135
 msgid "Show Image Counter"
 msgstr ""
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:38 src/pb-helpers/imageHoverActionPremiumControls.js:143 src/pb-image-block/premium.js:691
+#: src/fbks-helpers/imageClickActionPremiumControls.js:38 src/fbks-helpers/imageHoverActionPremiumControls.js:143 src/pb-image-block/premium.js:691
 msgid "Show Image Title"
 msgstr "Afficher le titre de l'image"
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:58 src/pb-image-block/premium.js:703
+#: src/fbks-helpers/imageClickActionPremiumControls.js:58 src/pb-image-block/premium.js:703
 msgid "Show Image Title & Caption"
 msgstr "Afficher le titre et la légende de l'image"
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:50 src/pb-image-block/premium.js:695
+#: src/fbks-helpers/imageClickActionPremiumControls.js:50 src/pb-image-block/premium.js:695
 msgid "Show Image Title & EXIF Data"
 msgstr "Afficher le titre de l'image et les données EXIF"
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:62 src/pb-image-block/premium.js:707
+#: src/fbks-helpers/imageClickActionPremiumControls.js:62 src/pb-image-block/premium.js:707
 msgid "Show Image Title, Caption, & EXIF Data"
 msgstr "Afficher le titre de l'image, la légende et les données EXIF"
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:76 src/pb-helpers/imageHoverActionPremiumControls.js:158 src/pb-image-block/premium.js:717
+#: src/fbks-helpers/imageClickActionPremiumControls.js:76 src/fbks-helpers/imageHoverActionPremiumControls.js:158 src/pb-image-block/premium.js:717
 msgid "Show Product Info"
 msgstr "Afficher les infos produit"
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:69 src/pb-helpers/imageHoverActionPremiumControls.js:163
+#: src/fbks-helpers/imageClickActionPremiumControls.js:69 src/fbks-helpers/imageHoverActionPremiumControls.js:163
 msgid "Show Social Media"
 msgstr ""
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:141
+#: src/fbks-helpers/imageClickActionPremiumControls.js:141
 msgid "Show the current image number and total image count in gallery lightboxes."
 msgstr ""
 
@@ -3162,7 +3162,7 @@ msgstr "Taille et point focal"
 msgid "Slide Borders & Rounded Corners"
 msgstr ""
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:45 src/pb-video-block/premium.js:48 src/video-gallery-block/premium.js:42
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:45 src/pb-video-block/premium.js:48 src/video-gallery-block/premium.js:42
 msgid "Slide Down"
 msgstr ""
 
@@ -3170,15 +3170,15 @@ msgstr ""
 msgid "Slide Drop Shadows: Subtle, Soft, Elevated, and Dramatic"
 msgstr ""
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:46 src/pb-video-block/premium.js:49 src/video-gallery-block/premium.js:43
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:46 src/pb-video-block/premium.js:49 src/video-gallery-block/premium.js:43
 msgid "Slide Left"
 msgstr ""
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:47 src/pb-video-block/premium.js:50 src/video-gallery-block/premium.js:44
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:47 src/pb-video-block/premium.js:50 src/video-gallery-block/premium.js:44
 msgid "Slide Right"
 msgstr ""
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:44 src/pb-video-block/premium.js:47 src/video-gallery-block/premium.js:41
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:44 src/pb-video-block/premium.js:47 src/video-gallery-block/premium.js:41
 msgid "Slide Up"
 msgstr ""
 
@@ -3186,7 +3186,7 @@ msgstr ""
 msgid "Slider & Label Styles"
 msgstr "Styles du curseur et des étiquettes"
 
-#: src/pb-helpers/specialistProFeatureNotices.js:19
+#: src/fbks-helpers/specialistProFeatureNotices.js:19
 msgid "Slider and Label Styles"
 msgstr "Styles de curseur et d’étiquette"
 
@@ -3202,11 +3202,11 @@ msgstr "Orientation du curseur"
 msgid "Social Sharing"
 msgstr ""
 
-#: src/pb-helpers/ImageStyleControl.js:95
+#: src/fbks-helpers/ImageStyleControl.js:95
 msgid "Soft"
 msgstr "Doux"
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:417
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:417
 msgid "Solid"
 msgstr ""
 
@@ -3238,7 +3238,7 @@ msgstr "Dispose les images dans une mise en page masonry avec des hauteurs varia
 msgid "Stacks images vertically with consistent spacing and full-width alignment."
 msgstr "Empile les images verticalement avec un espacement regulier et un alignement pleine largeur."
 
-#: src/pb-helpers/ProductSearchControl.js:84
+#: src/fbks-helpers/ProductSearchControl.js:84
 msgid "Start typing to search for products in your WooCommerce store. Click a result to link it."
 msgstr "Commencez à saisir pour rechercher des produits dans votre boutique WooCommerce. Cliquez sur un résultat pour le lier."
 
@@ -3250,7 +3250,7 @@ msgstr ""
 msgid "Studio White Logo"
 msgstr ""
 
-#: src/pb-helpers/imageProFeatureNotices.js:125 src/video-gallery-block/edit.js:321
+#: src/fbks-helpers/imageProFeatureNotices.js:125 src/video-gallery-block/edit.js:321
 msgid "Style the active filtering category."
 msgstr "Stylisez la catégorie de filtrage active."
 
@@ -3278,7 +3278,7 @@ msgstr ""
 msgid "Submitted Session Retention"
 msgstr ""
 
-#: src/pb-helpers/ImageStyleControl.js:94
+#: src/fbks-helpers/ImageStyleControl.js:94
 msgid "Subtle"
 msgstr "Subtil"
 
@@ -3322,11 +3322,11 @@ msgstr "Informations systeme"
 msgid "System Information"
 msgstr "Informations système"
 
-#: src/pb-helpers/ResponsiveHeightRangeControl.js:38 src/pb-helpers/ResponsiveRangeControl.js:31
+#: src/fbks-helpers/ResponsiveHeightRangeControl.js:38 src/fbks-helpers/ResponsiveRangeControl.js:31
 msgid "Tablet"
 msgstr "Tablette"
 
-#: src/pb-helpers/filteringPremiumControls.js:546 src/pb-helpers/filteringPremiumControls.js:569 src/pb-helpers/imageHoverActionPremiumControls.js:409 src/pb-video-block/premium.js:325 src/proofing-gallery-block/edit.js:362 src/video-gallery-block/premium.js:416
+#: src/fbks-helpers/filteringPremiumControls.js:546 src/fbks-helpers/filteringPremiumControls.js:569 src/fbks-helpers/imageHoverActionPremiumControls.js:409 src/pb-video-block/premium.js:325 src/proofing-gallery-block/edit.js:362 src/video-gallery-block/premium.js:416
 msgid "Text"
 msgstr "Texte"
 
@@ -3350,11 +3350,11 @@ msgstr ""
 msgid "The gallery password is incorrect."
 msgstr ""
 
-#: src/pb-helpers/getThemeSettings.js:103
+#: src/fbks-helpers/getThemeSettings.js:103
 msgid "Theme Default"
 msgstr "Defaut du theme"
 
-#: src/pb-helpers/overlayTypographyControls.js:44
+#: src/fbks-helpers/overlayTypographyControls.js:44
 msgid "Thin"
 msgstr ""
 
@@ -3362,11 +3362,11 @@ msgstr ""
 msgid "This content is password-protected. To view it, please enter the password below."
 msgstr ""
 
-#: includes/pro/php/social-sharing.php:40 src/pb-helpers/socialSharingControls.js:10
+#: includes/pro/php/social-sharing.php:40 src/fbks-helpers/socialSharingControls.js:10
 msgid "Threads"
 msgstr ""
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:205 src/pb-helpers/imageSizeOptions.js:3 src/pb-image-block/premium.js:558
+#: src/fbks-helpers/imageClickActionPremiumControls.js:205 src/fbks-helpers/imageSizeOptions.js:3 src/pb-image-block/premium.js:558
 msgid "Thumbnail"
 msgstr "Miniature"
 
@@ -3390,7 +3390,7 @@ msgstr "Résolution de la miniature"
 msgid "Tiled"
 msgstr ""
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:36 src/pb-video-block/premium.js:40 src/video-gallery-block/premium.js:34
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:36 src/pb-video-block/premium.js:40 src/video-gallery-block/premium.js:34
 msgid "Tilt"
 msgstr ""
 
@@ -3418,7 +3418,7 @@ msgstr ""
 msgid "Top Right"
 msgstr ""
 
-#: src/pb-helpers/filteringPremiumControls.js:429
+#: src/fbks-helpers/filteringPremiumControls.js:429
 msgid "Typography"
 msgstr "Typographie"
 
@@ -3490,7 +3490,7 @@ msgstr "Téléversez ou sélectionnez des images pour créer une galerie Masonry
 msgid "Upload or Select Watermark Image"
 msgstr ""
 
-#: src/pb-helpers/specialistProFeatureNotices.js:38
+#: src/fbks-helpers/specialistProFeatureNotices.js:38
 msgid "Use a light or dark loupe frame."
 msgstr "Utilisez une monture de loupe claire ou foncée."
 
@@ -3518,11 +3518,11 @@ msgstr ""
 msgid "Used to identify the client connected to this Proofing Gallery."
 msgstr ""
 
-#: src/pb-helpers/overlayTypographyControls.js:200
+#: src/fbks-helpers/overlayTypographyControls.js:200
 msgid "Uses fonts from your theme's Global Styles."
 msgstr ""
 
-#: src/pb-helpers/filteringPremiumControls.js:315
+#: src/fbks-helpers/filteringPremiumControls.js:315
 msgid "Uses fonts from your theme’s Global Styles."
 msgstr "Utilise les polices des Styles globaux de votre thème."
 
@@ -3694,7 +3694,7 @@ msgstr ""
 msgid "Visitors must enter this password to view the page."
 msgstr "Les visiteurs doivent saisir ce mot de passe pour visualiser la page."
 
-#: includes/pro/admin/global-settings.php:78 includes/pro/admin/global-settings.php:691 src/pb-helpers/watermarkOverlayControls.js:328
+#: includes/pro/admin/global-settings.php:78 includes/pro/admin/global-settings.php:691 src/fbks-helpers/watermarkOverlayControls.js:328
 msgid "Watermark"
 msgstr ""
 
@@ -3702,7 +3702,7 @@ msgstr ""
 msgid "Watermark Image"
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:784 src/filmstrip-gallery-block/edit.js:1307 src/grid-gallery-block/edit.js:824 src/justified-gallery-block/edit.js:764 src/masonry-gallery-block/edit.js:773 src/modular-gallery-block/edit.js:1033 src/pb-helpers/imageProFeatureNotices.js:79 src/pb-image-block/edit.js:1396 src/proofing-gallery-block/edit.js:1123
+#: src/carousel-gallery-block/edit.js:784 src/filmstrip-gallery-block/edit.js:1307 src/grid-gallery-block/edit.js:824 src/justified-gallery-block/edit.js:764 src/masonry-gallery-block/edit.js:773 src/modular-gallery-block/edit.js:1033 src/fbks-helpers/imageProFeatureNotices.js:79 src/pb-image-block/edit.js:1396 src/proofing-gallery-block/edit.js:1123
 msgid "Watermark Overlay"
 msgstr ""
 
@@ -3750,7 +3750,7 @@ msgstr "Intégration WooCommerce"
 msgid "WooCommerce integration for image galleries, Image Block, Video Block, and Video Gallery"
 msgstr ""
 
-#: src/pb-helpers/imageClickActionPremiumControls.js:346 src/pb-image-block/premium.js:838
+#: src/fbks-helpers/imageClickActionPremiumControls.js:346 src/pb-image-block/premium.js:838
 msgid "WooCommerce Product"
 msgstr "Produit WooCommerce"
 
@@ -3758,7 +3758,7 @@ msgstr "Produit WooCommerce"
 msgid "WooCommerce product linking for videos"
 msgstr ""
 
-#: includes/pro/php/social-sharing.php:28 src/pb-helpers/socialSharingControls.js:7
+#: includes/pro/php/social-sharing.php:28 src/fbks-helpers/socialSharingControls.js:7
 msgid "X"
 msgstr ""
 
@@ -3770,7 +3770,7 @@ msgstr ""
 msgid "You are not allowed to load FolioBlocks news."
 msgstr ""
 
-#: src/pb-helpers/socialSharingControls.js:152
+#: src/fbks-helpers/socialSharingControls.js:152
 msgid "You can select up to 5 sources."
 msgstr ""
 
@@ -3782,10 +3782,10 @@ msgstr ""
 msgid "YouTube"
 msgstr "YouTube"
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:37 src/pb-video-block/premium.js:41 src/video-gallery-block/premium.js:35
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:37 src/pb-video-block/premium.js:41 src/video-gallery-block/premium.js:35
 msgid "Zoom In"
 msgstr ""
 
-#: src/pb-helpers/imageHoverActionPremiumControls.js:38 src/pb-video-block/premium.js:42 src/video-gallery-block/premium.js:36
+#: src/fbks-helpers/imageHoverActionPremiumControls.js:38 src/pb-video-block/premium.js:42 src/video-gallery-block/premium.js:36
 msgid "Zoom Out"
 msgstr ""

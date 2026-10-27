@@ -14,16 +14,16 @@ const runtime = process.env.FBKS_TEST_GUTENBERG
 	: 'wp-includes/js/dist/script-modules';
 const filename = process.env.FBKS_TEST_GUTENBERG ? 'index.js' : 'index.min.js';
 const modules = {
-	'/style.css': path.join( root, 'build/pb-image-block/style-index.css' ),
+	'/style.css': path.join( root, 'build/image-block/style-index.css' ),
 	'/proofing.css': path.join(
 		root,
 		'build/proofing-gallery-block/style-index.css'
 	),
 	'/proofing.js': path.join( root, 'build/proofing-gallery-block/view.js' ),
-	'/view.js': path.join( root, 'build/pb-image-block/view.js' ),
+	'/view.js': path.join( root, 'build/image-block/view.js' ),
 	'/premium-view.js': path.join(
 		root,
-		'build/pb-image-block/premium-view.js'
+		'build/image-block/premium-view.js'
 	),
 	'/interactivity.js': path.join(
 		wpRoot,

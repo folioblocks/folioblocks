@@ -4,16 +4,16 @@
  */
 import { __ } from '@wordpress/i18n';
 import { addFilter } from '@wordpress/hooks';
-import ImageStyleControl from '../pb-helpers/ImageStyleControl';
-import { registerImageClickActionPremiumControls } from '../pb-helpers/imageClickActionPremiumControls';
-import { registerImageClickStylePremiumControls } from '../pb-helpers/imageClickStylePremiumControls';
-import { registerImageHoverActionPremiumControls } from '../pb-helpers/imageHoverActionPremiumControls';
-import { registerListViewThumbnailEnhancements } from '../pb-helpers/listViewThumbnailEnhancements';
-import { registerWatermarkOverlayControls } from '../pb-helpers/watermarkOverlayControls';
+import ImageStyleControl from '../fbks-helpers/ImageStyleControl';
+import { registerImageClickActionPremiumControls } from '../fbks-helpers/imageClickActionPremiumControls';
+import { registerImageClickStylePremiumControls } from '../fbks-helpers/imageClickStylePremiumControls';
+import { registerImageHoverActionPremiumControls } from '../fbks-helpers/imageHoverActionPremiumControls';
+import { registerListViewThumbnailEnhancements } from '../fbks-helpers/listViewThumbnailEnhancements';
+import { registerWatermarkOverlayControls } from '../fbks-helpers/watermarkOverlayControls';
 import {
 	registerDisableRightClickPremiumControl,
 	registerLazyLoadPremiumControl,
-} from '../pb-helpers/simplePremiumControls';
+} from '../fbks-helpers/simplePremiumControls';
 
 registerListViewThumbnailEnhancements( {
 	hookPrefix: 'folioBlocks.modularGallery',

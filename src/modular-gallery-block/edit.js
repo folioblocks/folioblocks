@@ -1,4 +1,4 @@
-import useGlobalBlockDefaults from '../pb-helpers/useGlobalBlockDefaults';
+import useGlobalBlockDefaults from '../fbks-helpers/useGlobalBlockDefaults';
 import blockMetadata from './block.json';
 /**
  * Modular Gallery Block
@@ -25,16 +25,16 @@ import {
 import { createBlock } from "@wordpress/blocks";
 import { row } from "@wordpress/icons";
 import { applyFilters } from "@wordpress/hooks";
-import { IconModularGallery } from "../pb-helpers/icons";
-import { getExifAttributesFromMedia } from "../pb-helpers/exifMetadata";
-import { getImageSizeOptions } from "../pb-helpers/imageSizeOptions";
-import { imageProFeatureNotice } from "../pb-helpers/imageProFeatureNotices";
-import ResponsiveRangeControl from "../pb-helpers/ResponsiveRangeControl";
-import ResponsiveRangeInspector, { ResponsiveLayoutInspector } from '../pb-helpers/ResponsiveRangeInspector';
+import { IconModularGallery } from "../fbks-helpers/icons";
+import { getExifAttributesFromMedia } from "../fbks-helpers/exifMetadata";
+import { getImageSizeOptions } from "../fbks-helpers/imageSizeOptions";
+import { imageProFeatureNotice } from "../fbks-helpers/imageProFeatureNotices";
+import ResponsiveRangeControl from "../fbks-helpers/ResponsiveRangeControl";
+import ResponsiveRangeInspector, { ResponsiveLayoutInspector } from '../fbks-helpers/ResponsiveRangeInspector';
 import {
 	getGalleryGapForWidth,
 	resolveGalleryGaps,
-} from "../pb-helpers/galleryGap";
+} from "../fbks-helpers/galleryGap";
 
 import "./editor.scss";
 
@@ -64,7 +64,9 @@ const getImageClickAction = ({
 
 const getImageClickAttributes = (value) => {
 	switch (value) {
-		case "lightbox":
+		case 'video_lightbox':
+            return { imageClickAction: 'video_lightbox', imageClickTarget: 'icon', linkIconDisplay: 'hover', lightbox: true, enableLightbox: true, lightboxZoom: false, enableDownload: false, enableWooCommerce: false };
+        case "lightbox":
 			return {
 				imageClickAction: "lightbox",
 				lightbox: true,

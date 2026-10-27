@@ -10,7 +10,7 @@ const context = { exports: exportsObject, window: { folioBlocksData: { isPro: tr
     if (name === '@wordpress/data') return { useSelect: fn => fn(() => ({ wasBlockJustInserted: () => justInserted, getBlockParents: () => parents, getBlockCount: () => childCount, getBlocks: () => blockTree })) };
     throw new Error(name);
 } };
-vm.runInNewContext(babel.transformSync(fs.readFileSync('src/pb-helpers/useGlobalBlockDefaults.js', 'utf8'), { babelrc: false, configFile: false, plugins: ['@babel/plugin-transform-modules-commonjs'] }).code, context);
+vm.runInNewContext(babel.transformSync(fs.readFileSync('src/fbks-helpers/useGlobalBlockDefaults.js', 'utf8'), { babelrc: false, configFile: false, plugins: ['@babel/plugin-transform-modules-commonjs'] }).code, context);
 const schema = { magnification: { default: 10 }, loupeShape: { default: 'circle' } };
 const run = (attributes, inserted = true, inheritGallery = false) => { justInserted = inserted; writes = []; ref = { current: false }; exportsObject.default('id', 'loupe', attributes, value => writes.push(value), schema, inheritGallery); return writes; };
 assert.equal(run({ magnification: 10 }, false).length, 0);

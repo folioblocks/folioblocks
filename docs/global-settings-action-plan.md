@@ -281,7 +281,7 @@ window.folioBlocksData.globalSettings
 Add a JS helper:
 
 ```text
-src/pb-helpers/globalSettings.js
+src/fbks-helpers/globalSettings.js
 ```
 
 Responsibilities:
@@ -432,7 +432,7 @@ This avoids surprising site owners by changing existing galleries after plugin u
 
 ### Phase 2: Editor Defaults
 
-- Add `src/pb-helpers/globalSettings.js`.
+- Add `src/fbks-helpers/globalSettings.js`.
 - Add `globalDefaultsApplied` attributes to supported gallery blocks.
 - Apply global defaults once when supported blocks are inserted.
 - Keep local inspector controls working exactly as they do today after defaults are applied.

@@ -1351,3 +1351,48 @@
 .pb-image-lightbox-host::backdrop {
     background: transparent;
 }
+
+// Video slides share the image lightbox's caption, navigation and focus handling.
+.pb-image-lightbox.fbks-lightbox-has-video .lightbox-image {
+    width: 100%;
+    max-width: none;
+    margin-inline: auto;
+}
+.pb-image-lightbox.fbks-lightbox-has-video .lightbox-caption,
+.pb-image-lightbox.fbks-lightbox-has-video .pb-lightbox-title,
+.pb-image-lightbox.fbks-lightbox-has-video .pb-lightbox-caption-text {
+    width: 100%;
+    max-width: none;
+    margin-inline: auto;
+    text-align: center;
+}
+.fbks-lightbox-video {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    margin-inline: auto;
+    max-width: 100%;
+    max-height: 78vh;
+    border: 0;
+    object-fit: contain;
+    background: #000;
+}
+.fbks-video-overlay-play {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    pointer-events: auto;
+    svg { width: 48px; height: 48px; }
+}
+
+
+.fbks-video-lightbox-trigger:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+.pb-image-block:focus-within .fbks-video-lightbox-trigger.hover-only { opacity: 1; }
+
+.pb-image-block-title .fbks-video-play-glyph { width: 48px; height: 48px; }

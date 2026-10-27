@@ -1,6 +1,6 @@
 /** Grid layout and reveals follow the gallery element's lifetime. */
 import { getElement, store } from '@wordpress/interactivity';
-import { createFrontendScope } from '../pb-helpers/frontendScope';
+import { createFrontendScope } from '../fbks-helpers/frontendScope';
 
 const initializeGrid = ( root ) => {
 	const scope = createFrontendScope();

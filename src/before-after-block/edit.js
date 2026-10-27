@@ -1,5 +1,5 @@
-import { getBeforeAfterLabelPosition } from "../pb-helpers/beforeAfterLabelPosition";
-import useGlobalBlockDefaults from "../pb-helpers/useGlobalBlockDefaults";
+import { getBeforeAfterLabelPosition } from "../fbks-helpers/beforeAfterLabelPosition";
+import useGlobalBlockDefaults from "../fbks-helpers/useGlobalBlockDefaults";
 import blockMetadata from "./block.json";
 /**
  * Before & After Block
@@ -24,9 +24,9 @@ import { useState, useRef, useEffect } from "@wordpress/element";
 import { useSelect } from "@wordpress/data";
 import { applyFilters } from "@wordpress/hooks";
 import { media } from "@wordpress/icons";
-import { IconBeforeAfter } from "../pb-helpers/icons";
-import { getImageSizeOptions } from "../pb-helpers/imageSizeOptions";
-import { specialistProFeatureNotice } from "../pb-helpers/specialistProFeatureNotices";
+import { IconBeforeAfter } from "../fbks-helpers/icons";
+import { getImageSizeOptions } from "../fbks-helpers/imageSizeOptions";
+import { specialistProFeatureNotice } from "../fbks-helpers/specialistProFeatureNotices";
 import "./editor.scss";
 
 function CustomPlaceholder({

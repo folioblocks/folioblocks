@@ -1,4 +1,4 @@
-import useGlobalBlockDefaults from "../pb-helpers/useGlobalBlockDefaults";
+import useGlobalBlockDefaults from "../fbks-helpers/useGlobalBlockDefaults";
 import blockMetadata from "./block.json";
 /**
  * PB Video Block
@@ -23,30 +23,27 @@ import {
 	ToolbarGroup,
 	Modal,
 	ToggleControl,
-	Notice,
-	SandBox,
-	Spinner,
 } from "@wordpress/components";
 import { useState, useEffect } from "@wordpress/element";
 import { useSelect } from "@wordpress/data";
 import { applyFilters } from "@wordpress/hooks";
-import { IconVideoBlock, IconPlayButton } from "../pb-helpers/icons";
+import { IconVideoBlock, IconPlayButton } from "../fbks-helpers/icons";
 import ImageStyleControl, {
 	getShadowStyleClass,
-} from "../pb-helpers/ImageStyleControl.js";
+} from "../fbks-helpers/ImageStyleControl.js";
 import {
 	getVideoIframeSrc,
 	getVideoProviderData,
 	getVideoProviderLabel,
-} from "../pb-helpers/videoProviders";
-import { isValidHttpUrl } from "../pb-helpers/urlValidation";
-import ValidatedUrlControl from "../pb-helpers/ValidatedUrlControl";
-import ProFeatureNotice from "../pb-helpers/ProFeatureNotice";
+} from "../fbks-helpers/videoProviders";
+import { isValidHttpUrl } from "../fbks-helpers/urlValidation";
+import ValidatedUrlControl from "../fbks-helpers/ValidatedUrlControl";
+import ProFeatureNotice from "../fbks-helpers/ProFeatureNotice";
 import {
 	FBKS_ALL_FILTER_TOKEN,
 	fbksNormalizeActiveFilterValue,
-} from "../pb-helpers/filterConstants";
-import { getTiltHoverHandlers } from "../pb-helpers/tiltHoverEffect";
+} from "../fbks-helpers/filterConstants";
+import { getTiltHoverHandlers } from "../fbks-helpers/tiltHoverEffect";
 import "./editor.scss";
 
 const ASPECT_RATIOS = {
@@ -142,51 +139,13 @@ const getOverlayContentAttributes = (content, visibility) => ({
 });
 
 // Function to support iframe provider and self-hosted video previews.
-function getVideoEmbedMarkup(videoUrl, videoEmbedPreview, isPro = false) {
+function getVideoEmbedMarkup(videoUrl, isPro = false) {
 	if (!videoUrl) {
 		return null;
 	}
 
-	const providerData = getVideoProviderData(videoUrl, { isPro });
 	const providerLabel = getVideoProviderLabel(videoUrl, { isPro });
-
-	if (
-		providerData.provider === "youtube" ||
-		providerData.provider === "dailymotion"
-	) {
-		if (videoEmbedPreview?.html) {
-			return (
-				<SandBox
-					allowSameOrigin
-					html={videoEmbedPreview.html}
-					scripts={videoEmbedPreview.scripts}
-					title={`${providerLabel} Video`}
-					type="video wp-has-aspect-ratio"
-				/>
-			);
-		}
-
-		if (videoEmbedPreview === false) {
-			const message =
-				providerData.provider === "dailymotion"
-					? __(
-						"DailyMotion could not be previewed in the editor. The video will still play on the published page.",
-						"folioblocks",
-					)
-					: __(
-						"YouTube could not be previewed in the editor. The video will still play on the published page.",
-						"folioblocks",
-					);
-
-			return (
-				<Notice status="warning" isDismissible={false}>
-					{message}
-				</Notice>
-			);
-		}
-
-		return <Spinner />;
-	}
+	// Provider URLs avoid SandBox's same-origin document rewrites in editor previews.
 
 	const iframeSrc = getVideoIframeSrc(videoUrl, { isPro });
 
@@ -1281,14 +1240,14 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 
 							{effectiveLightboxLayout === "video-only" && (
 								<div className="pb-video-lightbox-video">
-									{getVideoEmbedMarkup(videoUrl, videoEmbedPreview, isPro)}
+									{getVideoEmbedMarkup(videoUrl, isPro)}
 								</div>
 							)}
 
 							{effectiveLightboxLayout === "split" && (
 								<>
 									<div className="pb-video-lightbox-video">
-										{getVideoEmbedMarkup(videoUrl, videoEmbedPreview, isPro)}
+										{getVideoEmbedMarkup(videoUrl, isPro)}
 									</div>
 									<div className="pb-video-lightbox-info">
 										{title && <h2 className="lightbox-title">{title}</h2>}
@@ -1306,7 +1265,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 								lightboxLayout: effectiveLightboxLayout,
 								enableWooCommerce,
 								getVideoEmbedMarkup: (url) =>
-									getVideoEmbedMarkup(url, videoEmbedPreview, isPro),
+									getVideoEmbedMarkup(url, isPro),
 								title,
 								description,
 								__,

@@ -22,10 +22,10 @@ const modules = {
 		wpRoot,
 		`${ runtime }/interactivity-router/${ filename }`
 	),
-	'/view.js': path.join( root, 'build/pb-loupe-block/view.js' ),
+	'/view.js': path.join( root, 'build/loupe-block/view.js' ),
 	'/premium-view.js': path.join(
 		root,
-		'build/pb-loupe-block/premium-view.js'
+		'build/loupe-block/premium-view.js'
 	),
 };
 const loupe = ( key, protectedImage = false, shape = 'circle' ) => `

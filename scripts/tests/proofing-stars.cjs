@@ -25,11 +25,11 @@ vm.runInNewContext(source, {
             getContext: () => { if (!context) throw new Error("getContext called outside a scope"); return context; }, getElement: () => ({ ref }),
             store: (name, value) => { config = value; return value; },
         };
-        if (name === '../pb-helpers/frontendScope') return { createFrontendScope: () => {
+        if (name === '../fbks-helpers/frontendScope') return { createFrontendScope: () => {
             const controller = new AbortController();
             return { signal: controller.signal, frame: fn => fn(), dispose: () => controller.abort() };
         } };
-        if (name === '../pb-helpers/proofingRatings') { const exports = {}; vm.runInNewContext(babel.transformSync(fs.readFileSync('src/pb-helpers/proofingRatings.js', 'utf8'), { babelrc:false, configFile:false, plugins:['@babel/plugin-transform-modules-commonjs'] }).code, { exports }); return exports; }
+        if (name === '../fbks-helpers/proofingRatings') { const exports = {}; vm.runInNewContext(babel.transformSync(fs.readFileSync('src/fbks-helpers/proofingRatings.js', 'utf8'), { babelrc:false, configFile:false, plugins:['@babel/plugin-transform-modules-commonjs'] }).code, { exports }); return exports; }
         throw new Error(name);
     },
 });

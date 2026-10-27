@@ -5,20 +5,20 @@
 import { __ } from '@wordpress/i18n';
 import { addFilter } from '@wordpress/hooks';
 import { useEffect, useRef } from '@wordpress/element';
-import ImageStyleControl from '../pb-helpers/ImageStyleControl';
-import { registerImageClickActionPremiumControls } from '../pb-helpers/imageClickActionPremiumControls';
-import { registerImageClickStylePremiumControls } from '../pb-helpers/imageClickStylePremiumControls';
-import { registerImageHoverActionPremiumControls } from '../pb-helpers/imageHoverActionPremiumControls';
-import { registerFilteringPremiumControls } from '../pb-helpers/filteringPremiumControls';
-import { registerListViewThumbnailEnhancements } from '../pb-helpers/listViewThumbnailEnhancements';
-import { enableGalleryTransforms } from '../pb-helpers/galleryTransforms';
-import { registerResponsiveGapPremiumControl } from '../pb-helpers/responsiveGapPremiumControl';
-import { registerWatermarkOverlayControls } from '../pb-helpers/watermarkOverlayControls';
+import ImageStyleControl from '../fbks-helpers/ImageStyleControl';
+import { registerImageClickActionPremiumControls } from '../fbks-helpers/imageClickActionPremiumControls';
+import { registerImageClickStylePremiumControls } from '../fbks-helpers/imageClickStylePremiumControls';
+import { registerImageHoverActionPremiumControls } from '../fbks-helpers/imageHoverActionPremiumControls';
+import { registerFilteringPremiumControls } from '../fbks-helpers/filteringPremiumControls';
+import { registerListViewThumbnailEnhancements } from '../fbks-helpers/listViewThumbnailEnhancements';
+import { enableGalleryTransforms } from '../fbks-helpers/galleryTransforms';
+import { registerResponsiveGapPremiumControl } from '../fbks-helpers/responsiveGapPremiumControl';
+import { registerWatermarkOverlayControls } from '../fbks-helpers/watermarkOverlayControls';
 import {
 	registerDisableRightClickPremiumControl,
 	registerLazyLoadPremiumControl,
 	registerRandomizeOrderPremiumControl,
-} from '../pb-helpers/simplePremiumControls';
+} from '../fbks-helpers/simplePremiumControls';
 
 enableGalleryTransforms( 'folioblocks/justified-gallery-block' );
 registerResponsiveGapPremiumControl( {

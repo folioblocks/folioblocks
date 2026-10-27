@@ -1,7 +1,7 @@
 /** Filters and protection belong to the mounted Video Gallery. */
 import { getElement, store } from '@wordpress/interactivity';
-import { createFrontendScope } from '../pb-helpers/frontendScope';
-import { mountGalleryControls } from '../pb-helpers/galleryControls';
+import { createFrontendScope } from '../fbks-helpers/frontendScope';
+import { mountGalleryControls } from '../fbks-helpers/galleryControls';
 
 store( 'folioblocks/video-gallery', {
 	callbacks: {

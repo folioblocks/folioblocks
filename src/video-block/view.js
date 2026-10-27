@@ -4,12 +4,12 @@
  */
 
 import { getElement, store } from '@wordpress/interactivity';
-import { createFrontendScope } from '../pb-helpers/frontendScope';
+import { createFrontendScope } from '../fbks-helpers/frontendScope';
 import {
 	getVideoIframeSrc,
 	getVideoProviderData,
-} from '../pb-helpers/videoProviders';
-import { initTiltHoverEffects } from '../pb-helpers/tiltHoverEffect';
+} from '../fbks-helpers/videoProviders';
+import { initTiltHoverEffects } from '../fbks-helpers/tiltHoverEffect';
 
 let activeLightbox;
 

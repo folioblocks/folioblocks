@@ -1,3 +1,4 @@
+import { registerVideoLightboxControls, VideoLightboxSourceControl, VideoLightboxToolbar, VideoPlayIcon } from '../fbks-helpers/videoLightboxControls';
 /**
  * PB Image Block
  * Premium JS
@@ -24,22 +25,22 @@ import { useState, useEffect } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import { useDebounce } from '@wordpress/compose';
 import apiFetch from '@wordpress/api-fetch';
-import ProductSearchControl from '../pb-helpers/ProductSearchControl.js';
-import CompactColorControl from '../pb-helpers/CompactColorControl.js';
-import ImageStyleControl from '../pb-helpers/ImageStyleControl.js';
-import '../pb-helpers/applyThumbnails';
-import { registerImageClickStylePremiumControls } from '../pb-helpers/imageClickStylePremiumControls.js';
-import { enableImageTransforms } from '../pb-helpers/galleryTransforms';
-import { registerImageHoverActionPremiumControls } from '../pb-helpers/imageHoverActionPremiumControls.js';
+import ProductSearchControl from '../fbks-helpers/ProductSearchControl.js';
+import CompactColorControl from '../fbks-helpers/CompactColorControl.js';
+import ImageStyleControl from '../fbks-helpers/ImageStyleControl.js';
+import '../fbks-helpers/applyThumbnails';
+import { registerImageClickStylePremiumControls } from '../fbks-helpers/imageClickStylePremiumControls.js';
+import { enableImageTransforms } from '../fbks-helpers/galleryTransforms';
+import { registerImageHoverActionPremiumControls } from '../fbks-helpers/imageHoverActionPremiumControls.js';
 import {
 	registerImageBlockWatermarkOverlay,
 	registerWatermarkOverlayControls,
-} from '../pb-helpers/watermarkOverlayControls.js';
+} from '../fbks-helpers/watermarkOverlayControls.js';
 import {
 	SOCIAL_SHARE_SERVICES,
 	SOCIAL_SHARE_ICONS,
 	getSharedSocialSources,
-} from '../pb-helpers/socialSharingControls.js';
+} from '../fbks-helpers/socialSharingControls.js';
 
 enableImageTransforms( 'folioblocks/pb-image-block' );
 registerImageBlockWatermarkOverlay();
@@ -60,10 +61,10 @@ import {
 	link,
 	timeToRead,
 } from '@wordpress/icons';
-import { wooCartIcon } from '../pb-helpers/icons.js';
-import { syncImageMetadataToMedia } from '../pb-helpers/syncImageMetadata.js';
-import ValidatedUrlControl from '../pb-helpers/ValidatedUrlControl.js';
-import { isValidHttpUrl } from '../pb-helpers/urlValidation.js';
+import { wooCartIcon } from '../fbks-helpers/icons.js';
+import { syncImageMetadataToMedia } from '../fbks-helpers/syncImageMetadata.js';
+import ValidatedUrlControl from '../fbks-helpers/ValidatedUrlControl.js';
+import { isValidHttpUrl } from '../fbks-helpers/urlValidation.js';
 
 const ImageMetadataSyncControl = ( { attributes = {} } ) => {
 	const [ status, setStatus ] = useState( '' );
@@ -533,6 +534,7 @@ const LinkTargetControls = ( {
 	setAttributes,
 	imageClickAction,
 	isInsideGallery = false,
+	context = {},
 	showLightboxControls = true,
 	showIconDisplayControls = true,
 } ) => {
@@ -551,7 +553,7 @@ const LinkTargetControls = ( {
 					value={ imageClickTarget }
 					options={ [
 						{
-							label: __( 'Link Target Icon', 'folioblocks' ),
+							label: __( 'Icon', 'folioblocks' ),
 							value: 'icon',
 						},
 						{
@@ -651,7 +653,7 @@ const LinkTargetControls = ( {
 						<LightboxContentControl
 							attributes={ attributes }
 							setAttributes={ setAttributes }
-							context={ props.context || {} }
+							context={ context }
 						/>
 					) }
 				</>
@@ -679,6 +681,7 @@ const LightboxContentControl = ( {
 	setAttributes,
 	showProductInfoOption = false,
 	context = {},
+	showZoomControl = true,
 } ) => {
 	const value = getLightboxContent( attributes );
 	const canInheritGalleryTheme = !! attributes.overrideGalleryClickSettings;
@@ -774,7 +777,7 @@ const LightboxContentControl = ( {
 					'folioblocks'
 				) }
 			/>
-			<ToggleControl
+			{ showZoomControl && <ToggleControl
 				label={ __( 'Enable Lightbox Zoom', 'folioblocks' ) }
 				checked={ !! attributes.lightboxZoom }
 				onChange={ ( lightboxZoom ) =>
@@ -785,7 +788,7 @@ const LightboxContentControl = ( {
 					'Let visitors zoom into this image in the lightbox.',
 					'folioblocks'
 				) }
-			/>
+			/> }
 			{ [
 				'exif',
 				'title_exif',
@@ -1669,6 +1672,7 @@ addFilter(
 				? 'product'
 				: 'title' );
 
+			if ( overlayContent === 'video_play' ) { return showTitle ? <VideoPlayIcon /> : null; }
 			if ( overlayContent === 'caption' ) {
 				return showTitle && caption ? <>{ caption }</> : null;
 			}
@@ -1776,3 +1780,9 @@ addFilter(
 		);
 	}
 );
+
+registerVideoLightboxControls( { hookPrefix: 'folioBlocks.imageBlock', namespace: 'folioblocks/image-block', LightboxControl: LightboxContentControl, includeSource: true, showCounterControl: false } );
+addFilter( 'folioBlocks.imageBlock.videoSourceControls', 'folioblocks/video-source', ( original, props ) => <VideoLightboxSourceControl { ...props } /> );
+addFilter( 'folioBlocks.imageBlock.videoToolbar', 'folioblocks/video-toolbar', ( original, props ) => <VideoLightboxToolbar { ...props } /> );
+
+addFilter( 'folioBlocks.imageBlock.videoIcon', 'folioblocks/video-icon', ( original, { effectiveLinkIconDisplay, linkIconStyleVars } ) => <span className={ `pb-image-block-link-icon ${ effectiveLinkIconDisplay === 'always' ? '' : 'hover-only' }` } style={ linkIconStyleVars }><VideoPlayIcon /></span> );

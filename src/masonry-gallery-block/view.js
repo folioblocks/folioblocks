@@ -3,7 +3,7 @@ import { getElement, store } from '@wordpress/interactivity';
 import {
 	mountGalleryLayout,
 	resolveGalleryRoot,
-} from '../pb-helpers/galleryLifecycle';
+} from '../fbks-helpers/galleryLifecycle';
 const selector = '.wp-block-folioblocks-masonry-gallery-block';
 const instances = new WeakMap();
 const parseColumnClass = ( innerGallery, breakpoint, fallback ) => {

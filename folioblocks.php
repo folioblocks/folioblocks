@@ -15,7 +15,7 @@
  *
  * @package FolioBlocks
  * 
- * @fs_premium_only /languages/, /includes/pro/, /build/modular-gallery-block/, /build/pb-image-row, /build/pb-image-stack/, /build/proofing-gallery-block/, /build/background-video-block/premium-view.asset.php, /build/background-video-block/premium-view.js, /build/background-video-block/premium.asset.php, /build/background-video-block/premium.js, /build/carousel-gallery-block/premium-view.asset.php, /build/carousel-gallery-block/premium-view.js, /build/carousel-gallery-block/premium.asset.php, /build/carousel-gallery-block/premium.js, /build/filmstrip-gallery-block/premium-view.asset.php, /build/filmstrip-gallery-block/premium-view.js, /build/filmstrip-gallery-block/premium.asset.php, /build/filmstrip-gallery-block/premium.js, /build/grid-gallery-block/premium-view.asset.php, /build/grid-gallery-block/premium-view.js, /build/grid-gallery-block/premium.asset.php, /build/grid-gallery-block/premium.js, /build/justified-gallery-block/premium-view.asset.php, /build/justified-gallery-block/premium-view.js, /build/justified-gallery-block/premium.asset.php, /build/justified-gallery-block/premium.js, /build/masonry-gallery-block/premium-view.asset.php, /build/masonry-gallery-block/premium-view.js, /build/masonry-gallery-block/premium.asset.php, /build/masonry-gallery-block/premium.js, /build/modular-gallery-block/premium-view.asset.php, /build/modular-gallery-block/premium-view.js, /build/modular-gallery-block/premium.asset.php, /build/modular-gallery-block/premium.js, /build/pb-before-after-block/premium-view.asset.php, /build/pb-before-after-block/premium-view.js, /build/pb-before-after-block/premium.asset.php, /build/pb-before-after-block/premium.js, /build/pb-image-block/premium-rtl.css, /build/pb-image-block/premium.css, /build/pb-image-block/premium-view.asset.php, /build/pb-image-block/premium-view.js, /build/pb-image-block/premium.asset.php, /build/pb-image-block/premium.js, /build/pb-loupe-block/premium-view.asset.php, /build/pb-loupe-block/premium-view.js, /build/pb-loupe-block/premium.asset.php, /build/pb-loupe-block/premium.js, /build/pb-video-block/premium-view.asset.php, /build/pb-video-block/premium-view.js, /build/pb-video-block/premium.asset.php, /build/pb-video-block/premium.js, /build/video-gallery-block/premium-view.asset.php, /build/video-gallery-block/premium-view.js, /build/video-gallery-block/premium.asset.php, /build/video-gallery-block/premium.js
+ * @fs_premium_only /languages/, /includes/pro/, /build/modular-gallery-block/, /build/image-row, /build/image-stack/, /build/proofing-gallery-block/, /build/background-video-block/premium-view.asset.php, /build/background-video-block/premium-view.js, /build/background-video-block/premium.asset.php, /build/background-video-block/premium.js, /build/carousel-gallery-block/premium-view.asset.php, /build/carousel-gallery-block/premium-view.js, /build/carousel-gallery-block/premium.asset.php, /build/carousel-gallery-block/premium.js, /build/filmstrip-gallery-block/premium-view.asset.php, /build/filmstrip-gallery-block/premium-view.js, /build/filmstrip-gallery-block/premium.asset.php, /build/filmstrip-gallery-block/premium.js, /build/grid-gallery-block/premium-view.asset.php, /build/grid-gallery-block/premium-view.js, /build/grid-gallery-block/premium.asset.php, /build/grid-gallery-block/premium.js, /build/justified-gallery-block/premium-view.asset.php, /build/justified-gallery-block/premium-view.js, /build/justified-gallery-block/premium.asset.php, /build/justified-gallery-block/premium.js, /build/masonry-gallery-block/premium-view.asset.php, /build/masonry-gallery-block/premium-view.js, /build/masonry-gallery-block/premium.asset.php, /build/masonry-gallery-block/premium.js, /build/modular-gallery-block/premium-view.asset.php, /build/modular-gallery-block/premium-view.js, /build/modular-gallery-block/premium.asset.php, /build/modular-gallery-block/premium.js, /build/before-after-block/premium-view.asset.php, /build/before-after-block/premium-view.js, /build/before-after-block/premium.asset.php, /build/before-after-block/premium.js, /build/image-block/premium-rtl.css, /build/image-block/premium.css, /build/image-block/premium-view.asset.php, /build/image-block/premium-view.js, /build/image-block/premium.asset.php, /build/image-block/premium.js, /build/loupe-block/premium-view.asset.php, /build/loupe-block/premium-view.js, /build/loupe-block/premium.asset.php, /build/loupe-block/premium.js, /build/video-block/premium-view.asset.php, /build/video-block/premium-view.js, /build/video-block/premium.asset.php, /build/video-block/premium.js, /build/video-gallery-block/premium-view.asset.php, /build/video-gallery-block/premium-view.js, /build/video-gallery-block/premium.asset.php, /build/video-gallery-block/premium.js
  */
 
 if (! defined('ABSPATH')) {
@@ -236,13 +236,13 @@ if (function_exists('fbks_fs')) {
 
         $block_directories = array(
             __DIR__ . '/build/background-video-block',
-            __DIR__ . '/build/pb-before-after-block',
+            __DIR__ . '/build/before-after-block',
             __DIR__ . '/build/carousel-gallery-block',
             __DIR__ . '/build/filmstrip-gallery-block',
             __DIR__ . '/build/grid-gallery-block',
-            __DIR__ . '/build/pb-image-block',
+            __DIR__ . '/build/image-block',
             __DIR__ . '/build/justified-gallery-block',
-            __DIR__ . '/build/pb-loupe-block',
+            __DIR__ . '/build/loupe-block',
             __DIR__ . '/build/masonry-gallery-block',
         );
 
@@ -251,11 +251,11 @@ if (function_exists('fbks_fs')) {
             if (fbks_fs()->is_plan('business') || fbks_fs()->is_plan('agency')) {
                 $block_directories[] = __DIR__ . '/build/proofing-gallery-block';
             }
-            $block_directories[] = __DIR__ . '/build/pb-image-row';
-            $block_directories[] = __DIR__ . '/build/pb-image-stack';
+            $block_directories[] = __DIR__ . '/build/image-row';
+            $block_directories[] = __DIR__ . '/build/image-stack';
         }
 
-        $block_directories[] = __DIR__ . '/build/pb-video-block';
+        $block_directories[] = __DIR__ . '/build/video-block';
         $block_directories[] = __DIR__ . '/build/video-gallery-block';
 
         foreach ($block_directories as $block_directory) {

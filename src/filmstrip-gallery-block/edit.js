@@ -1,4 +1,4 @@
-import useGlobalBlockDefaults from '../pb-helpers/useGlobalBlockDefaults';
+import useGlobalBlockDefaults from '../fbks-helpers/useGlobalBlockDefaults';
 import blockMetadata from './block.json';
 /**
  * Filmstrip Gallery Block
@@ -30,13 +30,13 @@ import {
 	timeToRead,
 } from '@wordpress/icons';
 import { decodeEntities } from '@wordpress/html-entities';
-import { IconFilmstripGallery, IconPBSpinner } from '../pb-helpers/icons';
-import { getExifAttributesFromMedia } from '../pb-helpers/exifMetadata';
-import { getImageSizeOptions } from '../pb-helpers/imageSizeOptions';
-import { imageProFeatureNotice } from '../pb-helpers/imageProFeatureNotices';
-import { getOverlayTypographyCSS } from '../pb-helpers/overlayTypographyControls';
-import { getTiltHoverHandlers } from '../pb-helpers/tiltHoverEffect';
-import { WatermarkOverlay } from '../pb-helpers/watermarkOverlayControls';
+import { IconFilmstripGallery, IconPBSpinner } from '../fbks-helpers/icons';
+import { getExifAttributesFromMedia } from '../fbks-helpers/exifMetadata';
+import { getImageSizeOptions } from '../fbks-helpers/imageSizeOptions';
+import { imageProFeatureNotice } from '../fbks-helpers/imageProFeatureNotices';
+import { getOverlayTypographyCSS } from '../fbks-helpers/overlayTypographyControls';
+import { getTiltHoverHandlers } from '../fbks-helpers/tiltHoverEffect';
+import { WatermarkOverlay } from '../fbks-helpers/watermarkOverlayControls';
 import './editor.scss';
 
 const ALLOWED_BLOCKS = [ 'folioblocks/pb-image-block' ];
@@ -121,7 +121,9 @@ const getImageClickAction = ( {
 
 const getImageClickAttributes = ( value ) => {
 	switch ( value ) {
-		case 'lightbox':
+		case 'video_lightbox':
+            return { imageClickAction: 'video_lightbox', imageClickTarget: 'icon', linkIconDisplay: 'hover', lightbox: true, enableLightbox: true, lightboxZoom: false, enableDownload: false, enableWooCommerce: false };
+        case 'lightbox':
 			return {
 				imageClickAction: 'lightbox',
 				imageClickTarget: 'icon',
@@ -535,7 +537,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			: overlayContent;
 	const showOverlay =
 		!! effectiveHoverEnabled &&
-		( effectiveOverlayContent === 'product'
+		( effectiveOverlayContent === 'video_play' ? !!activeImageAttributes.videoLightboxUrl && (activeImageAttributes.overrideGalleryClickSettings ? activeImageAttributes.imageClickAction : attributes.imageClickAction) === 'video_lightbox' : effectiveOverlayContent === 'product'
 			? effectiveHoverWooActive && activeImageProductId > 0
 			: effectiveOverlayContent === 'caption'
 			? !! activeImageCaption
@@ -938,6 +940,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 								}
 							) }
 
+                        { effectiveClickAction === 'video_lightbox' && (effectiveClickAttributes.imageClickTarget || 'icon') === 'icon' && applyFilters( 'folioBlocks.imageBlock.videoIcon', null, { attributes: activeImageAttributes, effectiveLinkIconDisplay: effectiveClickAttributes.linkIconDisplay || 'hover', linkIconStyleVars } ) }
 						{ activeImageSrc ? (
 							<img
 								className="pb-filmstrip-gallery-main-image pb-image-block-img"
@@ -980,7 +983,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					{ showOverlay && (
 							<div className="pb-image-block-title-container">
 								<figcaption className="pb-image-block-title">
-								{ showProductOverlay ? (
+								{ effectiveOverlayContent === 'video_play' ? <svg className="fbks-video-play-glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor" /></svg> : showProductOverlay ? (
 									<>
 										{ activeImageProductName && (
 											<div className="pb-product-name">

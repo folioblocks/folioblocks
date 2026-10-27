@@ -1,6 +1,6 @@
-import useGlobalBlockDefaults from '../pb-helpers/useGlobalBlockDefaults';
+import useGlobalBlockDefaults from '../fbks-helpers/useGlobalBlockDefaults';
 import blockMetadata from './block.json';
-import { ResponsiveLayoutInspector } from '../pb-helpers/ResponsiveRangeInspector';
+import { ResponsiveLayoutInspector } from '../fbks-helpers/ResponsiveRangeInspector';
 /**
  * Carousel Gallery Block
  * Edit JS
@@ -26,11 +26,11 @@ import { decodeEntities } from '@wordpress/html-entities';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { useEffect, useCallback, useRef, useState } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
-import { IconCarouselGallery, IconPBSpinner } from '../pb-helpers/icons';
-import { getExifAttributesFromMedia } from '../pb-helpers/exifMetadata';
-import { getImageSizeOptions } from '../pb-helpers/imageSizeOptions';
-import { imageProFeatureNotice } from '../pb-helpers/imageProFeatureNotices';
-import { resolveLegacyGalleryGaps } from '../pb-helpers/galleryGap';
+import { IconCarouselGallery, IconPBSpinner } from '../fbks-helpers/icons';
+import { getExifAttributesFromMedia } from '../fbks-helpers/exifMetadata';
+import { getImageSizeOptions } from '../fbks-helpers/imageSizeOptions';
+import { imageProFeatureNotice } from '../fbks-helpers/imageProFeatureNotices';
+import { resolveLegacyGalleryGaps } from '../fbks-helpers/galleryGap';
 import './editor.scss';
 
 const getImageClickAction = ( {
@@ -56,7 +56,9 @@ const getImageClickAction = ( {
 
 const getImageClickAttributes = ( value ) => {
 	switch ( value ) {
-		case 'lightbox':
+		case 'video_lightbox':
+            return { imageClickAction: 'video_lightbox', imageClickTarget: 'icon', linkIconDisplay: 'hover', lightbox: true, enableLightbox: true, lightboxZoom: false, enableDownload: false, enableWooCommerce: false };
+        case 'lightbox':
 			return {
 				imageClickAction: 'lightbox',
 				lightbox: true,

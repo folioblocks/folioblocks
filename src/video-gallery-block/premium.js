@@ -14,9 +14,9 @@ import {
 } from "@wordpress/components";
 import { useEffect } from "@wordpress/element";
 import { addFilter } from "@wordpress/hooks";
-import { CompactTwoColorControl } from "../pb-helpers/CompactColorControl";
-import ImageStyleControl from "../pb-helpers/ImageStyleControl";
-import { registerFilteringPremiumControls } from "../pb-helpers/filteringPremiumControls";
+import { CompactTwoColorControl } from "../fbks-helpers/CompactColorControl";
+import ImageStyleControl from "../fbks-helpers/ImageStyleControl";
+import { registerFilteringPremiumControls } from "../fbks-helpers/filteringPremiumControls";
 
 const DEFAULT_OVERLAY_BG_COLOR = "#f9f9f9";
 const DEFAULT_OVERLAY_BG_GRADIENT =

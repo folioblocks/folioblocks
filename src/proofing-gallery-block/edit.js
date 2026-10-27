@@ -1,7 +1,7 @@
-import useGlobalBlockDefaults from '../pb-helpers/useGlobalBlockDefaults';
+import useGlobalBlockDefaults from '../fbks-helpers/useGlobalBlockDefaults';
 import blockMetadata from './block.json';
-import { getProofingFlags, captureProofingPalette, getProofingFlagOutline, getProofingPaletteOptions, getProofingPaletteId } from '../pb-helpers/proofingFlags';
-import ProofingRatingFilter from '../pb-helpers/ProofingRatingFilter';
+import { getProofingFlags, captureProofingPalette, getProofingFlagOutline, getProofingPaletteOptions, getProofingPaletteId } from '../fbks-helpers/proofingFlags';
+import ProofingRatingFilter from '../fbks-helpers/ProofingRatingFilter';
 /**
  * Proofing Gallery Block
  * Edit JS
@@ -35,10 +35,10 @@ import { decodeEntities } from '@wordpress/html-entities';
 import { applyFilters } from '@wordpress/hooks';
 import apiFetch from '@wordpress/api-fetch';
 import { Icon, sidesHorizontal, sidesVertical } from '@wordpress/icons';
-import { getExifAttributesFromMedia } from '../pb-helpers/exifMetadata';
-import { IconProofingGallery } from '../pb-helpers/icons';
-import { imageProFeatureNotice } from '../pb-helpers/imageProFeatureNotices';
-import { CompactTwoColorControl } from '../pb-helpers/CompactColorControl';
+import { getExifAttributesFromMedia } from '../fbks-helpers/exifMetadata';
+import { IconProofingGallery } from '../fbks-helpers/icons';
+import { imageProFeatureNotice } from '../fbks-helpers/imageProFeatureNotices';
+import { CompactTwoColorControl } from '../fbks-helpers/CompactColorControl';
 import './editor.scss';
 
 const ALLOWED_BLOCKS = [

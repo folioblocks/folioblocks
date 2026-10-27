@@ -111,6 +111,12 @@ $fbks_image_click_target = sanitize_key( $fbks_click_context['folioBlocks/imageC
 if ( ! in_array( $fbks_image_click_target, [ 'icon', 'thumbnail' ], true ) ) {
 	$fbks_image_click_target = 'icon';
 }
+$fbks_is_video_lightbox = fbks_fs()->can_use_premium_code__premium_only() && 'video_lightbox' === $fbks_image_click_action;
+$fbks_video_url = esc_url_raw( $attributes['videoLightboxUrl'] ?? '', [ 'http', 'https' ] );
+if ( $fbks_is_video_lightbox ) {
+    $fbks_lightbox = '' !== $fbks_video_url;
+    $fbks_lightbox_zoom = false;
+}
 $fbks_link_url = '';
 $fbks_link_attrs = '';
 $fbks_link_class = 'pb-image-block-link';
@@ -254,9 +260,10 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 	}
 	$fbks_woo_hover_info = $fbks_hover_context['folioBlocks/wooProductPriceOnHover'] ?? ( $attributes['wooProductPriceOnHover'] ?? false );
 	$fbks_overlay_content = $fbks_hover_context['folioBlocks/overlayContent'] ?? ( $attributes['overlayContent'] ?? ( $fbks_woo_hover_info ? 'product' : 'title' ) );
-	if ( ! in_array( $fbks_overlay_content, [ 'title', 'caption', 'product', 'exif', 'social' ], true ) ) {
+	if ( ! in_array( $fbks_overlay_content, [ 'title', 'caption', 'product', 'exif', 'social', 'video_play' ], true ) ) {
 		$fbks_overlay_content = 'title';
 	}
+	if ( 'video_play' === $fbks_overlay_content && ( ! $fbks_is_video_lightbox || '' === $fbks_video_url ) ) { $fbks_overlay_content = 'title'; }
 	if ( 'social' === $fbks_overlay_content && ! $fbks_social_sharing_enabled ) {
 		$fbks_overlay_content = 'title';
 	}
@@ -656,6 +663,10 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 				href="#"
 				class="pb-image-block-lightbox"
 				data-src="<?php echo esc_url( $fbks_full_src ); ?>"
+                <?php if ( $fbks_is_video_lightbox ) : ?>
+                    data-video-src="<?php echo esc_url( $fbks_video_url ); ?>"
+                    data-video-target="<?php echo esc_attr( $fbks_image_click_target ); ?>"
+                <?php endif; ?>
 				data-lightbox-theme="<?php echo esc_attr( $fbks_lightbox_theme ); ?>"
 				<?php if ( $fbks_lightbox_counter ) : ?>
 					data-lightbox-counter="true"
@@ -841,7 +852,9 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 		<?php
 			// Handle title/product overlay display (Pro only)
 			if ( fbks_fs()->can_use_premium_code__premium_only() && $fbks_title_hover ) {
-					if ( 'caption' === $fbks_overlay_content ) {
+                    if ( 'video_play' === $fbks_overlay_content && $fbks_is_video_lightbox && '' !== $fbks_video_url ) {
+                        echo '<div class="pb-image-block-title-container"><figcaption class="pb-image-block-title"><button type="button" class="fbks-video-lightbox-trigger fbks-video-overlay-play" aria-label="' . esc_attr__( 'Play video in lightbox', 'folioblocks' ) . '"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5v14l11-7z" fill="currentColor" /></svg></button></figcaption></div>';
+                    } elseif ( 'caption' === $fbks_overlay_content ) {
 						if ( ! empty( $fbks_caption ) ) {
 							echo '<div class="pb-image-block-title-container">';
 							echo '<figcaption class="pb-image-block-title">';
@@ -921,6 +934,9 @@ $fbks_get_overlay_exif = static function () use ( $attributes, $fbks_get_exif_ic
 				</button>
 			<?php endif; ?>
 		<?php endif; ?>
+        <?php if ( $fbks_is_video_lightbox && '' !== $fbks_video_url && 'icon' === $fbks_image_click_target ) : ?>
+            <button type="button" class="pb-image-block-link-icon fbks-video-lightbox-trigger <?php echo 'always' === $fbks_link_icon_display ? '' : 'hover-only'; ?>" style="<?php echo esc_attr( $fbks_link_button_style ); ?>" aria-label="<?php esc_attr_e( 'Play video in lightbox', 'folioblocks' ); ?>"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5v14l11-7z" fill="currentColor" /></svg></button>
+        <?php endif; ?>
 		<?php if ( fbks_fs()->can_use_premium_code__premium_only() ) : ?>
 			<?php if ( '' !== $fbks_icon_link_url ) : ?>
 				<a

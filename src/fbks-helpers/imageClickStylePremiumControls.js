@@ -17,7 +17,7 @@ const RESET_ICON_COLOR_ATTRIBUTES = {
 
 const isLinkIconEnabled = ( attributes = {} ) =>
 	( attributes.imageClickAction === 'custom_url' ||
-		attributes.imageClickAction === 'page_post' ) &&
+		attributes.imageClickAction === 'page_post' || attributes.imageClickAction === 'video_lightbox' ) &&
 	( attributes.linkIconDisplay || 'hover' ) !== 'none';
 
 const IconColorPanelItem = ( {

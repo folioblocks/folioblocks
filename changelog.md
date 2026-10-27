@@ -4,6 +4,28 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0] - 2026-10-27
+### Added
+- Added Play Video in Lightbox to Image Block and Carousel, Filmstrip, Grid, Justified, Modular, and Masonry galleries. Images remain the thumbnails, with individual video URLs supporting existing video providers and self-hosted videos.
+- Added a Video URL field, an inline self-hosted video media selector, and an Image Block toolbar action for setting video links. Clearing the URL removes the video. Galleries share behavior and appearance while each image retains its own video source and optional overrides.
+- Added Icon/Thumbnail targeting, On Hover/Always play icons, and Show Video Play Button overlay content across all image overlay styles. Independent play icons and overlay play buttons can be used together, with icon colors under Click Styles.
+- Extended the image lightbox with mixed image/video navigation, video appearance and content controls, gallery counters, and playback cleanup when changing slides, closing the lightbox, or leaving the page. Image zoom is excluded from video slides.
+
+### Changed
+- Updated Image Block and photo gallery Global Block Defaults to match the reviewed editor controls, including WooCommerce options, consistent labels and ordering, Icon/Thumbnail targets, icon display selectors, and conditional lightbox controls. Play Video in Lightbox appears immediately before WooCommerce.
+- Moved icon colors into conditional Image/Gallery Click Styles sections and overlay colors and gradients into Image/Gallery Hover Styles sections. Empty style headings hide with their controls. Video Block and Video Gallery defaults now have Video Hover Styles and Gallery Hover Styles sections, with corrected hover style labels in both block editors.
+- Kept video URLs local to individual images and omitted Image Counter and font family/weight/style controls from Image Block global defaults. Gallery counters remain available, video zoom is disabled, and switching away from video behavior resets play-button overlay defaults.
+- Renamed the shared helper folder from pb-helpers to fbks-helpers and removed pb- from block folder names, updating imports, registration paths, premium packaging rules, release checks, tests, and documentation. Existing registered block names and saved-content compatibility are preserved.
+- Renamed admin interface CSS classes and related preview variables from pb- to fbks-, updating matching PHP markup and JavaScript across the dashboard, settings, Pro settings, and proofing administration pages.
+
+### Fixed
+- Fixed Image Block crashing when enabling a secondary lightbox because LinkTargetControls referenced an undefined props variable.
+- Removed the unsupported __next40pxDefaultSize prop from the Image Caption textarea to prevent React DOM warnings.
+- Changed YouTube and DailyMotion editor previews to direct provider iframes, avoiding WordPress's same-origin SandBox flags and document rewrites associated with the reported Safari errors. Video dimension metadata lookup is retained.
+- Fixed video lightbox width and centering so videos, titles, and captions use the available content width. Native video controls keep the lightbox open, and video slides restore visible lightbox controls after navigating from an image with hidden controls.
+- Fixed Filmstrip lightbox proxies to retain individual video sources and per-image zoom/counter overrides, and ensured missing or unsafe video URLs do not create video lightbox triggers.
+- Fixed the Image Block toolbar popover remaining above the media modal when selecting a self-hosted video, and corrected dashboard block version lookups after the folder renames.
+
 ## [1.6.0] - 2026-10-26
 ### Added
 - Expanded Global Block Defaults to Image, Video, Carousel, Filmstrip, Modular, Video Gallery, Grid, Justified, and Masonry blocks. Cards follow their editor controls, with relevant resolution, responsive layout, playback, click, lightbox, overlay, filtering, and style settings, autosaving, and per-block resets.

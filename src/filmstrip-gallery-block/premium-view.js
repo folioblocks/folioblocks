@@ -1,6 +1,6 @@
 import { getElement, store } from '@wordpress/interactivity';
-import { createFrontendScope } from '../pb-helpers/frontendScope';
-import { initTiltHoverEffects } from '../pb-helpers/tiltHoverEffect';
+import { createFrontendScope } from '../fbks-helpers/frontendScope';
+import { initTiltHoverEffects } from '../fbks-helpers/tiltHoverEffect';
 const mounted = new Set();
 let activeKeyboardGallery = null;
 let gallerySequence = 0;
@@ -267,7 +267,7 @@ const initializeFilmstripPremium = ( galleryRoot ) => {
 			? image
 			: settings;
 		const lightboxEnabled =
-			clickSettings?.imageClickAction === 'lightbox' ||
+			[ 'lightbox', 'video_lightbox' ].includes( clickSettings?.imageClickAction ) ||
 			!! clickSettings?.lightbox;
 		const effectiveTheme =
 			clickSettings?.lightboxTheme === 'inherit'
@@ -361,7 +361,7 @@ const initializeFilmstripPremium = ( galleryRoot ) => {
 			? image
 			: settings;
 		const lightboxEnabled =
-			clickSettings.imageClickAction === 'lightbox' ||
+			[ 'lightbox', 'video_lightbox' ].includes( clickSettings.imageClickAction ) ||
 			!! clickSettings.lightbox;
 		const trigger = document.createElement( 'a' );
 		trigger.href = '#';
@@ -369,12 +369,13 @@ const initializeFilmstripPremium = ( galleryRoot ) => {
 		trigger.className = 'pb-image-block-lightbox';
 		trigger.dataset.lightboxGroup = lightboxGroup;
 		trigger.dataset.filmstripLightboxIndex = String( index );
-		trigger.dataset.src = String( image.fullSrc || image.src || '' );
+        trigger.dataset.src = String( image.fullSrc || image.src || '' );
+        if ( clickSettings.imageClickAction === 'video_lightbox' && image.videoLightboxUrl ) trigger.dataset.videoSrc = image.videoLightboxUrl;
 		applyWatermarkTriggerData( trigger );
-		if ( settings.lightboxCounter ) {
+		if ( clickSettings.lightboxCounter ) {
 			trigger.dataset.lightboxCounter = 'true';
 		}
-		if ( settings.lightboxZoom ) {
+		if ( clickSettings.lightboxZoom && clickSettings.imageClickAction !== 'video_lightbox' ) {
 			trigger.dataset.lightboxZoom = 'true';
 		}
 		const lightboxTheme =
@@ -383,7 +384,7 @@ const initializeFilmstripPremium = ( galleryRoot ) => {
 				: clickSettings.lightboxTheme;
 		trigger.dataset.lightboxTheme =
 			lightboxTheme === 'light' ? 'light' : 'dark';
-		if ( ! lightboxEnabled ) {
+		if ( ! lightboxEnabled || ( clickSettings.imageClickAction === 'video_lightbox' && !image.videoLightboxUrl ) ) {
 			trigger.dataset.filmstripLightboxDisabled = 'true';
 		}
 
@@ -696,13 +697,12 @@ const initializeFilmstripPremium = ( galleryRoot ) => {
 			? image
 			: settings;
 		const lightboxEnabled =
-			clickSettings?.imageClickAction === 'lightbox' ||
+			[ 'lightbox', 'video_lightbox' ].includes( clickSettings?.imageClickAction ) ||
 			!! clickSettings?.lightbox;
-		if ( ! lightboxEnabled ) {
-			return;
-		}
+        if ( ! lightboxEnabled ) return;
+        if ( clickSettings.imageClickAction === 'video_lightbox' && ( !image.videoLightboxUrl || ( ( clickSettings.imageClickTarget || 'icon' ) === 'icon' && !event.target.closest( '.fbks-video-overlay-play' ) ) ) ) { event.preventDefault(); return; }
 
-		event.preventDefault();
+        event.preventDefault();
 		event.stopPropagation();
 		const trigger = lightboxTriggers[ api.getActiveIndex() ];
 		if ( trigger ) {
@@ -842,6 +842,7 @@ const initializeFilmstripPremium = ( galleryRoot ) => {
 				? 'title'
 				: configuredOverlayContent;
 		const overlayVisibility = {
+			video_play: !!image?.videoLightboxUrl && ( image.overrideGalleryClickSettings ? image.imageClickAction : settings.imageClickAction ) === 'video_lightbox',
 			product: hoverWooActive && hasProduct,
 			caption: !! caption,
 			exif: true,
@@ -862,6 +863,10 @@ const initializeFilmstripPremium = ( galleryRoot ) => {
 		const showProductInfo =
 			hoverWooActive && overlayContent === 'product' && hasProduct;
 
+        if ( overlayContent === 'video_play' ) {
+            overlayNode.innerHTML = '<button type="button" class="fbks-video-overlay-play" aria-label="Play video in lightbox"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor" /></svg></button>';
+            return;
+        }
 		if ( showProductInfo ) {
 			const productName = String( image?.wooProductName || '' ).trim();
 			const productPriceHtml = String(
@@ -1068,6 +1073,13 @@ const initializeFilmstripPremium = ( galleryRoot ) => {
 		}
 	};
 
+    const videoPlayButton = document.createElement( 'button' );
+    videoPlayButton.type = 'button';
+    videoPlayButton.className = 'pb-image-block-link-icon fbks-filmstrip-video-play';
+    videoPlayButton.setAttribute( 'aria-label', 'Play video in lightbox' );
+    videoPlayButton.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor" /></svg>';
+    mainMedia.appendChild( videoPlayButton );
+    scope.listen( videoPlayButton, 'click', event => { event.preventDefault(); event.stopPropagation(); lightboxTriggers[ api.getActiveIndex() ]?.click(); } );
 	const updateButtons = ( image ) => {
 		const clickSettings = image?.overrideGalleryClickSettings
 			? image
@@ -1095,6 +1107,9 @@ const initializeFilmstripPremium = ( galleryRoot ) => {
 			} );
 		};
 
+        videoPlayButton.hidden = !( clickAction === 'video_lightbox' && clickTarget === 'icon' && image?.videoLightboxUrl );
+        setHoverOnly( videoPlayButton, clickSettings.linkIconDisplay === 'always' ? 'always' : 'hover' );
+        setIconStyles( videoPlayButton, [ [ '--pb-link-icon-color', clickSettings.linkIconColor ], [ '--pb-link-icon-bg', clickSettings.linkIconBgColor ] ] );
 		if ( downloadButton ) {
 			downloadButton.setAttribute(
 				'data-full-src',
@@ -1447,6 +1462,7 @@ const initializeFilmstripPremium = ( galleryRoot ) => {
 				detail: { root: galleryRoot },
 			} )
 		);
+		videoPlayButton.remove();
 		scope.dispose();
 		lightboxTriggers.forEach( ( trigger ) => trigger.remove() );
 		mounted.delete( galleryRoot );

@@ -52,7 +52,7 @@ function fbks_get_block_defaults_schema() {
             'fields' => [
                 'imageSize' => ['group' => 'image', 'label' => __('Resolution', 'folioblocks'), 'help' => __('Select the size of the source image.', 'folioblocks'), 'default' => 'large', 'choices' => $image_sizes],
                 'imageClickAction' => ['label' => __('Image Click Behavior', 'folioblocks'), 'default' => 'none', 'help' => __('Choose what happens when visitors click this image.', 'folioblocks'), 'choices' => ['none' => __('None', 'folioblocks'), 'lightbox' => __('Open in Lightbox', 'folioblocks'), 'download' => __('Download', 'folioblocks'), 'media_file' => __('Media File', 'folioblocks'), 'custom_url' => __('Custom URL', 'folioblocks'), 'page_post' => __('Page or Post', 'folioblocks')], 'group' => 'click', 'uiDefault' => true],
-                'imageClickTarget' => ['label' => __('Link Target', 'folioblocks'), 'default' => 'icon', 'help' => __('Choose whether the link is attached to the image or an icon.', 'folioblocks'), 'choices' => ['icon' => __('Link Target Icon', 'folioblocks'), 'thumbnail' => __('Thumbnail', 'folioblocks')], 'group' => 'click', 'condition' => 'link-target'],
+                'imageClickTarget' => ['label' => __('Link Target', 'folioblocks'), 'default' => 'icon', 'help' => __('Choose whether the link is attached to the image or an icon.', 'folioblocks'), 'choices' => ['icon' => __('Icon', 'folioblocks'), 'thumbnail' => __('Thumbnail', 'folioblocks')], 'group' => 'click', 'condition' => 'link-target'],
                 'linkIconDisplay' => ['label' => __('Display Link Target Icon', 'folioblocks'), 'default' => 'hover', 'help' => __('Choose when the link icon is displayed.', 'folioblocks'), 'choices' => ['none' => __('Never', 'folioblocks'), 'hover' => __('On Hover', 'folioblocks'), 'always' => __('Always', 'folioblocks')], 'group' => 'click', 'condition' => 'link-icon'],
                 'downloadOnHover' => ['label' => __('Show Download Icon on Hover', 'folioblocks'), 'default' => true, 'help' => __('When disabled, the download icon is always displayed.', 'folioblocks'), 'group' => 'click', 'condition' => 'download-icon'],
                 'downloadIconColor' => ['label' => __('Download Icon Color', 'folioblocks'), 'default' => '#000000', 'help' => __('Set the download icon color.', 'folioblocks'), 'group' => 'click', 'condition' => 'download-icon', 'color' => true],
@@ -121,9 +121,131 @@ function fbks_get_block_defaults_schema() {
     $schemas['grid'] = fbks_get_grid_defaults_schema($schemas['carousel'], $schemas['video_gallery']);
     $schemas['justified'] = fbks_get_justified_defaults_schema($schemas['grid'], $schemas['carousel']);
     $schemas['masonry'] = fbks_get_masonry_defaults_schema($schemas['grid'], $schemas['carousel']);
+    // Keep click and hover style sections consistent across the reviewed photo galleries.
+    foreach (['grid', 'justified', 'masonry', 'modular'] as $key) {
+        $grid = &$schemas[$key];
+        foreach (['downloadIconColor', 'downloadIconBgColor', 'linkIconColor', 'linkIconBgColor', 'cartIconColor', 'cartIconBgColor'] as $name) { $grid['fields'][$name]['group'] = 'click_styles'; }
+        foreach (['linkIconColor', 'linkIconBgColor'] as $name) { $grid['fields'][$name]['condition'] = 'link-icon-style'; }
+        foreach (['overlayBgColor', 'overlayTextColor', 'chipOverlayBgColor', 'chipOverlayTextColor', 'overlayBgGradient', 'chipOverlayBgGradient'] as $name) { $grid['fields'][$name]['group'] = 'hover_styles'; }
+        $filter_styles = $grid['groups']['filter_styles'] ?? null;
+        unset($grid['groups']['filter_styles']);
+        $grid['groups']['click_styles'] = __('Gallery Click Styles', 'folioblocks');
+        $grid['groups']['hover_styles'] = __('Gallery Hover Styles', 'folioblocks');
+        if (null !== $filter_styles) { $grid['groups']['filter_styles'] = $filter_styles; }
+        $grid['group_conditions'] = ($grid['group_conditions'] ?? []) + ['click_styles' => 'click-styles', 'hover_styles' => 'hover-styles'];
+        $ordered = [];
+        foreach ($grid['groups'] as $group => $label) { foreach ($grid['fields'] as $name => $definition) { if ($group === $definition['group']) { $ordered[$name] = $definition; } } }
+        $grid['fields'] = $ordered;
+        unset($grid);
+    }
+
+    foreach (['video' => __('Video Hover Styles', 'folioblocks'), 'video_gallery' => __('Gallery Hover Styles', 'folioblocks')] as $key => $label) {
+        $schema = &$schemas[$key];
+        foreach (['overlayBgColor', 'overlayBgGradient', 'overlayTextColor'] as $name) { $schema['fields'][$name]['group'] = 'hover_styles'; }
+        $groups = [];
+        foreach ($schema['groups'] as $group => $title) {
+            $groups[$group] = $title;
+            if ('styles' === $group) { $groups['hover_styles'] = $label; }
+        }
+        $schema['groups'] = $groups;
+        $schema['group_conditions'] = ($schema['group_conditions'] ?? []) + ['hover_styles' => 'video-text'];
+        $ordered = [];
+        foreach ($groups as $group => $title) { foreach ($schema['fields'] as $name => $definition) { if ($group === $definition['group']) { $ordered[$name] = $definition; } } }
+        $schema['fields'] = $ordered;
+        unset($schema);
+    }
+    $schemas['image'] = fbks_get_reviewed_image_defaults_schema($schemas['image'], $schemas['carousel']);
+    foreach (['image', 'carousel', 'filmstrip', 'grid', 'justified', 'modular', 'masonry'] as $key) {
+        $choices = $schemas[$key]['fields']['imageClickAction']['choices'];
+        $ordered_choices = [];
+        foreach ($choices as $value => $label) {
+            if ('woocommerce' === $value) { $ordered_choices['video_lightbox'] = __('Play Video in Lightbox', 'folioblocks'); }
+            $ordered_choices[$value] = $label;
+        }
+        $ordered_choices += ['video_lightbox' => __('Play Video in Lightbox', 'folioblocks')];
+        $schemas[$key]['fields']['imageClickAction']['choices'] = $ordered_choices;
+        $schemas[$key]['fields']['overlayContent']['choices']['video_play'] = __('Show Video Play Button', 'folioblocks');
+        $schemas[$key]['fields']['lightboxZoom']['condition'] = 'lightbox-zoom';
+        if ('image' !== $key) {
+            $labels = [
+                'none' => __('None', 'folioblocks'),
+                'lightbox' => __('Open in Lightbox', 'folioblocks'),
+                'download' => __('Enable Image Downloads', 'folioblocks'),
+                'media_file' => __('Link Image to Media File', 'folioblocks'),
+                'custom_url' => __('Link Image to Custom URL', 'folioblocks'),
+                'page_post' => __('Link Image to Page/Post', 'folioblocks'),
+                'video_lightbox' => __('Play Video in Lightbox', 'folioblocks'),
+                'woocommerce' => __('WooCommerce Product', 'folioblocks'),
+            ];
+            foreach ($schemas[$key]['fields']['imageClickAction']['choices'] as $value => $label) {
+                $schemas[$key]['fields']['imageClickAction']['choices'][$value] = $labels[$value] ?? $label;
+            }
+            $overlay_choices = $schemas[$key]['fields']['overlayContent']['choices'];
+            $ordered_overlay = [];
+            foreach (['title', 'caption', 'exif', 'video_play', 'product', 'social'] as $value) {
+                if (isset($overlay_choices[$value])) { $ordered_overlay[$value] = $overlay_choices[$value]; }
+            }
+            $schemas[$key]['fields']['overlayContent']['choices'] = $ordered_overlay;
+            $fields = $schemas[$key]['fields']; $ordered_fields = [];
+            foreach ($fields as $name => $field) {
+                if ('lightboxCounter' === $name) { continue; }
+                if ('lightboxZoom' === $name) { $ordered_fields['lightboxCounter'] = $fields['lightboxCounter']; }
+                $ordered_fields[$name] = $field;
+            }
+            $schemas[$key]['fields'] = $ordered_fields;
+        }
+
+
+    }
     $schemas['proofing'] = fbks_get_proofing_defaults_schema();
     uasort($schemas, static function($first, $second) { return strnatcasecmp($first['title'], $second['title']); });
     return $schemas;
+}
+
+/** Standalone image defaults share gallery conventions without sharing content destinations. */
+function fbks_get_reviewed_image_defaults_schema($image, $carousel) {
+    $fields = $image['fields'];
+    foreach (['imageClickTarget', 'linkIconDisplay', 'downloadDisplay', 'lightbox', 'downloadIconColor', 'downloadIconBgColor', 'linkIconColor', 'linkIconBgColor', 'wooCartIconDisplay', 'cartIconColor', 'cartIconBgColor'] as $name) {
+        $fields[$name] = $carousel['fields'][$name];
+    }
+    unset($fields['downloadOnHover']);
+    $fields['downloadDisplay']['condition'] = 'download-icon';
+    $fields['lightbox']['help'] = __('Open images in a lightbox when clicked.', 'folioblocks');
+    $fields['imageClickAction']['choices'] = [
+        'none' => __('None', 'folioblocks'),
+        'lightbox' => __('Open in Lightbox', 'folioblocks'),
+        'download' => __('Enable Image Downloads', 'folioblocks'),
+        'media_file' => __('Link Image to Media File', 'folioblocks'),
+        'custom_url' => __('Link Image to Custom URL', 'folioblocks'),
+        'page_post' => __('Link Image to Page/Post', 'folioblocks'),
+        'video_lightbox' => __('Play Video in Lightbox', 'folioblocks'),
+        'woocommerce' => __('WooCommerce Product', 'folioblocks'),
+    ];
+    $fields['linkIconDisplay']['choices']['none'] = __('None', 'folioblocks');
+    $fields['wooLinkAction'] = ['label' => __('Product Link Behavior', 'folioblocks'), 'help' => __('Choose what happens when visitors use the image product link.', 'folioblocks'), 'default' => 'inherit', 'group' => 'click', 'condition' => 'commerce', 'choices' => ['inherit' => __('Default (Add to Cart)', 'folioblocks'), 'add_to_cart' => __('Add to Cart', 'folioblocks'), 'product' => __('Open Product Page', 'folioblocks')]];
+    $fields['lightboxContent']['choices']['product'] = __('Show Product Info', 'folioblocks');
+    foreach ($fields['lightboxContent']['choices'] as $value => $label) { $fields['lightboxContent']['choices'][$value] = str_replace(' + ', ' & ', $label); }
+    $fields['overlayContent']['choices'] = [
+        'title' => __('Show Image Title', 'folioblocks'),
+        'caption' => __('Show Image Caption', 'folioblocks'),
+        'exif' => __('Show EXIF Data', 'folioblocks'),
+        'video_play' => __('Show Video Play Button', 'folioblocks'),
+        'product' => __('Show Product Info', 'folioblocks'),
+        'social' => __('Show Social Media', 'folioblocks'),
+    ];
+    $fields['wooProductPriceOnHover'] = ['label' => __('Show Product Price', 'folioblocks'), 'help' => __('Show the product price with product information in the overlay.', 'folioblocks'), 'default' => false, 'group' => 'hover', 'condition' => 'product-overlay'];
+    foreach (['overlayBgColor', 'overlayTextColor', 'chipOverlayBgColor', 'chipOverlayTextColor', 'overlayBgGradient', 'chipOverlayBgGradient'] as $name) { $fields[$name]['group'] = 'hover_styles'; }
+    foreach (['borderWidth', 'borderRadius'] as $name) { $fields[$name]['range'] = true; }
+    $first = [];
+    foreach (['imageClickAction', 'wooLinkAction', 'imageClickTarget', 'linkIconDisplay', 'downloadDisplay', 'wooCartIconDisplay'] as $name) { $first[$name] = $fields[$name]; }
+    $fields = $first + $fields;
+    $image['groups']['click_styles'] = __('Image Click Styles', 'folioblocks');
+    $image['groups']['hover_styles'] = __('Image Hover Styles', 'folioblocks');
+    $image['group_conditions'] = ['click_styles' => 'click-styles', 'hover_styles' => 'hover-styles'];
+    $ordered = [];
+    foreach ($image['groups'] as $group => $label) { foreach ($fields as $name => $definition) { if ($group === $definition['group']) { $ordered[$name] = $definition; } } }
+    $image['fields'] = $ordered;
+    return $image;
 }
 
 /** Proofing-owned inspector controls only; client credentials and child layout stay local. */
@@ -219,6 +341,10 @@ function fbks_get_grid_defaults_schema($carousel, $video_gallery) {
     }
     $fields['randomizeOrder'] = ['group' => 'gallery', 'label' => __('Randomize Image Order', 'folioblocks'), 'help' => __('Display gallery images in random order.', 'folioblocks'), 'default' => false];
     foreach ($carousel['fields'] as $name => $definition) {
+        // Carousel's style sections remain in the original groups for galleries awaiting review.
+        if ('click_styles' === $definition['group']) { $definition['group'] = 'click'; }
+        if ('hover_styles' === $definition['group']) { $definition['group'] = 'hover'; }
+        if ('link-icon-style' === ($definition['condition'] ?? '')) { $definition['condition'] = 'link-icon'; }
         if (in_array($definition['group'], ['click', 'hover', 'styles'], true)) { $fields[$name] = $definition; }
     }
     foreach ($video_gallery['fields'] as $name => $definition) {
@@ -243,6 +369,10 @@ function fbks_get_modular_defaults_schema($carousel) {
         $fields[$name]['help'] = __('Set the space between gallery images.', 'folioblocks');
     }
     foreach ($carousel['fields'] as $name => $definition) {
+        // Carousel's style sections remain in the original groups for galleries awaiting review.
+        if ('click_styles' === $definition['group']) { $definition['group'] = 'click'; }
+        if ('hover_styles' === $definition['group']) { $definition['group'] = 'hover'; }
+        if ('link-icon-style' === ($definition['condition'] ?? '')) { $definition['condition'] = 'link-icon'; }
         if (in_array($definition['group'], ['click', 'hover', 'styles'], true)) { $fields[$name] = $definition; }
     }
     return ['title' => __('Modular Gallery Block', 'folioblocks'), 'block' => 'folioblocks/modular-gallery-block', 'icon' => 'pb-modular-gallery.svg', 'groups' => ['gallery' => __('General Gallery Settings', 'folioblocks'), 'click' => __('Gallery Click Settings', 'folioblocks'), 'hover' => __('Gallery Hover Settings', 'folioblocks'), 'styles' => __('Gallery Image Styles', 'folioblocks')], 'fields' => $fields];
@@ -344,11 +474,29 @@ function fbks_get_gallery_defaults_schema($key, $image) {
     } else {
         $fields['colorMode'] = $field('Color Mode', 'Switch between light and dark editor themes.', 'light', ['group' => 'styles', 'choices' => ['light' => __('Light', 'folioblocks'), 'dark' => __('Dark', 'folioblocks')]]);
     }
+    $fields['imageClickAction']['choices']['woocommerce'] = __('WooCommerce Product', 'folioblocks');
+    $fields['wooDefaultLinkAction'] = $field('Default Product Link Behavior', 'Individual images can override this product action.', 'add_to_cart', ['group' => 'click', 'condition' => 'commerce', 'choices' => ['add_to_cart' => __('Add to Cart', 'folioblocks'), 'product' => __('Open Product Page', 'folioblocks')]]);
+    $fields['wooCartIconDisplay'] = $field('Display Add to Cart Icon', 'Choose when to display the Add to Cart icon.', 'hover', ['group' => 'click', 'condition' => 'commerce', 'choices' => ['none' => __('None', 'folioblocks'), 'hover' => __('On Hover', 'folioblocks'), 'always' => __('Always', 'folioblocks')]]);
+    foreach (['cartIconColor' => ['Cart Icon Color', '#000000'], 'cartIconBgColor' => ['Cart Icon Background', '#f9f9f9']] as $name => $settings) {
+        $fields[$name] = $field($settings[0], 'Set the color of the cart icon.', $settings[1], ['group' => 'click_styles', 'condition' => 'cart-icon', 'color' => true, 'uiDefault' => !$carousel]);
+    }
+    foreach (['downloadIconColor', 'downloadIconBgColor', 'linkIconColor', 'linkIconBgColor'] as $name) { $fields[$name]['group'] = 'click_styles'; }
+    $fields['linkIconColor']['condition'] = $fields['linkIconBgColor']['condition'] = 'link-icon-style';
+    foreach (['overlayBgColor', 'overlayTextColor', 'chipOverlayBgColor', 'chipOverlayTextColor', 'overlayBgGradient', 'chipOverlayBgGradient'] as $name) { $fields[$name]['group'] = 'hover_styles'; }
+    $fields['lightboxContent']['choices']['product'] = __('Show Product Info', 'folioblocks');
+    // Place the action-specific icon display immediately after Link Target.
+    $first = [];
+    foreach (['imageClickAction', 'wooDefaultLinkAction', 'imageClickTarget', 'linkIconDisplay', 'downloadDisplay', 'wooCartIconDisplay'] as $name) { $first[$name] = $fields[$name]; }
+    $fields = $first + $fields;
     // Keep each feature section contiguous, including controls inserted above.
     $groups = ['gallery' => $carousel ? __('Carousel Gallery Settings', 'folioblocks') : __('Filmstrip Gallery Settings', 'folioblocks'), 'click' => __('Gallery Click Settings', 'folioblocks'), 'hover' => __('Gallery Hover Settings', 'folioblocks'), 'styles' => $carousel ? __('Gallery Image Styles', 'folioblocks') : __('Gallery Styles', 'folioblocks'), 'controls' => __('Carousel Control Styles', 'folioblocks')];
+    $controls = $groups['controls']; unset($groups['controls']);
+    $groups['click_styles'] = __('Gallery Click Styles', 'folioblocks');
+    $groups['hover_styles'] = __('Gallery Hover Styles', 'folioblocks');
+    $groups['controls'] = $controls;
     $ordered = [];
     foreach ($groups as $group => $label) { foreach ($fields as $name => $definition) { if ($group === $definition['group']) { $ordered[$name] = $definition; } } }
-    return ['title' => $carousel ? __('Carousel Gallery Block', 'folioblocks') : __('Filmstrip Gallery Block', 'folioblocks'), 'icon' => $carousel ? 'pb-carousel-gallery.svg' : 'pb-filmstrip-gallery.svg', 'block' => 'folioblocks/' . $key . '-gallery-block', 'groups' => $groups, 'fields' => $ordered];
+    return ['title' => $carousel ? __('Carousel Gallery Block', 'folioblocks') : __('Filmstrip Gallery Block', 'folioblocks'), 'icon' => $carousel ? 'pb-carousel-gallery.svg' : 'pb-filmstrip-gallery.svg', 'block' => 'folioblocks/' . $key . '-gallery-block', 'groups' => $groups, 'group_conditions' => ['click_styles' => 'click-styles', 'hover_styles' => 'hover-styles'], 'fields' => $ordered];
 }
 
 function fbks_resolve_gallery_block_defaults($key, $values) {
@@ -358,9 +506,19 @@ function fbks_resolve_gallery_block_defaults($key, $values) {
     unset($values['downloadDisplay']);
     if ($carousel) { $values['verticalOnMobile'] = 'vertical' === $values['mobileOrientation']; unset($values['mobileOrientation']); }
     if (!$has_image_styles) { $values['shadowStyle'] = 'none'; }
-    $secondary_lightbox = $has_image_styles && in_array($values['imageClickAction'], ['custom_url', 'page_post'], true) && 'icon' === $values['imageClickTarget'] && $values['lightbox'];
+    $secondary_lightbox = ($has_image_styles || 'filmstrip' === $key) && in_array($values['imageClickAction'], ['custom_url', 'page_post'], true) && 'icon' === $values['imageClickTarget'] && $values['lightbox'];
+    $secondary_commerce_lightbox = $values['lightbox'];
     $values = fbks_resolve_image_block_defaults($values);
     $values['lightbox'] = $values['lightbox'] || $secondary_lightbox;
+    if (in_array($key, ['carousel', 'filmstrip', 'grid', 'justified', 'masonry', 'modular'], true)) {
+        $commerce = 'woocommerce' === $values['imageClickAction'];
+        $values['enableWooCommerce'] = $commerce;
+        if ($commerce) {
+            $values['lightbox'] = 'icon' === $values['imageClickTarget'] && $secondary_commerce_lightbox;
+            if ('thumbnail' === $values['imageClickTarget']) { $values['wooCartIconDisplay'] = 'none'; }
+        }
+        $values['wooLightboxInfoType'] = 'product' === $values['lightboxContent'] ? 'product' : 'caption';
+    }
     $values['onHoverTitle'] = $values['showTitleOnHover'];
     $values['lightboxCaption'] = 'none' !== $values['lightboxContent'];
     unset($values['enableLightbox'], $values['showTitleOnHover']);
@@ -381,12 +539,20 @@ function fbks_sanitize_block_default_gradient($value, $fallback = '') {
 }
 
 function fbks_resolve_image_block_defaults($values) {
+    if (isset($values['downloadDisplay'])) { $values['downloadOnHover'] = 'hover' === $values['downloadDisplay']; unset($values['downloadDisplay']); }
     $action = $values['imageClickAction'];
-    $lightbox = 'lightbox' === $action || ('download' === $action && 'icon' === $values['imageClickTarget'] && $values['lightbox']);
+    $video_lightbox = 'video_lightbox' === $action;
+    if ($video_lightbox) { $values['lightboxZoom'] = false; if ('none' === $values['linkIconDisplay']) { $values['linkIconDisplay'] = 'hover'; } }
+    $lightbox = $video_lightbox || 'lightbox' === $action || (in_array($action, ['download', 'custom_url', 'page_post', 'woocommerce'], true) && 'icon' === $values['imageClickTarget'] && $values['lightbox']);
     $values['lightbox'] = $lightbox;
     $values['enableLightbox'] = $lightbox;
     $values['enableDownload'] = 'download' === $action;
-    $values['enableWooCommerce'] = false;
+    $values['enableWooCommerce'] = 'woocommerce' === $action;
+    if ('woocommerce' === $action && 'thumbnail' === $values['imageClickTarget']) { $values['wooCartIconDisplay'] = 'none'; }
+    if (isset($values['wooLinkAction'])) {
+        $values['wooLightboxInfoType'] = 'product' === $values['lightboxContent'] ? 'product' : 'caption';
+        $values['wooProductPriceOnHover'] = $values['wooProductPriceOnHover'] && 'product' === $values['overlayContent'] && 'none' !== $values['onHoverStyle'] && $values['enableWooCommerce'];
+    }
     $values['showTitleOnHover'] = 'none' !== $values['onHoverStyle'];
     if (!$values['showTitleOnHover']) { $values['onHoverStyle'] = 'blur-overlay'; }
     $values['dropShadow'] = 'none' !== $values['shadowStyle'];
@@ -447,6 +613,7 @@ function fbks_sanitize_block_defaults($key, $raw) {
         if (!isset($raw['shadowStyle']) && !empty($raw['dropShadow'])) { $raw['shadowStyle'] = 'soft'; }
     }
     if ('image' === $key) {
+        if (!isset($raw['downloadDisplay']) && isset($raw['downloadOnHover'])) { $raw['downloadDisplay'] = in_array($raw['downloadOnHover'], [true, 1, '1', 'true'], true) ? 'hover' : 'always'; }
         if (!isset($raw['imageClickAction'])) { $raw['imageClickAction'] = !empty($raw['enableLightbox']) ? 'lightbox' : 'none'; }
         if (isset($raw['showTitleOnHover']) && empty($raw['showTitleOnHover'])) { $raw['onHoverStyle'] = 'none'; }
         if (!isset($raw['shadowStyle']) && !empty($raw['dropShadow'])) { $raw['shadowStyle'] = 'soft'; }
@@ -469,6 +636,7 @@ function fbks_sanitize_block_defaults($key, $raw) {
         }
         $result[$name] = $value;
     }
+    if (in_array($key, ['image', 'carousel', 'filmstrip', 'grid', 'justified', 'modular', 'masonry'], true) && 'video_lightbox' !== $result['imageClickAction'] && 'video_play' === $result['overlayContent']) { $result['overlayContent'] = 'title'; }
     if ('video_gallery' === $key && !$result['enableFilter'] && 'title-play-category' === $result['defaultOverlayContent']) { $result['defaultOverlayContent'] = 'title-play'; }
     if ('before_after' === $key) {
         $allowed = 'vertical' === $result['sliderOrientation'] ? ['left', 'center', 'right'] : ['top', 'center', 'bottom'];
@@ -534,15 +702,15 @@ function fbks_render_block_defaults_panels() {
         if ('proofing' === $key && !fbks_can_use_proofing_sessions()) { continue; }
         $values = fbks_sanitize_block_defaults($key, $saved[$key] ?? []);
         ?>
-        <details class="pb-dashboard-box pb-global-settings-panel pb-block-default-panel" data-settings-section="block_<?php echo esc_attr($key); ?>">
-            <summary class="pb-global-settings-panel__summary"><span class="pb-global-settings-panel__heading"><span class="pb-block-default-icon" aria-hidden="true"><img src="<?php echo esc_url(FBKS_PLUGIN_URL . 'includes/icons/' . $schema['icon']); ?>" alt="" /></span><span class="pb-block-default-title-group"><span class="pb-global-settings-panel__title"><?php echo esc_html($schema['title']); ?></span><span class="pb-block-default-customized" data-block-default-customized <?php if (!fbks_block_defaults_are_customized($key, $saved[$key] ?? [])) { echo 'hidden'; } ?>><?php esc_html_e('Customized', 'folioblocks'); ?></span></span></span><span class="pb-global-settings-panel__status" data-autosave-status aria-live="polite"></span></summary>
-            <div class="pb-global-settings-panel__content pb-block-default-fields">
+        <details class="fbks-dashboard-box fbks-global-settings-panel fbks-block-default-panel" data-settings-section="block_<?php echo esc_attr($key); ?>">
+            <summary class="fbks-global-settings-panel__summary"><span class="fbks-global-settings-panel__heading"><span class="fbks-block-default-icon" aria-hidden="true"><img src="<?php echo esc_url(FBKS_PLUGIN_URL . 'includes/icons/' . $schema['icon']); ?>" alt="" /></span><span class="fbks-block-default-title-group"><span class="fbks-global-settings-panel__title"><?php echo esc_html($schema['title']); ?></span><span class="fbks-block-default-customized" data-block-default-customized <?php if (!fbks_block_defaults_are_customized($key, $saved[$key] ?? [])) { echo 'hidden'; } ?>><?php esc_html_e('Customized', 'folioblocks'); ?></span></span></span><span class="fbks-global-settings-panel__status" data-autosave-status aria-live="polite"></span></summary>
+            <div class="fbks-global-settings-panel__content fbks-block-default-fields">
                 <?php $previous_group = null; foreach ($schema['fields'] as $name => $field) :
-                    if (isset($field['group']) && $field['group'] !== $previous_group) { $previous_group = $field['group']; echo '<h3 class="pb-block-default-group-title"' . (isset($schema['group_conditions'][$previous_group]) ? ' data-image-default-condition="' . esc_attr($schema['group_conditions'][$previous_group]) . '"' : ('carousel' === $key && 'controls' === $previous_group ? ' data-image-default-condition="controls"' : '')) . '>' . esc_html($schema['groups'][$previous_group]) . '</h3>'; }
+                    if (isset($field['group']) && $field['group'] !== $previous_group) { $previous_group = $field['group']; echo '<h3 class="fbks-block-default-group-title"' . (isset($schema['group_conditions'][$previous_group]) ? ' data-image-default-condition="' . esc_attr($schema['group_conditions'][$previous_group]) . '"' : ('carousel' === $key && 'controls' === $previous_group ? ' data-image-default-condition="controls"' : '')) . '>' . esc_html($schema['groups'][$previous_group]) . '</h3>'; }
                     $id = 'fbks-default-' . $key . '-' . $name; $input_name = 'fbks_block_defaults[' . $key . '][' . $name . ']'; ?>
-                <div class="pb-settings-field pb-block-default-field pb-block-default-field--<?php echo esc_attr($name); ?>"<?php if (isset($field['condition'])) : ?> data-image-default-condition="<?php echo esc_attr($field['condition']); ?>"<?php endif; ?>><label for="<?php echo esc_attr($id); ?>"><?php echo esc_html($field['label']); ?></label>
+                <div class="fbks-settings-field fbks-block-default-field fbks-block-default-field--<?php echo esc_attr($name); ?>"<?php if (isset($field['condition'])) : ?> data-image-default-condition="<?php echo esc_attr($field['condition']); ?>"<?php endif; ?>><label for="<?php echo esc_attr($id); ?>"><?php echo esc_html($field['label']); ?></label>
                     <?php if (!empty($field['radio'])) : ?>
-                        <span class="pb-block-default-radios" id="<?php echo esc_attr($id); ?>" role="group" aria-label="<?php echo esc_attr($field['label']); ?>">
+                        <span class="fbks-block-default-radios" id="<?php echo esc_attr($id); ?>" role="group" aria-label="<?php echo esc_attr($field['label']); ?>">
                             <?php foreach ($field['choices'] as $value => $label) : ?><label><input type="radio" name="<?php echo esc_attr($input_name); ?>" value="<?php echo esc_attr($value); ?>" <?php checked($values[$name], $value); ?> /><?php echo esc_html($label); ?></label><?php endforeach; ?>
                         </span>
                     <?php elseif (isset($field['choices'])) : ?>
@@ -553,25 +721,25 @@ function fbks_render_block_defaults_panels() {
                         <input type="hidden" name="<?php echo esc_attr($input_name); ?>" value="<?php echo esc_attr($values[$name]); ?>" data-block-gradient-value />
                         <div id="<?php echo esc_attr($id); ?>" role="group" aria-label="<?php echo esc_attr($field['label']); ?>" data-block-gradient-picker></div>
                     <?php elseif (!empty($field['color'])) : ?>
-                        <span class="pb-block-color-picker" data-block-color-picker>
+                        <span class="fbks-block-color-picker" data-block-color-picker>
                             <input type="hidden" name="<?php echo esc_attr($input_name); ?>" value="<?php echo esc_attr($values[$name]); ?>" data-block-color-value />
                             <input type="color" id="<?php echo esc_attr($id); ?>" aria-describedby="<?php echo esc_attr($id . '-help'); ?>" value="<?php echo esc_attr(sanitize_hex_color($values[$name]) ?: '#000000'); ?>" data-block-color-swatch />
                             <?php if ('labelBackgroundColor' === $name || !empty($field['alpha'])) : ?>
-                                <span class="pb-block-color-opacity"><span><?php esc_html_e('Opacity', 'folioblocks'); ?></span><input type="range" min="0" max="100" step="1" value="60" aria-label="<?php echo esc_attr(sprintf(__('%s opacity', 'folioblocks'), $field['label'])); ?>" data-block-color-alpha /><output data-block-color-opacity>60%</output></span>
+                                <span class="fbks-block-color-opacity"><span><?php esc_html_e('Opacity', 'folioblocks'); ?></span><input type="range" min="0" max="100" step="1" value="60" aria-label="<?php echo esc_attr(sprintf(__('%s opacity', 'folioblocks'), $field['label'])); ?>" data-block-color-alpha /><output data-block-color-opacity>60%</output></span>
                             <?php endif; ?>
                         </span>
                     <?php elseif (isset($field['min']) && ('background_video' === $key || 'magnification' === $name || !empty($field['range']))) : ?>
-                        <span class="pb-block-default-range">
+                        <span class="fbks-block-default-range">
                             <input type="range" id="<?php echo esc_attr($id); ?>" aria-describedby="<?php echo esc_attr($id . '-help'); ?>" name="<?php echo esc_attr($input_name); ?>" min="<?php echo esc_attr($field['min']); ?>" max="<?php echo esc_attr($field['max']); ?>" step="<?php echo esc_attr($field['step'] ?? 1); ?>" value="<?php echo esc_attr($values[$name]); ?>" data-block-default-range />
                             <output for="<?php echo esc_attr($id); ?>"><?php echo esc_html($values[$name]); ?></output>
                         </span>
                     <?php else : ?>
                         <input type="<?php echo isset($field['min']) ? 'number' : 'text'; ?>" id="<?php echo esc_attr($id); ?>" aria-describedby="<?php echo esc_attr($id . '-help'); ?>" name="<?php echo esc_attr($input_name); ?>" value="<?php echo esc_attr($values[$name]); ?>" <?php if (isset($field['min'])) : ?> min="<?php echo esc_attr($field['min']); ?>" max="<?php echo esc_attr($field['max']); ?>" step="1"<?php endif; ?> />
                     <?php endif; ?>
-                    <?php if (!empty($field['help'])) : ?><span class="pb-block-default-help" id="<?php echo esc_attr($id . '-help'); ?>"><?php echo esc_html($field['help']); ?></span><?php endif; ?>
+                    <?php if (!empty($field['help'])) : ?><span class="fbks-block-default-help" id="<?php echo esc_attr($id . '-help'); ?>"><?php echo esc_html($field['help']); ?></span><?php endif; ?>
                 </div>
                 <?php endforeach; ?>
-                <div class="pb-block-default-reset"><button type="button" class="button-link" data-reset-block-defaults="<?php echo esc_attr(wp_json_encode(array_map(static function ($field) { return $field['default']; }, $schema['fields']))); ?>"><?php esc_html_e('Reset to plugin defaults', 'folioblocks'); ?></button></div>
+                <div class="fbks-block-default-reset"><button type="button" class="button-link" data-reset-block-defaults="<?php echo esc_attr(wp_json_encode(array_map(static function ($field) { return $field['default']; }, $schema['fields']))); ?>"><?php esc_html_e('Reset to plugin defaults', 'folioblocks'); ?></button></div>
             </div>
         </details>
         <?php

@@ -1,4 +1,4 @@
-import { getBeforeAfterLabelPosition } from '../pb-helpers/beforeAfterLabelPosition';
+import { getBeforeAfterLabelPosition } from '../fbks-helpers/beforeAfterLabelPosition';
 /**
  * Before & After Block
  * Premium JS

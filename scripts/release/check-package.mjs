@@ -190,7 +190,7 @@ const assertRequiredProjectFiles = () => {
 		'readme.txt',
 		'package.json',
 		'package-lock.json',
-		'build/pb-image-block/render.php',
+		'build/image-block/render.php',
 		'includes/php/i18n.php',
 		'includes/php/svg-allowed-html.php',
 		'includes/pro/admin/global-settings.php',
@@ -226,12 +226,12 @@ const assertPremiumOnlyHeaderCoversProFiles = () => {
 	const requiredPremiumOnlyPaths = [
 		'/includes/pro/',
 		'/build/modular-gallery-block/',
-		'/build/pb-image-row',
-		'/build/pb-image-stack/',
+		'/build/image-row',
+		'/build/image-stack/',
 		'/build/proofing-gallery-block/',
-		'/build/pb-image-block/premium.css',
-		'/build/pb-image-block/premium-rtl.css',
-		'/build/pb-loupe-block/premium-view.asset.php',
+		'/build/image-block/premium.css',
+		'/build/image-block/premium-rtl.css',
+		'/build/loupe-block/premium-view.asset.php',
 	];
 
 	const missing = requiredPremiumOnlyPaths.filter((premiumPath) => {
@@ -274,7 +274,7 @@ const assertZipContents = (version) => {
 		[
 			'folioblocks.php',
 			'readme.txt',
-			'build/pb-image-block/render.php',
+			'build/image-block/render.php',
 			'includes/pro/php/css-values.php',
 			'vendor/freemius/start.php',
 		].forEach((file) => requireFile(file, packageRoot));

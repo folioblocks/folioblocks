@@ -16,7 +16,7 @@
 	);
 
 	const showFallback = () => {
-		newsList.innerHTML = `<li class="pb-news-item--empty">${ config.emptyText }</li>`;
+		newsList.innerHTML = `<li class="fbks-news-item--empty">${ config.emptyText }</li>`;
 	};
 
 	const setLoading = ( isLoading ) => {

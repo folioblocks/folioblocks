@@ -1,4 +1,4 @@
-import useGlobalBlockDefaults from '../pb-helpers/useGlobalBlockDefaults';
+import useGlobalBlockDefaults from '../fbks-helpers/useGlobalBlockDefaults';
 import blockMetadata from './block.json';
 /**
  * Video Gallery Block
@@ -30,17 +30,17 @@ import {
 import { useState, useEffect } from "@wordpress/element";
 import { applyFilters } from "@wordpress/hooks";
 import { plus } from "@wordpress/icons";
-import ResponsiveRangeControl from "../pb-helpers/ResponsiveRangeControl";
-import ResponsiveRangeInspector, { ResponsiveLayoutInspector } from '../pb-helpers/ResponsiveRangeInspector';
-import { IconVideoGallery } from "../pb-helpers/icons";
+import ResponsiveRangeControl from "../fbks-helpers/ResponsiveRangeControl";
+import ResponsiveRangeInspector, { ResponsiveLayoutInspector } from '../fbks-helpers/ResponsiveRangeInspector';
+import { IconVideoGallery } from "../fbks-helpers/icons";
 import {
 	FBKS_ALL_FILTER_TOKEN,
 	fbksNormalizeActiveFilterValue,
-} from "../pb-helpers/filterConstants";
-import { isValidHttpUrl } from "../pb-helpers/urlValidation";
-import ProFeatureNotice from "../pb-helpers/ProFeatureNotice";
-import { resolveGalleryGaps } from "../pb-helpers/galleryGap";
-import { getVideoProviderData } from "../pb-helpers/videoProviders";
+} from "../fbks-helpers/filterConstants";
+import { isValidHttpUrl } from "../fbks-helpers/urlValidation";
+import ProFeatureNotice from "../fbks-helpers/ProFeatureNotice";
+import { resolveGalleryGaps } from "../fbks-helpers/galleryGap";
+import { getVideoProviderData } from "../fbks-helpers/videoProviders";
 import "./editor.scss";
 
 const getOverlayContent = (titleVisibility, playButtonVisibility, showCategory) => {

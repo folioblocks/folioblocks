@@ -57,7 +57,7 @@ const supportsOverlayEntrance = ( overlayStyle ) =>
 		overlayStyle
 	);
 const supportsOverlayTypography = ( overlayContent ) =>
-	! [ 'exif', 'social' ].includes( overlayContent );
+	! [ 'exif', 'social', 'video_play' ].includes( overlayContent );
 const isGradientValue = ( value ) =>
 	typeof value === 'string' && value.toLowerCase().includes( 'gradient(' );
 
@@ -135,6 +135,7 @@ export const registerImageHoverActionPremiumControls = ( {
 			const showProductInfoOption =
 				attributes.imageClickAction === 'woocommerce' &&
 				!! attributes.enableWooCommerce;
+			const clickAction = attributes.imageClickAction || props.context?.[ 'folioBlocks/imageClickAction' ] || '';
 			const overlayContent =
 				attributes.overlayContent ||
 				( attributes.wooProductPriceOnHover ? 'product' : 'title' );
@@ -153,6 +154,7 @@ export const registerImageHoverActionPremiumControls = ( {
 				},
 			];
 
+			if ( clickAction === 'video_lightbox' ) { overlayContentOptions.push( { label: __( 'Show Video Play Button', 'folioblocks' ), value: 'video_play' } ); }
 			if ( showProductInfoOption ) {
 				overlayContentOptions.push( {
 					label: __( 'Show Product Info', 'folioblocks' ),

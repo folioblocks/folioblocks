@@ -1,14 +1,15 @@
+import { createVideoLightboxMedia, stopVideoLightboxMedia } from '../fbks-helpers/videoLightboxMedia';
 /**
  * PB Image Block
  * View JS
  */
 import { getElement, store } from '@wordpress/interactivity';
-import { createFrontendScope } from '../pb-helpers/frontendScope';
+import { createFrontendScope } from '../fbks-helpers/frontendScope';
 
 import {
 	updateTiltHoverVars,
 	resetTiltHoverVars,
-} from '../pb-helpers/tiltHoverEffect';
+} from '../fbks-helpers/tiltHoverEffect';
 
 const roots = new Set();
 let runtime;
@@ -171,7 +172,9 @@ const initializeRuntime = () => {
 			return;
 		}
 
-		const trigger = event.target.closest( '.pb-image-block-lightbox' );
+        const videoTrigger = event.target.closest( '.fbks-video-lightbox-trigger' );
+        const trigger = videoTrigger ? videoTrigger.closest( '.pb-image-block' )?.querySelector( '.pb-image-block-lightbox' ) : event.target.closest( '.pb-image-block-lightbox' );
+        if ( trigger?.hasAttribute( 'data-video-src' ) && trigger.getAttribute( 'data-video-target' ) === 'icon' && !videoTrigger ) { event.preventDefault(); return; }
 		if ( ! trigger ) {
 			return;
 		}
@@ -312,7 +315,7 @@ const initializeRuntime = () => {
 
 		focusStart.addEventListener( 'focus', () => {
 			const focusable = wrapper.querySelectorAll(
-				'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+				'button, [href], input, select, textarea, iframe, video[controls], [tabindex]:not([tabindex="-1"])'
 			);
 			if ( focusable.length ) {
 				focusable[ focusable.length - 1 ].focus();
@@ -320,7 +323,7 @@ const initializeRuntime = () => {
 		} );
 		focusEnd.addEventListener( 'focus', () => {
 			const focusable = wrapper.querySelectorAll(
-				'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+				'button, [href], input, select, textarea, iframe, video[controls], [tabindex]:not([tabindex="-1"])'
 			);
 			if ( focusable.length ) {
 				focusable[ 0 ].focus();
@@ -799,6 +802,7 @@ const initializeRuntime = () => {
 			if ( closed ) {
 				return;
 			}
+			stopVideoLightboxMedia( inner );
 			closed = true;
 			activeLightbox = null;
 			host.close();
@@ -877,7 +881,7 @@ const initializeRuntime = () => {
 				return;
 			}
 			const interactiveTarget = e.target.closest(
-				'.lightbox-image img, .lightbox-caption, .lightbox-close, .lightbox-prev, .lightbox-next, .lightbox-fullscreen, .lightbox-zoom, .lightbox-counter'
+				'.lightbox-image img, .fbks-lightbox-video, .fbks-lightbox-video-error, .lightbox-caption, .lightbox-close, .lightbox-prev, .lightbox-next, .lightbox-fullscreen, .lightbox-zoom, .lightbox-counter'
 			);
 
 			if ( interactiveTarget ) {
@@ -895,12 +899,13 @@ const initializeRuntime = () => {
 
 			setLightboxZoomed( false );
 			const src = imageData.getAttribute( 'data-src' );
+            const videoSrc = imageData.getAttribute( 'data-video-src' );
 			const caption = imageData.getAttribute( 'data-caption' );
 			const showCounter =
 				imageData.getAttribute( 'data-lightbox-counter' ) === 'true' &&
 				allImages.length > 1;
 			const zoomEnabled =
-				imageData.getAttribute( 'data-lightbox-zoom' ) === 'true';
+				!videoSrc && imageData.getAttribute( 'data-lightbox-zoom' ) === 'true';
 			const lightboxTheme =
 				imageData.getAttribute( 'data-lightbox-theme' ) === 'light'
 					? 'light'
@@ -910,7 +915,9 @@ const initializeRuntime = () => {
 				lightboxTheme === 'light'
 			);
 
-			inner.innerHTML = '';
+			stopVideoLightboxMedia( inner );
+            wrapper.classList.toggle( 'fbks-lightbox-has-video', !!videoSrc );
+            inner.innerHTML = '';
 			wrapper
 				.querySelectorAll(
 					'.lightbox-close, .lightbox-prev, .lightbox-next, .lightbox-counter, .lightbox-zoom'
@@ -933,7 +940,13 @@ const initializeRuntime = () => {
 			const imageWrapper = document.createElement( 'div' );
 			imageWrapper.className = 'lightbox-image';
 
-			const img = document.createElement( 'img' );
+            let img = null;
+            if ( videoSrc ) {
+                const media = createVideoLightboxMedia( videoSrc, { title: imageData.querySelector( 'img' )?.alt || 'Video' } );
+                if ( media ) imageWrapper.appendChild( media );
+                else { const error = document.createElement( 'p' ); error.textContent = 'This video is unavailable.'; imageWrapper.appendChild( error ); }
+            } else {
+			img = document.createElement( 'img' );
 			img.alt = '';
 			img.draggable = false;
 			img.tabIndex = 0;
@@ -979,10 +992,12 @@ const initializeRuntime = () => {
 
 			imageWrapper.appendChild( img );
 
+            }
+
 			const watermarkImage = imageData.getAttribute(
 				'data-watermark-image'
 			);
-			if ( watermarkImage ) {
+			if ( watermarkImage && !videoSrc ) {
 				const escapedWatermarkImage = watermarkImage.replace(
 					/["\\]/g,
 					'\\$&'
@@ -1038,7 +1053,7 @@ const initializeRuntime = () => {
 			wrapper.appendChild( close );
 			inner.appendChild( imageWrapper );
 			scheduleLightboxSync( 3 );
-			if ( img.complete ) {
+			if ( img?.complete ) {
 				syncLightboxImageHeight();
 			}
 
@@ -1073,7 +1088,7 @@ const initializeRuntime = () => {
 				} );
 				wrapper.appendChild( zoom );
 			}
-			setChromeHidden( wrapper.classList.contains( 'is-chrome-hidden' ) );
+			setChromeHidden( videoSrc ? false : wrapper.classList.contains( 'is-chrome-hidden' ) );
 			const closeBtn = wrapper.querySelector( '.lightbox-close' );
 			if (
 				closeBtn &&
@@ -1087,10 +1102,11 @@ const initializeRuntime = () => {
 					detail: { wrapper, inner, trigger: imageData },
 				} )
 			);
-			setChromeHidden( wrapper.classList.contains( 'is-chrome-hidden' ) );
+			setChromeHidden( videoSrc ? false : wrapper.classList.contains( 'is-chrome-hidden' ) );
 		}
 
 		function keyHandler( e ) {
+            if ( e.key !== 'Escape' && e.target.closest?.( 'video, iframe, input, textarea, select' ) ) return;
 			if ( e.key === 'Escape' ) {
 				e.preventDefault();
 				closeLightbox();
@@ -1185,7 +1201,7 @@ const initializeRuntime = () => {
 
 			const focusable = Array.from(
 				wrapper.querySelectorAll(
-					'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+					'button, [href], input, select, textarea, iframe, video[controls], [tabindex]:not([tabindex="-1"])'
 				)
 			).filter( ( el ) => ! el.disabled && el.offsetParent !== null );
 

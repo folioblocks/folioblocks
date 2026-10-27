@@ -473,8 +473,8 @@ if (! function_exists('fbks_render_proofing_sessions_page_header')) {
 	function fbks_render_proofing_sessions_page_header($subtitle = '')
 	{
 		?>
-		<div class="pb-settings-header">
-			<img src="<?php echo esc_url(FBKS_PLUGIN_URL . 'includes/icons/pb-brand-icon.svg'); ?>" alt="<?php echo esc_attr__('FolioBlocks', 'folioblocks'); ?>" class="pb-settings-logo" />
+		<div class="fbks-settings-header">
+			<img src="<?php echo esc_url(FBKS_PLUGIN_URL . 'includes/icons/pb-brand-icon.svg'); ?>" alt="<?php echo esc_attr__('FolioBlocks', 'folioblocks'); ?>" class="fbks-settings-logo" />
 			<h1><?php esc_html_e('FolioBlocks Pro - Proofing Sessions', 'folioblocks'); ?></h1>
 		</div>
 		<?php if ('' !== $subtitle) : ?>
@@ -509,7 +509,7 @@ if (! function_exists('fbks_render_proofing_sessions_list')) {
 			<?php endforeach; ?>
 		</div>
 
-		<div class="pb-dashboard-box">
+		<div class="fbks-dashboard-box">
 			<h2><?php esc_html_e('Proofing Sessions', 'folioblocks'); ?></h2>
 			<?php if (empty($sessions)) : ?>
 				<p><?php esc_html_e('No proofing sessions found yet.', 'folioblocks'); ?></p>
@@ -569,7 +569,7 @@ if (! function_exists('fbks_render_proofing_session_detail')) {
 		?>
 		<?php fbks_render_proofing_session_detail_actions($session['id'], $back_url); ?>
 
-		<div class="pb-dashboard-box">
+		<div class="fbks-dashboard-box">
 			<div class="fbks-proofing-detail-header">
 				<div>
 					<h2><?php echo esc_html($session['clientEmail'] ?: __('Proofing Session', 'folioblocks')); ?></h2>
@@ -591,7 +591,7 @@ if (! function_exists('fbks_render_proofing_session_detail')) {
 			</div>
 		</div>
 
-		<div class="pb-dashboard-box">
+		<div class="fbks-dashboard-box">
 			<h2><?php esc_html_e('Submitted Selections', 'folioblocks'); ?></h2>
 			<?php if (empty($session['images'])) : ?>
 				<p><?php esc_html_e('No image selections were saved for this session.', 'folioblocks'); ?></p>
@@ -682,7 +682,7 @@ if (! function_exists('fbks_render_proofing_sessions_page')) {
 
 		if (! defined('FBKS_PROOFING_SESSION_POST_TYPE')) {
 			?>
-			<div class="pb-wrap" data-plugin-version="<?php echo esc_attr(sprintf(__('Version %s', 'folioblocks'), FBKS_VERSION)); ?>">
+			<div class="fbks-wrap" data-plugin-version="<?php echo esc_attr(sprintf(__('Version %s', 'folioblocks'), FBKS_VERSION)); ?>">
 				<?php fbks_render_proofing_sessions_page_header(__('Proofing session storage is not available.', 'folioblocks')); ?>
 			</div>
 			<?php
@@ -692,7 +692,7 @@ if (! function_exists('fbks_render_proofing_sessions_page')) {
 		$session_id = isset($_GET['session_id']) ? absint($_GET['session_id']) : 0;
 		$session = $session_id ? fbks_get_proofing_session_admin_data($session_id) : null;
 		?>
-		<div class="pb-wrap pb-proofing-sessions-wrap" data-plugin-version="<?php echo esc_attr(sprintf(__('Version %s', 'folioblocks'), FBKS_VERSION)); ?>">
+		<div class="fbks-wrap fbks-proofing-sessions-wrap" data-plugin-version="<?php echo esc_attr(sprintf(__('Version %s', 'folioblocks'), FBKS_VERSION)); ?>">
 			<?php fbks_render_proofing_sessions_page_header(__('Review saved and submitted client proofing selections.', 'folioblocks')); ?>
 			<?php
 			if (isset($_GET['proofing_deleted'])) {

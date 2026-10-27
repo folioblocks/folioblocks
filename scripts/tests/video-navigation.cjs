@@ -17,15 +17,15 @@ const runtime = process.env.FBKS_TEST_GUTENBERG
 	: 'wp-includes/js/dist/script-modules';
 const filename = process.env.FBKS_TEST_GUTENBERG ? 'index.js' : 'index.min.js';
 const modules = {
-	'/style.css': path.join( root, 'build/pb-video-block/style-index.css' ),
+	'/style.css': path.join( root, 'build/video-block/style-index.css' ),
 	'/gallery.css': path.join(
 		root,
 		'build/video-gallery-block/style-index.css'
 	),
-	'/view.js': path.join( root, 'build/pb-video-block/view.js' ),
+	'/view.js': path.join( root, 'build/video-block/view.js' ),
 	'/premium-view.js': path.join(
 		root,
-		'build/pb-video-block/premium-view.js'
+		'build/video-block/premium-view.js'
 	),
 	'/gallery.js': path.join( root, 'build/video-gallery-block/view.js' ),
 	'/gallery-premium.js': path.join(

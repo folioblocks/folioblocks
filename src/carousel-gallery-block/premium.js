@@ -13,21 +13,21 @@ import {
 	__experimentalToolsPanelItem as ToolsPanelItem,
 } from '@wordpress/components';
 import { alignLeft, alignCenter, alignRight } from '@wordpress/icons';
-import { CompactTwoColorControl } from '../pb-helpers/CompactColorControl';
-import ImageStyleControl from '../pb-helpers/ImageStyleControl';
+import { CompactTwoColorControl } from '../fbks-helpers/CompactColorControl';
+import ImageStyleControl from '../fbks-helpers/ImageStyleControl';
 import { addFilter } from '@wordpress/hooks';
-import { registerImageClickActionPremiumControls } from '../pb-helpers/imageClickActionPremiumControls';
-import { registerImageClickStylePremiumControls } from '../pb-helpers/imageClickStylePremiumControls';
-import { registerImageHoverActionPremiumControls } from '../pb-helpers/imageHoverActionPremiumControls';
-import { registerListViewThumbnailEnhancements } from '../pb-helpers/listViewThumbnailEnhancements';
-import { enableGalleryTransforms } from '../pb-helpers/galleryTransforms';
-import { registerResponsiveGapPremiumControl } from '../pb-helpers/responsiveGapPremiumControl';
-import { registerWatermarkOverlayControls } from '../pb-helpers/watermarkOverlayControls';
+import { registerImageClickActionPremiumControls } from '../fbks-helpers/imageClickActionPremiumControls';
+import { registerImageClickStylePremiumControls } from '../fbks-helpers/imageClickStylePremiumControls';
+import { registerImageHoverActionPremiumControls } from '../fbks-helpers/imageHoverActionPremiumControls';
+import { registerListViewThumbnailEnhancements } from '../fbks-helpers/listViewThumbnailEnhancements';
+import { enableGalleryTransforms } from '../fbks-helpers/galleryTransforms';
+import { registerResponsiveGapPremiumControl } from '../fbks-helpers/responsiveGapPremiumControl';
+import { registerWatermarkOverlayControls } from '../fbks-helpers/watermarkOverlayControls';
 import {
 	registerDisableRightClickPremiumControl,
 	registerLazyLoadPremiumControl,
 	registerRandomizeOrderPremiumControl,
-} from '../pb-helpers/simplePremiumControls';
+} from '../fbks-helpers/simplePremiumControls';
 
 enableGalleryTransforms( 'folioblocks/carousel-gallery-block' );
 registerResponsiveGapPremiumControl( {

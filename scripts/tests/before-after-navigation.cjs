@@ -22,10 +22,10 @@ const modules = {
 		wpRoot,
 		`${ runtime }/interactivity-router/${ filename }`
 	),
-	'/view.js': path.join( root, 'build/pb-before-after-block/view.js' ),
+	'/view.js': path.join( root, 'build/before-after-block/view.js' ),
 	'/premium-view.js': path.join(
 		root,
-		'build/pb-before-after-block/premium-view.js'
+		'build/before-after-block/premium-view.js'
 	),
 };
 const image =

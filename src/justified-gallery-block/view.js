@@ -1,10 +1,10 @@
 /** Justified layout follows the mounted gallery's lifetime. */
 import { getElement, store } from '@wordpress/interactivity';
-import { calculateJustifiedLayout } from '../pb-helpers/justifiedLayout';
+import { calculateJustifiedLayout } from '../fbks-helpers/justifiedLayout';
 import {
 	mountGalleryLayout,
 	resolveGalleryRoot,
-} from '../pb-helpers/galleryLifecycle';
+} from '../fbks-helpers/galleryLifecycle';
 
 const selector = '.wp-block-folioblocks-justified-gallery-block';
 const instances = new WeakMap();
