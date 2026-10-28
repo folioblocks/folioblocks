@@ -472,7 +472,7 @@ function fbks_render_settings_page()
 							<?php esc_html_e('Thank you for purchasing FolioBlocks Pro. FolioBlocks is purpose-built for the WordPress block editor and Site Editor, giving you the tools to create beautiful photo and video galleries directly in your pages, posts, and templates.', 'folioblocks'); ?>
 						</p>
 						<p>
-							<?php esc_html_e('Create and customize individual blocks and galleries in the block editor, then use Global Settings to manage reusable defaults and site-wide FolioBlocks features. Settings inherited from Global Settings can still be overridden where supported on individual pages, posts, and blocks.', 'folioblocks'); ?>
+							<?php esc_html_e('Create and customize individual blocks and galleries in the block editor, then use Settings to manage reusable defaults and site-wide FolioBlocks features. Settings inherited from Settings can still be overridden where supported on individual pages, posts, and blocks.', 'folioblocks'); ?>
 						</p>
 					<?php else : ?>
 						<p>
@@ -734,8 +734,8 @@ function fbks_render_settings_page()
 							<li><?php esc_html_e('Hover effects and overlays: zoom, lift, tilt, pop, glare, pan, desaturate, blur, gradient, color, chip, and entrance animations', 'folioblocks'); ?></li>
 							<li><?php esc_html_e('Per-image and per-video overrides for click behavior and hover styling', 'folioblocks'); ?></li>
 							<li><?php esc_html_e('WooCommerce integration for image galleries, Image Block, Video Block, and Video Gallery', 'folioblocks'); ?></li>
-							<li><?php esc_html_e('Watermark overlays for gallery images and lightbox images, managed from Global Settings', 'folioblocks'); ?></li>
-							<li><?php esc_html_e('Global Settings for reusable watermarks, social sharing sources, and proofing behavior', 'folioblocks'); ?></li>
+							<li><?php esc_html_e('Watermark overlays for gallery images and lightbox images, managed from Settings', 'folioblocks'); ?></li>
+							<li><?php esc_html_e('Settings for reusable watermarks, social sharing sources, and proofing behavior', 'folioblocks'); ?></li>
 							<li><?php esc_html_e('Media protection and performance controls: lazy load, disable right-click, disable drag-to-save, and password protection support', 'folioblocks'); ?></li>
 							<li><?php esc_html_e('Advanced styling: borders, rounded corners, drop shadows, icon colors, overlay colors, typography, and control styling', 'folioblocks'); ?></li>
 							<li><?php esc_html_e('EXIF metadata support in overlays/lightboxes plus media-library metadata sync', 'folioblocks'); ?></li>

@@ -957,7 +957,7 @@ if (! function_exists('fbks_render_global_settings_page')) {
 		<div class="fbks-wrap" data-plugin-version="<?php echo esc_attr(sprintf(__('Version %s', 'folioblocks'), FBKS_VERSION)); ?>">
 			<div class="fbks-settings-header">
 				<img src="<?php echo esc_url(FBKS_PLUGIN_URL . 'includes/icons/pb-brand-icon.svg'); ?>" alt="<?php echo esc_attr__('FolioBlocks', 'folioblocks'); ?>" class="fbks-settings-logo" />
-				<h1><?php esc_html_e('FolioBlocks', 'folioblocks'); ?><?php if (fbks_fs()->can_use_premium_code()) : ?> <?php esc_html_e('Pro', 'folioblocks'); ?><?php endif; ?> - <?php esc_html_e('Global Settings', 'folioblocks'); ?></h1>
+				<h1><?php esc_html_e('FolioBlocks', 'folioblocks'); ?><?php if (fbks_fs()->can_use_premium_code()) : ?> <?php esc_html_e('Pro', 'folioblocks'); ?><?php endif; ?> - <?php esc_html_e('Settings', 'folioblocks'); ?></h1>
 			</div>
 
 			<?php if ($notice) : ?>
@@ -1348,7 +1348,7 @@ if (! function_exists('fbks_render_global_settings_page')) {
                         <div class="fbks-block-default-grid"><?php fbks_render_block_defaults_panels(); ?></div>
                         <p class="buy-button-wrapper fbks-global-settings-save-wrapper" data-global-save-fallback>
 							<button type="submit" class="button button-primary buy-button">
-								<?php esc_html_e('Save Global Settings', 'folioblocks'); ?>
+								<?php esc_html_e('Save Settings', 'folioblocks'); ?>
 							</button>
 						</p>
 					</form>

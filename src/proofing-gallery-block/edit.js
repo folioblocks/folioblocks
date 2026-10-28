@@ -1110,7 +1110,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                 help={ __( 'This gallery keeps a copy of the selected palette.', 'folioblocks' ) }
                                 __nextHasNoMarginBottom
                             />
-                            { ! getProofingFlags( attributes ).length && <Notice status="warning" isDismissible={ false }>{ __( 'No colors are enabled in this palette. Choose another palette or enable colors in Global Settings.', 'folioblocks' ) }</Notice> }
+                            { ! getProofingFlags( attributes ).length && <Notice status="warning" isDismissible={ false }>{ __( 'No colors are enabled in this palette. Choose another palette or enable colors in Settings.', 'folioblocks' ) }</Notice> }
                         </> }
                     </div> }
 					<ToggleControl

@@ -316,7 +316,7 @@ export const WatermarkControls = ( {
 			{ ! hasSavedWatermarks && (
 				<Notice status="warning" isDismissible={ false }>
 					{ __(
-						'No saved watermarks are available. Create and save a watermark in FolioBlocks Global Settings before enabling watermarking.',
+						'No saved watermarks are available. Create and save a watermark in FolioBlocks Settings before enabling watermarking.',
 						'folioblocks'
 					) }
 				</Notice>

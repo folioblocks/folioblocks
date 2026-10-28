@@ -26,7 +26,7 @@ add_action( 'admin_enqueue_scripts', 'fbks_enqueue_system_info_scripts' );
 function fbks_get_settings_system_info_lines() {
     $switched = switch_to_locale('en_US');
     try {
-        $lines = ['=== FolioBlocks Global Settings ==='];
+        $lines = ['=== FolioBlocks Settings ==='];
         if (!function_exists('fbks_get_block_defaults_schema') || !fbks_fs()->can_use_premium_code__premium_only()) {
             return array_merge($lines, ['Unavailable (requires an active paid plan).', '', '=== Global Block Defaults ===', 'Unavailable (requires an active paid plan).', '']);
         }
@@ -337,7 +337,7 @@ if ( ! function_exists( 'fbks_render_system_info_page' ) ) {
 				<div class="settings-left">
 					<div class="fbks-dashboard-box">
 						<h2><?php esc_html_e( 'System Report', 'folioblocks' ); ?></h2>
-						<p><?php esc_html_e( 'Below you can find your server configuration, active FolioBlocks Global Settings, and customized Global Block Defaults. Copy and paste this information when requesting support. Client credentials and watermark image URLs are excluded.', 'folioblocks' ); ?></p>
+						<p><?php esc_html_e( 'Below you can find your server configuration, active FolioBlocks Settings, and customized Global Block Defaults. Copy and paste this information when requesting support. Client credentials and watermark image URLs are excluded.', 'folioblocks' ); ?></p>
 						<textarea
 							readonly
 							class="large-text code"

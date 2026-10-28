@@ -17,7 +17,7 @@ const zipFileName = `${ packageRootName }.zip`;
 const zipPath = path.join(root, zipFileName);
 const phpCandidates = [
 	process.env.PHP_BINARY,
-	'/Applications/MAMP/bin/php/php8.3.14/bin/php',
+	'/Applications/MAMP/bin/php/php/bin/php',
 	'php',
 ].filter(Boolean);
 
@@ -63,7 +63,7 @@ const findPhp = () => {
 		}
 	}
 
-	fail('Could not find a PHP binary for syntax checks.');
+	fail('Could not find a PHP binary for syntax checks. Set PHP_BINARY to its full path, or make php available on PATH.');
 };
 
 const readJson = (file) => JSON.parse(readFileSync(path.join(root, file), 'utf8'));
@@ -332,6 +332,7 @@ const createReleaseZip = () => {
 };
 
 const php = findPhp();
+log(`Using PHP: ${ php }`);
 
 log('Removing generated build artifacts');
 rmSync(path.join(root, 'build'), { recursive: true, force: true });

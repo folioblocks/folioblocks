@@ -346,7 +346,7 @@ if (! function_exists('fbks_add_media_metadata_attachment_fields')) {
 				'html'  => '<span class="fbks-media-metadata-readonly">' . esc_html__('Not scanned', 'folioblocks') . '</span>',
 				'helps' => sprintf(
 					/* translators: 1: opening link tag, 2: closing link tag */
-					__('Use %1$sGlobal Settings%2$s to scan existing Media Library images.', 'folioblocks'),
+					__('Use %1$sSettings%2$s to scan existing Media Library images.', 'folioblocks'),
 					'<a href="' . esc_url($settings_url) . '">',
 					'</a>'
 				),
