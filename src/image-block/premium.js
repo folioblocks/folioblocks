@@ -6,6 +6,7 @@ import { registerVideoLightboxControls, VideoLightboxSourceControl, VideoLightbo
 import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 import {
+	BaseControl,
 	CheckboxControl,
 	Button,
 	Dropdown,
@@ -21,7 +22,7 @@ import {
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from '@wordpress/components';
-import { useState, useEffect } from '@wordpress/element';
+import { useState, useEffect, useRef } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import { useDebounce } from '@wordpress/compose';
 import apiFetch from '@wordpress/api-fetch';
@@ -62,70 +63,67 @@ import {
 	timeToRead,
 } from '@wordpress/icons';
 import { wooCartIcon } from '../fbks-helpers/icons.js';
-import { syncImageMetadataToMedia } from '../fbks-helpers/syncImageMetadata.js';
+import { syncImageMetadataToMedia, refreshImageMetadataFromMedia } from '../fbks-helpers/syncImageMetadata.js';
 import ValidatedUrlControl from '../fbks-helpers/ValidatedUrlControl.js';
 import { isValidHttpUrl } from '../fbks-helpers/urlValidation.js';
 
-const ImageMetadataSyncControl = ( { attributes = {} } ) => {
-	const [ status, setStatus ] = useState( '' );
-	const [ isSyncing, setIsSyncing ] = useState( false );
-	const attachmentId = Number( attributes.id || 0 );
-	const canSyncMedia = useSelect(
-		( select ) =>
-			attachmentId
-				? select( 'core' ).canUser( 'update', 'media', attachmentId )
-				: false,
-		[ attachmentId ]
-	);
+const ImageMetadataSyncControl = ( { attributes = {}, setAttributes } ) => {
+    const [ status, setStatus ] = useState( '' );
+    const [ busy, setBusy ] = useState( '' );
+    const request = useRef( null );
+    const currentAttachment = useRef( 0 );
+    const attachmentId = Number( attributes.id || 0 );
+    currentAttachment.current = attachmentId;
+    const canSyncMedia = useSelect(
+        ( select ) => attachmentId ? select( 'core' ).canUser( 'update', 'media', attachmentId ) : false,
+        [ attachmentId ]
+    );
+    useEffect( () => {
+        setStatus( '' ); setBusy( '' );
+        return () => { request.current?.abort(); request.current = null; };
+    }, [ attachmentId ] );
 
-	if ( canSyncMedia !== true ) {
-		return null;
-	}
+    if ( canSyncMedia === false || !attachmentId ) return null;
 
-	const syncMetadata = async () => {
-		setIsSyncing( true );
-		setStatus( '' );
-
-		try {
-			await syncImageMetadataToMedia( attachmentId, attributes );
-			setStatus( 'success' );
-		} catch ( error ) {
-			setStatus( 'error' );
-		} finally {
-			setIsSyncing( false );
-		}
-	};
-
-	return (
-		<div style={ { marginTop: '16px' } }>
-			<Button
-				variant="secondary"
-				onClick={ syncMetadata }
-				isBusy={ isSyncing }
-				disabled={ isSyncing }
-			>
-				{ isSyncing
-					? __( 'Syncing…', 'folioblocks' )
-					: __( 'Sync to Media Library', 'folioblocks' ) }
-			</Button>
-			{ status === 'success' && (
-				<Notice status="success" isDismissible={ false }>
-					{ __(
-						'Metadata synced to the Media Library.',
-						'folioblocks'
-					) }
-				</Notice>
-			) }
-			{ status === 'error' && (
-				<Notice status="error" isDismissible={ false }>
-					{ __(
-						'Metadata could not be synced to the Media Library.',
-						'folioblocks'
-					) }
-				</Notice>
-			) }
-		</div>
-	);
+    const perform = async ( action ) => {
+        if ( canSyncMedia !== true || request.current ) return;
+        const controller = new AbortController();
+        request.current = controller;
+        setBusy( action ); setStatus( '' );
+        try {
+            if ( action === 'sync' ) {
+                await syncImageMetadataToMedia( attachmentId, attributes, { signal: controller.signal } );
+            } else {
+                const values = await refreshImageMetadataFromMedia( attachmentId, { signal: controller.signal } );
+                if ( controller.signal.aborted || currentAttachment.current !== attachmentId ) return;
+                setAttributes( values );
+            }
+            if ( !controller.signal.aborted && currentAttachment.current === attachmentId ) setStatus( action + '-success' );
+        } catch ( error ) {
+            if ( !controller.signal.aborted && currentAttachment.current === attachmentId ) setStatus( action + '-error' );
+        } finally {
+            if ( request.current === controller ) { request.current = null; setBusy( '' ); }
+        }
+    };
+    const messages = {
+        'sync-success': __( 'Metadata synced to the Media Library.', 'folioblocks' ),
+        'sync-error': __( 'Metadata could not be synced to the Media Library.', 'folioblocks' ),
+        'refresh-success': __( 'Image text and EXIF data refreshed from the Media Library.', 'folioblocks' ),
+        'refresh-error': __( 'Metadata could not be refreshed from the Media Library.', 'folioblocks' ),
+    };
+    return <div style={ { marginTop: '16px' } }>
+        <BaseControl help={ __( 'Sync saves this image’s title, caption, and alt text to the Media Library. Refresh replaces this block’s text and EXIF data with the latest Media Library values.', 'folioblocks' ) } __nextHasNoMarginBottom>
+        <div style={ { display: 'flex', gap: '8px' } }>
+            <Button variant="primary" title={ __( 'Sync to Media Library', 'folioblocks' ) } onClick={ () => perform( 'sync' ) } isBusy={ busy === 'sync' } disabled={ canSyncMedia !== true || !!busy } style={ { flex: '1 1 0', justifyContent: 'center', minWidth: 0 } }>
+                { busy === 'sync' ? __( 'Syncing…', 'folioblocks' ) : __( 'Sync', 'folioblocks' ) }
+            </Button>
+            <Button variant="secondary" title={ __( 'Refresh from Media Library', 'folioblocks' ) } onClick={ () => perform( 'refresh' ) } isBusy={ busy === 'refresh' } disabled={ canSyncMedia !== true || !!busy } style={ { flex: '1 1 0', justifyContent: 'center', minWidth: 0 } }>
+                { busy === 'refresh' ? __( 'Refreshing…', 'folioblocks' ) : __( 'Refresh', 'folioblocks' ) }
+            </Button>
+        </div>
+        </BaseControl>
+        { status && <Notice status={ status.endsWith( '-error' ) ? 'error' : 'success' } isDismissible={ false }>{ messages[ status ] }</Notice> }
+    </div>;
 };
 
 addFilter(

@@ -988,7 +988,7 @@ export default function Edit( {
 	}, [ effectiveResolution, sizes, src, setAttributes ] );
 
 	useEffect( () => {
-		if ( hasStoredExif || ! selectedMedia ) {
+		if ( attributes.exifRefreshedFromMedia || hasStoredExif || ! selectedMedia ) {
 			return;
 		}
 
@@ -1000,7 +1000,7 @@ export default function Edit( {
 		if ( exifAttributes ) {
 			setAttributes( exifAttributes );
 		}
-	}, [ hasStoredExif, selectedMedia, setAttributes ] );
+	}, [ attributes.exifRefreshedFromMedia, hasStoredExif, selectedMedia, setAttributes ] );
 
 	const onSelectImage = ( media ) => {
 		if ( ! media?.id ) {
@@ -1021,6 +1021,7 @@ export default function Edit( {
 			src: media.url || media.source_url || '',
 			alt: media.alt || '',
 			title: media.title || '',
+            exifRefreshedFromMedia: false,
 			caption: media.caption || '',
 			width,
 			height,
@@ -1217,7 +1218,7 @@ export default function Edit( {
 									{ applyFilters(
 										'folioBlocks.imageBlock.metadataSyncControl',
 										null,
-										{ attributes }
+										{ attributes, setAttributes }
 									) }
 								</>
 							) }
@@ -1465,13 +1466,13 @@ export default function Edit( {
 									setAttributes={ setAttributes }
 								/>
 								{ applyFilters(
-									'folioBlocks.imageBlock.metadataSyncControl',
-									null,
-									{ attributes }
-								) }
-								{ applyFilters(
 									'folioBlocks.imageBlock.cameraMetadataControls',
 									imageProFeatureNotice( 'exif' ),
+									{ attributes, setAttributes }
+								) }
+								{ applyFilters(
+									'folioBlocks.imageBlock.metadataSyncControl',
+									null,
 									{ attributes, setAttributes }
 								) }
 							</PanelBody>

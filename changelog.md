@@ -4,6 +4,13 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0] - 2026-10-28
+### Added
+- Added a Refresh button to Image Block to retrieve the latest title, caption, alternative text, and EXIF data from the Media Library without changing the image or its settings.
+
+### Changed
+- Placed Sync and Refresh side by side beneath EXIF data, with Sync as the primary action and shared helper text explaining both directions. Buttons appear immediately while Media Library editing permissions are checked and enable once permission is confirmed.
+
 ## [1.6.0] - 2026-10-27
 ### Added
 - Added Play Video in Lightbox to Image Block and Carousel, Filmstrip, Grid, Justified, Modular, and Masonry galleries. Images remain the thumbnails, with individual video URLs supporting existing video providers and self-hosted videos.

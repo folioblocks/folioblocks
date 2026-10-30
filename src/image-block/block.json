@@ -36,6 +36,7 @@
 		}
 	},
 	"attributes": {
+        "exifRefreshedFromMedia": { "type": "boolean", "default": false },
         "videoLightboxUrl": { "type": "string", "default": "" },
         "globalDefaultsApplied": { "type": "boolean", "default": false },
 		"preview": {
