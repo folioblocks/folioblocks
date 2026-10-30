@@ -8,6 +8,7 @@ import {
 	parsePoFile,
 	projectRoot,
 	textDomain,
+	writeCatalog,
 } from './shared.mjs';
 
 const poPath = process.argv[2];
@@ -50,7 +51,8 @@ ensureDirectory(languageDirectory);
 for (const fileName of fs.readdirSync(languageDirectory)) {
 	if (
 		fileName.startsWith(`${textDomain}-${locale}-`) &&
-		fileName.endsWith('.json')
+		fileName.endsWith('.json') &&
+		fileName !== `${textDomain}-${locale}-folioblocks-i18n-loader.json`
 	) {
 		fs.unlinkSync(path.join(languageDirectory, fileName));
 	}
@@ -91,7 +93,7 @@ if (Object.keys(filteredLocaleData).length > 1) {
 		languageDirectory,
 		`${textDomain}-${locale}-folioblocks-i18n-loader.json`
 	);
-	fs.writeFileSync(
+	writeCatalog(
 		outputPath,
 		JSON.stringify(
 			{

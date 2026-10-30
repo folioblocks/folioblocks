@@ -5,7 +5,7 @@ import {
 	collectMessages,
 	loadLocaleMap,
 	projectRoot,
-	writeFile,
+	writeCatalog,
 } from './shared.mjs';
 
 const locale = process.argv[2];
@@ -21,7 +21,7 @@ validateTranslations(messages, translations, locale);
 
 const outputPath = path.join(projectRoot, 'languages', `${'folioblocks'}-${locale}.po`);
 
-writeFile(
+writeCatalog(
 	outputPath,
 	buildPot(messages, {
 		language: locale,

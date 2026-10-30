@@ -565,3 +565,17 @@ export function writeFile(filePath, content) {
 	ensureDirectory(path.dirname(filePath));
 	fs.writeFileSync(filePath, content, "utf8");
 }
+
+// Catalog dates describe content changes, not the last release-check run.
+export function writeCatalog(filePath, content) {
+	const withoutDates = (value) => value
+		.replace(/^"(?:POT-Creation-Date|PO-Revision-Date): .*"$/gm, '')
+		.replace(/^  "translation-revision-date": .*$/gm, '');
+	if (fs.existsSync(filePath)) {
+		const existing = fs.readFileSync(filePath, "utf8");
+		if (withoutDates(existing) === withoutDates(content)) {
+			return;
+		}
+	}
+	writeFile(filePath, content);
+}

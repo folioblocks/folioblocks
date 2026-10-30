@@ -12,6 +12,7 @@ import {
 	getPluralForms,
 	loadLocaleMap,
 	parsePoFile,
+	writeCatalog,
 } from './shared.mjs';
 import { locales, validateTranslations } from './check.mjs';
 
@@ -91,4 +92,21 @@ test('all supported locales cover every current source message with valid placeh
 	}
 	assert.equal(getPluralForms('fr_FR'), 'nplurals=2; plural=(n > 1);');
 	assert.equal(getPluralForms('sv_SE'), 'nplurals=2; plural=(n != 1);');
+});
+
+
+test('catalog regeneration preserves dates until catalog content changes', (t) => {
+	for (const [before, after] of [
+		['"POT-Creation-Date: old"\n"PO-Revision-Date: old"\nmsgstr "Save"',
+		 '"POT-Creation-Date: new"\n"PO-Revision-Date: new"\nmsgstr "Save"'],
+		['{\n  "translation-revision-date": "old",\n  "message": "Save"\n}',
+		 '{\n  "translation-revision-date": "new",\n  "message": "Save"\n}'],
+	]) {
+		const file = temporaryFile(t, before);
+		writeCatalog(file, after);
+		assert.equal(fs.readFileSync(file, 'utf8'), before);
+		const changed = after.replace('Save', 'Saved');
+		writeCatalog(file, changed);
+		assert.equal(fs.readFileSync(file, 'utf8'), changed);
+	}
 });
