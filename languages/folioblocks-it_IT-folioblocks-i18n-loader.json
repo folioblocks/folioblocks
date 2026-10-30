@@ -1,5 +1,5 @@
 {
-  "translation-revision-date": "2026-08-12T13:59:18.824Z",
+  "translation-revision-date": "2026-10-30T09:27:44.379Z",
   "generator": "FolioBlocks custom i18n tooling",
   "domain": "messages",
   "locale_data": {
@@ -9,6 +9,18 @@
         "lang": "it_IT",
         "plural-forms": "nplurals=2; plural=(n != 1);"
       },
+      "%d stars": [
+        "%d stelle"
+      ],
+      ". Note: Some provider videos may not work due to privacy settings.": [
+        ". Nota: alcuni video potrebbero non funzionare a causa delle impostazioni di riservatezza."
+      ],
+      "1 star": [
+        "1 stella"
+      ],
+      "A client proofing session is in progress for this page. Avoid updating this page until the client submits their selections.": [
+        "È in corso una sessione di selezione immagini su questa pagina. Evita di aggiornare la pagina finché il cliente non invia le sue selezioni."
+      ],
       "Activate and set your overlay style.": [
         "Attiva e imposta lo stile dell’overlay."
       ],
@@ -39,14 +51,23 @@
       "Add Videos": [
         "Aggiungi video"
       ],
+      "Add a page-level control that discourages visitors from copying displayed media.": [
+        "Aggiungi un controllo a livello di pagina che scoraggia la copia dei media visualizzati."
+      ],
       "Add a visitor-facing filter bar.": [
         "Aggiungi una barra filtro rivolta ai visitatori."
       ],
       "Add content…": [
         "Aggiungi contenuto…"
       ],
+      "Add first video. Upload, select from media library, or insert from URL.": [
+        "Aggiungi il primo video. Carica, seleziona dalla Libreria media o inserisci da URL."
+      ],
       "Add image caption.": [
         "Aggiungi una didascalia all'immagine."
+      ],
+      "Add page-level controls for protecting and loading your media.": [
+        "Aggiungi controlli a livello di pagina per proteggere e caricare i tuoi media."
       ],
       "Add product and cart actions.": [
         "Aggiungi azioni sul prodotto e sul carrello."
@@ -81,14 +102,23 @@
       "Adjust the height (%1$s) on %2$s.": [
         "Regola l'altezza (%1$s) su %2$s."
       ],
+      "Adjust the horizontal focal point (%) for this screen size.": [
+        "Regola il punto focale orizzontale (%) per questa dimensione dello schermo."
+      ],
       "Adjust the horizontal focal point per device.": [
         "Regola il punto focale orizzontale per dispositivo."
+      ],
+      "Adjust the vertical focal point (%) for this screen size.": [
+        "Regola il punto focale verticale (%) per questa dimensione dello schermo."
       ],
       "Adjust the vertical focal point per device.": [
         "Regola il punto focale verticale per dispositivo."
       ],
       "Adjust vertical focal points per device.": [
         "Regola i punti focali verticali per dispositivo."
+      ],
+      "Advanced": [
+        "Avanzate"
       ],
       "Advanced Click Actions": [
         "Azioni clic avanzate"
@@ -108,6 +138,15 @@
       "All": [
         "Tutti"
       ],
+      "All Images": [
+        "Tutte le immagini"
+      ],
+      "Allows video to open in a Lightbox while editing.": [
+        "Consente di aprire il video in una lightbox durante la modifica."
+      ],
+      "Allows videos to open in a Lightbox while editing.": [
+        "Consente di aprire i video in una lightbox durante la modifica."
+      ],
       "Alternative Text": [
         "Testo alternativo"
       ],
@@ -125,6 +164,12 @@
       ],
       "Apply image drop shadows.": [
         "Applicare ombre esterne all'immagine."
+      ],
+      "Apply one of your saved watermarks to this block.": [
+        "Applica una delle filigrane salvate a questo blocco."
+      ],
+      "Apply saved watermark overlays to gallery images and lightbox previews.": [
+        "Applica filigrane salvate alle immagini della galleria e alle anteprime della lightbox."
       ],
       "Apply thumbnail drop shadows.": [
         "Applicare ombre esterne alle miniature."
@@ -147,14 +192,23 @@
       "Automatically advance to the next image in the gallery.": [
         "Avanza automaticamente all'immagine successiva nella galleria."
       ],
+      "Automatically loop the video for continous play.": [
+        "Ripeti automaticamente il video per una riproduzione continua."
+      ],
       "Automatically shuffle gallery images.": [
         "Mescola automaticamente le immagini della galleria."
       ],
       "Autoplay Speed (seconds)": [
         "Velocità autoplay (secondi)"
       ],
+      "Back": [
+        "Indietro"
+      ],
       "Background": [
         "Sfondo"
+      ],
+      "Background & Border": [
+        "Sfondo e bordo"
       ],
       "Background Video Overlay Styles": [
         "Stili overlay del video di sfondo"
@@ -171,8 +225,17 @@
       "Before Image": [
         "Immagine prima"
       ],
+      "Black": [
+        "Nero"
+      ],
+      "Bluesky": [
+        "Bluesky"
+      ],
       "Blur Overlay": [
         "Overlay sfocato"
+      ],
+      "Bold": [
+        "Grassetto"
       ],
       "Border Color": [
         "Colore del bordo"
@@ -185,6 +248,12 @@
       ],
       "Bottom": [
         "In basso"
+      ],
+      "Bottom Gradient Overlay": [
+        "Sovrapposizione con sfumatura inferiore"
+      ],
+      "Button Gap": [
+        "Spaziatura pulsanti"
       ],
       "Camera Model": [
         "Modello fotocamera"
@@ -225,6 +294,9 @@
       "Change the shape of the Loupe.": [
         "Cambia la forma della Loupe."
       ],
+      "Chip Gradient Overlay": [
+        "Sovrapposizione a etichetta sfumata"
+      ],
       "Chip Overlay": [
         "Overlay etichetta"
       ],
@@ -240,8 +312,14 @@
       "Choose a light or dark lightbox background.": [
         "Scegli uno sfondo lightbox chiaro o scuro."
       ],
+      "Choose a light or dark presentation for your filmstrip.": [
+        "Scegli una presentazione chiara o scura per la pellicola."
+      ],
       "Choose any spacing from 0 to 50 pixels.": [
         "Scegli qualsiasi spaziatura compresa tra 0 e 50 pixel."
+      ],
+      "Choose from saved watermarks.": [
+        "Scegli tra le filigrane salvate."
       ],
       "Choose gradient, blur, color, or chip hover styles.": [
         "Scegli gli stili sfumatura, sfocatura, colore o chip al passaggio del mouse."
@@ -249,17 +327,44 @@
       "Choose gradient, blur, or color hover styles.": [
         "Scegli gli stili sfumatura, sfocatura o colore al passaggio del mouse."
       ],
+      "Choose how overlay content enters each thumbnail.": [
+        "Scegli come il contenuto in sovrapposizione entra in ogni miniatura."
+      ],
+      "Choose how overlay content enters the thumbnail.": [
+        "Scegli come il contenuto in sovrapposizione entra nella miniatura."
+      ],
+      "Choose how the image itself moves or changes on hover.": [
+        "Scegli come l’immagine si muove o cambia al passaggio del mouse."
+      ],
+      "Choose how the overlay enters the image.": [
+        "Scegli come la sovrapposizione entra nell’immagine."
+      ],
+      "Choose how the video thumbnail moves or changes on hover.": [
+        "Scegli come la miniatura del video si muove o cambia al passaggio del mouse."
+      ],
+      "Choose how video thumbnails move or change on hover.": [
+        "Scegli come le miniature video si muovono o cambiano al passaggio del mouse."
+      ],
       "Choose label placement for each slider orientation.": [
         "Scegli il posizionamento dell'etichetta per ciascun orientamento del dispositivo di scorrimento."
       ],
       "Choose label text and background colors.": [
         "Scegli il testo dell'etichetta e i colori dello sfondo."
       ],
+      "Choose light or dark styling for proofing filters, flags, and comments.": [
+        "Scegli uno stile chiaro o scuro per filtri, contrassegni e commenti della selezione immagini."
+      ],
+      "Choose the gallery layout clients will use to proof these images.": [
+        "Scegli il layout della galleria che i clienti useranno per selezionare queste immagini."
+      ],
       "Choose the hover overlay style.": [
         "Scegli lo stile dell'overlay al passaggio del mouse."
       ],
       "Choose what appears below images in the lightbox.": [
         "Scegli cosa appare sotto le immagini nella Lightbox."
+      ],
+      "Choose what appears over the video thumbnail.": [
+        "Scegli cosa appare sulla miniatura del video."
       ],
       "Choose what appears when hovering over images.": [
         "Scegli cosa appare al passaggio del mouse sulle immagini."
@@ -278,6 +383,9 @@
       ],
       "Choose what happens when visitors click this image.": [
         "Scegli cosa succede quando i visitatori fanno clic su questa immagine."
+      ],
+      "Choose what happens when visitors interact with gallery images.": [
+        "Scegli cosa accade quando i visitatori interagiscono con le immagini della galleria."
       ],
       "Choose what happens when visitors use the WooCommerce action.": [
         "Scegli cosa succede quando i visitatori usano l’azione WooCommerce."
@@ -300,14 +408,38 @@
       "Choose where the thumbnail strip appears.": [
         "Scegli dove appare la striscia delle miniature."
       ],
+      "Choose where this watermark should appear.": [
+        "Scegli dove mostrare questa filigrana."
+      ],
       "Choose whether the link is attached to each image or an icon.": [
         "Scegli se il link è collegato a ogni immagine o a un’icona."
       ],
       "Choose whether the link is attached to the image or an icon.": [
         "Scegli se il link è collegato all’immagine o a un’icona."
       ],
+      "Choose whether the slider moves left-to-right or top-to-bottom.": [
+        "Scegli se lo slider si muove da sinistra a destra o dall’alto in basso."
+      ],
+      "Choose which gallery block is used for layout. Columns, gap, row height, and resolution are edited on that nested gallery.": [
+        "Scegli il blocco galleria da usare per il layout. Colonne, spaziatura, altezza delle righe e risoluzione si modificano nella galleria nidificata."
+      ],
       "Circle": [
         "Cerchio"
+      ],
+      "Clear": [
+        "Cancella"
+      ],
+      "Client Email Address": [
+        "Indirizzo email del cliente"
+      ],
+      "Client email": [
+        "Email del cliente"
+      ],
+      "Client rating: %d/5": [
+        "Valutazione del cliente: %d/5"
+      ],
+      "Client star rating": [
+        "Valutazione a stelle del cliente"
       ],
       "Close lightbox": [
         "Chiudi Lightbox"
@@ -315,17 +447,35 @@
       "Collapse layout on Mobile": [
         "Comprimi layout su mobile"
       ],
+      "Color": [
+        "Colore"
+      ],
       "Color Mode": [
         "Modalità colore"
       ],
       "Color Overlay": [
         "Overlay colore"
       ],
+      "Colors": [
+        "Colori"
+      ],
       "Columns": [
         "Colonne"
       ],
+      "Comment": [
+        "Commento"
+      ],
+      "Comment on image": [
+        "Commenta l’immagine"
+      ],
+      "Commented": [
+        "Commentata"
+      ],
       "Configure playback timing and behavior.": [
         "Configura i tempi e il comportamento della riproduzione."
+      ],
+      "Connect videos directly to products in your store.": [
+        "Collega i video direttamente ai prodotti del tuo negozio."
       ],
       "Control filter-bar typography.": [
         "Controlla la tipografia della barra dei filtri."
@@ -333,14 +483,38 @@
       "Controls Alignment": [
         "Allineamento controlli"
       ],
+      "Copy Link": [
+        "Copia link"
+      ],
       "Create a brighter or more cinematic presentation.": [
         "Crea una presentazione più brillante o cinematografica."
+      ],
+      "Create a continuously moving, hands-free gallery experience.": [
+        "Crea una galleria in movimento continuo senza interventi manuali."
+      ],
+      "Create a more immersive and automated filmstrip experience.": [
+        "Crea una pellicola più coinvolgente e automatizzata."
+      ],
+      "Create a richer, more polished viewing experience for your video.": [
+        "Crea un’esperienza di visione più ricca e curata per il tuo video."
+      ],
+      "Create a richer, more polished viewing experience for your videos.": [
+        "Crea un’esperienza di visione più ricca e curata per i tuoi video."
+      ],
+      "Create distinctive interactions for your video thumbnails.": [
+        "Crea interazioni uniche per le miniature dei tuoi video."
+      ],
+      "Create richer interactions and reveal useful image information.": [
+        "Crea interazioni più ricche e mostra informazioni utili sulle immagini."
       ],
       "Custom URL": [
         "URL personalizzato"
       ],
       "Customize border colors and widths.": [
         "Personalizza i colori e le larghezze dei bordi."
+      ],
+      "Customize carousel navigation to complement your gallery.": [
+        "Personalizza la navigazione del carosello per adattarla alla tua galleria."
       ],
       "Customize control colors and appearance.": [
         "Personalizza i colori e l'aspetto dei controlli."
@@ -351,6 +525,9 @@
       "Customize filter-bar typography and colors.": [
         "Personalizza la tipografia e i colori della barra dei filtri."
       ],
+      "Customize lightbox appearance and displayed information.": [
+        "Personalizza l’aspetto della lightbox e le informazioni visualizzate."
+      ],
       "Customize overlay and play-button colors.": [
         "Personalizza i colori della sovrapposizione e dei pulsanti di riproduzione."
       ],
@@ -359,6 +536,9 @@
       ],
       "Customize the information shown in the lightbox.": [
         "Personalizza le informazioni mostrate nella lightbox."
+      ],
+      "Customize the magnifying loupe to complement your image.": [
+        "Personalizza la lente d’ingrandimento per adattarla alla tua immagine."
       ],
       "Customize the slider handle and line color.": [
         "Personalizza la maniglia del dispositivo di scorrimento e il colore della linea."
@@ -381,17 +561,32 @@
       "Default Product Link Behavior": [
         "Comportamento predefinito del link prodotto"
       ],
+      "Default Watermark": [
+        "Filigrana predefinita"
+      ],
+      "Desaturate": [
+        "Desatura"
+      ],
+      "Describe the purpose of the image. Leave empty if decorative.": [
+        "Descrivi lo scopo dell’immagine. Lascia vuoto se decorativa."
+      ],
       "Description": [
         "Descrizione"
       ],
       "Desktop": [
         "Desktop"
       ],
+      "Disable Drag To Save": [
+        "Disabilita trascinamento per salvare"
+      ],
       "Disable Right-Click": [
         "Disabilita clic destro"
       ],
       "Disable Right-Click on Page": [
         "Disabilita clic destro sulla pagina"
+      ],
+      "Disable background video is on mobile and display poster image.": [
+        "Disabilita il video di sfondo sui dispositivi mobili e mostra l’immagine di copertina."
       ],
       "Disable on Mobile": [
         "Disabilita su mobile"
@@ -417,8 +612,14 @@
       "Display Link Target Icon": [
         "Mostra icona di destinazione del link"
       ],
+      "Display Watermark On": [
+        "Mostra filigrana su"
+      ],
       "Display camera details in overlays and lightboxes.": [
         "Visualizza i dettagli della telecamera in sovrapposizioni e lightbox."
+      ],
+      "Display overlay content at all times instead of on hover.": [
+        "Mostra sempre il contenuto in sovrapposizione anziché solo al passaggio del mouse."
       ],
       "Display product information with videos.": [
         "Visualizza le informazioni sul prodotto con i video."
@@ -426,14 +627,32 @@
       "Display the video title and description.": [
         "Visualizza il titolo e la descrizione del video."
       ],
+      "Display titles, captions, categories, products, or EXIF data.": [
+        "Mostra titoli, didascalie, categorie, prodotti o dati EXIF."
+      ],
       "Display video titles and descriptions.": [
         "Visualizza titoli e descrizioni dei video."
+      ],
+      "Display watermarks on gallery images, lightbox images, or both.": [
+        "Mostra filigrane sulle immagini della galleria, della lightbox o su entrambe."
       ],
       "Displays the overlay content in a compact chip above the image.": [
         "Mostra il contenuto dell’overlay in un’etichetta compatta sopra l’immagine."
       ],
+      "Displays the overlay content in a compact chip with a gradient background.": [
+        "Mostra il contenuto in sovrapposizione in un’etichetta compatta con sfondo sfumato."
+      ],
+      "Displays the overlay content over a gradient background set in Styles panel.": [
+        "Mostra il contenuto in sovrapposizione su uno sfondo sfumato impostato nel pannello Stili."
+      ],
+      "Displays the overlay content over a solid background color set in Styles panel.": [
+        "Mostra il contenuto in sovrapposizione su uno sfondo a tinta unita impostato nel pannello Stili."
+      ],
       "Displays the overlay content over a subtle gradient at the bottom of the image.": [
         "Mostra il contenuto dell’overlay sopra una sfumatura delicata nella parte inferiore dell’immagine."
+      ],
+      "Done": [
+        "Fine"
       ],
       "Download Icon": [
         "Icona di download"
@@ -451,7 +670,7 @@
         "Drammatico"
       ],
       "Drop Shadow": [
-        "Sfalsa ombra"
+        "Ombra"
       ],
       "E-Commerce Settings": [
         "Impostazioni e-commerce"
@@ -477,17 +696,29 @@
       "Elevated": [
         "Elevato"
       ],
+      "Email site admin on Submit": [
+        "Invia un’email all’amministratore del sito all’invio"
+      ],
       "Enable Autoplay": [
         "Abilita autoplay"
       ],
       "Enable Carousel Controls": [
         "Abilita controlli Carousel"
       ],
+      "Enable Color Flags": [
+        "Abilita contrassegni colorati"
+      ],
+      "Enable Comments": [
+        "Abilita commenti"
+      ],
       "Enable Full-Screen Mode": [
         "Abilita modalità schermo intero"
       ],
       "Enable Full-Screen Mode for the gallery on the frontend.": [
         "Abilita la modalità schermo intero per la galleria nel frontend."
+      ],
+      "Enable Hearts": [
+        "Abilita cuori"
       ],
       "Enable Image Downloads": [
         "Abilita download immagini"
@@ -501,11 +732,20 @@
       "Enable Lightbox": [
         "Abilita Lightbox"
       ],
+      "Enable Lightbox Zoom": [
+        "Abilita zoom della lightbox"
+      ],
       "Enable Lightbox in Editor": [
         "Abilita Lightbox nell'editor"
       ],
+      "Enable Star Ratings": [
+        "Abilita valutazioni a stelle"
+      ],
       "Enable Video Filtering": [
         "Abilita filtro video"
+      ],
+      "Enable Watermarking": [
+        "Abilita filigrana"
       ],
       "Enable WooCommerce Integration": [
         "Abilita integrazione WooCommerce"
@@ -513,17 +753,50 @@
       "Enable image filtering with categories.": [
         "Abilita il filtro immagini con categorie."
       ],
+      "Enable the lightbox to watermark enlarged lightbox images.": [
+        "Abilita la lightbox per applicare la filigrana alle immagini ingrandite."
+      ],
+      "Enable video filtering with categories.": [
+        "Abilita il filtro dei video per categorie."
+      ],
+      "Enables lazy loading of Video Gallery thumbnails.": [
+        "Abilita il caricamento differito delle miniature della galleria video."
+      ],
       "Enables lazy loading of gallery images.": [
         "Abilita il lazy loading delle immagini della galleria."
       ],
       "Enables lazy loading of image.": [
         "Abilita il lazy loading dell'immagine."
       ],
+      "Enter a password to protect this page.": [
+        "Inserisci una password per proteggere questa pagina."
+      ],
+      "Enter a password to protect this post.": [
+        "Inserisci una password per proteggere questo articolo."
+      ],
       "Enter a valid URL beginning with http:// or https://.": [
         "Inserisci un URL valido che inizi con http:// o https://."
       ],
+      "Enter a valid Vimeo URL beginning with http:// or https://.": [
+        "Inserisci un URL Vimeo valido che inizi con http:// o https://."
+      ],
+      "Enter a valid YouTube, Vimeo, or self-hosted video URL. Bunny Stream, Cloudflare Stream, DailyMotion, Livid, Loom, VideoPress, and Wistia require FolioBlocks Pro.": [
+        "Inserisci un URL valido di YouTube, Vimeo o di un video ospitato sul tuo sito. Bunny Stream, Cloudflare Stream, DailyMotion, Livid, Loom, VideoPress e Wistia richiedono FolioBlocks Pro."
+      ],
+      "Enter a valid client email address before creating the proofing gallery.": [
+        "Inserisci un indirizzo email valido del cliente prima di creare la galleria di selezione."
+      ],
+      "Extra Bold": [
+        "Extra grassetto"
+      ],
+      "Extra Light": [
+        "Extra leggero"
+      ],
       "Facebook": [
         "Facebook"
+      ],
+      "Fade": [
+        "Dissolvenza"
       ],
       "Fade Overlay": [
         "Overlay in dissolvenza"
@@ -555,6 +828,21 @@
       "Filter Categories": [
         "Categorie filtro"
       ],
+      "Filter by star rating": [
+        "Filtra per valutazione a stelle"
+      ],
+      "Fine-tune gallery spacing independently for every screen size.": [
+        "Regola la spaziatura della galleria in modo indipendente per ogni dimensione dello schermo."
+      ],
+      "Fine-tune how visitors explore your before and after images.": [
+        "Regola il modo in cui i visitatori esplorano le immagini prima e dopo."
+      ],
+      "Fine-tune the background video composition for every screen size.": [
+        "Regola la composizione del video di sfondo per ogni dimensione dello schermo."
+      ],
+      "Flag mode": [
+        "Modalità contrassegni"
+      ],
       "Focal Length": [
         "Lunghezza focale"
       ],
@@ -563,6 +851,12 @@
       ],
       "Focal Point Y (Up - Down)": [
         "Punto focale Y (alto - basso)"
+      ],
+      "FolioBlocks Page Settings": [
+        "Impostazioni della pagina FolioBlocks"
+      ],
+      "FolioBlocks Post Settings": [
+        "Impostazioni articolo FolioBlocks"
       ],
       "Folioblocks loading": [
         "Caricamento di Folioblocks"
@@ -603,14 +897,29 @@
       "Gallery Image Styles": [
         "Stili immagini galleria"
       ],
+      "Gallery Images": [
+        "Immagini della galleria"
+      ],
+      "Gallery Images & Lightbox": [
+        "Immagini della galleria e lightbox"
+      ],
+      "Gallery Password": [
+        "Password della galleria"
+      ],
       "Gallery Styles": [
         "Stili galleria"
+      ],
+      "Gallery Type": [
+        "Tipo di galleria"
+      ],
+      "Gallery password": [
+        "Password della galleria"
       ],
       "Gallery thumbnail": [
         "Miniatura galleria"
       ],
       "Gap Between Items": [
-        "Spazio tra gli elementi"
+        "Spaziatura tra elementi"
       ],
       "General Gallery Settings": [
         "Impostazioni generali galleria"
@@ -618,14 +927,53 @@
       "Get FolioBlocks Pro": [
         "Ottieni FolioBlocks Pro"
       ],
+      "Give every gallery image a polished, consistent appearance.": [
+        "Dai a ogni immagine della galleria un aspetto curato e coerente."
+      ],
+      "Give every video thumbnail a polished, consistent appearance.": [
+        "Dai a ogni miniatura video un aspetto curato e coerente."
+      ],
+      "Give individual videos their own hover appearance and behavior.": [
+        "Assegna ai singoli video un aspetto e comportamento al passaggio del mouse personalizzati."
+      ],
+      "Give this image different behavior from the rest of its gallery.": [
+        "Assegna a questa immagine un comportamento diverso dal resto della galleria."
+      ],
+      "Glare": [
+        "Bagliore"
+      ],
+      "Gradient": [
+        "Sfumatura"
+      ],
+      "Gradient Overlay": [
+        "Sovrapposizione sfumata"
+      ],
+      "Green": [
+        "Verde"
+      ],
+      "Green Flag": [
+        "Contrassegno verde"
+      ],
+      "Grid": [
+        "Griglia"
+      ],
       "Grid Gallery": [
         "Galleria griglia"
       ],
       "Grid Gallery Settings": [
         "Impostazioni di Grid Gallery"
       ],
+      "Hearted": [
+        "Preferita"
+      ],
       "Height": [
         "Altezza"
+      ],
+      "Help visitors quickly find the images that interest them.": [
+        "Aiuta i visitatori a trovare rapidamente le immagini che li interessano."
+      ],
+      "Help visitors quickly find the videos that interest them.": [
+        "Aiuta i visitatori a trovare rapidamente i video che li interessano."
       ],
       "Hide EXIF fields that do not have a value.": [
         "Nascondi i campi EXIF senza valore."
@@ -633,8 +981,14 @@
       "Hide EXIF rows that do not have a value.": [
         "Nascondi le righe EXIF senza valore."
       ],
+      "Hide Password": [
+        "Nascondi password"
+      ],
       "Hide Unknown EXIF Fields": [
         "Nascondi campi EXIF sconosciuti"
+      ],
+      "Highlight individual images with unique interactions.": [
+        "Metti in risalto singole immagini con interazioni uniche."
       ],
       "Horizontal": [
         "Orizzontale"
@@ -642,8 +996,14 @@
       "Horizontal Images": [
         "Immagini orizzontali"
       ],
+      "Horizontal Padding": [
+        "Spaziatura interna orizzontale"
+      ],
       "Hover": [
         "Al passaggio del mouse"
+      ],
+      "Hover Effect": [
+        "Effetto al passaggio del mouse"
       ],
       "ISO": [
         "ISO"
@@ -690,6 +1050,12 @@
       "Image Title": [
         "Titolo immagine"
       ],
+      "Image has per-image overrides": [
+        "L’immagine ha impostazioni individuali"
+      ],
+      "Image text and EXIF data refreshed from the Media Library.": [
+        "Testo dell’immagine e dati EXIF aggiornati dalla Libreria media."
+      ],
       "Images without a URL will not be linked.": [
         "Le immagini senza URL non verranno collegate."
       ],
@@ -705,6 +1071,12 @@
       "Inherit Gallery": [
         "Eredita Galleria"
       ],
+      "Italic": [
+        "Corsivo"
+      ],
+      "Justified": [
+        "Giustificata"
+      ],
       "Justified Gallery": [
         "Galleria giustificata"
       ],
@@ -716,6 +1088,9 @@
       ],
       "Keep technical information attached to the image.": [
         "Mantieni le informazioni tecniche allegate all'immagine."
+      ],
+      "Keep watermark styling managed globally.": [
+        "Gestisci lo stile della filigrana a livello globale."
       ],
       "Label Background Color": [
         "Colore di sfondo etichetta"
@@ -729,6 +1104,12 @@
       "Large": [
         "Grande"
       ],
+      "Layout": [
+        "Layout"
+      ],
+      "Lazy load compatible FolioBlocks images and thumbnails on this page.": [
+        "Immagini e miniature FolioBlocks compatibili con il caricamento lento in questa pagina."
+      ],
       "Lazy-load compatible images.": [
         "Immagini compatibili con il caricamento lento."
       ],
@@ -741,11 +1122,23 @@
       "Left": [
         "Sinistra"
       ],
+      "Let clients rate images from one to five stars.": [
+        "Consenti ai clienti di valutare le immagini da una a cinque stelle."
+      ],
+      "Let visitors zoom into lightbox images.": [
+        "Consenti ai visitatori di ingrandire le immagini nella lightbox."
+      ],
+      "Let visitors zoom into this image in the lightbox.": [
+        "Consenti ai visitatori di ingrandire questa immagine nella lightbox."
+      ],
       "Letter case": [
         "Maiuscole/minuscole"
       ],
       "Letter spacing": [
         "Spaziatura lettere"
+      ],
+      "Lift": [
+        "Sollevamento"
       ],
       "Light": [
         "Chiaro"
@@ -758,6 +1151,9 @@
       ],
       "Lightbox Content": [
         "Contenuto Lightbox"
+      ],
+      "Like image": [
+        "Mi piace sull’immagine"
       ],
       "Line Height": [
         "Altezza riga"
@@ -780,8 +1176,17 @@
       "Link Target Icon Colors": [
         "Colori icona destinazione link"
       ],
+      "Link gallery videos to WooCommerce products.": [
+        "Collega i video della galleria a prodotti WooCommerce."
+      ],
       "Link this video to a WooCommerce product.": [
         "Collega questo video a un prodotto WooCommerce."
+      ],
+      "Link to a supported video provider or select a <video>self-hosted video</video>. The lightbox will be unavailable until a video is selected.": [
+        "Collega un servizio video supportato o seleziona un <video>video ospitato sul tuo sito</video>. La lightbox non sarà disponibile finché non viene selezionato un video."
+      ],
+      "Link to a supported video provider or select a self-hosted video. The lightbox will be unavailable until a video is selected.": [
+        "Collega un servizio video supportato o seleziona un video ospitato sul tuo sito. La lightbox non sarà disponibile finché non viene selezionato un video."
       ],
       "Link to media files, custom URLs, Pages, or Posts.": [
         "Collegamento a file multimediali, URL personalizzati, pagine o post."
@@ -794,6 +1199,9 @@
       ],
       "Linked WooCommerce Product": [
         "Prodotto WooCommerce collegato"
+      ],
+      "LinkedIn": [
+        "LinkedIn"
       ],
       "Loop": [
         "Ripeti"
@@ -828,20 +1236,35 @@
       "Main Image Resolution": [
         "Risoluzione immagine principale"
       ],
+      "Masonry": [
+        "Masonry"
+      ],
       "Masonry Gallery": [
         "Galleria masonry"
       ],
       "Masonry Gallery Settings": [
         "Impostazioni di Masonry Gallery"
       ],
+      "Match the comparison controls to your site and images.": [
+        "Adatta i controlli di confronto al tuo sito e alle tue immagini."
+      ],
       "Match the filmstrip controls to your site.": [
         "Abbina i controlli della pellicola al tuo sito."
+      ],
+      "Match the filter bar to the design of your site.": [
+        "Adatta la barra dei filtri al design del tuo sito."
+      ],
+      "Match the gallery filter bar to the design of your site.": [
+        "Adatta la barra dei filtri della galleria al design del tuo sito."
       ],
       "Media Protection": [
         "Protezione dei media"
       ],
       "Medium": [
         "Medio"
+      ],
+      "Metadata could not be refreshed from the Media Library.": [
+        "Impossibile aggiornare i metadati dalla Libreria media."
       ],
       "Metadata could not be synced to the Media Library.": [
         "Impossibile sincronizzare i metadati con il Catalogo multimediale."
@@ -852,6 +1275,9 @@
       "Mobile": [
         "Mobile"
       ],
+      "Next": [
+        "Avanti"
+      ],
       "Next image": [
         "Immagine successiva"
       ],
@@ -860,6 +1286,12 @@
       ],
       "No Thumbnail Selected": [
         "Nessuna miniatura selezionata"
+      ],
+      "No colors are enabled in this palette. Choose another palette or enable colors in Settings.": [
+        "Nessun colore è abilitato in questa tavolozza. Scegli un’altra tavolozza o abilita i colori nelle Impostazioni."
+      ],
+      "No saved watermarks are available. Create and save a watermark in FolioBlocks Settings before enabling watermarking.": [
+        "Nessuna filigrana salvata disponibile. Crea e salva una filigrana nelle Impostazioni di FolioBlocks prima di abilitarla."
       ],
       "No theme fonts found. Add font families in theme.json or Global Styles.": [
         "Nessun font del tema trovato. Aggiungi famiglie di font in theme.json o negli Stili globali."
@@ -906,11 +1338,26 @@
       "Open the linked page or post in a new browser tab.": [
         "Apri la pagina o l’articolo collegato in una nuova scheda del browser."
       ],
+      "Orange": [
+        "Arancione"
+      ],
+      "Orange Flag": [
+        "Contrassegno arancione"
+      ],
       "Overlay Colors": [
         "Colori overlay"
       ],
       "Overlay Content": [
         "Contenuto overlay"
+      ],
+      "Overlay Entrance": [
+        "Ingresso sovrapposizione"
+      ],
+      "Overlay Style": [
+        "Stile sovrapposizione"
+      ],
+      "Overlay Typography": [
+        "Tipografia sovrapposizione"
       ],
       "Overlay color": [
         "Colore overlay"
@@ -942,6 +1389,33 @@
       "Override hover settings for individual videos.": [
         "Sostituisci le impostazioni al passaggio del mouse per i singoli video."
       ],
+      "Padding": [
+        "Spaziatura interna"
+      ],
+      "Page Password": [
+        "Password della pagina"
+      ],
+      "Palette": [
+        "Tavolozza"
+      ],
+      "Pan": [
+        "Panoramica"
+      ],
+      "Password Protect Page": [
+        "Pagina protetta da password"
+      ],
+      "Password Protect Post": [
+        "Proteggi articolo con password"
+      ],
+      "Password protection is managed by the Proofing Gallery block on this page.": [
+        "La protezione con password è gestita dal blocco Proofing Gallery su questa pagina."
+      ],
+      "Password protection is managed by the Proofing Gallery block on this post.": [
+        "La protezione con password è gestita dal blocco Proofing Gallery in questo articolo."
+      ],
+      "Paste a Vimeo URL. The block will extract the Vimeo video ID when possible.": [
+        "Incolla un URL Vimeo. Il blocco estrarrà l’ID del video Vimeo quando possibile."
+      ],
       "Pause autoplay": [
         "Metti in pausa autoplay"
       ],
@@ -954,8 +1428,14 @@
       "Per-Image Gallery Overrides": [
         "Sostituzioni della galleria per immagine"
       ],
+      "Pinterest": [
+        "Pinterest"
+      ],
       "Play Button": [
         "Pulsante Riproduci"
+      ],
+      "Play Video in Lightbox": [
+        "Riproduci video nella lightbox"
       ],
       "Play autoplay": [
         "Riprendi autoplay"
@@ -966,8 +1446,23 @@
       "Playback Control Colors": [
         "Colori controlli riproduzione"
       ],
+      "Pop": [
+        "Pop"
+      ],
+      "Post Password": [
+        "Password articolo"
+      ],
       "Poster Image": [
         "Immagine poster"
+      ],
+      "Present images in a different order whenever the gallery loads.": [
+        "Presenta le immagini in un ordine diverso a ogni caricamento della galleria."
+      ],
+      "Prevent right-clicking on compatible FolioBlocks media on this page.": [
+        "Impedisci di fare clic con il pulsante destro del mouse sui supporti FolioBlocks compatibili in questa pagina."
+      ],
+      "Prevent visitors from dragging compatible FolioBlocks images on this page.": [
+        "Impedisci ai visitatori di trascinare le immagini compatibili di FolioBlocks su questa pagina."
       ],
       "Prevents visitors from right-clicking.": [
         "Impedisce ai visitatori di fare clic destro."
@@ -980,6 +1475,30 @@
       ],
       "Product Link Behavior": [
         "Comportamento link prodotto"
+      ],
+      "Proofing Appearance": [
+        "Aspetto della selezione immagini"
+      ],
+      "Proofing Client Settings": [
+        "Impostazioni cliente per la selezione"
+      ],
+      "Proofing Gallery": [
+        "Galleria di selezione"
+      ],
+      "Proofing Gallery Settings": [
+        "Impostazioni galleria di selezione"
+      ],
+      "Proofing Options": [
+        "Opzioni di selezione"
+      ],
+      "Proofing Save & Submit Settings": [
+        "Impostazioni di salvataggio e invio della selezione"
+      ],
+      "Proofing UI Mode": [
+        "Modalità interfaccia di selezione"
+      ],
+      "Proofing filters": [
+        "Filtri di selezione"
       ],
       "Protection and Performance": [
         "Protezione e prestazioni"
@@ -996,8 +1515,29 @@
       "Randomize order of images.": [
         "Casualizza l'ordine delle immagini."
       ],
+      "Rate image": [
+        "Valuta immagine"
+      ],
       "Read stored EXIF metadata.": [
         "Leggere i metadati EXIF ​​memorizzati."
+      ],
+      "Red": [
+        "Rosso"
+      ],
+      "Red Flag": [
+        "Contrassegno rosso"
+      ],
+      "Refresh": [
+        "Aggiorna"
+      ],
+      "Refresh from Media Library": [
+        "Aggiorna dalla Libreria media"
+      ],
+      "Refreshing…": [
+        "Aggiornamento…"
+      ],
+      "Regular": [
+        "Normale"
       ],
       "Remove": [
         "Rimuovi"
@@ -1026,6 +1566,12 @@
       "Replace Video": [
         "Sostituisci video"
       ],
+      "Require a password before visitors can view the page.": [
+        "Richiedi una password prima che i visitatori possano visualizzare la pagina."
+      ],
+      "Require a password before visitors can view the post.": [
+        "Richiedi una password prima che i visitatori possano visualizzare l’articolo."
+      ],
       "Resolution": [
         "Risoluzione"
       ],
@@ -1043,6 +1589,24 @@
       ],
       "Row Height": [
         "Altezza riga"
+      ],
+      "SVG files are not supported for the Loupe effect. Please select a raster image (JPG/PNG).": [
+        "I file SVG non sono supportati per l’effetto lente. Seleziona un’immagine raster (JPG/PNG)."
+      ],
+      "Save & Continue": [
+        "Salva e continua"
+      ],
+      "Save & Submit Button Alignment": [
+        "Allineamento pulsanti Salva e Invia"
+      ],
+      "Save & Submit Button Styles": [
+        "Stili pulsanti Salva e Invia"
+      ],
+      "Save Button": [
+        "Pulsante Salva"
+      ],
+      "Saved palette": [
+        "Tavolozza salvata"
       ],
       "Search pages or posts...": [
         "Cerca pagine o articoli..."
@@ -1083,6 +1647,9 @@
       "Select or Insert Video": [
         "Seleziona o inserisci video"
       ],
+      "Select or upload an image to use with the loupe effect.": [
+        "Seleziona o carica un’immagine da usare con l’effetto lente."
+      ],
       "Select the font’s weight and style (matches WordPress Typography → Appearance).": [
         "Seleziona peso e stile del font (corrisponde a Tipografia → Aspetto di WordPress)."
       ],
@@ -1092,11 +1659,20 @@
       "Select the size of the source image.": [
         "Seleziona la dimensione dell'immagine sorgente."
       ],
+      "Select two images for Before & After Block. For best results, use images with the same dimensions (width and height).": [
+        "Seleziona due immagini per Before & After Block. Per risultati migliori, usa immagini con le stesse dimensioni (larghezza e altezza)."
+      ],
       "Selected gallery image": [
         "Immagine galleria selezionata"
       ],
       "Self-Hosted": [
         "Self-hosted"
+      ],
+      "Semi Bold": [
+        "Semigrassetto"
+      ],
+      "Send email to the site admin when the client has submitted the session on the Proofing Gallery.": [
+        "Invia un’email all’amministratore del sito quando il cliente ha inviato la sessione nella galleria di selezione."
       ],
       "Separate categories with commas": [
         "Separa le categorie con virgole"
@@ -1113,8 +1689,23 @@
       "Set Before & After label position.": [
         "Imposta la posizione delle etichette Prima e Dopo."
       ],
+      "Set Video Link": [
+        "Imposta link video"
+      ],
+      "Set Video Title used in the Hover Overlay, Lightbox, and for Alt-text.": [
+        "Imposta il titolo del video usato nella sovrapposizione al passaggio del mouse, nella lightbox e come testo alternativo."
+      ],
+      "Set a gallery password before creating the proofing gallery.": [
+        "Imposta una password prima di creare la galleria di selezione."
+      ],
+      "Set alignment of the Save & Continue and Submit buttons.": [
+        "Imposta l’allineamento dei pulsanti Salva e continua e Invia."
+      ],
       "Set alignment of the filter bar.": [
         "Imposta l'allineamento della barra filtro."
+      ],
+      "Set alignment of the proofing filter bar.": [
+        "Imposta l’allineamento della barra dei filtri di selezione."
       ],
       "Set background and icon colors for the carousel controls.": [
         "Imposta i colori di sfondo e delle icone per i controlli del Carousel."
@@ -1131,20 +1722,41 @@
       "Set each image destination from its individual Image Block settings.": [
         "Imposta la destinazione di ogni immagine dalle impostazioni del relativo blocco immagine."
       ],
+      "Set flag color": [
+        "Imposta colore del contrassegno"
+      ],
       "Set independent desktop, tablet, and mobile heights.": [
         "Imposta altezze indipendenti per desktop, tablet e dispositivi mobili."
       ],
       "Set starting position for slider drag handle.": [
         "Imposta la posizione iniziale del cursore."
       ],
+      "Set the client email address and gallery password in Client Settings.": [
+        "Imposta l’indirizzo email del cliente e la password della galleria nelle Impostazioni cliente."
+      ],
       "Set the color for the Overlay.": [
         "Imposta il colore dell'overlay."
+      ],
+      "Set the desired strength of the magnification effect.": [
+        "Imposta l’intensità desiderata dell’effetto di ingrandimento."
       ],
       "Set the destination on this Image Block.": [
         "Imposta la destinazione su questo blocco immagine."
       ],
+      "Set the height (vh) for this screen size.": [
+        "Imposta l’altezza (vh) per questa dimensione dello schermo."
+      ],
       "Set the horizontal alignment of carousel controls.": [
         "Imposta l'allineamento orizzontale dei controlli del Carousel."
+      ],
+      "Set the level of opacity for the Overlay.": [
+        "Imposta il livello di opacità della sovrapposizione."
+      ],
+      "Set the number of columns for this screen size.": [
+        "Imposta il numero di colonne per questa dimensione dello schermo."
+      ],
+      "Set the password in the Proofing Gallery block settings.": [
+        "Imposta la password nelle impostazioni del blocco Proofing Gallery."
       ],
       "Set the preferred row height. Rows adjust as needed to fill the gallery width.": [
         "Imposta l'altezza della riga preferita. Le righe vengono adattate secondo necessità per riempire la larghezza della galleria."
@@ -1170,17 +1782,35 @@
       "Sets the default WooCommerce product action for this gallery. Individual images can override this setting.": [
         "Imposta l’azione prodotto WooCommerce predefinita per questa galleria. Le singole immagini possono sovrascrivere questa impostazione."
       ],
+      "Sets the default action for Add To Cart icons in this gallery. Individual videos can override this setting.": [
+        "Imposta l’azione predefinita per le icone Aggiungi al carrello in questa galleria. I singoli video possono modificarla."
+      ],
+      "Shape": [
+        "Forma"
+      ],
       "Show Before & After Labels": [
         "Mostra etichette Prima e Dopo"
       ],
+      "Show Comment icon for image-specific client notes.": [
+        "Mostra l’icona Commento per le note del cliente sulle singole immagini."
+      ],
       "Show EXIF Data": [
         "Mostra dati EXIF"
+      ],
+      "Show Flag icon so clients can assign a color status to images.": [
+        "Mostra l’icona Contrassegno per consentire ai clienti di assegnare uno stato di colore alle immagini."
+      ],
+      "Show Heart icon so clients can mark images they like.": [
+        "Mostra l’icona Cuore per consentire ai clienti di segnare le immagini preferite."
       ],
       "Show Image Caption": [
         "Mostra didascalia immagine"
       ],
       "Show Image Caption & EXIF Data": [
         "Mostra didascalia immagine e dati EXIF"
+      ],
+      "Show Image Counter": [
+        "Mostra contatore immagini"
       ],
       "Show Image Title": [
         "Mostra titolo immagine"
@@ -1197,11 +1827,44 @@
       "Show Product Info": [
         "Mostra info prodotto"
       ],
+      "Show Social Media": [
+        "Mostra social media"
+      ],
+      "Show Video Play Button": [
+        "Mostra pulsante di riproduzione video"
+      ],
+      "Show the camera settings and technical details behind your image.": [
+        "Mostra le impostazioni della fotocamera e i dettagli tecnici della tua immagine."
+      ],
+      "Show the current image number and total image count in gallery lightboxes.": [
+        "Mostra il numero dell’immagine corrente e il totale delle immagini nelle lightbox delle gallerie."
+      ],
+      "Shown in the lightbox when enabled in Gallery Lightbox Settings.": [
+        "Mostrato nella lightbox quando abilitato nelle impostazioni lightbox della galleria."
+      ],
       "Shutter Speed": [
         "Tempo di esposizione"
       ],
+      "Simple": [
+        "Semplice"
+      ],
+      "Size & Spacing": [
+        "Dimensioni e spaziatura"
+      ],
       "Sizing & Focal Point": [
         "Dimensioni e punto focale"
+      ],
+      "Slide Down": [
+        "Scorri in basso"
+      ],
+      "Slide Left": [
+        "Scorri a sinistra"
+      ],
+      "Slide Right": [
+        "Scorri a destra"
+      ],
+      "Slide Up": [
+        "Scorri in alto"
       ],
       "Slider & Label Styles": [
         "Stili cursore ed etichette"
@@ -1218,8 +1881,14 @@
       "Soft": [
         "Morbido"
       ],
+      "Solid": [
+        "Tinta unita"
+      ],
       "Square": [
         "Quadrato"
+      ],
+      "Stack all images vertically on mobile devices.": [
+        "Impila tutte le immagini verticalmente sui dispositivi mobili."
       ],
       "Start typing to search for products in your WooCommerce store. Click a result to link it.": [
         "Inizia a digitare per cercare prodotti nel tuo negozio WooCommerce. Fai clic su un risultato per collegarlo."
@@ -1227,14 +1896,32 @@
       "Style the active filtering category.": [
         "Applicare uno stile alla categoria di filtro attiva."
       ],
+      "Submit": [
+        "Invia"
+      ],
+      "Submit Button": [
+        "Pulsante Invia"
+      ],
       "Subtle": [
         "Impercettibile"
+      ],
+      "Supports YouTube, Vimeo, Bunny Stream, Cloudflare Stream, DailyMotion, Livid, Loom, VideoPress, Wistia, or ": [
+        "Supporta YouTube, Vimeo, Bunny Stream, Cloudflare Stream, DailyMotion, Livid, Loom, VideoPress, Wistia o "
+      ],
+      "Supports YouTube, Vimeo, or ": [
+        "Supporta YouTube, Vimeo o "
       ],
       "Swap Position": [
         "Scambia posizione"
       ],
       "Switch between light and dark editor themes.": [
         "Passa tra i temi chiaro e scuro dell'editor."
+      ],
+      "Sync": [
+        "Sincronizza"
+      ],
+      "Sync saves this image’s title, caption, and alt text to the Media Library. Refresh replaces this block’s text and EXIF data with the latest Media Library values.": [
+        "La sincronizzazione salva titolo, didascalia e testo alternativo dell’immagine nella Libreria media. L’aggiornamento sostituisce testo e dati EXIF del blocco con i valori più recenti della Libreria media."
       ],
       "Sync to Media Library": [
         "Sincronizza con il catalogo multimediale"
@@ -1245,8 +1932,23 @@
       "Tablet": [
         "Tablet"
       ],
+      "Tablet and mobile inherit this value.": [
+        "Tablet e dispositivi mobili ereditano questo valore."
+      ],
       "Text": [
         "Testo"
+      ],
+      "Text & Border": [
+        "Testo e bordo"
+      ],
+      "Thin": [
+        "Sottile"
+      ],
+      "This gallery keeps a copy of the selected palette.": [
+        "Questa galleria conserva una copia della tavolozza selezionata."
+      ],
+      "Threads": [
+        "Threads"
       ],
       "Thumbnail": [
         "Miniatura"
@@ -1260,6 +1962,9 @@
       "Thumbnail Resolution": [
         "Risoluzione miniatura"
       ],
+      "Tilt": [
+        "Inclinazione"
+      ],
       "Time between automatic image transitions.": [
         "Tempo tra le transizioni automatiche delle immagini."
       ],
@@ -1272,11 +1977,20 @@
       "Top": [
         "In alto"
       ],
+      "Turn video galleries into engaging product showcases.": [
+        "Trasforma le gallerie video in vetrine di prodotti coinvolgenti."
+      ],
       "Typography": [
         "Tipografia"
       ],
       "Unknown": [
         "Sconosciuto"
+      ],
+      "Upload a video, select one from your media library, or insert a URL (including Vimeo).": [
+        "Carica un video, selezionane uno dalla Libreria media o inserisci un URL (incluso Vimeo)."
+      ],
+      "Upload images or select them from the Media Library.": [
+        "Carica immagini o selezionale dalla Libreria media."
       ],
       "Upload or select images to create a Filmstrip Gallery.": [
         "Carica o seleziona immagini per creare una galleria Filmstrip."
@@ -1293,6 +2007,12 @@
       "Upload or select images to create a carousel.": [
         "Carica o seleziona immagini per creare un carosello."
       ],
+      "Upload, select from media library or insert from URL.": [
+        "Carica, seleziona dalla Libreria media o inserisci da URL."
+      ],
+      "Upload, select from media library, or insert from URL.": [
+        "Carica, seleziona dalla Libreria media o inserisci da URL."
+      ],
       "Use a light or dark loupe frame.": [
         "Utilizzare una montatura per occhiali chiara o scura."
       ],
@@ -1302,8 +2022,17 @@
       "Use hover behavior configured specifically for this image.": [
         "Utilizza il comportamento al passaggio del mouse configurato appositamente per questa immagine."
       ],
+      "Use hover behavior configured specifically for this video.": [
+        "Usa il comportamento al passaggio del mouse configurato per questo video."
+      ],
       "Use this video": [
         "Usa questo video"
+      ],
+      "Used to identify the client connected to this Proofing Gallery.": [
+        "Usato per identificare il cliente collegato a questa galleria di selezione."
+      ],
+      "Uses fonts from your theme's Global Styles.": [
+        "Usa i caratteri degli Stili globali del tema."
       ],
       "Uses fonts from your theme’s Global Styles.": [
         "Usa i font degli Stili globali del tema."
@@ -1313,6 +2042,9 @@
       ],
       "Vertical Images": [
         "Immagini verticali"
+      ],
+      "Vertical Padding": [
+        "Spaziatura interna verticale"
       ],
       "Video": [
         "Video"
@@ -1347,6 +2079,9 @@
       "Video Hover Settings": [
         "Impostazioni del video al passaggio del mouse"
       ],
+      "Video Hover Styles": [
+        "Stili video al passaggio del mouse"
+      ],
       "Video Lightbox": [
         "Scatola luminosa video"
       ],
@@ -1368,8 +2103,14 @@
       "Video Title + Play Button": [
         "Titolo video + pulsante Riproduci"
       ],
+      "Video Title + Play Button + Filtering Category": [
+        "Titolo video + pulsante di riproduzione + categoria di filtro"
+      ],
       "Video URL": [
         "URL video"
+      ],
+      "View Password": [
+        "Mostra password"
       ],
       "View Product": [
         "Vedi prodotto"
@@ -1383,11 +2124,38 @@
       "Vimeo background video": [
         "Video di sfondo Vimeo"
       ],
+      "Visitors must enter this password before they can view the Proofing Gallery.": [
+        "I visitatori devono inserire questa password prima di poter visualizzare la galleria di selezione."
+      ],
+      "Visitors must enter this password to view the page.": [
+        "I visitatori devono inserire questa password per visualizzare la pagina."
+      ],
+      "Visitors must enter this password to view the post.": [
+        "I visitatori devono inserire questa password per visualizzare l’articolo."
+      ],
+      "Watermark": [
+        "Filigrana"
+      ],
+      "Watermark Overlay": [
+        "Sovrapposizione filigrana"
+      ],
+      "We could not detect a Vimeo video ID from this URL yet. The front end may fall back to the poster until a valid Vimeo URL is provided.": [
+        "Non è stato ancora possibile rilevare un ID video Vimeo da questo URL. Il sito potrebbe mostrare l’immagine di copertina finché non viene fornito un URL Vimeo valido."
+      ],
       "WooCommerce Integration": [
         "Integrazione WooCommerce"
       ],
       "WooCommerce Product": [
         "Prodotto WooCommerce"
+      ],
+      "X": [
+        "X"
+      ],
+      "Zoom In": [
+        "Zoom avanti"
+      ],
+      "Zoom Out": [
+        "Zoom indietro"
       ],
       "https://vimeo.com/12345678": [
         "https://vimeo.com/12345678"

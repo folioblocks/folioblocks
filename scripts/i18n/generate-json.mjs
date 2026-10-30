@@ -2,8 +2,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {
 	ensureDirectory,
+	getPluralForms,
 	extractMessagesFromBuiltScript,
-	listBlockScriptAssets,
+	listTranslationScriptAssets,
 	parsePoFile,
 	projectRoot,
 	textDomain,
@@ -25,8 +26,24 @@ if (!localeMatch) {
 }
 
 const locale = localeMatch[1];
-const { translations } = parsePoFile(absolutePoPath);
+const { translations, headers } = parsePoFile(absolutePoPath);
 const languageDirectory = path.join(projectRoot, 'languages');
+const assets = listTranslationScriptAssets();
+if (assets.length < 2) {
+	throw new Error('No built blocks found. Run npm run build before generating JSON translations.');
+}
+// Validate inputs before replacing existing catalogs.
+const sharedMessages = new Set();
+for (const { filePath } of assets) {
+	for (const msgid of extractMessagesFromBuiltScript(filePath)) {
+		const translation = translations.get(msgid);
+		const forms = Array.isArray(translation) ? translation : [translation];
+		if (!forms.length || forms.some((form) => typeof form !== 'string' || !form.trim())) {
+			throw new Error(`Missing PO translation for ${JSON.stringify(msgid)}`);
+		}
+		sharedMessages.add(msgid);
+	}
+}
 
 ensureDirectory(languageDirectory);
 
@@ -43,7 +60,7 @@ const localeData = {
 	'': {
 		domain: 'messages',
 		lang: locale,
-		'plural-forms': 'nplurals=2; plural=(n != 1);',
+		'plural-forms': headers['Plural-Forms'] || getPluralForms(locale),
 	},
 };
 
@@ -52,7 +69,7 @@ for (const [msgid, msgstr] of translations.entries()) {
 		continue;
 	}
 
-	localeData[msgid] = [msgstr];
+	localeData[msgid] = Array.isArray(msgstr) ? msgstr : [msgstr];
 }
 
 const payload = {
@@ -60,16 +77,6 @@ const payload = {
 	generator: 'FolioBlocks custom i18n tooling',
 	domain: 'messages',
 };
-
-const sharedMessages = new Set();
-
-for (const { filePath } of listBlockScriptAssets()) {
-	for (const msgid of extractMessagesFromBuiltScript(filePath)) {
-		if (localeData[msgid]) {
-			sharedMessages.add(msgid);
-		}
-	}
-}
 
 const filteredLocaleData = {
 	'': localeData[''],

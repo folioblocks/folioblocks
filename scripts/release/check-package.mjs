@@ -192,6 +192,7 @@ const assertRequiredProjectFiles = () => {
 		'package-lock.json',
 		'build/image-block/render.php',
 		'includes/php/i18n.php',
+		'languages/folioblocks.pot',
 		'includes/php/svg-allowed-html.php',
 		'includes/pro/admin/global-settings.php',
 		'includes/pro/admin/proofing-sessions.php',
@@ -334,6 +335,9 @@ const createReleaseZip = () => {
 const php = findPhp();
 log(`Using PHP: ${ php }`);
 
+log('Checking translation coverage');
+run('npm', [ 'run', 'i18n:check:source' ]);
+
 log('Removing generated build artifacts');
 rmSync(path.join(root, 'build'), { recursive: true, force: true });
 rmSync(zipPath, { force: true });
@@ -341,6 +345,11 @@ rmSync(path.join(root, 'folioblocks.zip'), { force: true });
 
 log('Building from the current source branch');
 run('npm', [ 'run', 'build' ]);
+
+log('Refreshing and checking translation catalogs');
+run('npm', [ 'run', 'i18n:pot' ]);
+run('npm', [ 'run', 'i18n:locales' ]);
+run('npm', [ 'run', 'i18n:check' ]);
 
 log('Checking required files and version consistency');
 assertRequiredProjectFiles();

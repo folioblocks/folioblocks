@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { validateTranslations } from './check.mjs';
 import {
 	buildPot,
 	collectMessages,
@@ -15,12 +16,14 @@ if (!locale) {
 
 const localeMap = loadLocaleMap(locale);
 const translations = { ...(localeMap.translations ?? {}) };
+const messages = collectMessages();
+validateTranslations(messages, translations, locale);
 
 const outputPath = path.join(projectRoot, 'languages', `${'folioblocks'}-${locale}.po`);
 
 writeFile(
 	outputPath,
-	buildPot(collectMessages(), {
+	buildPot(messages, {
 		language: locale,
 		locale,
 		translations,

@@ -32,7 +32,7 @@ for (const locale of locales) {
 		stdio: "inherit",
 	});
 
-	execFileSync("msgfmt", [poFile, "-o", moFile], {
+	execFileSync("msgfmt", ["--check", poFile, "-o", moFile], {
 		cwd: projectRoot,
 		stdio: "inherit",
 	});

@@ -46,7 +46,7 @@ const ignoredDirectories = new Set([
 ]);
 
 const translationCallPattern =
-	/(?<![\w$])(?:__|_e|esc_html__|esc_attr__|esc_html_e|esc_attr_e)\(\s*(['"])((?:\\.|(?!\1)[\s\S])*?)\1\s*,\s*(['"])folioblocks\3\s*\)/g;
+	/(?<![\w$])(?:__|_e|esc_html__|esc_attr__|esc_html_e|esc_attr_e)\(\s*(['"])((?:\\.|(?!\1)[\s\S])*?)\1\s*,\s*(['"])folioblocks\3\s*,?\s*\)/g;
 
 function escapePoString(value) {
 	return value
@@ -58,13 +58,9 @@ function escapePoString(value) {
 }
 
 function unescapeQuotedString(value) {
-	return value
-		.replace(/\\\\/g, "\\")
-		.replace(/\\'/g, "'")
-		.replace(/\\"/g, '"')
-		.replace(/\\n/g, "\n")
-		.replace(/\\r/g, "\r")
-		.replace(/\\t/g, "\t");
+	return value.replace(/\\([\\'"nrt])/g, (_, character) =>
+		({ n: "\n", r: "\r", t: "\t" }[character] ?? character),
+	);
 }
 
 function getLineNumber(text, index) {
@@ -125,7 +121,14 @@ function listSourceFiles() {
 	return files.sort();
 }
 
-function extractMessagesFromCode(relativePath, content, messages) {
+export function extractMessagesFromCode(relativePath, content, messages) {
+	// Plural calls have two literals before the count and text domain.
+	const pluralPattern = /(?<![\w$])_n\(\s*(['"])((?:\\.|(?!\1)[\s\S])*?)\1\s*,\s*(['"])((?:\\.|(?!\3)[\s\S])*?)\3\s*,\s*[^,]+,\s*(['"])folioblocks\5\s*,?\s*\)/g;
+	for (const match of content.matchAll(pluralPattern)) {
+		const msgid = unescapeQuotedString(match[2]);
+		addMessage(messages, msgid, `${relativePath}:${getLineNumber(content, match.index)}`);
+		messages.get(msgid).plural = unescapeQuotedString(match[4]);
+	}
 	for (const match of content.matchAll(translationCallPattern)) {
 		const msgid = unescapeQuotedString(match[2]);
 		const line = getLineNumber(content, match.index ?? 0);
@@ -228,7 +231,7 @@ function formatPoString(keyword, value) {
 	return [
 		`${keyword} ""`,
 		...lines.map((line, index) => {
-			const suffix = index === lines.length - 1 ? "" : "\\n";
+			const suffix = index === lines.length - 1 ? "" : "\n";
 			return `"${escapePoString(line + suffix)}"`;
 		}),
 	].join("\n");
@@ -248,14 +251,14 @@ export function buildPot(
 		`Project-Id-Version: FolioBlocks ${packageJson.version}\\n`,
 		"Report-Msgid-Bugs-To: https://folioblocks.com\\n",
 		`POT-Creation-Date: ${now}\\n`,
-		"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\\n",
+		`PO-Revision-Date: ${language ? now : "YEAR-MO-DA HO:MI+ZONE"}\\n`,
 		"Last-Translator: \\n",
 		"Language-Team: \\n",
 		`Language: ${language}\\n`,
 		"MIME-Version: 1.0\\n",
 		"Content-Type: text/plain; charset=UTF-8\\n",
 		"Content-Transfer-Encoding: 8bit\\n",
-		"Plural-Forms: nplurals=2; plural=(n != 1);\\n",
+		`Plural-Forms: ${getPluralForms(language)}\\n`,
 		"X-Generator: FolioBlocks custom i18n tooling\\n",
 		"X-Domain: folioblocks\\n",
 	];
@@ -269,8 +272,19 @@ export function buildPot(
 
 	for (const [msgid, references] of messages.entries()) {
 		chunks.push(`#: ${Array.from(references).join(" ")}`);
+		if (/%(?:\d+\$)?[sdif]/.test(msgid)) {
+			chunks.push("#, php-format");
+		}
 		chunks.push(formatPoString("msgid", msgid));
-		chunks.push(formatPoString("msgstr", translations[msgid] ?? ""));
+		const translation = translations[msgid];
+		if (references.plural) {
+			chunks.push(formatPoString("msgid_plural", references.plural));
+			for (let index = 0; index < 2; index += 1) {
+				chunks.push(formatPoString(`msgstr[${index}]`, translation?.[index] ?? ""));
+			}
+		} else {
+			chunks.push(formatPoString("msgstr", translation ?? ""));
+		}
 		chunks.push("");
 	}
 
@@ -330,83 +344,64 @@ export function pruneLocaleMap(locale) {
 	return removedCount;
 }
 
+export function getPluralForms(locale) {
+	return locale === "fr_FR"
+		? "nplurals=2; plural=(n > 1);"
+		: "nplurals=2; plural=(n != 1);";
+}
+
 function parsePoMultilineBlock(lines, index, keyword) {
-	const firstLine = lines[index];
-	const directMatch = firstLine.match(new RegExp(`^${keyword} "(.*)"$`));
-
-	if (directMatch) {
-		return {
-			value: unescapeQuotedString(directMatch[1]),
-			nextIndex: index + 1,
-		};
+	const prefix = `${keyword} `;
+	if (!lines[index]?.startsWith(prefix)) {
+		throw new Error(`Invalid PO ${keyword} declaration: ${lines[index]}`);
 	}
-
-	if (firstLine !== `${keyword} ""`) {
-		throw new Error(`Invalid PO ${keyword} declaration: ${firstLine}`);
-	}
-
-	let value = "";
+	let value = JSON.parse(lines[index].slice(prefix.length));
 	let cursor = index + 1;
-
-	while (cursor < lines.length) {
-		const line = lines[cursor];
-
-		if (!line.startsWith('"')) {
-			break;
-		}
-
-		value += unescapeQuotedString(line.slice(1, -1));
+	while (cursor < lines.length && lines[cursor].startsWith('"')) {
+		value += JSON.parse(lines[cursor]);
 		cursor += 1;
 	}
-
-	return {
-		value,
-		nextIndex: cursor,
-	};
+	return { value, nextIndex: cursor };
 }
 
 export function parsePoFile(poPath) {
-	const content = fs.readFileSync(poPath, "utf8");
-	const lines = content.split(/\r?\n/);
+	const lines = fs.readFileSync(poPath, "utf8").split(/\r?\n/);
 	const translations = new Map();
 	const headers = {};
-
 	let cursor = 0;
 	while (cursor < lines.length) {
-		const line = lines[cursor].trim();
-
-		if (!line || line.startsWith("#")) {
+		if (!lines[cursor].startsWith("msgid ")) {
 			cursor += 1;
 			continue;
 		}
-
-		if (!line.startsWith("msgid")) {
-			cursor += 1;
-			continue;
-		}
-
-		const msgidBlock = parsePoMultilineBlock(lines, cursor, "msgid");
-		cursor = msgidBlock.nextIndex;
-		const msgstrBlock = parsePoMultilineBlock(lines, cursor, "msgstr");
-		cursor = msgstrBlock.nextIndex;
-
-		if (msgidBlock.value === "") {
-			for (const headerLine of msgstrBlock.value.split("\n")) {
-				const separatorIndex = headerLine.indexOf(":");
-				if (separatorIndex === -1) {
-					continue;
-				}
-
-				const key = headerLine.slice(0, separatorIndex).trim();
-				const value = headerLine.slice(separatorIndex + 1).trim();
-				headers[key] = value;
+		const msgid = parsePoMultilineBlock(lines, cursor, "msgid");
+		cursor = msgid.nextIndex;
+		let translation;
+		if (lines[cursor]?.startsWith("msgid_plural ")) {
+			cursor = parsePoMultilineBlock(lines, cursor, "msgid_plural").nextIndex;
+			translation = [];
+			while (lines[cursor]?.startsWith("msgstr[")) {
+				const index = Number(lines[cursor].match(/^msgstr\[(\d+)\]/)[1]);
+				const block = parsePoMultilineBlock(lines, cursor, `msgstr[${index}]`);
+				translation[index] = block.value;
+				cursor = block.nextIndex;
 			}
-			continue;
+		} else {
+			const block = parsePoMultilineBlock(lines, cursor, "msgstr");
+			translation = block.value;
+			cursor = block.nextIndex;
 		}
-
-		translations.set(msgidBlock.value, msgstrBlock.value);
+		if (msgid.value === "") {
+			for (const headerLine of translation.split("\n")) {
+				const separator = headerLine.indexOf(":");
+				if (separator !== -1) {
+					headers[headerLine.slice(0, separator).trim()] = headerLine.slice(separator + 1).trim();
+				}
+			}
+		} else {
+			translations.set(msgid.value, translation);
+		}
 	}
-
 	return { headers, translations };
 }
 
@@ -533,16 +528,29 @@ export function listBlockScriptAssets() {
 	return assets.sort((left, right) => left.handle.localeCompare(right.handle));
 }
 
+// Standalone editor scripts also need the shared catalog, even when none of
+// their messages appear in a compiled block bundle.
+export function listTranslationScriptAssets() {
+	return [
+		...listBlockScriptAssets(),
+		{
+			handle: "folioblocks-page-media-settings",
+			filePath: path.join(projectRoot, "includes/pro/js/page-media-settings.js"),
+		},
+	];
+}
+
 export function extractMessagesFromBuiltScript(filePath) {
 	if (!fs.existsSync(filePath)) {
-		return new Set();
+		throw new Error(`Missing translation script: ${filePath}. Run npm run build first.`);
 	}
 
 	const content = fs.readFileSync(filePath, "utf8");
 	const messages = new Set();
+	// Webpack emits both direct calls and calls such as (0,module.__)(...).
 	const patterns = [
-		/\b(?:__|_x|_n|_nx)\s*\)?\s*\(\s*(['"])((?:\\.|(?!\1)[\s\S])*?)\1\s*,\s*(['"])folioblocks\3/g,
-		/\.\s*(?:__|_x|_n|_nx)\s*\)?\s*\(\s*(['"])((?:\\.|(?!\1)[\s\S])*?)\1\s*,\s*(['"])folioblocks\3/g,
+		/\b__\s*\)?\s*\(\s*(['"])((?:\\.|(?!\1)[\s\S])*?)\1\s*,\s*(['"])folioblocks\3/g,
+		/\b_n\s*\)?\s*\(\s*(['"])((?:\\.|(?!\1)[\s\S])*?)\1\s*,\s*(['"])((?:\\.|(?!\3)[\s\S])*?)\3\s*,\s*[^,]+,\s*(['"])folioblocks\5/g,
 	];
 
 	for (const pattern of patterns) {
@@ -550,7 +558,6 @@ export function extractMessagesFromBuiltScript(filePath) {
 			messages.add(unescapeQuotedString(match[2]));
 		}
 	}
-
 	return messages;
 }
 
