@@ -4,6 +4,13 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0] - 2026-11-03
+### Added
+- Added a Customized badge to the Page/Post Defaults card when its settings differ from plugin defaults. The badge updates after autosaving and clears when all settings are restored to their defaults.
+
+### Changed
+- Updated Customized badges to muted amber with warm brown text to distinguish changed settings from the settings page's blue tones.
+
 ## [1.6.0] - 2026-10-28
 ### Added
 - Added a Refresh button to Image Block to retrieve the latest title, caption, alternative text, and EXIF data from the Media Library without changing the image or its settings.

@@ -769,7 +769,7 @@ function fbks_render_settings_page()
 						</li>
 					</ul>
 					<p class="fbks-news-view-all">
-						<a href="https://folioblocks.com/news/" target="_blank" rel="noopener noreferrer">
+						<a href="https://folioblocks.com/blog/" target="_blank" rel="noopener noreferrer">
 							<?php esc_html_e('View all news', 'folioblocks'); ?> &rarr;
 						</a>
 					</p>

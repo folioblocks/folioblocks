@@ -236,7 +236,12 @@ if (! function_exists('fbks_ajax_save_global_settings_section')) {
 				$raw_settings = isset($_POST['fbks_page_media_defaults']) && is_array($_POST['fbks_page_media_defaults'])
 					? wp_unslash($_POST['fbks_page_media_defaults'])
 					: array();
-				update_option(FBKS_PAGE_MEDIA_DEFAULTS_OPTION, fbks_sanitize_page_media_defaults($raw_settings));
+				$settings = fbks_sanitize_page_media_defaults($raw_settings);
+				update_option(FBKS_PAGE_MEDIA_DEFAULTS_OPTION, $settings);
+				wp_send_json_success(array(
+					'message' => __('Saved.', 'folioblocks'),
+					'customized' => in_array(true, $settings, true),
+				));
 				break;
 
 			case 'media_metadata':
@@ -980,7 +985,10 @@ if (! function_exists('fbks_render_global_settings_page')) {
 						<details class="fbks-dashboard-box fbks-global-settings-panel" data-settings-section="page_media_defaults">
 							<summary class="fbks-global-settings-panel__summary">
 								<span class="fbks-global-settings-panel__heading">
-									<span class="fbks-global-settings-panel__title"><?php esc_html_e('Page/Post Defaults', 'folioblocks'); ?></span>
+									<span class="fbks-block-default-title-group">
+										<span class="fbks-global-settings-panel__title"><?php esc_html_e('Page/Post Defaults', 'folioblocks'); ?></span>
+										<span class="fbks-block-default-customized" data-block-default-customized <?php if (! in_array(true, $page_media_defaults, true)) { echo 'hidden'; } ?>><?php esc_html_e('Customized', 'folioblocks'); ?></span>
+									</span>
 									<span class="fbks-global-settings-panel__description"><?php esc_html_e('Set the starting Page/Post Settings for newly added compatible FolioBlocks content.', 'folioblocks'); ?></span>
 								</span>
 								<span class="fbks-global-settings-panel__status" data-autosave-status aria-live="polite"></span>
