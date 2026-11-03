@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: FolioBlocks 1.6.0-beta\n"
+"Project-Id-Version: FolioBlocks 1.6.0-beta.1\n"
 "Report-Msgid-Bugs-To: https://folioblocks.com\n"
-"POT-Creation-Date: 2026-10-30 09:29:19+0000\n"
-"PO-Revision-Date: 2026-10-30 09:29:19+0000\n"
+"POT-Creation-Date: 2026-11-03 07:53:44+0000\n"
+"PO-Revision-Date: 2026-11-03 07:53:44+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: sv_SE\n"
@@ -195,7 +195,7 @@ msgstr "Lagg till bildstapel"
 msgid "Add Images"
 msgstr "Lägg till bilder"
 
-#: includes/pro/admin/global-settings.php:1335
+#: includes/pro/admin/global-settings.php:1343
 msgid "Add New Watermark"
 msgstr "Lägg till ny vattenstämpel"
 
@@ -239,7 +239,7 @@ msgstr "Lägg till video"
 msgid "Add Videos"
 msgstr "Lägg till videor"
 
-#: includes/pro/admin/global-settings.php:792
+#: includes/pro/admin/global-settings.php:797
 msgid "Add Watermark"
 msgstr "Lägg till vattenstämpel"
 
@@ -293,7 +293,7 @@ msgstr "Justerbar videoposition (X / Y)"
 msgid "Adjustable video position (X / Y) for Tablet & Mobile"
 msgstr "Justerbar videoposition (X / Y) for surfplatta och mobil"
 
-#: includes/pro/admin/global-settings.php:1152
+#: includes/pro/admin/global-settings.php:1160
 msgid "Administrators always retain access. Attachment permissions are checked in addition to the selected role."
 msgstr "Administratörer behåller alltid åtkomsten. Bilagebehörigheter kontrolleras utöver den valda rollen."
 
@@ -357,11 +357,11 @@ msgstr "Alla"
 msgid "All Images"
 msgstr "Alla bilder"
 
-#: includes/pro/admin/global-settings.php:1047
+#: includes/pro/admin/global-settings.php:1055
 msgid "Allow FolioBlocks Media Library tools to retain supported camera and exposure fields."
 msgstr "Tillåt FolioBlocks verktyg för mediebiblioteket att behålla stödda kamera- och exponeringsfält."
 
-#: includes/pro/admin/global-settings.php:1124
+#: includes/pro/admin/global-settings.php:1132
 msgid "Allow Metadata Editing"
 msgstr "Tillåt redigering av metadata"
 
@@ -525,7 +525,7 @@ msgstr "Svart"
 msgid "Block defaults require a paid plan."
 msgstr "Blockstandarder kräver en betalplan."
 
-#: includes/pro/admin/global-settings.php:888
+#: includes/pro/admin/global-settings.php:893
 msgid "Block settings saved."
 msgstr "Blockinställningar sparade."
 
@@ -601,11 +601,11 @@ msgstr "Nederst"
 msgid "Bottom Gradient Overlay"
 msgstr "Överlägg med toning nedtill"
 
-#: includes/pro/admin/global-settings.php:666 includes/pro/admin/global-settings.php:1403
+#: includes/pro/admin/global-settings.php:671 includes/pro/admin/global-settings.php:1411
 msgid "Bottom Left"
 msgstr "Nere till vänster"
 
-#: includes/pro/admin/global-settings.php:667 includes/pro/admin/global-settings.php:1404
+#: includes/pro/admin/global-settings.php:672 includes/pro/admin/global-settings.php:1412
 msgid "Bottom Right"
 msgstr "Nere till höger"
 
@@ -669,7 +669,7 @@ msgstr "Karusellens uppspelningskontroller: med anpassade stilkontroller"
 msgid "Carousel Styles"
 msgstr "Karusellstilar"
 
-#: includes/pro/admin/global-settings.php:663 includes/pro/admin/global-settings.php:1400 includes/pro/php/block-defaults.php:20 includes/pro/php/block-defaults.php:256 includes/pro/php/block-defaults.php:404 includes/pro/php/block-defaults.php:442 src/before-after-block/premium.js:76 src/before-after-block/premium.js:93 src/carousel-gallery-block/premium.js:154 src/fbks-helpers/filteringPremiumControls.js:168 src/proofing-gallery-block/edit.js:189
+#: includes/pro/admin/global-settings.php:668 includes/pro/admin/global-settings.php:1408 includes/pro/php/block-defaults.php:20 includes/pro/php/block-defaults.php:256 includes/pro/php/block-defaults.php:404 includes/pro/php/block-defaults.php:442 src/before-after-block/premium.js:76 src/before-after-block/premium.js:93 src/carousel-gallery-block/premium.js:154 src/fbks-helpers/filteringPremiumControls.js:168 src/proofing-gallery-block/edit.js:189
 msgid "Center"
 msgstr "Centrera"
 
@@ -842,11 +842,11 @@ msgstr "Välj stil för hovringsöverlägget."
 msgid "Choose the information shown with the image."
 msgstr "Välj vilken information som visas med bilden."
 
-#: includes/pro/admin/global-settings.php:1233
+#: includes/pro/admin/global-settings.php:1241
 msgid "Choose the social networks available in lightbox and overlay sharing controls."
 msgstr "Välj vilka sociala nätverk som ska vara tillgängliga i ljuslådans och överläggets delningskontroller."
 
-#: includes/pro/admin/global-settings.php:1347
+#: includes/pro/admin/global-settings.php:1355
 msgid "Choose the starting settings for newly inserted FolioBlocks blocks. Individual blocks can be adjusted in the editor, and existing blocks keep their saved settings."
 msgstr "Välj startinställningar för nya FolioBlocks-block. Enskilda block kan justeras i redigeraren och befintliga block behåller sina sparade inställningar."
 
@@ -858,7 +858,7 @@ msgstr "Välj bildöverläggets visuella stil."
 msgid "Choose the visual style of the video overlay."
 msgstr "Välj videoöverläggets visuella stil."
 
-#: includes/pro/admin/global-settings.php:1239
+#: includes/pro/admin/global-settings.php:1247
 msgid "Choose up to 5 social sharing sources used when Social Media is selected for lightbox or overlay content."
 msgstr "Välj upp till 5 delningskällor som används när Sociala medier har valts för innehållet i ljuslådan eller överlägget."
 
@@ -958,7 +958,7 @@ msgstr "Välj vilket galleriblock som används för layouten. Kolumner, avstånd
 msgid "Choose WooCommerce products from the individual Image Block settings."
 msgstr "Välj WooCommerce-produkter från inställningarna för varje bildblock."
 
-#: includes/pro/admin/global-settings.php:1193
+#: includes/pro/admin/global-settings.php:1201
 msgid "Choosing a preset copies its mapping below. Editing a row changes the selection to Custom."
 msgstr "När du väljer en förinställning kopieras dess mappning nedan. Om du redigerar en rad ändras valet till Anpassad."
 
@@ -1017,7 +1017,7 @@ msgstr "Kundernas stjärnbetyg: valfria betyg med 1–5 stjärnor, sparade frams
 msgid "Client: %s"
 msgstr "Kund: %s"
 
-#: includes/pro/admin/global-settings.php:1361 src/video-block/render.php:343
+#: includes/pro/admin/global-settings.php:1369 src/video-block/render.php:343
 msgid "Close"
 msgstr "Stäng"
 
@@ -1029,7 +1029,7 @@ msgstr "Stäng Lightbox"
 msgid "Collapse layout on Mobile"
 msgstr "Fäll ihop layouten på mobil"
 
-#: includes/pro/admin/global-settings.php:1200 includes/pro/php/block-defaults.php:92 src/fbks-helpers/CompactColorControl.js:264
+#: includes/pro/admin/global-settings.php:1208 includes/pro/php/block-defaults.php:92 src/fbks-helpers/CompactColorControl.js:264
 msgid "Color"
 msgstr "Färg"
 
@@ -1038,11 +1038,11 @@ msgstr "Färg"
 msgid "Color class %d"
 msgstr "Färgklass %d"
 
-#: includes/pro/admin/global-settings.php:1109 includes/pro/admin/global-settings.php:1174
+#: includes/pro/admin/global-settings.php:1117 includes/pro/admin/global-settings.php:1182
 msgid "Color Classes"
 msgstr "Färgklasser"
 
-#: includes/pro/admin/global-settings.php:1212
+#: includes/pro/admin/global-settings.php:1220
 #, php-format
 msgid "Color for class %d"
 msgstr "Färg för klass %d"
@@ -1095,7 +1095,7 @@ msgstr "Jämför funktionerna för att hitta det bästa alternativet för din we
 msgid "Configure playback timing and behavior."
 msgstr "Konfigurera uppspelningstid och beteende."
 
-#: includes/pro/admin/global-settings.php:970
+#: includes/pro/admin/global-settings.php:975
 msgid "Configure the default behavior of FolioBlocks across your website. Open a section to view its settings—changes are saved automatically as you make them."
 msgstr "Ställ in FolioBlocks standardbeteende på din webbplats. Öppna en sektion för att se dess inställningar. Ändringar sparas automatiskt när du gör dem."
 
@@ -1107,7 +1107,7 @@ msgstr "Koppla videor direkt till produkter i din butik."
 msgid "Control filter-bar typography."
 msgstr "Kontroll filter-bar typografi."
 
-#: includes/pro/admin/global-settings.php:1264
+#: includes/pro/admin/global-settings.php:1272
 msgid "Control how long proofing sessions are stored and whether admins are notified when clients submit selections."
 msgstr "Styr hur länge bildgranskningssessioner sparas och om administratörer meddelas när kunder skickar in urval."
 
@@ -1155,7 +1155,7 @@ msgstr "Skapa och anpassa enskilda block och gallerier i blockredigeraren. Anvä
 msgid "Create distinctive interactions for your video thumbnails."
 msgstr "Skapa unika interaktioner för dina videominiatyrer."
 
-#: includes/pro/admin/global-settings.php:1305
+#: includes/pro/admin/global-settings.php:1313
 msgid "Create reusable watermarks and choose the default for new compatible blocks."
 msgstr "Skapa återanvändbara vattenstämplar och välj standard för nya kompatibla block."
 
@@ -1251,7 +1251,7 @@ msgstr "Anpassa förstoringsluppen så att den passar din bild."
 msgid "Customize the slider handle and line color."
 msgstr "Anpassa skjutreglaget och linjefärgen."
 
-#: includes/pro/php/block-defaults.php:706
+#: includes/pro/admin/global-settings.php:990 includes/pro/php/block-defaults.php:706
 msgid "Customized"
 msgstr "Anpassad"
 
@@ -1291,7 +1291,7 @@ msgstr "Standardbeteende för produktklick"
 msgid "Default Product Link Behavior"
 msgstr "Standardbeteende för produktlänk"
 
-#: includes/pro/admin/global-settings.php:796 src/fbks-helpers/watermarkOverlayControls.js:332
+#: includes/pro/admin/global-settings.php:801 src/fbks-helpers/watermarkOverlayControls.js:332
 msgid "Default Watermark"
 msgstr "Standardvattenstämpel"
 
@@ -1303,7 +1303,7 @@ msgstr "Ta bort"
 msgid "Delete this proofing session permanently? This only deletes the saved proofing results, not the Media Library images."
 msgstr "Ta bort den här bildgranskningssessionen permanent? Detta tar bara bort de sparade granskningsresultaten, inte bilderna i mediebiblioteket."
 
-#: includes/pro/admin/global-settings.php:859
+#: includes/pro/admin/global-settings.php:864
 msgid "Delete this watermark"
 msgstr "Ta bort den här vattenstämpeln"
 
@@ -1355,7 +1355,7 @@ msgstr "Inaktivera bakgrundsvideo på mobila enheter och visa posterbilden."
 msgid "Disable background video on mobile and display the poster image."
 msgstr "Inaktivera bakgrundsvideo på mobila enheter och visa posterbilden."
 
-#: includes/pro/admin/global-settings.php:1015 includes/pro/js/page-media-settings.js:430
+#: includes/pro/admin/global-settings.php:1023 includes/pro/js/page-media-settings.js:430
 msgid "Disable Drag To Save"
 msgstr "Förhindra dra för att spara"
 
@@ -1383,7 +1383,7 @@ msgstr "Inaktivera högerklicka på visat media."
 msgid "Disable Right-Click on Page"
 msgstr "Inaktivera högerklick på sidan"
 
-#: includes/pro/admin/global-settings.php:1006
+#: includes/pro/admin/global-settings.php:1014
 msgid "Disable Right-Click on Page/Post"
 msgstr "Inaktivera högerklick på sida/inlägg"
 
@@ -1435,7 +1435,7 @@ msgstr "Visa alltid överläggsinnehåll i stället för enbart vid hovring."
 msgid "Display product information with videos."
 msgstr "Visa produktinformation med videor."
 
-#: includes/pro/admin/global-settings.php:1295
+#: includes/pro/admin/global-settings.php:1303
 msgid "Display the Proofing Gallery Block's status component in the Admin bar and see in real time when clients are interacting the proofing galleries."
 msgstr "Visa bildgranskningsblockets statuskomponent i adminfältet och se i realtid när kunder använder bildgranskningsgallerierna."
 
@@ -1559,7 +1559,7 @@ msgstr "E-handelsinställningar"
 msgid "E-Commerce Styles"
 msgstr "E-handelsstilar"
 
-#: includes/pro/admin/global-settings.php:770
+#: includes/pro/admin/global-settings.php:775
 msgid "Edit"
 msgstr "Redigera"
 
@@ -1579,7 +1579,7 @@ msgstr "Redigera WooCommerce-produkt"
 msgid "Elevated"
 msgstr "Upphöjd"
 
-#: includes/pro/admin/global-settings.php:1285
+#: includes/pro/admin/global-settings.php:1293
 msgid "Email admin when session is submitted"
 msgstr "Skicka e-post till administratören när sessionen skickas in"
 
@@ -1596,7 +1596,7 @@ msgstr "Inbäddade originalvärden förblir oförändrade."
 msgid "Embedded Rating: %s"
 msgstr "Inbäddat betyg: %s"
 
-#: includes/pro/admin/global-settings.php:1033
+#: includes/pro/admin/global-settings.php:1041
 msgid "Embedded values remain unchanged for provenance. These settings control future imports and how the separate editable Media Library values will be presented."
 msgstr "Inbäddade värden förblir oförändrade för att bevara ursprunget. Dessa inställningar styr framtida importer och hur de separata, redigerbara värdena i mediebiblioteket visas."
 
@@ -1610,7 +1610,7 @@ msgstr "Inbäddat: %1$s · Etikett: %2$s"
 msgid "Embedded: %s"
 msgstr "Inbäddat: %s"
 
-#: includes/pro/admin/global-settings.php:567
+#: includes/pro/admin/global-settings.php:572
 msgid "Enable at least one metadata import option before scanning existing media."
 msgstr "Aktivera minst ett alternativ för metadataimport innan du skannar befintliga medier."
 
@@ -1622,12 +1622,12 @@ msgstr "Aktivera automatisk uppspelning"
 msgid "Enable Carousel Controls"
 msgstr "Aktivera karusellkontroller"
 
-#: includes/pro/admin/global-settings.php:1207
+#: includes/pro/admin/global-settings.php:1215
 #, php-format
 msgid "Enable color class %d"
 msgstr "Aktivera färgklass %d"
 
-#: includes/pro/admin/global-settings.php:1180
+#: includes/pro/admin/global-settings.php:1188
 msgid "Enable Color Classes"
 msgstr "Aktivera färgklasser"
 
@@ -1667,7 +1667,7 @@ msgstr "Aktivera bildfiltrering"
 msgid "Enable image filtering with categories."
 msgstr "Aktivera bildfiltrering med kategorier."
 
-#: includes/pro/admin/global-settings.php:997 includes/pro/js/page-media-settings.js:399 src/before-after-block/premium.js:213 src/video-block/premium.js:709 src/video-gallery-block/premium.js:200
+#: includes/pro/admin/global-settings.php:1005 includes/pro/js/page-media-settings.js:399 src/before-after-block/premium.js:213 src/video-block/premium.js:709 src/video-gallery-block/premium.js:200
 msgid "Enable Lazy Load of Images"
 msgstr "Aktivera lazy load för bilder"
 
@@ -1687,11 +1687,11 @@ msgstr "Aktivera Lightbox i blockredigeraren"
 msgid "Enable Lightbox Zoom"
 msgstr "Aktivera zoom i ljuslådan"
 
-#: includes/pro/admin/global-settings.php:1162 src/proofing-gallery-block/edit.js:1117
+#: includes/pro/admin/global-settings.php:1170 src/proofing-gallery-block/edit.js:1117
 msgid "Enable Star Ratings"
 msgstr "Aktivera stjärnbetyg"
 
-#: includes/pro/admin/global-settings.php:1317
+#: includes/pro/admin/global-settings.php:1325
 msgid "Enable the default watermark for new compatible blocks"
 msgstr "Aktivera standardvattenstämpeln för nya kompatibla block"
 
@@ -1715,7 +1715,7 @@ msgstr "Aktivera vattenstämpling"
 msgid "Enable WooCommerce Integration"
 msgstr "Aktivera WooCommerce-integration"
 
-#: includes/pro/admin/global-settings.php:1199
+#: includes/pro/admin/global-settings.php:1207
 msgid "Enabled"
 msgstr "Aktiverad"
 
@@ -1763,7 +1763,7 @@ msgstr "Ange en giltig Vimeo-URL som börjar med http:// eller https://."
 msgid "Enter a valid YouTube, Vimeo, or self-hosted video URL. Bunny Stream, Cloudflare Stream, DailyMotion, Livid, Loom, VideoPress, and Wistia require FolioBlocks Pro."
 msgstr "Ange en giltig URL för YouTube, Vimeo eller egenhostad video. Bunny Stream, Cloudflare Stream, DailyMotion, Livid, Loom, VideoPress och Wistia kräver FolioBlocks Pro."
 
-#: includes/pro/admin/global-settings.php:1107 includes/pro/admin/media-metadata.php:374
+#: includes/pro/admin/global-settings.php:1115 includes/pro/admin/media-metadata.php:374
 msgid "EXIF Data"
 msgstr "EXIF-data"
 
@@ -1899,7 +1899,7 @@ msgstr "Fokuspunkt X (vänster - höger)"
 msgid "Focal Point Y (Up - Down)"
 msgstr "Fokuspunkt Y (upp - ned)"
 
-#: folioblocks.php:216 folioblocks.php:492 folioblocks.php:493 includes/admin/free-pro.php:380 includes/admin/free-pro.php:381 includes/admin/settings-page.php:462 includes/admin/settings-page.php:463 includes/admin/system-info.php:327 includes/admin/system-info.php:329 includes/pro/admin/global-settings.php:959 includes/pro/admin/global-settings.php:960 includes/pro/admin/proofing-sessions.php:477 includes/pro/php/icon-registration.php:22
+#: folioblocks.php:216 folioblocks.php:492 folioblocks.php:493 includes/admin/free-pro.php:380 includes/admin/free-pro.php:381 includes/admin/settings-page.php:462 includes/admin/settings-page.php:463 includes/admin/system-info.php:327 includes/admin/system-info.php:329 includes/pro/admin/global-settings.php:964 includes/pro/admin/global-settings.php:965 includes/pro/admin/proofing-sessions.php:477 includes/pro/php/icon-registration.php:22
 msgid "FolioBlocks"
 msgstr "FolioBlocks"
 
@@ -1947,7 +1947,7 @@ msgstr "Typsnittsfamilj"
 msgid "Font Size"
 msgstr "Teckenstorlek"
 
-#: includes/pro/admin/global-settings.php:1347
+#: includes/pro/admin/global-settings.php:1355
 msgid "For blocks that can be nested inside other blocks, global defaults apply only when they are used on their own, outside another block."
 msgstr "För block som kan nästlas i andra block används globala standardvärden bara när blocken används fristående, utanför ett annat block."
 
@@ -2063,7 +2063,7 @@ msgstr "Avstånd mellan objekt"
 msgid "General Gallery Settings"
 msgstr "Allmänna galleriinställningar"
 
-#: includes/pro/admin/global-settings.php:978
+#: includes/pro/admin/global-settings.php:983
 msgid "General Settings"
 msgstr "Allmänna inställningar"
 
@@ -2095,11 +2095,11 @@ msgstr "Ge den här bilden ett annat beteende än resten av galleriet."
 msgid "Glare"
 msgstr "Glans"
 
-#: includes/pro/admin/global-settings.php:1346
+#: includes/pro/admin/global-settings.php:1354
 msgid "Global Block Defaults"
 msgstr "Globala blockstandarder"
 
-#: includes/pro/admin/global-settings.php:918
+#: includes/pro/admin/global-settings.php:923
 msgid "Global settings saved."
 msgstr "Globala inställningar har sparats."
 
@@ -2347,23 +2347,23 @@ msgstr "Bilder utan URL kommer inte att länkas."
 msgid "img"
 msgstr "img"
 
-#: includes/pro/admin/global-settings.php:1064
+#: includes/pro/admin/global-settings.php:1072
 msgid "Import Color Classes"
 msgstr "Importera färgklasser"
 
-#: includes/pro/admin/global-settings.php:1046
+#: includes/pro/admin/global-settings.php:1054
 msgid "Import EXIF Data"
 msgstr "Importera EXIF-data"
 
-#: includes/pro/admin/global-settings.php:1038
+#: includes/pro/admin/global-settings.php:1046
 msgid "Import options apply to future uploads and rescans. Turning one off does not delete metadata already stored."
 msgstr "Importalternativen gäller framtida uppladdningar och omskanningar. Om du inaktiverar ett alternativ tas inte redan sparade metadata bort."
 
-#: includes/pro/admin/global-settings.php:1055
+#: includes/pro/admin/global-settings.php:1063
 msgid "Import Star Ratings"
 msgstr "Importera stjärnbetyg"
 
-#: includes/pro/admin/global-settings.php:1027
+#: includes/pro/admin/global-settings.php:1035
 msgid "Import, display, and manage ratings and color classes used throughout FolioBlocks."
 msgstr "Importera, visa och hantera betyg och färgklasser som används i FolioBlocks."
 
@@ -2391,7 +2391,7 @@ msgstr "Ärv (galleriets standard)"
 msgid "Inherit Gallery"
 msgstr "Arv Galleri"
 
-#: includes/pro/admin/global-settings.php:833
+#: includes/pro/admin/global-settings.php:838
 msgid "Inset (% of short edge)"
 msgstr "Indrag (% av kortsidan)"
 
@@ -2439,7 +2439,7 @@ msgstr "Håll teknisk information bifogad till bilden."
 msgid "Keep watermark styling managed globally."
 msgstr "Hantera vattenstämpelns utseende globalt."
 
-#: includes/pro/admin/global-settings.php:1201
+#: includes/pro/admin/global-settings.php:1209
 msgid "Label"
 msgstr "Etikett"
 
@@ -2451,7 +2451,7 @@ msgstr "Etikettens bakgrundsfärg"
 msgid "Label Background Color"
 msgstr "Etikettens bakgrundsfärg"
 
-#: includes/pro/admin/global-settings.php:1216
+#: includes/pro/admin/global-settings.php:1224
 #, php-format
 msgid "Label for class %d"
 msgstr "Etikett för klass %d"
@@ -2476,11 +2476,11 @@ msgstr "Etikettens textfärg"
 msgid "Label Text Color"
 msgstr "Etikettens textfärg"
 
-#: includes/pro/admin/global-settings.php:700
+#: includes/pro/admin/global-settings.php:705
 msgid "Landscape 3:2"
 msgstr "Liggande 3:2"
 
-#: includes/pro/admin/global-settings.php:695
+#: includes/pro/admin/global-settings.php:700
 msgid "Landscape 4:3"
 msgstr "Liggande 4:3"
 
@@ -2488,7 +2488,7 @@ msgstr "Liggande 4:3"
 msgid "Large"
 msgstr "Stor"
 
-#: includes/pro/admin/global-settings.php:1083
+#: includes/pro/admin/global-settings.php:1091
 msgid "Last Scanned:"
 msgstr "Senast skannad:"
 
@@ -2505,7 +2505,7 @@ msgstr "Senaste nytt fran FolioBlocks webbplats:"
 msgid "Layout"
 msgstr "Layout"
 
-#: includes/pro/admin/global-settings.php:998
+#: includes/pro/admin/global-settings.php:1006
 msgid "Lazy load compatible FolioBlocks images and thumbnails by default."
 msgstr "Ladda kompatibla FolioBlocks-bilder och miniatyrer först vid behov som standard."
 
@@ -2737,19 +2737,19 @@ msgstr "Förstora en del av en bild med en cirkulär lupp."
 msgid "Main Image Resolution"
 msgstr "Upplösning för huvudbild"
 
-#: includes/pro/admin/global-settings.php:1181
+#: includes/pro/admin/global-settings.php:1189
 msgid "Make Media Color Classes available to compatible FolioBlocks tools and blocks."
 msgstr "Gör mediefärgklasser tillgängliga för kompatibla verktyg och block i FolioBlocks."
 
-#: includes/pro/admin/global-settings.php:1163
+#: includes/pro/admin/global-settings.php:1171
 msgid "Make Media Ratings available to compatible FolioBlocks tools and blocks."
 msgstr "Gör mediebetyg tillgängliga för kompatibla verktyg och block i FolioBlocks."
 
-#: includes/pro/admin/global-settings.php:1258
+#: includes/pro/admin/global-settings.php:1266
 msgid "Manage proofing retention, notifications, and the admin bar activity indicator."
 msgstr "Hantera lagringstid, aviseringar och aktivitetsindikatorn i adminfältet för bildgranskning."
 
-#: includes/pro/admin/global-settings.php:979
+#: includes/pro/admin/global-settings.php:984
 msgid "Manage site-wide preferences for media, sharing, proofing, and watermarks. Open a card to adjust its settings; changes are saved automatically."
 msgstr "Hantera webbplatsens inställningar för medier, delning, bildgranskning och vattenstämplar. Öppna ett kort för att ändra inställningarna. Ändringar sparas automatiskt."
 
@@ -2801,19 +2801,19 @@ msgstr "Mediets EXIF-värden kan redigeras utan att de inbäddade originalvärde
 msgid "Media File"
 msgstr "Mediefil"
 
-#: includes/pro/admin/global-settings.php:1091
+#: includes/pro/admin/global-settings.php:1099
 msgid "Media Library"
 msgstr "Mediebibliotek"
 
-#: includes/pro/admin/global-settings.php:1026
+#: includes/pro/admin/global-settings.php:1034
 msgid "Media Metadata"
 msgstr "Mediemetadata"
 
-#: includes/pro/admin/global-settings.php:243 includes/pro/admin/global-settings.php:545 includes/pro/php/media-metadata.php:531 includes/pro/php/media-metadata.php:580 includes/pro/php/media-metadata.php:606
+#: includes/pro/admin/global-settings.php:248 includes/pro/admin/global-settings.php:550 includes/pro/php/media-metadata.php:531 includes/pro/php/media-metadata.php:580 includes/pro/php/media-metadata.php:606
 msgid "Media Metadata requires a Business or Agency plan."
 msgstr "Mediemetadata kräver en Business- eller Agency-plan."
 
-#: includes/pro/admin/global-settings.php:245
+#: includes/pro/admin/global-settings.php:250
 msgid "Media Metadata settings are unavailable."
 msgstr "Inställningarna för mediemetadata är inte tillgängliga."
 
@@ -2845,7 +2845,7 @@ msgstr "Metadata kunde inte uppdateras från mediebiblioteket."
 msgid "Metadata could not be synced to the Media Library."
 msgstr "Metadata kunde inte synkroniseras till mediebiblioteket."
 
-#: includes/pro/admin/global-settings.php:1037
+#: includes/pro/admin/global-settings.php:1045
 msgid "Metadata Import"
 msgstr "Metadataimport"
 
@@ -2857,7 +2857,7 @@ msgstr "Metadata synkroniseras till mediebiblioteket."
 msgid "Metadata Synchronization: Sync Image Metadata back to the WordPress Media Library"
 msgstr "Metadatasynkronisering: synkronisera bildmetadata tillbaka till WordPress mediebibliotek"
 
-#: includes/pro/admin/global-settings.php:1103
+#: includes/pro/admin/global-settings.php:1111
 msgid "Metadata to Show"
 msgstr "Metadata att visa"
 
@@ -2913,7 +2913,7 @@ msgstr "Videogallerifiltrering med flera nyckelord och anpassad typografi och fi
 msgid "Multiple Layout Options"
 msgstr "Flera layoutalternativ"
 
-#: includes/pro/admin/global-settings.php:805
+#: includes/pro/admin/global-settings.php:810
 msgid "Name"
 msgstr "Namn"
 
@@ -2949,7 +2949,7 @@ msgstr "Ingen ändringslogg hittades i readme.txt."
 msgid "No colors are enabled in this palette. Choose another palette or enable colors in Settings."
 msgstr "Inga färger är aktiverade i den här paletten. Välj en annan palett eller aktivera färger i Inställningar."
 
-#: includes/pro/admin/global-settings.php:429
+#: includes/pro/admin/global-settings.php:434
 msgid "No existing JPEG images were found."
 msgstr "Inga befintliga JPEG-bilder hittades."
 
@@ -2977,7 +2977,7 @@ msgstr "Inga bildgranskningssessioner hittades ännu."
 msgid "No saved watermarks are available. Create and save a watermark in FolioBlocks Settings before enabling watermarking."
 msgstr "Inga sparade vattenstämplar är tillgängliga. Skapa och spara en vattenstämpel i FolioBlocks inställningar innan du aktiverar vattenstämpling."
 
-#: includes/pro/admin/global-settings.php:1327
+#: includes/pro/admin/global-settings.php:1335
 msgid "No saved watermarks yet. Add your first watermark below."
 msgstr "Inga sparade vattenstämplar ännu. Lägg till din första vattenstämpel nedan."
 
@@ -3001,11 +3001,11 @@ msgstr "Normaliserade FolioBlocks-metadata för mediebetyg och färgklasser."
 msgid "Not scanned"
 msgstr "Inte skannad"
 
-#: includes/pro/admin/global-settings.php:1277
+#: includes/pro/admin/global-settings.php:1285
 msgid "Number of days to keep submitted proofing sessions before cleanup."
 msgstr "Antal dagar som inskickade bildgranskningssessioner sparas före rensning."
 
-#: includes/pro/admin/global-settings.php:1271
+#: includes/pro/admin/global-settings.php:1279
 msgid "Number of days to keep viewing and saved in-progress proofing sessions."
 msgstr "Antal dagar som pågående och sparade bildgranskningssessioner behålls."
 
@@ -3017,11 +3017,11 @@ msgstr "Erbjud nedladdningar eller anslut WooCommerce-produkter."
 msgid "On Hover"
 msgstr "Vid hovring"
 
-#: includes/pro/admin/global-settings.php:823 includes/pro/php/block-defaults.php:728
+#: includes/pro/admin/global-settings.php:828 includes/pro/php/block-defaults.php:728
 msgid "Opacity"
 msgstr "Opacitet"
 
-#: includes/pro/admin/global-settings.php:1472
+#: includes/pro/admin/global-settings.php:1480
 msgid "Opacity:"
 msgstr "Opacitet:"
 
@@ -3049,7 +3049,7 @@ msgstr "Öppna i Lightbox"
 msgid "Open in new tab"
 msgstr "Öppna i ny flik"
 
-#: includes/pro/admin/global-settings.php:783
+#: includes/pro/admin/global-settings.php:788
 msgid "Open larger watermark preview"
 msgstr "Öppna större förhandsvisning av vattenstämpel"
 
@@ -3230,7 +3230,7 @@ msgstr "Stöd för lösenordsskydd på sidnivå"
 msgid "Page: %s"
 msgstr "Sida: %s"
 
-#: includes/pro/admin/global-settings.php:983
+#: includes/pro/admin/global-settings.php:989
 msgid "Page/Post Defaults"
 msgstr "Standardvärden för sida/inlägg"
 
@@ -3238,7 +3238,7 @@ msgstr "Standardvärden för sida/inlägg"
 msgid "Palette"
 msgstr "Palett"
 
-#: includes/pro/admin/global-settings.php:1187
+#: includes/pro/admin/global-settings.php:1195
 msgid "Palette Preset"
 msgstr "Palettförinställning"
 
@@ -3306,7 +3306,7 @@ msgstr "Åsidosätter inställningar för svävning per videogalleri"
 msgid "Permission denied"
 msgstr "Åtkomst nekad"
 
-#: includes/pro/admin/global-settings.php:1125
+#: includes/pro/admin/global-settings.php:1133
 msgid "Permit selected roles to edit Media Library values without rewriting the original image file."
 msgstr "Tillåt valda roller att redigera mediebibliotekets värden utan att skriva om originalbildfilen."
 
@@ -3375,23 +3375,23 @@ msgstr "Färger för uppspelningskontroller"
 msgid "Pop"
 msgstr "Pop"
 
-#: includes/pro/admin/global-settings.php:685
+#: includes/pro/admin/global-settings.php:690
 msgid "Portrait 2:3"
 msgstr "Stående 2:3"
 
-#: includes/pro/admin/global-settings.php:690
+#: includes/pro/admin/global-settings.php:695
 msgid "Portrait 3:4"
 msgstr "Stående 3:4"
 
-#: includes/pro/admin/global-settings.php:838
+#: includes/pro/admin/global-settings.php:843
 msgid "Position"
 msgstr "Position"
 
-#: includes/pro/admin/global-settings.php:1472
+#: includes/pro/admin/global-settings.php:1480
 msgid "Position:"
 msgstr "Position:"
 
-#: includes/pro/admin/global-settings.php:763
+#: includes/pro/admin/global-settings.php:768
 #, php-format
 msgid "Position: %1$s · Opacity: %2$s"
 msgstr "Position: %1$s · Opacitet: %2$s"
@@ -3408,11 +3408,11 @@ msgstr "Posterbild"
 msgid "Present images in a different order whenever the gallery loads."
 msgstr "Visa bilder i en annan ordning varje gång galleriet laddas."
 
-#: includes/pro/admin/global-settings.php:1016
+#: includes/pro/admin/global-settings.php:1024
 msgid "Prevent dragging compatible FolioBlocks images by default."
 msgstr "Förhindra att kompatibla FolioBlocks-bilder dras som standard."
 
-#: includes/pro/admin/global-settings.php:1007
+#: includes/pro/admin/global-settings.php:1015
 msgid "Prevent right-clicking on compatible FolioBlocks media by default."
 msgstr "Förhindra högerklick på kompatibla FolioBlocks-medier som standard."
 
@@ -3428,7 +3428,7 @@ msgstr "Förhindra att besökare drar kompatibla FolioBlocks-bilder på den här
 msgid "Prevents visitors from right-clicking."
 msgstr "Förhindrar att besökare högerklickar."
 
-#: includes/pro/admin/global-settings.php:776
+#: includes/pro/admin/global-settings.php:781
 msgid "Preview aspect ratio"
 msgstr "Förhandsvisningens bildförhållande"
 
@@ -3448,7 +3448,7 @@ msgstr "Föregående miniatyr"
 msgid "Private Client Proofing Galleries"
 msgstr "Privata bildgranskningsgallerier för kunder"
 
-#: includes/admin/settings-page.php:463 includes/admin/system-info.php:331 includes/pro/admin/global-settings.php:960
+#: includes/admin/settings-page.php:463 includes/admin/system-info.php:331 includes/pro/admin/global-settings.php:965
 msgid "Pro"
 msgstr "Pro"
 
@@ -3516,7 +3516,7 @@ msgstr "Proofing Gallery Block (endast Pro – Business- och Agency-planer)"
 msgid "Proofing Gallery Settings"
 msgstr "Inställningar för bildgranskningsgalleri"
 
-#: includes/pro/admin/global-settings.php:265
+#: includes/pro/admin/global-settings.php:270
 msgid "Proofing Gallery settings are unavailable."
 msgstr "Inställningarna för bildgranskningsgalleriet är inte tillgängliga."
 
@@ -3562,7 +3562,7 @@ msgstr "Bildgranskningssession inskickad av %s"
 msgid "Proofing Session: %s"
 msgstr "Bildgranskningssession: %s"
 
-#: folioblocks.php:511 folioblocks.php:512 includes/pro/admin/global-settings.php:1257 includes/pro/admin/proofing-sessions.php:513 includes/pro/php/proofing-gallery.php:295
+#: folioblocks.php:511 folioblocks.php:512 includes/pro/admin/global-settings.php:1265 includes/pro/admin/proofing-sessions.php:513 includes/pro/php/proofing-gallery.php:295
 msgid "Proofing Sessions"
 msgstr "Bildgranskningssessioner"
 
@@ -3634,7 +3634,7 @@ msgstr "Betygsätt oss"
 msgid "Rated"
 msgstr "Betygsatt"
 
-#: includes/pro/admin/global-settings.php:1108
+#: includes/pro/admin/global-settings.php:1116
 msgid "Ratings"
 msgstr "Betyg"
 
@@ -3642,11 +3642,11 @@ msgstr "Betyg"
 msgid "Read stored EXIF metadata."
 msgstr "Läs lagrad EXIF-metadata."
 
-#: includes/pro/admin/global-settings.php:1056
+#: includes/pro/admin/global-settings.php:1064
 msgid "Read supported embedded one-to-five-star ratings when JPEG images are imported."
 msgstr "Läs in stödda inbäddade betyg från en till fem stjärnor när JPEG-bilder importeras."
 
-#: includes/pro/admin/global-settings.php:1065
+#: includes/pro/admin/global-settings.php:1073
 msgid "Read supported numeric color classes, XMP labels, and Photo Mechanic tagged state."
 msgstr "Läs in stödda numeriska färgklasser, XMP-etiketter och markeringsstatus från Photo Mechanic."
 
@@ -3687,7 +3687,7 @@ msgstr "Uppdaterar…"
 msgid "Regular"
 msgstr "Normal"
 
-#: includes/pro/admin/global-settings.php:814 src/background-video-block/edit.js:741 src/background-video-block/edit.js:854
+#: includes/pro/admin/global-settings.php:819 src/background-video-block/edit.js:741 src/background-video-block/edit.js:854
 msgid "Remove"
 msgstr "Ta bort"
 
@@ -3707,7 +3707,7 @@ msgstr "Ta bort länk"
 msgid "Remove Product"
 msgstr "Ta bort produkt"
 
-#: includes/pro/admin/global-settings.php:847
+#: includes/pro/admin/global-settings.php:852
 msgid "Repeat"
 msgstr "Upprepa"
 
@@ -3791,7 +3791,7 @@ msgstr "Responsiva mellanrumskontroller (dator/surfplatta/mobil)"
 msgid "Responsive Pro controls for gaps, sizing, focal points, and per-device layout tuning"
 msgstr "Responsiva Pro-kontroller för avstånd, storlekar, fokuspunkter och layout per enhet"
 
-#: folioblocks.php:625 includes/pro/admin/global-settings.php:1074
+#: folioblocks.php:625 includes/pro/admin/global-settings.php:1082
 msgid "Resume Scan"
 msgstr "Återuppta skanning"
 
@@ -3848,19 +3848,19 @@ msgstr "Spara som PDF"
 msgid "Save Button"
 msgstr "Sparaknapp"
 
-#: includes/pro/admin/global-settings.php:1311
+#: includes/pro/admin/global-settings.php:1319
 msgid "Save each watermark with a name that will appear in block editor select controls. One saved watermark can be marked as the default. Gallery blocks will decide where the watermark appears."
 msgstr "Spara varje vattenstämpel med ett namn som visas i blockredigerarens väljare. En sparad vattenstämpel kan anges som standard. Galleriblocken avgör var vattenstämpeln visas."
 
-#: includes/pro/admin/global-settings.php:1351
+#: includes/pro/admin/global-settings.php:1359
 msgid "Save Settings"
 msgstr "Spara inställningar"
 
-#: includes/pro/admin/global-settings.php:867
+#: includes/pro/admin/global-settings.php:872
 msgid "Save Watermark"
 msgstr "Spara vattenstämpel"
 
-#: folioblocks.php:619 includes/pro/admin/global-settings.php:321
+#: folioblocks.php:619 includes/pro/admin/global-settings.php:326
 msgid "Saved"
 msgstr "Sparat"
 
@@ -3868,11 +3868,11 @@ msgstr "Sparat"
 msgid "Saved palette"
 msgstr "Sparad palett"
 
-#: includes/pro/admin/global-settings.php:1269
+#: includes/pro/admin/global-settings.php:1277
 msgid "Saved Session Retention"
 msgstr "Lagringstid för sparade sessioner"
 
-#: includes/pro/admin/global-settings.php:232
+#: includes/pro/admin/global-settings.php:232 includes/pro/admin/global-settings.php:242
 msgid "Saved."
 msgstr "Sparat."
 
@@ -3888,20 +3888,20 @@ msgstr "Sparar…"
 msgid "Scan Again"
 msgstr "Skanna igen"
 
-#: includes/pro/admin/global-settings.php:434
+#: includes/pro/admin/global-settings.php:439
 #, php-format
 msgid "Scan complete: %1$d imported, %2$d already scanned, %3$d failed."
 msgstr "Skanning klar: %1$d importerade, %2$d redan skannade, %3$d misslyckade."
 
-#: folioblocks.php:624 includes/pro/admin/global-settings.php:1074
+#: folioblocks.php:624 includes/pro/admin/global-settings.php:1082
 msgid "Scan Existing Media"
 msgstr "Skanna befintliga medier"
 
-#: includes/pro/admin/global-settings.php:441
+#: includes/pro/admin/global-settings.php:446
 msgid "Scan JPEG images already in the Media Library without changing image files or existing Library edits."
 msgstr "Skanna JPEG-bilder som redan finns i mediebiblioteket utan att ändra bildfiler eller befintliga biblioteksredigeringar."
 
-#: includes/pro/admin/global-settings.php:421
+#: includes/pro/admin/global-settings.php:426
 #, php-format
 msgid "Scanned %1$d of %2$d JPEG images."
 msgstr "Skannat %1$d av %2$d JPEG-bilder."
@@ -3938,7 +3938,7 @@ msgstr "Välj"
 msgid "Select a video"
 msgstr "Välj en video"
 
-#: includes/pro/admin/global-settings.php:286
+#: includes/pro/admin/global-settings.php:291
 msgid "Select a watermark image before saving."
 msgstr "Välj en vattenstämpelbild innan du sparar."
 
@@ -4026,7 +4026,7 @@ msgstr "egenhostade videor"
 msgid "Semi Bold"
 msgstr "Halvfet"
 
-#: includes/pro/admin/global-settings.php:1286
+#: includes/pro/admin/global-settings.php:1294
 msgid "Send an email to the site admin account when a Proofing Session is submitted."
 msgstr "Skicka e-post till webbplatsadministratörens konto när en bildgranskningssession skickas in."
 
@@ -4245,7 +4245,7 @@ msgstr "Ställ in utrymmet mellan galleribilder."
 msgid "Set the space between video thumbnails."
 msgstr "Ställ in utrymmet mellan videominiatyrer."
 
-#: includes/pro/admin/global-settings.php:984
+#: includes/pro/admin/global-settings.php:992
 msgid "Set the starting Page/Post Settings for newly added compatible FolioBlocks content."
 msgstr "Ange startvärden för sid-/inläggsinställningar för nyligen tillagt kompatibelt FolioBlocks-innehåll."
 
@@ -4289,7 +4289,7 @@ msgstr "Anger standardåtgärden för Lägg i varukorg-ikoner i det här galleri
 msgid "Sets the default WooCommerce product action for this gallery. Individual images can override this setting."
 msgstr "Anger standardåtgärden för WooCommerce-produkt i detta galleri. Enskilda bilder kan åsidosätta inställningen."
 
-#: folioblocks.php:521 folioblocks.php:522 folioblocks.php:672 includes/pro/admin/global-settings.php:960
+#: folioblocks.php:521 folioblocks.php:522 folioblocks.php:672 includes/pro/admin/global-settings.php:965
 msgid "Settings"
 msgstr "Installningar"
 
@@ -4334,7 +4334,7 @@ msgstr "Visa EXIF-data"
 msgid "Show Flag icon so clients can assign a color status to images."
 msgstr "Visa flaggikon så att kunder kan tilldela bilder en färgstatus."
 
-#: includes/pro/admin/global-settings.php:1097
+#: includes/pro/admin/global-settings.php:1105
 msgid "Show FolioBlocks Metadata"
 msgstr "Visa FolioBlocks-metadata"
 
@@ -4398,11 +4398,11 @@ msgstr "Visa produktinfo"
 msgid "Show Product Price"
 msgstr "Visa produktpris"
 
-#: includes/pro/admin/global-settings.php:1294
+#: includes/pro/admin/global-settings.php:1302
 msgid "Show Proofing Status Component in the Admin bar"
 msgstr "Visa bildgranskningens statuskomponent i adminfältet"
 
-#: includes/pro/admin/global-settings.php:1098
+#: includes/pro/admin/global-settings.php:1106
 msgid "Show ratings, color classes, and supported EXIF data in attachment details."
 msgstr "Visa betyg, färgklasser och stödda EXIF-data i bilageinformationen."
 
@@ -4442,11 +4442,11 @@ msgstr "Slutartid"
 msgid "Simple"
 msgstr "Enkel"
 
-#: includes/admin/free-pro.php:396 includes/pro/admin/global-settings.php:849
+#: includes/admin/free-pro.php:396 includes/pro/admin/global-settings.php:854
 msgid "Single"
 msgstr "Enstaka"
 
-#: includes/pro/admin/global-settings.php:828
+#: includes/pro/admin/global-settings.php:833
 msgid "Size (% of short edge)"
 msgstr "Storlek (% av kortsidan)"
 
@@ -4506,11 +4506,11 @@ msgstr "Reglagets riktning"
 msgid "Slider Settings"
 msgstr "Reglageinställningar"
 
-#: includes/pro/admin/global-settings.php:1232
+#: includes/pro/admin/global-settings.php:1240
 msgid "Social Sharing"
 msgstr "Social delning"
 
-#: includes/pro/admin/global-settings.php:255
+#: includes/pro/admin/global-settings.php:260
 msgid "Social Sharing settings are unavailable."
 msgstr "Inställningarna för social delning är inte tillgängliga."
 
@@ -4538,7 +4538,7 @@ msgstr "Du har inte behörighet att ta bort bildgranskningssessioner."
 msgid "Sorry, you are not allowed to perform this action."
 msgstr "Tyvärr, du får inte utföra den här åtgärden."
 
-#: includes/pro/admin/global-settings.php:550
+#: includes/pro/admin/global-settings.php:555
 msgid "Sorry, you are not allowed to scan the Media Library."
 msgstr "Du har inte behörighet att skanna mediebiblioteket."
 
@@ -4546,7 +4546,7 @@ msgstr "Du har inte behörighet att skanna mediebiblioteket."
 msgid "Sorry, you are not allowed to update these settings."
 msgstr "Du har inte behörighet att uppdatera dessa inställningar."
 
-#: includes/pro/admin/global-settings.php:680 includes/pro/php/block-defaults.php:113 src/loupe-block/premium.js:32
+#: includes/pro/admin/global-settings.php:685 includes/pro/php/block-defaults.php:113 src/loupe-block/premium.js:32
 msgid "Square"
 msgstr "Fyrkant"
 
@@ -4566,7 +4566,7 @@ msgstr "Staplar bilder vertikalt med jamnt avstand och fullbreddsjustering."
 msgid "Star Rating"
 msgstr "Stjärnbetyg"
 
-#: includes/pro/admin/global-settings.php:1156
+#: includes/pro/admin/global-settings.php:1164
 msgid "Star Ratings"
 msgstr "Stjärnbetyg"
 
@@ -4582,7 +4582,7 @@ msgstr "Startposition (%)"
 msgid "Status"
 msgstr "Status"
 
-#: includes/pro/admin/global-settings.php:806
+#: includes/pro/admin/global-settings.php:811
 msgid "Studio White Logo"
 msgstr "Vit studiologotyp"
 
@@ -4610,7 +4610,7 @@ msgstr "Inskickade bildgranskningsrapporter: granska och sortera kundernas gilla
 msgid "Submitted Selections"
 msgstr "Inskickade urval"
 
-#: includes/pro/admin/global-settings.php:1275
+#: includes/pro/admin/global-settings.php:1283
 msgid "Submitted Session Retention"
 msgstr "Lagringstid för inskickade sessioner"
 
@@ -4750,7 +4750,7 @@ msgstr "Metadata kunde inte återställas. Försök igen."
 msgid "The original attachment file could not be read."
 msgstr "Den ursprungliga bilagefilen kunde inte läsas."
 
-#: includes/pro/admin/global-settings.php:1222
+#: includes/pro/admin/global-settings.php:1230
 msgid "The values 1–8 never move. Changing a color or label only changes how that stored number appears in FolioBlocks."
 msgstr "Värdena 1–8 flyttas aldrig. Om du ändrar en färg eller etikett ändras bara hur det lagrade numret visas i FolioBlocks."
 
@@ -4762,11 +4762,11 @@ msgstr "Tema"
 msgid "Theme Default"
 msgstr "Temats standard"
 
-#: includes/pro/admin/global-settings.php:591
+#: includes/pro/admin/global-settings.php:596
 msgid "There is no Media Library scan to resume."
 msgstr "Det finns ingen skanning av mediebiblioteket att återuppta."
 
-#: includes/pro/admin/global-settings.php:990
+#: includes/pro/admin/global-settings.php:998
 msgid "These defaults can be overridden on each page or post and do not change existing FolioBlocks content."
 msgstr "Dessa standardvärden kan åsidosättas på varje sida eller inlägg och ändrar inte befintligt FolioBlocks-innehåll."
 
@@ -4810,7 +4810,7 @@ msgstr "Miniatyrposition"
 msgid "Thumbnail Resolution"
 msgstr "Miniatyrupplösning"
 
-#: includes/pro/admin/global-settings.php:850
+#: includes/pro/admin/global-settings.php:855
 msgid "Tiled"
 msgstr "Sida vid sida"
 
@@ -4834,11 +4834,11 @@ msgstr "Växla synligheten för navigeringspilar."
 msgid "Top"
 msgstr "Överst"
 
-#: includes/pro/admin/global-settings.php:664 includes/pro/admin/global-settings.php:1401
+#: includes/pro/admin/global-settings.php:669 includes/pro/admin/global-settings.php:1409
 msgid "Top Left"
 msgstr "Uppe till vänster"
 
-#: includes/pro/admin/global-settings.php:665 includes/pro/admin/global-settings.php:1402
+#: includes/pro/admin/global-settings.php:670 includes/pro/admin/global-settings.php:1410
 msgid "Top Right"
 msgstr "Uppe till höger"
 
@@ -4878,7 +4878,7 @@ msgstr "Okänd flagga"
 msgid "Unknown page"
 msgstr "Okänd sida"
 
-#: includes/pro/admin/global-settings.php:318
+#: includes/pro/admin/global-settings.php:323
 msgid "Unknown settings section."
 msgstr "Okänd inställningssektion."
 
@@ -4890,7 +4890,7 @@ msgstr "Las upp Pro"
 msgid "Unrated"
 msgstr "Utan betyg"
 
-#: includes/pro/admin/global-settings.php:1168
+#: includes/pro/admin/global-settings.php:1176
 msgid "Unrated Label"
 msgstr "Etikett för utan betyg"
 
@@ -4922,7 +4922,7 @@ msgstr "Uppgradera till Pro for att lasa upp alla dessa funktioner."
 msgid "Upgrade Today"
 msgstr "Uppgradera idag"
 
-#: includes/pro/admin/global-settings.php:813
+#: includes/pro/admin/global-settings.php:818
 msgid "Upload / Select Image"
 msgstr "Ladda upp / välj bild"
 
@@ -4954,7 +4954,7 @@ msgstr "Ladda upp eller välj bilder för att skapa ett justerat galleri."
 msgid "Upload or select images to create a Masonry Gallery."
 msgstr "Ladda upp eller välj bilder för att skapa ett Masonry-galleri."
 
-#: includes/pro/admin/global-settings.php:1584
+#: includes/pro/admin/global-settings.php:1592
 msgid "Upload or Select Watermark Image"
 msgstr "Ladda upp eller välj vattenstämpelbild"
 
@@ -4975,7 +4975,7 @@ msgstr "Använd %1$sInställningar%2$s för att skanna befintliga bilder i medie
 msgid "Use a light or dark loupe frame."
 msgstr "Använd en ljus eller mörk luppram."
 
-#: includes/pro/admin/global-settings.php:817
+#: includes/pro/admin/global-settings.php:822
 msgid "Use a transparent PNG or WebP where possible. Accepts the image formats allowed by your WordPress Media Library; SVG uploads are not supported by default unless your site explicitly enables them."
 msgstr "Använd om möjligt en transparent PNG eller WebP. Bildformat som tillåts i ditt WordPress-mediebibliotek accepteras. SVG-uppladdningar stöds inte som standard om inte webbplatsen uttryckligen aktiverar dem."
 
@@ -4995,7 +4995,7 @@ msgstr "Använd hovringsbeteende som har ställts in specifikt för den här vid
 msgid "Use this video"
 msgstr "Använd denna video"
 
-#: includes/pro/admin/global-settings.php:1585
+#: includes/pro/admin/global-settings.php:1593
 msgid "Use Watermark"
 msgstr "Använd vattenstämpel"
 
@@ -5016,7 +5016,7 @@ msgstr "Använder typsnitt från temats Globala stilar."
 msgid "v%s"
 msgstr "v%s"
 
-#: includes/pro/admin/global-settings.php:1198
+#: includes/pro/admin/global-settings.php:1206
 msgid "Value"
 msgstr "Värde"
 
@@ -5024,7 +5024,7 @@ msgstr "Värde"
 msgid "Version"
 msgstr "Version"
 
-#: includes/admin/free-pro.php:378 includes/admin/settings-page.php:460 includes/admin/system-info.php:325 includes/pro/admin/global-settings.php:957 includes/pro/admin/proofing-sessions.php:685 includes/pro/admin/proofing-sessions.php:695
+#: includes/admin/free-pro.php:378 includes/admin/settings-page.php:460 includes/admin/system-info.php:325 includes/pro/admin/global-settings.php:962 includes/pro/admin/proofing-sessions.php:685 includes/pro/admin/proofing-sessions.php:695
 #, php-format
 msgid "Version %s"
 msgstr "Version %s"
@@ -5218,11 +5218,11 @@ msgstr "Besökare måste ange detta lösenord för att se sidan."
 msgid "Visitors must enter this password to view the post."
 msgstr "Besökare måste ange detta lösenord för att se inlägget."
 
-#: includes/pro/admin/global-settings.php:114 includes/pro/admin/global-settings.php:1467 src/fbks-helpers/watermarkOverlayControls.js:328
+#: includes/pro/admin/global-settings.php:114 includes/pro/admin/global-settings.php:1475 src/fbks-helpers/watermarkOverlayControls.js:328
 msgid "Watermark"
 msgstr "Vattenstämpel"
 
-#: includes/pro/admin/global-settings.php:810
+#: includes/pro/admin/global-settings.php:815
 msgid "Watermark Image"
 msgstr "Vattenstämpelbild"
 
@@ -5242,15 +5242,15 @@ msgstr "Vattenstämpelöverlägg: visa anpassade vattenstämplar på galleribild
 msgid "Watermark Overlays: Display custom watermarks on images"
 msgstr "Vattenstämpelöverlägg: visa anpassade vattenstämplar på bilder"
 
-#: includes/pro/admin/global-settings.php:1360
+#: includes/pro/admin/global-settings.php:1368
 msgid "Watermark Preview"
 msgstr "Förhandsvisning av vattenstämpel"
 
-#: folioblocks.php:622 includes/pro/admin/global-settings.php:309
+#: folioblocks.php:622 includes/pro/admin/global-settings.php:314
 msgid "Watermark saved."
 msgstr "Vattenstämpeln har sparats."
 
-#: includes/pro/admin/global-settings.php:1304
+#: includes/pro/admin/global-settings.php:1312
 msgid "Watermarks"
 msgstr "Vattenstämplar"
 
@@ -5274,15 +5274,15 @@ msgstr "När detta är inaktiverat visas nedladdningsikonen alltid."
 msgid "White"
 msgstr "Vit"
 
-#: includes/pro/admin/global-settings.php:1142
+#: includes/pro/admin/global-settings.php:1150
 msgid "Who Can Edit Metadata"
 msgstr "Vem kan redigera metadata"
 
-#: includes/pro/admin/global-settings.php:1131
+#: includes/pro/admin/global-settings.php:1139
 msgid "Who Can View Metadata"
 msgstr "Vem kan se metadata"
 
-#: includes/pro/admin/global-settings.php:705
+#: includes/pro/admin/global-settings.php:710
 msgid "Wide 16:9"
 msgstr "Bredbild 16:9"
 

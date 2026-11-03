@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: FolioBlocks 1.6.0-beta\n"
+"Project-Id-Version: FolioBlocks 1.6.0-beta.1\n"
 "Report-Msgid-Bugs-To: https://folioblocks.com\n"
-"POT-Creation-Date: 2026-10-30 09:29:19+0000\n"
-"PO-Revision-Date: 2026-10-30 09:29:19+0000\n"
+"POT-Creation-Date: 2026-11-03 07:53:45+0000\n"
+"PO-Revision-Date: 2026-11-03 07:53:45+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es_ES\n"
@@ -195,7 +195,7 @@ msgstr "Anadir pila de imagenes"
 msgid "Add Images"
 msgstr "Añadir imágenes"
 
-#: includes/pro/admin/global-settings.php:1335
+#: includes/pro/admin/global-settings.php:1343
 msgid "Add New Watermark"
 msgstr "Añadir nueva marca de agua"
 
@@ -239,7 +239,7 @@ msgstr "Añadir vídeo"
 msgid "Add Videos"
 msgstr "Añadir vídeos"
 
-#: includes/pro/admin/global-settings.php:792
+#: includes/pro/admin/global-settings.php:797
 msgid "Add Watermark"
 msgstr "Añadir marca de agua"
 
@@ -293,7 +293,7 @@ msgstr "Posicion de video ajustable (X / Y)"
 msgid "Adjustable video position (X / Y) for Tablet & Mobile"
 msgstr "Posicion de video ajustable (X / Y) para tableta y movil"
 
-#: includes/pro/admin/global-settings.php:1152
+#: includes/pro/admin/global-settings.php:1160
 msgid "Administrators always retain access. Attachment permissions are checked in addition to the selected role."
 msgstr "Los administradores siempre conservan el acceso. Se comprueban los permisos de los adjuntos además del rol seleccionado."
 
@@ -357,11 +357,11 @@ msgstr "Todos"
 msgid "All Images"
 msgstr "Todas las imágenes"
 
-#: includes/pro/admin/global-settings.php:1047
+#: includes/pro/admin/global-settings.php:1055
 msgid "Allow FolioBlocks Media Library tools to retain supported camera and exposure fields."
 msgstr "Permite que las herramientas de la biblioteca de medios de FolioBlocks conserven los campos de cámara y exposición compatibles."
 
-#: includes/pro/admin/global-settings.php:1124
+#: includes/pro/admin/global-settings.php:1132
 msgid "Allow Metadata Editing"
 msgstr "Permitir editar metadatos"
 
@@ -525,7 +525,7 @@ msgstr "Negro"
 msgid "Block defaults require a paid plan."
 msgstr "Los valores predeterminados de bloques requieren un plan de pago."
 
-#: includes/pro/admin/global-settings.php:888
+#: includes/pro/admin/global-settings.php:893
 msgid "Block settings saved."
 msgstr "Ajustes del bloque guardados."
 
@@ -601,11 +601,11 @@ msgstr "Abajo"
 msgid "Bottom Gradient Overlay"
 msgstr "Superposición con degradado inferior"
 
-#: includes/pro/admin/global-settings.php:666 includes/pro/admin/global-settings.php:1403
+#: includes/pro/admin/global-settings.php:671 includes/pro/admin/global-settings.php:1411
 msgid "Bottom Left"
 msgstr "Abajo a la izquierda"
 
-#: includes/pro/admin/global-settings.php:667 includes/pro/admin/global-settings.php:1404
+#: includes/pro/admin/global-settings.php:672 includes/pro/admin/global-settings.php:1412
 msgid "Bottom Right"
 msgstr "Abajo a la derecha"
 
@@ -669,7 +669,7 @@ msgstr "Controles de reproducción del carrusel: con estilos personalizados"
 msgid "Carousel Styles"
 msgstr "Estilos de Carousel"
 
-#: includes/pro/admin/global-settings.php:663 includes/pro/admin/global-settings.php:1400 includes/pro/php/block-defaults.php:20 includes/pro/php/block-defaults.php:256 includes/pro/php/block-defaults.php:404 includes/pro/php/block-defaults.php:442 src/before-after-block/premium.js:76 src/before-after-block/premium.js:93 src/carousel-gallery-block/premium.js:154 src/fbks-helpers/filteringPremiumControls.js:168 src/proofing-gallery-block/edit.js:189
+#: includes/pro/admin/global-settings.php:668 includes/pro/admin/global-settings.php:1408 includes/pro/php/block-defaults.php:20 includes/pro/php/block-defaults.php:256 includes/pro/php/block-defaults.php:404 includes/pro/php/block-defaults.php:442 src/before-after-block/premium.js:76 src/before-after-block/premium.js:93 src/carousel-gallery-block/premium.js:154 src/fbks-helpers/filteringPremiumControls.js:168 src/proofing-gallery-block/edit.js:189
 msgid "Center"
 msgstr "Centro"
 
@@ -842,11 +842,11 @@ msgstr "Elige el estilo de la superposición al pasar el cursor."
 msgid "Choose the information shown with the image."
 msgstr "Elige la información que se muestra con la imagen."
 
-#: includes/pro/admin/global-settings.php:1233
+#: includes/pro/admin/global-settings.php:1241
 msgid "Choose the social networks available in lightbox and overlay sharing controls."
 msgstr "Elige las redes sociales disponibles en los controles para compartir de la caja de luz y las superposiciones."
 
-#: includes/pro/admin/global-settings.php:1347
+#: includes/pro/admin/global-settings.php:1355
 msgid "Choose the starting settings for newly inserted FolioBlocks blocks. Individual blocks can be adjusted in the editor, and existing blocks keep their saved settings."
 msgstr "Elige los ajustes iniciales para nuevos bloques de FolioBlocks. Los bloques individuales pueden ajustarse en el editor y los existentes conservan sus ajustes guardados."
 
@@ -858,7 +858,7 @@ msgstr "Elige el estilo visual de la superposición de imagen."
 msgid "Choose the visual style of the video overlay."
 msgstr "Elige el estilo visual de la superposición de vídeo."
 
-#: includes/pro/admin/global-settings.php:1239
+#: includes/pro/admin/global-settings.php:1247
 msgid "Choose up to 5 social sharing sources used when Social Media is selected for lightbox or overlay content."
 msgstr "Elige hasta 5 servicios para compartir que se usarán al seleccionar Redes sociales como contenido de la caja de luz o la superposición."
 
@@ -958,7 +958,7 @@ msgstr "Elige qué bloque de galería se usa para el diseño. Las columnas, el e
 msgid "Choose WooCommerce products from the individual Image Block settings."
 msgstr "Elige productos de WooCommerce desde los ajustes individuales del bloque de imagen."
 
-#: includes/pro/admin/global-settings.php:1193
+#: includes/pro/admin/global-settings.php:1201
 msgid "Choosing a preset copies its mapping below. Editing a row changes the selection to Custom."
 msgstr "Al elegir un preajuste se copia su asignación debajo. Al editar una fila, la selección cambia a Personalizado."
 
@@ -1017,7 +1017,7 @@ msgstr "Valoraciones de clientes: de 1 a 5 estrellas opcionales, con progreso gu
 msgid "Client: %s"
 msgstr "Cliente: %s"
 
-#: includes/pro/admin/global-settings.php:1361 src/video-block/render.php:343
+#: includes/pro/admin/global-settings.php:1369 src/video-block/render.php:343
 msgid "Close"
 msgstr "Cerrar"
 
@@ -1029,7 +1029,7 @@ msgstr "Cerrar Lightbox"
 msgid "Collapse layout on Mobile"
 msgstr "Contraer diseño en móvil"
 
-#: includes/pro/admin/global-settings.php:1200 includes/pro/php/block-defaults.php:92 src/fbks-helpers/CompactColorControl.js:264
+#: includes/pro/admin/global-settings.php:1208 includes/pro/php/block-defaults.php:92 src/fbks-helpers/CompactColorControl.js:264
 msgid "Color"
 msgstr "Color"
 
@@ -1038,11 +1038,11 @@ msgstr "Color"
 msgid "Color class %d"
 msgstr "Clase de color %d"
 
-#: includes/pro/admin/global-settings.php:1109 includes/pro/admin/global-settings.php:1174
+#: includes/pro/admin/global-settings.php:1117 includes/pro/admin/global-settings.php:1182
 msgid "Color Classes"
 msgstr "Clases de color"
 
-#: includes/pro/admin/global-settings.php:1212
+#: includes/pro/admin/global-settings.php:1220
 #, php-format
 msgid "Color for class %d"
 msgstr "Color de la clase %d"
@@ -1095,7 +1095,7 @@ msgstr "Compara las funciones para encontrar la mejor opción para tu sitio web.
 msgid "Configure playback timing and behavior."
 msgstr "Configure el tiempo y el comportamiento de reproducción."
 
-#: includes/pro/admin/global-settings.php:970
+#: includes/pro/admin/global-settings.php:975
 msgid "Configure the default behavior of FolioBlocks across your website. Open a section to view its settings—changes are saved automatically as you make them."
 msgstr "Configura el comportamiento predeterminado de FolioBlocks en tu sitio web. Abre una sección para ver sus ajustes; los cambios se guardan automáticamente."
 
@@ -1107,7 +1107,7 @@ msgstr "Conecta vídeos directamente con productos de tu tienda."
 msgid "Control filter-bar typography."
 msgstr "Controlar la tipografía de la barra de filtros."
 
-#: includes/pro/admin/global-settings.php:1264
+#: includes/pro/admin/global-settings.php:1272
 msgid "Control how long proofing sessions are stored and whether admins are notified when clients submit selections."
 msgstr "Controla cuánto tiempo se conservan las sesiones de selección y si se avisa a los administradores cuando los clientes envían sus selecciones."
 
@@ -1155,7 +1155,7 @@ msgstr "Crea y personaliza bloques y galerías en el editor de bloques y usa Aju
 msgid "Create distinctive interactions for your video thumbnails."
 msgstr "Crea interacciones únicas para tus miniaturas de vídeo."
 
-#: includes/pro/admin/global-settings.php:1305
+#: includes/pro/admin/global-settings.php:1313
 msgid "Create reusable watermarks and choose the default for new compatible blocks."
 msgstr "Crea marcas de agua reutilizables y elige la predeterminada para los nuevos bloques compatibles."
 
@@ -1251,7 +1251,7 @@ msgstr "Personaliza la lupa para adaptarla a tu imagen."
 msgid "Customize the slider handle and line color."
 msgstr "Personalice el control deslizante y el color de la línea."
 
-#: includes/pro/php/block-defaults.php:706
+#: includes/pro/admin/global-settings.php:990 includes/pro/php/block-defaults.php:706
 msgid "Customized"
 msgstr "Personalizado"
 
@@ -1291,7 +1291,7 @@ msgstr "Comportamiento predeterminado del clic en producto"
 msgid "Default Product Link Behavior"
 msgstr "Comportamiento predeterminado del enlace de producto"
 
-#: includes/pro/admin/global-settings.php:796 src/fbks-helpers/watermarkOverlayControls.js:332
+#: includes/pro/admin/global-settings.php:801 src/fbks-helpers/watermarkOverlayControls.js:332
 msgid "Default Watermark"
 msgstr "Marca de agua predeterminada"
 
@@ -1303,7 +1303,7 @@ msgstr "Eliminar"
 msgid "Delete this proofing session permanently? This only deletes the saved proofing results, not the Media Library images."
 msgstr "¿Eliminar esta sesión de selección permanentemente? Solo se eliminan los resultados guardados, no las imágenes de la biblioteca de medios."
 
-#: includes/pro/admin/global-settings.php:859
+#: includes/pro/admin/global-settings.php:864
 msgid "Delete this watermark"
 msgstr "Eliminar esta marca de agua"
 
@@ -1355,7 +1355,7 @@ msgstr "Desactiva el vídeo de fondo en móviles y muestra la imagen de portada.
 msgid "Disable background video on mobile and display the poster image."
 msgstr "Desactiva el vídeo de fondo en móviles y muestra la imagen de portada."
 
-#: includes/pro/admin/global-settings.php:1015 includes/pro/js/page-media-settings.js:430
+#: includes/pro/admin/global-settings.php:1023 includes/pro/js/page-media-settings.js:430
 msgid "Disable Drag To Save"
 msgstr "Desactivar arrastrar para guardar"
 
@@ -1383,7 +1383,7 @@ msgstr "Deshabilite el clic derecho en los medios mostrados."
 msgid "Disable Right-Click on Page"
 msgstr "Desactivar clic derecho en la página"
 
-#: includes/pro/admin/global-settings.php:1006
+#: includes/pro/admin/global-settings.php:1014
 msgid "Disable Right-Click on Page/Post"
 msgstr "Desactivar clic derecho en la página/entrada"
 
@@ -1435,7 +1435,7 @@ msgstr "Muestra siempre el contenido superpuesto en lugar de solo al pasar el cu
 msgid "Display product information with videos."
 msgstr "Muestra información del producto con vídeos."
 
-#: includes/pro/admin/global-settings.php:1295
+#: includes/pro/admin/global-settings.php:1303
 msgid "Display the Proofing Gallery Block's status component in the Admin bar and see in real time when clients are interacting the proofing galleries."
 msgstr "Muestra el componente de estado de Proofing Gallery Block en la barra de administración y ve en tiempo real cuándo los clientes interactúan con las galerías de selección."
 
@@ -1559,7 +1559,7 @@ msgstr "Ajustes de comercio electrónico"
 msgid "E-Commerce Styles"
 msgstr "Estilos de comercio electrónico"
 
-#: includes/pro/admin/global-settings.php:770
+#: includes/pro/admin/global-settings.php:775
 msgid "Edit"
 msgstr "Editar"
 
@@ -1579,7 +1579,7 @@ msgstr "Editar producto de WooCommerce"
 msgid "Elevated"
 msgstr "Elevado"
 
-#: includes/pro/admin/global-settings.php:1285
+#: includes/pro/admin/global-settings.php:1293
 msgid "Email admin when session is submitted"
 msgstr "Enviar correo al administrador al enviar la sesión"
 
@@ -1596,7 +1596,7 @@ msgstr "Los valores originales incrustados no cambian."
 msgid "Embedded Rating: %s"
 msgstr "Valoración incrustada: %s"
 
-#: includes/pro/admin/global-settings.php:1033
+#: includes/pro/admin/global-settings.php:1041
 msgid "Embedded values remain unchanged for provenance. These settings control future imports and how the separate editable Media Library values will be presented."
 msgstr "Los valores incrustados no cambian para conservar su procedencia. Estos ajustes controlan las importaciones futuras y cómo se presentan los valores editables independientes de la biblioteca de medios."
 
@@ -1610,7 +1610,7 @@ msgstr "Incrustado: %1$s · Etiqueta: %2$s"
 msgid "Embedded: %s"
 msgstr "Incrustado: %s"
 
-#: includes/pro/admin/global-settings.php:567
+#: includes/pro/admin/global-settings.php:572
 msgid "Enable at least one metadata import option before scanning existing media."
 msgstr "Activa al menos una opción de importación de metadatos antes de analizar los medios existentes."
 
@@ -1622,12 +1622,12 @@ msgstr "Activar reproducción automática"
 msgid "Enable Carousel Controls"
 msgstr "Activar controles de Carousel"
 
-#: includes/pro/admin/global-settings.php:1207
+#: includes/pro/admin/global-settings.php:1215
 #, php-format
 msgid "Enable color class %d"
 msgstr "Activar clase de color %d"
 
-#: includes/pro/admin/global-settings.php:1180
+#: includes/pro/admin/global-settings.php:1188
 msgid "Enable Color Classes"
 msgstr "Activar clases de color"
 
@@ -1667,7 +1667,7 @@ msgstr "Activar filtrado de imágenes"
 msgid "Enable image filtering with categories."
 msgstr "Activar el filtrado de imágenes con categorías."
 
-#: includes/pro/admin/global-settings.php:997 includes/pro/js/page-media-settings.js:399 src/before-after-block/premium.js:213 src/video-block/premium.js:709 src/video-gallery-block/premium.js:200
+#: includes/pro/admin/global-settings.php:1005 includes/pro/js/page-media-settings.js:399 src/before-after-block/premium.js:213 src/video-block/premium.js:709 src/video-gallery-block/premium.js:200
 msgid "Enable Lazy Load of Images"
 msgstr "Activar carga diferida de imágenes"
 
@@ -1687,11 +1687,11 @@ msgstr "Activar Lightbox en el editor"
 msgid "Enable Lightbox Zoom"
 msgstr "Activar zoom de la caja de luz"
 
-#: includes/pro/admin/global-settings.php:1162 src/proofing-gallery-block/edit.js:1117
+#: includes/pro/admin/global-settings.php:1170 src/proofing-gallery-block/edit.js:1117
 msgid "Enable Star Ratings"
 msgstr "Activar valoraciones con estrellas"
 
-#: includes/pro/admin/global-settings.php:1317
+#: includes/pro/admin/global-settings.php:1325
 msgid "Enable the default watermark for new compatible blocks"
 msgstr "Activar la marca de agua predeterminada para nuevos bloques compatibles"
 
@@ -1715,7 +1715,7 @@ msgstr "Activar marcas de agua"
 msgid "Enable WooCommerce Integration"
 msgstr "Activar integración con WooCommerce"
 
-#: includes/pro/admin/global-settings.php:1199
+#: includes/pro/admin/global-settings.php:1207
 msgid "Enabled"
 msgstr "Activado"
 
@@ -1763,7 +1763,7 @@ msgstr "Introduce una URL válida de Vimeo que empiece por http:// o https://."
 msgid "Enter a valid YouTube, Vimeo, or self-hosted video URL. Bunny Stream, Cloudflare Stream, DailyMotion, Livid, Loom, VideoPress, and Wistia require FolioBlocks Pro."
 msgstr "Introduce una URL válida de YouTube, Vimeo o un vídeo alojado en tu sitio. Bunny Stream, Cloudflare Stream, DailyMotion, Livid, Loom, VideoPress y Wistia requieren FolioBlocks Pro."
 
-#: includes/pro/admin/global-settings.php:1107 includes/pro/admin/media-metadata.php:374
+#: includes/pro/admin/global-settings.php:1115 includes/pro/admin/media-metadata.php:374
 msgid "EXIF Data"
 msgstr "Datos EXIF"
 
@@ -1899,7 +1899,7 @@ msgstr "Punto focal X (izquierda - derecha)"
 msgid "Focal Point Y (Up - Down)"
 msgstr "Punto focal Y (arriba - abajo)"
 
-#: folioblocks.php:216 folioblocks.php:492 folioblocks.php:493 includes/admin/free-pro.php:380 includes/admin/free-pro.php:381 includes/admin/settings-page.php:462 includes/admin/settings-page.php:463 includes/admin/system-info.php:327 includes/admin/system-info.php:329 includes/pro/admin/global-settings.php:959 includes/pro/admin/global-settings.php:960 includes/pro/admin/proofing-sessions.php:477 includes/pro/php/icon-registration.php:22
+#: folioblocks.php:216 folioblocks.php:492 folioblocks.php:493 includes/admin/free-pro.php:380 includes/admin/free-pro.php:381 includes/admin/settings-page.php:462 includes/admin/settings-page.php:463 includes/admin/system-info.php:327 includes/admin/system-info.php:329 includes/pro/admin/global-settings.php:964 includes/pro/admin/global-settings.php:965 includes/pro/admin/proofing-sessions.php:477 includes/pro/php/icon-registration.php:22
 msgid "FolioBlocks"
 msgstr "FolioBlocks"
 
@@ -1947,7 +1947,7 @@ msgstr "Familia tipográfica"
 msgid "Font Size"
 msgstr "Tamaño de fuente"
 
-#: includes/pro/admin/global-settings.php:1347
+#: includes/pro/admin/global-settings.php:1355
 msgid "For blocks that can be nested inside other blocks, global defaults apply only when they are used on their own, outside another block."
 msgstr "Para los bloques que pueden anidarse, los valores globales solo se aplican cuando se usan de forma independiente, fuera de otro bloque."
 
@@ -2063,7 +2063,7 @@ msgstr "Espacio entre elementos"
 msgid "General Gallery Settings"
 msgstr "Ajustes generales de la galería"
 
-#: includes/pro/admin/global-settings.php:978
+#: includes/pro/admin/global-settings.php:983
 msgid "General Settings"
 msgstr "Ajustes generales"
 
@@ -2095,11 +2095,11 @@ msgstr "Da a esta imagen un comportamiento diferente al resto de la galería."
 msgid "Glare"
 msgstr "Brillo"
 
-#: includes/pro/admin/global-settings.php:1346
+#: includes/pro/admin/global-settings.php:1354
 msgid "Global Block Defaults"
 msgstr "Valores globales predeterminados de bloques"
 
-#: includes/pro/admin/global-settings.php:918
+#: includes/pro/admin/global-settings.php:923
 msgid "Global settings saved."
 msgstr "Ajustes globales guardados."
 
@@ -2347,23 +2347,23 @@ msgstr "Las imágenes sin URL no tendrán enlace."
 msgid "img"
 msgstr "img"
 
-#: includes/pro/admin/global-settings.php:1064
+#: includes/pro/admin/global-settings.php:1072
 msgid "Import Color Classes"
 msgstr "Importar clases de color"
 
-#: includes/pro/admin/global-settings.php:1046
+#: includes/pro/admin/global-settings.php:1054
 msgid "Import EXIF Data"
 msgstr "Importar datos EXIF"
 
-#: includes/pro/admin/global-settings.php:1038
+#: includes/pro/admin/global-settings.php:1046
 msgid "Import options apply to future uploads and rescans. Turning one off does not delete metadata already stored."
 msgstr "Las opciones de importación se aplican a futuras subidas y nuevos análisis. Desactivar una opción no elimina los metadatos ya guardados."
 
-#: includes/pro/admin/global-settings.php:1055
+#: includes/pro/admin/global-settings.php:1063
 msgid "Import Star Ratings"
 msgstr "Importar valoraciones con estrellas"
 
-#: includes/pro/admin/global-settings.php:1027
+#: includes/pro/admin/global-settings.php:1035
 msgid "Import, display, and manage ratings and color classes used throughout FolioBlocks."
 msgstr "Importa, muestra y gestiona las valoraciones y clases de color utilizadas en FolioBlocks."
 
@@ -2391,7 +2391,7 @@ msgstr "Heredar (predeterminado de la galería)"
 msgid "Inherit Gallery"
 msgstr "Heredar galería"
 
-#: includes/pro/admin/global-settings.php:833
+#: includes/pro/admin/global-settings.php:838
 msgid "Inset (% of short edge)"
 msgstr "Margen interior (% del lado corto)"
 
@@ -2439,7 +2439,7 @@ msgstr "Mantenga la información técnica adjunta a la imagen."
 msgid "Keep watermark styling managed globally."
 msgstr "Gestiona el estilo de la marca de agua de forma global."
 
-#: includes/pro/admin/global-settings.php:1201
+#: includes/pro/admin/global-settings.php:1209
 msgid "Label"
 msgstr "Etiqueta"
 
@@ -2451,7 +2451,7 @@ msgstr "Color de fondo de la etiqueta"
 msgid "Label Background Color"
 msgstr "Color de fondo de la etiqueta"
 
-#: includes/pro/admin/global-settings.php:1216
+#: includes/pro/admin/global-settings.php:1224
 #, php-format
 msgid "Label for class %d"
 msgstr "Etiqueta de la clase %d"
@@ -2476,11 +2476,11 @@ msgstr "Color de texto de la etiqueta"
 msgid "Label Text Color"
 msgstr "Color del texto de la etiqueta"
 
-#: includes/pro/admin/global-settings.php:700
+#: includes/pro/admin/global-settings.php:705
 msgid "Landscape 3:2"
 msgstr "Horizontal 3:2"
 
-#: includes/pro/admin/global-settings.php:695
+#: includes/pro/admin/global-settings.php:700
 msgid "Landscape 4:3"
 msgstr "Horizontal 4:3"
 
@@ -2488,7 +2488,7 @@ msgstr "Horizontal 4:3"
 msgid "Large"
 msgstr "Grande"
 
-#: includes/pro/admin/global-settings.php:1083
+#: includes/pro/admin/global-settings.php:1091
 msgid "Last Scanned:"
 msgstr "Último análisis:"
 
@@ -2505,7 +2505,7 @@ msgstr "Ultimas noticias del sitio web de FolioBlocks:"
 msgid "Layout"
 msgstr "Diseño"
 
-#: includes/pro/admin/global-settings.php:998
+#: includes/pro/admin/global-settings.php:1006
 msgid "Lazy load compatible FolioBlocks images and thumbnails by default."
 msgstr "Aplicar carga diferida de forma predeterminada a las imágenes y miniaturas compatibles de FolioBlocks."
 
@@ -2737,19 +2737,19 @@ msgstr "Amplía parte de una imagen con una loupe circular."
 msgid "Main Image Resolution"
 msgstr "Resolución de la imagen principal"
 
-#: includes/pro/admin/global-settings.php:1181
+#: includes/pro/admin/global-settings.php:1189
 msgid "Make Media Color Classes available to compatible FolioBlocks tools and blocks."
 msgstr "Permite usar las clases de color de medios en herramientas y bloques compatibles de FolioBlocks."
 
-#: includes/pro/admin/global-settings.php:1163
+#: includes/pro/admin/global-settings.php:1171
 msgid "Make Media Ratings available to compatible FolioBlocks tools and blocks."
 msgstr "Permite usar las valoraciones de medios en herramientas y bloques compatibles de FolioBlocks."
 
-#: includes/pro/admin/global-settings.php:1258
+#: includes/pro/admin/global-settings.php:1266
 msgid "Manage proofing retention, notifications, and the admin bar activity indicator."
 msgstr "Gestiona la conservación de sesiones de selección, las notificaciones y el indicador de actividad de la barra de administración."
 
-#: includes/pro/admin/global-settings.php:979
+#: includes/pro/admin/global-settings.php:984
 msgid "Manage site-wide preferences for media, sharing, proofing, and watermarks. Open a card to adjust its settings; changes are saved automatically."
 msgstr "Gestiona las preferencias del sitio para medios, compartir, selección de imágenes y marcas de agua. Abre una tarjeta para ajustar sus opciones; los cambios se guardan automáticamente."
 
@@ -2801,19 +2801,19 @@ msgstr "Los valores EXIF de los medios se pueden editar sin modificar los origin
 msgid "Media File"
 msgstr "Archivo multimedia"
 
-#: includes/pro/admin/global-settings.php:1091
+#: includes/pro/admin/global-settings.php:1099
 msgid "Media Library"
 msgstr "Biblioteca de medios"
 
-#: includes/pro/admin/global-settings.php:1026
+#: includes/pro/admin/global-settings.php:1034
 msgid "Media Metadata"
 msgstr "Metadatos de medios"
 
-#: includes/pro/admin/global-settings.php:243 includes/pro/admin/global-settings.php:545 includes/pro/php/media-metadata.php:531 includes/pro/php/media-metadata.php:580 includes/pro/php/media-metadata.php:606
+#: includes/pro/admin/global-settings.php:248 includes/pro/admin/global-settings.php:550 includes/pro/php/media-metadata.php:531 includes/pro/php/media-metadata.php:580 includes/pro/php/media-metadata.php:606
 msgid "Media Metadata requires a Business or Agency plan."
 msgstr "Los metadatos de medios requieren un plan Business o Agency."
 
-#: includes/pro/admin/global-settings.php:245
+#: includes/pro/admin/global-settings.php:250
 msgid "Media Metadata settings are unavailable."
 msgstr "Los ajustes de metadatos de medios no están disponibles."
 
@@ -2845,7 +2845,7 @@ msgstr "No se han podido actualizar los metadatos desde la biblioteca de medios.
 msgid "Metadata could not be synced to the Media Library."
 msgstr "Los metadatos no se pudieron sincronizar con la biblioteca multimedia."
 
-#: includes/pro/admin/global-settings.php:1037
+#: includes/pro/admin/global-settings.php:1045
 msgid "Metadata Import"
 msgstr "Importación de metadatos"
 
@@ -2857,7 +2857,7 @@ msgstr "Metadatos sincronizados con la biblioteca multimedia."
 msgid "Metadata Synchronization: Sync Image Metadata back to the WordPress Media Library"
 msgstr "Sincronización de metadatos: sincroniza los metadatos de imágenes con la biblioteca de medios de WordPress"
 
-#: includes/pro/admin/global-settings.php:1103
+#: includes/pro/admin/global-settings.php:1111
 msgid "Metadata to Show"
 msgstr "Metadatos que mostrar"
 
@@ -2913,7 +2913,7 @@ msgstr "Filtrado de galerías de vídeo por varias palabras clave con tipografí
 msgid "Multiple Layout Options"
 msgstr "Multiples opciones de diseno"
 
-#: includes/pro/admin/global-settings.php:805
+#: includes/pro/admin/global-settings.php:810
 msgid "Name"
 msgstr "Nombre"
 
@@ -2949,7 +2949,7 @@ msgstr "No se encontró ningún changelog en readme.txt."
 msgid "No colors are enabled in this palette. Choose another palette or enable colors in Settings."
 msgstr "No hay colores activados en esta paleta. Elige otra paleta o activa colores en Ajustes."
 
-#: includes/pro/admin/global-settings.php:429
+#: includes/pro/admin/global-settings.php:434
 msgid "No existing JPEG images were found."
 msgstr "No se han encontrado imágenes JPEG existentes."
 
@@ -2977,7 +2977,7 @@ msgstr "Aún no se han encontrado sesiones de selección."
 msgid "No saved watermarks are available. Create and save a watermark in FolioBlocks Settings before enabling watermarking."
 msgstr "No hay marcas de agua guardadas disponibles. Crea y guarda una en los Ajustes de FolioBlocks antes de activar las marcas de agua."
 
-#: includes/pro/admin/global-settings.php:1327
+#: includes/pro/admin/global-settings.php:1335
 msgid "No saved watermarks yet. Add your first watermark below."
 msgstr "Aún no hay marcas de agua guardadas. Añade la primera a continuación."
 
@@ -3001,11 +3001,11 @@ msgstr "Metadatos normalizados de FolioBlocks de valoraciones de medios y clases
 msgid "Not scanned"
 msgstr "Sin analizar"
 
-#: includes/pro/admin/global-settings.php:1277
+#: includes/pro/admin/global-settings.php:1285
 msgid "Number of days to keep submitted proofing sessions before cleanup."
 msgstr "Número de días que se conservan las sesiones de selección enviadas antes de limpiarlas."
 
-#: includes/pro/admin/global-settings.php:1271
+#: includes/pro/admin/global-settings.php:1279
 msgid "Number of days to keep viewing and saved in-progress proofing sessions."
 msgstr "Número de días que se conservan las sesiones de selección en visualización y las guardadas en curso."
 
@@ -3017,11 +3017,11 @@ msgstr "Ofrezca descargas o conecte productos WooCommerce."
 msgid "On Hover"
 msgstr "Al pasar el cursor"
 
-#: includes/pro/admin/global-settings.php:823 includes/pro/php/block-defaults.php:728
+#: includes/pro/admin/global-settings.php:828 includes/pro/php/block-defaults.php:728
 msgid "Opacity"
 msgstr "Opacidad"
 
-#: includes/pro/admin/global-settings.php:1472
+#: includes/pro/admin/global-settings.php:1480
 msgid "Opacity:"
 msgstr "Opacidad:"
 
@@ -3049,7 +3049,7 @@ msgstr "Abrir en Lightbox"
 msgid "Open in new tab"
 msgstr "Abrir en una pestaña nueva"
 
-#: includes/pro/admin/global-settings.php:783
+#: includes/pro/admin/global-settings.php:788
 msgid "Open larger watermark preview"
 msgstr "Abrir vista previa ampliada de la marca de agua"
 
@@ -3230,7 +3230,7 @@ msgstr "Compatibilidad con protección por contraseña a nivel de página"
 msgid "Page: %s"
 msgstr "Página: %s"
 
-#: includes/pro/admin/global-settings.php:983
+#: includes/pro/admin/global-settings.php:989
 msgid "Page/Post Defaults"
 msgstr "Valores predeterminados de página/entrada"
 
@@ -3238,7 +3238,7 @@ msgstr "Valores predeterminados de página/entrada"
 msgid "Palette"
 msgstr "Paleta"
 
-#: includes/pro/admin/global-settings.php:1187
+#: includes/pro/admin/global-settings.php:1195
 msgid "Palette Preset"
 msgstr "Preajuste de paleta"
 
@@ -3306,7 +3306,7 @@ msgstr "Anulaciones de configuración de desplazamiento de galería por video"
 msgid "Permission denied"
 msgstr "Permiso denegado"
 
-#: includes/pro/admin/global-settings.php:1125
+#: includes/pro/admin/global-settings.php:1133
 msgid "Permit selected roles to edit Media Library values without rewriting the original image file."
 msgstr "Permite a los roles seleccionados editar valores de la biblioteca de medios sin modificar el archivo de imagen original."
 
@@ -3375,23 +3375,23 @@ msgstr "Colores de los controles de reproducción"
 msgid "Pop"
 msgstr "Realce"
 
-#: includes/pro/admin/global-settings.php:685
+#: includes/pro/admin/global-settings.php:690
 msgid "Portrait 2:3"
 msgstr "Vertical 2:3"
 
-#: includes/pro/admin/global-settings.php:690
+#: includes/pro/admin/global-settings.php:695
 msgid "Portrait 3:4"
 msgstr "Vertical 3:4"
 
-#: includes/pro/admin/global-settings.php:838
+#: includes/pro/admin/global-settings.php:843
 msgid "Position"
 msgstr "Posición"
 
-#: includes/pro/admin/global-settings.php:1472
+#: includes/pro/admin/global-settings.php:1480
 msgid "Position:"
 msgstr "Posición:"
 
-#: includes/pro/admin/global-settings.php:763
+#: includes/pro/admin/global-settings.php:768
 #, php-format
 msgid "Position: %1$s · Opacity: %2$s"
 msgstr "Posición: %1$s · Opacidad: %2$s"
@@ -3408,11 +3408,11 @@ msgstr "Imagen de póster"
 msgid "Present images in a different order whenever the gallery loads."
 msgstr "Muestra las imágenes en un orden diferente cada vez que se carga la galería."
 
-#: includes/pro/admin/global-settings.php:1016
+#: includes/pro/admin/global-settings.php:1024
 msgid "Prevent dragging compatible FolioBlocks images by default."
 msgstr "Impide arrastrar imágenes compatibles de FolioBlocks de forma predeterminada."
 
-#: includes/pro/admin/global-settings.php:1007
+#: includes/pro/admin/global-settings.php:1015
 msgid "Prevent right-clicking on compatible FolioBlocks media by default."
 msgstr "Impide hacer clic derecho en medios compatibles de FolioBlocks de forma predeterminada."
 
@@ -3428,7 +3428,7 @@ msgstr "Impide que los visitantes arrastren imágenes compatibles de FolioBlocks
 msgid "Prevents visitors from right-clicking."
 msgstr "Impide que los visitantes hagan clic derecho."
 
-#: includes/pro/admin/global-settings.php:776
+#: includes/pro/admin/global-settings.php:781
 msgid "Preview aspect ratio"
 msgstr "Relación de aspecto de la vista previa"
 
@@ -3448,7 +3448,7 @@ msgstr "Miniatura anterior"
 msgid "Private Client Proofing Galleries"
 msgstr "Galerías privadas de selección para clientes"
 
-#: includes/admin/settings-page.php:463 includes/admin/system-info.php:331 includes/pro/admin/global-settings.php:960
+#: includes/admin/settings-page.php:463 includes/admin/system-info.php:331 includes/pro/admin/global-settings.php:965
 msgid "Pro"
 msgstr "Pro"
 
@@ -3516,7 +3516,7 @@ msgstr "Proofing Gallery Block (solo Pro - planes Business y Agency)"
 msgid "Proofing Gallery Settings"
 msgstr "Ajustes de la galería de selección"
 
-#: includes/pro/admin/global-settings.php:265
+#: includes/pro/admin/global-settings.php:270
 msgid "Proofing Gallery settings are unavailable."
 msgstr "Los ajustes de la galería de selección no están disponibles."
 
@@ -3562,7 +3562,7 @@ msgstr "Sesión de selección enviada por %s"
 msgid "Proofing Session: %s"
 msgstr "Sesión de selección: %s"
 
-#: folioblocks.php:511 folioblocks.php:512 includes/pro/admin/global-settings.php:1257 includes/pro/admin/proofing-sessions.php:513 includes/pro/php/proofing-gallery.php:295
+#: folioblocks.php:511 folioblocks.php:512 includes/pro/admin/global-settings.php:1265 includes/pro/admin/proofing-sessions.php:513 includes/pro/php/proofing-gallery.php:295
 msgid "Proofing Sessions"
 msgstr "Sesiones de selección"
 
@@ -3634,7 +3634,7 @@ msgstr "Valóranos"
 msgid "Rated"
 msgstr "Valorada"
 
-#: includes/pro/admin/global-settings.php:1108
+#: includes/pro/admin/global-settings.php:1116
 msgid "Ratings"
 msgstr "Valoraciones"
 
@@ -3642,11 +3642,11 @@ msgstr "Valoraciones"
 msgid "Read stored EXIF metadata."
 msgstr "Leer metadatos EXIF ​​almacenados."
 
-#: includes/pro/admin/global-settings.php:1056
+#: includes/pro/admin/global-settings.php:1064
 msgid "Read supported embedded one-to-five-star ratings when JPEG images are imported."
 msgstr "Lee las valoraciones incrustadas compatibles de una a cinco estrellas al importar imágenes JPEG."
 
-#: includes/pro/admin/global-settings.php:1065
+#: includes/pro/admin/global-settings.php:1073
 msgid "Read supported numeric color classes, XMP labels, and Photo Mechanic tagged state."
 msgstr "Lee las clases de color numéricas compatibles, las etiquetas XMP y el estado de marcado de Photo Mechanic."
 
@@ -3687,7 +3687,7 @@ msgstr "Actualizando…"
 msgid "Regular"
 msgstr "Normal"
 
-#: includes/pro/admin/global-settings.php:814 src/background-video-block/edit.js:741 src/background-video-block/edit.js:854
+#: includes/pro/admin/global-settings.php:819 src/background-video-block/edit.js:741 src/background-video-block/edit.js:854
 msgid "Remove"
 msgstr "Eliminar"
 
@@ -3707,7 +3707,7 @@ msgstr "Eliminar enlace"
 msgid "Remove Product"
 msgstr "Eliminar producto"
 
-#: includes/pro/admin/global-settings.php:847
+#: includes/pro/admin/global-settings.php:852
 msgid "Repeat"
 msgstr "Repetir"
 
@@ -3791,7 +3791,7 @@ msgstr "Controles de espacio responsivos (escritorio/tableta/móvil)"
 msgid "Responsive Pro controls for gaps, sizing, focal points, and per-device layout tuning"
 msgstr "Controles adaptables Pro de espaciado, tamaño, puntos focales y ajustes de diseño por dispositivo"
 
-#: folioblocks.php:625 includes/pro/admin/global-settings.php:1074
+#: folioblocks.php:625 includes/pro/admin/global-settings.php:1082
 msgid "Resume Scan"
 msgstr "Reanudar análisis"
 
@@ -3848,19 +3848,19 @@ msgstr "Guardar como PDF"
 msgid "Save Button"
 msgstr "Botón Guardar"
 
-#: includes/pro/admin/global-settings.php:1311
+#: includes/pro/admin/global-settings.php:1319
 msgid "Save each watermark with a name that will appear in block editor select controls. One saved watermark can be marked as the default. Gallery blocks will decide where the watermark appears."
 msgstr "Guarda cada marca de agua con un nombre que aparecerá en los selectores del editor de bloques. Se puede establecer una marca guardada como predeterminada. Los bloques de galería determinan dónde aparece."
 
-#: includes/pro/admin/global-settings.php:1351
+#: includes/pro/admin/global-settings.php:1359
 msgid "Save Settings"
 msgstr "Guardar ajustes"
 
-#: includes/pro/admin/global-settings.php:867
+#: includes/pro/admin/global-settings.php:872
 msgid "Save Watermark"
 msgstr "Guardar marca de agua"
 
-#: folioblocks.php:619 includes/pro/admin/global-settings.php:321
+#: folioblocks.php:619 includes/pro/admin/global-settings.php:326
 msgid "Saved"
 msgstr "Guardado"
 
@@ -3868,11 +3868,11 @@ msgstr "Guardado"
 msgid "Saved palette"
 msgstr "Paleta guardada"
 
-#: includes/pro/admin/global-settings.php:1269
+#: includes/pro/admin/global-settings.php:1277
 msgid "Saved Session Retention"
 msgstr "Conservación de sesiones guardadas"
 
-#: includes/pro/admin/global-settings.php:232
+#: includes/pro/admin/global-settings.php:232 includes/pro/admin/global-settings.php:242
 msgid "Saved."
 msgstr "Guardado."
 
@@ -3888,20 +3888,20 @@ msgstr "Guardando…"
 msgid "Scan Again"
 msgstr "Analizar de nuevo"
 
-#: includes/pro/admin/global-settings.php:434
+#: includes/pro/admin/global-settings.php:439
 #, php-format
 msgid "Scan complete: %1$d imported, %2$d already scanned, %3$d failed."
 msgstr "Análisis completo: %1$d importados, %2$d ya analizados, %3$d fallidos."
 
-#: folioblocks.php:624 includes/pro/admin/global-settings.php:1074
+#: folioblocks.php:624 includes/pro/admin/global-settings.php:1082
 msgid "Scan Existing Media"
 msgstr "Analizar medios existentes"
 
-#: includes/pro/admin/global-settings.php:441
+#: includes/pro/admin/global-settings.php:446
 msgid "Scan JPEG images already in the Media Library without changing image files or existing Library edits."
 msgstr "Analiza las imágenes JPEG existentes en la biblioteca de medios sin modificar los archivos ni las ediciones existentes."
 
-#: includes/pro/admin/global-settings.php:421
+#: includes/pro/admin/global-settings.php:426
 #, php-format
 msgid "Scanned %1$d of %2$d JPEG images."
 msgstr "Analizadas %1$d de %2$d imágenes JPEG."
@@ -3938,7 +3938,7 @@ msgstr "Seleccionar"
 msgid "Select a video"
 msgstr "Selecciona un vídeo"
 
-#: includes/pro/admin/global-settings.php:286
+#: includes/pro/admin/global-settings.php:291
 msgid "Select a watermark image before saving."
 msgstr "Selecciona una imagen de marca de agua antes de guardar."
 
@@ -4026,7 +4026,7 @@ msgstr "vídeos autoalojados"
 msgid "Semi Bold"
 msgstr "Seminegrita"
 
-#: includes/pro/admin/global-settings.php:1286
+#: includes/pro/admin/global-settings.php:1294
 msgid "Send an email to the site admin account when a Proofing Session is submitted."
 msgstr "Envía un correo a la cuenta del administrador del sitio cuando se envíe una sesión de selección."
 
@@ -4245,7 +4245,7 @@ msgstr "Establece el espacio entre las imágenes de la galería."
 msgid "Set the space between video thumbnails."
 msgstr "Establece el espacio entre las miniaturas de los vídeos."
 
-#: includes/pro/admin/global-settings.php:984
+#: includes/pro/admin/global-settings.php:992
 msgid "Set the starting Page/Post Settings for newly added compatible FolioBlocks content."
 msgstr "Establece los ajustes iniciales de página/entrada para el nuevo contenido compatible de FolioBlocks."
 
@@ -4289,7 +4289,7 @@ msgstr "Establece la acción predeterminada de los iconos Añadir al carrito de 
 msgid "Sets the default WooCommerce product action for this gallery. Individual images can override this setting."
 msgstr "Define la acción predeterminada de producto de WooCommerce para esta galería. Las imágenes individuales pueden sobrescribir este ajuste."
 
-#: folioblocks.php:521 folioblocks.php:522 folioblocks.php:672 includes/pro/admin/global-settings.php:960
+#: folioblocks.php:521 folioblocks.php:522 folioblocks.php:672 includes/pro/admin/global-settings.php:965
 msgid "Settings"
 msgstr "Ajustes"
 
@@ -4334,7 +4334,7 @@ msgstr "Mostrar datos EXIF"
 msgid "Show Flag icon so clients can assign a color status to images."
 msgstr "Muestra el icono de indicador para que los clientes asignen un estado de color a las imágenes."
 
-#: includes/pro/admin/global-settings.php:1097
+#: includes/pro/admin/global-settings.php:1105
 msgid "Show FolioBlocks Metadata"
 msgstr "Mostrar metadatos de FolioBlocks"
 
@@ -4398,11 +4398,11 @@ msgstr "Mostrar información del producto"
 msgid "Show Product Price"
 msgstr "Mostrar precio del producto"
 
-#: includes/pro/admin/global-settings.php:1294
+#: includes/pro/admin/global-settings.php:1302
 msgid "Show Proofing Status Component in the Admin bar"
 msgstr "Mostrar el componente de estado de selección en la barra de administración"
 
-#: includes/pro/admin/global-settings.php:1098
+#: includes/pro/admin/global-settings.php:1106
 msgid "Show ratings, color classes, and supported EXIF data in attachment details."
 msgstr "Muestra valoraciones, clases de color y datos EXIF compatibles en los detalles del adjunto."
 
@@ -4442,11 +4442,11 @@ msgstr "Velocidad de obturación"
 msgid "Simple"
 msgstr "Simple"
 
-#: includes/admin/free-pro.php:396 includes/pro/admin/global-settings.php:849
+#: includes/admin/free-pro.php:396 includes/pro/admin/global-settings.php:854
 msgid "Single"
 msgstr "Único"
 
-#: includes/pro/admin/global-settings.php:828
+#: includes/pro/admin/global-settings.php:833
 msgid "Size (% of short edge)"
 msgstr "Tamaño (% del lado corto)"
 
@@ -4506,11 +4506,11 @@ msgstr "Orientación del deslizador"
 msgid "Slider Settings"
 msgstr "Ajustes del deslizador"
 
-#: includes/pro/admin/global-settings.php:1232
+#: includes/pro/admin/global-settings.php:1240
 msgid "Social Sharing"
 msgstr "Compartir en redes sociales"
 
-#: includes/pro/admin/global-settings.php:255
+#: includes/pro/admin/global-settings.php:260
 msgid "Social Sharing settings are unavailable."
 msgstr "Los ajustes para compartir en redes sociales no están disponibles."
 
@@ -4538,7 +4538,7 @@ msgstr "No tienes permisos para eliminar sesiones de selección."
 msgid "Sorry, you are not allowed to perform this action."
 msgstr "Lo sentimos, no tienes permiso para realizar esta acción."
 
-#: includes/pro/admin/global-settings.php:550
+#: includes/pro/admin/global-settings.php:555
 msgid "Sorry, you are not allowed to scan the Media Library."
 msgstr "No tienes permisos para analizar la biblioteca de medios."
 
@@ -4546,7 +4546,7 @@ msgstr "No tienes permisos para analizar la biblioteca de medios."
 msgid "Sorry, you are not allowed to update these settings."
 msgstr "No tienes permisos para actualizar estos ajustes."
 
-#: includes/pro/admin/global-settings.php:680 includes/pro/php/block-defaults.php:113 src/loupe-block/premium.js:32
+#: includes/pro/admin/global-settings.php:685 includes/pro/php/block-defaults.php:113 src/loupe-block/premium.js:32
 msgid "Square"
 msgstr "Cuadrado"
 
@@ -4566,7 +4566,7 @@ msgstr "Apila las imagenes verticalmente con espaciado uniforme y alineacion a a
 msgid "Star Rating"
 msgstr "Valoración con estrellas"
 
-#: includes/pro/admin/global-settings.php:1156
+#: includes/pro/admin/global-settings.php:1164
 msgid "Star Ratings"
 msgstr "Valoraciones con estrellas"
 
@@ -4582,7 +4582,7 @@ msgstr "Posición inicial (%)"
 msgid "Status"
 msgstr "Estado"
 
-#: includes/pro/admin/global-settings.php:806
+#: includes/pro/admin/global-settings.php:811
 msgid "Studio White Logo"
 msgstr "Logotipo Studio blanco"
 
@@ -4610,7 +4610,7 @@ msgstr "Informes de selección enviados: revisa y ordena favoritos, valoraciones
 msgid "Submitted Selections"
 msgstr "Selecciones enviadas"
 
-#: includes/pro/admin/global-settings.php:1275
+#: includes/pro/admin/global-settings.php:1283
 msgid "Submitted Session Retention"
 msgstr "Conservación de sesiones enviadas"
 
@@ -4750,7 +4750,7 @@ msgstr "No se han podido restablecer los metadatos. Inténtalo de nuevo."
 msgid "The original attachment file could not be read."
 msgstr "No se ha podido leer el archivo original del adjunto."
 
-#: includes/pro/admin/global-settings.php:1222
+#: includes/pro/admin/global-settings.php:1230
 msgid "The values 1–8 never move. Changing a color or label only changes how that stored number appears in FolioBlocks."
 msgstr "Los valores del 1 al 8 nunca se mueven. Cambiar un color o etiqueta solo cambia cómo aparece ese número guardado en FolioBlocks."
 
@@ -4762,11 +4762,11 @@ msgstr "Tema"
 msgid "Theme Default"
 msgstr "Predeterminado del tema"
 
-#: includes/pro/admin/global-settings.php:591
+#: includes/pro/admin/global-settings.php:596
 msgid "There is no Media Library scan to resume."
 msgstr "No hay ningún análisis de la biblioteca de medios que reanudar."
 
-#: includes/pro/admin/global-settings.php:990
+#: includes/pro/admin/global-settings.php:998
 msgid "These defaults can be overridden on each page or post and do not change existing FolioBlocks content."
 msgstr "Estos valores predeterminados pueden sobrescribirse en cada página o entrada y no cambian el contenido existente de FolioBlocks."
 
@@ -4810,7 +4810,7 @@ msgstr "Posición de la miniatura"
 msgid "Thumbnail Resolution"
 msgstr "Resolución de la miniatura"
 
-#: includes/pro/admin/global-settings.php:850
+#: includes/pro/admin/global-settings.php:855
 msgid "Tiled"
 msgstr "En mosaico"
 
@@ -4834,11 +4834,11 @@ msgstr "Alternar la visibilidad de las flechas de navegación."
 msgid "Top"
 msgstr "Arriba"
 
-#: includes/pro/admin/global-settings.php:664 includes/pro/admin/global-settings.php:1401
+#: includes/pro/admin/global-settings.php:669 includes/pro/admin/global-settings.php:1409
 msgid "Top Left"
 msgstr "Arriba a la izquierda"
 
-#: includes/pro/admin/global-settings.php:665 includes/pro/admin/global-settings.php:1402
+#: includes/pro/admin/global-settings.php:670 includes/pro/admin/global-settings.php:1410
 msgid "Top Right"
 msgstr "Arriba a la derecha"
 
@@ -4878,7 +4878,7 @@ msgstr "Indicador desconocido"
 msgid "Unknown page"
 msgstr "Página desconocida"
 
-#: includes/pro/admin/global-settings.php:318
+#: includes/pro/admin/global-settings.php:323
 msgid "Unknown settings section."
 msgstr "Sección de ajustes desconocida."
 
@@ -4890,7 +4890,7 @@ msgstr "Desbloquear Pro"
 msgid "Unrated"
 msgstr "Sin valorar"
 
-#: includes/pro/admin/global-settings.php:1168
+#: includes/pro/admin/global-settings.php:1176
 msgid "Unrated Label"
 msgstr "Etiqueta sin valoración"
 
@@ -4922,7 +4922,7 @@ msgstr "Actualiza a Pro para desbloquear todas estas funciones."
 msgid "Upgrade Today"
 msgstr "Actualizar hoy"
 
-#: includes/pro/admin/global-settings.php:813
+#: includes/pro/admin/global-settings.php:818
 msgid "Upload / Select Image"
 msgstr "Subir / Seleccionar imagen"
 
@@ -4954,7 +4954,7 @@ msgstr "Sube o selecciona imágenes para crear una galería justificada."
 msgid "Upload or select images to create a Masonry Gallery."
 msgstr "Sube o selecciona imágenes para crear una galería Masonry."
 
-#: includes/pro/admin/global-settings.php:1584
+#: includes/pro/admin/global-settings.php:1592
 msgid "Upload or Select Watermark Image"
 msgstr "Subir o seleccionar imagen de marca de agua"
 
@@ -4975,7 +4975,7 @@ msgstr "Usa los %1$sAjustes%2$s para analizar las imágenes existentes de la bib
 msgid "Use a light or dark loupe frame."
 msgstr "Utilice un marco de lupa claro u oscuro."
 
-#: includes/pro/admin/global-settings.php:817
+#: includes/pro/admin/global-settings.php:822
 msgid "Use a transparent PNG or WebP where possible. Accepts the image formats allowed by your WordPress Media Library; SVG uploads are not supported by default unless your site explicitly enables them."
 msgstr "Usa un PNG o WebP transparente cuando sea posible. Se aceptan los formatos permitidos por la biblioteca de medios de WordPress; las subidas SVG no se admiten de forma predeterminada salvo que el sitio las active expresamente."
 
@@ -4995,7 +4995,7 @@ msgstr "Usa el comportamiento al pasar el cursor configurado para este vídeo."
 msgid "Use this video"
 msgstr "Usar este vídeo"
 
-#: includes/pro/admin/global-settings.php:1585
+#: includes/pro/admin/global-settings.php:1593
 msgid "Use Watermark"
 msgstr "Usar marca de agua"
 
@@ -5016,7 +5016,7 @@ msgstr "Usa fuentes de los Estilos globales de tu tema."
 msgid "v%s"
 msgstr "v%s"
 
-#: includes/pro/admin/global-settings.php:1198
+#: includes/pro/admin/global-settings.php:1206
 msgid "Value"
 msgstr "Valor"
 
@@ -5024,7 +5024,7 @@ msgstr "Valor"
 msgid "Version"
 msgstr "Versión"
 
-#: includes/admin/free-pro.php:378 includes/admin/settings-page.php:460 includes/admin/system-info.php:325 includes/pro/admin/global-settings.php:957 includes/pro/admin/proofing-sessions.php:685 includes/pro/admin/proofing-sessions.php:695
+#: includes/admin/free-pro.php:378 includes/admin/settings-page.php:460 includes/admin/system-info.php:325 includes/pro/admin/global-settings.php:962 includes/pro/admin/proofing-sessions.php:685 includes/pro/admin/proofing-sessions.php:695
 #, php-format
 msgid "Version %s"
 msgstr "Versión %s"
@@ -5218,11 +5218,11 @@ msgstr "Los visitantes deben ingresar esta contraseña para ver la página."
 msgid "Visitors must enter this password to view the post."
 msgstr "Los visitantes deben introducir esta contraseña para ver la entrada."
 
-#: includes/pro/admin/global-settings.php:114 includes/pro/admin/global-settings.php:1467 src/fbks-helpers/watermarkOverlayControls.js:328
+#: includes/pro/admin/global-settings.php:114 includes/pro/admin/global-settings.php:1475 src/fbks-helpers/watermarkOverlayControls.js:328
 msgid "Watermark"
 msgstr "Marca de agua"
 
-#: includes/pro/admin/global-settings.php:810
+#: includes/pro/admin/global-settings.php:815
 msgid "Watermark Image"
 msgstr "Imagen de marca de agua"
 
@@ -5242,15 +5242,15 @@ msgstr "Superposiciones de marca de agua: muestra marcas personalizadas en imág
 msgid "Watermark Overlays: Display custom watermarks on images"
 msgstr "Superposiciones de marca de agua: muestra marcas personalizadas en imágenes"
 
-#: includes/pro/admin/global-settings.php:1360
+#: includes/pro/admin/global-settings.php:1368
 msgid "Watermark Preview"
 msgstr "Vista previa de marca de agua"
 
-#: folioblocks.php:622 includes/pro/admin/global-settings.php:309
+#: folioblocks.php:622 includes/pro/admin/global-settings.php:314
 msgid "Watermark saved."
 msgstr "Marca de agua guardada."
 
-#: includes/pro/admin/global-settings.php:1304
+#: includes/pro/admin/global-settings.php:1312
 msgid "Watermarks"
 msgstr "Marcas de agua"
 
@@ -5274,15 +5274,15 @@ msgstr "Cuando está desactivado, el icono de descarga se muestra siempre."
 msgid "White"
 msgstr "Blanco"
 
-#: includes/pro/admin/global-settings.php:1142
+#: includes/pro/admin/global-settings.php:1150
 msgid "Who Can Edit Metadata"
 msgstr "Quién puede editar metadatos"
 
-#: includes/pro/admin/global-settings.php:1131
+#: includes/pro/admin/global-settings.php:1139
 msgid "Who Can View Metadata"
 msgstr "Quién puede ver metadatos"
 
-#: includes/pro/admin/global-settings.php:705
+#: includes/pro/admin/global-settings.php:710
 msgid "Wide 16:9"
 msgstr "Panorámico 16:9"
 
