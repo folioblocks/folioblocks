@@ -422,7 +422,52 @@ if (! function_exists('fbks_add_media_metadata_attachment_fields')) {
 		return $form_fields;
 	}
 }
-add_filter('attachment_fields_to_edit', 'fbks_add_media_metadata_attachment_fields', 20, 2);
+function fbks_add_media_metadata_compat_fields($form_fields, $post)
+{
+	$screen = function_exists('get_current_screen') ? get_current_screen() : null;
+	if ($screen && 'post' === $screen->base && 'attachment' === $screen->post_type) {
+		return $form_fields;
+	}
+
+	return fbks_add_media_metadata_attachment_fields($form_fields, $post);
+}
+add_filter('attachment_fields_to_edit', 'fbks_add_media_metadata_compat_fields', 20, 2);
+
+function fbks_register_media_metadata_meta_box($post)
+{
+	$fields = fbks_add_media_metadata_attachment_fields(array(), $post);
+	if (! $fields) {
+		return;
+	}
+
+	add_meta_box(
+		'fbks-media-metadata',
+		__('FolioBlocks Metadata', 'folioblocks'),
+		'fbks_render_media_metadata_meta_box',
+		'attachment',
+		'side',
+		'default',
+		$fields
+	);
+}
+add_action('add_meta_boxes_attachment', 'fbks_register_media_metadata_meta_box');
+
+function fbks_render_media_metadata_meta_box($post, $box)
+{
+	echo '<div class="fbks-media-metadata-panel">';
+	foreach ($box['args'] as $key => $field) {
+		echo '<div class="fbks-media-metadata-panel__section">';
+		if ('fbks_media_metadata_status' !== $key) {
+			echo '<h3>' . esc_html($field['label']) . '</h3>';
+		}
+		echo $field['html']; // Escaped by the individual field renderers.
+		if (! empty($field['helps'])) {
+			echo '<p class="description">' . wp_kses_post($field['helps']) . '</p>';
+		}
+		echo '</div>';
+	}
+	echo '</div>';
+}
 
 if (! function_exists('fbks_sanitize_media_library_exif_changes')) {
 	function fbks_sanitize_media_library_exif_changes($attachment_id, $raw_exif)

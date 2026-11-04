@@ -154,7 +154,7 @@
 	}
 
 	async function resetMetadata( reset ) {
-		const form = reset.closest( '.compat-item' );
+		const form = reset.closest( '.compat-item, .fbks-media-metadata-panel' );
 		const status = reset.closest( '[data-fbks-media-metadata-status]' );
 		const scope = reset.value;
 		if ( ! form || ! status || ! scope ) {
@@ -227,8 +227,11 @@
 			) {
 				updateColorSwatch( target );
 			}
-			if ( target.closest( '.compat-item' ) ) {
-				refreshResetControl( target.closest( '.compat-item' ) );
+			const form = target.closest(
+				'.compat-item, .fbks-media-metadata-panel'
+			);
+			if ( form ) {
+				refreshResetControl( form );
 			}
 		},
 		true
@@ -238,7 +241,8 @@
 		'input',
 		( event ) => {
 			const form =
-				event.target.closest && event.target.closest( '.compat-item' );
+				event.target.closest &&
+				event.target.closest( '.compat-item, .fbks-media-metadata-panel' );
 			if ( form ) {
 				refreshResetControl( form );
 			}

@@ -377,7 +377,7 @@ if (! function_exists('fbks_extract_attachment_exif_metadata')) {
 			? $attachment_metadata['image_meta']
 			: array();
 		$shutter_speed = $image_meta['shutter_speed'] ?? '';
-		if ('' === (string) $shutter_speed && function_exists('fbks_get_attachment_shutter_speed_from_exif')) {
+		if (('' === (string) $shutter_speed || (is_numeric($shutter_speed) && 0.0 === (float) $shutter_speed)) && function_exists('fbks_get_attachment_shutter_speed_from_exif')) {
 			$shutter_speed = fbks_get_attachment_shutter_speed_from_exif($attachment_id);
 		}
 
@@ -497,7 +497,23 @@ if (! function_exists('fbks_get_attachment_media_metadata')) {
 			$record = fbks_import_attachment_media_metadata($attachment_id);
 		}
 
-		return is_array($record) ? fbks_normalize_media_metadata_record($record) : null;
+		if (! is_array($record)) {
+			return null;
+		}
+
+		$record = fbks_normalize_media_metadata_record($record);
+		$embedded_speed = $record['embedded']['exif']['shutterSpeed'];
+		if (is_numeric($embedded_speed) && 0.0 === (float) $embedded_speed) {
+			$exif = fbks_extract_attachment_exif_metadata($attachment_id);
+			$record['embedded']['exif']['shutterSpeed'] = $exif['shutterSpeed'];
+
+			$library_speed = $record['library']['exif']['shutterSpeed'];
+			if (is_numeric($library_speed) && 0.0 === (float) $library_speed) {
+				$record['library']['exif']['shutterSpeed'] = $exif['shutterSpeed'];
+			}
+		}
+
+		return $record;
 	}
 }
 

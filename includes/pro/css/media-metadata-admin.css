@@ -299,3 +299,27 @@
 .media-sidebar .compat-field-fbks_media_metadata_status .fbks-media-metadata-reset[hidden] {
     display: none;
 }
+
+.fbks-media-metadata-panel {
+	max-width: 640px;
+}
+
+.fbks-media-metadata-panel__section + .fbks-media-metadata-panel__section {
+	margin-top: 16px;
+}
+
+.fbks-media-metadata-panel__section h3 {
+	margin: 0 0 6px;
+}
+
+.fbks-media-metadata-panel .fbks-media-metadata-status {
+	flex-wrap: wrap;
+}
+
+.fbks-media-metadata-panel .fbks-media-metadata-reset {
+	max-width: 100%;
+}
+
+#side-sortables .fbks-media-metadata-panel .fbks-media-exif-grid {
+	grid-template-columns: minmax(0, 1fr);
+}
