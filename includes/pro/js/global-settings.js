@@ -44,6 +44,7 @@
             'download-icon': downloadIcon,
             'secondary-lightbox': secondaryLightbox,
             download: action === 'download',
+            'custom-carousel-height': read( 'mobileOrientation' )?.value === 'custom',
             autoplay: !!read( 'autoplay' )?.checked,
             controls: !!read( 'showControls' )?.checked,
             filter: !!read( 'enableFilter' )?.checked,

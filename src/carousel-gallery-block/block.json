@@ -50,6 +50,11 @@
 			"type": "boolean",
 			"default": false
 		},
+		"customHeightEnabled": { "type": "boolean", "default": false },
+		"customHeight": { "type": "string", "default": "400px" },
+		"tabletCustomHeight": { "type": "string", "default": "" },
+		"mobileCustomHeight": { "type": "string", "default": "" },
+		"autoplayDirection": { "type": "string", "enum": [ "left", "right" ], "default": "right" },
 		"carouselHeight": {
 			"type": "number",
 			"default": 300

@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: FolioBlocks 1.6.0-beta.1\n"
+"Project-Id-Version: FolioBlocks 1.6.0-beta.2\n"
 "Report-Msgid-Bugs-To: https://folioblocks.com\n"
-"POT-Creation-Date: 2026-11-03 07:53:45+0000\n"
-"PO-Revision-Date: 2026-11-03 07:53:45+0000\n"
+"POT-Creation-Date: 2026-11-04 06:34:39+0000\n"
+"PO-Revision-Date: 2026-11-04 06:34:39+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: it_IT\n"
@@ -127,11 +127,11 @@ msgstr "È stata inviata una sessione di selezione immagini."
 msgid "A proofing session is active or unfinished. Avoid updating this page until the client submits their selections."
 msgstr "Una sessione di selezione immagini è attiva o incompleta. Evita di aggiornare la pagina finché il cliente non invia le sue selezioni."
 
-#: includes/pro/php/media-metadata.php:534
+#: includes/pro/php/media-metadata.php:550
 msgid "A valid attachment is required."
 msgstr "È richiesto un allegato valido."
 
-#: includes/pro/php/media-metadata.php:617
+#: includes/pro/php/media-metadata.php:633
 msgid "A valid metadata section is required."
 msgstr "È richiesta una sezione di metadati valida."
 
@@ -1915,15 +1915,15 @@ msgstr "FolioBlocks è un plugin premium a pagamento. Questa versione gratuita d
 msgid "Folioblocks loading"
 msgstr "Caricamento di Folioblocks"
 
-#: includes/pro/admin/media-metadata.php:344 includes/pro/admin/media-metadata.php:362
+#: includes/pro/admin/media-metadata.php:344 includes/pro/admin/media-metadata.php:362 includes/pro/admin/media-metadata.php:445
 msgid "FolioBlocks Metadata"
 msgstr "Metadati FolioBlocks"
 
-#: includes/pro/php/media-metadata.php:585 includes/pro/php/media-metadata.php:611
+#: includes/pro/php/media-metadata.php:601 includes/pro/php/media-metadata.php:627
 msgid "FolioBlocks metadata could not be loaded for this attachment."
 msgstr "Impossibile caricare i metadati FolioBlocks per questo allegato."
 
-#: includes/pro/php/media-metadata.php:539
+#: includes/pro/php/media-metadata.php:555
 msgid "FolioBlocks metadata import currently supports JPEG images."
 msgstr "L’importazione dei metadati FolioBlocks supporta attualmente le immagini JPEG."
 
@@ -2809,7 +2809,7 @@ msgstr "Libreria media"
 msgid "Media Metadata"
 msgstr "Metadati dei media"
 
-#: includes/pro/admin/global-settings.php:248 includes/pro/admin/global-settings.php:550 includes/pro/php/media-metadata.php:531 includes/pro/php/media-metadata.php:580 includes/pro/php/media-metadata.php:606
+#: includes/pro/admin/global-settings.php:248 includes/pro/admin/global-settings.php:550 includes/pro/php/media-metadata.php:547 includes/pro/php/media-metadata.php:596 includes/pro/php/media-metadata.php:622
 msgid "Media Metadata requires a Business or Agency plan."
 msgstr "I metadati dei media richiedono un piano Business o Agency."
 
@@ -2993,7 +2993,7 @@ msgstr "Nessuna miniatura selezionata"
 msgid "None"
 msgstr "Nessuno"
 
-#: includes/pro/php/media-metadata.php:667
+#: includes/pro/php/media-metadata.php:683
 msgid "Normalized FolioBlocks media rating and color-class metadata."
 msgstr "Metadati normalizzati di FolioBlocks per valutazioni dei media e classi di colore."
 
@@ -3755,7 +3755,7 @@ msgstr "Ripristina i metadati della Libreria media al valore incorporato"
 msgid "Reset Media Rating"
 msgstr "Reimposta valutazione del media"
 
-#: includes/pro/admin/media-metadata.php:561
+#: includes/pro/admin/media-metadata.php:606
 msgid "Reset this Media Library value to the original value embedded in the image? The image file will not be changed."
 msgstr "Ripristinare questo valore della Libreria media al valore originale incorporato nell’immagine? Il file immagine non verrà modificato."
 
@@ -4742,11 +4742,11 @@ msgstr "La password della galleria non è corretta."
 msgid "The Media Library scan could not continue. Please try again."
 msgstr "Impossibile continuare l’analisi della Libreria media. Riprova."
 
-#: includes/pro/admin/media-metadata.php:562
+#: includes/pro/admin/media-metadata.php:607
 msgid "The metadata could not be reset. Please try again."
 msgstr "Impossibile reimpostare i metadati. Riprova."
 
-#: includes/pro/php/media-metadata.php:549
+#: includes/pro/php/media-metadata.php:565
 msgid "The original attachment file could not be read."
 msgstr "Impossibile leggere il file originale dell’allegato."
 
@@ -5330,7 +5330,7 @@ msgstr "Sì"
 msgid "You are not allowed to load FolioBlocks news."
 msgstr "Non hai i permessi per caricare le notizie di FolioBlocks."
 
-#: includes/pro/admin/media-metadata.php:517
+#: includes/pro/admin/media-metadata.php:562
 msgid "You are not allowed to reset this media metadata."
 msgstr "Non hai i permessi per reimpostare questi metadati dei media."
 

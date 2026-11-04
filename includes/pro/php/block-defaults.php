@@ -418,6 +418,10 @@ function fbks_get_video_gallery_defaults_schema($video) {
     return ['title' => __('Video Gallery Block', 'folioblocks'), 'icon' => 'pb-video-gallery.svg', 'block' => 'folioblocks/video-gallery-block', 'groups' => $groups, 'group_conditions' => ['commerce' => 'woocommerce', 'filter_styles' => 'filter', 'commerce_styles' => 'commerce'], 'fields' => $ordered];
 }
 
+function fbks_sanitize_carousel_height($value, $fallback = '') {
+    return is_string($value) && preg_match('/^[1-9][0-9]*(?:\.[0-9]+)?(?:px|vh)$/D', $value) ? $value : $fallback;
+}
+
 /** Shared inspector controls, with gallery-specific playback and layout sections. */
 function fbks_get_gallery_defaults_schema($key, $image) {
     $carousel = 'carousel' === $key;
@@ -429,7 +433,10 @@ function fbks_get_gallery_defaults_schema($key, $image) {
     $sizes['full'] = __('Full Size', 'folioblocks');
     $fields = ['resolution' => $field($carousel ? 'Resolution' : 'Main Image Resolution', $carousel ? 'Select the size of the source image.' : 'Select the size of the main gallery image.', 'large', ['choices' => $sizes])];
     if ($carousel) {
-        $fields['mobileOrientation'] = $field('Image Orientation (Mobile)', 'Affects layout on mobile only. Switch ONLY when all images are vertical in orientation.', 'horizontal', ['uiDefault' => true, 'choices' => ['horizontal' => __('Horizontal Images', 'folioblocks'), 'vertical' => __('Vertical Images', 'folioblocks')]]);
+        $fields['mobileOrientation'] = $field('Carousel Height', 'Choose how the carousel height is set.', 'horizontal', ['uiDefault' => true, 'choices' => ['horizontal' => __('Automatic', 'folioblocks'), 'vertical' => __('Vertical Priority on Mobile', 'folioblocks'), 'custom' => __('Custom Height', 'folioblocks')]]);
+        $fields['customHeight'] = $field('Desktop Custom Height', 'Enter a height in px or vh.', '400px', ['condition' => 'custom-carousel-height', 'carousel_height' => true]);
+        $fields['tabletCustomHeight'] = $field('Tablet Custom Height', 'Enter a height in px or vh, or leave blank to inherit the desktop height.', '', ['condition' => 'custom-carousel-height', 'carousel_height' => true]);
+        $fields['mobileCustomHeight'] = $field('Mobile Custom Height', 'Enter a height in px or vh, or leave blank to inherit the tablet height.', '', ['condition' => 'custom-carousel-height', 'carousel_height' => true]);
         foreach (['gap' => 'Desktop', 'tabletGap' => 'Tablet', 'mobileGap' => 'Mobile'] as $name => $device) {
             $fields[$name] = $field($device . ' Gap Between Items (px)', 'Set the spacing between gallery items for this screen size.', 10, ['min' => 0, 'max' => 50, 'range' => true]);
         }
@@ -437,7 +444,8 @@ function fbks_get_gallery_defaults_schema($key, $image) {
     $fields['autoplay'] = $field('Enable Autoplay', $carousel ? 'Automatically advance to the next image in the carousel.' : 'Automatically advance to the next image in the gallery.', false);
     $fields['autoplaySpeed'] = $field('Autoplay Speed (seconds)', $carousel ? 'Time between automatic slide transitions.' : 'Time between automatic image transitions.', 3, ['min' => 1, 'max' => 5, 'step' => 0.25, 'range' => true, 'condition' => 'autoplay']);
     if ($carousel) {
-        $fields['loopSlides'] = $field('Loop Carousel Slides', 'Return to the first slide after reaching the end.', false);
+        $fields['autoplayDirection'] = $field('Autoplay Direction', 'Choose which side the next image enters from.', 'right', ['condition' => 'autoplay', 'radio' => true, 'choices' => ['left' => __('Left', 'folioblocks'), 'right' => __('Right', 'folioblocks')]]);
+        $fields['loopSlides'] = $field('Loop Carousel Slides', 'Keep navigating past the first and last slides.', false);
         $fields['showControls'] = $field('Enable Carousel Controls', 'Toggle visibility of navigation arrows.', false);
         $fields['controlsAlignment'] = $field('Controls Alignment', 'Set the horizontal alignment of carousel controls.', 'center', ['condition' => 'controls', 'choices' => ['left' => __('Left', 'folioblocks'), 'center' => __('Center', 'folioblocks'), 'right' => __('Right', 'folioblocks')]]);
     } else {
@@ -504,7 +512,11 @@ function fbks_resolve_gallery_block_defaults($key, $values) {
     $has_image_styles = in_array($key, ['carousel', 'modular', 'grid', 'justified', 'masonry'], true);
     $values['downloadOnHover'] = 'hover' === $values['downloadDisplay'];
     unset($values['downloadDisplay']);
-    if ($carousel) { $values['verticalOnMobile'] = 'vertical' === $values['mobileOrientation']; unset($values['mobileOrientation']); }
+    if ($carousel) {
+        $values['verticalOnMobile'] = 'vertical' === $values['mobileOrientation'];
+        $values['customHeightEnabled'] = 'custom' === $values['mobileOrientation'];
+        unset($values['mobileOrientation']);
+    }
     if (!$has_image_styles) { $values['shadowStyle'] = 'none'; }
     $secondary_lightbox = ($has_image_styles || 'filmstrip' === $key) && in_array($values['imageClickAction'], ['custom_url', 'page_post'], true) && 'icon' === $values['imageClickTarget'] && $values['lightbox'];
     $secondary_commerce_lightbox = $values['lightbox'];
@@ -629,6 +641,8 @@ function fbks_sanitize_block_defaults($key, $raw) {
             $value = in_array($value, [true, 1, '1', 'true'], true);
         } elseif (isset($field['min'])) {
             $value = is_numeric($value) ? max($field['min'], min($field['max'], (isset($field['step']) && $field['step'] < 1 ? (float) $value : (int) $value))) : $field['default'];
+        } elseif (!empty($field['carousel_height'])) {
+            $value = fbks_sanitize_carousel_height($value, $field['default']);
         } elseif (!empty($field['gradient'])) {
             $value = fbks_sanitize_block_default_gradient($value, $field['default']);
         } elseif (!empty($field['color'])) {

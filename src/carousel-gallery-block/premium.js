@@ -6,6 +6,7 @@
 import { __ } from '@wordpress/i18n';
 import {
 	ToggleControl,
+	__experimentalUnitControl as UnitControl,
 	RangeControl,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
@@ -15,6 +16,9 @@ import {
 import { alignLeft, alignCenter, alignRight } from '@wordpress/icons';
 import { CompactTwoColorControl } from '../fbks-helpers/CompactColorControl';
 import ImageStyleControl from '../fbks-helpers/ImageStyleControl';
+import { store as blockEditorStore } from '@wordpress/block-editor';
+import { useSelect } from '@wordpress/data';
+import ResponsiveRangeControl from '../fbks-helpers/ResponsiveRangeControl';
 import { addFilter } from '@wordpress/hooks';
 import { registerImageClickActionPremiumControls } from '../fbks-helpers/imageClickActionPremiumControls';
 import { registerImageClickStylePremiumControls } from '../fbks-helpers/imageClickStylePremiumControls';
@@ -38,6 +42,105 @@ registerResponsiveGapPremiumControl( {
 
 const DEFAULT_CONTROLS_BACKGROUND_COLOR = 'rgba(0, 0, 0, 0.5)';
 const DEFAULT_CONTROLS_ICON_COLOR = '#ffffff';
+
+const HEIGHT_UNITS = [
+	{ value: 'px', label: 'px', default: 400 },
+	{ value: 'vh', label: 'vh', default: 60 },
+];
+
+const getCustomHeights = ( attributes ) => {
+	const desktop = attributes.customHeight || '400px';
+	const tablet = attributes.tabletCustomHeight || desktop;
+	return { desktop, tablet, mobile: attributes.mobileCustomHeight || tablet };
+};
+
+function HeightInput( { value, onChange, label } ) {
+	return (
+		<UnitControl
+			label={ label || __( 'Custom Height', 'folioblocks' ) }
+			hideLabelFromVision={ ! label }
+			help={ __( 'Set the carousel height for this device in pixels (px) or viewport height (vh).', 'folioblocks' ) }
+			units={ HEIGHT_UNITS }
+			min={ 1 }
+			value={ value }
+			onChange={ ( height ) => {
+				if ( height === '' || /^[1-9][0-9]*(?:\.[0-9]+)?(?:px|vh)$/.test( height ) ) {
+					onChange( height );
+				}
+			} }
+			__next40pxDefaultSize
+		/>
+	);
+}
+
+function ResponsiveHeightInspector( { clientId, attributes, setAttributes } ) {
+	const viewport = useSelect(
+		( select ) => select( blockEditorStore ).getSelectedBlockStyleState?.( clientId )?.viewport,
+		[ clientId ]
+	);
+	const isTablet = viewport === '@tablet';
+	const heights = getCustomHeights( attributes );
+
+	return (
+		<HeightInput
+			label={ __( 'Custom Height', 'folioblocks' ) }
+			value={ isTablet ? heights.tablet : heights.mobile }
+			onChange={ ( height ) =>
+				setAttributes( { [ isTablet ? 'tabletCustomHeight' : 'mobileCustomHeight' ]: height } )
+			}
+		/>
+	);
+}
+
+addFilter(
+	'folioBlocks.carouselGallery.heightOptions',
+	'folioblocks/carousel-height',
+	( options ) => [ ...options, { label: __( 'Custom Height', 'folioblocks' ), value: 'custom' } ]
+);
+
+addFilter(
+	'folioBlocks.carouselGallery.customHeightStyles',
+	'folioblocks/carousel-height',
+	( styles, attributes ) => {
+		if ( ! attributes.customHeightEnabled ) {
+			return styles;
+		}
+		const { desktop, tablet, mobile } = getCustomHeights( attributes );
+		return {
+			'--pb-carousel-height-desktop': desktop,
+			'--pb-carousel-height-tablet': tablet,
+			'--pb-carousel-height-mobile': mobile,
+		};
+	}
+);
+
+addFilter(
+	'folioBlocks.carouselGallery.customHeight',
+	'folioblocks/carousel-height',
+	( content, { attributes, setAttributes } ) =>
+		attributes.customHeightEnabled && (
+			<ResponsiveRangeControl
+				label={ __( 'Custom Height', 'folioblocks' ) }
+				columns={ attributes.customHeight || '400px' }
+				tabletColumns={ attributes.tabletCustomHeight || undefined }
+				mobileColumns={ attributes.mobileCustomHeight || attributes.tabletCustomHeight || undefined }
+				desktopKey="customHeight"
+				tabletKey="tabletCustomHeight"
+				mobileKey="mobileCustomHeight"
+				lockTabletMobileToDesktop={ false }
+				onChange={ setAttributes }
+				renderInput={ ( props ) => <HeightInput { ...props } /> }
+			/>
+		)
+);
+
+addFilter(
+	'folioBlocks.carouselGallery.customHeight.inspector',
+	'folioblocks/carousel-height',
+	( content, props ) => props.attributes.customHeightEnabled
+		? <ResponsiveHeightInspector { ...props } />
+		: null
+);
 
 registerListViewThumbnailEnhancements( {
 	hookPrefix: 'folioBlocks.carouselGallery',
@@ -90,6 +193,24 @@ addFilter(
 						) }
 					/>
 				) }
+				{ attributes.autoplay && (
+					<ToggleGroupControl
+						label={ __( 'Autoplay Direction', 'folioblocks' ) }
+						value={ attributes.autoplayDirection || 'right' }
+						onChange={ ( autoplayDirection ) => {
+							if ( autoplayDirection ) {
+								setAttributes( { autoplayDirection } );
+							}
+						} }
+						help={ __( 'Choose which side the next image enters from.', 'folioblocks' ) }
+						isBlock
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+					>
+						<ToggleGroupControlOption label={ __( 'Left', 'folioblocks' ) } value="left" />
+						<ToggleGroupControlOption label={ __( 'Right', 'folioblocks' ) } value="right" />
+					</ToggleGroupControl>
+				) }
 				<ToggleControl
 					label={ __( 'Loop Carousel Slides', 'folioblocks' ) }
 					checked={ attributes.loopSlides || false }
@@ -98,7 +219,7 @@ addFilter(
 					}
 					__nextHasNoMarginBottom
 					help={ __(
-						'Return to the first slide after reaching the end.',
+						'Keep navigating past the first and last slides.',
 						'folioblocks'
 					) }
 				/>

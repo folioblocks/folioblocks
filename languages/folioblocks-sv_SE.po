@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: FolioBlocks 1.6.0-beta.1\n"
+"Project-Id-Version: FolioBlocks 1.6.0-beta.2\n"
 "Report-Msgid-Bugs-To: https://folioblocks.com\n"
-"POT-Creation-Date: 2026-11-03 07:53:44+0000\n"
-"PO-Revision-Date: 2026-11-03 07:53:44+0000\n"
+"POT-Creation-Date: 2026-11-04 06:34:39+0000\n"
+"PO-Revision-Date: 2026-11-04 06:34:39+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: sv_SE\n"
@@ -127,11 +127,11 @@ msgstr "En bildgranskningssession har skickats in."
 msgid "A proofing session is active or unfinished. Avoid updating this page until the client submits their selections."
 msgstr "En bildgranskningssession är aktiv eller oavslutad. Undvik att uppdatera sidan tills kunden har skickat in sitt urval."
 
-#: includes/pro/php/media-metadata.php:534
+#: includes/pro/php/media-metadata.php:550
 msgid "A valid attachment is required."
 msgstr "En giltig bilaga krävs."
 
-#: includes/pro/php/media-metadata.php:617
+#: includes/pro/php/media-metadata.php:633
 msgid "A valid metadata section is required."
 msgstr "En giltig metadatasektion krävs."
 
@@ -1915,15 +1915,15 @@ msgstr "FolioBlocks är ett betalt premium-plugin. Den här gratisversionen i Wo
 msgid "Folioblocks loading"
 msgstr "Folioblocks laddar"
 
-#: includes/pro/admin/media-metadata.php:344 includes/pro/admin/media-metadata.php:362
+#: includes/pro/admin/media-metadata.php:344 includes/pro/admin/media-metadata.php:362 includes/pro/admin/media-metadata.php:445
 msgid "FolioBlocks Metadata"
 msgstr "FolioBlocks-metadata"
 
-#: includes/pro/php/media-metadata.php:585 includes/pro/php/media-metadata.php:611
+#: includes/pro/php/media-metadata.php:601 includes/pro/php/media-metadata.php:627
 msgid "FolioBlocks metadata could not be loaded for this attachment."
 msgstr "FolioBlocks-metadata kunde inte hämtas för den här bilagan."
 
-#: includes/pro/php/media-metadata.php:539
+#: includes/pro/php/media-metadata.php:555
 msgid "FolioBlocks metadata import currently supports JPEG images."
 msgstr "FolioBlocks metadataimport stöder för närvarande JPEG-bilder."
 
@@ -2809,7 +2809,7 @@ msgstr "Mediebibliotek"
 msgid "Media Metadata"
 msgstr "Mediemetadata"
 
-#: includes/pro/admin/global-settings.php:248 includes/pro/admin/global-settings.php:550 includes/pro/php/media-metadata.php:531 includes/pro/php/media-metadata.php:580 includes/pro/php/media-metadata.php:606
+#: includes/pro/admin/global-settings.php:248 includes/pro/admin/global-settings.php:550 includes/pro/php/media-metadata.php:547 includes/pro/php/media-metadata.php:596 includes/pro/php/media-metadata.php:622
 msgid "Media Metadata requires a Business or Agency plan."
 msgstr "Mediemetadata kräver en Business- eller Agency-plan."
 
@@ -2993,7 +2993,7 @@ msgstr "Ingen miniatyr vald"
 msgid "None"
 msgstr "Ingen"
 
-#: includes/pro/php/media-metadata.php:667
+#: includes/pro/php/media-metadata.php:683
 msgid "Normalized FolioBlocks media rating and color-class metadata."
 msgstr "Normaliserade FolioBlocks-metadata för mediebetyg och färgklasser."
 
@@ -3755,7 +3755,7 @@ msgstr "Återställ mediebibliotekets metadata till inbäddat värde"
 msgid "Reset Media Rating"
 msgstr "Återställ mediebetyg"
 
-#: includes/pro/admin/media-metadata.php:561
+#: includes/pro/admin/media-metadata.php:606
 msgid "Reset this Media Library value to the original value embedded in the image? The image file will not be changed."
 msgstr "Återställ detta värde i mediebiblioteket till originalvärdet inbäddat i bilden? Bildfilen ändras inte."
 
@@ -4742,11 +4742,11 @@ msgstr "Gallerilösenordet är felaktigt."
 msgid "The Media Library scan could not continue. Please try again."
 msgstr "Skanningen av mediebiblioteket kunde inte fortsätta. Försök igen."
 
-#: includes/pro/admin/media-metadata.php:562
+#: includes/pro/admin/media-metadata.php:607
 msgid "The metadata could not be reset. Please try again."
 msgstr "Metadata kunde inte återställas. Försök igen."
 
-#: includes/pro/php/media-metadata.php:549
+#: includes/pro/php/media-metadata.php:565
 msgid "The original attachment file could not be read."
 msgstr "Den ursprungliga bilagefilen kunde inte läsas."
 
@@ -5330,7 +5330,7 @@ msgstr "Ja"
 msgid "You are not allowed to load FolioBlocks news."
 msgstr "Du har inte behörighet att hämta FolioBlocks-nyheter."
 
-#: includes/pro/admin/media-metadata.php:517
+#: includes/pro/admin/media-metadata.php:562
 msgid "You are not allowed to reset this media metadata."
 msgstr "Du har inte behörighet att återställa dessa mediemetadata."
 

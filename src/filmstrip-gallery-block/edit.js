@@ -541,7 +541,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			? effectiveHoverWooActive && activeImageProductId > 0
 			: effectiveOverlayContent === 'caption'
 			? !! activeImageCaption
-			: effectiveOverlayContent === 'exif'
+			: [ 'exif', 'social' ].includes( effectiveOverlayContent )
 			? true
 			: !! activeImageTitle );
 	const showProductOverlay =
@@ -999,6 +999,8 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 											/>
 										) }
 									</>
+									) : effectiveOverlayContent === 'social' ? (
+										applyFilters( 'folioBlocks.filmstripGallery.socialOverlayPreview', null )
 									) : showExifOverlay ? (
 											<FilmstripExifOverlay
 												attributes={ activeImageAttributes }

@@ -221,6 +221,21 @@ window.navigate = ( url ) => store( 'core/router' ).actions.navigate( url );
 		await page.locator( '.pb-carousel-chevron.next' ).click();
 		await page.waitForTimeout( 700 );
 		assert.equal( await index(), 0 );
+		const track = page.locator( '.pb-carousel-gallery' );
+		assert.equal( await track.locator( '[data-pb-carousel-clone][inert]' ).count(), 0 );
+		assert.ok( await track.locator( '[data-pb-carousel-clone] a[inert]' ).count() > 0 );
+		const bounds = await track.boundingBox();
+		await page.mouse.move( bounds.x + bounds.width / 2, bounds.y + bounds.height / 2 );
+		for ( const direction of [ 'previous', 'next' ] ) {
+			await track.evaluate( ( el, method ) => el.__pbCarousel[ method ](), direction );
+			await page.waitForFunction( () => {
+				const gallery = document.querySelector( '.pb-carousel-gallery' );
+				const carousel = gallery.__pbCarousel;
+				const slide = carousel.getSlides()[ carousel.getCurrentIndex() ];
+				const overlay = slide.querySelector( '.pb-image-block-title' );
+				return ! carousel.isMoving() && overlay && Number( getComputedStyle( overlay ).opacity ) > 0.9;
+			} );
+		}
 		// Rapid commands across both loop boundaries must all settle on the
 		// expected original slide, without a delayed reset to an earlier click.
 		for ( const direction of [ 'next', 'prev' ] ) {
@@ -306,6 +321,39 @@ window.navigate = ( url ) => store( 'core/router' ).actions.navigate( url );
 		);
 		await navigate( '/carousel-empty' );
 		await readyCarousel();
+		await navigate( '/carousel-reverse' );
+		await readyCarousel();
+		assert.equal( await index(), 2 );
+		const assertCarouselHeight = async ( height ) => {
+			const track = page.locator( '.pb-carousel-gallery' );
+			assert.equal(
+				await track.evaluate( ( el ) => parseFloat( getComputedStyle( el ).height ) ),
+				height
+			);
+			const image = track.locator( 'img.pb-image-block-img' ).first();
+			assert.equal( ( await image.boundingBox() ).height, height );
+		};
+		await assertCarouselHeight( 800 );
+		await page.setViewportSize( { width: 900, height: 600 } );
+		await assertCarouselHeight( 420 );
+		await page.setViewportSize( { width: 550, height: 600 } );
+		await assertCarouselHeight( 420 );
+		await page.setViewportSize( { width: 1280, height: 720 } );
+		await page.locator( '.pb-carousel-play-button' ).click();
+		await page.waitForFunction( () =>
+			document.querySelector( '.pb-carousel-play-button' ).getAttribute( 'aria-pressed' ) === 'false'
+		);
+		assert.equal( await index(), 0 );
+
+		await navigate( '/carousel-reverse-loop' );
+		await readyCarousel();
+		assert.equal( await index(), 0 );
+		await page.locator( '.pb-carousel-play-button' ).click();
+		await page.waitForFunction( () =>
+			document.querySelector( '.pb-carousel-gallery' ).__pbCarousel.getCurrentIndex() === 2
+		);
+		await page.locator( '.pb-carousel-play-button' ).click();
+
 		await navigate( '/carousel-auto' );
 		await readyCarousel();
 		await page.waitForTimeout( 300 );
@@ -364,19 +412,37 @@ window.navigate = ( url ) => store( 'core/router' ).actions.navigate( url );
 			false
 		);
 		assert.equal( await contextMenuBlocked(), false );
+		await navigate( '/carousel-social' );
+		await readyCarousel();
+		const carouselShare = page.locator(
+			'.pb-carousel-gallery > :not([data-pb-carousel-clone]) .pb-social-share__link--copy'
+		).first();
+		await carouselShare.locator( '.pb-social-share__icon' ).click();
+		const cloneShare = page.locator(
+			'[data-pb-carousel-clone="before"] .pb-social-share__link--copy'
+		).last();
+		await cloneShare.locator( '.pb-social-share__label' ).click();
+		assert.equal( await page.evaluate( () => window.clipboardCopies ), 2 );
+		assert.equal( await page.locator( 'dialog[open]' ).count(), 0 );
 		await navigate( '/filmstrip-social' );
 		await readyFilm();
 		await page.locator( '.pb-filmstrip-gallery' ).evaluate( ( el ) => {
 			const api = el.__pbFilmstrip;
-			api.getSettings().socialSharingSources = [ 'copy' ];
+			api.getSettings().socialSharingSources = [ 'threads', 'copy' ];
 			api.setActiveImage( 0 );
 		} );
+		assert.equal(
+			await page.locator(
+				'.pb-filmstrip-gallery-main-media .pb-social-share__link--threads .pb-social-share__icon svg'
+			).count(),
+			1
+		);
 		await page
 			.locator(
 				'.pb-filmstrip-gallery-main-media .pb-social-share__link--copy'
 			)
 			.dispatchEvent( 'click' );
-		assert.equal( await page.evaluate( () => window.clipboardCopies ), 1 );
+		assert.equal( await page.evaluate( () => window.clipboardCopies ), 3 );
 		await navigate( '/filmstrip-download' );
 		await readyFilm();
 		await page.locator( '.pb-filmstrip-gallery' ).evaluate( ( el ) => {

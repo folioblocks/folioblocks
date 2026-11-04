@@ -223,10 +223,13 @@ const initializeCarousel = ( block ) => {
 	} );
 
 	const initialize = () => {
+		const startIndex = block.dataset.autoplayDirection === 'left' && ! loopSlides
+			? Math.max( 0, originalSlides.length - 1 )
+			: 0;
 		applyHeight();
-		scrollToSlide( 0, { smooth: false } );
+		scrollToSlide( startIndex, { smooth: false } );
 		scope.frame( () => {
-			scrollToSlide( 0, { smooth: false } );
+			scrollToSlide( startIndex, { smooth: false } );
 			gallery.style.overflowX = '';
 			gallery.setAttribute( 'tabindex', '0' );
 			gallery.classList.add( 'pb-carousel-ready' );

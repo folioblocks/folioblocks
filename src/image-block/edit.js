@@ -944,20 +944,14 @@ export default function Edit( {
 			( category ) => category.toLowerCase() === normalizedActiveFilter
 		);
 
-	const carouselHeight = context[ 'folioBlocks/carouselHeight' ] || 400;
-	const displayHeight = carouselHeight;
-
 	const blockProps = useBlockProps( {
 		className: isHidden ? 'is-hidden' : undefined,
 	} );
-	const baseFigureStyle = {
+	const figureStyle = {
 		...imageStyle,
 		...overlayStyleVars,
 		...overlayTypographyVars,
 	};
-	const figureStyle = context[ 'folioBlocks/inCarousel' ]
-		? { ...baseFigureStyle, height: `${ displayHeight }px` }
-		: baseFigureStyle;
 
 	// Detect: in Image Row, Image Stack, or Masonry Gallery
 	const { isInImageRow, isInImageStack, isInMasonryGallery } = useSelect(

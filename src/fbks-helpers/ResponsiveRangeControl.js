@@ -21,6 +21,7 @@ const ResponsiveRangeControl = ({
 	max = 8,
 	lockTabletMobileToDesktop = true,
 	help,
+	renderInput,
 	onChange,
 }) => {
 	const [device, setDevice] = useState("desktop");
@@ -160,24 +161,28 @@ const ResponsiveRangeControl = ({
 				)}
 			</div>
 
-			<RangeControl
-				min={min}
-				max={dynamicMax}
-				value={getValue()}
-				onChange={setValue}
-				help={controlHelp}
-				__nextHasNoMarginBottom
-				__next40pxDefaultSize
-			/>
+			{renderInput ? (
+				renderInput({ value: getValue(), onChange: setValue })
+			) : (
+				<RangeControl
+					min={min}
+					max={dynamicMax}
+					value={getValue()}
+					onChange={setValue}
+					help={controlHelp}
+					__nextHasNoMarginBottom
+					__next40pxDefaultSize
+				/>
+			)}
 		</div>
 	);
 };
 
 ResponsiveRangeControl.propTypes = {
 	label: PropTypes.string.isRequired,
-	columns: PropTypes.number.isRequired,
-	tabletColumns: PropTypes.number,
-	mobileColumns: PropTypes.number,
+	columns: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+	tabletColumns: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+	mobileColumns: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 	desktopKey: PropTypes.string,
 	tabletKey: PropTypes.string,
 	mobileKey: PropTypes.string,
@@ -186,6 +191,7 @@ ResponsiveRangeControl.propTypes = {
 	lockTabletMobileToDesktop: PropTypes.bool,
 	help: PropTypes.string,
 	onChange: PropTypes.func.isRequired,
+	renderInput: PropTypes.func,
 };
 
 export default ResponsiveRangeControl;

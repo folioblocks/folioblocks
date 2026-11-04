@@ -5,7 +5,7 @@ Tags: gallery, image gallery, photo gallery, video gallery, lightbox,
 Tested up to:      7.2
 Requires at least: 6.5
 Requires PHP: 7.4
-Stable tag:        1.6.0-beta.1
+Stable tag:        1.6.0-beta.3
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -137,10 +137,10 @@ No, the galleries will remain in place on your site. However, the **advanced lay
 * Video lightboxes in image galleries: Image Block and all six photo galleries can open provider-hosted or self-hosted videos from image thumbnails. Includes toolbar editing, configurable play icons, overlay play buttons, and mixed image/video navigation.
 * Global Block Defaults: Shared starting settings for image, video, gallery, Background Video, Before & After, Loupe, and Proofing blocks. Includes autosaving, resets, conditional controls, and Customized badges. Defaults apply to new content while preserving existing blocks.
 * Expanded Proofing Gallery: Optional client star ratings and filtering, Simple/Advanced color flags, retained gallery palettes, and improved feedback controls. Session reports now support sorting and clearer ratings, flags, and enabled-feedback columns.
+* Carousel Gallery Block now supports user defined custom heigh values and includes a new option to set scroll direction for Autoplay. 
 * Media metadata tools: Import and inspect embedded ratings, color classes, labels, and EXIF information. Includes editable Media Library values, palette presets, access controls, and scanning existing images without modifying their files. These tools are restricted to Business and Agency plans.
 * WordPress compatibility and navigation: WordPress 7.2 responsive editing integration, grouped layout controls, and support for Interactivity API page navigation across all blocks, including initialization and cleanup.
 * Settings, editor, and maintenance improvements: Redesigned Global Settings, expanded System Info reports, clearer click/hover style sections, standardized icons, and removal of legacy pb- folder/admin naming while preserving saved-content compatibility.
-
 
 = 1.5.2 =
 * Minor bug fixes and improvements

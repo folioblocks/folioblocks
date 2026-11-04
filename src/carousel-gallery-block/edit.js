@@ -145,6 +145,13 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 	const [ isLoading, setIsLoading ] = useState( false );
 
 	const { carouselHeight, preview, lightbox, lightboxCaption } = attributes;
+	const customHeightStyles = applyFilters(
+		'folioBlocks.carouselGallery.customHeightStyles',
+		null,
+		attributes
+	);
+	const hasCustomHeight = !! customHeightStyles;
+	const reverseAutoplay = attributes.autoplayDirection === 'left';
 
 	// Block Preview Image
 	if ( preview ) {
@@ -172,10 +179,20 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 		}
 	}, [ window.folioBlocksData?.hasWooCommerce ] );
 
+	const responsiveViewport = useSelect(
+		( select ) => select( blockEditorStore ).getSelectedBlockStyleState?.( clientId )?.viewport,
+		[ clientId ]
+	);
+	const previewHeight = {
+		'@tablet': 'var(--pb-carousel-height-tablet)',
+		'@mobile': 'var(--pb-carousel-height-mobile)',
+	}[ responsiveViewport ];
 	const blockProps = useBlockProps( {
 		'data-carousel-height': carouselHeight, // optional debug aid
 		'data-in-carousel': true, // optional debug aid
 		style: {
+			...customHeightStyles,
+			'--pb-carousel-height-active': hasCustomHeight ? previewHeight : undefined,
 			'--pb-gallery-gap-desktop': `${ responsiveGaps.gap }px`,
 			'--pb-gallery-gap-tablet': `${ responsiveGaps.tabletGap }px`,
 			'--pb-gallery-gap-mobile': `${ responsiveGaps.mobileGap }px`,
@@ -268,7 +285,9 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 	const { ref: innerRef, ...restInnerBlocksProps } = useInnerBlocksProps(
 		{
 			className: 'pb-carousel-gallery',
-			style: { '--pb-carousel-height': `${ carouselHeight || 400 }px` },
+			style: hasCustomHeight
+				? undefined
+				: { '--pb-carousel-height': `${ carouselHeight || 400 }px` },
 		},
 		{
 			allowedBlocks: ALLOWED_BLOCKS,
@@ -325,7 +344,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 	}, [ innerBlocks.length, isLoading, attributes.align ] );
 
 	useEffect( () => {
-		if ( ! Number.isFinite( containerWidth ) || containerWidth <= 0 ) {
+		if ( hasCustomHeight || ! Number.isFinite( containerWidth ) || containerWidth <= 0 ) {
 			return;
 		}
 
@@ -346,7 +365,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 			}, 100 );
 			return () => clearTimeout( timeout );
 		}
-	}, [ containerWidth, attributes.verticalOnMobile ] );
+	}, [ containerWidth, attributes.verticalOnMobile, hasCustomHeight ] );
 
 	// Determine if this block or one of its children is selected
 	const isBlockOrChildSelected = useSelect(
@@ -399,7 +418,13 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 	}, [ innerBlocks ] );
 
 	// Carousel navigation state and handlers
-	const [ currentSlide, setCurrentSlide ] = useState( 0 );
+	const autoplayStart = attributes.autoplay && reverseAutoplay && ! attributes.loopSlides
+		? Math.max( 0, innerBlocks.length - 1 )
+		: 0;
+	const [ currentSlide, setCurrentSlide ] = useState( autoplayStart );
+	useEffect( () => {
+		setCurrentSlide( autoplayStart );
+	}, [ autoplayStart ] );
 	const [ isPlaying, setIsPlaying ] = useState( false );
 
 	const goToPrevSlide = () => {
@@ -497,23 +522,28 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 			return;
 		}
 
-		const interval = setInterval(
+		const timer = setTimeout(
 			() => {
-				setCurrentSlide( ( prev ) => {
-					if ( prev + 1 < innerBlocks.length ) {
-						return prev + 1;
-					}
-					return 0; // Jump back to the first slide instead of stopping
-				} );
+				const next = currentSlide + ( reverseAutoplay ? -1 : 1 );
+				if ( next >= 0 && next < innerBlocks.length ) {
+					setCurrentSlide( next );
+				} else if ( attributes.loopSlides && innerBlocks.length > 1 ) {
+					setCurrentSlide( reverseAutoplay ? innerBlocks.length - 1 : 0 );
+				} else {
+					setIsPlaying( false );
+				}
 			},
 			( attributes.autoplaySpeed || 3 ) * 1000
 		);
 
-		return () => clearInterval( interval );
+		return () => clearTimeout( timer );
 	}, [
 		isPlaying,
 		attributes.autoplaySpeed,
 		attributes.autoplay,
+		attributes.loopSlides,
+		currentSlide,
+		reverseAutoplay,
 		innerBlocks.length,
 	] );
 
@@ -646,6 +676,11 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 				</ToolbarGroup>
 			</BlockControls>
 			<ResponsiveLayoutInspector clientId={ clientId }>
+				{ applyFilters(
+					'folioBlocks.carouselGallery.customHeight.inspector',
+					null,
+					{ clientId, attributes, setAttributes }
+				) }
 				{applyFilters(
 					"folioBlocks.carouselGallery.responsiveGapControl.inspector",
 					null,
@@ -682,36 +717,42 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 					/>
 					<SelectControl
 						label={ __(
-							'Image Orientation (Mobile)',
+							'Carousel Height',
 							'folioblocks'
 						) }
 						value={
-							attributes.verticalOnMobile
-								? 'vertical'
-								: 'horizontal'
+							hasCustomHeight
+								? 'custom'
+								: attributes.verticalOnMobile ? 'vertical' : 'horizontal'
 						}
-						options={ [
-							{
-								label: __( 'Horizontal Images', 'folioblocks' ),
-								value: 'horizontal',
-							},
-							{
-								label: __( 'Vertical Images', 'folioblocks' ),
-								value: 'vertical',
-							},
-						] }
+						options={ applyFilters(
+							'folioBlocks.carouselGallery.heightOptions',
+							[
+								{ label: __( 'Automatic', 'folioblocks' ), value: 'horizontal' },
+								{
+									label: __( 'Vertical Priority on Mobile', 'folioblocks' ),
+									value: 'vertical',
+								},
+							]
+						) }
 						onChange={ ( val ) =>
 							setAttributes( {
-								verticalOnMobile: val === 'vertical',
+								customHeightEnabled: val === 'custom',
+								...( val !== 'custom' && { verticalOnMobile: val === 'vertical' } ),
 							} )
 						}
 						help={ __(
-							'Affects layout on mobile only. Switch ONLY when all images are vertical in orientation.',
+							'Choose how the carousel height is set.',
 							'folioblocks'
 						) }
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
+					{ applyFilters(
+						'folioBlocks.carouselGallery.customHeight',
+						null,
+						{ attributes, setAttributes }
+					) }
 					{ applyFilters(
 						'folioBlocks.carouselGallery.responsiveGapControl',
 						imageProFeatureNotice( 'responsiveGaps' ),

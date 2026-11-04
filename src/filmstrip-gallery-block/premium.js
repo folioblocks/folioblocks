@@ -24,6 +24,14 @@ import {
 	registerRandomizeOrderPremiumControl,
 } from '../fbks-helpers/simplePremiumControls';
 
+import { OverlaySocialContent } from '../fbks-helpers/socialSharingControls';
+
+addFilter(
+	'folioBlocks.filmstripGallery.socialOverlayPreview',
+	'folioblocks/filmstrip-social-overlay',
+	() => <OverlaySocialContent />
+);
+
 enableGalleryTransforms( 'folioblocks/filmstrip-gallery-block' );
 
 registerImageHoverActionPremiumControls( {

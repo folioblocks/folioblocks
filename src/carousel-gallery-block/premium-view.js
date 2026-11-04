@@ -28,6 +28,7 @@ store( 'folioblocks/carousel', {
 					'.pb-carousel-controls, .pb-carousel-play-button'
 				);
 			const enabled = block.dataset.autoplay === 'true';
+			const direction = block.dataset.autoplayDirection === 'left' ? 'previous' : 'next';
 			let playing = enabled && ! hasControls;
 			let timer;
 			const icons = () => {
@@ -59,7 +60,7 @@ store( 'folioblocks/carousel', {
 							schedule();
 							return;
 						}
-						if ( ! gallery.__pbCarousel?.next() ) {
+						if ( ! gallery.__pbCarousel?.[ direction ]() ) {
 							playing = false;
 							icons();
 							return;

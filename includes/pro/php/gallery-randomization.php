@@ -48,10 +48,18 @@ function fbks_carousel_clone_markup( $markup, $position ) {
         if ( $processor->has_class( 'wp-block-folioblocks-pb-image-block' ) ) {
             $processor->set_attribute( 'data-pb-carousel-clone', $position );
             $processor->set_attribute( 'aria-hidden', 'true' );
-            $processor->set_attribute( 'inert', true );
         }
-        if ( in_array( $processor->get_tag(), [ 'A', 'BUTTON', 'INPUT', 'SELECT', 'TEXTAREA' ], true ) || null !== $processor->get_attribute( 'tabindex' ) ) {
+        if ( 'A' === $processor->get_tag() && $processor->has_class( 'pb-social-share__link' ) ) {
+            // Visible loop copies can share the same image without adding a tab stop.
             $processor->set_attribute( 'tabindex', '-1' );
+            continue;
+        }
+        // The slide surface needs to receive hover while passing through a loop copy.
+        if ( in_array( $processor->get_tag(), [ 'A', 'BUTTON', 'INPUT', 'SELECT', 'TEXTAREA', 'SUMMARY', 'IFRAME', 'AUDIO', 'VIDEO' ], true )
+            || null !== $processor->get_attribute( 'tabindex' )
+            || null !== $processor->get_attribute( 'contenteditable' ) ) {
+            $processor->remove_attribute( 'tabindex' );
+            $processor->set_attribute( 'inert', true );
         }
     }
     return $processor->get_updated_html();

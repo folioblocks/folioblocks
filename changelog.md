@@ -4,6 +4,22 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0] - 2026-11-04
+### Added
+- Added responsive Custom Height to Carousel Gallery on all Pro plans. Set desktop, tablet, and mobile heights in px or vh from the block settings or responsive design mode.
+- Added Left and Right autoplay directions to Carousel Gallery on all Pro plans. Right remains the default. Left starts on the last slide when looping is off and wraps backward from the first slide when looping is on.
+
+### Changed
+- Renamed Image Orientation (Mobile) to Carousel Height, with Automatic and Vertical Priority on Mobile as presets. Updated Carousel Global Block Defaults with the height presets, device heights, and autoplay direction.
+- Moved FolioBlocks Metadata on the Edit Media screen into a WordPress meta box that can be collapsed, reordered, or hidden through Screen Options.
+
+### Fixed
+- Fixed social sharing icons and labels on visible Carousel Gallery loop copies so they respond to clicks.
+- Fixed Filmstrip Gallery showing the image title in the editor when the social sharing overlay was selected.
+- Fixed Filmstrip Gallery showing letter placeholders instead of social sharing icons on the frontend.
+- Fixed Carousel Gallery hover overlays becoming unresponsive when looping between the first and last slides in either direction.
+- Fixed zero shutter speeds in the Media Library by retrying the EXIF lookup using ExposureTime and ShutterSpeedValue. Previously imported zero values are corrected when read without rescanning the library.
+
 ## [1.6.0] - 2026-11-03
 ### Added
 - Added a Customized badge to the Page/Post Defaults card when its settings differ from plugin defaults. The badge updates after autosaving and clears when all settings are restored to their defaults.

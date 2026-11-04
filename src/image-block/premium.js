@@ -37,11 +37,7 @@ import {
 	registerImageBlockWatermarkOverlay,
 	registerWatermarkOverlayControls,
 } from '../fbks-helpers/watermarkOverlayControls.js';
-import {
-	SOCIAL_SHARE_SERVICES,
-	SOCIAL_SHARE_ICONS,
-	getSharedSocialSources,
-} from '../fbks-helpers/socialSharingControls.js';
+import { OverlaySocialContent } from '../fbks-helpers/socialSharingControls.js';
 
 enableImageTransforms( 'folioblocks/pb-image-block' );
 registerImageBlockWatermarkOverlay();
@@ -261,36 +257,6 @@ const OverlayExifContent = ( { attributes, hideUnknownExifFields = false } ) => 
 						) }
 					</span>
 					<span className="pb-hover-exif__value">{ field.value }</span>
-				</span>
-			) ) }
-		</div>
-	);
-};
-
-const OverlaySocialContent = ( { attributes, context = {} } ) => {
-	const sources = getSharedSocialSources( attributes, context );
-	const serviceMap = SOCIAL_SHARE_SERVICES.reduce( ( acc, service ) => {
-		acc[ service.value ] = service.label;
-		return acc;
-	}, {} );
-
-	return (
-		<div className="pb-social-share pb-social-share--overlay">
-			{ sources.map( ( source ) => (
-				<span
-					className={ `pb-social-share__link pb-social-share__link--${ source }` }
-					key={ source }
-				>
-					<span
-						className="pb-social-share__icon"
-						aria-hidden="true"
-						dangerouslySetInnerHTML={ {
-							__html: SOCIAL_SHARE_ICONS[ source ] || '',
-						} }
-					/>
-					<span className="pb-social-share__label">
-						{ serviceMap[ source ] || source }
-					</span>
 				</span>
 			) ) }
 		</div>
@@ -1690,10 +1656,7 @@ addFilter(
 
 			if ( overlayContent === 'social' ) {
 				return showTitle ? (
-					<OverlaySocialContent
-						attributes={ attributes }
-						context={ context }
-					/>
+					<OverlaySocialContent />
 				) : null;
 			}
 

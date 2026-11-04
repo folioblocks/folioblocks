@@ -19,6 +19,7 @@ $fbks_wrapper_attributes = array(
 $fbks_gap = 10;
 $fbks_tablet_gap = 10;
 $fbks_mobile_gap = 10;
+$fbks_custom_height_style = '';
 
 if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 	// Premium-only attributes
@@ -26,9 +27,19 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 	$fbks_tablet_gap = max( 0, min( 50, intval( $attributes['tabletGap'] ?? $fbks_gap ) ) );
 	$fbks_mobile_gap = max( 0, min( 50, intval( $attributes['mobileGap'] ?? $fbks_gap ) ) );
 
+	if ( ! empty( $attributes['customHeightEnabled'] ) ) {
+		$height = fbks_sanitize_carousel_height( $attributes['customHeight'] ?? '', '400px' );
+		$tablet_height = fbks_sanitize_carousel_height( $attributes['tabletCustomHeight'] ?? '', $height );
+		$mobile_height = fbks_sanitize_carousel_height( $attributes['mobileCustomHeight'] ?? '', $tablet_height );
+		$fbks_custom_height_style = '--pb-carousel-height-desktop:' . $height . ';'
+			. '--pb-carousel-height-tablet:' . $tablet_height . ';'
+			. '--pb-carousel-height-mobile:' . $mobile_height . ';';
+	}
+
 	// Autoplay
 	if ( ! empty( $attributes['autoplay'] ) ) {
 		$fbks_wrapper_attributes['data-autoplay']       = 'true';
+		$fbks_wrapper_attributes['data-autoplay-direction'] = 'left' === ( $attributes['autoplayDirection'] ?? '' ) ? 'left' : 'right';
 		$fbks_wrapper_attributes['data-autoplay-speed'] = isset( $attributes['autoplaySpeed'] )
 			? esc_attr( $attributes['autoplaySpeed'] )
 			: '3';
@@ -52,7 +63,8 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 }
 $fbks_wrapper_attributes['style'] = '--pb-gallery-gap-desktop:' . $fbks_gap . 'px;'
 	. '--pb-gallery-gap-tablet:' . $fbks_tablet_gap . 'px;'
-	. '--pb-gallery-gap-mobile:' . $fbks_mobile_gap . 'px;';
+	. '--pb-gallery-gap-mobile:' . $fbks_mobile_gap . 'px;'
+	. $fbks_custom_height_style;
 
 $fbks_wrapper_attr_string = get_block_wrapper_attributes( $fbks_wrapper_attributes );
 $fbks_controls_background_color = ! empty( $attributes['controlsBackgroundColor'] )

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: FolioBlocks 1.6.0-beta.1\n"
+"Project-Id-Version: FolioBlocks 1.6.0-beta.2\n"
 "Report-Msgid-Bugs-To: https://folioblocks.com\n"
-"POT-Creation-Date: 2026-11-03 07:53:44+0000\n"
+"POT-Creation-Date: 2026-11-04 06:34:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -127,11 +127,11 @@ msgstr ""
 msgid "A proofing session is active or unfinished. Avoid updating this page until the client submits their selections."
 msgstr ""
 
-#: includes/pro/php/media-metadata.php:534
+#: includes/pro/php/media-metadata.php:550
 msgid "A valid attachment is required."
 msgstr ""
 
-#: includes/pro/php/media-metadata.php:617
+#: includes/pro/php/media-metadata.php:633
 msgid "A valid metadata section is required."
 msgstr ""
 
@@ -1915,15 +1915,15 @@ msgstr ""
 msgid "Folioblocks loading"
 msgstr ""
 
-#: includes/pro/admin/media-metadata.php:344 includes/pro/admin/media-metadata.php:362
+#: includes/pro/admin/media-metadata.php:344 includes/pro/admin/media-metadata.php:362 includes/pro/admin/media-metadata.php:445
 msgid "FolioBlocks Metadata"
 msgstr ""
 
-#: includes/pro/php/media-metadata.php:585 includes/pro/php/media-metadata.php:611
+#: includes/pro/php/media-metadata.php:601 includes/pro/php/media-metadata.php:627
 msgid "FolioBlocks metadata could not be loaded for this attachment."
 msgstr ""
 
-#: includes/pro/php/media-metadata.php:539
+#: includes/pro/php/media-metadata.php:555
 msgid "FolioBlocks metadata import currently supports JPEG images."
 msgstr ""
 
@@ -2809,7 +2809,7 @@ msgstr ""
 msgid "Media Metadata"
 msgstr ""
 
-#: includes/pro/admin/global-settings.php:248 includes/pro/admin/global-settings.php:550 includes/pro/php/media-metadata.php:531 includes/pro/php/media-metadata.php:580 includes/pro/php/media-metadata.php:606
+#: includes/pro/admin/global-settings.php:248 includes/pro/admin/global-settings.php:550 includes/pro/php/media-metadata.php:547 includes/pro/php/media-metadata.php:596 includes/pro/php/media-metadata.php:622
 msgid "Media Metadata requires a Business or Agency plan."
 msgstr ""
 
@@ -2993,7 +2993,7 @@ msgstr ""
 msgid "None"
 msgstr ""
 
-#: includes/pro/php/media-metadata.php:667
+#: includes/pro/php/media-metadata.php:683
 msgid "Normalized FolioBlocks media rating and color-class metadata."
 msgstr ""
 
@@ -3755,7 +3755,7 @@ msgstr ""
 msgid "Reset Media Rating"
 msgstr ""
 
-#: includes/pro/admin/media-metadata.php:561
+#: includes/pro/admin/media-metadata.php:606
 msgid "Reset this Media Library value to the original value embedded in the image? The image file will not be changed."
 msgstr ""
 
@@ -4742,11 +4742,11 @@ msgstr ""
 msgid "The Media Library scan could not continue. Please try again."
 msgstr ""
 
-#: includes/pro/admin/media-metadata.php:562
+#: includes/pro/admin/media-metadata.php:607
 msgid "The metadata could not be reset. Please try again."
 msgstr ""
 
-#: includes/pro/php/media-metadata.php:549
+#: includes/pro/php/media-metadata.php:565
 msgid "The original attachment file could not be read."
 msgstr ""
 
@@ -5330,7 +5330,7 @@ msgstr ""
 msgid "You are not allowed to load FolioBlocks news."
 msgstr ""
 
-#: includes/pro/admin/media-metadata.php:517
+#: includes/pro/admin/media-metadata.php:562
 msgid "You are not allowed to reset this media metadata."
 msgstr ""
 
