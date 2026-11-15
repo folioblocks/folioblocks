@@ -1,5 +1,5 @@
 {
-  "translation-revision-date": "2026-10-30T09:29:19.339Z",
+  "translation-revision-date": "2026-11-04T09:00:20.357Z",
   "generator": "FolioBlocks custom i18n tooling",
   "domain": "messages",
   "locale_data": {
@@ -126,9 +126,6 @@
       "Advanced Comparison Controls": [
         "Avancerade jämförelsekontroller"
       ],
-      "Affects layout on mobile only. Switch ONLY when all images are vertical in orientation.": [
-        "Påverkar endast layouten på mobila enheter. Slå ENDAST på när alla bilder är vertikalt orienterade."
-      ],
       "After": [
         "Efter"
       ],
@@ -180,6 +177,9 @@
       "Assign multiple categories to videos.": [
         "Tilldela flera kategorier till videor."
       ],
+      "Automatic": [
+        "Automatisk"
+      ],
       "Automatically advance carousel slides.": [
         "Flytta automatiskt karusellbilder."
       ],
@@ -197,6 +197,9 @@
       ],
       "Automatically shuffle gallery images.": [
         "Blanda automatiskt galleribilder."
+      ],
+      "Autoplay Direction": [
+        "Riktning för automatisk uppspelning"
       ],
       "Autoplay Speed (seconds)": [
         "Hastighet för automatisk uppspelning (sekunder)"
@@ -267,6 +270,9 @@
       "Carousel Gallery Settings": [
         "Inställningar för Carousel Gallery"
       ],
+      "Carousel Height": [
+        "Karusellhöjd"
+      ],
       "Carousel Playback and Controls": [
         "Karuselluppspelning och kontroller"
       ],
@@ -332,6 +338,9 @@
       ],
       "Choose how overlay content enters the thumbnail.": [
         "Välj hur överläggsinnehållet visas i miniatyrbilden."
+      ],
+      "Choose how the carousel height is set.": [
+        "Välj hur karusellens höjd ska ställas in."
       ],
       "Choose how the image itself moves or changes on hover.": [
         "Välj hur själva bilden rör sig eller ändras när pekaren förs över den."
@@ -423,6 +432,9 @@
       "Choose which gallery block is used for layout. Columns, gap, row height, and resolution are edited on that nested gallery.": [
         "Välj vilket galleriblock som används för layouten. Kolumner, avstånd, radhöjd och upplösning redigeras i det nästlade galleriet."
       ],
+      "Choose which side the next image enters from.": [
+        "Välj från vilken sida nästa bild ska visas."
+      ],
       "Circle": [
         "Cirkel"
       ],
@@ -506,6 +518,9 @@
       ],
       "Create richer interactions and reveal useful image information.": [
         "Skapa rikare interaktioner och visa användbar bildinformation."
+      ],
+      "Custom Height": [
+        "Anpassad höjd"
       ],
       "Custom URL": [
         "Anpassad URL"
@@ -993,9 +1008,6 @@
       "Horizontal": [
         "Horisontell"
       ],
-      "Horizontal Images": [
-        "Horisontella bilder"
-      ],
       "Horizontal Padding": [
         "Horisontellt inre avstånd"
       ],
@@ -1038,9 +1050,6 @@
       "Image Hover Styles": [
         "Stilar för bildhovring"
       ],
-      "Image Orientation (Mobile)": [
-        "Bildorientering (mobil)"
-      ],
       "Image Resolution": [
         "Bildupplösning"
       ],
@@ -1082,6 +1091,9 @@
       ],
       "Justified Gallery Settings": [
         "Inställningar för Justified Gallery"
+      ],
+      "Keep navigating past the first and last slides.": [
+        "Fortsätt bläddra förbi den första och sista bilden."
       ],
       "Keep repeat visits feeling fresh.": [
         "Fortsätt att återbesöken känns fräsch."
@@ -1581,9 +1593,6 @@
       "Responsive Gallery Gaps": [
         "Responsiva galleriluckor"
       ],
-      "Return to the first slide after reaching the end.": [
-        "Återgå till den första bilden efter att ha nått slutet."
-      ],
       "Right": [
         "Höger"
       ],
@@ -1730,6 +1739,9 @@
       ],
       "Set starting position for slider drag handle.": [
         "Ange startposition för reglagets draghandtag."
+      ],
+      "Set the carousel height for this device in pixels (px) or viewport height (vh).": [
+        "Ange karusellens höjd för den här enheten i pixlar (px) eller relativt visningsytans höjd (vh)."
       ],
       "Set the client email address and gallery password in Client Settings.": [
         "Ange kundens e-postadress och galleriets lösenord i kundinställningarna."
@@ -2040,11 +2052,11 @@
       "Vertical": [
         "Vertikal"
       ],
-      "Vertical Images": [
-        "Vertikala bilder"
-      ],
       "Vertical Padding": [
         "Vertikalt inre avstånd"
+      ],
+      "Vertical Priority on Mobile": [
+        "Prioritera stående bilder på mobil"
       ],
       "Video": [
         "Video"

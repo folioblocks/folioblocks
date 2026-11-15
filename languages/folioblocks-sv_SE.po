@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: FolioBlocks 1.6.0-beta.2\n"
+"Project-Id-Version: FolioBlocks 1.6.0-beta.3\n"
 "Report-Msgid-Bugs-To: https://folioblocks.com\n"
-"POT-Creation-Date: 2026-11-04 06:34:39+0000\n"
-"PO-Revision-Date: 2026-11-04 06:34:39+0000\n"
+"POT-Creation-Date: 2026-11-04 09:00:20+0000\n"
+"PO-Revision-Date: 2026-11-04 09:00:20+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: sv_SE\n"
@@ -69,7 +69,7 @@ msgstr "%s (aktuell)"
 msgid "%s Columns"
 msgstr "%s kolumner"
 
-#: includes/pro/php/block-defaults.php:728
+#: includes/pro/php/block-defaults.php:742
 #, php-format
 msgid "%s opacity"
 msgstr "%s opacitet"
@@ -191,7 +191,7 @@ msgstr "Lägg till bildrad"
 msgid "Add Image Stack"
 msgstr "Lagg till bildstapel"
 
-#: src/carousel-gallery-block/edit.js:624 src/carousel-gallery-block/edit.js:644 src/filmstrip-gallery-block/edit.js:1148 src/filmstrip-gallery-block/edit.js:1151 src/grid-gallery-block/edit.js:660 src/grid-gallery-block/edit.js:680 src/justified-gallery-block/edit.js:588 src/justified-gallery-block/edit.js:608 src/masonry-gallery-block/edit.js:587 src/masonry-gallery-block/edit.js:608
+#: src/carousel-gallery-block/edit.js:654 src/carousel-gallery-block/edit.js:674 src/filmstrip-gallery-block/edit.js:1150 src/filmstrip-gallery-block/edit.js:1153 src/grid-gallery-block/edit.js:660 src/grid-gallery-block/edit.js:680 src/justified-gallery-block/edit.js:588 src/justified-gallery-block/edit.js:608 src/masonry-gallery-block/edit.js:587 src/masonry-gallery-block/edit.js:608
 msgid "Add Images"
 msgstr "Lägg till bilder"
 
@@ -211,7 +211,7 @@ msgstr "Lägg till produkt- och kundvagnsåtgärder."
 msgid "Add rounded corners."
 msgstr "Lägg till rundade hörn."
 
-#: includes/pro/php/block-defaults.php:225 includes/pro/php/block-defaults.php:411 includes/pro/php/block-defaults.php:478 src/fbks-helpers/imageClickActionPremiumControls.js:473 src/filmstrip-gallery-block/render.php:910 src/image-block/premium.js:1092 src/image-block/premium.js:1108 src/image-block/premium.js:1377 src/image-block/premium.js:1393 src/image-block/premium.js:1767 src/image-block/render.php:924 src/video-block/premium.js:611 src/video-block/premium.js:627 src/video-block/premium.js:847 src/video-block/render.php:324 src/video-gallery-block/premium.js:150
+#: includes/pro/php/block-defaults.php:225 includes/pro/php/block-defaults.php:411 includes/pro/php/block-defaults.php:486 src/fbks-helpers/imageClickActionPremiumControls.js:473 src/filmstrip-gallery-block/render.php:910 src/image-block/premium.js:1058 src/image-block/premium.js:1074 src/image-block/premium.js:1343 src/image-block/premium.js:1359 src/image-block/premium.js:1730 src/image-block/render.php:924 src/video-block/premium.js:611 src/video-block/premium.js:627 src/video-block/premium.js:847 src/video-block/render.php:324 src/video-gallery-block/premium.js:150
 msgid "Add to Cart"
 msgstr "Lägg till i Varukorgen"
 
@@ -223,11 +223,11 @@ msgstr "Ikon för Lägg till i Varukorgen"
 msgid "Add to Cart Icon Colors"
 msgstr "Färger för Lägg till i Varukorgen-ikon"
 
-#: src/carousel-gallery-block/edit.js:631 src/filmstrip-gallery-block/edit.js:468 src/grid-gallery-block/edit.js:667 src/justified-gallery-block/edit.js:595 src/masonry-gallery-block/edit.js:595
+#: src/carousel-gallery-block/edit.js:661 src/filmstrip-gallery-block/edit.js:468 src/grid-gallery-block/edit.js:667 src/justified-gallery-block/edit.js:595 src/masonry-gallery-block/edit.js:595
 msgid "Add to Gallery"
 msgstr "Lägg till i galleri"
 
-#: src/image-block/edit.js:1170 src/image-block/edit.js:1172
+#: src/image-block/edit.js:1164 src/image-block/edit.js:1166
 msgid "Add to Image Stack"
 msgstr "Lägg till Image Stack"
 
@@ -255,7 +255,7 @@ msgstr "Lägger till ett mjukt oskärpeöverlägg bakom titeln eller produktinfo
 msgid "Adjust horizontal focal points per device."
 msgstr "Justera horisontella fokuspunkter per enhet."
 
-#: src/fbks-helpers/ResponsiveRangeControl.js:84
+#: src/fbks-helpers/ResponsiveRangeControl.js:85
 #, php-format
 msgid "Adjust the default amount of columns on %s."
 msgstr "Justera standardantalet kolumner pa %s."
@@ -329,10 +329,6 @@ msgstr "Avancerade ljuslådekontroller: ljust/mörkt tema, helskärm, bildräkna
 msgid "Advanced styling: borders, rounded corners, drop shadows, icon colors, overlay colors, typography, and control styling"
 msgstr "Avancerad formgivning: ramar, rundade hörn, skuggor, ikonfärger, överläggsfärger, typografi och kontrollernas utseende"
 
-#: src/carousel-gallery-block/edit.js:708
-msgid "Affects layout on mobile only. Switch ONLY when all images are vertical in orientation."
-msgstr "Påverkar endast layouten på mobila enheter. Slå ENDAST på när alla bilder är vertikalt orienterade."
-
 #: src/before-after-block/edit.js:265 src/before-after-block/premium.js:177 src/before-after-block/render.php:63
 msgid "After"
 msgstr "Efter"
@@ -381,7 +377,7 @@ msgstr "Tillåter att videor öppnas i en ljuslåda under redigering."
 msgid "Alternative Text"
 msgstr "Alternativ text"
 
-#: includes/pro/php/block-defaults.php:56 includes/pro/php/block-defaults.php:410 includes/pro/php/block-defaults.php:459 includes/pro/php/block-defaults.php:479 src/fbks-helpers/imageClickActionPremiumControls.js:264 src/fbks-helpers/imageClickActionPremiumControls.js:405 src/fbks-helpers/imageClickActionPremiumControls.js:518 src/fbks-helpers/videoLightboxControls.js:172 src/image-block/premium.js:618 src/image-block/premium.js:1172 src/image-block/premium.js:1276 src/video-block/premium.js:492 src/video-gallery-block/premium.js:133
+#: includes/pro/php/block-defaults.php:56 includes/pro/php/block-defaults.php:410 includes/pro/php/block-defaults.php:467 includes/pro/php/block-defaults.php:487 src/fbks-helpers/imageClickActionPremiumControls.js:264 src/fbks-helpers/imageClickActionPremiumControls.js:405 src/fbks-helpers/imageClickActionPremiumControls.js:518 src/fbks-helpers/videoLightboxControls.js:172 src/image-block/premium.js:584 src/image-block/premium.js:1138 src/image-block/premium.js:1242 src/video-block/premium.js:492 src/video-gallery-block/premium.js:133
 msgid "Always"
 msgstr "Alltid"
 
@@ -389,7 +385,7 @@ msgstr "Alltid"
 msgid "Always Display Overlay"
 msgstr "Visa alltid överlägg"
 
-#: includes/pro/admin/media-metadata.php:295 src/image-block/premium.js:321 src/image-block/render.php:530
+#: includes/pro/admin/media-metadata.php:295 src/image-block/premium.js:287 src/image-block/render.php:530
 msgid "Aperture"
 msgstr "Bländare"
 
@@ -425,6 +421,10 @@ msgstr "Tilldela flera kategorier till bilder."
 msgid "Assign multiple categories to videos."
 msgstr "Tilldela flera kategorier till videor."
 
+#: includes/pro/php/block-defaults.php:436 src/carousel-gallery-block/edit.js:731
+msgid "Automatic"
+msgstr "Automatisk"
+
 #: src/fbks-helpers/imageProFeatureNotices.js:137
 msgid "Automatically advance carousel slides."
 msgstr "Flytta automatiskt karusellbilder."
@@ -433,11 +433,11 @@ msgstr "Flytta automatiskt karusellbilder."
 msgid "Automatically advance filmstrip images."
 msgstr "Förflytta automatiskt filmremsbilder."
 
-#: src/carousel-gallery-block/premium.js:67
+#: src/carousel-gallery-block/premium.js:170
 msgid "Automatically advance to the next image in the carousel."
 msgstr "Växla automatiskt till nästa bild i karusellen."
 
-#: src/filmstrip-gallery-block/premium.js:176
+#: src/filmstrip-gallery-block/premium.js:184
 msgid "Automatically advance to the next image in the gallery."
 msgstr "Växla automatiskt till nästa bild i galleriet."
 
@@ -457,11 +457,15 @@ msgstr "Blanda automatiskt galleribilder."
 msgid "Autoplay Carousel"
 msgstr "Automatisk karuselluppspelning"
 
+#: src/carousel-gallery-block/premium.js:198
+msgid "Autoplay Direction"
+msgstr "Riktning för automatisk uppspelning"
+
 #: includes/admin/free-pro.php:78
 msgid "Autoplay Gallery"
 msgstr "Automatisk galleriuppspelning"
 
-#: src/carousel-gallery-block/premium.js:74 src/filmstrip-gallery-block/premium.js:184
+#: src/carousel-gallery-block/premium.js:177 src/filmstrip-gallery-block/premium.js:192
 msgid "Autoplay Speed (seconds)"
 msgstr "Hastighet för automatisk uppspelning (sekunder)"
 
@@ -477,7 +481,7 @@ msgstr "Tillbaka"
 msgid "Back to Sessions"
 msgstr "Tillbaka till sessioner"
 
-#: src/carousel-gallery-block/premium.js:256 src/fbks-helpers/filteringPremiumControls.js:547 src/fbks-helpers/filteringPremiumControls.js:570 src/fbks-helpers/imageClickStylePremiumControls.js:58 src/fbks-helpers/imageHoverActionPremiumControls.js:412 src/proofing-gallery-block/edit.js:350 src/video-block/premium.js:326 src/video-block/premium.js:773 src/video-gallery-block/premium.js:417 src/video-gallery-block/premium.js:493
+#: src/carousel-gallery-block/premium.js:377 src/fbks-helpers/filteringPremiumControls.js:547 src/fbks-helpers/filteringPremiumControls.js:570 src/fbks-helpers/imageClickStylePremiumControls.js:58 src/fbks-helpers/imageHoverActionPremiumControls.js:412 src/proofing-gallery-block/edit.js:350 src/video-block/premium.js:326 src/video-block/premium.js:773 src/video-gallery-block/premium.js:417 src/video-gallery-block/premium.js:493
 msgid "Background"
 msgstr "Bakgrund"
 
@@ -541,7 +545,7 @@ msgstr "Blockomvandlingar: mellan kompatibla bildblock"
 msgid "Blue"
 msgstr "Blå"
 
-#: includes/pro/php/social-sharing.php:32 src/fbks-helpers/socialSharingControls.js:8
+#: includes/pro/php/social-sharing.php:32 src/fbks-helpers/socialSharingControls.js:9
 msgid "Bluesky"
 msgstr "Bluesky"
 
@@ -593,7 +597,7 @@ msgstr "Rambredd (px)"
 msgid "Border Width (px)"
 msgstr "Rambredd (px)"
 
-#: includes/pro/php/block-defaults.php:20 includes/pro/php/block-defaults.php:445 src/before-after-block/premium.js:100 src/filmstrip-gallery-block/edit.js:1195
+#: includes/pro/php/block-defaults.php:20 includes/pro/php/block-defaults.php:453 src/before-after-block/premium.js:100 src/filmstrip-gallery-block/edit.js:1197
 msgid "Bottom"
 msgstr "Nederst"
 
@@ -633,7 +637,7 @@ msgstr "Knappstorlek och avstånd"
 msgid "Camera"
 msgstr "Kamera"
 
-#: src/image-block/premium.js:306 src/image-block/render.php:515
+#: src/image-block/premium.js:272 src/image-block/render.php:515
 msgid "Camera Model"
 msgstr "Kameramodell"
 
@@ -641,21 +645,25 @@ msgstr "Kameramodell"
 msgid "Capture One"
 msgstr "Capture One"
 
-#: includes/pro/php/block-defaults.php:492 src/carousel-gallery-block/edit.js:822 src/fbks-helpers/imageProFeatureNotices.js:145
+#: includes/pro/php/block-defaults.php:500 src/carousel-gallery-block/edit.js:863 src/fbks-helpers/imageProFeatureNotices.js:145
 msgid "Carousel Control Styles"
 msgstr "Stilar för karusellkontroller"
 
-#: includes/pro/php/icon-registration.php:27 src/carousel-gallery-block/block.json:6 src/carousel-gallery-block/edit.js:863
+#: includes/pro/php/icon-registration.php:27 src/carousel-gallery-block/block.json:6 src/carousel-gallery-block/edit.js:904
 msgid "Carousel Gallery"
 msgstr "Karusellgalleri"
 
-#: includes/admin/free-pro.php:42 includes/admin/settings-page.php:533 includes/pro/php/block-defaults.php:499
+#: includes/admin/free-pro.php:42 includes/admin/settings-page.php:533 includes/pro/php/block-defaults.php:507
 msgid "Carousel Gallery Block"
 msgstr "Karusellgalleriblock"
 
-#: includes/pro/php/block-defaults.php:492 src/carousel-gallery-block/edit.js:657
+#: includes/pro/php/block-defaults.php:500 src/carousel-gallery-block/edit.js:692
 msgid "Carousel Gallery Settings"
 msgstr "Inställningar för Carousel Gallery"
+
+#: src/carousel-gallery-block/edit.js:719
+msgid "Carousel Height"
+msgstr "Karusellhöjd"
 
 #: src/fbks-helpers/imageProFeatureNotices.js:131
 msgid "Carousel Playback and Controls"
@@ -665,19 +673,19 @@ msgstr "Karuselluppspelning och kontroller"
 msgid "Carousel Playback Controls: With custom styling controls"
 msgstr "Karusellens uppspelningskontroller: med anpassade stilkontroller"
 
-#: src/carousel-gallery-block/premium.js:209
+#: src/carousel-gallery-block/premium.js:330
 msgid "Carousel Styles"
 msgstr "Karusellstilar"
 
-#: includes/pro/admin/global-settings.php:668 includes/pro/admin/global-settings.php:1408 includes/pro/php/block-defaults.php:20 includes/pro/php/block-defaults.php:256 includes/pro/php/block-defaults.php:404 includes/pro/php/block-defaults.php:442 src/before-after-block/premium.js:76 src/before-after-block/premium.js:93 src/carousel-gallery-block/premium.js:154 src/fbks-helpers/filteringPremiumControls.js:168 src/proofing-gallery-block/edit.js:189
+#: includes/pro/admin/global-settings.php:668 includes/pro/admin/global-settings.php:1408 includes/pro/php/block-defaults.php:20 includes/pro/php/block-defaults.php:256 includes/pro/php/block-defaults.php:404 includes/pro/php/block-defaults.php:450 src/before-after-block/premium.js:76 src/before-after-block/premium.js:93 src/carousel-gallery-block/premium.js:275 src/fbks-helpers/filteringPremiumControls.js:168 src/proofing-gallery-block/edit.js:189
 msgid "Center"
 msgstr "Centrera"
 
-#: src/fbks-helpers/ResponsiveHeightRangeControl.js:161 src/fbks-helpers/ResponsiveRangeControl.js:118
+#: src/fbks-helpers/ResponsiveHeightRangeControl.js:161 src/fbks-helpers/ResponsiveRangeControl.js:119
 msgid "Change device"
 msgstr "Byt enhet"
 
-#: src/image-block/edit.js:209 src/image-block/edit.js:1112 src/loupe-block/edit.js:187 src/loupe-block/edit.js:222
+#: src/image-block/edit.js:209 src/image-block/edit.js:1106 src/loupe-block/edit.js:187 src/loupe-block/edit.js:222
 msgid "Change Image"
 msgstr "Byt bild"
 
@@ -742,7 +750,7 @@ msgstr "Välj en skuggstil för videominiatyren."
 msgid "Choose a light or dark appearance."
 msgstr "Välj ett ljust eller mörkt utseende."
 
-#: includes/pro/php/block-defaults.php:61 src/fbks-helpers/imageClickActionPremiumControls.js:92 src/image-block/premium.js:731 src/video-block/premium.js:71 src/video-gallery-block/premium.js:59
+#: includes/pro/php/block-defaults.php:61 src/fbks-helpers/imageClickActionPremiumControls.js:92 src/image-block/premium.js:697 src/video-block/premium.js:71 src/video-gallery-block/premium.js:59
 msgid "Choose a light or dark lightbox background."
 msgstr "Välj en ljus eller mörk ljusbordsbakgrund."
 
@@ -781,6 +789,10 @@ msgstr "Välj hur överläggsinnehållet visas i varje miniatyrbild."
 #: src/video-block/premium.js:252
 msgid "Choose how overlay content enters the thumbnail."
 msgstr "Välj hur överläggsinnehållet visas i miniatyrbilden."
+
+#: src/carousel-gallery-block/edit.js:744
+msgid "Choose how the carousel height is set."
+msgstr "Välj hur karusellens höjd ska ställas in."
 
 #: includes/pro/php/block-defaults.php:64 src/fbks-helpers/imageHoverActionPremiumControls.js:180
 msgid "Choose how the image itself moves or changes on hover."
@@ -862,7 +874,7 @@ msgstr "Välj videoöverläggets visuella stil."
 msgid "Choose up to 5 social sharing sources used when Social Media is selected for lightbox or overlay content."
 msgstr "Välj upp till 5 delningskällor som används när Sociala medier har valts för innehållet i ljuslådan eller överlägget."
 
-#: src/fbks-helpers/imageClickActionPremiumControls.js:130 src/image-block/premium.js:773
+#: src/fbks-helpers/imageClickActionPremiumControls.js:130 src/image-block/premium.js:739
 msgid "Choose what appears below images in the lightbox."
 msgstr "Välj vad som visas under bilderna i Lightbox."
 
@@ -878,7 +890,7 @@ msgstr "Välj vad som visas när du hovrar över bilder."
 msgid "Choose what appears with the Video in the lightbox."
 msgstr "Välj vad som ska visas med videon i ljuslådan."
 
-#: includes/pro/php/block-defaults.php:455 src/carousel-gallery-block/edit.js:135 src/carousel-gallery-block/edit.js:744 src/filmstrip-gallery-block/edit.js:1241 src/grid-gallery-block/edit.js:766 src/justified-gallery-block/edit.js:158 src/justified-gallery-block/edit.js:723 src/masonry-gallery-block/edit.js:164 src/masonry-gallery-block/edit.js:723 src/modular-gallery-block/edit.js:143 src/modular-gallery-block/edit.js:1001
+#: includes/pro/php/block-defaults.php:463 src/carousel-gallery-block/edit.js:135 src/carousel-gallery-block/edit.js:785 src/filmstrip-gallery-block/edit.js:1243 src/grid-gallery-block/edit.js:766 src/justified-gallery-block/edit.js:158 src/justified-gallery-block/edit.js:723 src/masonry-gallery-block/edit.js:164 src/masonry-gallery-block/edit.js:723 src/modular-gallery-block/edit.js:143 src/modular-gallery-block/edit.js:1001
 msgid "Choose what happens when visitors click gallery images."
 msgstr "Välj vad som händer när besökare klickar på galleribilder."
 
@@ -890,7 +902,7 @@ msgstr "Välj vad som händer när besökare klickar på Lägg till i varukorg-i
 msgid "Choose what happens when visitors click the Add To Cart icon. Select Inherit to follow the gallery default."
 msgstr "Välj vad som händer när besökare klickar på Lägg till i varukorg-ikonen. Välj Ärv för att följa galleriets standardinställning."
 
-#: includes/pro/php/block-defaults.php:54 src/image-block/edit.js:1285
+#: includes/pro/php/block-defaults.php:54 src/image-block/edit.js:1279
 msgid "Choose what happens when visitors click this image."
 msgstr "Välj vad som händer när besökare klickar på den här bilden."
 
@@ -902,15 +914,15 @@ msgstr "Välj vad som händer när besökare interagerar med galleribilder."
 msgid "Choose what happens when visitors use the image product link."
 msgstr "Välj vad som händer när besökare använder bildens produktlänk."
 
-#: src/image-block/premium.js:1419
+#: src/image-block/premium.js:1385
 msgid "Choose what happens when visitors use the WooCommerce action."
 msgstr "Välj vad som händer när besökare använder WooCommerce-åtgärden."
 
-#: src/image-block/premium.js:1130
+#: src/image-block/premium.js:1096
 msgid "Choose what happens when visitors use this image product link."
 msgstr "Välj vad som händer när besökare använder produktlänken för den här bilden."
 
-#: src/image-block/premium.js:1415
+#: src/image-block/premium.js:1381
 msgid "Choose what happens when visitors use this image product link. Select Inherit to follow the gallery default."
 msgstr "Välj vad som händer när besökare använder produktlänken för den här bilden. Välj Ärv för att följa galleriets standardinställning."
 
@@ -922,15 +934,15 @@ msgstr "Välj när navigeringskontroller visas."
 msgid "Choose when the link icon is displayed."
 msgstr "Välj när länkikonen visas."
 
-#: src/fbks-helpers/imageClickActionPremiumControls.js:527 src/image-block/premium.js:1285 src/video-block/premium.js:501 src/video-gallery-block/premium.js:140
+#: src/fbks-helpers/imageClickActionPremiumControls.js:527 src/image-block/premium.js:1251 src/video-block/premium.js:501 src/video-gallery-block/premium.js:140
 msgid "Choose when to display the Add to Cart icon."
 msgstr "Välj när Lägg till i varukorg-ikonen ska visas."
 
-#: src/fbks-helpers/imageClickActionPremiumControls.js:273 src/image-block/premium.js:627
+#: src/fbks-helpers/imageClickActionPremiumControls.js:273 src/image-block/premium.js:593
 msgid "Choose when to display the link target icon."
 msgstr "Välj när länkmålsikonen ska visas."
 
-#: src/filmstrip-gallery-block/edit.js:1210
+#: src/filmstrip-gallery-block/edit.js:1212
 msgid "Choose where the thumbnail strip appears."
 msgstr "Välj var miniatyrbildsremsan visas."
 
@@ -942,7 +954,7 @@ msgstr "Välj var vattenstämpeln ska visas."
 msgid "Choose whether the link is attached to each image or an icon."
 msgstr "Välj om länken ska kopplas till varje bild eller till en ikon."
 
-#: includes/pro/php/block-defaults.php:55 src/image-block/premium.js:594
+#: includes/pro/php/block-defaults.php:55 src/image-block/premium.js:560
 msgid "Choose whether the link is attached to the image or an icon."
 msgstr "Välj om länken ska kopplas till bilden eller till en ikon."
 
@@ -953,6 +965,10 @@ msgstr "Välj om bildspelet går från vänster till höger eller uppifrån och 
 #: src/proofing-gallery-block/edit.js:1051
 msgid "Choose which gallery block is used for layout. Columns, gap, row height, and resolution are edited on that nested gallery."
 msgstr "Välj vilket galleriblock som används för layouten. Kolumner, avstånd, radhöjd och upplösning redigeras i det nästlade galleriet."
+
+#: src/carousel-gallery-block/premium.js:205
+msgid "Choose which side the next image enters from."
+msgstr "Välj från vilken sida nästa bild ska visas."
 
 #: src/carousel-gallery-block/edit.js:120 src/justified-gallery-block/edit.js:143 src/masonry-gallery-block/edit.js:149 src/modular-gallery-block/edit.js:128
 msgid "Choose WooCommerce products from the individual Image Block settings."
@@ -1047,7 +1063,7 @@ msgstr "Färgklasser"
 msgid "Color for class %d"
 msgstr "Färg för klass %d"
 
-#: src/filmstrip-gallery-block/premium.js:72
+#: src/filmstrip-gallery-block/premium.js:80
 msgid "Color Mode"
 msgstr "Färgläge"
 
@@ -1111,11 +1127,11 @@ msgstr "Kontroll filter-bar typografi."
 msgid "Control how long proofing sessions are stored and whether admins are notified when clients submit selections."
 msgstr "Styr hur länge bildgranskningssessioner sparas och om administratörer meddelas när kunder skickar in urval."
 
-#: src/carousel-gallery-block/premium.js:133
+#: src/carousel-gallery-block/premium.js:254
 msgid "Controls Alignment"
 msgstr "Justering av kontroller"
 
-#: includes/pro/php/social-sharing.php:44 src/fbks-helpers/socialSharingControls.js:11
+#: includes/pro/php/social-sharing.php:44 src/fbks-helpers/socialSharingControls.js:12
 msgid "Copy Link"
 msgstr "Kopiera länk"
 
@@ -1187,6 +1203,10 @@ msgstr "Anpassad kant och kantradie på videominiatyrer"
 msgid "Custom Drag Handle Starting Position"
 msgstr "Anpassad startposition for draghandtag"
 
+#: includes/pro/php/block-defaults.php:436 src/carousel-gallery-block/premium.js:60 src/carousel-gallery-block/premium.js:86 src/carousel-gallery-block/premium.js:98 src/carousel-gallery-block/premium.js:123
+msgid "Custom Height"
+msgstr "Anpassad höjd"
+
 #: includes/admin/free-pro.php:295
 msgid "Custom hover overlays, gradient overlays, overlay entrances, and hover effects"
 msgstr "Anpassade överlägg, tonade överlägg, överläggsanimationer och hovringseffekter"
@@ -1199,7 +1219,7 @@ msgstr "Anpassat bildblock som används av FolioBlocks galleriblock."
 msgid "Custom Slider Orientation"
 msgstr "Anpassad reglageorientering"
 
-#: includes/pro/php/block-defaults.php:54 src/image-block/premium.js:863 src/image-block/premium.js:928
+#: includes/pro/php/block-defaults.php:54 src/image-block/premium.js:829 src/image-block/premium.js:894
 msgid "Custom URL"
 msgstr "Anpassad URL"
 
@@ -1251,7 +1271,7 @@ msgstr "Anpassa förstoringsluppen så att den passar din bild."
 msgid "Customize the slider handle and line color."
 msgstr "Anpassa skjutreglaget och linjefärgen."
 
-#: includes/pro/admin/global-settings.php:990 includes/pro/php/block-defaults.php:706
+#: includes/pro/admin/global-settings.php:990 includes/pro/php/block-defaults.php:720
 msgid "Customized"
 msgstr "Anpassad"
 
@@ -1259,7 +1279,7 @@ msgstr "Anpassad"
 msgid "Cyan"
 msgstr "Cyan"
 
-#: includes/pro/php/block-defaults.php:61 includes/pro/php/block-defaults.php:89 includes/pro/php/block-defaults.php:114 includes/pro/php/block-defaults.php:270 includes/pro/php/block-defaults.php:475 src/fbks-helpers/imageClickActionPremiumControls.js:107 src/filmstrip-gallery-block/premium.js:92 src/image-block/premium.js:752 src/loupe-block/premium.js:54 src/proofing-gallery-block/edit.js:217 src/video-block/premium.js:77 src/video-gallery-block/premium.js:65
+#: includes/pro/php/block-defaults.php:61 includes/pro/php/block-defaults.php:89 includes/pro/php/block-defaults.php:114 includes/pro/php/block-defaults.php:270 includes/pro/php/block-defaults.php:483 src/fbks-helpers/imageClickActionPremiumControls.js:107 src/filmstrip-gallery-block/premium.js:100 src/image-block/premium.js:718 src/loupe-block/premium.js:54 src/proofing-gallery-block/edit.js:217 src/video-block/premium.js:77 src/video-gallery-block/premium.js:65
 msgid "Dark"
 msgstr "Mörk"
 
@@ -1283,11 +1303,11 @@ msgstr "Standardbeteende för Lägg till i Varukorgen-ikonen"
 msgid "Default Overlay"
 msgstr "Standard-överlägg"
 
-#: src/image-block/premium.js:1360
+#: src/image-block/premium.js:1326
 msgid "Default Product Click Behavior"
 msgstr "Standardbeteende för produktklick"
 
-#: src/fbks-helpers/imageClickActionPremiumControls.js:466 src/image-block/premium.js:1356
+#: src/fbks-helpers/imageClickActionPremiumControls.js:466 src/image-block/premium.js:1322
 msgid "Default Product Link Behavior"
 msgstr "Standardbeteende för produktlänk"
 
@@ -1327,7 +1347,7 @@ msgstr "Beskriv bildens syfte. Lämna tomt om bilden är dekorativ."
 msgid "Description"
 msgstr "Beskrivning"
 
-#: src/fbks-helpers/ResponsiveHeightRangeControl.js:37 src/fbks-helpers/ResponsiveRangeControl.js:30
+#: src/fbks-helpers/ResponsiveHeightRangeControl.js:37 src/fbks-helpers/ResponsiveRangeControl.js:31
 msgid "Desktop"
 msgstr "Skrivbord"
 
@@ -1391,7 +1411,7 @@ msgstr "Inaktivera högerklick på sida/inlägg"
 msgid "Disable Video on Mobile"
 msgstr "Inaktivera video pa mobil"
 
-#: src/fbks-helpers/imageClickActionPremiumControls.js:503 src/image-block/premium.js:1264 src/video-block/premium.js:481 src/video-gallery-block/premium.js:125
+#: src/fbks-helpers/imageClickActionPremiumControls.js:503 src/image-block/premium.js:1230 src/video-block/premium.js:481 src/video-gallery-block/premium.js:125
 msgid "Display Add to Cart Icon"
 msgstr "Visa Lägg till i Varukorgen-ikon"
 
@@ -1415,7 +1435,7 @@ msgstr "Visa filtreringskategorier i videoöverlägg"
 msgid "Display gallery images in random order."
 msgstr "Visa galleribilder i slumpmässig ordning."
 
-#: src/fbks-helpers/imageClickActionPremiumControls.js:394 src/image-block/premium.js:1164
+#: src/fbks-helpers/imageClickActionPremiumControls.js:394 src/image-block/premium.js:1130
 msgid "Display Image Download Icon"
 msgstr "Visa Nedladdnings-ikon för bild"
 
@@ -1423,7 +1443,7 @@ msgstr "Visa Nedladdnings-ikon för bild"
 msgid "Display images in a filmstrip gallery."
 msgstr "Visar bilder i ett filmstrip-galleri."
 
-#: includes/pro/php/block-defaults.php:56 src/fbks-helpers/imageClickActionPremiumControls.js:252 src/fbks-helpers/videoLightboxControls.js:157 src/image-block/premium.js:606
+#: includes/pro/php/block-defaults.php:56 src/fbks-helpers/imageClickActionPremiumControls.js:252 src/fbks-helpers/videoLightboxControls.js:157 src/image-block/premium.js:572
 msgid "Display Link Target Icon"
 msgstr "Visa ikon för länkmål"
 
@@ -1511,7 +1531,7 @@ msgstr "Nedladdningsikonens färg"
 msgid "Download Icon Colors"
 msgstr "Färger för Nedladdnings-ikon"
 
-#: src/filmstrip-gallery-block/render.php:927 src/image-block/premium.js:1591 src/image-block/render.php:964
+#: src/filmstrip-gallery-block/render.php:927 src/image-block/premium.js:1557 src/image-block/render.php:964
 msgid "Download Image"
 msgstr "Ladda ner bild"
 
@@ -1563,15 +1583,15 @@ msgstr "E-handelsstilar"
 msgid "Edit"
 msgstr "Redigera"
 
-#: src/image-block/premium.js:920
+#: src/image-block/premium.js:886
 msgid "Edit Custom URL"
 msgstr "Redigera anpassad URL"
 
-#: src/image-block/premium.js:1012
+#: src/image-block/premium.js:978
 msgid "Edit Page/Post Link"
 msgstr "Redigera sid-/inläggslänk"
 
-#: src/image-block/premium.js:1055
+#: src/image-block/premium.js:1021
 msgid "Edit WooCommerce Product"
 msgstr "Redigera WooCommerce-produkt"
 
@@ -1614,11 +1634,11 @@ msgstr "Inbäddat: %s"
 msgid "Enable at least one metadata import option before scanning existing media."
 msgstr "Aktivera minst ett alternativ för metadataimport innan du skannar befintliga medier."
 
-#: src/carousel-gallery-block/premium.js:61 src/filmstrip-gallery-block/premium.js:170
+#: src/carousel-gallery-block/premium.js:164 src/filmstrip-gallery-block/premium.js:178
 msgid "Enable Autoplay"
 msgstr "Aktivera automatisk uppspelning"
 
-#: src/carousel-gallery-block/premium.js:119
+#: src/carousel-gallery-block/premium.js:240
 msgid "Enable Carousel Controls"
 msgstr "Aktivera karusellkontroller"
 
@@ -1639,11 +1659,11 @@ msgstr "Aktivera färgflaggor"
 msgid "Enable Comments"
 msgstr "Aktivera kommentarer"
 
-#: src/filmstrip-gallery-block/premium.js:229
+#: src/filmstrip-gallery-block/premium.js:237
 msgid "Enable Full-Screen Mode"
 msgstr "Aktivera helskärmsläge"
 
-#: src/filmstrip-gallery-block/premium.js:234
+#: src/filmstrip-gallery-block/premium.js:242
 msgid "Enable Full-Screen Mode for the gallery on the frontend."
 msgstr "Aktivera helskärmsläge för galleriet på frontenden."
 
@@ -1655,7 +1675,7 @@ msgstr "Aktivera gallerifiltrering"
 msgid "Enable Hearts"
 msgstr "Aktivera hjärtan"
 
-#: includes/pro/php/block-defaults.php:173 includes/pro/php/block-defaults.php:217 src/fbks-helpers/imageClickActionPremiumControls.js:330 src/image-block/premium.js:820
+#: includes/pro/php/block-defaults.php:173 includes/pro/php/block-defaults.php:217 src/fbks-helpers/imageClickActionPremiumControls.js:330 src/image-block/premium.js:786
 msgid "Enable Image Downloads"
 msgstr "Aktivera bildnedladdningar"
 
@@ -1671,7 +1691,7 @@ msgstr "Aktivera bildfiltrering med kategorier."
 msgid "Enable Lazy Load of Images"
 msgstr "Aktivera lazy load för bilder"
 
-#: includes/pro/php/block-defaults.php:461 src/fbks-helpers/imageClickActionPremiumControls.js:281 src/fbks-helpers/imageClickActionPremiumControls.js:423 src/fbks-helpers/imageClickActionPremiumControls.js:534 src/image-block/premium.js:635 src/image-block/premium.js:1191 src/image-block/premium.js:1292
+#: includes/pro/php/block-defaults.php:469 src/fbks-helpers/imageClickActionPremiumControls.js:281 src/fbks-helpers/imageClickActionPremiumControls.js:423 src/fbks-helpers/imageClickActionPremiumControls.js:534 src/image-block/premium.js:601 src/image-block/premium.js:1157 src/image-block/premium.js:1258
 msgid "Enable Lightbox"
 msgstr "Aktivera Lightbox"
 
@@ -1683,7 +1703,7 @@ msgstr "Aktivera ljuslåda tillsammans med nedladdning"
 msgid "Enable Lightbox in Editor"
 msgstr "Aktivera Lightbox i blockredigeraren"
 
-#: includes/pro/php/block-defaults.php:63 src/fbks-helpers/imageClickActionPremiumControls.js:150 src/image-block/premium.js:779
+#: includes/pro/php/block-defaults.php:63 src/fbks-helpers/imageClickActionPremiumControls.js:150 src/image-block/premium.js:745
 msgid "Enable Lightbox Zoom"
 msgstr "Aktivera zoom i ljuslådan"
 
@@ -1767,7 +1787,7 @@ msgstr "Ange en giltig URL för YouTube, Vimeo eller egenhostad video. Bunny Str
 msgid "EXIF Data"
 msgstr "EXIF-data"
 
-#: src/image-block/premium.js:346
+#: src/image-block/premium.js:312
 msgid "EXIF DATA"
 msgstr "EXIF-DATA"
 
@@ -1799,7 +1819,7 @@ msgstr "Extra tunn"
 msgid "Extras"
 msgstr "Extra"
 
-#: includes/admin/common.php:107 includes/pro/php/social-sharing.php:20 src/fbks-helpers/socialSharingControls.js:5
+#: includes/admin/common.php:107 includes/pro/php/social-sharing.php:20 src/fbks-helpers/socialSharingControls.js:6
 msgid "Facebook"
 msgstr "Facebook"
 
@@ -1827,11 +1847,11 @@ msgstr "Färgläge för filmremsor"
 msgid "Filmstrip Gallery"
 msgstr "Filmremsgalleri"
 
-#: includes/admin/free-pro.php:71 includes/admin/settings-page.php:552 includes/pro/php/block-defaults.php:499
+#: includes/admin/free-pro.php:71 includes/admin/settings-page.php:552 includes/pro/php/block-defaults.php:507
 msgid "Filmstrip Gallery Block"
 msgstr "Filmremsgalleriblock"
 
-#: includes/pro/php/block-defaults.php:492 src/filmstrip-gallery-block/edit.js:1158
+#: includes/pro/php/block-defaults.php:500 src/filmstrip-gallery-block/edit.js:1160
 msgid "Filmstrip Gallery Settings"
 msgstr "Inställningar för Filmstrip Gallery"
 
@@ -1839,7 +1859,7 @@ msgstr "Inställningar för Filmstrip Gallery"
 msgid "Filmstrip Playback and Display"
 msgstr "Uppspelning och visning av filmremsor"
 
-#: src/filmstrip-gallery-block/edit.js:1060 src/filmstrip-gallery-block/render.php:1074
+#: src/filmstrip-gallery-block/edit.js:1062 src/filmstrip-gallery-block/render.php:1074
 msgid "Filmstrip thumbnails"
 msgstr "Filmstrip-miniatyrer"
 
@@ -1859,7 +1879,7 @@ msgstr "Färger för filterfält"
 msgid "Filter by star rating"
 msgstr "Filtrera efter stjärnbetyg"
 
-#: src/fbks-helpers/filteringPremiumControls.js:177 src/image-block/premium.js:1490 src/video-block/premium.js:399
+#: src/fbks-helpers/filteringPremiumControls.js:177 src/image-block/premium.js:1456 src/video-block/premium.js:399
 msgid "Filter Categories"
 msgstr "Filterkategorier"
 
@@ -1887,7 +1907,7 @@ msgstr "Flaggläge"
 msgid "Flagged"
 msgstr "Flaggad"
 
-#: includes/pro/admin/media-metadata.php:293 src/image-block/premium.js:311 src/image-block/render.php:520
+#: includes/pro/admin/media-metadata.php:293 src/image-block/premium.js:277 src/image-block/render.php:520
 msgid "Focal Length"
 msgstr "Brännvidd"
 
@@ -1963,7 +1983,7 @@ msgstr "Gratis vs Pro"
 msgid "Full"
 msgstr "Full storlek"
 
-#: includes/pro/php/block-defaults.php:8 includes/pro/php/block-defaults.php:395 includes/pro/php/block-defaults.php:429
+#: includes/pro/php/block-defaults.php:8 includes/pro/php/block-defaults.php:395 includes/pro/php/block-defaults.php:433
 msgid "Full Size"
 msgstr "Full storlek"
 
@@ -1979,11 +1999,11 @@ msgstr "galleri"
 msgid "Gallery Click Actions: Play videos in a lightbox, or link images to Downloads, WooCommerce products, Media Files, Custom URLs, and Pages/Posts"
 msgstr "Galleriets klickåtgärder: spela videor i en ljuslåda eller länka bilder till nedladdningar, WooCommerce-produkter, mediefiler, anpassade URL:er och sidor/inlägg"
 
-#: includes/pro/php/block-defaults.php:355 includes/pro/php/block-defaults.php:378 includes/pro/php/block-defaults.php:415 includes/pro/php/block-defaults.php:492 src/carousel-gallery-block/edit.js:732 src/filmstrip-gallery-block/edit.js:1229 src/grid-gallery-block/edit.js:746 src/justified-gallery-block/edit.js:711 src/masonry-gallery-block/edit.js:706 src/modular-gallery-block/edit.js:991 src/video-gallery-block/edit.js:535
+#: includes/pro/php/block-defaults.php:355 includes/pro/php/block-defaults.php:378 includes/pro/php/block-defaults.php:415 includes/pro/php/block-defaults.php:500 src/carousel-gallery-block/edit.js:773 src/filmstrip-gallery-block/edit.js:1231 src/grid-gallery-block/edit.js:746 src/justified-gallery-block/edit.js:711 src/masonry-gallery-block/edit.js:706 src/modular-gallery-block/edit.js:991 src/video-gallery-block/edit.js:535
 msgid "Gallery Click Settings"
 msgstr "Inställningar för galleriklick"
 
-#: includes/pro/php/block-defaults.php:132 includes/pro/php/block-defaults.php:494 src/fbks-helpers/imageClickStylePremiumControls.js:66
+#: includes/pro/php/block-defaults.php:132 includes/pro/php/block-defaults.php:502 src/fbks-helpers/imageClickStylePremiumControls.js:66
 msgid "Gallery Click Styles"
 msgstr "Stilar för galleriklick"
 
@@ -1991,7 +2011,7 @@ msgstr "Stilar för galleriklick"
 msgid "Gallery Filtering"
 msgstr "Gallerifiltrering"
 
-#: src/image-block/premium.js:1479 src/video-block/premium.js:388
+#: src/image-block/premium.js:1445 src/video-block/premium.js:388
 msgid "Gallery Filtering Categories"
 msgstr "Gallerifiltreringskategorier"
 
@@ -2003,11 +2023,11 @@ msgstr "Inställningar för gallerifiltrering"
 msgid "Gallery Filtering Styles"
 msgstr "Stilar för gallerifiltrering"
 
-#: includes/pro/php/block-defaults.php:355 includes/pro/php/block-defaults.php:378 includes/pro/php/block-defaults.php:415 includes/pro/php/block-defaults.php:492 src/carousel-gallery-block/edit.js:787 src/fbks-helpers/imageProFeatureNotices.js:49 src/filmstrip-gallery-block/edit.js:1303 src/grid-gallery-block/edit.js:813 src/justified-gallery-block/edit.js:768 src/masonry-gallery-block/edit.js:771 src/modular-gallery-block/edit.js:1045 src/video-gallery-block/edit.js:572 src/video-gallery-block/edit.js:578
+#: includes/pro/php/block-defaults.php:355 includes/pro/php/block-defaults.php:378 includes/pro/php/block-defaults.php:415 includes/pro/php/block-defaults.php:500 src/carousel-gallery-block/edit.js:828 src/fbks-helpers/imageProFeatureNotices.js:49 src/filmstrip-gallery-block/edit.js:1305 src/grid-gallery-block/edit.js:813 src/justified-gallery-block/edit.js:768 src/masonry-gallery-block/edit.js:771 src/modular-gallery-block/edit.js:1045 src/video-gallery-block/edit.js:572 src/video-gallery-block/edit.js:578
 msgid "Gallery Hover Settings"
 msgstr "Inställningar för gallerihovring"
 
-#: includes/pro/php/block-defaults.php:133 includes/pro/php/block-defaults.php:142 includes/pro/php/block-defaults.php:495 src/carousel-gallery-block/premium.js:196 src/filmstrip-gallery-block/premium.js:32 src/grid-gallery-block/premium.js:27 src/justified-gallery-block/premium.js:104 src/masonry-gallery-block/premium.js:126 src/modular-gallery-block/premium.js:51 src/video-gallery-block/premium.js:375
+#: includes/pro/php/block-defaults.php:133 includes/pro/php/block-defaults.php:142 includes/pro/php/block-defaults.php:503 src/carousel-gallery-block/premium.js:317 src/filmstrip-gallery-block/premium.js:40 src/grid-gallery-block/premium.js:27 src/justified-gallery-block/premium.js:104 src/masonry-gallery-block/premium.js:126 src/modular-gallery-block/premium.js:51 src/video-gallery-block/premium.js:375
 msgid "Gallery Hover Styles"
 msgstr "Stilar för gallerihovring"
 
@@ -2015,7 +2035,7 @@ msgstr "Stilar för gallerihovring"
 msgid "Gallery icons from FolioBlocks Pro."
 msgstr "Galleriikoner från FolioBlocks Pro."
 
-#: includes/pro/php/block-defaults.php:355 includes/pro/php/block-defaults.php:378 includes/pro/php/block-defaults.php:492 src/carousel-gallery-block/edit.js:826 src/fbks-helpers/imageProFeatureNotices.js:105 src/grid-gallery-block/edit.js:869 src/justified-gallery-block/edit.js:817 src/masonry-gallery-block/edit.js:823 src/modular-gallery-block/edit.js:1072
+#: includes/pro/php/block-defaults.php:355 includes/pro/php/block-defaults.php:378 includes/pro/php/block-defaults.php:500 src/carousel-gallery-block/edit.js:867 src/fbks-helpers/imageProFeatureNotices.js:105 src/grid-gallery-block/edit.js:869 src/justified-gallery-block/edit.js:817 src/masonry-gallery-block/edit.js:823 src/modular-gallery-block/edit.js:1072
 msgid "Gallery Image Styles"
 msgstr "Stilar för galleribilder"
 
@@ -2035,11 +2055,11 @@ msgstr "Gallerilösenord"
 msgid "Gallery Password"
 msgstr "Gallerilösenord"
 
-#: includes/pro/php/block-defaults.php:492 src/filmstrip-gallery-block/edit.js:1337
+#: includes/pro/php/block-defaults.php:500 src/filmstrip-gallery-block/edit.js:1339
 msgid "Gallery Styles"
 msgstr "Galleristilar"
 
-#: src/filmstrip-gallery-block/edit.js:1096 src/filmstrip-gallery-block/render.php:1095
+#: src/filmstrip-gallery-block/edit.js:1098 src/filmstrip-gallery-block/render.php:1095
 msgid "Gallery thumbnail"
 msgstr "Galleriminiatyr"
 
@@ -2167,7 +2187,7 @@ msgstr "Hjälp besökare att snabbt hitta videor som intresserar dem."
 msgid "Hide EXIF fields that do not have a value."
 msgstr "Dölj EXIF-fält som saknar värde."
 
-#: src/fbks-helpers/imageClickActionPremiumControls.js:172 src/image-block/premium.js:803
+#: src/fbks-helpers/imageClickActionPremiumControls.js:172 src/image-block/premium.js:769
 msgid "Hide EXIF rows that do not have a value."
 msgstr "Dölj EXIF-rader som saknar värde."
 
@@ -2175,7 +2195,7 @@ msgstr "Dölj EXIF-rader som saknar värde."
 msgid "Hide Password"
 msgstr "Dölj lösenord"
 
-#: includes/pro/php/block-defaults.php:68 src/fbks-helpers/imageClickActionPremiumControls.js:166 src/fbks-helpers/imageHoverActionPremiumControls.js:291 src/image-block/premium.js:797
+#: includes/pro/php/block-defaults.php:68 src/fbks-helpers/imageClickActionPremiumControls.js:166 src/fbks-helpers/imageHoverActionPremiumControls.js:291 src/image-block/premium.js:763
 msgid "Hide Unknown EXIF Fields"
 msgstr "Dölj okända EXIF-fält"
 
@@ -2186,10 +2206,6 @@ msgstr "Framhäv enskilda bilder med unika interaktioner."
 #: includes/pro/php/block-defaults.php:16 src/before-after-block/edit.js:304
 msgid "Horizontal"
 msgstr "Horisontell"
-
-#: includes/pro/php/block-defaults.php:432 src/carousel-gallery-block/edit.js:695
-msgid "Horizontal Images"
-msgstr "Horisontella bilder"
 
 #: src/proofing-gallery-block/edit.js:257
 msgid "Horizontal Padding"
@@ -2239,7 +2255,7 @@ msgstr "https://vimeo.com/12345678"
 msgid "I already did"
 msgstr "Det har jag redan gjort"
 
-#: includes/pro/php/block-defaults.php:55 src/carousel-gallery-block/premium.js:257 src/fbks-helpers/imageClickActionPremiumControls.js:203 src/fbks-helpers/imageClickStylePremiumControls.js:57 src/fbks-helpers/videoLightboxControls.js:141 src/image-block/premium.js:554 src/video-block/premium.js:772 src/video-gallery-block/premium.js:492
+#: includes/pro/php/block-defaults.php:55 src/carousel-gallery-block/premium.js:378 src/fbks-helpers/imageClickActionPremiumControls.js:203 src/fbks-helpers/imageClickStylePremiumControls.js:57 src/fbks-helpers/videoLightboxControls.js:141 src/image-block/premium.js:520 src/video-block/premium.js:772 src/video-gallery-block/premium.js:492
 msgid "Icon"
 msgstr "Ikon"
 
@@ -2251,7 +2267,7 @@ msgstr "Bild"
 msgid "Image Block"
 msgstr "Bildblock"
 
-#: includes/pro/php/block-defaults.php:51 src/image-block/edit.js:1180
+#: includes/pro/php/block-defaults.php:51 src/image-block/edit.js:1174
 msgid "Image Block Settings"
 msgstr "Inställningar för Image Block"
 
@@ -2267,19 +2283,19 @@ msgstr "Bildtext"
 msgid "Image Click Actions: Play videos in a lightbox, or link images to Downloads, WooCommerce products, Media Files, Custom URLs, and Pages/Posts"
 msgstr "Bilders klickåtgärder: spela videor i en ljuslåda eller länka bilder till nedladdningar, WooCommerce-produkter, mediefiler, anpassade URL:er och sidor/inlägg"
 
-#: includes/pro/php/block-defaults.php:54 src/carousel-gallery-block/edit.js:736 src/filmstrip-gallery-block/edit.js:1233 src/grid-gallery-block/edit.js:753 src/image-block/edit.js:1272 src/justified-gallery-block/edit.js:715 src/masonry-gallery-block/edit.js:710 src/modular-gallery-block/edit.js:995
+#: includes/pro/php/block-defaults.php:54 src/carousel-gallery-block/edit.js:777 src/filmstrip-gallery-block/edit.js:1235 src/grid-gallery-block/edit.js:753 src/image-block/edit.js:1266 src/justified-gallery-block/edit.js:715 src/masonry-gallery-block/edit.js:710 src/modular-gallery-block/edit.js:995
 msgid "Image Click Behavior"
 msgstr "Beteende för bildklick"
 
-#: includes/pro/php/block-defaults.php:51 src/image-block/edit.js:1246
+#: includes/pro/php/block-defaults.php:51 src/image-block/edit.js:1240
 msgid "Image Click Settings"
 msgstr "Inställningar för bildklick"
 
-#: includes/pro/php/block-defaults.php:242 src/image-block/premium.js:386
+#: includes/pro/php/block-defaults.php:242 src/image-block/premium.js:352
 msgid "Image Click Styles"
 msgstr "Stilar för bildklick"
 
-#: src/image-block/edit.js:1451
+#: src/image-block/edit.js:1445
 msgid "Image Content"
 msgstr "Bildinnehåll"
 
@@ -2291,7 +2307,7 @@ msgstr "Bildskuggor: diskret, mjuk, upphöjd och dramatisk"
 msgid "Image has per-image overrides"
 msgstr "Bilden har individuella åsidosättningar"
 
-#: includes/pro/php/block-defaults.php:51 src/image-block/edit.js:1394
+#: includes/pro/php/block-defaults.php:51 src/image-block/edit.js:1388
 msgid "Image Hover Settings"
 msgstr "Inställningar för bildhovring"
 
@@ -2302,10 +2318,6 @@ msgstr "Stilar för bildhovring"
 #: src/filmstrip-gallery-block/render.php:808 src/image-block/render.php:599
 msgid "Image lightbox"
 msgstr "Bildljuslåda"
-
-#: src/carousel-gallery-block/edit.js:684
-msgid "Image Orientation (Mobile)"
-msgstr "Bildorientering (mobil)"
 
 #: includes/pro/php/block-defaults.php:365 src/modular-gallery-block/edit.js:950
 msgid "Image Resolution"
@@ -2319,11 +2331,11 @@ msgstr "Bildrad"
 msgid "Image Stack"
 msgstr "Bildstapel"
 
-#: includes/pro/php/block-defaults.php:51 src/image-block/premium.js:1537
+#: includes/pro/php/block-defaults.php:51 src/image-block/premium.js:1503
 msgid "Image Styles"
 msgstr "Bildstilar"
 
-#: src/image-block/premium.js:111
+#: src/image-block/premium.js:107
 msgid "Image text and EXIF data refreshed from the Media Library."
 msgstr "Bildtext och EXIF-data har uppdaterats från mediebiblioteket."
 
@@ -2335,11 +2347,11 @@ msgstr "Bildtitel"
 msgid "Images"
 msgstr "Bilder"
 
-#: src/image-block/premium.js:452
+#: src/image-block/premium.js:418
 msgid "Images without a selected page or post will not be linked."
 msgstr "Bilder utan vald sida eller valt inlägg kommer inte att länkas."
 
-#: src/image-block/premium.js:875 src/image-block/premium.js:942
+#: src/image-block/premium.js:841 src/image-block/premium.js:908
 msgid "Images without a URL will not be linked."
 msgstr "Bilder utan URL kommer inte att länkas."
 
@@ -2383,11 +2395,11 @@ msgstr "I session"
 msgid "Inactive Item Colors"
 msgstr "Färger för inaktivt objekt"
 
-#: src/image-block/premium.js:1085 src/image-block/premium.js:1370 src/video-block/premium.js:604
+#: src/image-block/premium.js:1051 src/image-block/premium.js:1336 src/video-block/premium.js:604
 msgid "Inherit (Gallery Default)"
 msgstr "Ärv (galleriets standard)"
 
-#: src/image-block/premium.js:743
+#: src/image-block/premium.js:709
 msgid "Inherit Gallery"
 msgstr "Arv Galleri"
 
@@ -2403,7 +2415,7 @@ msgstr "Ogiltig begäran"
 msgid "Invalid review action."
 msgstr "Ogiltig granskningsåtgärd."
 
-#: includes/pro/admin/media-metadata.php:296 src/image-block/premium.js:326 src/image-block/render.php:535
+#: includes/pro/admin/media-metadata.php:296 src/image-block/premium.js:292 src/image-block/render.php:535
 msgid "ISO"
 msgstr "ISO"
 
@@ -2426,6 +2438,10 @@ msgstr "Justerat galleriblock"
 #: includes/pro/php/block-defaults.php:331 src/justified-gallery-block/edit.js:637
 msgid "Justified Gallery Settings"
 msgstr "Inställningar för Justified Gallery"
+
+#: src/carousel-gallery-block/premium.js:221
+msgid "Keep navigating past the first and last slides."
+msgstr "Fortsätt bläddra förbi den första och sista bilden."
 
 #: src/fbks-helpers/imageProFeatureNotices.js:13
 msgid "Keep repeat visits feeling fresh."
@@ -2525,7 +2541,7 @@ msgstr "Lazy-load galleribilder."
 msgid "Lazy-load videos and thumbnails."
 msgstr "Lata ladda videor och miniatyrer."
 
-#: includes/pro/php/block-defaults.php:20 includes/pro/php/block-defaults.php:256 includes/pro/php/block-defaults.php:404 includes/pro/php/block-defaults.php:442 includes/pro/php/block-defaults.php:445 src/before-after-block/premium.js:72 src/carousel-gallery-block/premium.js:149 src/fbks-helpers/filteringPremiumControls.js:164 src/filmstrip-gallery-block/edit.js:1199 src/proofing-gallery-block/edit.js:185
+#: includes/pro/php/block-defaults.php:20 includes/pro/php/block-defaults.php:256 includes/pro/php/block-defaults.php:404 includes/pro/php/block-defaults.php:447 includes/pro/php/block-defaults.php:450 includes/pro/php/block-defaults.php:453 src/before-after-block/premium.js:72 src/carousel-gallery-block/premium.js:210 src/carousel-gallery-block/premium.js:270 src/fbks-helpers/filteringPremiumControls.js:164 src/filmstrip-gallery-block/edit.js:1201 src/proofing-gallery-block/edit.js:185
 msgid "Left"
 msgstr "Vänster"
 
@@ -2541,7 +2557,7 @@ msgstr "Låt kunder välja, godkänna och kommentera bilder i ett privat bildgra
 msgid "Let visitors zoom into lightbox images."
 msgstr "Låt besökare zooma in på bilder i ljuslådan."
 
-#: src/image-block/premium.js:785
+#: src/image-block/premium.js:751
 msgid "Let visitors zoom into this image in the lightbox."
 msgstr "Låt besökare zooma in på den här bilden i ljuslådan."
 
@@ -2557,7 +2573,7 @@ msgstr "Bokstavsavstånd"
 msgid "Lift"
 msgstr "Lyft"
 
-#: includes/pro/php/block-defaults.php:61 includes/pro/php/block-defaults.php:89 includes/pro/php/block-defaults.php:114 includes/pro/php/block-defaults.php:270 includes/pro/php/block-defaults.php:475 src/fbks-helpers/imageClickActionPremiumControls.js:103 src/fbks-helpers/overlayTypographyControls.js:46 src/filmstrip-gallery-block/premium.js:88 src/image-block/premium.js:748 src/loupe-block/premium.js:50 src/proofing-gallery-block/edit.js:213 src/video-block/premium.js:76 src/video-gallery-block/premium.js:64
+#: includes/pro/php/block-defaults.php:61 includes/pro/php/block-defaults.php:89 includes/pro/php/block-defaults.php:114 includes/pro/php/block-defaults.php:270 includes/pro/php/block-defaults.php:483 src/fbks-helpers/imageClickActionPremiumControls.js:103 src/fbks-helpers/overlayTypographyControls.js:46 src/filmstrip-gallery-block/premium.js:96 src/image-block/premium.js:714 src/loupe-block/premium.js:50 src/proofing-gallery-block/edit.js:213 src/video-block/premium.js:76 src/video-gallery-block/premium.js:64
 msgid "Light"
 msgstr "Ljus"
 
@@ -2577,7 +2593,7 @@ msgstr "Ljuslåda"
 msgid "Lightbox appearance"
 msgstr "Ljuslådans utseende"
 
-#: includes/pro/php/block-defaults.php:61 src/fbks-helpers/imageClickActionPremiumControls.js:91 src/image-block/premium.js:730 src/video-block/premium.js:61 src/video-gallery-block/premium.js:49
+#: includes/pro/php/block-defaults.php:61 src/fbks-helpers/imageClickActionPremiumControls.js:91 src/image-block/premium.js:696 src/video-block/premium.js:61 src/video-gallery-block/premium.js:49
 msgid "Lightbox Appearance"
 msgstr "Ljuslådans utseende"
 
@@ -2585,7 +2601,7 @@ msgstr "Ljuslådans utseende"
 msgid "Lightbox content"
 msgstr "Ljuslådans innehåll"
 
-#: includes/pro/php/block-defaults.php:62 src/fbks-helpers/imageClickActionPremiumControls.js:114 src/image-block/premium.js:757 src/video-block/premium.js:149 src/video-gallery-block/premium.js:242
+#: includes/pro/php/block-defaults.php:62 src/fbks-helpers/imageClickActionPremiumControls.js:114 src/image-block/premium.js:723 src/video-block/premium.js:149 src/video-gallery-block/premium.js:242
 msgid "Lightbox Content"
 msgstr "Lightbox-innehåll"
 
@@ -2621,19 +2637,19 @@ msgstr "Radhöjd"
 msgid "Link gallery videos to WooCommerce products."
 msgstr "Länka gallerivideor till WooCommerce-produkter."
 
-#: includes/pro/php/block-defaults.php:175 includes/pro/php/block-defaults.php:219 src/fbks-helpers/imageClickActionPremiumControls.js:338 src/image-block/premium.js:828
+#: includes/pro/php/block-defaults.php:175 includes/pro/php/block-defaults.php:219 src/fbks-helpers/imageClickActionPremiumControls.js:338 src/image-block/premium.js:794
 msgid "Link Image to Custom URL"
 msgstr "Länka bild till anpassad URL"
 
-#: includes/pro/php/block-defaults.php:174 includes/pro/php/block-defaults.php:218 src/fbks-helpers/imageClickActionPremiumControls.js:334 src/image-block/premium.js:824
+#: includes/pro/php/block-defaults.php:174 includes/pro/php/block-defaults.php:218 src/fbks-helpers/imageClickActionPremiumControls.js:334 src/image-block/premium.js:790
 msgid "Link Image to Media File"
 msgstr "Länka bild till mediafil"
 
-#: includes/pro/php/block-defaults.php:176 includes/pro/php/block-defaults.php:220 src/fbks-helpers/imageClickActionPremiumControls.js:342 src/image-block/premium.js:832
+#: includes/pro/php/block-defaults.php:176 includes/pro/php/block-defaults.php:220 src/fbks-helpers/imageClickActionPremiumControls.js:342 src/image-block/premium.js:798
 msgid "Link Image to Page/Post"
 msgstr "Länka bild till sida/inlägg"
 
-#: includes/pro/php/block-defaults.php:55 src/fbks-helpers/imageClickActionPremiumControls.js:199 src/fbks-helpers/videoLightboxControls.js:137 src/image-block/premium.js:550
+#: includes/pro/php/block-defaults.php:55 src/fbks-helpers/imageClickActionPremiumControls.js:199 src/fbks-helpers/videoLightboxControls.js:137 src/image-block/premium.js:516
 msgid "Link Target"
 msgstr "Länkmål"
 
@@ -2665,7 +2681,7 @@ msgstr "Länk till mediefiler, anpassade webbadresser, sidor eller inlägg."
 msgid "Link videos to WooCommerce products."
 msgstr "Länka videor till WooCommerce-produkter."
 
-#: src/image-block/premium.js:446
+#: src/image-block/premium.js:412
 msgid "Linked Page or Post"
 msgstr "Länkad sida eller inlägg"
 
@@ -2673,7 +2689,7 @@ msgstr "Länkad sida eller inlägg"
 msgid "Linked WooCommerce Product"
 msgstr "Lankad WooCommerce-produkt"
 
-#: includes/pro/php/social-sharing.php:24 src/fbks-helpers/socialSharingControls.js:6
+#: includes/pro/php/social-sharing.php:24 src/fbks-helpers/socialSharingControls.js:7
 msgid "LinkedIn"
 msgstr "LinkedIn"
 
@@ -2689,7 +2705,7 @@ msgstr "Hämtar senaste nytt..."
 msgid "Loop"
 msgstr "Loopa"
 
-#: includes/admin/free-pro.php:50 src/carousel-gallery-block/premium.js:94
+#: includes/admin/free-pro.php:50 src/carousel-gallery-block/premium.js:215
 msgid "Loop Carousel Slides"
 msgstr "Loopa karusellens bilder"
 
@@ -2733,7 +2749,7 @@ msgstr "Förstoring"
 msgid "Magnify part of an image with a circular loupe."
 msgstr "Förstora en del av en bild med en cirkulär lupp."
 
-#: src/filmstrip-gallery-block/edit.js:1162
+#: src/filmstrip-gallery-block/edit.js:1164
 msgid "Main Image Resolution"
 msgstr "Upplösning för huvudbild"
 
@@ -2837,11 +2853,11 @@ msgstr "Medievärden kan redigeras. Inbäddade originalvärden förblir oförän
 msgid "Medium"
 msgstr "Medium"
 
-#: src/image-block/premium.js:112
+#: src/image-block/premium.js:108
 msgid "Metadata could not be refreshed from the Media Library."
 msgstr "Metadata kunde inte uppdateras från mediebiblioteket."
 
-#: src/image-block/premium.js:110
+#: src/image-block/premium.js:106
 msgid "Metadata could not be synced to the Media Library."
 msgstr "Metadata kunde inte synkroniseras till mediebiblioteket."
 
@@ -2849,7 +2865,7 @@ msgstr "Metadata kunde inte synkroniseras till mediebiblioteket."
 msgid "Metadata Import"
 msgstr "Metadataimport"
 
-#: src/image-block/premium.js:109
+#: src/image-block/premium.js:105
 msgid "Metadata synced to the Media Library."
 msgstr "Metadata synkroniseras till mediebiblioteket."
 
@@ -2869,7 +2885,7 @@ msgstr "Sid-ID saknas."
 msgid "Missing proofing gallery key."
 msgstr "Nyckel för bildgranskningsgalleri saknas."
 
-#: src/fbks-helpers/ResponsiveHeightRangeControl.js:39 src/fbks-helpers/ResponsiveRangeControl.js:32
+#: src/fbks-helpers/ResponsiveHeightRangeControl.js:39 src/fbks-helpers/ResponsiveRangeControl.js:33
 msgid "Mobile"
 msgstr "Mobil"
 
@@ -2929,11 +2945,11 @@ msgstr "Nästa"
 msgid "Next image"
 msgstr "Nästa bild"
 
-#: src/carousel-gallery-block/render.php:122
+#: src/carousel-gallery-block/render.php:134
 msgid "Next slide"
 msgstr "Nästa bild"
 
-#: src/filmstrip-gallery-block/edit.js:1116 src/filmstrip-gallery-block/edit.js:1128 src/filmstrip-gallery-block/render.php:1108 src/filmstrip-gallery-block/render.php:1119
+#: src/filmstrip-gallery-block/edit.js:1118 src/filmstrip-gallery-block/edit.js:1130 src/filmstrip-gallery-block/render.php:1108 src/filmstrip-gallery-block/render.php:1119
 msgid "Next thumbnail"
 msgstr "Nästa miniatyr"
 
@@ -2989,7 +3005,7 @@ msgstr "Inga tematypsnitt hittades. Lägg till typsnittsfamiljer i theme.json el
 msgid "No Thumbnail Selected"
 msgstr "Ingen miniatyr vald"
 
-#: includes/pro/php/block-defaults.php:54 includes/pro/php/block-defaults.php:62 includes/pro/php/block-defaults.php:64 includes/pro/php/block-defaults.php:65 includes/pro/php/block-defaults.php:78 includes/pro/php/block-defaults.php:93 includes/pro/php/block-defaults.php:95 includes/pro/php/block-defaults.php:103 includes/pro/php/block-defaults.php:171 includes/pro/php/block-defaults.php:215 includes/pro/php/block-defaults.php:224 includes/pro/php/block-defaults.php:479 src/carousel-gallery-block/edit.js:604 src/fbks-helpers/CompactColorControl.js:227 src/fbks-helpers/ImageStyleControl.js:93 src/fbks-helpers/imageClickActionPremiumControls.js:36 src/fbks-helpers/imageClickActionPremiumControls.js:256 src/fbks-helpers/imageClickActionPremiumControls.js:510 src/fbks-helpers/imageHoverActionPremiumControls.js:13 src/fbks-helpers/imageHoverActionPremiumControls.js:30 src/fbks-helpers/watermarkOverlayControls.js:245 src/filmstrip-gallery-block/edit.js:708 src/grid-gallery-block/edit.js:559 src/image-block/edit.js:1049 src/image-block/premium.js:610 src/image-block/premium.js:691 src/image-block/premium.js:1268 src/justified-gallery-block/edit.js:568 src/masonry-gallery-block/edit.js:567 src/modular-gallery-block/edit.js:886 src/video-block/edit.js:933 src/video-block/premium.js:34 src/video-gallery-block/edit.js:602 src/video-gallery-block/premium.js:28
+#: includes/pro/php/block-defaults.php:54 includes/pro/php/block-defaults.php:62 includes/pro/php/block-defaults.php:64 includes/pro/php/block-defaults.php:65 includes/pro/php/block-defaults.php:78 includes/pro/php/block-defaults.php:93 includes/pro/php/block-defaults.php:95 includes/pro/php/block-defaults.php:103 includes/pro/php/block-defaults.php:171 includes/pro/php/block-defaults.php:215 includes/pro/php/block-defaults.php:224 includes/pro/php/block-defaults.php:487 src/carousel-gallery-block/edit.js:634 src/fbks-helpers/CompactColorControl.js:227 src/fbks-helpers/ImageStyleControl.js:93 src/fbks-helpers/imageClickActionPremiumControls.js:36 src/fbks-helpers/imageClickActionPremiumControls.js:256 src/fbks-helpers/imageClickActionPremiumControls.js:510 src/fbks-helpers/imageHoverActionPremiumControls.js:13 src/fbks-helpers/imageHoverActionPremiumControls.js:30 src/fbks-helpers/watermarkOverlayControls.js:245 src/filmstrip-gallery-block/edit.js:708 src/grid-gallery-block/edit.js:559 src/image-block/edit.js:1043 src/image-block/premium.js:576 src/image-block/premium.js:657 src/image-block/premium.js:1234 src/justified-gallery-block/edit.js:568 src/masonry-gallery-block/edit.js:567 src/modular-gallery-block/edit.js:886 src/video-block/edit.js:933 src/video-block/premium.js:34 src/video-gallery-block/edit.js:602 src/video-gallery-block/premium.js:28
 msgid "None"
 msgstr "Ingen"
 
@@ -3013,11 +3029,11 @@ msgstr "Antal dagar som pågående och sparade bildgranskningssessioner behålls
 msgid "Offer downloads or connect WooCommerce products."
 msgstr "Erbjud nedladdningar eller anslut WooCommerce-produkter."
 
-#: includes/pro/php/block-defaults.php:56 includes/pro/php/block-defaults.php:410 includes/pro/php/block-defaults.php:459 includes/pro/php/block-defaults.php:479 src/fbks-helpers/imageClickActionPremiumControls.js:260 src/fbks-helpers/imageClickActionPremiumControls.js:401 src/fbks-helpers/imageClickActionPremiumControls.js:514 src/fbks-helpers/videoLightboxControls.js:168 src/image-block/premium.js:614 src/image-block/premium.js:1168 src/image-block/premium.js:1272 src/video-block/premium.js:488 src/video-gallery-block/premium.js:129
+#: includes/pro/php/block-defaults.php:56 includes/pro/php/block-defaults.php:410 includes/pro/php/block-defaults.php:467 includes/pro/php/block-defaults.php:487 src/fbks-helpers/imageClickActionPremiumControls.js:260 src/fbks-helpers/imageClickActionPremiumControls.js:401 src/fbks-helpers/imageClickActionPremiumControls.js:514 src/fbks-helpers/videoLightboxControls.js:168 src/image-block/premium.js:580 src/image-block/premium.js:1134 src/image-block/premium.js:1238 src/video-block/premium.js:488 src/video-gallery-block/premium.js:129
 msgid "On Hover"
 msgstr "Vid hovring"
 
-#: includes/pro/admin/global-settings.php:828 includes/pro/php/block-defaults.php:728
+#: includes/pro/admin/global-settings.php:828 includes/pro/php/block-defaults.php:742
 msgid "Opacity"
 msgstr "Opacitet"
 
@@ -3029,11 +3045,11 @@ msgstr "Opacitet:"
 msgid "Open Fullscreen"
 msgstr "Öppna helskärm"
 
-#: includes/pro/php/block-defaults.php:213 src/fbks-helpers/imageClickActionPremiumControls.js:429 src/fbks-helpers/imageClickActionPremiumControls.js:540 src/image-block/premium.js:1200 src/image-block/premium.js:1301
+#: includes/pro/php/block-defaults.php:213 src/fbks-helpers/imageClickActionPremiumControls.js:429 src/fbks-helpers/imageClickActionPremiumControls.js:540 src/image-block/premium.js:1166 src/image-block/premium.js:1267
 msgid "Open images in a lightbox when clicked."
 msgstr "Öppna bilder i en Lightbox vid klick."
 
-#: src/image-block/premium.js:644
+#: src/image-block/premium.js:610
 msgid "Open images in a lightbox when the thumbnail is clicked."
 msgstr "Öppna bilder i en Lightbox när miniatyrbilden klickas."
 
@@ -3041,11 +3057,11 @@ msgstr "Öppna bilder i en Lightbox när miniatyrbilden klickas."
 msgid "Open images in a lightbox when thumbnails are clicked."
 msgstr "Öppna bilder i en Lightbox när miniatyrbilder klickas."
 
-#: includes/pro/php/block-defaults.php:54 includes/pro/php/block-defaults.php:172 includes/pro/php/block-defaults.php:216 src/carousel-gallery-block/edit.js:606 src/fbks-helpers/imageClickActionPremiumControls.js:324 src/grid-gallery-block/edit.js:561 src/image-block/edit.js:1051 src/justified-gallery-block/edit.js:570 src/masonry-gallery-block/edit.js:569 src/modular-gallery-block/edit.js:888
+#: includes/pro/php/block-defaults.php:54 includes/pro/php/block-defaults.php:172 includes/pro/php/block-defaults.php:216 src/carousel-gallery-block/edit.js:636 src/fbks-helpers/imageClickActionPremiumControls.js:324 src/grid-gallery-block/edit.js:561 src/image-block/edit.js:1045 src/justified-gallery-block/edit.js:570 src/masonry-gallery-block/edit.js:569 src/modular-gallery-block/edit.js:888
 msgid "Open in Lightbox"
 msgstr "Öppna i Lightbox"
 
-#: src/image-block/premium.js:512 src/image-block/premium.js:882 src/image-block/premium.js:949
+#: src/image-block/premium.js:478 src/image-block/premium.js:848 src/image-block/premium.js:915
 msgid "Open in new tab"
 msgstr "Öppna i ny flik"
 
@@ -3053,7 +3069,7 @@ msgstr "Öppna i ny flik"
 msgid "Open larger watermark preview"
 msgstr "Öppna större förhandsvisning av vattenstämpel"
 
-#: src/filmstrip-gallery-block/render.php:948 src/image-block/premium.js:1634 src/image-block/render.php:949
+#: src/filmstrip-gallery-block/render.php:948 src/image-block/premium.js:1600 src/image-block/render.php:949
 msgid "Open Link"
 msgstr "Öppna länk"
 
@@ -3061,11 +3077,11 @@ msgstr "Öppna länk"
 msgid "Open Media"
 msgstr "Öppna media"
 
-#: includes/pro/php/block-defaults.php:225 includes/pro/php/block-defaults.php:411 includes/pro/php/block-defaults.php:478 src/fbks-helpers/imageClickActionPremiumControls.js:477 src/image-block/premium.js:1099 src/image-block/premium.js:1115 src/image-block/premium.js:1384 src/image-block/premium.js:1400 src/video-block/premium.js:618 src/video-block/premium.js:634 src/video-gallery-block/premium.js:154
+#: includes/pro/php/block-defaults.php:225 includes/pro/php/block-defaults.php:411 includes/pro/php/block-defaults.php:486 src/fbks-helpers/imageClickActionPremiumControls.js:477 src/image-block/premium.js:1065 src/image-block/premium.js:1081 src/image-block/premium.js:1350 src/image-block/premium.js:1366 src/video-block/premium.js:618 src/video-block/premium.js:634 src/video-gallery-block/premium.js:154
 msgid "Open Product Page"
 msgstr "Öppna produktsida"
 
-#: src/image-block/premium.js:890 src/image-block/premium.js:962
+#: src/image-block/premium.js:856 src/image-block/premium.js:928
 msgid "Open the custom URL in a new browser tab."
 msgstr "Öppna den anpassade URL:en i en ny webbläsarflik."
 
@@ -3077,7 +3093,7 @@ msgstr "Öppna filmremsan i helskärmsläge."
 msgid "Open the image in a lightbox when its download icon is used separately."
 msgstr "Öppna bilden i en ljuslåda när dess nedladdningsikon används separat."
 
-#: src/image-block/premium.js:520
+#: src/image-block/premium.js:486
 msgid "Open the linked page or post in a new browser tab."
 msgstr "Öppna den länkade sidan eller inlägget i en ny webbläsarflik."
 
@@ -3161,7 +3177,7 @@ msgstr "Åsidosätt klickbeteende för enskilda bilder."
 msgid "Override Gallery Click & Hover Settings Per Image"
 msgstr "Åsidosätt Galleri Klicka & Hover-inställningar per bild"
 
-#: src/image-block/edit.js:1251
+#: src/image-block/edit.js:1245
 msgid "Override Gallery Click Settings"
 msgstr "Åsidosätt Galleri Klicka på Inställningar"
 
@@ -3169,7 +3185,7 @@ msgstr "Åsidosätt Galleri Klicka på Inställningar"
 msgid "Override gallery click settings."
 msgstr "Åsidosätt inställningar för galleriklick."
 
-#: src/image-block/edit.js:1399 src/video-block/edit.js:894
+#: src/image-block/edit.js:1393 src/video-block/edit.js:894
 msgid "Override Gallery Hover Settings"
 msgstr "Åsidosätt Gallery Hover Settings"
 
@@ -3278,11 +3294,11 @@ msgstr "Klistra in en Vimeo-URL. Blocket hämtar Vimeos video-ID när det är m�
 msgid "Pause autoplay"
 msgstr "Pausa automatisk uppspelning"
 
-#: src/filmstrip-gallery-block/premium.js:209
+#: src/filmstrip-gallery-block/premium.js:217
 msgid "Pause autoplay while hovering over the main image."
 msgstr "Pausa automatisk uppspelning när du hovrar över huvudbilden."
 
-#: src/filmstrip-gallery-block/premium.js:203
+#: src/filmstrip-gallery-block/premium.js:211
 msgid "Pause on Hover"
 msgstr "Pausa vid hovring"
 
@@ -3294,7 +3310,7 @@ msgstr "Individuella åsidosättningar för bilders och videors klickbeteende oc
 msgid "Per-Image Click & Hover Setting Overrides"
 msgstr "Åsidosätter inställningar för klick- och muspekare per bild"
 
-#: src/fbks-helpers/imageProFeatureNotices.js:183 src/image-block/edit.js:1235
+#: src/fbks-helpers/imageProFeatureNotices.js:183 src/image-block/edit.js:1229
 msgid "Per-Image Gallery Overrides"
 msgstr "Åsidosätter per bildgalleri"
 
@@ -3326,7 +3342,7 @@ msgstr "bild"
 msgid "Pink"
 msgstr "Rosa"
 
-#: includes/pro/php/social-sharing.php:36 src/fbks-helpers/socialSharingControls.js:9
+#: includes/pro/php/social-sharing.php:36 src/fbks-helpers/socialSharingControls.js:10
 msgid "Pinterest"
 msgstr "Pinterest"
 
@@ -3359,7 +3375,7 @@ msgstr "Spela video i ljuslåda"
 msgid "Play video: %1$s"
 msgstr "Spela video: %1$s"
 
-#: src/carousel-gallery-block/render.php:108
+#: src/carousel-gallery-block/render.php:120
 msgid "Play/Pause carousel"
 msgstr "Spela upp/pausa karusell"
 
@@ -3367,7 +3383,7 @@ msgstr "Spela upp/pausa karusell"
 msgid "Playback"
 msgstr "Uppspelning"
 
-#: src/carousel-gallery-block/premium.js:219 src/carousel-gallery-block/premium.js:238
+#: src/carousel-gallery-block/premium.js:340 src/carousel-gallery-block/premium.js:359
 msgid "Playback Control Colors"
 msgstr "Färger för uppspelningskontroller"
 
@@ -3436,11 +3452,11 @@ msgstr "Förhandsvisningens bildförhållande"
 msgid "Previous image"
 msgstr "Föregående bild"
 
-#: src/carousel-gallery-block/render.php:97
+#: src/carousel-gallery-block/render.php:109
 msgid "Previous slide"
 msgstr "Föregående bild"
 
-#: src/filmstrip-gallery-block/edit.js:1033 src/filmstrip-gallery-block/edit.js:1048 src/filmstrip-gallery-block/render.php:1054 src/filmstrip-gallery-block/render.php:1065
+#: src/filmstrip-gallery-block/edit.js:1035 src/filmstrip-gallery-block/edit.js:1050 src/filmstrip-gallery-block/render.php:1054 src/filmstrip-gallery-block/render.php:1065
 msgid "Previous thumbnail"
 msgstr "Föregående miniatyr"
 
@@ -3476,7 +3492,7 @@ msgstr "Pro-versionen - funktioner:"
 msgid "Pro-only blocks: Modular Gallery and Proofing Gallery on Business/Agency plans"
 msgstr "Pro-block: Modular Gallery och Proofing Gallery i Business/Agency-planer"
 
-#: includes/pro/php/block-defaults.php:225 src/image-block/premium.js:1076
+#: includes/pro/php/block-defaults.php:225 src/image-block/premium.js:1042
 msgid "Product Link Behavior"
 msgstr "Beteende för produktlänk"
 
@@ -3667,11 +3683,11 @@ msgstr "Röd"
 msgid "Red Flag"
 msgstr "Röd flagga"
 
-#: src/image-block/premium.js:121
+#: src/image-block/premium.js:117
 msgid "Refresh"
 msgstr "Uppdatera"
 
-#: src/image-block/premium.js:120
+#: src/image-block/premium.js:116
 msgid "Refresh from Media Library"
 msgstr "Uppdatera från mediebiblioteket"
 
@@ -3679,7 +3695,7 @@ msgstr "Uppdatera från mediebiblioteket"
 msgid "Refresh latest news"
 msgstr "Uppdatera senaste nytt"
 
-#: src/image-block/premium.js:121
+#: src/image-block/premium.js:117
 msgid "Refreshing…"
 msgstr "Uppdaterar…"
 
@@ -3699,7 +3715,7 @@ msgstr "Ta bort mellanrummet mellan bilderna."
 msgid "Remove Image Gap"
 msgstr "Ta bort bildmellanrum"
 
-#: src/image-block/premium.js:504
+#: src/image-block/premium.js:470
 msgid "Remove Link"
 msgstr "Ta bort länk"
 
@@ -3719,7 +3735,7 @@ msgstr "Ersätt efter-bild"
 msgid "Replace Before Image"
 msgstr "Ersätt före-bild"
 
-#: src/background-video-block/edit.js:849 src/image-block/edit.js:1106 src/loupe-block/edit.js:184
+#: src/background-video-block/edit.js:849 src/image-block/edit.js:1100 src/loupe-block/edit.js:184
 msgid "Replace Image"
 msgstr "Ersätt bild"
 
@@ -3759,7 +3775,7 @@ msgstr "Återställ mediebetyg"
 msgid "Reset this Media Library value to the original value embedded in the image? The image file will not be changed."
 msgstr "Återställ detta värde i mediebiblioteket till originalvärdet inbäddat i bilden? Bildfilen ändras inte."
 
-#: includes/pro/php/block-defaults.php:742
+#: includes/pro/php/block-defaults.php:756
 msgid "Reset to plugin defaults"
 msgstr "Återställ till tilläggets standardvärden"
 
@@ -3767,7 +3783,7 @@ msgstr "Återställ till tilläggets standardvärden"
 msgid "Reset…"
 msgstr "Återställ…"
 
-#: includes/pro/php/block-defaults.php:53 src/before-after-block/edit.js:291 src/carousel-gallery-block/edit.js:661 src/grid-gallery-block/edit.js:707 src/image-block/edit.js:1193 src/justified-gallery-block/edit.js:641 src/loupe-block/edit.js:241 src/masonry-gallery-block/edit.js:637
+#: includes/pro/php/block-defaults.php:53 src/before-after-block/edit.js:291 src/carousel-gallery-block/edit.js:696 src/grid-gallery-block/edit.js:707 src/image-block/edit.js:1187 src/justified-gallery-block/edit.js:641 src/loupe-block/edit.js:241 src/masonry-gallery-block/edit.js:637
 msgid "Resolution"
 msgstr "Upplösning"
 
@@ -3795,10 +3811,6 @@ msgstr "Responsiva Pro-kontroller för avstånd, storlekar, fokuspunkter och lay
 msgid "Resume Scan"
 msgstr "Återuppta skanning"
 
-#: src/carousel-gallery-block/premium.js:100
-msgid "Return to the first slide after reaching the end."
-msgstr "Återgå till den första bilden efter att ha nått slutet."
-
 #: includes/pro/admin/proofing-admin-bar.php:258 includes/pro/admin/proofing-sessions.php:550 includes/pro/php/media-metadata.php:69
 msgid "Review"
 msgstr "Granska"
@@ -3812,7 +3824,7 @@ msgstr "Granska kundernas sparade och inskickade bildurval."
 msgid "Review the session: %s"
 msgstr "Granska sessionen: %s"
 
-#: includes/pro/php/block-defaults.php:20 includes/pro/php/block-defaults.php:256 includes/pro/php/block-defaults.php:404 includes/pro/php/block-defaults.php:442 includes/pro/php/block-defaults.php:445 src/before-after-block/premium.js:83 src/carousel-gallery-block/premium.js:159 src/fbks-helpers/filteringPremiumControls.js:172 src/filmstrip-gallery-block/edit.js:1203 src/proofing-gallery-block/edit.js:193
+#: includes/pro/php/block-defaults.php:20 includes/pro/php/block-defaults.php:256 includes/pro/php/block-defaults.php:404 includes/pro/php/block-defaults.php:447 includes/pro/php/block-defaults.php:450 includes/pro/php/block-defaults.php:453 src/before-after-block/premium.js:83 src/carousel-gallery-block/premium.js:211 src/carousel-gallery-block/premium.js:280 src/fbks-helpers/filteringPremiumControls.js:172 src/filmstrip-gallery-block/edit.js:1205 src/proofing-gallery-block/edit.js:193
 msgid "Right"
 msgstr "Höger"
 
@@ -3910,7 +3922,7 @@ msgstr "Skannat %1$d av %2$d JPEG-bilder."
 msgid "Scanning…"
 msgstr "Skannar…"
 
-#: src/image-block/premium.js:448
+#: src/image-block/premium.js:414
 msgid "Search pages or posts..."
 msgstr "Sök sidor eller inlägg..."
 
@@ -3954,15 +3966,15 @@ msgstr "Välj en bild för att förhandsgranska den."
 msgid "Select Before Image"
 msgstr "Välj före-bild"
 
-#: src/background-video-block/edit.js:850 src/image-block/edit.js:1542 src/image-block/edit.js:1685 src/image-row/edit.js:53 src/image-stack/edit.js:54 src/image-stack/edit.js:98
+#: src/background-video-block/edit.js:850 src/image-block/edit.js:1536 src/image-block/edit.js:1679 src/image-row/edit.js:53 src/image-stack/edit.js:54 src/image-stack/edit.js:98
 msgid "Select Image"
 msgstr "Välj bild"
 
-#: src/carousel-gallery-block/edit.js:627 src/filmstrip-gallery-block/edit.js:465 src/grid-gallery-block/edit.js:663 src/justified-gallery-block/edit.js:591 src/masonry-gallery-block/edit.js:591
+#: src/carousel-gallery-block/edit.js:657 src/filmstrip-gallery-block/edit.js:465 src/grid-gallery-block/edit.js:663 src/justified-gallery-block/edit.js:591 src/masonry-gallery-block/edit.js:591
 msgid "Select Images"
 msgstr "Välj bilder"
 
-#: src/image-block/premium.js:1516
+#: src/image-block/premium.js:1482
 msgid "Select one or more categories for this image."
 msgstr "Välj en eller flera kategorier för den här bilden."
 
@@ -3982,11 +3994,11 @@ msgstr "Välj eller ladda upp en bild för luppeffekten."
 msgid "Select the font’s weight and style (matches WordPress Typography → Appearance)."
 msgstr "Välj typsnittets vikt och stil (matchar WordPress Typografi → Utseende)."
 
-#: src/filmstrip-gallery-block/edit.js:1177
+#: src/filmstrip-gallery-block/edit.js:1179
 msgid "Select the size of the main gallery image."
 msgstr "Välj storlek på galleriets huvudbild."
 
-#: includes/pro/php/block-defaults.php:53 src/before-after-block/edit.js:295 src/carousel-gallery-block/edit.js:678 src/grid-gallery-block/edit.js:724 src/justified-gallery-block/edit.js:660 src/loupe-block/edit.js:257 src/masonry-gallery-block/edit.js:663
+#: includes/pro/php/block-defaults.php:53 src/before-after-block/edit.js:295 src/carousel-gallery-block/edit.js:713 src/grid-gallery-block/edit.js:724 src/justified-gallery-block/edit.js:660 src/loupe-block/edit.js:257 src/masonry-gallery-block/edit.js:663
 msgid "Select the size of the source image."
 msgstr "Välj storleken på källbilden."
 
@@ -4069,7 +4081,7 @@ msgstr "Ange justering för bildgranskningens filterfält."
 msgid "Set alignment of the Save & Continue and Submit buttons."
 msgstr "Ange justering för knapparna Spara och fortsätt och Skicka in."
 
-#: src/carousel-gallery-block/premium.js:258
+#: src/carousel-gallery-block/premium.js:379
 msgid "Set background and icon colors for the carousel controls."
 msgstr "Ange bakgrunds- och ikonfärger för karusellkontrollerna."
 
@@ -4101,7 +4113,7 @@ msgstr "Ställ in anpassade luckor för dator, surfplatta och mobil."
 msgid "Set display preference for Image Download icon."
 msgstr "Välj hur bildens nedladdningsikon ska visas."
 
-#: src/image-block/premium.js:1183
+#: src/image-block/premium.js:1149
 msgid "Set display preference for the download icon."
 msgstr "Välj hur nedladdningsikonen ska visas."
 
@@ -4181,6 +4193,10 @@ msgstr "Ange miniatyrens hörnradie."
 msgid "Set the border width for the thumbnail."
 msgstr "Ange miniatyrens rambredd."
 
+#: src/carousel-gallery-block/premium.js:62
+msgid "Set the carousel height for this device in pixels (px) or viewport height (vh)."
+msgstr "Ange karusellens höjd för den här enheten i pixlar (px) eller relativt visningsytans höjd (vh)."
+
 #: src/proofing-gallery-block/edit.js:1240
 msgid "Set the client email address and gallery password in Client Settings."
 msgstr "Ange kundens e-postadress och galleriets lösenord i kundinställningarna."
@@ -4197,7 +4213,7 @@ msgstr "Ange färgen på reglagets handtag och linje."
 msgid "Set the desired strength of the magnification effect."
 msgstr "Ange önskad förstoringseffekt."
 
-#: src/image-block/premium.js:590
+#: src/image-block/premium.js:556
 msgid "Set the destination on this Image Block."
 msgstr "Ange destinationen för detta bildblock."
 
@@ -4213,7 +4229,7 @@ msgstr "Ange nedladdningsikonens färg."
 msgid "Set the height (vh) for this screen size."
 msgstr "Ange höjden (vh) för den här skärmstorleken."
 
-#: src/carousel-gallery-block/premium.js:139
+#: src/carousel-gallery-block/premium.js:260
 msgid "Set the horizontal alignment of carousel controls."
 msgstr "Ange den horisontella justeringen för karusellkontrollerna."
 
@@ -4310,7 +4326,7 @@ msgstr "Dela bild"
 msgid "Share on %s"
 msgstr "Dela på %s"
 
-#: src/fbks-helpers/socialSharingControls.js:114
+#: src/fbks-helpers/socialSharingControls.js:98
 msgid "Sharing Sources"
 msgstr "Delningskällor"
 
@@ -4326,7 +4342,7 @@ msgstr "Visa kommentarikon för kundanteckningar om enskilda bilder."
 msgid "Show Download Icon on Hover"
 msgstr "Visa nedladdningsikon vid hovring"
 
-#: includes/pro/php/block-defaults.php:62 includes/pro/php/block-defaults.php:67 includes/pro/php/block-defaults.php:231 src/fbks-helpers/imageClickActionPremiumControls.js:48 src/fbks-helpers/imageHoverActionPremiumControls.js:152 src/image-block/premium.js:694
+#: includes/pro/php/block-defaults.php:62 includes/pro/php/block-defaults.php:67 includes/pro/php/block-defaults.php:231 src/fbks-helpers/imageClickActionPremiumControls.js:48 src/fbks-helpers/imageHoverActionPremiumControls.js:152 src/image-block/premium.js:660
 msgid "Show EXIF Data"
 msgstr "Visa EXIF-data"
 
@@ -4342,11 +4358,11 @@ msgstr "Visa FolioBlocks-metadata"
 msgid "Show Heart icon so clients can mark images they like."
 msgstr "Visa hjärtikon så att kunder kan markera bilder de gillar."
 
-#: includes/pro/php/block-defaults.php:62 includes/pro/php/block-defaults.php:67 includes/pro/php/block-defaults.php:230 src/fbks-helpers/imageClickActionPremiumControls.js:44 src/fbks-helpers/imageHoverActionPremiumControls.js:148 src/image-block/premium.js:693
+#: includes/pro/php/block-defaults.php:62 includes/pro/php/block-defaults.php:67 includes/pro/php/block-defaults.php:230 src/fbks-helpers/imageClickActionPremiumControls.js:44 src/fbks-helpers/imageHoverActionPremiumControls.js:148 src/image-block/premium.js:659
 msgid "Show Image Caption"
 msgstr "Visa bildtext"
 
-#: src/fbks-helpers/imageClickActionPremiumControls.js:56 src/image-block/premium.js:700
+#: src/fbks-helpers/imageClickActionPremiumControls.js:56 src/image-block/premium.js:666
 msgid "Show Image Caption & EXIF Data"
 msgstr "Visa bildtext och EXIF-data"
 
@@ -4358,15 +4374,15 @@ msgstr "Visa bildtext + EXIF-data"
 msgid "Show Image Counter"
 msgstr "Visa bildräknare"
 
-#: includes/pro/php/block-defaults.php:62 includes/pro/php/block-defaults.php:67 includes/pro/php/block-defaults.php:229 src/fbks-helpers/imageClickActionPremiumControls.js:40 src/fbks-helpers/imageHoverActionPremiumControls.js:144 src/image-block/premium.js:692
+#: includes/pro/php/block-defaults.php:62 includes/pro/php/block-defaults.php:67 includes/pro/php/block-defaults.php:229 src/fbks-helpers/imageClickActionPremiumControls.js:40 src/fbks-helpers/imageHoverActionPremiumControls.js:144 src/image-block/premium.js:658
 msgid "Show Image Title"
 msgstr "Visa bildtitel"
 
-#: src/fbks-helpers/imageClickActionPremiumControls.js:60 src/image-block/premium.js:704
+#: src/fbks-helpers/imageClickActionPremiumControls.js:60 src/image-block/premium.js:670
 msgid "Show Image Title & Caption"
 msgstr "Visa bildtitel och bildtext"
 
-#: src/fbks-helpers/imageClickActionPremiumControls.js:52 src/image-block/premium.js:696
+#: src/fbks-helpers/imageClickActionPremiumControls.js:52 src/image-block/premium.js:662
 msgid "Show Image Title & EXIF Data"
 msgstr "Visa bildtitel & EXIF-data"
 
@@ -4382,7 +4398,7 @@ msgstr "Visa bildtitel + bildtext + EXIF-data"
 msgid "Show Image Title + EXIF Data"
 msgstr "Visa bildtitel + EXIF-data"
 
-#: src/fbks-helpers/imageClickActionPremiumControls.js:64 src/image-block/premium.js:708
+#: src/fbks-helpers/imageClickActionPremiumControls.js:64 src/image-block/premium.js:674
 msgid "Show Image Title, Caption, & EXIF Data"
 msgstr "Visa bildtitel, bildtext och EXIF-data"
 
@@ -4390,7 +4406,7 @@ msgstr "Visa bildtitel, bildtext och EXIF-data"
 msgid "Show labels"
 msgstr "Visa etiketter"
 
-#: includes/pro/php/block-defaults.php:226 includes/pro/php/block-defaults.php:233 includes/pro/php/block-defaults.php:486 src/fbks-helpers/imageClickActionPremiumControls.js:78 src/fbks-helpers/imageHoverActionPremiumControls.js:160 src/image-block/premium.js:718
+#: includes/pro/php/block-defaults.php:226 includes/pro/php/block-defaults.php:233 includes/pro/php/block-defaults.php:494 src/fbks-helpers/imageClickActionPremiumControls.js:78 src/fbks-helpers/imageHoverActionPremiumControls.js:160 src/image-block/premium.js:684
 msgid "Show Product Info"
 msgstr "Visa produktinfo"
 
@@ -4406,7 +4422,7 @@ msgstr "Visa bildgranskningens statuskomponent i adminfältet"
 msgid "Show ratings, color classes, and supported EXIF data in attachment details."
 msgstr "Visa betyg, färgklasser och stödda EXIF-data i bilageinformationen."
 
-#: includes/pro/php/block-defaults.php:67 includes/pro/php/block-defaults.php:234 includes/pro/php/block-defaults.php:457 src/fbks-helpers/imageClickActionPremiumControls.js:71 src/fbks-helpers/imageHoverActionPremiumControls.js:165
+#: includes/pro/php/block-defaults.php:67 includes/pro/php/block-defaults.php:234 includes/pro/php/block-defaults.php:465 src/fbks-helpers/imageClickActionPremiumControls.js:71 src/fbks-helpers/imageHoverActionPremiumControls.js:165
 msgid "Show Social Media"
 msgstr "Visa sociala medier"
 
@@ -4434,7 +4450,7 @@ msgstr "Visas i ljuslådan när det aktiveras i galleriets ljuslådeinställning
 msgid "Shows images in a clean, responsive grid while maintaining original proportions."
 msgstr "Visar bilder i ett rent, responsivt rutnät samtidigt som de ursprungliga proportionerna behålls."
 
-#: includes/pro/admin/media-metadata.php:294 src/image-block/premium.js:316 src/image-block/render.php:525
+#: includes/pro/admin/media-metadata.php:294 src/image-block/premium.js:282 src/image-block/render.php:525
 msgid "Shutter Speed"
 msgstr "Slutartid"
 
@@ -4658,23 +4674,23 @@ msgstr "Byt plats"
 msgid "Switch between Grid, Justified, or Masonry layouts"
 msgstr "Växla mellan rutnät, justerad layout och murverk"
 
-#: src/filmstrip-gallery-block/premium.js:81
+#: src/filmstrip-gallery-block/premium.js:89
 msgid "Switch between light and dark editor themes."
 msgstr "Växla mellan ljusa och mörka redigeringsteman."
 
-#: src/image-block/premium.js:118
+#: src/image-block/premium.js:114
 msgid "Sync"
 msgstr "Synkronisera"
 
-#: src/image-block/premium.js:115
+#: src/image-block/premium.js:111
 msgid "Sync saves this image’s title, caption, and alt text to the Media Library. Refresh replaces this block’s text and EXIF data with the latest Media Library values."
 msgstr "Synkronisering sparar bildens titel, bildtext och alternativtext i mediebiblioteket. Uppdatering ersätter blockets text och EXIF-data med de senaste värdena från mediebiblioteket."
 
-#: src/image-block/premium.js:117
+#: src/image-block/premium.js:113
 msgid "Sync to Media Library"
 msgstr "Synkronisera till mediebibliotek"
 
-#: src/image-block/premium.js:118
+#: src/image-block/premium.js:114
 msgid "Syncing…"
 msgstr "Synkroniseras..."
 
@@ -4690,7 +4706,7 @@ msgstr "Systeminformation"
 msgid "System Report"
 msgstr "Systemrapport"
 
-#: src/fbks-helpers/ResponsiveHeightRangeControl.js:38 src/fbks-helpers/ResponsiveRangeControl.js:31
+#: src/fbks-helpers/ResponsiveHeightRangeControl.js:38 src/fbks-helpers/ResponsiveRangeControl.js:32
 msgid "Tablet"
 msgstr "Surfplatta"
 
@@ -4782,11 +4798,11 @@ msgstr "Detta innehåll är lösenordsskyddat. Ange lösenordet nedan för att v
 msgid "This gallery keeps a copy of the selected palette."
 msgstr "Det här galleriet behåller en kopia av den valda paletten."
 
-#: includes/pro/php/social-sharing.php:40 src/fbks-helpers/socialSharingControls.js:10
+#: includes/pro/php/social-sharing.php:40 src/fbks-helpers/socialSharingControls.js:11
 msgid "Threads"
 msgstr "Threads"
 
-#: includes/pro/php/block-defaults.php:55 src/fbks-helpers/imageClickActionPremiumControls.js:207 src/fbks-helpers/imageSizeOptions.js:3 src/fbks-helpers/videoLightboxControls.js:145 src/image-block/premium.js:558
+#: includes/pro/php/block-defaults.php:55 src/fbks-helpers/imageClickActionPremiumControls.js:207 src/fbks-helpers/imageSizeOptions.js:3 src/fbks-helpers/videoLightboxControls.js:145 src/image-block/premium.js:524
 msgid "Thumbnail"
 msgstr "Miniatyr"
 
@@ -4802,7 +4818,7 @@ msgstr "Miniatyrens bildförhållande"
 msgid "Thumbnail Missing"
 msgstr "Miniatyr saknas"
 
-#: src/filmstrip-gallery-block/edit.js:1191
+#: src/filmstrip-gallery-block/edit.js:1193
 msgid "Thumbnail Position"
 msgstr "Miniatyrposition"
 
@@ -4818,15 +4834,15 @@ msgstr "Sida vid sida"
 msgid "Tilt"
 msgstr "Lutning"
 
-#: src/filmstrip-gallery-block/premium.js:197
+#: src/filmstrip-gallery-block/premium.js:205
 msgid "Time between automatic image transitions."
 msgstr "Tid mellan automatiska bildövergångar."
 
-#: src/carousel-gallery-block/premium.js:87
+#: src/carousel-gallery-block/premium.js:190
 msgid "Time between automatic slide transitions."
 msgstr "Tid mellan automatiska bildväxlingar."
 
-#: src/carousel-gallery-block/premium.js:125
+#: src/carousel-gallery-block/premium.js:246
 msgid "Toggle visibility of navigation arrows."
 msgstr "Växla synligheten för navigeringspilar."
 
@@ -4866,7 +4882,7 @@ msgstr "Typografi"
 msgid "Unclassified"
 msgstr "Oklassificerad"
 
-#: includes/pro/admin/media-metadata.php:175 includes/pro/admin/media-metadata.php:248 includes/pro/admin/proofing-admin-bar.php:36 includes/pro/admin/proofing-sessions.php:32 includes/pro/admin/proofing-sessions.php:547 includes/pro/admin/proofing-sessions.php:585 includes/pro/php/proofing-gallery.php:548 src/filmstrip-gallery-block/edit.js:57 src/filmstrip-gallery-block/render.php:260 src/image-block/edit.js:538 src/image-block/premium.js:235 src/image-block/premium.js:301 src/image-block/render.php:511 src/image-block/render.php:561
+#: includes/pro/admin/media-metadata.php:175 includes/pro/admin/media-metadata.php:248 includes/pro/admin/proofing-admin-bar.php:36 includes/pro/admin/proofing-sessions.php:32 includes/pro/admin/proofing-sessions.php:547 includes/pro/admin/proofing-sessions.php:585 includes/pro/php/proofing-gallery.php:548 src/filmstrip-gallery-block/edit.js:57 src/filmstrip-gallery-block/render.php:260 src/image-block/edit.js:538 src/image-block/premium.js:231 src/image-block/premium.js:267 src/image-block/render.php:511 src/image-block/render.php:561
 msgid "Unknown"
 msgstr "Okänd"
 
@@ -4934,7 +4950,7 @@ msgstr "Ladda upp en video, välj en från mediebiblioteket eller infoga en URL 
 msgid "Upload images or select them from the Media Library."
 msgstr "Ladda upp bilder eller välj dem från mediebiblioteket."
 
-#: src/carousel-gallery-block/edit.js:864
+#: src/carousel-gallery-block/edit.js:905
 msgid "Upload or select images to create a carousel."
 msgstr "Ladda upp eller välj bilder för att skapa en karusell."
 
@@ -4979,11 +4995,11 @@ msgstr "Använd en ljus eller mörk luppram."
 msgid "Use a transparent PNG or WebP where possible. Accepts the image formats allowed by your WordPress Media Library; SVG uploads are not supported by default unless your site explicitly enables them."
 msgstr "Använd om möjligt en transparent PNG eller WebP. Bildformat som tillåts i ditt WordPress-mediebibliotek accepteras. SVG-uppladdningar stöds inte som standard om inte webbplatsen uttryckligen aktiverar dem."
 
-#: src/image-block/edit.js:1262
+#: src/image-block/edit.js:1256
 msgid "Use click behavior configured specifically for this image."
 msgstr "Använd klickbeteende som konfigurerats specifikt för den här bilden."
 
-#: src/image-block/edit.js:1410
+#: src/image-block/edit.js:1404
 msgid "Use hover behavior configured specifically for this image."
 msgstr "Använd hovringsbeteende som konfigurerats specifikt för den här bilden."
 
@@ -5033,13 +5049,13 @@ msgstr "Version %s"
 msgid "Vertical"
 msgstr "Vertikal"
 
-#: includes/pro/php/block-defaults.php:432 src/carousel-gallery-block/edit.js:699
-msgid "Vertical Images"
-msgstr "Vertikala bilder"
-
 #: src/proofing-gallery-block/edit.js:236
 msgid "Vertical Padding"
 msgstr "Vertikalt inre avstånd"
+
+#: includes/pro/php/block-defaults.php:436 src/carousel-gallery-block/edit.js:733
+msgid "Vertical Priority on Mobile"
+msgstr "Prioritera stående bilder på mobil"
 
 #: src/video-gallery-block/block.json:16
 msgid "video"
@@ -5182,7 +5198,7 @@ msgstr "Visa fullstandig andringslogg"
 msgid "View Password"
 msgstr "Visa lösenord"
 
-#: src/filmstrip-gallery-block/render.php:910 src/image-block/premium.js:1768 src/image-block/render.php:924 src/video-block/premium.js:848 src/video-block/premium.js:937 src/video-block/render.php:324 src/video-block/render.php:362
+#: src/filmstrip-gallery-block/render.php:910 src/image-block/premium.js:1731 src/image-block/render.php:924 src/video-block/premium.js:848 src/video-block/premium.js:937 src/video-block/render.php:324 src/video-block/render.php:362
 msgid "View Product"
 msgstr "Visa produkt"
 
@@ -5226,7 +5242,7 @@ msgstr "Vattenstämpel"
 msgid "Watermark Image"
 msgstr "Vattenstämpelbild"
 
-#: src/carousel-gallery-block/edit.js:797 src/fbks-helpers/imageProFeatureNotices.js:79 src/filmstrip-gallery-block/edit.js:1313 src/grid-gallery-block/edit.js:844 src/image-block/edit.js:1437 src/justified-gallery-block/edit.js:792 src/masonry-gallery-block/edit.js:798 src/modular-gallery-block/edit.js:1055 src/proofing-gallery-block/edit.js:1176
+#: src/carousel-gallery-block/edit.js:838 src/fbks-helpers/imageProFeatureNotices.js:79 src/filmstrip-gallery-block/edit.js:1315 src/grid-gallery-block/edit.js:844 src/image-block/edit.js:1431 src/justified-gallery-block/edit.js:792 src/masonry-gallery-block/edit.js:798 src/modular-gallery-block/edit.js:1055 src/proofing-gallery-block/edit.js:1176
 msgid "Watermark Overlay"
 msgstr "Vattenstämpelöverlägg"
 
@@ -5306,7 +5322,7 @@ msgstr "WooCommerce-integration"
 msgid "WooCommerce integration for image galleries, Image Block, Video Block, and Video Gallery"
 msgstr "WooCommerce-integration för bildgallerier, Image Block, Video Block och Video Gallery"
 
-#: includes/pro/php/block-defaults.php:178 includes/pro/php/block-defaults.php:222 includes/pro/php/block-defaults.php:477 src/fbks-helpers/imageClickActionPremiumControls.js:349 src/image-block/premium.js:839
+#: includes/pro/php/block-defaults.php:178 includes/pro/php/block-defaults.php:222 includes/pro/php/block-defaults.php:485 src/fbks-helpers/imageClickActionPremiumControls.js:349 src/image-block/premium.js:805
 msgid "WooCommerce Product"
 msgstr "WooCommerce-produkt"
 
@@ -5314,7 +5330,7 @@ msgstr "WooCommerce-produkt"
 msgid "WooCommerce product linking for videos"
 msgstr "WooCommerce-produktlänkar för video"
 
-#: includes/pro/php/social-sharing.php:28 src/fbks-helpers/socialSharingControls.js:7
+#: includes/pro/php/social-sharing.php:28 src/fbks-helpers/socialSharingControls.js:8
 msgid "X"
 msgstr "X"
 
@@ -5334,7 +5350,7 @@ msgstr "Du har inte behörighet att hämta FolioBlocks-nyheter."
 msgid "You are not allowed to reset this media metadata."
 msgstr "Du har inte behörighet att återställa dessa mediemetadata."
 
-#: src/fbks-helpers/socialSharingControls.js:152
+#: src/fbks-helpers/socialSharingControls.js:136
 msgid "You can select up to 5 sources."
 msgstr "Du kan välja upp till 5 källor."
 

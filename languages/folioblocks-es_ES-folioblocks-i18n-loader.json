@@ -1,5 +1,5 @@
 {
-  "translation-revision-date": "2026-10-30T09:29:19.787Z",
+  "translation-revision-date": "2026-11-04T09:00:20.785Z",
   "generator": "FolioBlocks custom i18n tooling",
   "domain": "messages",
   "locale_data": {
@@ -126,9 +126,6 @@
       "Advanced Comparison Controls": [
         "Controles de comparación avanzados"
       ],
-      "Affects layout on mobile only. Switch ONLY when all images are vertical in orientation.": [
-        "Solo afecta al diseño en móviles. Actívalo SOLO cuando todas las imágenes tengan orientación vertical."
-      ],
       "After": [
         "Después"
       ],
@@ -180,6 +177,9 @@
       "Assign multiple categories to videos.": [
         "Asigne múltiples categorías a videos."
       ],
+      "Automatic": [
+        "Automática"
+      ],
       "Automatically advance carousel slides.": [
         "Avance automáticamente las diapositivas del carrusel."
       ],
@@ -197,6 +197,9 @@
       ],
       "Automatically shuffle gallery images.": [
         "Mezcla automáticamente las imágenes de la galería."
+      ],
+      "Autoplay Direction": [
+        "Dirección de reproducción automática"
       ],
       "Autoplay Speed (seconds)": [
         "Velocidad de reproducción automática (segundos)"
@@ -267,6 +270,9 @@
       "Carousel Gallery Settings": [
         "Ajustes de Carousel Gallery"
       ],
+      "Carousel Height": [
+        "Altura del carrusel"
+      ],
       "Carousel Playback and Controls": [
         "Controles y reproducción en carrusel"
       ],
@@ -332,6 +338,9 @@
       ],
       "Choose how overlay content enters the thumbnail.": [
         "Elige cómo aparece el contenido superpuesto en la miniatura."
+      ],
+      "Choose how the carousel height is set.": [
+        "Elige cómo se establece la altura del carrusel."
       ],
       "Choose how the image itself moves or changes on hover.": [
         "Elige cómo se mueve o cambia la imagen al pasar el cursor."
@@ -423,6 +432,9 @@
       "Choose which gallery block is used for layout. Columns, gap, row height, and resolution are edited on that nested gallery.": [
         "Elige qué bloque de galería se usa para el diseño. Las columnas, el espaciado, la altura de fila y la resolución se editan en esa galería anidada."
       ],
+      "Choose which side the next image enters from.": [
+        "Elige por qué lado entra la siguiente imagen."
+      ],
       "Circle": [
         "Círculo"
       ],
@@ -506,6 +518,9 @@
       ],
       "Create richer interactions and reveal useful image information.": [
         "Crea interacciones más completas y muestra información útil de las imágenes."
+      ],
+      "Custom Height": [
+        "Altura personalizada"
       ],
       "Custom URL": [
         "URL personalizada"
@@ -993,9 +1008,6 @@
       "Horizontal": [
         "Horizontal"
       ],
-      "Horizontal Images": [
-        "Imágenes horizontales"
-      ],
       "Horizontal Padding": [
         "Relleno horizontal"
       ],
@@ -1038,9 +1050,6 @@
       "Image Hover Styles": [
         "Estilos de hover de imagen"
       ],
-      "Image Orientation (Mobile)": [
-        "Orientación de la imagen (móvil)"
-      ],
       "Image Resolution": [
         "Resolución de imagen"
       ],
@@ -1082,6 +1091,9 @@
       ],
       "Justified Gallery Settings": [
         "Ajustes de Justified Gallery"
+      ],
+      "Keep navigating past the first and last slides.": [
+        "Sigue navegando al pasar la primera o la última diapositiva."
       ],
       "Keep repeat visits feeling fresh.": [
         "Haga que las visitas repetidas se sientan frescas."
@@ -1581,9 +1593,6 @@
       "Responsive Gallery Gaps": [
         "Brechas en la galería responsiva"
       ],
-      "Return to the first slide after reaching the end.": [
-        "Regrese a la primera diapositiva después de llegar al final."
-      ],
       "Right": [
         "Derecha"
       ],
@@ -1730,6 +1739,9 @@
       ],
       "Set starting position for slider drag handle.": [
         "Establece la posición inicial del controlador del deslizador."
+      ],
+      "Set the carousel height for this device in pixels (px) or viewport height (vh).": [
+        "Define la altura del carrusel para este dispositivo en píxeles (px) o en unidades relativas a la altura de la ventana (vh)."
       ],
       "Set the client email address and gallery password in Client Settings.": [
         "Establece el correo del cliente y la contraseña de la galería en Ajustes del cliente."
@@ -2040,11 +2052,11 @@
       "Vertical": [
         "Vertical"
       ],
-      "Vertical Images": [
-        "Imágenes verticales"
-      ],
       "Vertical Padding": [
         "Relleno vertical"
+      ],
+      "Vertical Priority on Mobile": [
+        "Prioridad a las imágenes verticales en móviles"
       ],
       "Video": [
         "Vídeo"

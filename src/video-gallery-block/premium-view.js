@@ -7,7 +7,7 @@ store( 'folioblocks/video-gallery', {
 	callbacks: {
 		premium() {
 			const root = getElement().ref.closest(
-				'.wp-block-folioblocks-video-gallery-block'
+				'[data-wp-interactive="folioblocks/video-gallery"]'
 			);
 			const scope = createFrontendScope();
 			const unprotect = mountGalleryControls(
