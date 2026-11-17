@@ -15,7 +15,7 @@
     "Autoplay Direction": "Dirección de reproducción automática",
     "Carousel Height": "Altura del carrusel",
     "Choose how the carousel height is set.": "Elige cómo se establece la altura del carrusel.",
-    "Choose which side the next image enters from.": "Elige por qué lado entra la siguiente imagen.",
+    "Choose the direction the images move during autoplay.": "Elige en qué dirección se mueven las imágenes durante la reproducción automática.",
     "Custom Height": "Altura personalizada",
     "Keep navigating past the first and last slides.": "Sigue navegando al pasar la primera o la última diapositiva.",
     "Set the carousel height for this device in pixels (px) or viewport height (vh).": "Define la altura del carrusel para este dispositivo en píxeles (px) o en unidades relativas a la altura de la ventana (vh).",

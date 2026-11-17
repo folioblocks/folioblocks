@@ -39,7 +39,7 @@ if ( fbks_fs()->can_use_premium_code__premium_only() ) {
 	// Autoplay
 	if ( ! empty( $attributes['autoplay'] ) ) {
 		$fbks_wrapper_attributes['data-autoplay']       = 'true';
-		$fbks_wrapper_attributes['data-autoplay-direction'] = 'left' === ( $attributes['autoplayDirection'] ?? '' ) ? 'left' : 'right';
+		$fbks_wrapper_attributes['data-autoplay-direction'] = 'right' === ( $attributes['autoplayDirection'] ?? '' ) ? 'right' : 'left';
 		$fbks_wrapper_attributes['data-autoplay-speed'] = isset( $attributes['autoplaySpeed'] )
 			? esc_attr( $attributes['autoplaySpeed'] )
 			: '3';

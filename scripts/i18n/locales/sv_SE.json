@@ -15,7 +15,7 @@
     "Autoplay Direction": "Riktning för automatisk uppspelning",
     "Carousel Height": "Karusellhöjd",
     "Choose how the carousel height is set.": "Välj hur karusellens höjd ska ställas in.",
-    "Choose which side the next image enters from.": "Välj från vilken sida nästa bild ska visas.",
+    "Choose the direction the images move during autoplay.": "Välj åt vilket håll bilderna rör sig under automatisk uppspelning.",
     "Custom Height": "Anpassad höjd",
     "Keep navigating past the first and last slides.": "Fortsätt bläddra förbi den första och sista bilden.",
     "Set the carousel height for this device in pixels (px) or viewport height (vh).": "Ange karusellens höjd för den här enheten i pixlar (px) eller relativt visningsytans höjd (vh).",

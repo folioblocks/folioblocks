@@ -151,7 +151,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 		attributes
 	);
 	const hasCustomHeight = !! customHeightStyles;
-	const reverseAutoplay = attributes.autoplayDirection === 'left';
+	const reverseAutoplay = attributes.autoplayDirection === 'right';
 
 	// Block Preview Image
 	if ( preview ) {
@@ -426,6 +426,12 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 		setCurrentSlide( autoplayStart );
 	}, [ autoplayStart ] );
 	const [ isPlaying, setIsPlaying ] = useState( false );
+	const canAutoplay = attributes.autoplay && innerBlocks.length > 1;
+
+	// Start each editor preview when autoplay becomes available.
+	useEffect( () => {
+		setIsPlaying( Boolean( canAutoplay ) );
+	}, [ canAutoplay ] );
 
 	const goToPrevSlide = () => {
 		setCurrentSlide( ( prev ) => Math.max( 0, prev - 1 ) );
@@ -518,7 +524,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 
 	// Autoplay effect: advance slide automatically if isPlaying and autoplay are true
 	useEffect( () => {
-		if ( ! attributes.autoplay || ! isPlaying ) {
+		if ( ! canAutoplay || ! isPlaying || isLoading ) {
 			return;
 		}
 
@@ -540,25 +546,20 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 	}, [
 		isPlaying,
 		attributes.autoplaySpeed,
-		attributes.autoplay,
+		canAutoplay,
+		isLoading,
 		attributes.loopSlides,
 		currentSlide,
 		reverseAutoplay,
 		innerBlocks.length,
 	] );
 
-	// Automatically start playback when autoplay is enabled and controls are hidden
-	useEffect( () => {
-		// Only auto-start if autoplay is on, controls are off, and it's not already playing
-		if ( attributes.autoplay && ! attributes.showControls && ! isPlaying ) {
-			setIsPlaying( true );
-		}
-	}, [ attributes.autoplay, attributes.showControls ] );
-
 	// Listen for scroll events to update currentSlide
 	useEffect( () => {
 		const container = containerRef.current;
-		if ( ! container ) {
+		// During playback the timer owns the slide index. A narrow slide near
+		// an edge may never reach the center of the track.
+		if ( ! container || isPlaying || isLoading ) {
 			return;
 		}
 
@@ -614,7 +615,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 				clearTimeout( scrollTimeout );
 			}
 		};
-	}, [] );
+	}, [ isPlaying, isLoading, innerBlocks.length ] );
 
 	applyFilters( 'folioBlocks.carouselGallery.editorEnhancements', null, {
 		clientId,

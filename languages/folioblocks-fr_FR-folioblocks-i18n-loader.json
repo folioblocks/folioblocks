@@ -1,5 +1,5 @@
 {
-  "translation-revision-date": "2026-11-04T09:00:20.996Z",
+  "translation-revision-date": "2026-11-17T08:33:10.942Z",
   "generator": "FolioBlocks custom i18n tooling",
   "domain": "messages",
   "locale_data": {
@@ -363,6 +363,9 @@
       "Choose light or dark styling for proofing filters, flags, and comments.": [
         "Choisissez un style clair ou sombre pour les filtres, marqueurs et commentaires de sélection."
       ],
+      "Choose the direction the images move during autoplay.": [
+        "Choisissez dans quel sens les images défilent pendant la lecture automatique."
+      ],
       "Choose the gallery layout clients will use to proof these images.": [
         "Choisissez la disposition de galerie que les clients utiliseront pour sélectionner ces images."
       ],
@@ -431,9 +434,6 @@
       ],
       "Choose which gallery block is used for layout. Columns, gap, row height, and resolution are edited on that nested gallery.": [
         "Choisissez le bloc galerie utilisé pour la disposition. Les colonnes, l’espacement, la hauteur des lignes et la résolution se règlent dans cette galerie imbriquée."
-      ],
-      "Choose which side the next image enters from.": [
-        "Choisissez de quel côté arrive l’image suivante."
       ],
       "Circle": [
         "Cercle"

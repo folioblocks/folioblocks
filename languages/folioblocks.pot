@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: FolioBlocks 1.6.0-beta.3\n"
+"Project-Id-Version: FolioBlocks 1.6.0-beta.5\n"
 "Report-Msgid-Bugs-To: https://folioblocks.com\n"
-"POT-Creation-Date: 2026-11-04 09:00:16+0000\n"
+"POT-Creation-Date: 2026-11-17 13:56:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -191,7 +191,7 @@ msgstr ""
 msgid "Add Image Stack"
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:654 src/carousel-gallery-block/edit.js:674 src/filmstrip-gallery-block/edit.js:1150 src/filmstrip-gallery-block/edit.js:1153 src/grid-gallery-block/edit.js:660 src/grid-gallery-block/edit.js:680 src/justified-gallery-block/edit.js:588 src/justified-gallery-block/edit.js:608 src/masonry-gallery-block/edit.js:587 src/masonry-gallery-block/edit.js:608
+#: src/carousel-gallery-block/edit.js:655 src/carousel-gallery-block/edit.js:675 src/filmstrip-gallery-block/edit.js:1150 src/filmstrip-gallery-block/edit.js:1153 src/grid-gallery-block/edit.js:660 src/grid-gallery-block/edit.js:680 src/justified-gallery-block/edit.js:588 src/justified-gallery-block/edit.js:608 src/masonry-gallery-block/edit.js:587 src/masonry-gallery-block/edit.js:608
 msgid "Add Images"
 msgstr ""
 
@@ -223,7 +223,7 @@ msgstr ""
 msgid "Add to Cart Icon Colors"
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:661 src/filmstrip-gallery-block/edit.js:468 src/grid-gallery-block/edit.js:667 src/justified-gallery-block/edit.js:595 src/masonry-gallery-block/edit.js:595
+#: src/carousel-gallery-block/edit.js:662 src/filmstrip-gallery-block/edit.js:468 src/grid-gallery-block/edit.js:667 src/justified-gallery-block/edit.js:595 src/masonry-gallery-block/edit.js:595
 msgid "Add to Gallery"
 msgstr ""
 
@@ -421,7 +421,7 @@ msgstr ""
 msgid "Assign multiple categories to videos."
 msgstr ""
 
-#: includes/pro/php/block-defaults.php:436 src/carousel-gallery-block/edit.js:731
+#: includes/pro/php/block-defaults.php:436 src/carousel-gallery-block/edit.js:732
 msgid "Automatic"
 msgstr ""
 
@@ -645,11 +645,11 @@ msgstr ""
 msgid "Capture One"
 msgstr ""
 
-#: includes/pro/php/block-defaults.php:500 src/carousel-gallery-block/edit.js:863 src/fbks-helpers/imageProFeatureNotices.js:145
+#: includes/pro/php/block-defaults.php:500 src/carousel-gallery-block/edit.js:864 src/fbks-helpers/imageProFeatureNotices.js:145
 msgid "Carousel Control Styles"
 msgstr ""
 
-#: includes/pro/php/icon-registration.php:27 src/carousel-gallery-block/block.json:6 src/carousel-gallery-block/edit.js:904
+#: includes/pro/php/icon-registration.php:27 src/carousel-gallery-block/block.json:6 src/carousel-gallery-block/edit.js:905
 msgid "Carousel Gallery"
 msgstr ""
 
@@ -657,11 +657,11 @@ msgstr ""
 msgid "Carousel Gallery Block"
 msgstr ""
 
-#: includes/pro/php/block-defaults.php:500 src/carousel-gallery-block/edit.js:692
+#: includes/pro/php/block-defaults.php:500 src/carousel-gallery-block/edit.js:693
 msgid "Carousel Gallery Settings"
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:719
+#: src/carousel-gallery-block/edit.js:720
 msgid "Carousel Height"
 msgstr ""
 
@@ -790,7 +790,7 @@ msgstr ""
 msgid "Choose how overlay content enters the thumbnail."
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:744
+#: src/carousel-gallery-block/edit.js:745
 msgid "Choose how the carousel height is set."
 msgstr ""
 
@@ -836,6 +836,10 @@ msgstr ""
 
 #: includes/pro/php/block-defaults.php:69 includes/pro/php/block-defaults.php:70 includes/pro/php/block-defaults.php:71 includes/pro/php/block-defaults.php:72
 msgid "Choose the color for this overlay style."
+msgstr ""
+
+#: src/carousel-gallery-block/premium.js:205
+msgid "Choose the direction the images move during autoplay."
 msgstr ""
 
 #: src/proofing-gallery-block/edit.js:1244
@@ -890,7 +894,7 @@ msgstr ""
 msgid "Choose what appears with the Video in the lightbox."
 msgstr ""
 
-#: includes/pro/php/block-defaults.php:463 src/carousel-gallery-block/edit.js:135 src/carousel-gallery-block/edit.js:785 src/filmstrip-gallery-block/edit.js:1243 src/grid-gallery-block/edit.js:766 src/justified-gallery-block/edit.js:158 src/justified-gallery-block/edit.js:723 src/masonry-gallery-block/edit.js:164 src/masonry-gallery-block/edit.js:723 src/modular-gallery-block/edit.js:143 src/modular-gallery-block/edit.js:1001
+#: includes/pro/php/block-defaults.php:463 src/carousel-gallery-block/edit.js:135 src/carousel-gallery-block/edit.js:786 src/filmstrip-gallery-block/edit.js:1243 src/grid-gallery-block/edit.js:766 src/justified-gallery-block/edit.js:158 src/justified-gallery-block/edit.js:723 src/masonry-gallery-block/edit.js:164 src/masonry-gallery-block/edit.js:723 src/modular-gallery-block/edit.js:143 src/modular-gallery-block/edit.js:1001
 msgid "Choose what happens when visitors click gallery images."
 msgstr ""
 
@@ -964,10 +968,6 @@ msgstr ""
 
 #: src/proofing-gallery-block/edit.js:1051
 msgid "Choose which gallery block is used for layout. Columns, gap, row height, and resolution are edited on that nested gallery."
-msgstr ""
-
-#: src/carousel-gallery-block/premium.js:205
-msgid "Choose which side the next image enters from."
 msgstr ""
 
 #: src/carousel-gallery-block/edit.js:120 src/justified-gallery-block/edit.js:143 src/masonry-gallery-block/edit.js:149 src/modular-gallery-block/edit.js:128
@@ -1999,7 +1999,7 @@ msgstr ""
 msgid "Gallery Click Actions: Play videos in a lightbox, or link images to Downloads, WooCommerce products, Media Files, Custom URLs, and Pages/Posts"
 msgstr ""
 
-#: includes/pro/php/block-defaults.php:355 includes/pro/php/block-defaults.php:378 includes/pro/php/block-defaults.php:415 includes/pro/php/block-defaults.php:500 src/carousel-gallery-block/edit.js:773 src/filmstrip-gallery-block/edit.js:1231 src/grid-gallery-block/edit.js:746 src/justified-gallery-block/edit.js:711 src/masonry-gallery-block/edit.js:706 src/modular-gallery-block/edit.js:991 src/video-gallery-block/edit.js:535
+#: includes/pro/php/block-defaults.php:355 includes/pro/php/block-defaults.php:378 includes/pro/php/block-defaults.php:415 includes/pro/php/block-defaults.php:500 src/carousel-gallery-block/edit.js:774 src/filmstrip-gallery-block/edit.js:1231 src/grid-gallery-block/edit.js:746 src/justified-gallery-block/edit.js:711 src/masonry-gallery-block/edit.js:706 src/modular-gallery-block/edit.js:991 src/video-gallery-block/edit.js:535
 msgid "Gallery Click Settings"
 msgstr ""
 
@@ -2023,7 +2023,7 @@ msgstr ""
 msgid "Gallery Filtering Styles"
 msgstr ""
 
-#: includes/pro/php/block-defaults.php:355 includes/pro/php/block-defaults.php:378 includes/pro/php/block-defaults.php:415 includes/pro/php/block-defaults.php:500 src/carousel-gallery-block/edit.js:828 src/fbks-helpers/imageProFeatureNotices.js:49 src/filmstrip-gallery-block/edit.js:1305 src/grid-gallery-block/edit.js:813 src/justified-gallery-block/edit.js:768 src/masonry-gallery-block/edit.js:771 src/modular-gallery-block/edit.js:1045 src/video-gallery-block/edit.js:572 src/video-gallery-block/edit.js:578
+#: includes/pro/php/block-defaults.php:355 includes/pro/php/block-defaults.php:378 includes/pro/php/block-defaults.php:415 includes/pro/php/block-defaults.php:500 src/carousel-gallery-block/edit.js:829 src/fbks-helpers/imageProFeatureNotices.js:49 src/filmstrip-gallery-block/edit.js:1305 src/grid-gallery-block/edit.js:813 src/justified-gallery-block/edit.js:768 src/masonry-gallery-block/edit.js:771 src/modular-gallery-block/edit.js:1045 src/video-gallery-block/edit.js:572 src/video-gallery-block/edit.js:578
 msgid "Gallery Hover Settings"
 msgstr ""
 
@@ -2035,7 +2035,7 @@ msgstr ""
 msgid "Gallery icons from FolioBlocks Pro."
 msgstr ""
 
-#: includes/pro/php/block-defaults.php:355 includes/pro/php/block-defaults.php:378 includes/pro/php/block-defaults.php:500 src/carousel-gallery-block/edit.js:867 src/fbks-helpers/imageProFeatureNotices.js:105 src/grid-gallery-block/edit.js:869 src/justified-gallery-block/edit.js:817 src/masonry-gallery-block/edit.js:823 src/modular-gallery-block/edit.js:1072
+#: includes/pro/php/block-defaults.php:355 includes/pro/php/block-defaults.php:378 includes/pro/php/block-defaults.php:500 src/carousel-gallery-block/edit.js:868 src/fbks-helpers/imageProFeatureNotices.js:105 src/grid-gallery-block/edit.js:869 src/justified-gallery-block/edit.js:817 src/masonry-gallery-block/edit.js:823 src/modular-gallery-block/edit.js:1072
 msgid "Gallery Image Styles"
 msgstr ""
 
@@ -2283,7 +2283,7 @@ msgstr ""
 msgid "Image Click Actions: Play videos in a lightbox, or link images to Downloads, WooCommerce products, Media Files, Custom URLs, and Pages/Posts"
 msgstr ""
 
-#: includes/pro/php/block-defaults.php:54 src/carousel-gallery-block/edit.js:777 src/filmstrip-gallery-block/edit.js:1235 src/grid-gallery-block/edit.js:753 src/image-block/edit.js:1266 src/justified-gallery-block/edit.js:715 src/masonry-gallery-block/edit.js:710 src/modular-gallery-block/edit.js:995
+#: includes/pro/php/block-defaults.php:54 src/carousel-gallery-block/edit.js:778 src/filmstrip-gallery-block/edit.js:1235 src/grid-gallery-block/edit.js:753 src/image-block/edit.js:1266 src/justified-gallery-block/edit.js:715 src/masonry-gallery-block/edit.js:710 src/modular-gallery-block/edit.js:995
 msgid "Image Click Behavior"
 msgstr ""
 
@@ -3005,7 +3005,7 @@ msgstr ""
 msgid "No Thumbnail Selected"
 msgstr ""
 
-#: includes/pro/php/block-defaults.php:54 includes/pro/php/block-defaults.php:62 includes/pro/php/block-defaults.php:64 includes/pro/php/block-defaults.php:65 includes/pro/php/block-defaults.php:78 includes/pro/php/block-defaults.php:93 includes/pro/php/block-defaults.php:95 includes/pro/php/block-defaults.php:103 includes/pro/php/block-defaults.php:171 includes/pro/php/block-defaults.php:215 includes/pro/php/block-defaults.php:224 includes/pro/php/block-defaults.php:487 src/carousel-gallery-block/edit.js:634 src/fbks-helpers/CompactColorControl.js:227 src/fbks-helpers/ImageStyleControl.js:93 src/fbks-helpers/imageClickActionPremiumControls.js:36 src/fbks-helpers/imageClickActionPremiumControls.js:256 src/fbks-helpers/imageClickActionPremiumControls.js:510 src/fbks-helpers/imageHoverActionPremiumControls.js:13 src/fbks-helpers/imageHoverActionPremiumControls.js:30 src/fbks-helpers/watermarkOverlayControls.js:245 src/filmstrip-gallery-block/edit.js:708 src/grid-gallery-block/edit.js:559 src/image-block/edit.js:1043 src/image-block/premium.js:576 src/image-block/premium.js:657 src/image-block/premium.js:1234 src/justified-gallery-block/edit.js:568 src/masonry-gallery-block/edit.js:567 src/modular-gallery-block/edit.js:886 src/video-block/edit.js:933 src/video-block/premium.js:34 src/video-gallery-block/edit.js:602 src/video-gallery-block/premium.js:28
+#: includes/pro/php/block-defaults.php:54 includes/pro/php/block-defaults.php:62 includes/pro/php/block-defaults.php:64 includes/pro/php/block-defaults.php:65 includes/pro/php/block-defaults.php:78 includes/pro/php/block-defaults.php:93 includes/pro/php/block-defaults.php:95 includes/pro/php/block-defaults.php:103 includes/pro/php/block-defaults.php:171 includes/pro/php/block-defaults.php:215 includes/pro/php/block-defaults.php:224 includes/pro/php/block-defaults.php:487 src/carousel-gallery-block/edit.js:635 src/fbks-helpers/CompactColorControl.js:227 src/fbks-helpers/ImageStyleControl.js:93 src/fbks-helpers/imageClickActionPremiumControls.js:36 src/fbks-helpers/imageClickActionPremiumControls.js:256 src/fbks-helpers/imageClickActionPremiumControls.js:510 src/fbks-helpers/imageHoverActionPremiumControls.js:13 src/fbks-helpers/imageHoverActionPremiumControls.js:30 src/fbks-helpers/watermarkOverlayControls.js:245 src/filmstrip-gallery-block/edit.js:708 src/grid-gallery-block/edit.js:559 src/image-block/edit.js:1043 src/image-block/premium.js:576 src/image-block/premium.js:657 src/image-block/premium.js:1234 src/justified-gallery-block/edit.js:568 src/masonry-gallery-block/edit.js:567 src/modular-gallery-block/edit.js:886 src/video-block/edit.js:933 src/video-block/premium.js:34 src/video-gallery-block/edit.js:602 src/video-gallery-block/premium.js:28
 msgid "None"
 msgstr ""
 
@@ -3057,7 +3057,7 @@ msgstr ""
 msgid "Open images in a lightbox when thumbnails are clicked."
 msgstr ""
 
-#: includes/pro/php/block-defaults.php:54 includes/pro/php/block-defaults.php:172 includes/pro/php/block-defaults.php:216 src/carousel-gallery-block/edit.js:636 src/fbks-helpers/imageClickActionPremiumControls.js:324 src/grid-gallery-block/edit.js:561 src/image-block/edit.js:1045 src/justified-gallery-block/edit.js:570 src/masonry-gallery-block/edit.js:569 src/modular-gallery-block/edit.js:888
+#: includes/pro/php/block-defaults.php:54 includes/pro/php/block-defaults.php:172 includes/pro/php/block-defaults.php:216 src/carousel-gallery-block/edit.js:637 src/fbks-helpers/imageClickActionPremiumControls.js:324 src/grid-gallery-block/edit.js:561 src/image-block/edit.js:1045 src/justified-gallery-block/edit.js:570 src/masonry-gallery-block/edit.js:569 src/modular-gallery-block/edit.js:888
 msgid "Open in Lightbox"
 msgstr ""
 
@@ -3783,7 +3783,7 @@ msgstr ""
 msgid "Reset…"
 msgstr ""
 
-#: includes/pro/php/block-defaults.php:53 src/before-after-block/edit.js:291 src/carousel-gallery-block/edit.js:696 src/grid-gallery-block/edit.js:707 src/image-block/edit.js:1187 src/justified-gallery-block/edit.js:641 src/loupe-block/edit.js:241 src/masonry-gallery-block/edit.js:637
+#: includes/pro/php/block-defaults.php:53 src/before-after-block/edit.js:291 src/carousel-gallery-block/edit.js:697 src/grid-gallery-block/edit.js:707 src/image-block/edit.js:1187 src/justified-gallery-block/edit.js:641 src/loupe-block/edit.js:241 src/masonry-gallery-block/edit.js:637
 msgid "Resolution"
 msgstr ""
 
@@ -3970,7 +3970,7 @@ msgstr ""
 msgid "Select Image"
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:657 src/filmstrip-gallery-block/edit.js:465 src/grid-gallery-block/edit.js:663 src/justified-gallery-block/edit.js:591 src/masonry-gallery-block/edit.js:591
+#: src/carousel-gallery-block/edit.js:658 src/filmstrip-gallery-block/edit.js:465 src/grid-gallery-block/edit.js:663 src/justified-gallery-block/edit.js:591 src/masonry-gallery-block/edit.js:591
 msgid "Select Images"
 msgstr ""
 
@@ -3998,7 +3998,7 @@ msgstr ""
 msgid "Select the size of the main gallery image."
 msgstr ""
 
-#: includes/pro/php/block-defaults.php:53 src/before-after-block/edit.js:295 src/carousel-gallery-block/edit.js:713 src/grid-gallery-block/edit.js:724 src/justified-gallery-block/edit.js:660 src/loupe-block/edit.js:257 src/masonry-gallery-block/edit.js:663
+#: includes/pro/php/block-defaults.php:53 src/before-after-block/edit.js:295 src/carousel-gallery-block/edit.js:714 src/grid-gallery-block/edit.js:724 src/justified-gallery-block/edit.js:660 src/loupe-block/edit.js:257 src/masonry-gallery-block/edit.js:663
 msgid "Select the size of the source image."
 msgstr ""
 
@@ -4950,7 +4950,7 @@ msgstr ""
 msgid "Upload images or select them from the Media Library."
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:905
+#: src/carousel-gallery-block/edit.js:906
 msgid "Upload or select images to create a carousel."
 msgstr ""
 
@@ -5053,7 +5053,7 @@ msgstr ""
 msgid "Vertical Padding"
 msgstr ""
 
-#: includes/pro/php/block-defaults.php:436 src/carousel-gallery-block/edit.js:733
+#: includes/pro/php/block-defaults.php:436 src/carousel-gallery-block/edit.js:734
 msgid "Vertical Priority on Mobile"
 msgstr ""
 
@@ -5242,7 +5242,7 @@ msgstr ""
 msgid "Watermark Image"
 msgstr ""
 
-#: src/carousel-gallery-block/edit.js:838 src/fbks-helpers/imageProFeatureNotices.js:79 src/filmstrip-gallery-block/edit.js:1315 src/grid-gallery-block/edit.js:844 src/image-block/edit.js:1431 src/justified-gallery-block/edit.js:792 src/masonry-gallery-block/edit.js:798 src/modular-gallery-block/edit.js:1055 src/proofing-gallery-block/edit.js:1176
+#: src/carousel-gallery-block/edit.js:839 src/fbks-helpers/imageProFeatureNotices.js:79 src/filmstrip-gallery-block/edit.js:1315 src/grid-gallery-block/edit.js:844 src/image-block/edit.js:1431 src/justified-gallery-block/edit.js:792 src/masonry-gallery-block/edit.js:798 src/modular-gallery-block/edit.js:1055 src/proofing-gallery-block/edit.js:1176
 msgid "Watermark Overlay"
 msgstr ""
 

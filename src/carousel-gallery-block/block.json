@@ -54,7 +54,7 @@
 		"customHeight": { "type": "string", "default": "400px" },
 		"tabletCustomHeight": { "type": "string", "default": "" },
 		"mobileCustomHeight": { "type": "string", "default": "" },
-		"autoplayDirection": { "type": "string", "enum": [ "left", "right" ], "default": "right" },
+		"autoplayDirection": { "type": "string", "enum": [ "left", "right" ], "default": "left" },
 		"carouselHeight": {
 			"type": "number",
 			"default": 300

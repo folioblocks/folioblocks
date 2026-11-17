@@ -223,7 +223,7 @@ const initializeCarousel = ( block ) => {
 	} );
 
 	const initialize = () => {
-		const startIndex = block.dataset.autoplayDirection === 'left' && ! loopSlides
+		const startIndex = block.dataset.autoplayDirection === 'right' && ! loopSlides
 			? Math.max( 0, originalSlides.length - 1 )
 			: 0;
 		applyHeight();

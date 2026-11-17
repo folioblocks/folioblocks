@@ -444,7 +444,7 @@ function fbks_get_gallery_defaults_schema($key, $image) {
     $fields['autoplay'] = $field('Enable Autoplay', $carousel ? 'Automatically advance to the next image in the carousel.' : 'Automatically advance to the next image in the gallery.', false);
     $fields['autoplaySpeed'] = $field('Autoplay Speed (seconds)', $carousel ? 'Time between automatic slide transitions.' : 'Time between automatic image transitions.', 3, ['min' => 1, 'max' => 5, 'step' => 0.25, 'range' => true, 'condition' => 'autoplay']);
     if ($carousel) {
-        $fields['autoplayDirection'] = $field('Autoplay Direction', 'Choose which side the next image enters from.', 'right', ['condition' => 'autoplay', 'radio' => true, 'choices' => ['left' => __('Left', 'folioblocks'), 'right' => __('Right', 'folioblocks')]]);
+        $fields['autoplayDirection'] = $field('Autoplay Direction', 'Choose the direction the images move during autoplay.', 'left', ['condition' => 'autoplay', 'radio' => true, 'choices' => ['left' => __('Left', 'folioblocks'), 'right' => __('Right', 'folioblocks')]]);
         $fields['loopSlides'] = $field('Loop Carousel Slides', 'Keep navigating past the first and last slides.', false);
         $fields['showControls'] = $field('Enable Carousel Controls', 'Toggle visibility of navigation arrows.', false);
         $fields['controlsAlignment'] = $field('Controls Alignment', 'Set the horizontal alignment of carousel controls.', 'center', ['condition' => 'controls', 'choices' => ['left' => __('Left', 'folioblocks'), 'center' => __('Center', 'folioblocks'), 'right' => __('Right', 'folioblocks')]]);

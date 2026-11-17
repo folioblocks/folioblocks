@@ -196,13 +196,13 @@ addFilter(
 				{ attributes.autoplay && (
 					<ToggleGroupControl
 						label={ __( 'Autoplay Direction', 'folioblocks' ) }
-						value={ attributes.autoplayDirection || 'right' }
+						value={ attributes.autoplayDirection || 'left' }
 						onChange={ ( autoplayDirection ) => {
 							if ( autoplayDirection ) {
 								setAttributes( { autoplayDirection } );
 							}
 						} }
-						help={ __( 'Choose which side the next image enters from.', 'folioblocks' ) }
+						help={ __( 'Choose the direction the images move during autoplay.', 'folioblocks' ) }
 						isBlock
 						__next40pxDefaultSize
 						__nextHasNoMarginBottom

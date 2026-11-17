@@ -4,6 +4,10 @@ All notable changes to the FolioBlocks project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0] - 2026-11-17
+### Fixed
+- Fixed Carousel Gallery autoplay previews in the block editor. Each carousel starts independently when autoplay is enabled, including when playback controls are visible. Rows of narrow images continue advancing when several images fit in view.
+
 ## [1.6.0] - 2026-11-15
 ### Fixed
 - Bug in Video Gallery Block filtering. 
@@ -11,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.6.0] - 2026-11-04
 ### Added
 - Added responsive Custom Height to Carousel Gallery on all Pro plans. Set desktop, tablet, and mobile heights in px or vh from the block settings or responsive design mode.
-- Added Left and Right autoplay directions to Carousel Gallery on all Pro plans. Right remains the default. Left starts on the last slide when looping is off and wraps backward from the first slide when looping is on.
+- Added autoplay direction to Carousel Gallery on all Pro plans. Left and Right describe how the images move, as shown in the block settings and Global Block Defaults. Left is the default. Right starts on the last slide when looping is off and wraps backward from the first slide when looping is on.
 
 ### Changed
 - Renamed Image Orientation (Mobile) to Carousel Height, with Automatic and Vertical Priority on Mobile as presets. Updated Carousel Global Block Defaults with the height presets, device heights, and autoplay direction.

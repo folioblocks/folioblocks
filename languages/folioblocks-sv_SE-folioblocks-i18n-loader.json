@@ -1,5 +1,5 @@
 {
-  "translation-revision-date": "2026-11-04T09:00:20.357Z",
+  "translation-revision-date": "2026-11-17T08:33:10.288Z",
   "generator": "FolioBlocks custom i18n tooling",
   "domain": "messages",
   "locale_data": {
@@ -363,6 +363,9 @@
       "Choose light or dark styling for proofing filters, flags, and comments.": [
         "Välj ljust eller mörkt utseende för bildgranskningens filter, flaggor och kommentarer."
       ],
+      "Choose the direction the images move during autoplay.": [
+        "Välj åt vilket håll bilderna rör sig under automatisk uppspelning."
+      ],
       "Choose the gallery layout clients will use to proof these images.": [
         "Välj den gallerilayout som kunderna ska använda för att granska bilderna."
       ],
@@ -431,9 +434,6 @@
       ],
       "Choose which gallery block is used for layout. Columns, gap, row height, and resolution are edited on that nested gallery.": [
         "Välj vilket galleriblock som används för layouten. Kolumner, avstånd, radhöjd och upplösning redigeras i det nästlade galleriet."
-      ],
-      "Choose which side the next image enters from.": [
-        "Välj från vilken sida nästa bild ska visas."
       ],
       "Circle": [
         "Cirkel"
